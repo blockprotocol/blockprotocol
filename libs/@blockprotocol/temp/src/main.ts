@@ -1,6 +1,11 @@
-export * from "./entity";
-export * from "@blockprotocol/core";
+import {EntityType} from "@blockprotocol/graph";
 
-export const foo = () => {
 
-}
+// export * from "./entity";
+// export * from "@blockprotocol/core";
+//
+// export const foo = () => {
+//
+// }
+
+export { EntityType };

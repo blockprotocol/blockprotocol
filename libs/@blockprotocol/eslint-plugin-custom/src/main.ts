@@ -83,6 +83,7 @@ function getExportsForNode(
   context: Readonly<RuleContext<never, never[]>>,
   fileName: string
 ): { name: string, kind: string, from?: string, node: TSESTree.Node }[] {
+
   const exportedNames: { name: string, kind: string, from?: string, node: TSESTree.Node }[] = [];
   if (node.type === AST_NODE_TYPES.ExportDefaultDeclaration) {
     exportedNames.push({
@@ -168,6 +169,24 @@ function getExportsForNode(
           break;
       }
     }
+    if (!node.source?.value && !declaration) {
+      if (!node.parent) {
+        console.warn(`ExportNamedDeclaration Node didn't have a source, or declaration, or parent: ${util.inspect(node)}`);
+      }
+
+      if (node.specifiers) {
+        // @todo - Find the kind of the node
+        node.specifiers.forEach((specifier) => {
+          if (specifier.exported) {
+            exportedNames.push({
+              kind: 'unknown',
+              name: specifier.exported.name,
+              node,
+            });
+          }
+        });
+      }
+    }
   } else if (node.type === AST_NODE_TYPES.ExportAllDeclaration) {
     const ast = parseAstForModuleExports(node.source.value, fileName, context);
 
@@ -218,7 +237,7 @@ module.exports = {
             console.log(util.inspect({
               file: context.getFilename(),
               // names: exportedNames.map((n) => `export ${n.kind} ${n.name}${(n.from ? ` from ${n.from}` : "")};`)
-              names: exportedNames.map((n) => n.name)
+              names: [...(new Set(exportedNames.map((n) => n.name)))]
             }, {
               depth: 6,
               colors: true,
