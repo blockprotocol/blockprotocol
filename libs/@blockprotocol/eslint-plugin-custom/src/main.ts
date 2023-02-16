@@ -3,12 +3,48 @@ import path from "path";
 import fs from "fs";
 import ts from "typescript";
 import {parse, ParserOptions} from "@typescript-eslint/parser";
+import util from "util";
 import RuleContext = TSESLint.RuleContext;
 
 const createRule = ESLintUtils.RuleCreator((name) => `https://example.com/rule/${name}`)
 
+const moduleToAstMap = new Map<string, TSESTree.Program>();
+
+function parseAstForModuleExports(
+  modulePath: string,
+  context: Readonly<RuleContext<never, never[]>>
+) {
+  let requirePath = modulePath;
+
+  if (!context.parserPath.includes("typescript-eslint")) {
+    throw new Error(`This rule only works with the typescript-eslint parser`);
+  }
+
+  const compilerOptions = {
+    moduleResolution: ts.ModuleResolutionKind.NodeJs,
+    target: ts.ScriptTarget.ES2017,
+  };
+  const tsResolved = ts.nodeModuleNameResolver(modulePath, context.getFilename(), compilerOptions, ts.sys).resolvedModule?.resolvedFileName || require.resolve(requirePath);
+
+  if (moduleToAstMap.has(tsResolved)) {
+    return moduleToAstMap.get(tsResolved)!;
+  }
+
+  const code = fs.readFileSync(tsResolved, "utf-8");
+  const opts = {
+    ...context.parserOptions as ParserOptions,
+    project: [`${path.dirname(tsResolved)}/**/tsconfig.json`],
+    filePath: tsResolved,
+  };
+  const ast = parse(code, opts);
+
+  moduleToAstMap.set(tsResolved, ast);
+
+  return ast;
+}
+
 function collectExportNames(
-  exportedNames: { kind: string, name: string, node: Partial<TSESTree.Node>, debug?: string }[],
+  exportedNames: { kind: string, name: string, node: TSESTree.Node, debug?: string }[],
   node: TSESTree.ProgramStatement,
   context: Readonly<RuleContext<never, never[]>>
 ) {
@@ -16,7 +52,7 @@ function collectExportNames(
     exportedNames.push({
       kind: 'default',
       name: 'default',
-      node: {type: node.type, exportKind: node.exportKind, declaration: node.declaration}
+      node
     });
   } else if (node.type === AST_NODE_TYPES.ExportNamedDeclaration) {
     const declaration = node.declaration;
@@ -59,19 +95,15 @@ function collectExportNames(
           exportedNames.push({
             kind: keyword,
             name: decl.id.name,
-            node: {declaration: node.declaration, exportKind: node.exportKind, type: node.type},
+            node,
             debug: "VariableDeclaration.declarations"
           });
+
         }
       });
     } else if (declaration && declaration.type === AST_NODE_TYPES.FunctionDeclaration && declaration.id) {
       exportedNames.push({
-        kind: keyword, name: declaration.id.name, node: {
-          declaration: node.declaration,
-          exportKind: node.exportKind,
-          type: node.type,
-          source: node.source
-        }, debug: "FunctionDeclaration"
+        kind: keyword, name: declaration.id.name, node, debug: "FunctionDeclaration"
       });
     }
 
@@ -80,36 +112,13 @@ function collectExportNames(
         exportedNames.push({
           kind: keyword,
           name: specifier.exported.name,
-          node: {
-            declaration: node.declaration,
-            exportKind: node.exportKind,
-            type: node.type,
-          },
+          node,
           debug: "ExportNamedDeclaration.specifiers"
         });
       }
     });
   } else if (node.type === AST_NODE_TYPES.ExportAllDeclaration) {
-    const modulePath = node.source.value;
-    let requirePath = modulePath;
-
-    if (!context.parserPath.includes("typescript-eslint")) {
-      throw new Error(`This rule only works with the typescript-eslint parser`);
-    }
-
-    const compilerOptions = {
-      moduleResolution: ts.ModuleResolutionKind.NodeJs,
-      target: ts.ScriptTarget.ES2017,
-    };
-    const tsResolved = ts.nodeModuleNameResolver(modulePath, context.getFilename(), compilerOptions, ts.sys).resolvedModule?.resolvedFileName || require.resolve(requirePath);
-
-    const code = fs.readFileSync(tsResolved, "utf-8");
-    const opts = {
-      ...context.parserOptions as ParserOptions,
-      project: [`${path.dirname(tsResolved)}/**/tsconfig.json`],
-      filePath: tsResolved,
-    };
-    const ast = parse(code, opts);
+    const ast = parseAstForModuleExports(node.source.value, context);
     ast.body.forEach((node) => {
       collectExportNames(exportedNames, node as TSESTree.ProgramStatement, context);
     });
@@ -131,7 +140,7 @@ module.exports = {
       },
       defaultOptions: [],
       create(context) {
-        const exportedNames: { kind: string, name: string, node: Partial<TSESTree.Node>, debug?: string }[] = [];
+        const exportedNames: { kind: string, name: string, node: TSESTree.Node, debug?: string }[] = [];
         return {
           'Program:exit': (node: TSESTree.Program) => {
             node.body.forEach((node: TSESTree.Node) => {
@@ -139,7 +148,8 @@ module.exports = {
                 collectExportNames(exportedNames, node as TSESTree.ProgramStatement, context);
               }
             });
-            console.log(JSON.stringify({file: context.getFilename(), exportedNames}, null, 2));
+            console.log(util.inspect({file: context.getFilename(), exportedNames}, {depth: 6, colors: true}));
+            console.log({file: context.getFilename(), names: exportedNames.map((n) => `export ${n.kind} ${n.name};`)})
             // Your rule logic here
           },
         };
