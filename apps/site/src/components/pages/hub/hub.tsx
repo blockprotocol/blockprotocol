@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
-import { HUB_SERVICES_ENABLED } from "../../../pages/hub.page";
 
+import { HUB_SERVICES_ENABLED } from "../../../pages/hub.page";
 import { FontAwesomeIcon } from "../../icons";
 import { faBinary } from "../../icons/fa/binary";
 import { faBoxesStacked } from "../../icons/fa/boxes-stacked";
@@ -163,6 +163,68 @@ const HubListBrowse = () => {
     </Stack>
   );
 };
+
+const HubHeading = ({ children }: { children: ReactNode }) => (
+  <Typography
+    variant="bpHeading3"
+    fontWeight={500}
+    mb={2}
+    color={(theme) => theme.palette.gray[80]}
+  >
+    {children}
+  </Typography>
+);
+
+const HubSubHeading = ({ children }: { children: ReactNode }) => (
+  <Typography color={(theme) => theme.palette.gray[80]}>{children}</Typography>
+);
+
+const HubBrowseHeaderComponents = {
+  blocks: () => {
+    return (
+      <>
+        <HubHeading>Blocks</HubHeading>
+        <HubSubHeading>
+          Blocks are interactive components that can be used to view and/or edit
+          information on a page
+        </HubSubHeading>
+      </>
+    );
+  },
+  types: () => {
+    return (
+      <>
+        <HubHeading>Types</HubHeading>
+        <HubSubHeading>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit
+        </HubSubHeading>
+      </>
+    );
+  },
+  services: () => {
+    return (
+      <>
+        <HubHeading>Services</HubHeading>
+        <HubSubHeading>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit
+        </HubSubHeading>
+      </>
+    );
+  },
+};
+
+const HubBrowseHeader = () => {
+  const browseType = useRouteHubBrowseType();
+  const HeadingComponent =
+    browseType in HubBrowseHeaderComponents
+      ? HubBrowseHeaderComponents[
+          browseType as keyof typeof HubBrowseHeaderComponents
+        ]
+      : null;
+
+  return HeadingComponent ? <HeadingComponent /> : null;
+};
+
 export const HubList = ({
   listing,
   types,
@@ -192,13 +254,7 @@ export const HubList = ({
               <HubListBrowse />
             </Grid>
             <Grid item xs={9} pt={6.5} pb={6.5}>
-              <Typography variant="bpHeading3" fontWeight={500} mb={2}>
-                Blocks
-              </Typography>
-              <Typography>
-                Blocks are interactive components that can be used to view
-                and/or edit information on a page
-              </Typography>
+              <HubBrowseHeader />
             </Grid>
           </Grid>
         </Container>

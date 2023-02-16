@@ -6,7 +6,7 @@ import { NextSeo } from "next-seo";
 import { BlockCard } from "../components/block-card";
 import { BlockProtocolIcon, FontAwesomeIcon } from "../components/icons";
 import { Link } from "../components/link";
-import { HubItemDescription, HubList } from "../components/pages/hub/hub-list";
+import { HubItemDescription, HubList } from "../components/pages/hub/hub";
 import { getRouteHubBrowseType } from "../components/pages/hub/hub-utils";
 import { getAllBlocks, getFeaturedBlocks } from "../lib/api/blocks/get";
 import {
@@ -54,7 +54,7 @@ const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
 export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context,
 ) => {
-  const browseType = getRouteHubBrowseType(context.query).toString();
+  const browseType = getRouteHubBrowseType(context.query);
   const [featuredBlocks, listing] = await Promise.all([
     getFeaturedBlocks(),
     getHubItems[browseType]?.() ?? null,

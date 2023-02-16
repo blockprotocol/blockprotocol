@@ -21,7 +21,7 @@ export type BlockExampleGraph = {
 const defaultBrowseType = "blocks";
 
 export const getRouteHubBrowseType = (query: NextParsedUrlQuery) =>
-  query.type ?? defaultBrowseType;
+  query.type?.toString() ?? defaultBrowseType;
 
 export const getHubBrowseQuery = (type: string) =>
   type === defaultBrowseType ? {} : { type };
