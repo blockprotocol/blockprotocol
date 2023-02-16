@@ -2,7 +2,7 @@ import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { SvgIcon, SvgIconProps } from "@mui/material";
 import { forwardRef } from "react";
 
-type FontAwesomeIconProps = {
+export type FontAwesomeIconProps = {
   icon: IconDefinition;
 } & SvgIconProps;
 
@@ -11,7 +11,7 @@ export const FontAwesomeIcon = forwardRef<
   SVGSVGElement,
   FontAwesomeIconProps // https://github.com/prettier/prettier/issues/11923
 >((props, ref) => {
-  const { icon, sx = [], ...otherProps } = props;
+  const { children, icon, sx = [], ...otherProps } = props;
 
   const {
     icon: [width, height, , , svgPathData],
@@ -50,6 +50,7 @@ export const FontAwesomeIcon = forwardRef<
           />
         ))
       )}
+      {children}
     </SvgIcon>
   );
 });

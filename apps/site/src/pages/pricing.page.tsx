@@ -14,7 +14,7 @@ const PricingPage: NextPage = () => {
       />
       <Box
         sx={{
-          mb: 20,
+          mb: 60,
           position: "relative",
           backgroundImage: "url(/assets/hub-gradient.svg)",
           backgroundRepeat: "no-repeat",
