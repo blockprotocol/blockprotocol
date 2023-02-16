@@ -40,6 +40,7 @@ import {
   EntityRecordId as EntityRecordIdGeneral,
   EntityRevisionId as EntityRevisionIdGeneral,
   EntityRootType as EntityRootTypeGeneral,
+  EntityTemporalVersioningMetadata as EntityTemporalVersioningMetadataGeneral,
   EntityType as EntityTypeGeneral,
   EntityTypeRootType as EntityTypeRootTypeGeneral,
   EntityTypeVertex as EntityTypeVertexGeneral,
@@ -103,6 +104,7 @@ import {
   isPropertiesConstrainedByEdge as isPropertiesConstrainedByEdgeGeneral,
   isPropertyTypeVertex as isPropertyTypeVertexGeneral,
   isSharedEdgeKind as isSharedEdgeKindGeneral,
+  isTemporalSubgraph as isTemporalSubgraphGeneral,
   IsTypeOfEdge as IsTypeOfEdgeGeneral,
   isValuesConstrainedByEdge as isValuesConstrainedByEdgeGeneral,
   JsonObject as JsonObjectGeneral,
@@ -134,19 +136,26 @@ import {
   OutgoingEdgeResolveDepth as OutgoingEdgeResolveDepthGeneral,
   OutgoingLinkEdge as OutgoingLinkEdgeGeneral,
   OutwardEdge as OutwardEdgeGeneral,
+  PinnedTemporalAxis as PinnedTemporalAxisGeneral,
+  PinnedTemporalAxisUnresolved as PinnedTemporalAxisUnresolvedGeneral,
   PropertiesConstrainedByEdge as PropertiesConstrainedByEdgeGeneral,
   PropertyType as PropertyTypeGeneral,
   PropertyTypeRootType as PropertyTypeRootTypeGeneral,
   PropertyTypeVertex as PropertyTypeVertexGeneral,
   PropertyTypeWithMetadata as PropertyTypeWithMetadataGeneral,
+  QueryTemporalAxes as QueryTemporalAxesGeneral,
+  QueryTemporalAxesUnresolved as QueryTemporalAxesUnresolvedGeneral,
   ReadOrModifyResourceError as ReadOrModifyResourceErrorGeneral,
   SharedEdgeKind as SharedEdgeKindGeneral,
   SimpleProperties as SimplePropertiesGeneral,
   Sort as SortGeneral,
   Subgraph as SubgraphGeneral,
   SubgraphRootType as SubgraphRootTypeGeneral,
+  SubgraphTemporalAxes as SubgraphTemporalAxesGeneral,
+  TemporalAxis as TemporalAxisGeneral,
   TemporalBound as TemporalBoundGeneral,
   TimeInterval as TimeIntervalGeneral,
+  TimeIntervalUnresolved as TimeIntervalUnresolvedGeneral,
   Timestamp as TimestampGeneral,
   Unbounded as UnboundedGeneral,
   UpdateEntityData as UpdateEntityDataGeneral,
@@ -156,41 +165,29 @@ import {
   UploadFileData as UploadFileDataGeneral,
   UploadFileReturn as UploadFileReturnGeneral,
   ValuesConstrainedByEdge as ValuesConstrainedByEdgeGeneral,
+  VariableTemporalAxis as VariableTemporalAxisGeneral,
+  VariableTemporalAxisUnresolved as VariableTemporalAxisUnresolvedGeneral,
   Vertex as VertexGeneral,
   VertexId as VertexIdGeneral,
   Vertices as VerticesGeneral,
 } from "../shared/types.js";
 
-// import {
-//   EntityTemporalVersioningMetadata as EntityTemporalVersioningMetadataGeneral,
-//   isTemporalSubgraph as isTemporalSubgraphGeneral,
-//   QueryTemporalAxes as QueryTemporalAxesGeneral,
-//   QueryTemporalAxesUnresolved as QueryTemporalAxesUnresolvedGeneral,
-//   SubgraphTemporalAxes as SubgraphTemporalAxesGeneral,
-//   PinnedTemporalAxis as PinnedTemporalAxisGeneral,
-//   PinnedTemporalAxisUnresolved as PinnedTemporalAxisUnresolvedGeneral,
-//   TemporalAxis as TemporalAxisGeneral,
-//   TimeIntervalUnresolved as TimeIntervalUnresolvedGeneral,
-//   VariableTemporalAxis as VariableTemporalAxisGeneral,
-//   VariableTemporalAxisUnresolved as VariableTemporalAxisUnresolvedGeneral,
-// } from "../shared/types.js";
-
-export type GraphBlockHandler = GraphBlockHandlerGeneral<false>;
-export type GraphEmbedderHandler = GraphEmbedderHandlerGeneral<false>;
+export type GraphBlockHandler = GraphBlockHandlerGeneral<true>;
+export type GraphEmbedderHandler = GraphEmbedderHandlerGeneral<true>;
 export type BlockGraphProperties<RootEntity extends Entity = Entity> =
-  BlockGraphPropertiesGeneral<false, RootEntity>;
+  BlockGraphPropertiesGeneral<true, RootEntity>;
 export type BlockGraphMessageCallbacks =
-  BlockGraphMessageCallbacksGeneral<false>;
+  BlockGraphMessageCallbacksGeneral<true>;
 export type GraphEmbedderMessages<
   Key extends keyof BlockGraphMessageCallbacks = keyof BlockGraphMessageCallbacks,
-> = GraphEmbedderMessagesGeneral<false, Key>;
+> = GraphEmbedderMessagesGeneral<true, Key>;
 export type CreateResourceError = CreateResourceErrorGeneral;
 export type ReadOrModifyResourceError = ReadOrModifyResourceErrorGeneral;
 export type GraphEmbedderMessageCallbacks =
-  GraphEmbedderMessageCallbacksGeneral<false>;
+  GraphEmbedderMessageCallbacksGeneral<true>;
 export type GraphBlockMessages<
   Key extends keyof GraphEmbedderMessageCallbacks = keyof GraphEmbedderMessageCallbacks,
-> = GraphBlockMessagesGeneral<false, Key>;
+> = GraphBlockMessagesGeneral<true, Key>;
 export type JsonObject = JsonObjectGeneral;
 export type JsonValue = JsonValueGeneral;
 export type EntityId = EntityIdGeneral;
@@ -199,19 +196,19 @@ export type EntityRecordId = EntityRecordIdGeneral;
 export const isEntityRecordId = isEntityRecordIdGeneral;
 export type EntityPropertyValue = EntityPropertyValueGeneral;
 export type EntityPropertiesObject = EntityPropertiesObjectGeneral;
-// export type EntityTemporalVersioningMetadata =
-//   EntityTemporalVersioningMetadataGeneral;
-export type EntityMetadata = EntityMetadataGeneral<false>;
+export type EntityTemporalVersioningMetadata =
+  EntityTemporalVersioningMetadataGeneral;
+export type EntityMetadata = EntityMetadataGeneral<true>;
 export type LinkData = LinkDataGeneral;
 export type Entity<
   Properties extends EntityPropertiesObject | null = Record<
     BaseUri,
     EntityPropertyValue
   >,
-> = EntityGeneral<false, Properties>;
-export type LinkEntityAndRightEntity = LinkEntityAndRightEntityGeneral<false>;
+> = EntityGeneral<true, Properties>;
+export type LinkEntityAndRightEntity = LinkEntityAndRightEntityGeneral<true>;
 export type CreateEntityData = CreateEntityDataGeneral;
-export type GetEntityData = GetEntityDataGeneral<false>;
+export type GetEntityData = GetEntityDataGeneral<true>;
 export type UpdateEntityData = UpdateEntityDataGeneral;
 export type DeleteEntityData = DeleteEntityDataGeneral;
 export type FilterOperatorType = FilterOperatorTypeGeneral;
@@ -222,9 +219,9 @@ export type MultiFilter = MultiFilterGeneral;
 export type Sort = SortGeneral;
 export type MultiSort = MultiSortGeneral;
 export type AggregateOperationInput = AggregateOperationInputGeneral;
-export type AggregateEntitiesData = AggregateEntitiesDataGeneral<false>;
+export type AggregateEntitiesData = AggregateEntitiesDataGeneral<true>;
 export type AggregateEntitiesResult<T extends Subgraph<EntityRootType>> =
-  AggregateEntitiesResultGeneral<false, T>;
+  AggregateEntitiesResultGeneral<true, T>;
 export type SimpleProperties<Properties extends EntityPropertiesObject> =
   SimplePropertiesGeneral<Properties>;
 export type FileAtUrlData = FileAtUrlDataGeneral;
@@ -236,7 +233,7 @@ export type FileEntityProperties = FileEntityPropertiesGeneral;
 export type FileEntity = FileEntityGeneral;
 export type UploadFileReturn = UploadFileReturnGeneral;
 export type LinkedAggregationDefinition = LinkedAggregationDefinitionGeneral;
-export type LinkedAggregation = LinkedAggregationGeneral<false>;
+export type LinkedAggregation = LinkedAggregationGeneral<true>;
 export type GetLinkedAggregationData = GetLinkedAggregationDataGeneral;
 export type CreateLinkedAggregationData = CreateLinkedAggregationDataGeneral;
 export type UpdateLinkedAggregationData = UpdateLinkedAggregationDataGeneral;
@@ -315,19 +312,19 @@ export type OntologyOutwardEdge = OntologyOutwardEdgeGeneral;
 export type OntologyRootedEdges = OntologyRootedEdgesGeneral;
 export type KnowledgeGraphRootedEdges = KnowledgeGraphRootedEdgesGeneral;
 export type Edges = EdgesGeneral;
-export type GraphElementIdentifiers = GraphElementIdentifiersGeneral<false>;
+export type GraphElementIdentifiers = GraphElementIdentifiersGeneral<true>;
 export type IdentifierForGraphElement<
   Element extends GraphElementIdentifiers["element"],
-> = IdentifierForGraphElementGeneral<false, Element>;
+> = IdentifierForGraphElementGeneral<true, Element>;
 export type GraphElementForIdentifier<
   Identifier extends GraphElementIdentifiers["identifier"],
-> = GraphElementForIdentifierGeneral<false, Identifier>;
+> = GraphElementForIdentifierGeneral<true, Identifier>;
 export type OutgoingEdgeResolveDepth = OutgoingEdgeResolveDepthGeneral;
 export type EdgeResolveDepths = EdgeResolveDepthsGeneral;
 export type GraphResolveDepths = GraphResolveDepthsGeneral;
-// export type QueryTemporalAxesUnresolved = QueryTemporalAxesUnresolvedGeneral;
-// export type QueryTemporalAxes = QueryTemporalAxesGeneral;
-// export type SubgraphTemporalAxes = SubgraphTemporalAxesGeneral;
+export type QueryTemporalAxesUnresolved = QueryTemporalAxesUnresolvedGeneral;
+export type QueryTemporalAxes = QueryTemporalAxesGeneral;
+export type SubgraphTemporalAxes = SubgraphTemporalAxesGeneral;
 export type DataTypeVertex = DataTypeVertexGeneral;
 export type PropertyTypeVertex = PropertyTypeVertexGeneral;
 export type EntityTypeVertex = EntityTypeVertexGeneral;
@@ -336,24 +333,24 @@ export type EntityVertex<
     BaseUri,
     EntityPropertyValue
   >,
-> = EntityVertexGeneral<false, Properties>;
+> = EntityVertexGeneral<true, Properties>;
 export type OntologyVertex = OntologyVertexGeneral;
 export type KnowledgeGraphVertex<
   Properties extends EntityPropertiesObject | null = Record<
     BaseUri,
     EntityPropertyValue
   >,
-> = KnowledgeGraphVertexGeneral<false, Properties>;
+> = KnowledgeGraphVertexGeneral<true, Properties>;
 export type Vertex<
   Properties extends EntityPropertiesObject | null = Record<
     BaseUri,
     EntityPropertyValue
   >,
-> = VertexGeneral<false, Properties>;
+> = VertexGeneral<true, Properties>;
 export const isDataTypeVertex = isDataTypeVertexGeneral;
 export const isPropertyTypeVertex = isPropertyTypeVertexGeneral;
 export const isEntityTypeVertex = isEntityTypeVertexGeneral;
-export const isEntityVertex = isEntityVertexGeneral<false>;
+export const isEntityVertex = isEntityVertexGeneral<true>;
 export type VertexId<BaseId, RevisionId> = VertexIdGeneral<BaseId, RevisionId>;
 export type EntityVertexId = EntityVertexIdGeneral;
 export type OntologyTypeVertexId = OntologyTypeVertexIdGeneral;
@@ -361,18 +358,18 @@ export type GraphElementVertexId = GraphElementVertexIdGeneral;
 export const isOntologyTypeVertexId = isOntologyTypeVertexIdGeneral;
 export const isEntityVertexId = isEntityVertexIdGeneral;
 export type OntologyVertices = OntologyVerticesGeneral;
-export type KnowledgeGraphVertices = KnowledgeGraphVerticesGeneral<false>;
-export type Vertices = VerticesGeneral<false>;
+export type KnowledgeGraphVertices = KnowledgeGraphVerticesGeneral<true>;
+export type Vertices = VerticesGeneral<true>;
 export type DataTypeRootType = DataTypeRootTypeGeneral;
 export type PropertyTypeRootType = PropertyTypeRootTypeGeneral;
 export type EntityTypeRootType = EntityTypeRootTypeGeneral;
-export type EntityRootType = EntityRootTypeGeneral<false>;
-export type SubgraphRootType = SubgraphRootTypeGeneral<false>;
+export type EntityRootType = EntityRootTypeGeneral<true>;
+export type SubgraphRootType = SubgraphRootTypeGeneral<true>;
 export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> =
-  SubgraphGeneral<false, RootType>;
-// export const isTemporalSubgraph = isTemporalSubgraphGeneral;
+  SubgraphGeneral<true, RootType>;
+export const isTemporalSubgraph = isTemporalSubgraphGeneral;
 export type Timestamp = TimestampGeneral;
-// export type TemporalAxis = TemporalAxisGeneral;
+export type TemporalAxis = TemporalAxisGeneral;
 export type LimitedTemporalBound = LimitedTemporalBoundGeneral;
 export type InclusiveLimitedTemporalBound =
   InclusiveLimitedTemporalBoundGeneral;
@@ -380,11 +377,27 @@ export type ExclusiveLimitedTemporalBound =
   ExclusiveLimitedTemporalBoundGeneral;
 export type Unbounded = UnboundedGeneral;
 export type TemporalBound = TemporalBoundGeneral;
-// export type TimeIntervalUnresolved = TimeIntervalUnresolvedGeneral;
+export type TimeIntervalUnresolved<
+  StartBound extends TemporalBound | null,
+  EndBound extends TemporalBound | null,
+> = TimeIntervalUnresolvedGeneral<StartBound, EndBound>;
 export type TimeInterval = TimeIntervalGeneral;
 export type BoundedTimeInterval = BoundedTimeIntervalGeneral;
-// export type VariableTemporalAxisUnresolved =
-//   VariableTemporalAxisUnresolvedGeneral;
-// export type VariableTemporalAxis = VariableTemporalAxisGeneral;
-// export type PinnedTemporalAxisUnresolved = PinnedTemporalAxisUnresolvedGeneral;
-// export type PinnedTemporalAxis = PinnedTemporalAxisGeneral;
+export type VariableTemporalAxisUnresolved<
+  Axis extends TemporalAxis,
+  StartBound extends TemporalBound | null = TemporalBound | null,
+  EndBound extends LimitedTemporalBound | null = LimitedTemporalBound | null,
+> = VariableTemporalAxisUnresolvedGeneral<Axis, StartBound, EndBound>;
+export type VariableTemporalAxis<
+  Axis extends TemporalAxis,
+  StartBound extends TemporalBound = TemporalBound,
+  EndBound extends LimitedTemporalBound = LimitedTemporalBound,
+> = VariableTemporalAxisGeneral<Axis, StartBound, EndBound>;
+export type PinnedTemporalAxisUnresolved<
+  Axis extends TemporalAxis,
+  PinnedTime extends Timestamp | null = Timestamp | null,
+> = PinnedTemporalAxisUnresolvedGeneral<Axis, PinnedTime>;
+export type PinnedTemporalAxis<
+  Axis extends TemporalAxis,
+  PinnedTime extends Timestamp = Timestamp,
+> = PinnedTemporalAxisGeneral<Axis, PinnedTime>;

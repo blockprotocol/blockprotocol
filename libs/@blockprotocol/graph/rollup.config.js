@@ -34,6 +34,7 @@ const rolls = (fmt, input) => ({
 export default ["es", "cjs"].flatMap((fmt) =>
   [
     "src/non-temporal/main.ts",
+    "src/temporal/main.ts",
     "src/codegen.ts",
     "src/non-temporal/custom-element.ts",
     "src/graph-module-json.ts",

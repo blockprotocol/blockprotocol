@@ -28,6 +28,11 @@
       "require": "./dist/cjs/non-temporal/main.cjs",
       "import": "./dist/es/non-temporal/main.js"
     },
+    "./temporal": {
+      "types": "./dist/cjs/temporal/main.d.ts",
+      "require": "./dist/cjs/temporal/main.cjs",
+      "import": "./dist/es/temporal/main.js"
+    },
     "./codegen": {
       "types": "./dist/cjs/codegen.d.ts",
       "require": "./dist/cjs/codegen.cjs",
@@ -65,6 +70,9 @@
     "*": {
       ".": [
         "./dist/cjs/non-temporal/main.d.ts"
+      ],
+      "temporal": [
+        "./dist/cjs/temporal/main.d.ts"
       ],
       "codegen": [
         "./dist/cjs/codegen.d.ts"
