@@ -1,11 +1,11 @@
 import { Vertex } from "../../../types/subgraph/vertices.js";
 
 type BaseIdToRevisions<
-  TemporalSupport extends boolean,
-  GraphElementType extends Vertex<TemporalSupport>["inner"],
+  Temporal extends boolean,
+  GraphElementType extends Vertex<Temporal>["inner"],
 > = Record<
   /*
-   * @todo - we _should_ be able to use `Extract<GraphElementForIdentifier<TemporalSupport, VertexId<any, any>>`
+   * @todo - we _should_ be able to use `Extract<GraphElementForIdentifier<Temporal, VertexId<any, any>>`
    *   here to actually get a strong type (like `EntityId` or `BaseUri`). TypeScript seems to break on using it with a
    *   generic though. So for now we write `string` because all of the baseId's of `VertexId` are string aliases anyway.
    */
@@ -20,11 +20,11 @@ type BaseIdToRevisions<
  * @param elements
  */
 export const mapElementsIntoRevisions = <
-  TemporalSupport extends boolean,
-  GraphElementType extends Vertex<TemporalSupport>["inner"],
+  Temporal extends boolean,
+  GraphElementType extends Vertex<Temporal>["inner"],
 >(
   elements: GraphElementType[],
-): BaseIdToRevisions<TemporalSupport, GraphElementType> => {
+): BaseIdToRevisions<Temporal, GraphElementType> => {
   return elements.reduce((revisionMap, element) => {
     const baseId =
       "entityId" in element.metadata.recordId
@@ -36,5 +36,5 @@ export const mapElementsIntoRevisions = <
     revisionMap[baseId]!.push(element);
 
     return revisionMap;
-  }, {} as BaseIdToRevisions<TemporalSupport, GraphElementType>);
+  }, {} as BaseIdToRevisions<Temporal, GraphElementType>);
 };

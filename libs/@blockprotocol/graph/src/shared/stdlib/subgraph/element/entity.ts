@@ -20,7 +20,7 @@ import { mustBeDefined } from "../../must-be-defined.js";
  */
 export const getEntities = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
-  latest: boolean = false,
+  latest: Temporal extends true ? boolean : true,
 ): Entity<Temporal>[] => {
   return typedValues(subgraph.vertices).flatMap((revisions) => {
     if (latest) {
