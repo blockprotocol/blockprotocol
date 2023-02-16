@@ -24,7 +24,6 @@ const HookPortal = ({ entityId, path, type }: HookData) => {
     }
 
     /** @todo - do we want to catch potential errors here? */
-    /** @todo update `path` to be an array so this doesn't break on Base URIs */
     const foundValue = getFromObjectByPathComponents(
       foundEntity.properties,
       path,
