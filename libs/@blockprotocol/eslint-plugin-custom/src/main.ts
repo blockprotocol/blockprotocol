@@ -186,6 +186,11 @@ function getExportsForNode(
   return exportedNames;
 }
 
+/* @todo - Filter out duplicates */
+/* @todo - Take config object of module to check API against */
+/* @todo - Check API against another module by checking if all `Type` and `Value` names are consistent */
+/* @todo - Add whitelist to config object */
+
 module.exports = {
   rules: {
     "enforce-reexport": createRule({
@@ -210,10 +215,15 @@ module.exports = {
               }
             });
             // console.log(util.inspect({file: context.getFilename(), exportedNames}, {depth: 6, colors: true}));
-            console.log({
+            console.log(util.inspect({
               file: context.getFilename(),
-              names: exportedNames.map((n) => `export ${n.kind} ${n.name}${(n.from ? ` from ${n.from}` : "")};`)
-            })
+              // names: exportedNames.map((n) => `export ${n.kind} ${n.name}${(n.from ? ` from ${n.from}` : "")};`)
+              names: exportedNames.map((n) => n.name)
+            }, {
+              depth: 6,
+              colors: true,
+              maxArrayLength: 1000,
+            }))
             // Your rule logic here
           },
         };
