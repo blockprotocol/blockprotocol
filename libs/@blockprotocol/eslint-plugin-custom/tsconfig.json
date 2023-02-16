@@ -6,6 +6,6 @@
 
   },
   "include": [
-    "src/main.cts"
+    "src/main.ts"
   ]
 }

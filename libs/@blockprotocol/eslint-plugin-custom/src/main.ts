@@ -35,12 +35,6 @@ function collectExportNames(exportedNames: string[], node: TSESTree.ProgramState
       throw new Error(`This rule only works with the typescript-eslint parser`);
     }
 
-    const parserOptions = context.parserOptions as ParserOptions;
-
-    if (parserOptions.project && (parserOptions.project === true || Array.isArray(parserOptions.project) || parserOptions.project.includes("*"))) {
-      throw new Error(`This rule only supports a plain path to the 'tsconfig.json', it doesn't support 'true', multiple paths, or glob patterns in the project configuration`);
-    }
-
     const compilerOptions = {
       moduleResolution: ts.ModuleResolutionKind.NodeJs,
       target: ts.ScriptTarget.ES2017,

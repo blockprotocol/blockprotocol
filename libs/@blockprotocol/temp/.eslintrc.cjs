@@ -4,5 +4,5 @@ module.exports = {
   plugins: ["custom"],
   rules: {
     "custom/enforce-reexport": "error",
-  }
+  },
 };
