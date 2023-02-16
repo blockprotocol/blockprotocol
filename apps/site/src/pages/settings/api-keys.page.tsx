@@ -50,6 +50,7 @@ const ApiKeys: AuthWallPageContent = () => {
       activeApiKeys.map((key) => [
         key.displayName,
         key.publicId,
+        key.lastUsedOrigin ? key.lastUsedOrigin : "Unknown",
         key.lastUsedAt ? (
           <DateTimeCell key="lastUsed" timestamp={key.lastUsedAt} />
         ) : (
@@ -128,7 +129,13 @@ const ApiKeys: AuthWallPageContent = () => {
             </Box>
             {!!tableRows.length && (
               <Table
-                header={["Name", "Public ID", "Last Used", "Created"]}
+                header={[
+                  "Name",
+                  "Public ID",
+                  "Last Used Origin",
+                  "Last Used",
+                  "Created",
+                ]}
                 rows={tableRows}
               />
             )}

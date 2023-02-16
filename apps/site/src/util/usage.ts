@@ -1,4 +1,4 @@
-import { AuthenticatedApiRequest } from "../lib/api/handler/authenticated-handler";
+import { BaseApiRequest } from "../lib/api/handler/base-handler";
 
 const dataUrl = process.env.DATA_URL;
 const dataWriteKey = process.env.DATA_WRITE_KEY;
@@ -64,7 +64,7 @@ export const sendReport = async (context: EventContext) => {
 };
 
 export const parseClientIp = <RequestBody = unknown>(
-  req: AuthenticatedApiRequest<RequestBody>,
+  req: BaseApiRequest<RequestBody>,
 ): string | null => {
   const xForwardedFor = req.headers["x-forwarded-for"];
 
