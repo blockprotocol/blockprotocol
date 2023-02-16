@@ -12,7 +12,8 @@ export const Header: FunctionComponent = () => {
           md: "160px",
         },
         mb: { xs: 6, md: 10 },
-        maxWidth: { xs: "95%", md: "75%", lg: "60%" },
+        px: "6.5%",
+        maxWidth: { md: 800, lg: 1200 },
       }}
     >
       <Typography
