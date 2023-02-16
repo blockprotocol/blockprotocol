@@ -11,7 +11,7 @@ export const generatePropertyTypeWithMetadata = (data: {
 }): PropertyTypeWithMetadata => {
   const { author, schema: incompleteSchema, version } = data;
 
-  if (!incompleteSchema.title) {
+  if (!incompleteSchema.title.trim()) {
     throw new Error("Type is missing a title");
   }
 
