@@ -62,6 +62,11 @@
       "types": "./dist/cjs/non-temporal/stdlib.d.ts",
       "require": "./dist/cjs/non-temporal/stdlib.cjs",
       "import": "./dist/es/non-temporal/stdlib.js"
+    },
+    "./temporal/stdlib": {
+      "types": "./dist/cjs/temporal/stdlib.d.ts",
+      "require": "./dist/cjs/temporal/stdlib.cjs",
+      "import": "./dist/es/temporal/stdlib.js"
     }
   },
   "module": "./dist/es/non-temporal/main.js",
@@ -91,6 +96,9 @@
       ],
       "stdlib": [
         "./dist/cjs/non-temporal/stdlib.d.ts"
+      ],
+      "temporal/stdlib": [
+        "./dist/cjs/temporal/stdlib.d.ts"
       ]
     }
   },
