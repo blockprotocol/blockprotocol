@@ -1,10 +1,13 @@
 import {AST_NODE_TYPES, ESLintUtils, TSESLint, TSESTree} from "@typescript-eslint/utils";
-import * as path from "path";
+import path from "path";
+import fs from "fs";
+import ts from "typescript";
+import {parse, ParserOptions} from "@typescript-eslint/parser";
 import RuleContext = TSESLint.RuleContext;
 
 const createRule = ESLintUtils.RuleCreator((name) => `https://example.com/rule/${name}`)
 
-function collectExportNames(exportedNames: string[], node: TSESTree.Node, context: Readonly<RuleContext<never, never[]>>) {
+function collectExportNames(exportedNames: string[], node: TSESTree.ProgramStatement, context: Readonly<RuleContext<never, never[]>>) {
   if (node.type === AST_NODE_TYPES.ExportDefaultDeclaration) {
     exportedNames.push('default')
   } else if (node.type === AST_NODE_TYPES.ExportNamedDeclaration) {
@@ -26,15 +29,33 @@ function collectExportNames(exportedNames: string[], node: TSESTree.Node, contex
     }
   } else if (node.type === AST_NODE_TYPES.ExportAllDeclaration) {
     const modulePath = node.source.value;
-    const currentFile = context.getFilename();
-    console.log({modulePath, dirname: path.dirname(currentFile) });
-    const resolvedPath = require.resolve(modulePath, {paths: [path.dirname(currentFile)]});
-    const exportedModule = require(resolvedPath);
-    const exportedModuleNames = Object.keys(exportedModule);
-    exportedModuleNames.forEach((name) => {
-      if (name !== 'default' && !exportedNames.includes(name)) {
-        exportedNames.push(name);
-      }
+    let requirePath = modulePath;
+
+    if (!context.parserPath.includes("typescript-eslint")) {
+      throw new Error(`This rule only works with the typescript-eslint parser`);
+    }
+
+    const parserOptions = context.parserOptions as ParserOptions;
+
+    if (parserOptions.project && (parserOptions.project === true || Array.isArray(parserOptions.project) || parserOptions.project.includes("*"))) {
+      throw new Error(`This rule only supports a plain path to the 'tsconfig.json', it doesn't support 'true', multiple paths, or glob patterns in the project configuration`);
+    }
+
+    const compilerOptions = {
+      moduleResolution: ts.ModuleResolutionKind.NodeJs,
+      target: ts.ScriptTarget.ES2017,
+    };
+    const tsResolved = ts.nodeModuleNameResolver(modulePath, context.getFilename(), compilerOptions, ts.sys).resolvedModule?.resolvedFileName || require.resolve(requirePath);
+
+    const code = fs.readFileSync(tsResolved, "utf-8");
+    const opts = {
+      ...context.parserOptions as ParserOptions,
+      project: [`${path.dirname(tsResolved)}/**/tsconfig.json`],
+      filePath: tsResolved,
+    };
+    const ast = parse(code, opts);
+    ast.body.forEach((node) => {
+      collectExportNames(exportedNames, node as TSESTree.ProgramStatement, context);
     });
   }
 }
@@ -58,9 +79,11 @@ module.exports = {
         return {
           'Program:exit': (node: TSESTree.Program) => {
             node.body.forEach((node: TSESTree.Node) => {
-              collectExportNames(exportedNames, node, context);
+              if (node.type === AST_NODE_TYPES.ExportDefaultDeclaration || node.type === AST_NODE_TYPES.ExportNamedDeclaration || node.type === AST_NODE_TYPES.ExportAllDeclaration) {
+                collectExportNames(exportedNames, node as TSESTree.ProgramStatement, context);
+              }
             });
-            console.log(JSON.stringify({exportedNames}, null, 2));
+            console.log(JSON.stringify({file: context.getFilename(), exportedNames}, null, 2));
             // Your rule logic here
           },
         };

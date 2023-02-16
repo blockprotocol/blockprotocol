@@ -8,13 +8,14 @@
     "build" : "tsc"
   },
   "dependencies": {
-    "resolve": "1.22.1"
+    "enhanced-resolve": "5.12.0"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "eslint": "8.34.0",
     "@typescript-eslint/utils": "5.52.0",
+    "@typescript-eslint/parser": "5.52.0",
     "typescript": "4.9.4"
   }
 }
