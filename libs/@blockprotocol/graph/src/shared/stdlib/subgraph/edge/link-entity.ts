@@ -9,6 +9,7 @@ import {
   isIncomingLinkEdge,
   isOutgoingLinkEdge,
   isTemporalSubgraph,
+  OutwardEdge,
   Subgraph,
 } from "../../../types/subgraph.js";
 import { TimeInterval } from "../../../types/temporal-versioning.js";
@@ -18,7 +19,11 @@ import {
   intervalIntersectionWithInterval,
   intervalIsStrictlyAfterInterval,
 } from "../../interval.js";
-import { getEntityRevisionsByEntityId } from "../element/entity.js";
+import { mustBeDefined } from "../../must-be-defined";
+import {
+  getEntityRevision,
+  getEntityRevisionsByEntityId,
+} from "../element/entity.js";
 import { getLatestInstantIntervalForSubgraph } from "../temporal-axes.js";
 
 const getUniqueEntitiesFilter = <Temporal extends boolean>() => {
@@ -77,11 +82,12 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
       )
     ) {
       for (const outwardEdge of outwardEdges) {
-        if (isOutgoingLinkEdge(outwardEdge)) {
-          const { entityId: linkEntityId, interval: edgeInterval } =
-            outwardEdge.rightEndpoint;
+        if (isTemporalSubgraph(subgraph)) {
+          const outwardEdgeTemporal = outwardEdge as OutwardEdge<true>;
+          if (isOutgoingLinkEdge(outwardEdgeTemporal)) {
+            const { entityId: linkEntityId, interval: edgeInterval } =
+              outwardEdgeTemporal.rightEndpoint;
 
-          if (isTemporalSubgraph(subgraph)) {
             // Find the revisions of the link at the intersection of the search interval and the edge's valid interval
             const intersection = intervalIntersectionWithInterval(
               searchInterval,
@@ -106,15 +112,18 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
                 entities.push(entity);
               }
             }
-          } else {
-            for (const entity of getEntityRevisionsByEntityId(
-              subgraph,
-              linkEntityId,
-            )) {
-              if (uniqueEntitiesFilter(entity)) {
-                entities.push(entity);
-              }
-            }
+          }
+        } else {
+          const outwardEdgeNonTemporal = outwardEdge as OutwardEdge<false>;
+          if (isOutgoingLinkEdge(outwardEdgeNonTemporal)) {
+            const linkEntityId = outwardEdgeNonTemporal.rightEndpoint;
+
+            entities.push(
+              mustBeDefined(
+                getEntityRevision(subgraph, linkEntityId),
+                `Entity with ID ${linkEntityId} was not found in the subgraph`,
+              ),
+            );
           }
         }
       }
@@ -166,11 +175,12 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
       )
     ) {
       for (const outwardEdge of outwardEdges) {
-        if (isIncomingLinkEdge(outwardEdge)) {
-          const { entityId: linkEntityId, interval: edgeInterval } =
-            outwardEdge.rightEndpoint;
+        if (isTemporalSubgraph(subgraph)) {
+          const outwardEdgeTemporal = outwardEdge as OutwardEdge<true>;
+          if (isIncomingLinkEdge(outwardEdgeTemporal)) {
+            const { entityId: linkEntityId, interval: edgeInterval } =
+              outwardEdgeTemporal.rightEndpoint;
 
-          if (isTemporalSubgraph(subgraph)) {
             // Find the revisions of the link at the intersection of the search interval and the edge's valid interval
             const intersection = intervalIntersectionWithInterval(
               searchInterval,
@@ -195,15 +205,18 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
                 entities.push(entity);
               }
             }
-          } else {
-            for (const entity of getEntityRevisionsByEntityId(
-              subgraph,
-              linkEntityId,
-            )) {
-              if (uniqueEntitiesFilter(entity)) {
-                entities.push(entity);
-              }
-            }
+          }
+        } else {
+          const outwardEdgeNonTemporal = outwardEdge as OutwardEdge<false>;
+          if (isIncomingLinkEdge(outwardEdgeNonTemporal)) {
+            const linkEntityId = outwardEdgeNonTemporal.rightEndpoint;
+
+            entities.push(
+              mustBeDefined(
+                getEntityRevision(subgraph, linkEntityId),
+                `Entity with ID ${linkEntityId} was not found in the subgraph`,
+              ),
+            );
           }
         }
       }
@@ -232,23 +245,22 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
 ): Entity<Temporal>[] | undefined => {
-  const searchInterval =
-    interval !== undefined
-      ? interval
-      : getLatestInstantIntervalForSubgraph(subgraph);
-
-  const outwardEdge = Object.values(subgraph.edges[entityId] ?? {})
-    .flat()
-    .find(isHasLeftEntityEdge);
-
-  if (!outwardEdge) {
-    return undefined;
-  }
-
-  const leftEntityId = outwardEdge.rightEndpoint.entityId;
-
   if (isTemporalSubgraph(subgraph)) {
-    const { interval: edgeInterval } = outwardEdge.rightEndpoint;
+    const searchInterval =
+      interval !== undefined
+        ? interval
+        : getLatestInstantIntervalForSubgraph(subgraph);
+
+    const outwardEdge = Object.values(subgraph.edges[entityId] ?? {})
+      .flat()
+      .find(isHasLeftEntityEdge<true>);
+
+    if (!outwardEdge) {
+      return undefined;
+    }
+
+    const { entityId: leftEntityId, interval: edgeInterval } =
+      outwardEdge.rightEndpoint;
     const intersection = intervalIntersectionWithInterval(
       searchInterval,
       edgeInterval,
@@ -267,12 +279,24 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
       subgraph as Subgraph<true>,
       leftEntityId,
       intersection,
-    ) as Entity<Temporal>[];
+    );
   } else {
-    return getEntityRevisionsByEntityId(
-      subgraph as Subgraph<false>,
-      leftEntityId,
-    ) as Entity<Temporal>[];
+    const outwardEdge = Object.values(subgraph.edges[entityId] ?? {})
+      .flat()
+      .find(isHasLeftEntityEdge<false>);
+
+    if (!outwardEdge) {
+      return undefined;
+    }
+
+    const leftEntityId = outwardEdge.rightEndpoint;
+
+    return [
+      mustBeDefined(
+        getEntityRevision(subgraph, leftEntityId),
+        `Entity with ID ${leftEntityId} was not found in the subgraph`,
+      ),
+    ];
   }
 };
 
@@ -295,23 +319,23 @@ export const getRightEntityForLinkEntity = <Temporal extends boolean>(
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
 ): Entity<Temporal>[] | undefined => {
-  const searchInterval =
-    interval !== undefined
-      ? interval
-      : getLatestInstantIntervalForSubgraph(subgraph);
-
-  const outwardEdge = Object.values(subgraph.edges[entityId] ?? {})
-    .flat()
-    .find(isHasRightEntityEdge);
-
-  if (!outwardEdge) {
-    return undefined;
-  }
-
-  const rightEntityId = outwardEdge.rightEndpoint.entityId;
-
   if (isTemporalSubgraph(subgraph)) {
-    const { interval: edgeInterval } = outwardEdge.rightEndpoint;
+    const searchInterval =
+      interval !== undefined
+        ? interval
+        : getLatestInstantIntervalForSubgraph(subgraph);
+
+    const outwardEdge = Object.values(subgraph.edges[entityId] ?? {})
+      .flat()
+      .find(isHasRightEntityEdge<true>);
+
+    if (!outwardEdge) {
+      return undefined;
+    }
+
+    const { entityId: rightEntityId, interval: edgeInterval } =
+      outwardEdge.rightEndpoint;
+
     const intersection = intervalIntersectionWithInterval(
       searchInterval,
       edgeInterval,
@@ -330,12 +354,24 @@ export const getRightEntityForLinkEntity = <Temporal extends boolean>(
       subgraph as Subgraph<true>,
       rightEntityId,
       intersection,
-    ) as Entity<Temporal>[];
+    );
   } else {
-    return getEntityRevisionsByEntityId(
-      subgraph as Subgraph<false>,
-      rightEntityId,
-    ) as Entity<Temporal>[];
+    const outwardEdge = Object.values(subgraph.edges[entityId] ?? {})
+      .flat()
+      .find(isHasRightEntityEdge<false>);
+
+    if (!outwardEdge) {
+      return undefined;
+    }
+
+    const rightEntityId = outwardEdge.rightEndpoint;
+
+    return [
+      mustBeDefined(
+        getEntityRevision(subgraph, rightEntityId),
+        `Entity with ID ${rightEntityId} was not found in the subgraph`,
+      ),
+    ];
   }
 };
 

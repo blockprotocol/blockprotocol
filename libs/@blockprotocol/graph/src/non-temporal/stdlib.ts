@@ -98,7 +98,7 @@ export const getIncomingLinksForEntity = (
 export const getLeftEntityForLinkEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-) => getLeftEntityForLinkEntityGeneral<false>(subgraph, entityId);
+) => getLeftEntityForLinkEntityGeneral<false>(subgraph, entityId)?.pop();
 export const getOutgoingLinkAndTargetEntities = <
   LinkAndRightEntities extends LinkEntityAndRightEntity[] = LinkEntityAndRightEntity[],
 >(
@@ -116,7 +116,7 @@ export const getOutgoingLinksForEntity = (
 export const getRightEntityForLinkEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-) => getRightEntityForLinkEntityGeneral<false>(subgraph, entityId);
+) => getRightEntityForLinkEntityGeneral<false>(subgraph, entityId)?.pop();
 export const getDataTypeById = getDataTypeByIdGeneral;
 export const getDataTypeByVertexId = getDataTypeByVertexIdGeneral;
 export const getDataTypes = getDataTypesGeneral;
@@ -125,10 +125,10 @@ export const getEntities = (subgraph: Subgraph) =>
   getEntitiesGeneral<false>(subgraph, true);
 export const getEntityRevision = (subgraph: Subgraph, entityId: EntityId) =>
   getEntityRevisionGeneral<false>(subgraph, entityId);
-export const getEntityRevisionsByEntityId = (
-  subgraph: Subgraph,
-  entityId: EntityId,
-) => getEntityRevisionsByEntityIdGeneral<false>(subgraph, entityId);
+// export const getEntityRevisionsByEntityId = (
+//   subgraph: Subgraph,
+//   entityId: EntityId,
+// ) => getEntityRevisionsByEntityIdGeneral<false>(subgraph, entityId);
 export const getEntityTypeById = getEntityTypeByIdGeneral;
 export const getEntityTypeByVertexId = getEntityTypeByVertexIdGeneral;
 export const getEntityTypes = getEntityTypesGeneral;

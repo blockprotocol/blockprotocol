@@ -10,17 +10,19 @@ export * from "./edges/kind.js";
 export * from "./edges/outward-edge.js";
 export * from "./edges/variants.js";
 
-export type OntologyRootedEdges = Record<
+export type OntologyRootedEdges<Temporal extends boolean> = Record<
   BaseUri,
-  Record<OntologyTypeRevisionId, OntologyOutwardEdge[]>
+  Record<OntologyTypeRevisionId, OntologyOutwardEdge<Temporal>[]>
 >;
 
-export type KnowledgeGraphRootedEdges = Record<
+export type KnowledgeGraphRootedEdges<Temporal extends boolean> = Record<
   EntityId,
-  Record<Timestamp, KnowledgeGraphOutwardEdge[]>
+  Record<Timestamp, KnowledgeGraphOutwardEdge<Temporal>[]>
 >;
 
 // We technically want to intersect (`&`) the types here, but as their property keys overlap it confuses things and we
 // end up with unsatisfiable values like `EntityVertex & DataTypeVertex`. While the union (`|`) is semantically
 // incorrect, it structurally matches the types we want.
-export type Edges = OntologyRootedEdges | KnowledgeGraphRootedEdges;
+export type Edges<Temporal extends boolean> =
+  | OntologyRootedEdges<Temporal>
+  | KnowledgeGraphRootedEdges<Temporal>;

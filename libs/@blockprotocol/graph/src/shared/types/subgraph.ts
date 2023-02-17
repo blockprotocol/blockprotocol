@@ -50,7 +50,7 @@ export type Subgraph<
 > = {
   roots: RootType["vertexId"][];
   vertices: Vertices<Temporal>;
-  edges: Edges;
+  edges: Edges<Temporal>;
   depths: GraphResolveDepths;
 } & (Temporal extends true ? { temporalAxes: SubgraphTemporalAxes } : {});
 

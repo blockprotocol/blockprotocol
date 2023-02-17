@@ -26,16 +26,16 @@ export const addOutwardEdgeToSubgraphByMutation = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   sourceBaseId: EntityId | BaseUri,
   at: OntologyTypeRevisionId | Timestamp,
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<Temporal>,
 ) => {
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   subgraph.edges[sourceBaseId] ??= {};
   subgraph.edges[sourceBaseId]![at] ??= [];
-  const outwardEdgesAtVersion: OutwardEdge[] =
+  const outwardEdgesAtVersion: OutwardEdge<Temporal>[] =
     subgraph.edges[sourceBaseId]![at]!;
 
   if (
-    !outwardEdgesAtVersion.find((otherOutwardEdge: OutwardEdge) =>
+    !outwardEdgesAtVersion.find((otherOutwardEdge: OutwardEdge<Temporal>) =>
       isEqual(otherOutwardEdge, outwardEdge),
     )
   ) {

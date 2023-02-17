@@ -1,4 +1,4 @@
-import { BaseUri } from "@blockprotocol/type-system";
+import { BaseUri } from "@blockprotocol/type-system/slim";
 
 import { GraphBlockHandler as GraphBlockHandlerGeneral } from "../shared/graph-block-handler";
 import { GraphEmbedderHandler as GraphEmbedderHandlerGeneral } from "../shared/graph-embedder-handler";
@@ -12,7 +12,6 @@ import {
   AggregatePropertyTypesResult as AggregatePropertyTypesResultGeneral,
   BlockGraphMessageCallbacks as BlockGraphMessageCallbacksGeneral,
   BlockGraphProperties as BlockGraphPropertiesGeneral,
-  BoundedTimeInterval as BoundedTimeIntervalGeneral,
   ConstrainsLinkDestinationsOnEdge as ConstrainsLinkDestinationsOnEdgeGeneral,
   ConstrainsLinksOnEdge as ConstrainsLinksOnEdgeGeneral,
   ConstrainsPropertiesOnEdge as ConstrainsPropertiesOnEdgeGeneral,
@@ -32,8 +31,6 @@ import {
   Edges as EdgesGeneral,
   Entity as EntityGeneral,
   EntityId as EntityIdGeneral,
-  EntityIdWithInterval as EntityIdWithIntervalGeneral,
-  EntityIdWithTimestamp as EntityIdWithTimestampGeneral,
   EntityMetadata as EntityMetadataGeneral,
   EntityPropertiesObject as EntityPropertiesObjectGeneral,
   EntityPropertyValue as EntityPropertyValueGeneral,
@@ -46,7 +43,6 @@ import {
   EntityTypeWithMetadata as EntityTypeWithMetadataGeneral,
   EntityVertex as EntityVertexGeneral,
   EntityVertexId as EntityVertexIdGeneral,
-  ExclusiveLimitedTemporalBound as ExclusiveLimitedTemporalBoundGeneral,
   FileAtUrlData as FileAtUrlDataGeneral,
   FileData as FileDataGeneral,
   FileEntity as FileEntityGeneral,
@@ -68,7 +64,6 @@ import {
   HasLeftEntityEdge as HasLeftEntityEdgeGeneral,
   HasRightEntityEdge as HasRightEntityEdgeGeneral,
   IdentifierForGraphElement as IdentifierForGraphElementGeneral,
-  InclusiveLimitedTemporalBound as InclusiveLimitedTemporalBoundGeneral,
   IncomingLinkEdge as IncomingLinkEdgeGeneral,
   InheritsFromEdge as InheritsFromEdgeGeneral,
   isConstrainsLinkDestinationsOnEdge as isConstrainsLinkDestinationsOnEdgeGeneral,
@@ -112,7 +107,6 @@ import {
   KnowledgeGraphRootedEdges as KnowledgeGraphRootedEdgesGeneral,
   KnowledgeGraphVertex as KnowledgeGraphVertexGeneral,
   KnowledgeGraphVertices as KnowledgeGraphVerticesGeneral,
-  LimitedTemporalBound as LimitedTemporalBoundGeneral,
   LinkData as LinkDataGeneral,
   LinkDestinationsConstrainedByEdge as LinkDestinationsConstrainedByEdgeGeneral,
   LinkedAggregation as LinkedAggregationGeneral,
@@ -145,10 +139,7 @@ import {
   Sort as SortGeneral,
   Subgraph as SubgraphGeneral,
   SubgraphRootType as SubgraphRootTypeGeneral,
-  TemporalBound as TemporalBoundGeneral,
-  TimeInterval as TimeIntervalGeneral,
   Timestamp as TimestampGeneral,
-  Unbounded as UnboundedGeneral,
   UpdateEntityData as UpdateEntityDataGeneral,
   UpdateEntityTypeData as UpdateEntityTypeDataGeneral,
   UpdateLinkedAggregationData as UpdateLinkedAggregationDataGeneral,
@@ -162,15 +153,24 @@ import {
 } from "../shared/types.js";
 
 // import {
+//   BoundedTimeInterval as BoundedTimeIntervalGeneral,
 //   EntityTemporalVersioningMetadata as EntityTemporalVersioningMetadataGeneral,
+//   EntityIdWithInterval as EntityIdWithIntervalGeneral,
+//   EntityIdWithTimestamp as EntityIdWithTimestampGeneral,
+//   ExclusiveLimitedTemporalBound as ExclusiveLimitedTemporalBoundGeneral,
+//   InclusiveLimitedTemporalBound as InclusiveLimitedTemporalBoundGeneral,
 //   isTemporalSubgraph as isTemporalSubgraphGeneral,
+//   LimitedTemporalBound as LimitedTemporalBoundGeneral,
+//   PinnedTemporalAxis as PinnedTemporalAxisGeneral,
+//   PinnedTemporalAxisUnresolved as PinnedTemporalAxisUnresolvedGeneral,
 //   QueryTemporalAxes as QueryTemporalAxesGeneral,
 //   QueryTemporalAxesUnresolved as QueryTemporalAxesUnresolvedGeneral,
 //   SubgraphTemporalAxes as SubgraphTemporalAxesGeneral,
-//   PinnedTemporalAxis as PinnedTemporalAxisGeneral,
-//   PinnedTemporalAxisUnresolved as PinnedTemporalAxisUnresolvedGeneral,
 //   TemporalAxis as TemporalAxisGeneral,
+//   TemporalBound as TemporalBoundGeneral,
+//   TimeInterval as TimeIntervalGeneral,
 //   TimeIntervalUnresolved as TimeIntervalUnresolvedGeneral,
+//   Unbounded as UnboundedGeneral,
 //   VariableTemporalAxis as VariableTemporalAxisGeneral,
 //   VariableTemporalAxisUnresolved as VariableTemporalAxisUnresolvedGeneral,
 // } from "../shared/types.js";
@@ -268,22 +268,22 @@ export type SharedEdgeKind = SharedEdgeKindGeneral;
 export const isOntologyEdgeKind = isOntologyEdgeKindGeneral;
 export const isKnowledgeGraphEdgeKind = isKnowledgeGraphEdgeKindGeneral;
 export const isSharedEdgeKind = isSharedEdgeKindGeneral;
-export type EntityIdWithTimestamp = EntityIdWithTimestampGeneral;
-export type EntityIdWithInterval = EntityIdWithIntervalGeneral;
-export type OutwardEdge = OutwardEdgeGeneral;
+// export type EntityIdWithTimestamp = EntityIdWithTimestampGeneral;
+// export type EntityIdWithInterval = EntityIdWithIntervalGeneral;
+export type OutwardEdge = OutwardEdgeGeneral<false>;
 export const isOntologyOutwardEdge = isOntologyOutwardEdgeGeneral;
 export const isKnowledgeGraphOutwardEdge = isKnowledgeGraphOutwardEdgeGeneral;
-export type OutgoingLinkEdge = OutgoingLinkEdgeGeneral;
+export type OutgoingLinkEdge = OutgoingLinkEdgeGeneral<false>;
 export const isOutgoingLinkEdge = isOutgoingLinkEdgeGeneral;
-export type HasLeftEntityEdge = HasLeftEntityEdgeGeneral;
+export type HasLeftEntityEdge = HasLeftEntityEdgeGeneral<false>;
 export const isHasLeftEntityEdge = isHasLeftEntityEdgeGeneral;
-export type HasRightEntityEdge = HasRightEntityEdgeGeneral;
+export type HasRightEntityEdge = HasRightEntityEdgeGeneral<false>;
 export const isHasRightEntityEdge = isHasRightEntityEdgeGeneral;
-export type IncomingLinkEdge = IncomingLinkEdgeGeneral;
+export type IncomingLinkEdge = IncomingLinkEdgeGeneral<false>;
 export const isIncomingLinkEdge = isIncomingLinkEdgeGeneral;
 export type IsOfTypeEdge = IsOfTypeEdgeGeneral;
 export const isIsOfTypeEdge = isIsOfTypeEdgeGeneral;
-export type KnowledgeGraphOutwardEdge = KnowledgeGraphOutwardEdgeGeneral;
+export type KnowledgeGraphOutwardEdge = KnowledgeGraphOutwardEdgeGeneral<false>;
 export type InheritsFromEdge = InheritsFromEdgeGeneral;
 export const isInheritsFromEdge = isInheritsFromEdgeGeneral;
 export type IsInheritedByEdge = IsInheritedByEdgeGeneral;
@@ -309,12 +309,12 @@ export type LinkDestinationsConstrainedByEdge =
   LinkDestinationsConstrainedByEdgeGeneral;
 export const isLinkDestinationsConstrainedByEdge =
   isLinkDestinationsConstrainedByEdgeGeneral;
-export type IsTypeOfEdge = IsTypeOfEdgeGeneral;
+export type IsTypeOfEdge = IsTypeOfEdgeGeneral<false>;
 export const isIsTypeOfEdge = isIsTypeOfEdgeGeneral;
-export type OntologyOutwardEdge = OntologyOutwardEdgeGeneral;
-export type OntologyRootedEdges = OntologyRootedEdgesGeneral;
-export type KnowledgeGraphRootedEdges = KnowledgeGraphRootedEdgesGeneral;
-export type Edges = EdgesGeneral;
+export type OntologyOutwardEdge = OntologyOutwardEdgeGeneral<false>;
+export type OntologyRootedEdges = OntologyRootedEdgesGeneral<false>;
+export type KnowledgeGraphRootedEdges = KnowledgeGraphRootedEdgesGeneral<false>;
+export type Edges = EdgesGeneral<false>;
 export type GraphElementIdentifiers = GraphElementIdentifiersGeneral<false>;
 export type IdentifierForGraphElement<
   Element extends GraphElementIdentifiers["element"],
@@ -373,16 +373,16 @@ export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> =
 // export const isTemporalSubgraph = isTemporalSubgraphGeneral;
 export type Timestamp = TimestampGeneral;
 // export type TemporalAxis = TemporalAxisGeneral;
-export type LimitedTemporalBound = LimitedTemporalBoundGeneral;
-export type InclusiveLimitedTemporalBound =
-  InclusiveLimitedTemporalBoundGeneral;
-export type ExclusiveLimitedTemporalBound =
-  ExclusiveLimitedTemporalBoundGeneral;
-export type Unbounded = UnboundedGeneral;
-export type TemporalBound = TemporalBoundGeneral;
+// export type LimitedTemporalBound = LimitedTemporalBoundGeneral;
+// export type InclusiveLimitedTemporalBound =
+//   InclusiveLimitedTemporalBoundGeneral;
+// export type ExclusiveLimitedTemporalBound =
+//   ExclusiveLimitedTemporalBoundGeneral;
+// export type Unbounded = UnboundedGeneral;
+// export type TemporalBound = TemporalBoundGeneral;
 // export type TimeIntervalUnresolved = TimeIntervalUnresolvedGeneral;
-export type TimeInterval = TimeIntervalGeneral;
-export type BoundedTimeInterval = BoundedTimeIntervalGeneral;
+// export type TimeInterval = TimeIntervalGeneral;
+// export type BoundedTimeInterval = BoundedTimeIntervalGeneral;
 // export type VariableTemporalAxisUnresolved =
 //   VariableTemporalAxisUnresolvedGeneral;
 // export type VariableTemporalAxis = VariableTemporalAxisGeneral;

@@ -36,22 +36,24 @@ export type EntityIdWithInterval = {
   interval: TimeInterval<LimitedTemporalBound, TemporalBound>;
 };
 
-export type OutwardEdge = OntologyOutwardEdge | KnowledgeGraphOutwardEdge;
+export type OutwardEdge<Temporal extends boolean> =
+  | OntologyOutwardEdge<Temporal>
+  | KnowledgeGraphOutwardEdge<Temporal>;
 
 // -------------------------------- Type Guards --------------------------------
 
-export const isOntologyOutwardEdge = (
-  edge: OutwardEdge,
-): edge is OntologyOutwardEdge => {
+export const isOntologyOutwardEdge = <Temporal extends boolean>(
+  edge: OutwardEdge<Temporal>,
+): edge is OntologyOutwardEdge<Temporal> => {
   return (
     isOntologyEdgeKind(edge.kind) ||
     (isSharedEdgeKind(edge.kind) && isEntityRecordId(edge.rightEndpoint))
   );
 };
 
-export const isKnowledgeGraphOutwardEdge = (
-  edge: OutwardEdge,
-): edge is KnowledgeGraphOutwardEdge => {
+export const isKnowledgeGraphOutwardEdge = <Temporal extends boolean>(
+  edge: OutwardEdge<Temporal>,
+): edge is KnowledgeGraphOutwardEdge<Temporal> => {
   return (
     isKnowledgeGraphEdgeKind(edge.kind) ||
     (isSharedEdgeKind(edge.kind) && isOntologyTypeRecordId(edge.rightEndpoint))

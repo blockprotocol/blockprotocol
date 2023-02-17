@@ -1,4 +1,4 @@
-import { BaseUri } from "@blockprotocol/type-system";
+import { BaseUri } from "@blockprotocol/type-system/slim";
 
 import { GraphBlockHandler as GraphBlockHandlerGeneral } from "../shared/graph-block-handler";
 import { GraphEmbedderHandler as GraphEmbedderHandlerGeneral } from "../shared/graph-embedder-handler";
@@ -267,20 +267,20 @@ export const isKnowledgeGraphEdgeKind = isKnowledgeGraphEdgeKindGeneral;
 export const isSharedEdgeKind = isSharedEdgeKindGeneral;
 export type EntityIdWithTimestamp = EntityIdWithTimestampGeneral;
 export type EntityIdWithInterval = EntityIdWithIntervalGeneral;
-export type OutwardEdge = OutwardEdgeGeneral;
+export type OutwardEdge = OutwardEdgeGeneral<true>;
 export const isOntologyOutwardEdge = isOntologyOutwardEdgeGeneral;
 export const isKnowledgeGraphOutwardEdge = isKnowledgeGraphOutwardEdgeGeneral;
-export type OutgoingLinkEdge = OutgoingLinkEdgeGeneral;
+export type OutgoingLinkEdge = OutgoingLinkEdgeGeneral<true>;
 export const isOutgoingLinkEdge = isOutgoingLinkEdgeGeneral;
-export type HasLeftEntityEdge = HasLeftEntityEdgeGeneral;
+export type HasLeftEntityEdge = HasLeftEntityEdgeGeneral<true>;
 export const isHasLeftEntityEdge = isHasLeftEntityEdgeGeneral;
-export type HasRightEntityEdge = HasRightEntityEdgeGeneral;
+export type HasRightEntityEdge = HasRightEntityEdgeGeneral<true>;
 export const isHasRightEntityEdge = isHasRightEntityEdgeGeneral;
-export type IncomingLinkEdge = IncomingLinkEdgeGeneral;
+export type IncomingLinkEdge = IncomingLinkEdgeGeneral<true>;
 export const isIncomingLinkEdge = isIncomingLinkEdgeGeneral;
 export type IsOfTypeEdge = IsOfTypeEdgeGeneral;
 export const isIsOfTypeEdge = isIsOfTypeEdgeGeneral;
-export type KnowledgeGraphOutwardEdge = KnowledgeGraphOutwardEdgeGeneral;
+export type KnowledgeGraphOutwardEdge = KnowledgeGraphOutwardEdgeGeneral<true>;
 export type InheritsFromEdge = InheritsFromEdgeGeneral;
 export const isInheritsFromEdge = isInheritsFromEdgeGeneral;
 export type IsInheritedByEdge = IsInheritedByEdgeGeneral;
@@ -306,12 +306,12 @@ export type LinkDestinationsConstrainedByEdge =
   LinkDestinationsConstrainedByEdgeGeneral;
 export const isLinkDestinationsConstrainedByEdge =
   isLinkDestinationsConstrainedByEdgeGeneral;
-export type IsTypeOfEdge = IsTypeOfEdgeGeneral;
+export type IsTypeOfEdge = IsTypeOfEdgeGeneral<true>;
 export const isIsTypeOfEdge = isIsTypeOfEdgeGeneral;
-export type OntologyOutwardEdge = OntologyOutwardEdgeGeneral;
-export type OntologyRootedEdges = OntologyRootedEdgesGeneral;
-export type KnowledgeGraphRootedEdges = KnowledgeGraphRootedEdgesGeneral;
-export type Edges = EdgesGeneral;
+export type OntologyOutwardEdge = OntologyOutwardEdgeGeneral<true>;
+export type OntologyRootedEdges = OntologyRootedEdgesGeneral<true>;
+export type KnowledgeGraphRootedEdges = KnowledgeGraphRootedEdgesGeneral<true>;
+export type Edges = EdgesGeneral<true>;
 export type GraphElementIdentifiers = GraphElementIdentifiersGeneral<true>;
 export type IdentifierForGraphElement<
   Element extends GraphElementIdentifiers["element"],

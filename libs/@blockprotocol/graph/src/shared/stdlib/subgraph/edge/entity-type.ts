@@ -38,7 +38,7 @@ export const getPropertyTypesReferencedByEntityType = (
 
   const outwardEdges = subgraph.edges[baseUri]?.[
     revisionId
-  ] as OntologyOutwardEdge[];
+  ] as OntologyOutwardEdge<boolean>[];
 
   if (outwardEdges === undefined) {
     return [];

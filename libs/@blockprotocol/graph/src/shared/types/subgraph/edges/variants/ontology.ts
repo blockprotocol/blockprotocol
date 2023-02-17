@@ -1,4 +1,5 @@
 import { Subtype } from "../../../../util.js";
+import { EntityId } from "../../../entity";
 import { OntologyTypeVertexId } from "../../vertices.js";
 import { GenericOutwardEdge } from "../generic-outward-edge.js";
 import { OntologyEdgeKind, SharedEdgeKind } from "../kind.js";
@@ -14,7 +15,7 @@ export type InheritsFromEdge = Subtype<
 >;
 
 export const isInheritsFromEdge = (
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<boolean>,
 ): outwardEdge is InheritsFromEdge => {
   return outwardEdge.kind === "INHERITS_FROM" && !outwardEdge.reversed;
 };
@@ -29,7 +30,7 @@ export type IsInheritedByEdge = Subtype<
 >;
 
 export const isIsInheritedByEdge = (
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<boolean>,
 ): outwardEdge is IsInheritedByEdge => {
   return outwardEdge.kind === "INHERITS_FROM" && outwardEdge.reversed;
 };
@@ -44,7 +45,7 @@ export type ConstrainsValuesOnEdge = Subtype<
 >;
 
 export const isConstrainsValuesOnEdge = (
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<boolean>,
 ): outwardEdge is ConstrainsValuesOnEdge => {
   return outwardEdge.kind === "CONSTRAINS_VALUES_ON" && !outwardEdge.reversed;
 };
@@ -59,7 +60,7 @@ export type ValuesConstrainedByEdge = Subtype<
 >;
 
 export const isValuesConstrainedByEdge = (
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<boolean>,
 ): outwardEdge is ValuesConstrainedByEdge => {
   return outwardEdge.kind === "CONSTRAINS_VALUES_ON" && outwardEdge.reversed;
 };
@@ -74,7 +75,7 @@ export type ConstrainsPropertiesOnEdge = Subtype<
 >;
 
 export const isConstrainsPropertiesOnEdge = (
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<boolean>,
 ): outwardEdge is ConstrainsPropertiesOnEdge => {
   return (
     outwardEdge.kind === "CONSTRAINS_PROPERTIES_ON" && !outwardEdge.reversed
@@ -91,7 +92,7 @@ export type PropertiesConstrainedByEdge = Subtype<
 >;
 
 export const isPropertiesConstrainedByEdge = (
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<boolean>,
 ): outwardEdge is PropertiesConstrainedByEdge => {
   return (
     outwardEdge.kind === "CONSTRAINS_PROPERTIES_ON" && outwardEdge.reversed
@@ -108,7 +109,7 @@ export type ConstrainsLinksOnEdge = Subtype<
 >;
 
 export const isConstrainsLinksOnEdge = (
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<boolean>,
 ): outwardEdge is ConstrainsLinksOnEdge => {
   return outwardEdge.kind === "CONSTRAINS_LINKS_ON" && !outwardEdge.reversed;
 };
@@ -123,7 +124,7 @@ export type LinksConstrainedByEdge = Subtype<
 >;
 
 export const isLinksConstrainedByEdge = (
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<boolean>,
 ): outwardEdge is LinksConstrainedByEdge => {
   return outwardEdge.kind === "CONSTRAINS_LINKS_ON" && outwardEdge.reversed;
 };
@@ -138,7 +139,7 @@ export type ConstrainsLinkDestinationsOnEdge = Subtype<
 >;
 
 export const isConstrainsLinkDestinationsOnEdge = (
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<boolean>,
 ): outwardEdge is ConstrainsLinkDestinationsOnEdge => {
   return (
     outwardEdge.kind === "CONSTRAINS_LINK_DESTINATIONS_ON" &&
@@ -156,7 +157,7 @@ export type LinkDestinationsConstrainedByEdge = Subtype<
 >;
 
 export const isLinkDestinationsConstrainedByEdge = (
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<boolean>,
 ): outwardEdge is LinkDestinationsConstrainedByEdge => {
   return (
     outwardEdge.kind === "CONSTRAINS_LINK_DESTINATIONS_ON" &&
@@ -164,22 +165,22 @@ export const isLinkDestinationsConstrainedByEdge = (
   );
 };
 
-export type IsTypeOfEdge = Subtype<
+export type IsTypeOfEdge<Temporal extends boolean> = Subtype<
   GenericOutwardEdge,
   {
     reversed: true;
     kind: "IS_OF_TYPE";
-    rightEndpoint: EntityIdWithInterval;
+    rightEndpoint: Temporal extends true ? EntityIdWithInterval : EntityId;
   }
 >;
 
-export const isIsTypeOfEdge = (
-  outwardEdge: OutwardEdge,
-): outwardEdge is IsTypeOfEdge => {
+export const isIsTypeOfEdge = <Temporal extends boolean>(
+  outwardEdge: OutwardEdge<Temporal>,
+): outwardEdge is IsTypeOfEdge<Temporal> => {
   return outwardEdge.kind === "IS_OF_TYPE" && outwardEdge.reversed;
 };
 
-export type OntologyOutwardEdge =
+export type OntologyOutwardEdge<Temporal extends boolean> =
   | InheritsFromEdge
   | IsInheritedByEdge
   | ConstrainsValuesOnEdge
@@ -190,7 +191,7 @@ export type OntologyOutwardEdge =
   | LinksConstrainedByEdge
   | ConstrainsLinkDestinationsOnEdge
   | LinkDestinationsConstrainedByEdge
-  | IsTypeOfEdge;
+  | IsTypeOfEdge<Temporal>;
 
 /**
  * This provides a sanity check that we've fully expressed all variants for OntologyOutwardEdge edges. Should a new
@@ -198,8 +199,13 @@ export type OntologyOutwardEdge =
  *
  * This can be affirmed by commenting out one of the edges above
  */
-type _CheckOntologyOutwardEdge = Subtype<
-  OntologyOutwardEdge,
+type _CheckOntologyOutwardEdgeTemporal = Subtype<
+  OntologyOutwardEdge<true>,
   | GenericOutwardEdge<OntologyEdgeKind, boolean, OntologyTypeVertexId>
   | GenericOutwardEdge<SharedEdgeKind, true, EntityIdWithInterval>
+>;
+type _CheckOntologyOutwardEdge = Subtype<
+  OntologyOutwardEdge<false>,
+  | GenericOutwardEdge<OntologyEdgeKind, boolean, OntologyTypeVertexId>
+  | GenericOutwardEdge<SharedEdgeKind, true, EntityId>
 >;
