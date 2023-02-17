@@ -105,6 +105,16 @@ const nextConfig = {
         destination: "/docs/spec/graph-module",
         permanent: true,
       },
+      {
+        source: "/docs/spec/graph-service",
+        destination: "/docs/spec/graph-module",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/hook-service",
+        destination: "/docs/spec/hook-module",
+        permanent: true,
+      },
     ];
   },
 
