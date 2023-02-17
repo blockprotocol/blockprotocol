@@ -6,9 +6,9 @@ Blocks are discrete components that allow users to view, explore, or edit data.
 
 The Block Protocol defines a standard for communication between blocks and the applications that embed them.
 
-The protocol is split into a core specification setting out _how_ applications and blocks communicate, and service specifications defining _what_ applications and blocks communicate.
+The protocol is split into a core specification setting out _how_ applications and blocks communicate, and module specifications defining _what_ applications and blocks communicate.
 
-This guide helps get you set up and introduces some of the key features of the graph service specification, which deals with creating, reading and updating data records (or “entities”).
+This guide helps get you set up and introduces some of the key features of the graph module specification, which deals with creating, reading and updating data records (or “entities”).
 
 In practice, most block developers will not need to know the lower-level details of the specifications, as the libraries we provide implement them.
 
@@ -79,38 +79,38 @@ When a block is loaded into an embedding application:
 1.  `custom-element` and `react`-type blocks will be sent this initial data as properties.
 1.  `html`-type blocks will be sent messages containing the initial data.
 1.  the block can then do whatever it chooses to do with those properties.
-1.  at any time after this initialization, the block may send further messages via a `Service` for specific purposes, such as reading and writing data within the embedding application.
+1.  at any time after this initialization, the block may send further messages via a `Module` for specific purposes, such as reading and writing data within the embedding application.
 
 The starter blocks created by `create-block-app` implement a simple example of this lifecycle:
 
-1.  the `BlockEntityProperties` type in `src/app.tsx` defines the properties expected for the `blockEntity` (part of [the Graph Service](#using-the-graph-service)).
+1.  the `BlockEntityProperties` type in `src/app.tsx` defines the properties expected for the `blockEntity` (part of [the Graph Module](#using-the-graph-module)).
 1.  mock values for the `blockEntity` are passed to `MockBlockDock` in `dev.tsx`, including the `properties` it expects (in this case, a `name` of type `string`).
 1.  the block receives the data for `blockEntity`:
 1.  the `react` and `custom-element` blocks receive the `blockEntity` as part of the `graph` object in their properties.
 1.  the `html` block registers a callback for the `blockEntity` message.
 1.  the block accesses the properties in `blockEntity` and uses the `name` property to render its `Hello, World!` message.
 
-## Using the Graph Service
+## Using the Graph Module
 
-The Graph Service describes how entities can be created, queried, updated, and linked together, including the block entity. It enables your block to create, read, update, and delete data in the embedding application.
+The Graph Module describes how entities can be created, queried, updated, and linked together, including the block entity. It enables your block to create, read, update, and delete data in the embedding application.
 
-The Graph Service is available via the `graphService` property in each starter template. It has a number of methods corresponding to the messages defined in the [specification](https://blockprotocol.org/docs/spec/graph-service).
+The Graph Module is available via the `graphModule` property in each starter template. It has a number of methods corresponding to the messages defined in the [specification](https://blockprotocol.org/docs/spec/graph-module).
 
 Using these methods in combination, you can create complex graphs from within a block without having to know anything about the implementation details of the application embedding it.
 
 Each message payload is the same: an object containing `data` and `errors` keys.
 
-Depending on the template, you may need to check that the `graphService` is available before using it (we will be removing the need for this shortly). These checks are omitted below.
+Depending on the template, you may need to check that the `graphModule` is available before using it (we will be removing the need for this shortly). These checks are omitted below.
 
 ### Updating the `blockEntity`
 
-A common use for the Graph Service is to update the `blockEntity` to update the properties that are sent to the block (including when it is loaded again in the future).
+A common use for the Graph Module is to update the `blockEntity` to update the properties that are sent to the block (including when it is loaded again in the future).
 
 To do this, you need to call `updateEntity` using the `entityId` of the `blockEntity`:
 
 ```js
 // Update the block entity, and receive the updated entity in return
-const { data, errors } = await graphService.updateEntity({
+const { data, errors } = await graphModule.updateEntity({
   data: {
     entityId: blockEntity.entityId,
     properties: { name: "Bob" },
@@ -142,7 +142,7 @@ You can browse the available entities and types in order to display them, or cre
 To link other entities to the block, call `createLink` with the relevant source and destination:
 
 ```js
-graphService?.createLink({
+graphModule?.createLink({
   data: {
     sourceEntityId: blockEntity.entityId,
     destinationEntityId: "person-1",
@@ -155,13 +155,13 @@ Any entities linked to the block will appear in the `linkedEntities` property, w
 
 ### Going further
 
-If you are using TypeScript, the types for methods available on `graphService` (as defined in the `@blockprotocol/graph` package) should help you understand what methods are available and how they operate.
+If you are using TypeScript, the types for methods available on `graphModule` (as defined in the `@blockprotocol/graph` package) should help you understand what methods are available and how they operate.
 
-You can also review the messages defined in the graph specification [here](https://blockprotocol.org/docs/spec/graph-service). If you do so, bear in mind the following:
+You can also review the messages defined in the graph specification [here](https://blockprotocol.org/docs/spec/graph-module). If you do so, bear in mind the following:
 
 - only the ones marked as `source: "block"` are available as methods to your block.
 - any message marked as `sentOnInitialization` with `source: "embeder"` will be passed to your block as soon as it’s loaded. Remember that `custom-element` and `react`-type blocks receive these messages as properties under a `graph` object, whereas `html` blocks can register callbacks for each message.
-- if a message has `respondedToBy`, it expects a response and the `graphService` method will return a Promise which will resolve with the `{ data, errors }` object. If a message does not expect a response, the method will return void.
+- if a message has `respondedToBy`, it expects a response and the `graphModule` method will return a Promise which will resolve with the `{ data, errors }` object. If a message does not expect a response, the method will return void.
 
 ## Testing your block in HASH
 

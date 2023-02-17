@@ -28,24 +28,24 @@ export abstract class BlockElementBase<
   RootEntityLinkedEntities,
 > extends LitElement {
   /**
-   * The 'graphService' is a handler for sending messages to the embedding application, e.g. 'graphService.updateEntity'
+   * The 'graphModule' is a handler for sending messages to the embedding application, e.g. 'graphModule.updateEntity'
    * It starts off undefined and will be available once the initial exchange of messages has taken place (handled internally)
-   * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list of available messages
+   * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list of available messages
    */
-  protected graphService?: GraphBlockHandler<Temporal>;
+  protected graphModule?: GraphBlockHandler<Temporal>;
   protected blockEntity?: RootEntity;
   protected linkedEntities?: LinkEntityAndRightEntity<Temporal>[];
 
   /**
    * The properties sent to the block represent the messages sent automatically from the application to the block.
-   * All block <> application messages are split into services, and so is this property object.
+   * All block <> application messages are split into modules, and so is this property object.
    */
   static properties = {
     /**
-     * The 'graph' object contains messages sent under the graph service from the app to the block.
+     * The 'graph' object contains messages sent under the graph module from the app to the block.
      * They are sent on initialization and again when the application has new values to send.
      * One such message is 'graph.blockEntitySubgraph', which is a graph rooted at the block entity.
-     * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list
+     * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list
      */
     graph: { type: Object },
 
@@ -76,8 +76,8 @@ export abstract class BlockElementBase<
 
   connectedCallback() {
     super.connectedCallback();
-    if (!this.graphService || this.graphService.destroyed) {
-      this.graphService = new GraphBlockHandler({
+    if (!this.graphModule || this.graphModule.destroyed) {
+      this.graphModule = new GraphBlockHandler({
         callbacks: {
           blockEntitySubgraph: () => this.updateDerivedProperties(),
         },
@@ -88,8 +88,8 @@ export abstract class BlockElementBase<
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    if (this.graphService && !this.graphService.destroyed) {
-      this.graphService.destroy();
+    if (this.graphModule && !this.graphModule.destroyed) {
+      this.graphModule.destroy();
     }
   }
 
@@ -98,9 +98,9 @@ export abstract class BlockElementBase<
    * @param properties the properties object to assign to the entity, which will overwrite the existing object
    */
   protected updateSelfProperties(properties: EntityPropertiesObject) {
-    if (!this.graphService) {
+    if (!this.graphModule) {
       throw new Error(
-        "Cannot updateSelfProperties – graphService not yet connected.",
+        "Cannot updateSelfProperties – graphModule not yet connected.",
       );
     }
     if (!this.graph) {
@@ -120,7 +120,7 @@ export abstract class BlockElementBase<
       );
     }
 
-    return this.graphService.updateEntity({
+    return this.graphModule.updateEntity({
       data: {
         entityId: blockEntity.metadata.recordId.entityId,
         entityTypeId: blockEntity.metadata.entityTypeId,

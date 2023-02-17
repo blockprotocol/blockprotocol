@@ -1,19 +1,19 @@
 {
-  "$id": "https://blockprotocol.org/types/core/service-meta",
+  "$id": "https://blockprotocol.org/types/core/module-meta",
   "type": "object",
   "properties": {
     "description": {
       "type": "string",
-      "description": "A short description of the functionality the service provides and/or the problems it aims to solve. Markdown is permitted."
+      "description": "A short description of the functionality the module provides and/or the problems it aims to solve. Markdown is permitted."
     },
     "name": {
       "type": "string",
-      "description": "A unique name for the service, consisting of lowercase letters, numbers, and hyphens only.",
+      "description": "A unique name for the module, consisting of lowercase letters, numbers, and hyphens only.",
       "pattern": "^[-a-z0-9]$"
     },
     "messages": {
       "type": "array",
-      "description": "The messages that may be exchanged by blocks and embedding applications as part of the service",
+      "description": "The messages that may be exchanged by blocks and embedding applications as part of the module",
       "items": {
         "type": "object",
         "properties": {
@@ -47,7 +47,7 @@
       },
       "version": {
         "type": "string",
-        "description": "The semantic version of this service specification"
+        "description": "The semantic version of this module specification"
       },
       "coreVersion": {
         "type": "string",

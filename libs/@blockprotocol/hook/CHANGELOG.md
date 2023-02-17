@@ -19,7 +19,7 @@
 
 ### Patch Changes
 
-- [#676](https://github.com/blockprotocol/blockprotocol/pull/676) [`97d8751`](https://github.com/blockprotocol/blockprotocol/commit/97d8751a8e700293869d86c6062db9e88c1e24af) Thanks [@CiaranMn](https://github.com/CiaranMn)! - export hook-service.json. add error codes. bug fix in useHook
+- [#676](https://github.com/blockprotocol/blockprotocol/pull/676) [`97d8751`](https://github.com/blockprotocol/blockprotocol/commit/97d8751a8e700293869d86c6062db9e88c1e24af) Thanks [@CiaranMn](https://github.com/CiaranMn)! - export hook-module.json. add error codes. bug fix in useHook
 
 ## 0.0.6
 

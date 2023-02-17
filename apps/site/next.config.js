@@ -101,8 +101,18 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/docs/spec/graph-service-specification",
-        destination: "/docs/spec/graph-service",
+        source: "/docs/spec/graph-module-specification",
+        destination: "/docs/spec/graph-module",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/graph-service",
+        destination: "/docs/spec/graph-module",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/hook-service",
+        destination: "/docs/spec/hook-module",
         permanent: true,
       },
     ];
@@ -115,8 +125,8 @@ const nextConfig = {
         destination: "/api/rewrites/sandboxed-block-demo",
       },
       {
-        source: "/types/services/:servicename/:typename",
-        destination: "/types/services/:servicename/:typename.json",
+        source: "/types/modules/:modulename/:typename",
+        destination: "/types/modules/:modulename/:typename.json",
       },
       {
         source: "/types/core/:typename",

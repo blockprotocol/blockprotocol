@@ -1,4 +1,4 @@
-import { useServiceConstructor } from "@blockprotocol/core/react";
+import { useModuleConstructor } from "@blockprotocol/core/react";
 import { FunctionComponent, RefObject, useMemo } from "react";
 
 import {
@@ -20,17 +20,17 @@ export type BlockComponent<
 /**
  * Create a GraphBlockHandler instance, using a reference to an element in the block.
  *
- * The graphService will only be reconstructed if the element reference changes.
- * Updates to any callbacks after first constructing should be made by calling graphService.on("messageName", callback);
+ * The graphModule will only be reconstructed if the element reference changes.
+ * Updates to any callbacks after first constructing should be made by calling graphModule.on("messageName", callback);
  */
-export const useGraphBlockService = <Temporal extends boolean>(
+export const useGraphBlockModule = <Temporal extends boolean>(
   ref: RefObject<HTMLElement>,
   constructorArgs?: Omit<
     ConstructorParameters<typeof GraphBlockHandler>[0],
     "element"
   >,
-): { graphService: GraphBlockHandler<Temporal> } => ({
-  graphService: useServiceConstructor({
+): { graphModule: GraphBlockHandler<Temporal> } => ({
+  graphModule: useModuleConstructor({
     Handler: GraphBlockHandler,
     constructorArgs,
     ref,
@@ -40,19 +40,19 @@ export const useGraphBlockService = <Temporal extends boolean>(
 /**
  * Create a GraphBlockHandler instance, using a reference to an element in the block.
  *
- * The graphService will only be reconstructed if the element reference changes.
+ * The graphModule will only be reconstructed if the element reference changes.
  * Updates to any callbacks after first constructing should be made by:
- * 1. to register one, call graphService.on("messageName", callback);
- * 2. to register multiple, call graphService.registerCallbacks({ [messageName]: callback });
+ * 1. to register one, call graphModule.on("messageName", callback);
+ * 2. to register multiple, call graphModule.registerCallbacks({ [messageName]: callback });
  */
-export const useGraphEmbedderService = <Temporal extends boolean>(
+export const useGraphEmbedderModule = <Temporal extends boolean>(
   ref: RefObject<HTMLElement>,
   constructorArgs?: Omit<
     ConstructorParameters<typeof GraphEmbedderHandler<Temporal>>[0],
     "element"
   >,
-): { graphService: GraphEmbedderHandler<Temporal> } => ({
-  graphService: useServiceConstructor({
+): { graphModule: GraphEmbedderHandler<Temporal> } => ({
+  graphModule: useModuleConstructor({
     Handler: GraphEmbedderHandler,
     ref,
     constructorArgs,

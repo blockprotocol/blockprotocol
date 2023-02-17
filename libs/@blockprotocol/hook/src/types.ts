@@ -13,26 +13,26 @@ export type HookData = {
   entityId: EntityId;
 };
 
-export type BlockHookMessageCallbacks = {};
+export type HookBlockMessageCallbacks = {};
 
-export type EmbedderHookMessages<> = {};
+export type HookEmbedderMessages<> = {};
 
 export type HookError = "INVALID_INPUT" | "NOT_FOUND" | "NOT_IMPLEMENTED";
 
 /**
  * @todo Generate these types from the JSON definition, to avoid manually keeping the JSON and types in sync
  */
-export type EmbedderHookMessageCallbacks = {
+export type HookEmbedderMessageCallbacks = {
   hook: MessageCallback<HookData, null, MessageReturn<HookResponse>, HookError>;
 };
 
-export type BlockHookMessages<
-  Key extends keyof EmbedderHookMessageCallbacks = keyof EmbedderHookMessageCallbacks,
+export type HookBlockMessages<
+  Key extends keyof HookEmbedderMessageCallbacks = keyof HookEmbedderMessageCallbacks,
 > = {
   [key in Key]: ({
     data,
     errors,
-  }: Parameters<EmbedderHookMessageCallbacks[key]>[0]) => ReturnType<
-    EmbedderHookMessageCallbacks[key]
+  }: Parameters<HookEmbedderMessageCallbacks[key]>[0]) => ReturnType<
+    HookEmbedderMessageCallbacks[key]
   >;
 };

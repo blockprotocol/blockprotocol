@@ -1,7 +1,4 @@
-import {
-  EmbedderGraphMessageCallbacks,
-  EntityTypeWithMetadata,
-} from "@blockprotocol/graph";
+import { GraphEmbedderMessageCallbacks } from "@blockprotocol/graph";
 import { Container, Typography } from "@mui/material";
 import { NextPage } from "next";
 import NextError from "next/error";
@@ -50,7 +47,7 @@ const EntityTypePage: NextPage = () => {
       .finally(() => setIsLoading(false));
   }, [shortnameWithoutLeadingAt, title, setEntityType]);
 
-  const _aggregateEntityTypes: EmbedderGraphMessageCallbacks<false>["aggregateEntityTypes"] =
+  const _aggregateEntityTypes: GraphEmbedderMessageCallbacks<false>["aggregateEntityTypes"] =
     () => {
       if (!shortnameWithoutLeadingAt) {
         throw new Error(
@@ -66,7 +63,7 @@ const EntityTypePage: NextPage = () => {
         });
     };
 
-  const _updateEntityType: EmbedderGraphMessageCallbacks<false>["updateEntityType"] =
+  const _updateEntityType: GraphEmbedderMessageCallbacks<false>["updateEntityType"] =
     (args) => {
       if (!args.data) {
         throw new Error("No data supplied to updateEntityType request");

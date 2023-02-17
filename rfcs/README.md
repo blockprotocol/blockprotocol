@@ -25,7 +25,7 @@ Some changes though are "substantial", and we ask that these be put through a bi
 
 You should consider using this process if you intend to make "substantial" changes to the Block Protocol or its documentation. Some examples that would benefit from an RFC are:
 
-- The introduction of new services
+- The introduction of new modules
 - The removal of features that already shipped
 - The introduction of new idiomatic usage or conventions, even if they do not include code changes to the Block Protocol itself.
 

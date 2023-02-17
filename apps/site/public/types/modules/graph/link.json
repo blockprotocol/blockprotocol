@@ -1,5 +1,5 @@
 {
-  "$id": "https://blockprotocol.org/types/services/graph/link",
+  "$id": "https://blockprotocol.org/types/modules/graph/link",
   "title": "Link",
   "type": "object",
   "properties": {

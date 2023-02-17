@@ -35,7 +35,7 @@ For example, if you call `updateEntity`, MockBlockDock will update the specified
 If the entity is part of the properties sent to your block, they will be updated and the block re-rendered.
 
 ```typescript
-const { data, errors } = await graphService.updateEntity({
+const { data, errors } = await graphModule.updateEntity({
   entityId,
   properties: newProps,
 });

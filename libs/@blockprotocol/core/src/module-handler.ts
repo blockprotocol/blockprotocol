@@ -9,12 +9,12 @@ import {
 } from "./types";
 
 /**
- * The base class for creating service handlers from.
- * - registers the service with the CoreHandler
+ * The base class for creating module handlers from.
+ * - registers the module with the CoreHandler
  * - provides methods for registering callbacks and sending messages
  */
-export abstract class ServiceHandler {
-  /** the CoreHandler this service is registered with, for passing messages via */
+export abstract class ModuleHandler {
+  /** the CoreHandler this module is registered with, for passing messages via */
   private coreHandler: CoreHandler | null = null;
 
   /** the element messages are sent via */
@@ -28,13 +28,13 @@ export abstract class ServiceHandler {
   /** whether the instance of CoreHandler belongs to a block or embedding application */
   protected readonly sourceType: "block" | "embedder";
 
-  /** the name of the service */
-  readonly serviceName: string;
+  /** the name of the module */
+  readonly moduleName: string;
 
   destroyed?: boolean;
 
   /**
-   * a method individual embedder services handlers implement to provide the messages they send on initialization,
+   * a method individual embedder modules handlers implement to provide the messages they send on initialization,
    * i.e. the messages that are marked as 'sentOnInitialization: true'.
    * the payloads of these are combined and sent in the embedder's 'initResponse' message
    *
@@ -57,15 +57,15 @@ export abstract class ServiceHandler {
   protected constructor({
     element,
     callbacks,
-    serviceName,
+    moduleName,
     sourceType,
   }: {
     element?: HTMLElement | null;
     callbacks?: Record<string, GenericMessageCallback>;
-    serviceName: string;
+    moduleName: string;
     sourceType: "block" | "embedder";
   }) {
-    this.serviceName = serviceName;
+    this.moduleName = moduleName;
     this.sourceType = sourceType;
 
     if (callbacks) {
@@ -78,15 +78,15 @@ export abstract class ServiceHandler {
   }
 
   /**
-   * You only need to use this if you are constructing a service directly.
+   * You only need to use this if you are constructing a module directly.
    * You do not need to use it if you're using a React hook or block template.
    *
-   * This initializes a service with the element it will listen for messages on,
-   * and must be called if the service was constructed without an element.
+   * This initializes a module with the element it will listen for messages on,
+   * and must be called if the module was constructed without an element.
    */
   initialize(element: HTMLElement) {
     if (!this.element) {
-      this.registerService(element);
+      this.registerModule(element);
     } else if (element !== this.element) {
       throw new Error(
         "Could not initialize – already initialized with another element",
@@ -104,7 +104,7 @@ export abstract class ServiceHandler {
     this.processCoreQueue();
   }
 
-  private registerService(element: HTMLElement) {
+  private registerModule(element: HTMLElement) {
     this.checkIfDestroyed();
 
     if (this.element) {
@@ -114,14 +114,14 @@ export abstract class ServiceHandler {
     this.element = element;
 
     if (this.sourceType === "block") {
-      this.coreHandler = CoreBlockHandler.registerService({
+      this.coreHandler = CoreBlockHandler.registerModule({
         element,
-        service: this,
+        module: this,
       });
     } else if (this.sourceType === "embedder") {
-      this.coreHandler = CoreEmbedderHandler.registerService({
+      this.coreHandler = CoreEmbedderHandler.registerModule({
         element,
-        service: this,
+        module: this,
       });
     } else {
       throw new Error(
@@ -131,24 +131,24 @@ export abstract class ServiceHandler {
   }
 
   /**
-   * Unregister and clean up the service.
+   * Unregister and clean up the module.
    */
   destroy() {
-    this.coreHandler?.unregisterService({ service: this });
+    this.coreHandler?.unregisterModule({ module: this });
     this.destroyed = true;
   }
 
   private checkIfDestroyed() {
     if (this.destroyed) {
       throw new Error(
-        "Service has been destroyed. Please construct a new instance.",
+        "Module has been destroyed. Please construct a new instance.",
       );
     }
   }
 
   /** Register callbacks with the CoreHandler to handle incoming messages of specific types */
   registerCallbacks(
-    this: ServiceHandler,
+    this: ModuleHandler,
     callbacks: Record<string, GenericMessageCallback>,
   ) {
     for (const [messageName, callback] of Object.entries(callbacks)) {
@@ -158,7 +158,7 @@ export abstract class ServiceHandler {
 
   /** Remove callbacks with the CoreHandler for incoming messages of specific types */
   removeCallbacks(
-    this: ServiceHandler,
+    this: ModuleHandler,
     callbacks: Record<string, GenericMessageCallback>,
   ) {
     for (const [messageName, callback] of Object.entries(callbacks)) {
@@ -168,7 +168,7 @@ export abstract class ServiceHandler {
 
   /** Register a callback with the CoreHandler to handle an incoming messages of a specific type */
   protected registerCallback(
-    this: ServiceHandler,
+    this: ModuleHandler,
     {
       messageName,
       callback,
@@ -183,7 +183,7 @@ export abstract class ServiceHandler {
       coreHandler.registerCallback({
         callback,
         messageName,
-        serviceName: this.serviceName,
+        moduleName: this.moduleName,
       }),
     );
 
@@ -192,7 +192,7 @@ export abstract class ServiceHandler {
 
   /** Remove a callback from the CoreHandler for an incoming messages of a specific type */
   protected removeCallback(
-    this: ServiceHandler,
+    this: ModuleHandler,
     {
       messageName,
       callback,
@@ -207,7 +207,7 @@ export abstract class ServiceHandler {
       coreHandler.removeCallback({
         callback,
         messageName,
-        serviceName: this.serviceName,
+        moduleName: this.moduleName,
       }),
     );
 
@@ -227,7 +227,7 @@ export abstract class ServiceHandler {
   }
 
   protected sendMessage(
-    this: ServiceHandler,
+    this: ModuleHandler,
     args: { message: MessageContents },
   ): void;
 
@@ -235,7 +235,7 @@ export abstract class ServiceHandler {
     ExpectedResponseData,
     ExpectedResponseErrorCodes extends string | null,
   >(
-    this: ServiceHandler,
+    this: ModuleHandler,
     args: { message: MessageContents; respondedToBy: string },
   ): Promise<MessageData<ExpectedResponseData, ExpectedResponseErrorCodes>>;
 
@@ -244,7 +244,7 @@ export abstract class ServiceHandler {
     ExpectedResponseData,
     ExpectedResponseErrorCodes extends string | null,
   >(
-    this: ServiceHandler,
+    this: ModuleHandler,
     args:
       | {
           message: MessageContents;

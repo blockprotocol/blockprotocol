@@ -1,28 +1,28 @@
 import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import { ServiceHandler } from "./service-handler";
+import { ModuleHandler } from "./module-handler";
 import { GenericMessageCallback } from "./types";
 
-type ServiceConstructor<T extends ServiceHandler> = {
+type ModuleConstructor<T extends ModuleHandler> = {
   new (arg: {
     callbacks?: Record<string, GenericMessageCallback>;
     element?: HTMLElement | null;
   }): T;
 };
 
-export const useServiceConstructor = <T extends ServiceHandler>({
+export const useModuleConstructor = <T extends ModuleHandler>({
   Handler,
   constructorArgs,
   ref,
 }: {
-  Handler: ServiceConstructor<T>;
+  Handler: ModuleConstructor<T>;
   constructorArgs?: { callbacks?: Record<string, GenericMessageCallback> };
   ref: RefObject<HTMLElement>;
 }) => {
   const previousRef = useRef<HTMLElement | null>(null);
   const initialisedRef = useRef(false);
 
-  const [service, setService] = useState<T>(
+  const [module, setModule] = useState<T>(
     () => new Handler(constructorArgs ?? {}),
   );
 
@@ -35,13 +35,13 @@ export const useServiceConstructor = <T extends ServiceHandler>({
   // to avoid any potential timing bugs
   useLayoutEffect(() => {
     if (previousCallbacks.current) {
-      service.removeCallbacks(previousCallbacks.current);
+      module.removeCallbacks(previousCallbacks.current);
     }
 
     previousCallbacks.current = constructorArgs?.callbacks ?? null;
 
     if (constructorArgs?.callbacks) {
-      service.registerCallbacks(constructorArgs.callbacks);
+      module.registerCallbacks(constructorArgs.callbacks);
     }
   });
 
@@ -52,7 +52,7 @@ export const useServiceConstructor = <T extends ServiceHandler>({
     }
 
     if (previousRef.current) {
-      service.destroy();
+      module.destroy();
     }
 
     previousRef.current = ref.current;
@@ -60,9 +60,9 @@ export const useServiceConstructor = <T extends ServiceHandler>({
     if (ref.current) {
       if (!initialisedRef.current) {
         initialisedRef.current = true;
-        service.initialize(ref.current);
+        module.initialize(ref.current);
       } else {
-        setService(
+        setModule(
           new Handler({
             element: ref.current,
             ...constructorArgs,
@@ -72,5 +72,5 @@ export const useServiceConstructor = <T extends ServiceHandler>({
     }
   });
 
-  return service;
+  return module;
 };

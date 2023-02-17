@@ -21,8 +21,8 @@ import { FontAwesomeIcon } from "../icons";
 import { Link } from "../link";
 import { Snippet } from "../snippet";
 import { FAQ } from "./faq";
-import { GraphServiceMessageList } from "./graph-service-message-list";
-import { HookServiceMessageList } from "./hook-service-message-list";
+import { GraphModuleMessageList } from "./graph-module-message-list";
+import { HookModuleMessageList } from "./hook-module-message-list";
 import { GitHubInfoCard } from "./info-card/github-info-card";
 import { InfoCard } from "./info-card/info-card";
 import { InfoCardWrapper } from "./info-card/info-card-wrapper";
@@ -96,8 +96,8 @@ export const mdxComponents: Record<
   GitHubInfoCard,
   InfoCard,
   FAQ,
-  GraphServiceMessageList,
-  HookServiceMessageList,
+  GraphModuleMessageList,
+  HookModuleMessageList,
   SubTitle: (({ children }: { children?: ReactNode }) => (
     <Box
       maxWidth={750}

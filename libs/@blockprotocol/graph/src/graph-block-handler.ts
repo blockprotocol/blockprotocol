@@ -1,20 +1,19 @@
-import { ServiceHandler } from "@blockprotocol/core";
+import { ModuleHandler } from "@blockprotocol/core";
 
 /**
- * There's an issue when importing useGraphEmbedderService from @blockprotocol/graph/react in hashintel/hash:
- * NextJS's output file tracing does not include graph-service.json, and yet an import statement for it is preserved.
+ * There's an issue when importing useGraphEmbedderModule from @blockprotocol/graph/react in hashintel/hash:
+ * NextJS's output file tracing does not include graph-module.json, and yet an import statement for it is preserved.
  * This leads to a 'module cannot be found error'. For now, commenting out the import of the JSON from this file.
  * @todo restore this when module resolution issue resolved
  * @see https://app.asana.com/0/1202542409311090/1202614421149286/f
  */
-// import graphServiceJson from "./graph-service.json" assert { type: "json" };
+// import graphModuleJson from "./graph-module.json" assert { type: "json" };
 import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
   AggregateEntityTypesData,
   AggregateEntityTypesResult,
   BlockGraphMessageCallbacks,
-  BlockGraphMessages,
   CreateEntityData,
   CreateResourceError,
   DeleteEntityData,
@@ -24,6 +23,7 @@ import {
   EntityTypeRootType,
   GetEntityData,
   GetEntityTypeData,
+  GraphBlockMessages,
   ReadOrModifyResourceError,
   Subgraph,
   UpdateEntityData,
@@ -32,15 +32,15 @@ import {
 } from "./types.js";
 
 /**
- * Creates a handler for the graph service for the block.
+ * Creates a handler for the graph module for the block.
  * Register callbacks in the constructor or afterwards using the 'on' method to react to messages from the embedder.
  * Call the relevant methods to send messages to the embedder.
  */
 export class GraphBlockHandler<Temporal extends boolean>
-  extends ServiceHandler
+  extends ModuleHandler
   implements
     Omit<
-      BlockGraphMessages<Temporal>,
+      GraphBlockMessages<Temporal>,
       | "createEntityType"
       | "updateEntityType"
       | "createPropertyType"
@@ -56,17 +56,17 @@ export class GraphBlockHandler<Temporal extends boolean>
     callbacks?: Partial<BlockGraphMessageCallbacks<Temporal>>;
     element?: HTMLElement | null;
   }) {
-    super({ element, callbacks, serviceName: "graph", sourceType: "block" });
+    super({ element, callbacks, moduleName: "graph", sourceType: "block" });
   }
 
   getInitPayload(): Record<string, any> {
-    // there are no block messages which are sentOnInitialization in the graph service
+    // there are no block messages which are sentOnInitialization in the graph module
     return {};
   }
 
   /**
    * Registers multiple callbacks at once.
-   * Useful for bulk updates to callbacks after the service is first initialised.
+   * Useful for bulk updates to callbacks after the module is first initialised.
    */
   registerCallbacks(callbacks: Partial<BlockGraphMessageCallbacks<Temporal>>) {
     super.registerCallbacks(callbacks);
@@ -94,7 +94,7 @@ export class GraphBlockHandler<Temporal extends boolean>
     // @todo restore this when module resolution issue resolved
     // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
     // const expectedMessageSource = "embedder";
-    // const messageJsonDefinition = graphServiceJson.messages.find(
+    // const messageJsonDefinition = graphModuleJson.messages.find(
     //   (message) =>
     //     message.messageName === messageName &&
     //     message.source === expectedMessageSource,
@@ -110,7 +110,7 @@ export class GraphBlockHandler<Temporal extends boolean>
     });
   }
 
-  // @todo automate creation of these methods from graph-service.json and types.ts
+  // @todo automate creation of these methods from graph-module.json and types.ts
 
   createEntity<
     ValidProperties extends EntityPropertiesObject = EntityPropertiesObject,
@@ -120,7 +120,7 @@ export class GraphBlockHandler<Temporal extends boolean>
         messageName: "createEntity",
         data,
       },
-      respondedToBy: "createEntityResponse", // @todo get these from graph-service.json
+      respondedToBy: "createEntityResponse", // @todo get these from graph-module.json
     });
   }
 
@@ -183,7 +183,7 @@ export class GraphBlockHandler<Temporal extends boolean>
   //       messageName: "createEntityType",
   //       data,
   //     },
-  //     respondedToBy: "createEntityTypeResponse", // @todo get this from graph-service.json
+  //     respondedToBy: "createEntityTypeResponse", // @todo get this from graph-module.json
   //   });
   // }
   //

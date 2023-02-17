@@ -66,12 +66,12 @@ const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
       <Cell
         sx={({ palette }) => ({
           color:
-            log.service === "core"
+            log.module === "core"
               ? palette.primary.main
               : palette.secondary.main,
         })}
       >
-        [{log.service}]
+        [{log.module}]
       </Cell>
       <Cell>[{log.source}]</Cell>
       <Cell>[{log.messageName}]</Cell>
@@ -117,7 +117,7 @@ export const LogsView = () => {
   const [activeLog, setActiveLog] = useState<Message>();
   const [filters, setFilters] = useState({
     source: "all",
-    service: "all",
+    module: "all",
   });
   const logsContainerRef = useRef<HTMLElement>();
   const { logs, setLogs } = useMockBlockDockContext();
@@ -128,10 +128,10 @@ export const LogsView = () => {
       .filter((log) => {
         const hasSource =
           filters.source === "all" ? true : log.source === filters.source;
-        const hasService =
-          filters.service === "all" ? true : log.service === filters.service;
+        const hasModule =
+          filters.module === "all" ? true : log.module === filters.module;
 
-        return hasSource && hasService;
+        return hasSource && hasModule;
       })
       .sort((a, b) =>
         new Date(a.timestamp).getTime() > new Date(b.timestamp).getTime()
@@ -154,14 +154,14 @@ export const LogsView = () => {
     <Box>
       <Box display="flex" alignItems="center" mb={2}>
         <Typography variant="body2" mr={1}>
-          Service
+          Module
         </Typography>
         <Select
           size="small"
-          value={filters.service}
+          value={filters.module}
           sx={{ mr: 1 }}
           onChange={(evt) =>
-            setFilters((prev) => ({ ...prev, service: evt.target.value }))
+            setFilters((prev) => ({ ...prev, module: evt.target.value }))
           }
         >
           <MenuItem value="all">All</MenuItem>
@@ -196,7 +196,7 @@ export const LogsView = () => {
             <TableHead>
               <TableRow>
                 <Cell>timestamp</Cell>
-                <Cell>service</Cell>
+                <Cell>module</Cell>
                 <Cell>source</Cell>
                 <Cell>name</Cell>
                 <Cell>id</Cell>
