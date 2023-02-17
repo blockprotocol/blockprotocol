@@ -101,7 +101,7 @@ impl TryFrom<EntityType> for super::EntityType {
             .try_into()
             .map_err(ParseEntityTypeError::InvalidLinks)?;
 
-        if entity_type_repr.additional_properties == true {
+        if entity_type_repr.additional_properties {
             return Err(ParseEntityTypeError::InvalidAdditionalPropertiesValue);
         }
 

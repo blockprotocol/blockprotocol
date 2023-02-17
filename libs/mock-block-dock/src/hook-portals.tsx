@@ -1,3 +1,4 @@
+import { JsonValue } from "@blockprotocol/core";
 import { getEntityRevision } from "@blockprotocol/graph/stdlib";
 import { HookData } from "@blockprotocol/hook";
 import { useCallback, useMemo } from "react";
@@ -5,7 +6,10 @@ import { createPortal } from "react-dom";
 
 import { TextHookView } from "./hook-portals/text";
 import { useMockBlockDockContext } from "./mock-block-dock-context";
-import { get, set } from "./util";
+import {
+  getFromObjectByPathComponents,
+  setValueInObjectByPathComponents,
+} from "./util";
 
 const HookPortal = ({ entityId, path, type }: HookData) => {
   const { graph, readonly, updateEntity } = useMockBlockDockContext();
@@ -19,20 +23,20 @@ const HookPortal = ({ entityId, path, type }: HookData) => {
       );
     }
 
-    const foundValue = get(
+    /** @todo - do we want to catch potential errors here? */
+    const foundValue = getFromObjectByPathComponents(
       foundEntity.properties,
-      path.replace(/^\$\./, ""), // remove json path root identifier '$.'
-      undefined,
+      path,
     );
 
     return { entity: foundEntity, value: foundValue };
   }, [graph, entityId, path]);
 
   const updateValue = useCallback(
-    async (newValue: unknown) => {
+    async (newValue: JsonValue) => {
       const newProperties = { ...entity?.properties };
 
-      set(newProperties, path, newValue);
+      setValueInObjectByPathComponents(newProperties, path, newValue);
 
       return updateEntity({
         data: {

@@ -1,7 +1,7 @@
 import {
   JsonObject,
-  ServiceDefinition,
-  ServiceMessageDefinition,
+  ModuleDefinition,
+  ModuleMessageDefinition,
 } from "@blockprotocol/core";
 import { Box, Typography } from "@mui/material";
 import { Fragment, FunctionComponent } from "react";
@@ -32,8 +32,8 @@ const DataType: FunctionComponent<{ propertySchema: JsonObject }> = ({
   );
 };
 
-const ServiceMessageData: FunctionComponent<{
-  data: ServiceMessageDefinition["data"];
+const ModuleMessageData: FunctionComponent<{
+  data: ModuleMessageDefinition["data"];
 }> = ({ data }) => {
   const MdxCode = mdxComponents.code!;
   const MdxTable = mdxComponents.table!;
@@ -103,11 +103,11 @@ const ServiceMessageData: FunctionComponent<{
   );
 };
 
-const generateServiceMessageAnchor = (messageName: string) =>
+const generateModuleMessageAnchor = (messageName: string) =>
   `message:${messageName}`;
 
-const ServiceMessage: FunctionComponent<{
-  message: ServiceMessageDefinition;
+const ModuleMessage: FunctionComponent<{
+  message: ModuleMessageDefinition;
 }> = ({ message }) => {
   const MdxCode = mdxComponents.code!;
   const MdxLi = mdxComponents.li!;
@@ -125,7 +125,7 @@ const ServiceMessage: FunctionComponent<{
   } = message;
 
   return (
-    <Box sx={{ mb: 4 }} id={generateServiceMessageAnchor(messageName)}>
+    <Box sx={{ mb: 4 }} id={generateModuleMessageAnchor(messageName)}>
       <MdxH5>
         <MdxCode>{messageName}</MdxCode>
       </MdxH5>
@@ -140,7 +140,7 @@ const ServiceMessage: FunctionComponent<{
           </Typography>
         </MdxLi>
         <MdxLi>
-          <MdxCode>data</MdxCode>: <ServiceMessageData data={data} />
+          <MdxCode>data</MdxCode>: <ModuleMessageData data={data} />
         </MdxLi>
         <MdxLi>
           <MdxCode>errorCodes</MdxCode>:{" "}
@@ -175,16 +175,16 @@ const ServiceMessage: FunctionComponent<{
   );
 };
 
-export const ServiceMessageList: FunctionComponent<{
-  serviceDefinition: ServiceDefinition;
-}> = ({ serviceDefinition }) => {
+export const ModuleMessageList: FunctionComponent<{
+  moduleDefinition: ModuleDefinition;
+}> = ({ moduleDefinition }) => {
   return (
     <Box>
       <Box>
-        {serviceDefinition.messages.map(({ messageName, source }) => (
+        {moduleDefinition.messages.map(({ messageName, source }) => (
           <Typography key={messageName} mb={1}>
             <Link
-              href={`#${generateServiceMessageAnchor(messageName)}`}
+              href={`#${generateModuleMessageAnchor(messageName)}`}
               sx={{ fontWeight: 600 }}
             >
               {messageName}
@@ -195,8 +195,8 @@ export const ServiceMessageList: FunctionComponent<{
           </Typography>
         ))}
       </Box>
-      {serviceDefinition.messages.map((message) => (
-        <ServiceMessage key={message.messageName} message={message} />
+      {moduleDefinition.messages.map((message) => (
+        <ModuleMessage key={message.messageName} message={message} />
       ))}
     </Box>
   );

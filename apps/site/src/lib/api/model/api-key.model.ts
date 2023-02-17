@@ -11,6 +11,7 @@ type ApiKeyProperties = {
   displayName: string;
   hashedString: string;
   lastUsedAt?: Date | null;
+  lastUsedOrigin?: string | null;
   publicId: string;
   revokedAt?: Date | null;
   salt: string;
@@ -30,6 +31,7 @@ export class ApiKey {
   displayName: string;
   hashedString: string;
   lastUsedAt?: Date | null;
+  lastUsedOrigin?: string | null;
   publicId: string;
   revokedAt?: Date | null;
   salt: string;
@@ -58,6 +60,7 @@ export class ApiKey {
     displayName,
     hashedString,
     lastUsedAt,
+    lastUsedOrigin,
     publicId,
     revokedAt,
     salt,
@@ -68,6 +71,7 @@ export class ApiKey {
     this.displayName = displayName;
     this.hashedString = hashedString;
     this.lastUsedAt = lastUsedAt;
+    this.lastUsedOrigin = lastUsedOrigin;
     this.publicId = publicId;
     this.revokedAt = revokedAt;
     this.salt = salt;
@@ -142,6 +146,7 @@ export class ApiKey {
       createdAt: 1,
       displayName: 1,
       lastUsedAt: 1,
+      lastUsedOrigin: 1,
       publicId: 1,
       revokedAt: 1,
       useCount: 1,
@@ -163,7 +168,7 @@ export class ApiKey {
 
   static async validateAndGet(
     db: Db,
-    params: { apiKeyString: string },
+    params: { apiKeyString: string; usedAtOrigin?: string },
   ): Promise<ApiKey> {
     const { apiKeyString } = params;
 
@@ -196,7 +201,7 @@ export class ApiKey {
       throw new Error("API key has been revoked.");
     }
 
-    await apiKey.registerUse(db);
+    await apiKey.registerUse(db, { usedAtOrigin: params.usedAtOrigin });
 
     return apiKey;
   }
@@ -214,17 +219,21 @@ export class ApiKey {
     return this.revokedAt && this.revokedAt.valueOf() <= new Date().valueOf();
   }
 
-  async registerUse(db: Db) {
+  async registerUse(db: Db, { usedAtOrigin }: { usedAtOrigin?: string } = {}) {
     const { value } = await db
       .collection<ApiKeyDocument>(ApiKey.COLLECTION_NAME)
       .findOneAndUpdate(
         { publicId: this.publicId },
-        { $inc: { useCount: 1 }, $set: { lastUsedAt: new Date() } },
+        {
+          $inc: { useCount: 1 },
+          $set: { lastUsedAt: new Date(), lastUsedOrigin: usedAtOrigin },
+        },
         { returnDocument: "after" },
       );
 
     if (value) {
       this.lastUsedAt = value.lastUsedAt;
+      this.lastUsedOrigin = value.lastUsedOrigin;
       this.useCount = value.useCount;
     }
   }

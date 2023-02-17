@@ -1,8 +1,8 @@
-# Graph Service
+# Graph Module
 
-This document (version 0.2) defines a **graph service** according to the terms set out in the [core specification](https://blockprotocol.org/docs/spec/core).
+This document (version 0.2) defines a **graph module** according to the terms set out in the [core specification](https://blockprotocol.org/docs/spec/core).
 
-The graph service describes how **entities** can be created, queried, updated, and linked together – including the **block entity**, represented by the **properties** sent to the block.
+The graph module describes how **entities** can be created, queried, updated, and linked together – including the **block entity**, represented by the **properties** sent to the block.
 
 ## Glossary
 
@@ -28,7 +28,7 @@ The graph service describes how **entities** can be created, queried, updated, a
 
 #### <Hidden>Block package </Hidden>Summary
 
-Blocks using the graph service may provide a **schema** which describes the shape of their own **properties**, if any. Embedding applications should use this to constrain the properties they send to blocks. These properties are part of the **block entity**.
+Blocks using the graph module may provide a **schema** which describes the shape of their own **properties**, if any. Embedding applications should use this to constrain the properties they send to blocks. These properties are part of the **block entity**.
 
 The block’s schema may be included as a file in the **block package**, or referred to by remote address (a URL). If the block has a schema, a path to it must be added to their `block-metadata.json`, under a `schema` key.
 
@@ -38,7 +38,7 @@ Blocks may also add `default` and `examples` keys to `block-metadata.json` to de
 
 ##### Blocks
 
-A block using the graph service MAY expand `block-metadata.json` to specify:
+A block using the graph module MAY expand `block-metadata.json` to specify:
 
 - `schema`: a path to a JSON file describing the **properties** the block accepts as part of the **block entity,** using [JSON Schema vocabulary](https://json-schema.org/). This file may be included in the block package, or hosted at a remote address. If the schema hosted at a remote address is subject to change, bear in mind that changes in the schema may invalidate other values in the block metadata (e.g. `default`) or the block’s functioning (e.g. if important constraints are removed).
 - `default`: an object, conforming to the block’s schema, representing the default data that applications should provide when creating a block, unless (a) the block can handle being provided no data when first instantiated or (b) `variants` is provided (see below)
@@ -101,7 +101,7 @@ i.e. any entity MUST conform to the following schema:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/types/services/graph/entity",
+  "$id": "https://blockprotocol.org/types/modules/graph/entity",
   "title": "Entity",
   "type": "object",
   "properties": {
@@ -134,7 +134,7 @@ i.e. entity types MUST conform to the following JSON schema:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/types/services/graph/entity-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/entity-type",
   "title": "EntityType",
   "type": "object",
   "properties": {
@@ -166,7 +166,7 @@ i.e. links MUST conform to the following schema:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/types/services/graph/link",
+  "$id": "https://blockprotocol.org/types/modules/graph/link",
   "title": "Link",
   "type": "object",
   "properties": {
@@ -204,14 +204,14 @@ Where the block entity has links from it to other entities:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/types/services/graph/link-group",
+  "$id": "https://blockprotocol.org/types/modules/graph/link-group",
   "title": "LinkGroup",
   "type": "object",
   "properties": {
     "links": {
       "type": "array",
       "items": {
-        "$ref": "https://blockprotocol.org/types/services/graph/link"
+        "$ref": "https://blockprotocol.org/types/modules/graph/link"
       }
     },
     "sourceEntityId": {
@@ -238,7 +238,7 @@ i.e. a linked aggregation definition must conform to the following schema:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/types/services/graph/linked-aggregation-definition",
+  "$id": "https://blockprotocol.org/types/modules/graph/linked-aggregation-definition",
   "title": "LinkedAggregationDefinition",
   "type": "object",
   "properties": {
@@ -249,7 +249,7 @@ i.e. a linked aggregation definition must conform to the following schema:
       "type": "string"
     },
     "operation": {
-      "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
+      "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
     }
   },
   "required": ["sourceEntityId", "operation", "path"]
@@ -266,7 +266,7 @@ Embedding applications should ensure this is stable and unique for any given ent
 
 #### <Hidden>Identification </Hidden>Specification
 
-Blocks MUST provide `entityId` when identifying a particular entity for the purpose of **messages** under the graph service.
+Blocks MUST provide `entityId` when identifying a particular entity for the purpose of **messages** under the graph module.
 
 Embedding applications MUST provide `entityId` for each entity it supplies the block at the root of the entity data object, as described under [Structure](#structure) above.
 
@@ -318,12 +318,12 @@ Individual messages MAY specify only a subset of these codes as being valid for 
 
 #### <Hidden>Message definitions </Hidden>Summary
 
-Messages under the graph service can be grouped into two functional categories:
+Messages under the graph module can be grouped into two functional categories:
 
 - **values** provided by the embedding application, marked as `source: "embedder"` and `sentOnInitialization: true`
 - **requests** made by the block during its lifetime, marked as `source: "block"`
 
-Note that there is no reason why embedding applications cannot make requests, nor why blocks cannot send values on initialization, but the service does yet not specify any such messages.
+Note that there is no reason why embedding applications cannot make requests, nor why blocks cannot send values on initialization, but the module does yet not specify any such messages.
 
 The **values** are all sent from the embedding application to the block on initialization, and re-sent subsequently if they change. They are:
 
@@ -340,11 +340,11 @@ The **values** are all sent from the embedding application to the block on initi
 
 The **requests** may be made by the block once it has been initialized, and represent operations which create, read, update or delete entities, entity types, and create links. They are named according to the pattern `[action][Resource]`, e.g. `createEntity`.
 
-As well as the formal service JSON specification, the messages can be sent and received via the `@blockprotocol/graph` [package](https://www.npmjs.com/package/@blockprotocol/graph).
+As well as the formal module JSON specification, the messages can be sent and received via the `@blockprotocol/graph` [package](https://www.npmjs.com/package/@blockprotocol/graph).
 
 #### <Hidden>Message definitions </Hidden>Specification
 
-The messages available for exchange in the graph service are defined in the [service's JSON definition](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json#L5) and are also
+The messages available for exchange in the graph module are defined in the [module's JSON definition](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json#L5) and are also
 listed below for ease of reference.
 
-<GraphServiceMessageList />
+<GraphModuleMessageList />

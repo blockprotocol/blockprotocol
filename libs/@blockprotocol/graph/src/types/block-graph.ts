@@ -39,10 +39,10 @@ export type BlockGraphProperties<
   RootEntity extends Entity<Temporal> = Entity<Temporal>,
 > = {
   /**
-   * The 'graph' object contains messages sent under the graph service from the app to the block.
+   * The 'graph' object contains messages sent under the graph module from the app to the block.
    * They are sent on initialization and again when the application has new values to send.
-   * One such message is 'graph.blockEntity', which is a data entity fitting the block's schema (its type).
-   * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list
+   * One such message is 'graph.blockEntitySubgraph', which is a data entity fitting the block's schema (its type).
+   * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list
    */
   graph: {
     blockEntitySubgraph?: Subgraph<
@@ -64,7 +64,7 @@ export type BlockGraphMessageCallbacks<Temporal extends boolean> = {
   readonly: MessageCallback<boolean, null>;
 };
 
-export type EmbedderGraphMessages<
+export type GraphEmbedderMessages<
   Temporal extends boolean,
   Key extends keyof BlockGraphMessageCallbacks<Temporal> = keyof BlockGraphMessageCallbacks<Temporal>,
 > = {
@@ -89,7 +89,7 @@ export type ReadOrModifyResourceError =
 /**
  * @todo Generate these types from the JSON definition, to avoid manually keeping the JSON and types in sync
  */
-export type EmbedderGraphMessageCallbacks<Temporal extends boolean> = {
+export type GraphEmbedderMessageCallbacks<Temporal extends boolean> = {
   createEntity: MessageCallback<
     CreateEntityData,
     null,
@@ -208,14 +208,14 @@ export type EmbedderGraphMessageCallbacks<Temporal extends boolean> = {
   >;
 };
 
-export type BlockGraphMessages<
+export type GraphBlockMessages<
   Temporal extends boolean,
-  Key extends keyof EmbedderGraphMessageCallbacks<Temporal> = keyof EmbedderGraphMessageCallbacks<Temporal>,
+  Key extends keyof GraphEmbedderMessageCallbacks<Temporal> = keyof GraphEmbedderMessageCallbacks<Temporal>,
 > = {
   [key in Key]: ({
     data,
     errors,
-  }: Parameters<EmbedderGraphMessageCallbacks<Temporal>[key]>[0]) => ReturnType<
-    EmbedderGraphMessageCallbacks<Temporal>[key]
+  }: Parameters<GraphEmbedderMessageCallbacks<Temporal>[key]>[0]) => ReturnType<
+    GraphEmbedderMessageCallbacks<Temporal>[key]
   >;
 };

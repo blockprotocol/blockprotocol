@@ -9,7 +9,7 @@ import { RootEntity } from "./types.gen";
  * This uses the Lit framework as a base - @see https://lit.dev
  * It makes two special Block Protocol properties available:
  * 1. 'graph': contains properties representing messages sent from the embedding application to the block, e.g. 'blockEntity'
- * 2. 'graphService': has various methods you can use to send messages to the embedding application, e.g. 'updateEntity'
+ * 2. 'graphModule': has various methods you can use to send messages to the embedding application, e.g. 'updateEntity'
  */
 export class BlockElement extends BlockElementBase<false, RootEntity> {
   /** @see https://lit.dev/docs/components/styles */
@@ -18,19 +18,19 @@ export class BlockElement extends BlockElementBase<false, RootEntity> {
   `;
 
   private handleInput(event: InputEvent) {
-    if (!this.graphService || !this.blockEntity) {
+    if (!this.graphModule || !this.blockEntity) {
       return;
     }
     /**
-     * This is an example of using the graph service to send a message to the embedding application
+     * This is an example of using the graph module to send a message to the embedding application
      * – this particular message asks the application update an entity's properties.
      * The specific entity to update is identified by 'entityId'
      * – we are passing the 'entityId' of the entity loaded into the block (graph.blockEntity').
      *
      * Many other messages are available for your block to read and update entities, and links between entities
-     * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions
+     * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions
      */
-    this.graphService
+    this.graphModule
       .updateEntity<RootEntity["properties"]>({
         data: {
           entityId: this.blockEntity.metadata.recordId.entityId,

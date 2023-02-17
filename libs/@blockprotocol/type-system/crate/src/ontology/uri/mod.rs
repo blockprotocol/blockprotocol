@@ -85,30 +85,11 @@ impl<'de> Deserialize<'de> for BaseUri {
 //  if we can then we should delete wasm::VersionedUriPatch
 #[derive(Debug, Clone, PartialEq, Eq, Ord, PartialOrd, Hash)]
 pub struct VersionedUri {
-    base_uri: BaseUri,
-    version: u32,
+    pub base_uri: BaseUri,
+    pub version: u32,
 }
 
 impl VersionedUri {
-    /// Creates a new [`VersionedUri`] from the given `base_uri` and `version`.
-    ///
-    /// # Errors
-    /// - `ParseBaseUriError` if the given URI string is invalid
-    #[must_use]
-    pub const fn new(base_uri: BaseUri, version: u32) -> VersionedUri {
-        Self { base_uri, version }
-    }
-
-    #[must_use]
-    pub const fn base_uri(&self) -> &BaseUri {
-        &self.base_uri
-    }
-
-    #[must_use]
-    pub const fn version(&self) -> u32 {
-        self.version
-    }
-
     #[must_use]
     pub fn to_url(&self) -> Url {
         let mut url = self.base_uri.to_url();
@@ -151,11 +132,12 @@ impl FromStr for VersionedUri {
             }
         }
 
-        Ok(Self::new(
-            BaseUri::new(base_uri.to_owned()).map_err(ParseVersionedUriError::InvalidBaseUri)?,
-            u32::from_str(version)
+        Ok(Self {
+            base_uri: BaseUri::new(base_uri.to_owned())
+                .map_err(ParseVersionedUriError::InvalidBaseUri)?,
+            version: u32::from_str(version)
                 .map_err(|error| ParseVersionedUriError::InvalidVersion(error.to_string()))?,
-        ))
+        })
     }
 }
 

@@ -135,7 +135,7 @@ export const Header = ({ darkMode: _, setDarkMode: __ }: Props) => {
         </Typography>
       </Link>
 
-      {/* @todo restore when styling service is implemented */}
+      {/* @todo restore when styling module is implemented */}
       {/* <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}> */}
       {/*  Dark Mode */}
       {/*  {darkMode ? ( */}

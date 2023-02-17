@@ -12,11 +12,11 @@ type GraphValue = {
 }[keyof BlockGraphMessageCallbacks<true>];
 
 type UseSendGraphValueArgs = {
-  graphService: GraphEmbedderHandler<true> | null;
+  graphModule: GraphEmbedderHandler<true> | null;
 } & GraphValue;
 
 export const useSendGraphValue = ({
-  graphService,
+  graphModule,
   value,
   valueName,
 }: UseSendGraphValueArgs) => {
@@ -25,13 +25,13 @@ export const useSendGraphValue = ({
 
   useEffect(() => {
     if (
-      graphService &&
+      graphModule &&
       (!sentInitially.current ||
         JSON.stringify(value) !== JSON.stringify(sentValue.current))
     ) {
-      graphService[valueName]({ data: value as any }); // @todo how to maintain the union GraphValue is initially set to?
+      graphModule[valueName]({ data: value as any }); // @todo how to maintain the union GraphValue is initially set to?
       sentInitially.current = true;
       sentValue.current = value;
     }
-  }, [graphService, value, valueName]);
+  }, [graphModule, value, valueName]);
 };

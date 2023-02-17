@@ -1,9 +1,9 @@
 import {
   type BlockComponent,
-  useGraphBlockService,
+  useGraphBlockModule,
 } from "@blockprotocol/graph/react";
 import { getRoots } from "@blockprotocol/graph/stdlib";
-import { useHook, useHookBlockService } from "@blockprotocol/hook/react";
+import { useHook, useHookBlockModule } from "@blockprotocol/hook/react";
 import { extractBaseUri } from "@blockprotocol/type-system/slim";
 import { useMemo, useRef } from "react";
 
@@ -18,16 +18,16 @@ export const TestReactBlock: BlockComponent<true> = ({ graph }) => {
     return blockEntitySubgraph ? getRoots(blockEntitySubgraph)[0]! : undefined;
   }, [blockEntitySubgraph]);
 
-  const { graphService } = useGraphBlockService(blockRef);
+  const { graphModule } = useGraphBlockModule(blockRef);
 
-  const { hookService } = useHookBlockService(blockRef);
+  const { hookModule } = useHookBlockModule(blockRef);
 
   useHook(
-    hookService,
+    hookModule,
     hookRef,
     "text",
     blockEntity?.metadata.recordId.entityId ?? "",
-    "$.description",
+    [extractBaseUri(propertyTypes.description.$id)],
     () => {
       throw new Error(
         "Fallback called – dock is not correctly handling text hook.",
@@ -84,7 +84,7 @@ export const TestReactBlock: BlockComponent<true> = ({ graph }) => {
             return;
           }
           try {
-            const { data, errors } = await graphService.updateEntity({
+            const { data, errors } = await graphModule.updateEntity({
               data: {
                 entityId: blockEntity.metadata.recordId.entityId,
                 entityTypeId: blockEntity.metadata.entityTypeId,

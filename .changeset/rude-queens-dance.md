@@ -5,4 +5,4 @@
 "mock-block-dock": patch
 ---
 
-Allow creating services before element is available
+Allow creating modules before element is available

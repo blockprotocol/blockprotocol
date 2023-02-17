@@ -35,7 +35,7 @@ export default ["es", "cjs"].flatMap((fmt) =>
     "src/index.ts",
     "src/codegen.ts",
     "src/custom-element.ts",
-    "src/graph-service-json.ts",
+    "src/graph-module-json.ts",
     "src/internal.ts",
     "src/react.ts",
     "src/stdlib.ts",

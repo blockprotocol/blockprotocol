@@ -4,4 +4,4 @@
 "@blockprotocol/hook": patch
 ---
 
-Ensure callbacks to services passed via react are never stale
+Ensure callbacks to modules passed via react are never stale
