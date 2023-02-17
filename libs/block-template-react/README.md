@@ -34,7 +34,7 @@ Once you have created the type representing the data your block needs, copy its 
   - `name`: a slugified name for your block (which may differ to the package `name` in package.json)
     - this may either be in the format `slug` or `@namespace/slug` where `namespace` is your blockprotocol.org username
 
-1.  Run `yarn schema` to automatically TypeScript types from your block's entity type / `schema`
+1.  Run `yarn schema` to automatically generate TypeScript types from your block's entity type / `schema`
 
 ## Step four: write and build your block component
 

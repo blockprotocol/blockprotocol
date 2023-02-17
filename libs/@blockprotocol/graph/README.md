@@ -67,7 +67,8 @@ To create a `GraphEmbedderHandler`, pass the constructor:
 1.  `callbacks` to respond to messages from the block
 1.  The starting values for the following messages:
 
-- `blockEntitySubgraph`: the graph rooted at the blo
+- `blockEntitySubgraph`: the graph rooted at the block entity
+- `readonly`: whether or not the block should be in 'readonly' mode
 
 These starting values should also be passed in a `graph` property object, if the block can be passed or assigned properties.
 
