@@ -1,27 +1,33 @@
 import {
-  GraphElementVertexId,
+  GraphElementVertexId as GraphElementVertexIdNonTemporal,
   GraphResolveDepths,
-  Subgraph,
-  TimeInterval,
-  Vertex,
+  Subgraph as SubgraphNonTemporal,
+  Vertex as VertexNonTemporal,
 } from "@blockprotocol/graph";
+import { isTemporalSubgraph } from "@blockprotocol/graph/internal";
 import {
   GraphElementVertexId as GraphElementVertexIdTemporal,
-  isTemporalSubgraph,
   Subgraph as SubgraphTemporal,
+  TimeInterval,
   Vertex as VertexTemporal,
 } from "@blockprotocol/graph/temporal";
 
+import {
+  TraversalSubgraph as TraversalSubgraphNonTemporal,
+  traverseElement as traverseElementNonTemporal,
+} from "./traverse/non-temporal";
 import {
   TraversalSubgraph as TraversalSubgraphTemporal,
   traverseElement as traverseElementTemporal,
 } from "./traverse/temporal";
 
-/* @todo - Update this */
 const isTemporalTraversalSubgraph = (
-  traversalSubgraph: TraversalSubgraphTemporal | null,
+  traversalSubgraph: TraversalSubgraphTemporal | TraversalSubgraphNonTemporal,
 ): traversalSubgraph is TraversalSubgraphTemporal => {
-  return traversalSubgraph?.temporalAxes !== undefined;
+  // this cast should be safe as all we're doing is checking if a property is defined
+  return (
+    (traversalSubgraph as TraversalSubgraphTemporal)?.temporalAxes !== undefined
+  );
 };
 
 /** @todo - Update this to handle ontology edges */
@@ -47,13 +53,14 @@ export const traverseElement = <Temporal extends boolean>({
   currentTraversalDepths,
   interval,
 }: {
-  /* @todo - accept non-temporal subgraph */
-  traversalSubgraph: Temporal extends true ? TraversalSubgraphTemporal : null;
-  datastore: Temporal extends true ? SubgraphTemporal : Subgraph;
-  element: Temporal extends true ? VertexTemporal : Vertex;
+  traversalSubgraph: Temporal extends true
+    ? TraversalSubgraphTemporal
+    : TraversalSubgraphNonTemporal;
+  datastore: Temporal extends true ? SubgraphTemporal : SubgraphNonTemporal;
+  element: Temporal extends true ? VertexTemporal : VertexNonTemporal;
   elementIdentifier: Temporal extends true
     ? GraphElementVertexIdTemporal
-    : GraphElementVertexId;
+    : GraphElementVertexIdNonTemporal;
   currentTraversalDepths: GraphResolveDepths;
   interval: Temporal extends true ? TimeInterval : undefined;
 }) => {
@@ -75,13 +82,17 @@ export const traverseElement = <Temporal extends boolean>({
     !isTemporalSubgraph(datastore) &&
     !interval
   ) {
-    /** @todo - implement this once temporal versioning is configurable in MBD */
-    throw new Error(`Non-versioned traversal is currently unsupported`);
+    return traverseElementNonTemporal({
+      traversalSubgraph: traversalSubgraph as TraversalSubgraphNonTemporal,
+      datastore: datastore as SubgraphNonTemporal,
+      element: element as VertexTemporal,
+      elementIdentifier,
+      currentTraversalDepths,
+    });
   } else {
     throw new Error(
       `Invalid arguments, expected all fields to consistently support temporal versioning or not. Mixed ` +
-        `
-      temporal/non-temporal arguments are not supported.`,
+        `temporal/non-temporal arguments are not supported.`,
     );
   }
 };

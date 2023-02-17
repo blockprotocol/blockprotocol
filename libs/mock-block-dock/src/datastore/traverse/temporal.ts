@@ -1,13 +1,5 @@
 import { addOutwardEdgeToSubgraphByMutation } from "@blockprotocol/graph/internal";
 import {
-  getIncomingLinksForEntity,
-  getLeftEntityForLinkEntity,
-  getOutgoingLinksForEntity,
-  getRightEntityForLinkEntity,
-  intervalIntersectionWithInterval,
-  mapElementsIntoRevisions,
-} from "@blockprotocol/graph/stdlib-temporal";
-import {
   EntityId,
   EntityIdWithInterval,
   GraphElementVertexId,
@@ -25,6 +17,14 @@ import {
   TimeInterval,
   Vertex,
 } from "@blockprotocol/graph/temporal";
+import {
+  getIncomingLinksForEntity,
+  getLeftEntityForLinkEntity,
+  getOutgoingLinksForEntity,
+  getRightEntityForLinkEntity,
+  intervalIntersectionWithInterval,
+  mapElementsIntoRevisions,
+} from "@blockprotocol/graph/temporal/stdlib";
 
 import {
   mustBeDefined,
@@ -274,18 +274,12 @@ export const traverseElement = ({
   interval: TimeInterval;
   currentTraversalDepths: GraphResolveDepths;
 }) => {
-  const revisionsInTraversalSubgraph =
-    traversalSubgraph.vertices[elementIdentifier.baseId];
-
-  // `any` casts here are because TypeScript wants us to narrow the Identifier type before trusting us
-  if (revisionsInTraversalSubgraph) {
-    revisionsInTraversalSubgraph[elementIdentifier.revisionId] = element as any;
-  } else {
-    // eslint-disable-next-line no-param-reassign -- The point of this function is to mutate the traversal subgraph
-    traversalSubgraph.vertices[elementIdentifier.baseId] = {
-      [elementIdentifier.revisionId]: element as any,
-    };
-  }
+  // eslint-disable-next-line no-param-reassign -- The point of this function is to mutate the traversal subgraph
+  traversalSubgraph.vertices[elementIdentifier.baseId] ??= {};
+  // eslint-disable-next-line no-param-reassign -- The point of this function is to mutate the traversal subgraph
+  traversalSubgraph.vertices[elementIdentifier.baseId]![
+    elementIdentifier.revisionId
+  ] ??= element;
 
   for (const [edgeKind, depthsPerDirection] of typedEntries(
     currentTraversalDepths,
