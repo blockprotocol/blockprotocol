@@ -104,7 +104,6 @@ import {
   isPropertiesConstrainedByEdge as isPropertiesConstrainedByEdgeGeneral,
   isPropertyTypeVertex as isPropertyTypeVertexGeneral,
   isSharedEdgeKind as isSharedEdgeKindGeneral,
-  isTemporalSubgraph as isTemporalSubgraphGeneral,
   IsTypeOfEdge as IsTypeOfEdgeGeneral,
   isValuesConstrainedByEdge as isValuesConstrainedByEdgeGeneral,
   JsonObject as JsonObjectGeneral,
@@ -367,7 +366,6 @@ export type EntityRootType = EntityRootTypeGeneral<true>;
 export type SubgraphRootType = SubgraphRootTypeGeneral<true>;
 export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> =
   SubgraphGeneral<true, RootType>;
-export const isTemporalSubgraph = isTemporalSubgraphGeneral;
 export type Timestamp = TimestampGeneral;
 export type TemporalAxis = TemporalAxisGeneral;
 export type LimitedTemporalBound = LimitedTemporalBoundGeneral;
