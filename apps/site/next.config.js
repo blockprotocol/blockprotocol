@@ -115,6 +115,11 @@ const nextConfig = {
         destination: "/docs/spec/hook-module",
         permanent: true,
       },
+      {
+        source: "/docs/embedding-blocks",
+        destination: "/docs/using-blocks",
+        permanent: true,
+      },
     ];
   },
 
