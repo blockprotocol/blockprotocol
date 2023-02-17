@@ -41,6 +41,7 @@ declare module "@mui/material/styles" {
       700: string;
     };
     red: {
+      80: string;
       100: string;
       200: string;
       300: string;

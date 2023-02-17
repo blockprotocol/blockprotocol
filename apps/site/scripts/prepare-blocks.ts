@@ -56,6 +56,7 @@ const storedBlockInfoSchema: JSONSchemaType<StoredBlockInfo> = {
     distDir: { type: "string", nullable: true },
     folder: { type: "string", nullable: true },
     workspace: { type: "string", nullable: true },
+    verified: { type: "boolean", nullable: true },
   },
   required: ["repository", "commit"],
   additionalProperties: false, // protects against typos in field names
@@ -376,6 +377,28 @@ const prepareBlock = async ({
   };
 };
 
+/**
+ * Vercel builds are at risk of failing because of running out of disk space.
+ *
+ * ```
+ * Error: ENOSPC: no space left on device, write
+ * ```
+ *
+ * This function is used to derive a checksum from a given block info, which can be used
+ * as a trigger for cleaning global cache. This is a workaround until we have separated
+ * block building from app building on Vercel. See details in
+ * https://github.com/blockprotocol/blockprotocol/pull/936
+ */
+const calculateYarnCacheChecksum = (
+  blockInfo: BlockInfo,
+): string | undefined => {
+  if (!process.env.VERCEL) {
+    return undefined;
+  }
+
+  return `${blockInfo.repository}|${blockInfo.commit}`;
+};
+
 const script = async () => {
   console.log(chalk.bold("Preparing blocks..."));
 
@@ -452,6 +475,8 @@ const script = async () => {
       unsafeCleanup: true,
     });
 
+  let yarnCacheChecksum: string | undefined = undefined;
+
   for (const blockInfo of filteredBlockInfos) {
     const blockName = blockInfo.name;
     const blockDirPath = path.resolve(blocksDirPath, blockName);
@@ -488,12 +513,23 @@ const script = async () => {
 
     try {
       await fs.ensureDir(blockDirPath);
+
       const hubInfo = await prepareBlock({
         blockInfo,
         blockDirPath,
         workshopDirPath,
         validateLockfile: env.VALIDATE_LOCKFILE,
       });
+
+      const currentYarnCacheChecksum = calculateYarnCacheChecksum(blockInfo);
+      if (yarnCacheChecksum !== currentYarnCacheChecksum) {
+        console.log("Cleaning global Yarn cache...");
+        await execa("yarn", ["cache", "clean"], {
+          cwd: monorepoRoot,
+          stdio: "inherit",
+        });
+        yarnCacheChecksum = currentYarnCacheChecksum;
+      }
 
       const blockMetadata = await fs.readJson(blockMetadataPath);
 
@@ -520,6 +556,7 @@ const script = async () => {
 
       const blockMetadataToWrite: BlockMetadataOnDisk = {
         ...extendedBlockMetadata,
+        verified: blockInfo.verified,
         unstable_hubInfo: {
           ...hubInfo,
           checksum: blockInfoChecksum,

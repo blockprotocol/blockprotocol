@@ -5,9 +5,13 @@ import { SerializedUser } from "../lib/api/model/user.model";
 
 interface UserAvatarProps {
   user: SerializedUser;
+  size?: number;
 }
 
-export const UserAvatar: FunctionComponent<UserAvatarProps> = ({ user }) => {
+export const UserAvatar: FunctionComponent<UserAvatarProps> = ({
+  user,
+  size = 32,
+}) => {
   const { preferredName } = user || {};
 
   return (
@@ -16,8 +20,8 @@ export const UserAvatar: FunctionComponent<UserAvatarProps> = ({ user }) => {
       alignItems="center"
       justifyContent="center"
       sx={{
-        width: 32,
-        height: 32,
+        minWidth: size,
+        minHeight: size,
         borderRadius: "50%",
         backgroundColor: ({ palette }) => palette.gray[20],
         borderWidth: 1,
@@ -27,7 +31,11 @@ export const UserAvatar: FunctionComponent<UserAvatarProps> = ({ user }) => {
     >
       <Box
         component="span"
-        sx={{ color: ({ palette }) => palette.gray[70], lineHeight: "32px" }}
+        sx={{
+          color: ({ palette }) => palette.gray[70],
+          fontSize: size / 2,
+          lineHeight: `${size}px`,
+        }}
       >
         {preferredName?.charAt(0).toUpperCase()}
       </Box>

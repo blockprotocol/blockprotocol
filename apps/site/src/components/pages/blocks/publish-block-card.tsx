@@ -1,4 +1,4 @@
-import { Box, experimental_sx as sx, styled, Typography } from "@mui/material";
+import { Box, styled, Typography } from "@mui/material";
 
 import { LinkButton } from "../../link-button";
 
@@ -10,7 +10,7 @@ interface PublishBlockCardProps {
 }
 
 const Wrapper = styled(Box)(({ theme }) =>
-  sx({
+  theme.unstable_sx({
     display: "flex",
     alignItems: "center",
     p: theme.spacing(2.5, 3),

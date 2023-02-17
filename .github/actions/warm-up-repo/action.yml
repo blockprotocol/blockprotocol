@@ -11,10 +11,10 @@ runs:
   using: composite
 
   steps:
-    - name: Cache Rust dependencies
-      uses: Swatinem/rust-cache@v2
+    - uses: actions/setup-node@v3
       with:
-        workspaces: libs/@blockprotocol/type-system/crate
+        node-version: 16 ## aligned with Node version on Vercel
+        cache: yarn
 
     - name: Install Cargo-Make
       shell: bash
@@ -22,10 +22,10 @@ runs:
         cargo install cargo-quickinstall
         cargo quickinstall cargo-make --version 0.35.15
 
-    - uses: actions/setup-node@v3
+    - name: Cache Rust dependencies
+      uses: Swatinem/rust-cache@v2
       with:
-        node-version: 16 ## aligned with Node version on Vercel
-        cache: yarn
+        workspaces: libs/@blockprotocol/type-system/crate
 
     - run: yarn install --immutable
       shell: bash

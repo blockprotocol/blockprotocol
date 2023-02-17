@@ -53,8 +53,8 @@ const Settings: AuthWallPageContent = () => {
 
       const currentSettingsPageSlug = query.slugs.join("/");
 
-      return settingsPanels.find(
-        ({ slug }) => slug === currentSettingsPageSlug,
+      return settingsPanels.find(({ slug }) =>
+        currentSettingsPageSlug.startsWith(slug),
       );
     }
   }, [router]);

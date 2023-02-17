@@ -1,7 +1,8 @@
 {
   "repository": "https://github.com/hashintel/hash.git",
-  "commit": "23e3976aa173034dd37946531be085f7a20071c3",
+  "commit": "09b559a2bc48973ab9a2cfa3be8bf28e84d2dd85",
 
   "workspace": "@blocks/calculation",
-  "distDir": "dist"
+  "distDir": "dist",
+  "verified": true
 }

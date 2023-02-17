@@ -1,5 +1,11 @@
 # blockprotocol
 
+## 0.2.0
+
+### Minor Changes
+
+- [#953](https://github.com/blockprotocol/blockprotocol/pull/953) [`504a5087`](https://github.com/blockprotocol/blockprotocol/commit/504a50875a5355bbd24b1beb99e7865dc71f7389) Thanks [@kachkaev](https://github.com/kachkaev)! - Support namespaced block names (`@namespace/blockname` in addition to `blockname`)
+
 ## 0.1.4
 
 ### Patch Changes

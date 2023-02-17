@@ -21,6 +21,7 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     - `NEXT_PUBLIC_BILLING_FEATURE_FLAG` (optional): set to "1" to enable the "billing" feature flag
     - `INTERNAL_API_KEY` (optional): the internal API key, required when the "billing" feature flag is enabled
     - `INTERNAL_API_BASE_URL` (optional): the URL where the internal API is hosted (defaults to `http://localhost:5001`)
+    - `NEXT_PUBLIC_STRIPE_PUBLIC_API_KEY` (optional): the stripe public API key, which can be obtained from the developer console at https://dashboard.stripe.com/test/apikeys or https://dashboard.stripe.com/apikeys
 
     Example minimal file at `apps/site/.env.local` (with **zero** security) to make local development work when following the instructions below:
 
