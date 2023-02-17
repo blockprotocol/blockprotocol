@@ -133,7 +133,7 @@ export const paidSubscriptionFeatures: Record<
               component="span"
               sx={{ color: ({ palette }) => palette.gray[60] }}
             >
-              300k+ words, 100 images, 40 address fills, 600 static maps
+              300k+ words, 100 images, 40 address fills, etc.
             </Box>
           </>
         ),
