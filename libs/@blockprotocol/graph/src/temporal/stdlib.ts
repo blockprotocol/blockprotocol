@@ -43,6 +43,7 @@ import {
   sortIntervals as sortIntervalsGeneral,
   unionOfIntervals as unionOfIntervalsGeneral,
 } from "../shared/stdlib";
+import { GraphElementVertexId } from "../shared/types/subgraph/vertices";
 import {
   DataTypeWithMetadata,
   Entity,
@@ -84,11 +85,11 @@ export const buildSubgraph = (
     propertyTypes: PropertyTypeWithMetadata[];
     dataTypes: DataTypeWithMetadata[];
   },
-  rootRecordIds: EntityRecordId[],
+  rootVertexIds: GraphElementVertexId[],
   depths: GraphResolveDepths,
   subgraphTemporalAxes: SubgraphTemporalAxes,
 ) =>
-  buildSubgraphGeneral<true>(data, rootRecordIds, depths, subgraphTemporalAxes);
+  buildSubgraphGeneral<true>(data, rootVertexIds, depths, subgraphTemporalAxes);
 
 export const getPropertyTypesReferencedByEntityType =
   getPropertyTypesReferencedByEntityTypeGeneral;

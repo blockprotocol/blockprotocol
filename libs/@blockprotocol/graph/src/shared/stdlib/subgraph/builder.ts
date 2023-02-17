@@ -7,9 +7,9 @@ import {
 import {
   DataTypeWithMetadata,
   Entity,
-  EntityRecordId,
   EntityRootType,
   EntityTypeWithMetadata,
+  GraphElementVertexId,
   GraphResolveDepths,
   PropertyTypeWithMetadata,
   Subgraph,
@@ -35,7 +35,7 @@ import {
  * @param data.entityTypes – the entity types to include in the subgraph
  * @param data.entities – the entities to include in the subgraph
  * @param depths – the depth values to provide in the returned subgraph
- * @param rootRecordIds – the root values to provide in the returned subgraph
+ * @param rootVertexIds – the vertexIds of the root elements to provide in the returned subgraph
  * @param {SubgraphTemporalAxes} subgraphTemporalAxes - the sets of temporal axes that were used when originally
  * selecting the provided data
  *
@@ -55,18 +55,31 @@ export const buildSubgraph = <Temporal extends boolean>(
     propertyTypes: PropertyTypeWithMetadata[];
     dataTypes: DataTypeWithMetadata[];
   },
-  rootRecordIds: EntityRecordId[],
+  rootVertexIds: GraphElementVertexId[],
   depths: GraphResolveDepths,
   subgraphTemporalAxes: Temporal extends true
     ? SubgraphTemporalAxes
     : undefined,
 ): Subgraph<Temporal, EntityRootType<Temporal>> => {
-  const missingRoots = rootRecordIds.filter(
-    ({ entityId, editionId }) =>
-      !data.entities.find(
-        (entity) =>
-          entity.metadata.recordId.entityId === entityId &&
-          entity.metadata.recordId.editionId === editionId,
+  const isTemporal = subgraphTemporalAxes !== undefined;
+
+  const missingRoots = rootVertexIds.filter(
+    ({ baseId, revisionId }) =>
+      !(
+        data.entities.find(
+          (entity) =>
+            entity.metadata.recordId.entityId === baseId &&
+            (isTemporal
+              ? (entity as Entity<true>).metadata.temporalVersioning[
+                  subgraphTemporalAxes.resolved.variable.axis
+                ].start.limit === revisionId
+              : true),
+        ) ||
+        [...data.dataTypes, ...data.propertyTypes, ...data.entityTypes].find(
+          (ontologyType) =>
+            ontologyType.metadata.recordId.baseUri === baseId &&
+            `${ontologyType.metadata.recordId.version}` === revisionId,
+        )
       ),
   );
 
@@ -75,21 +88,15 @@ export const buildSubgraph = <Temporal extends boolean>(
       `Root(s) not present in data: ${missingRoots
         .map(
           (missingRoot) =>
-            `${missingRoot.entityId} at version ${missingRoot.editionId}`,
+            `${missingRoot.baseId} with revisionId: ${missingRoot.revisionId}`,
         )
         .join(", ")}`,
     );
   }
 
-  const roots = rootRecordIds.map((rootRecordId) => ({
-    baseId: rootRecordId.entityId,
-    /** @todo - This is temporary, and wrong */
-    revisionId: rootRecordId.editionId,
-  }));
-
   // @ts-expect-error -- @todo, how do we convince TS that we're only setting this when the generic is satisfied
   const subgraph: Subgraph<Temporal, EntityRootType<Temporal>> = {
-    roots,
+    roots: rootVertexIds,
     vertices: {},
     edges: {},
     depths,

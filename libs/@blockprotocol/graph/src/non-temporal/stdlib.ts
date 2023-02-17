@@ -27,6 +27,7 @@ import {
   isEntityTypeRootedSubgraph as isEntityTypeRootedSubgraphGeneral,
   isPropertyTypeRootedSubgraph as isPropertyTypeRootedSubgraphGeneral,
 } from "../shared/stdlib";
+import { GraphElementVertexId } from "../shared/types/subgraph/vertices";
 import {
   DataTypeWithMetadata,
   Entity,
@@ -85,9 +86,9 @@ export const buildSubgraph = (
     propertyTypes: PropertyTypeWithMetadata[];
     dataTypes: DataTypeWithMetadata[];
   },
-  rootRecordIds: EntityRecordId[],
+  rootVertexIds: GraphElementVertexId[],
   depths: GraphResolveDepths,
-) => buildSubgraphGeneral<false>(data, rootRecordIds, depths, undefined);
+) => buildSubgraphGeneral<false>(data, rootVertexIds, depths, undefined);
 
 export const getPropertyTypesReferencedByEntityType =
   getPropertyTypesReferencedByEntityTypeGeneral;
