@@ -3,5 +3,6 @@
   "commit": "e38dde1575c1d8b80d09815f3f9b3427869bfd0e",
 
   "folder": "src/packages/quote",
-  "distDir": "dist"
+  "distDir": "dist",
+  "verified": true
 }
