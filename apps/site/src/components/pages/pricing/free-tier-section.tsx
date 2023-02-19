@@ -21,7 +21,7 @@ import { FunctionComponent, ReactNode } from "react";
 
 import helix from "../../../../public/assets/pricing/helix.png";
 import { useUser } from "../../../context/user-context";
-import { FontAwesomeIcon, FontAwesomeIconProps } from "../../icons";
+import { FontAwesomeIcon } from "../../icons";
 import { faCloud } from "../../icons/pro/fa-cloud";
 import { faCubes } from "../../icons/pro/fa-cubes";
 import { faEye } from "../../icons/pro/fa-eye";
@@ -29,28 +29,7 @@ import { faHammer } from "../../icons/pro/fa-hammer";
 import { faServer } from "../../icons/pro/fa-server";
 import { faWindow } from "../../icons/pro/fa-window";
 import { LinkButton } from "../../link-button";
-
-const GradientFontAwesomeIcon: FunctionComponent<FontAwesomeIconProps> = ({
-  sx,
-  ...props
-}) => (
-  <FontAwesomeIcon
-    {...props}
-    sx={[{ fill: "url(#gradient)" }, ...(Array.isArray(sx) ? sx : [sx])]}
-  >
-    <linearGradient
-      id="gradient"
-      x1="0"
-      y1="0"
-      x2="1"
-      y2="1"
-      gradientTransform="rotate(96.94deg)"
-    >
-      <stop offset="30.81%" stopColor="#6834FB" />
-      <stop offset="92.56%" stopColor="#FF45EC" />
-    </linearGradient>
-  </FontAwesomeIcon>
-);
+import { GradientFontAwesomeIcon } from "./gradient-fontawesome-icon";
 
 interface DescriptionItem {
   icon: IconDefinition;

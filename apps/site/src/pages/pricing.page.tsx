@@ -1,9 +1,10 @@
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import { NextPage } from "next";
 import { NextSeo } from "next-seo";
 
 import { FreeTierSection } from "../components/pages/pricing/free-tier-section";
 import { Header } from "../components/pages/pricing/header";
+import { PaidTiersSection } from "../components/pages/pricing/paid-tiers-section";
 
 const PricingPage: NextPage = () => {
   return (
@@ -24,6 +25,7 @@ const PricingPage: NextPage = () => {
       >
         <Header />
         <FreeTierSection />
+        <PaidTiersSection />
       </Box>
     </>
   );

@@ -12,7 +12,15 @@ export const SubscriptionFeatureList: FunctionComponent<{
   headingSx?: TypographyProps["sx"];
 }> = ({ features, heading, headingSx }) => (
   <>
-    <Typography gutterBottom component="p" variant="bpSmallCopy" sx={headingSx}>
+    <Typography
+      gutterBottom
+      component="p"
+      variant="bpSmallCopy"
+      sx={[
+        { fontFamily: "colfax-web" },
+        ...(Array.isArray(headingSx) ? headingSx : [headingSx]),
+      ]}
+    >
       {heading}
     </Typography>
     <Box component="ul">
