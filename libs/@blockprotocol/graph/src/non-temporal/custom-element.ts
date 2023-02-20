@@ -69,10 +69,11 @@ export abstract class BlockElementBase<
     if (!this.graph || !this.graph.blockEntitySubgraph) {
       throw new Error("graph.blockEntitySubgraph was not passed to block.");
     }
+
     const blockEntity = getRoots(this.graph.blockEntitySubgraph)[0];
     if (!blockEntity) {
       throw new Error(
-        "Cannot update self: no root entity on graph.blockEntitySubgraph passed to block",
+        "No root entity on graph.blockEntitySubgraph passed to block",
       );
     }
 

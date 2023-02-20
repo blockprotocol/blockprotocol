@@ -52,13 +52,13 @@ export class BlockElement extends BlockElementBase<RootEntity> {
     return html`<h1>Hello, ${this.getBlockEntity().properties[nameKey]}</h1>
       <p>
         The entityId of this block is
-        ${this.getBlockEntity()?.metadata.recordId.entityId}. Use it to update
+        ${this.getBlockEntity().metadata.recordId.entityId}. Use it to update
         its data when calling updateEntity.
       </p>
       <!-- @see https://lit.dev/docs/components/events -->
       <input
         @change=${this.handleInput}
-        value=${this.getBlockEntity()?.properties[nameKey]}
+        value=${this.getBlockEntity().properties[nameKey]}
       />`;
   }
 }
