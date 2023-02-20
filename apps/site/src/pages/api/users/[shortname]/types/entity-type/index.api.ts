@@ -1,13 +1,14 @@
-import { createBaseHandler } from "../../../../../lib/api/handler/base-handler";
-import { EntityType } from "../../../../../lib/api/model/entity-type.model";
-import { User } from "../../../../../lib/api/model/user.model";
-import { formatErrors } from "../../../../../util/api";
+import { EntityTypeWithMetadata } from "@blockprotocol/graph";
+
+import { createBaseHandler } from "../../../../../../lib/api/handler/base-handler";
+import { User } from "../../../../../../lib/api/model/user.model";
+import { formatErrors } from "../../../../../../util/api";
 
 export type ApiTypesByUserRequest = {
   shortname: string;
 };
 
-export type ApiTypesByUserResponse = { entityTypes: EntityType[] };
+export type ApiTypesByUserResponse = { entityTypes: EntityTypeWithMetadata[] };
 
 export default createBaseHandler<null, ApiTypesByUserResponse>().get(
   async (req, res) => {
