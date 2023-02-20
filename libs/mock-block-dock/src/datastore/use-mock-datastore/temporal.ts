@@ -342,7 +342,7 @@ export const useMockDatastore = (
           errors: [
             {
               code: "NOT_IMPLEMENTED",
-              message: `Entity deletion is not currently supported`,
+              message: `Entity deletion is not currently supported in a datastore with temporal versioning`,
             },
           ],
         };
