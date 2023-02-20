@@ -43,6 +43,7 @@ import {
   sortIntervals as sortIntervalsGeneral,
   unionOfIntervals as unionOfIntervalsGeneral,
 } from "../shared/stdlib";
+import { BaseIdToRevisions } from "../shared/stdlib/subgraph/element/map-revisions";
 import { GraphElementVertexId } from "../shared/types/subgraph/vertices";
 import {
   DataTypeWithMetadata,
@@ -109,7 +110,7 @@ export const getOutgoingLinkAndTargetEntities = <
   subgraph: Subgraph,
   entityId: EntityId,
   interval?: TimeInterval,
-) =>
+): LinkAndRightEntities =>
   getOutgoingLinkAndTargetEntitiesGeneral<true, LinkAndRightEntities>(
     subgraph,
     entityId,
@@ -150,14 +151,15 @@ export const mapElementsIntoRevisions = <
   GraphElementType extends Vertex["inner"],
 >(
   elements: GraphElementType[],
-) => mapElementsIntoRevisionsGeneral<true, GraphElementType>(elements);
+): BaseIdToRevisions<true, GraphElementType> =>
+  mapElementsIntoRevisionsGeneral<true, GraphElementType>(elements);
 export const getPropertyTypeById = getPropertyTypeByIdGeneral;
 export const getPropertyTypeByVertexId = getPropertyTypeByVertexIdGeneral;
 export const getPropertyTypes = getPropertyTypesGeneral;
 export const getPropertyTypesByBaseUri = getPropertyTypesByBaseUriGeneral;
 export const getRoots = <RootType extends SubgraphRootType>(
   subgraph: Subgraph<RootType>,
-) => getRootsGeneral(subgraph);
+): RootType["element"][] => getRootsGeneral<true, RootType>(subgraph);
 export const isDataTypeRootedSubgraph = isDataTypeRootedSubgraphGeneral<true>;
 export const isEntityRootedSubgraph = isEntityRootedSubgraphGeneral<true>;
 export const isEntityTypeRootedSubgraph =

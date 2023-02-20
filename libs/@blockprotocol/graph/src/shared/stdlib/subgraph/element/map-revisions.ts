@@ -1,6 +1,6 @@
 import { Vertex } from "../../../types/subgraph/vertices.js";
 
-type BaseIdToRevisions<
+export type BaseIdToRevisions<
   Temporal extends boolean,
   GraphElementType extends Vertex<Temporal>["inner"],
 > = Record<

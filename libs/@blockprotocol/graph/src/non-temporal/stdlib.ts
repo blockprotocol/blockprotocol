@@ -6,7 +6,6 @@ import {
   getDataTypesByBaseUri as getDataTypesByBaseUriGeneral,
   getEntities as getEntitiesGeneral,
   getEntityRevision as getEntityRevisionGeneral,
-  getEntityRevisionsByEntityId as getEntityRevisionsByEntityIdGeneral,
   getEntityTypeById as getEntityTypeByIdGeneral,
   getEntityTypeByVertexId as getEntityTypeByVertexIdGeneral,
   getEntityTypes as getEntityTypesGeneral,
@@ -32,7 +31,6 @@ import {
   DataTypeWithMetadata,
   Entity,
   EntityId,
-  EntityRecordId,
   EntityTypeWithMetadata,
   GraphResolveDepths,
   LinkEntityAndRightEntity,
@@ -47,6 +45,7 @@ import {
 //   Timestamp,
 // } from "./main";
 // import {
+//   getEntityRevisionsByEntityId as getEntityRevisionsByEntityIdGeneral,
 //   intervalCompareWithInterval as intervalCompareWithIntervalGeneral,
 //   intervalContainsInterval as intervalContainsIntervalGeneral,
 //   intervalContainsTimestamp as intervalContainsTimestampGeneral,
@@ -105,7 +104,7 @@ export const getOutgoingLinkAndTargetEntities = <
 >(
   subgraph: Subgraph,
   entityId: EntityId,
-) =>
+): LinkAndRightEntities =>
   getOutgoingLinkAndTargetEntitiesGeneral<false, LinkAndRightEntities>(
     subgraph,
     entityId,
@@ -145,7 +144,7 @@ export const getPropertyTypes = getPropertyTypesGeneral;
 export const getPropertyTypesByBaseUri = getPropertyTypesByBaseUriGeneral;
 export const getRoots = <RootType extends SubgraphRootType>(
   subgraph: Subgraph<RootType>,
-) => getRootsGeneral(subgraph);
+): RootType["element"][] => getRootsGeneral<false, RootType>(subgraph);
 export const isDataTypeRootedSubgraph = isDataTypeRootedSubgraphGeneral<false>;
 export const isEntityRootedSubgraph = isEntityRootedSubgraphGeneral<false>;
 export const isEntityTypeRootedSubgraph =

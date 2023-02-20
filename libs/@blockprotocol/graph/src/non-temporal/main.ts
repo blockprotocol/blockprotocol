@@ -137,7 +137,6 @@ import {
   SharedEdgeKind as SharedEdgeKindGeneral,
   SimpleProperties as SimplePropertiesGeneral,
   Sort as SortGeneral,
-  Subgraph as SubgraphGeneral,
   SubgraphRootType as SubgraphRootTypeGeneral,
   Timestamp as TimestampGeneral,
   UpdateEntityData as UpdateEntityDataGeneral,
@@ -165,6 +164,7 @@ import {
 //   PinnedTemporalAxisUnresolved as PinnedTemporalAxisUnresolvedGeneral,
 //   QueryTemporalAxes as QueryTemporalAxesGeneral,
 //   QueryTemporalAxesUnresolved as QueryTemporalAxesUnresolvedGeneral,
+//   Subgraph as SubgraphGeneral,
 //   SubgraphTemporalAxes as SubgraphTemporalAxesGeneral,
 //   TemporalAxis as TemporalAxisGeneral,
 //   TemporalBound as TemporalBoundGeneral,
@@ -368,8 +368,18 @@ export type PropertyTypeRootType = PropertyTypeRootTypeGeneral;
 export type EntityTypeRootType = EntityTypeRootTypeGeneral;
 export type EntityRootType = EntityRootTypeGeneral<false>;
 export type SubgraphRootType = SubgraphRootTypeGeneral<false>;
-export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> =
-  SubgraphGeneral<false, RootType>;
+/*
+ @todo - For some reason, exporting this alias breaks inference of root types in `getRoots`
+   we should investigate this, it may cause problems with similar things such as <Properties>
+ */
+// export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> =
+//   SubgraphGeneral<false, RootType>;
+export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> = {
+  roots: RootType["vertexId"][];
+  vertices: Vertices;
+  edges: Edges;
+  depths: GraphResolveDepths;
+};
 // export const isTemporalSubgraph = isTemporalSubgraphGeneral;
 export type Timestamp = TimestampGeneral;
 // export type TemporalAxis = TemporalAxisGeneral;
