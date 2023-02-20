@@ -1,20 +1,29 @@
 import {
-  AggregateEntitiesData,
-  AggregateEntitiesResult,
-  EntityRootType,
+  AggregateEntitiesData as AggregateEntitiesDataNonTemporal,
+  AggregateEntitiesResult as AggregateEntitiesResultNonTemporal,
+  EntityRootType as EntityRootTypeNonTemporal,
   GraphResolveDepths,
-  Subgraph,
+  Subgraph as SubgraphNonTemporal,
 } from "@blockprotocol/graph";
-import { getEntities } from "@blockprotocol/graph/stdlib";
-
-import { filterAndSortEntitiesOrTypes } from "../../../util";
-import { getDefaultTemporalAxes } from "../../get-default-temporal-axes";
-import { resolveTemporalAxes } from "../../resolve-temporal-axes";
+import { isTemporalSubgraph } from "@blockprotocol/graph/internal";
+import { getEntities as getEntitiesNonTemporal } from "@blockprotocol/graph/stdlib";
 import {
-  finalizeSubgraph,
-  TraversalSubgraph,
-  traverseElement,
-} from "../../traverse";
+  AggregateEntitiesData as AggregateEntitiesDataTemporal,
+  AggregateEntitiesResult as AggregateEntitiesResultTemporal,
+  EntityRootType as EntityRootTypeTemporal,
+  Subgraph as SubgraphTemporal,
+} from "@blockprotocol/graph/temporal";
+import { getEntities as getEntitiesTemporal } from "@blockprotocol/graph/temporal/stdlib";
+
+import { InconsistentTemporalVersioningSupportError } from "../../../error";
+import { filterAndSortEntitiesOrTypes } from "../../../util";
+import { resolveTemporalAxes } from "../../resolve-temporal-axes";
+import { traverseElement } from "../../traverse";
+import { TraversalSubgraph as TraversalSubgraphNonTemporal } from "../../traverse/non-temporal";
+import {
+  finalizeSubgraph as finalizeSubgraphTemporal,
+  TraversalSubgraph as TraversalSubgraphTemporal,
+} from "../../traverse/temporal";
 
 const defaultGraphResolveDepths: GraphResolveDepths = {
   hasLeftEntity: { incoming: 1, outgoing: 1 },
@@ -27,92 +36,137 @@ const defaultGraphResolveDepths: GraphResolveDepths = {
   isOfType: { outgoing: 0 },
 };
 
-const aggregateEntitiesImpl = (
-  {
-    operation,
-    graphResolveDepths = defaultGraphResolveDepths,
-    temporalAxes,
-  }: AggregateEntitiesData<true>,
-  graph: Subgraph<true>,
-): AggregateEntitiesResult<true, Subgraph<true, EntityRootType<true>>> => {
-  const resolvedTemporalAxes = resolveTemporalAxes(temporalAxes);
-
-  const { results, operation: appliedOperation } =
-    filterAndSortEntitiesOrTypes<true>(getEntities<true>(graph), {
-      operation,
-      temporalAxes: resolvedTemporalAxes,
-    });
-
-  const fullyDefinedGraphResolveDepths = {
-    ...defaultGraphResolveDepths,
-    ...graphResolveDepths,
-  };
-
-  const traversalSubgraph: TraversalSubgraph<true, EntityRootType<true>> = {
-    roots: results.map((entity) => ({
-      baseId: entity.metadata.recordId.entityId,
-      revisionId:
-        entity.metadata.temporalVersioning[temporalAxes.variable.axis].start
-          .limit,
-    })),
-    vertices: {},
-    edges: {},
-    depths: fullyDefinedGraphResolveDepths,
-    temporalAxes: {
-      initial: temporalAxes,
-      resolved: resolvedTemporalAxes,
-    },
-  };
-
-  for (const entityRevision of results) {
-    traverseElement({
-      traversalSubgraph,
-      datastore: graph,
-      element: { kind: "entity", inner: entityRevision },
-      elementIdentifier: {
-        baseId: entityRevision.metadata.recordId.entityId,
-        revisionId:
-          entityRevision.metadata.temporalVersioning[
-            resolvedTemporalAxes.variable.axis
-          ].start.limit,
-      },
-      currentTraversalDepths: fullyDefinedGraphResolveDepths,
-      interval: resolvedTemporalAxes.variable.interval,
-    });
-  }
-
-  return {
-    results: finalizeSubgraph(traversalSubgraph),
-    operation: appliedOperation,
-  };
-};
+type AggregateEntitiesReturn<Temporal extends boolean> = Temporal extends true
+  ? AggregateEntitiesResultTemporal<SubgraphTemporal<EntityRootTypeTemporal>>
+  : AggregateEntitiesResultNonTemporal<
+      SubgraphNonTemporal<EntityRootTypeNonTemporal>
+    >;
 
 export const aggregateEntities = <Temporal extends boolean>(
-  data: AggregateEntitiesData<Temporal>,
-  graph: Subgraph<true>,
-): AggregateEntitiesResult<
-  Temporal,
-  Subgraph<Temporal, EntityRootType<Temporal>>
-> => {
-  // this cast is safe as we're only checking against undefined
-  if ((data as AggregateEntitiesData<true>).temporalAxes !== undefined) {
-    return aggregateEntitiesImpl(
-      data as AggregateEntitiesData<true>,
-      graph,
-    ) as AggregateEntitiesResult<
-      Temporal,
-      Subgraph<Temporal, EntityRootType<Temporal>>
-    >;
-  } else {
-    return aggregateEntitiesImpl(
+  data: Temporal extends true
+    ? AggregateEntitiesDataTemporal
+    : AggregateEntitiesDataNonTemporal,
+  graph: Temporal extends true ? SubgraphTemporal : SubgraphNonTemporal,
+): AggregateEntitiesReturn<Temporal> => {
+  if (
+    // this cast should be safe because we're only checking if temporalAxes is defined
+    (data as AggregateEntitiesDataTemporal).temporalAxes !== undefined &&
+    isTemporalSubgraph(graph)
+  ) {
+    const {
+      operation,
+      graphResolveDepths = {},
+      temporalAxes,
+    } = data as AggregateEntitiesDataTemporal;
+
+    const fullyDefinedGraphResolveDepths = {
+      ...defaultGraphResolveDepths,
+      ...graphResolveDepths,
+    };
+
+    const resolvedTemporalAxes = resolveTemporalAxes(temporalAxes);
+
+    const entities = getEntitiesTemporal(graph);
+
+    const { results, operation: appliedOperation } =
+      filterAndSortEntitiesOrTypes(entities, {
+        operation,
+        temporalAxes: resolvedTemporalAxes,
+      });
+
+    const traversalSubgraph: TraversalSubgraphTemporal<EntityRootTypeTemporal> =
       {
-        ...(data as AggregateEntitiesData<false>),
-        temporalAxes: getDefaultTemporalAxes(),
-      },
-      graph,
-    ) as AggregateEntitiesResult<
-      Temporal,
-      Subgraph<Temporal, EntityRootType<Temporal>>
-    >;
+        roots: results.map((entity) => ({
+          baseId: entity.metadata.recordId.entityId,
+          revisionId:
+            entity.metadata.temporalVersioning[
+              resolvedTemporalAxes.variable.axis
+            ].start.limit,
+        })),
+        vertices: {},
+        edges: {},
+        depths: fullyDefinedGraphResolveDepths,
+        temporalAxes: {
+          initial: temporalAxes,
+          resolved: resolvedTemporalAxes,
+        },
+      };
+
+    for (const entityRevision of results) {
+      traverseElement({
+        traversalSubgraph,
+        datastore: graph,
+        element: { kind: "entity", inner: entityRevision },
+        elementIdentifier: {
+          baseId: entityRevision.metadata.recordId.entityId,
+          revisionId:
+            entityRevision.metadata.temporalVersioning[
+              resolvedTemporalAxes.variable.axis
+            ].start.limit,
+        },
+        currentTraversalDepths: fullyDefinedGraphResolveDepths,
+        interval: resolvedTemporalAxes.variable.interval,
+      });
+    }
+
+    return {
+      results: finalizeSubgraphTemporal(traversalSubgraph),
+      operation: appliedOperation,
+    } as AggregateEntitiesReturn<Temporal>;
+  } else if (
+    // similarly, this cast should be safe because we're only checking if temporalAxes is undefined
+    (data as AggregateEntitiesDataTemporal).temporalAxes === undefined &&
+    !isTemporalSubgraph(graph)
+  ) {
+    const { operation, graphResolveDepths = {} } =
+      data as AggregateEntitiesDataNonTemporal;
+
+    const fullyDefinedGraphResolveDepths = {
+      ...defaultGraphResolveDepths,
+      ...graphResolveDepths,
+    };
+
+    const entities = getEntitiesNonTemporal(graph);
+
+    const { results, operation: appliedOperation } =
+      filterAndSortEntitiesOrTypes(entities, {
+        operation,
+      });
+
+    const traversalSubgraph: TraversalSubgraphNonTemporal<EntityRootTypeNonTemporal> =
+      {
+        roots: results.map((entity) => ({
+          baseId: entity.metadata.recordId.entityId,
+          revisionId: new Date(0).toISOString(),
+        })),
+        vertices: {},
+        edges: {},
+        depths: fullyDefinedGraphResolveDepths,
+      };
+
+    for (const entityRevision of results) {
+      traverseElement<false>({
+        traversalSubgraph,
+        datastore: graph,
+        element: { kind: "entity", inner: entityRevision },
+        elementIdentifier: {
+          baseId: entityRevision.metadata.recordId.entityId,
+          revisionId: new Date(0).toISOString(),
+        },
+        currentTraversalDepths: fullyDefinedGraphResolveDepths,
+        interval: undefined,
+      });
+    }
+
+    return {
+      results: traversalSubgraph,
+      operation: appliedOperation,
+    } as AggregateEntitiesReturn<Temporal>;
+  } else {
+    throw new InconsistentTemporalVersioningSupportError({
+      getEntityData:
+        (data as AggregateEntitiesDataTemporal).temporalAxes !== undefined,
+      datastoreGraph: isTemporalSubgraph(graph),
+    });
   }
 };

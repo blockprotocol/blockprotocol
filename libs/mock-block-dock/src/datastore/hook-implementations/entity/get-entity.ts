@@ -1,18 +1,29 @@
 import {
-  EntityRootType,
-  GetEntityData,
+  EntityRootType as EntityRootTypeNonTemporal,
+  GetEntityData as GetEntityDataNonTemporal,
   GraphResolveDepths,
-  Subgraph,
+  Subgraph as SubgraphNonTemporal,
 } from "@blockprotocol/graph";
-import { getEntityRevision } from "@blockprotocol/graph/stdlib";
+import { isTemporalSubgraph } from "@blockprotocol/graph/internal";
+import { getEntityRevision as getEntityRevisionNonTemporal } from "@blockprotocol/graph/stdlib";
+import {
+  EntityRootType as EntityRootTypeTemporal,
+  GetEntityData as GetEntityDataTemporal,
+  Subgraph as SubgraphTemporal,
+} from "@blockprotocol/graph/temporal";
+import { getEntityRevision as getEntityRevisionTemporal } from "@blockprotocol/graph/temporal/stdlib";
 
-import { getDefaultTemporalAxes } from "../../get-default-temporal-axes";
+import { InconsistentTemporalVersioningSupportError } from "../../../error";
 import { resolveTemporalAxes } from "../../resolve-temporal-axes";
 import {
-  finalizeSubgraph,
-  TraversalSubgraph,
-  traverseElement,
-} from "../../traverse";
+  TraversalSubgraph as TraversalSubgraphNonTemporal,
+  traverseElement as traverseElementNonTemporal,
+} from "../../traverse/non-temporal";
+import {
+  finalizeSubgraph as finalizeSubgraphTemporal,
+  TraversalSubgraph as TraversalSubgraphTemporal,
+  traverseElement as traverseElementTemporal,
+} from "../../traverse/temporal";
 
 const defaultGraphResolveDepths: GraphResolveDepths = {
   hasLeftEntity: { incoming: 1, outgoing: 1 },
@@ -25,77 +36,123 @@ const defaultGraphResolveDepths: GraphResolveDepths = {
   isOfType: { outgoing: 0 },
 };
 
-export const getEntityImpl = (
-  {
-    entityId,
-    graphResolveDepths = defaultGraphResolveDepths,
-    temporalAxes,
-  }: GetEntityData<true>,
-  graph: Subgraph<true>,
-): Subgraph<true, EntityRootType<true>> | undefined => {
-  const resolvedTemporalAxes = resolveTemporalAxes(temporalAxes);
+type GetEntityReturn<Temporal extends boolean> =
+  | (Temporal extends true
+      ? SubgraphTemporal<EntityRootTypeTemporal>
+      : SubgraphNonTemporal<EntityRootTypeNonTemporal>)
+  | undefined;
 
-  const entityRevision = getEntityRevision(graph, entityId);
+export const getEntity = <Temporal extends boolean>(
+  data: GetEntityDataTemporal | GetEntityDataNonTemporal,
+  graph: Temporal extends true ? SubgraphTemporal : SubgraphNonTemporal,
+): GetEntityReturn<Temporal> => {
+  if (
+    // this cast should be safe because we're only checking if temporalAxes is defined
+    (data as GetEntityDataTemporal).temporalAxes !== undefined &&
+    isTemporalSubgraph(graph)
+  ) {
+    const {
+      entityId,
+      graphResolveDepths = {},
+      temporalAxes,
+    } = data as GetEntityDataTemporal;
 
-  if (entityRevision === undefined) {
-    return undefined;
-  }
+    const fullyDefinedGraphResolveDepths = {
+      ...defaultGraphResolveDepths,
+      ...graphResolveDepths,
+    };
 
-  const fullyDefinedGraphResolveDepths = {
-    ...defaultGraphResolveDepths,
-    ...graphResolveDepths,
-  };
+    const resolvedTemporalAxes = resolveTemporalAxes(temporalAxes);
 
-  const traversalSubgraph: TraversalSubgraph<true, EntityRootType<true>> = {
-    roots: [
+    const entityRevision = getEntityRevisionTemporal(graph, entityId);
+
+    if (entityRevision === undefined) {
+      return undefined as GetEntityReturn<Temporal>;
+    }
+
+    const traversalSubgraph: TraversalSubgraphTemporal<EntityRootTypeTemporal> =
       {
+        roots: [
+          {
+            baseId: entityRevision.metadata.recordId.entityId,
+            revisionId:
+              entityRevision.metadata.temporalVersioning[
+                resolvedTemporalAxes.variable.axis
+              ].start.limit,
+          },
+        ],
+        vertices: {},
+        edges: {},
+        depths: fullyDefinedGraphResolveDepths,
+        temporalAxes: { initial: temporalAxes, resolved: resolvedTemporalAxes },
+      };
+
+    traverseElementTemporal({
+      traversalSubgraph,
+      datastore: graph,
+      element: { kind: "entity", inner: entityRevision },
+      elementIdentifier: {
         baseId: entityRevision.metadata.recordId.entityId,
         revisionId:
           entityRevision.metadata.temporalVersioning[
             resolvedTemporalAxes.variable.axis
           ].start.limit,
       },
-    ],
-    vertices: {},
-    edges: {},
-    depths: fullyDefinedGraphResolveDepths,
-    temporalAxes: { initial: temporalAxes, resolved: resolvedTemporalAxes },
-  };
+      currentTraversalDepths: fullyDefinedGraphResolveDepths,
+      interval: resolvedTemporalAxes.variable.interval,
+    });
 
-  traverseElement({
-    traversalSubgraph,
-    datastore: graph,
-    element: { kind: "entity", inner: entityRevision },
-    elementIdentifier: {
-      baseId: entityRevision.metadata.recordId.entityId,
-      revisionId:
-        entityRevision.metadata.temporalVersioning[
-          resolvedTemporalAxes.variable.axis
-        ].start.limit,
-    },
-    currentTraversalDepths: fullyDefinedGraphResolveDepths,
-    interval: resolvedTemporalAxes.variable.interval,
-  });
+    return finalizeSubgraphTemporal(
+      traversalSubgraph,
+    ) as GetEntityReturn<Temporal>;
+  } else if (
+    // this cast should be safe because we're only checking if temporalAxes is defined
+    (data as GetEntityDataTemporal).temporalAxes === undefined &&
+    !isTemporalSubgraph(graph)
+  ) {
+    const { entityId, graphResolveDepths = {} } =
+      data as GetEntityDataNonTemporal;
 
-  return finalizeSubgraph(traversalSubgraph);
-};
+    const fullyDefinedGraphResolveDepths = {
+      ...defaultGraphResolveDepths,
+      ...graphResolveDepths,
+    };
 
-export const getEntity = <Temporal extends boolean>(
-  data: GetEntityData<Temporal>,
-  graph: Subgraph<true>,
-): Subgraph<Temporal, EntityRootType<Temporal>> | undefined => {
-  // this cast is safe as we're only checking against undefined
-  if ((data as GetEntityData<true>).temporalAxes !== undefined) {
-    return getEntityImpl(data as GetEntityData<true>, graph) as
-      | Subgraph<Temporal, EntityRootType<Temporal>>
-      | undefined;
-  } else {
-    return getEntityImpl(
+    const entityRevision = getEntityRevisionNonTemporal(graph, entityId);
+
+    if (entityRevision === undefined) {
+      return undefined as GetEntityReturn<Temporal>;
+    }
+
+    const traversalSubgraph: TraversalSubgraphNonTemporal<EntityRootTypeNonTemporal> =
       {
-        ...(data as GetEntityData<false>),
-        temporalAxes: getDefaultTemporalAxes(),
+        roots: [
+          {
+            baseId: entityRevision.metadata.recordId.entityId,
+            revisionId: new Date(0).toISOString(),
+          },
+        ],
+        vertices: {},
+        edges: {},
+        depths: fullyDefinedGraphResolveDepths,
+      };
+
+    traverseElementNonTemporal({
+      traversalSubgraph,
+      datastore: graph,
+      element: { kind: "entity", inner: entityRevision },
+      elementIdentifier: {
+        baseId: entityRevision.metadata.recordId.entityId,
+        revisionId: new Date(0).toISOString(),
       },
-      graph,
-    ) as Subgraph<Temporal, EntityRootType<Temporal>> | undefined;
+      currentTraversalDepths: fullyDefinedGraphResolveDepths,
+    });
+
+    return traversalSubgraph as GetEntityReturn<Temporal>;
+  } else {
+    throw new InconsistentTemporalVersioningSupportError({
+      getEntityData: (data as GetEntityDataTemporal).temporalAxes !== undefined,
+      datastoreGraph: isTemporalSubgraph(graph),
+    });
   }
 };

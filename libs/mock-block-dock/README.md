@@ -101,10 +101,17 @@ import MyCustomElement from "./my-custom-element.ts";
 
 #### Debug mode
 
-When passed `debug=true`, `MockBlockDock` will also render a display of:
+When passed `debug={true}` (which can be shortened to `debug`), `MockBlockDock` will also render a display of:
 
 1.  the properties being passed to the blocks (for non-HTML blocks), which are derived from the mock datastore
 1.  the raw contents of the mock datastore
+
+### Readonly mode
+
+When passed `readonly={true}` (which can be shortened to `readonly`), `MockBlockDock` will send a `readonly: true`
+message to the block, and will reject any attempts to mutate data in the datastore.
+
+You can also toggle this option in the debug UI.
 
 ### Hook: custom, manual control
 

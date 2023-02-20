@@ -31,7 +31,7 @@ Once you have created the type representing the data your block needs, copy its 
   - `examples`: an array of example data structures your block would accept and use
   - `image`: a preview image showing your block in action (in place of `public/block-preview.png`)
   - `icon`: an icon to be associated with your block (in place of `public/omega.svg`)
-  - `name`: a slugified name for your block (which may differ to the package `name` in package.json)
+  - `name`: a slugified name for your block (which may differ to the package `name` in package.json); it can be defined as `blockname` or `@namespace/blockname`, where `namespace` must be your username on blockprotocol.org if you intend to publish it there
     - this may either be in the format `slug` or `@namespace/slug` where `namespace` is your blockprotocol.org username
 
 1.  Run `yarn schema` to automatically generate TypeScript types from your block's entity type / `schema`

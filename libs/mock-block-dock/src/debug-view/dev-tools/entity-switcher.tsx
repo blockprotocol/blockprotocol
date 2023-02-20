@@ -1,10 +1,24 @@
 import {
-  getEntities,
-  getEntityRevision,
-  getEntityTypes,
-  getRoots,
+  Entity as EntityNonTemporal,
+  EntityRecordId as EntityRecordIdNonTemporal,
+  VersionedUri,
+} from "@blockprotocol/graph";
+import {
+  getEntities as getEntitiesNonTemporal,
+  getEntityRevision as getEntityRevisionNonTemporal,
+  getEntityTypes as getEntityTypesNonTemporal,
+  getRoots as getRootsNonTemporal,
 } from "@blockprotocol/graph/stdlib";
-import { VersionedUri } from "@blockprotocol/type-system/slim";
+import {
+  Entity as EntityTemporal,
+  EntityRecordId as EntityRecordIdTemporal,
+} from "@blockprotocol/graph/temporal";
+import {
+  getEntities as getEntitiesTemporal,
+  getEntityRevision as getEntityRevisionTemporal,
+  getEntityTypes as getEntityTypesTemporal,
+  getRoots as getRootsTemporal,
+} from "@blockprotocol/graph/temporal/stdlib";
 import {
   Box,
   Button,
@@ -13,40 +27,41 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import { MouseEvent, useMemo, useState } from "react";
+import { Dispatch, MouseEvent, SetStateAction, useMemo, useState } from "react";
 
-import { useMockBlockDockContext } from "../../mock-block-dock-context";
+import {
+  useMockBlockDockNonTemporalContext,
+  useMockBlockDockTemporalContext,
+} from "../../mock-block-dock-context";
 import { JsonView } from "./json-view";
 
-/**
- * Interface to change the entity selected for loading into a block
- * 1. Choose the entity type the user wants to look for entities from
- * 2. Choose an entity of that type as a candidate for loading into the block
- * 3. Confirm the choice to send the entityId of the chosen entity
- */
-export const EntitySwitcher = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const { blockEntitySubgraph, setEntityRecordIdOfEntityForBlock, graph } =
-    useMockBlockDockContext();
-
-  const blockEntity = useMemo(
-    () => getRoots(blockEntitySubgraph)[0]!,
-    [blockEntitySubgraph],
-  );
-
-  const [entityTypeId, setEntityTypeId] = useState(
-    blockEntity.metadata.entityTypeId,
-  );
-  const [entityId, setEntityIdOfProposedEntityForBlock] = useState<
-    string | undefined
-  >(blockEntity.metadata.recordId.entityId);
-
-  const selectedEntity = useMemo(
-    () => (entityId ? getEntityRevision(graph, entityId)! : blockEntity),
-    [graph, blockEntity, entityId],
-  );
-
+const EntitySwitcherComponent = ({
+  blockEntity,
+  selectedEntity,
+  entityIds,
+  entityTypeIds,
+  entityIdOfProposedEntity,
+  setEntityIdOfProposedEntity,
+  selectedEntityTypeId,
+  setSelectedEntityTypeId,
+  setEntityRecordIdOfEntityForBlock,
+  anchorEl,
+  setAnchorEl,
+}: {
+  blockEntity: EntityNonTemporal | EntityTemporal;
+  selectedEntity: EntityNonTemporal | EntityTemporal;
+  entityIds: string[];
+  entityTypeIds: VersionedUri[];
+  entityIdOfProposedEntity: string | undefined;
+  setEntityIdOfProposedEntity: Dispatch<SetStateAction<string | undefined>>;
+  selectedEntityTypeId: VersionedUri | undefined;
+  setSelectedEntityTypeId: Dispatch<SetStateAction<VersionedUri>>;
+  setEntityRecordIdOfEntityForBlock: Dispatch<
+    SetStateAction<EntityRecordIdNonTemporal | EntityRecordIdTemporal>
+  >;
+  anchorEl: HTMLElement | null;
+  setAnchorEl: Dispatch<HTMLElement | null>;
+}) => {
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -109,19 +124,19 @@ export const EntitySwitcher = () => {
             <Select
               size="small"
               id="entity-type-id-selector"
-              value={entityTypeId}
+              value={selectedEntityTypeId}
               onChange={(event) => {
-                if (event.target.value !== entityTypeId) {
-                  setEntityIdOfProposedEntityForBlock(undefined);
+                if (event.target.value !== selectedEntityTypeId) {
+                  setEntityIdOfProposedEntity(undefined);
                 }
-                setEntityTypeId(event.target.value as VersionedUri);
+                setSelectedEntityTypeId(event.target.value as VersionedUri);
               }}
               sx={{ mb: 2 }}
               fullWidth
             >
-              {getEntityTypes(graph).map(({ schema: entityType }) => (
-                <MenuItem key={entityType.$id} value={entityType.$id}>
-                  {entityType.$id}
+              {entityTypeIds.map((entityTypeId) => (
+                <MenuItem key={entityTypeId} value={entityTypeId}>
+                  {entityTypeId}
                 </MenuItem>
               ))}
             </Select>
@@ -139,28 +154,21 @@ export const EntitySwitcher = () => {
             <Select
               id="entity-id-selector"
               size="small"
-              value={entityId}
+              value={entityIdOfProposedEntity}
               placeholder="Select Entity"
               onChange={(event) => {
-                setEntityIdOfProposedEntityForBlock(event.target.value);
+                setEntityIdOfProposedEntity(event.target.value);
               }}
               sx={{
                 mb: 2,
               }}
               fullWidth
             >
-              {getEntities(graph)
-                .filter(
-                  (entity) => entity.metadata.entityTypeId === entityTypeId,
-                )
-                .map((entity) => (
-                  <MenuItem
-                    key={entity.metadata.recordId.entityId}
-                    value={entity.metadata.recordId.entityId}
-                  >
-                    {entity.metadata.recordId.entityId}
-                  </MenuItem>
-                ))}
+              {entityIds.map((entityId) => (
+                <MenuItem key={entityId} value={entityId}>
+                  {entityId}
+                </MenuItem>
+              ))}
             </Select>
           </Box>
 
@@ -197,3 +205,132 @@ export const EntitySwitcher = () => {
     </Box>
   );
 };
+
+const EntitySwitcherNonTemporal = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const { blockEntitySubgraph, setEntityRecordIdOfEntityForBlock, graph } =
+    useMockBlockDockNonTemporalContext();
+
+  const blockEntity = useMemo(
+    () => getRootsNonTemporal(blockEntitySubgraph)[0]!,
+    [blockEntitySubgraph],
+  );
+
+  const [selectedEntityTypeId, setSelectedEntityTypeId] = useState(
+    blockEntity.metadata.entityTypeId,
+  );
+  const [entityIdOfProposedEntity, setEntityIdOfProposedEntityForBlock] =
+    useState<string | undefined>(blockEntity.metadata.recordId.entityId);
+
+  const selectedEntity = useMemo(
+    () =>
+      entityIdOfProposedEntity
+        ? getEntityRevisionNonTemporal(graph, entityIdOfProposedEntity)!
+        : blockEntity,
+    [graph, blockEntity, entityIdOfProposedEntity],
+  );
+
+  const entityIds = useMemo(
+    () =>
+      getEntitiesNonTemporal(graph)
+        .filter(
+          (entity) => entity.metadata.entityTypeId === selectedEntityTypeId,
+        )
+        .map((entity) => entity.metadata.recordId.entityId),
+    [graph, selectedEntityTypeId],
+  );
+
+  const entityTypeIds = useMemo(
+    () =>
+      getEntityTypesNonTemporal(graph).map(
+        ({ schema: entityType }) => entityType.$id,
+      ),
+    [graph],
+  );
+
+  return (
+    <EntitySwitcherComponent
+      blockEntity={blockEntity}
+      selectedEntity={selectedEntity}
+      entityIds={entityIds}
+      entityTypeIds={entityTypeIds}
+      entityIdOfProposedEntity={entityIdOfProposedEntity}
+      setEntityIdOfProposedEntity={setEntityIdOfProposedEntityForBlock}
+      selectedEntityTypeId={selectedEntityTypeId}
+      setSelectedEntityTypeId={setSelectedEntityTypeId}
+      setEntityRecordIdOfEntityForBlock={setEntityRecordIdOfEntityForBlock}
+      anchorEl={anchorEl}
+      setAnchorEl={setAnchorEl}
+    />
+  );
+};
+
+const EntitySwitcherTemporal = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const { blockEntitySubgraph, setEntityRecordIdOfEntityForBlock, graph } =
+    useMockBlockDockTemporalContext();
+
+  const blockEntity = useMemo(
+    () => getRootsTemporal(blockEntitySubgraph)[0]!,
+    [blockEntitySubgraph],
+  );
+
+  const [selectedEntityTypeId, setSelectedEntityTypeId] = useState(
+    blockEntity.metadata.entityTypeId,
+  );
+  const [entityIdOfProposedEntity, setEntityIdOfProposedEntityForBlock] =
+    useState<string | undefined>(blockEntity.metadata.recordId.entityId);
+
+  const selectedEntity = useMemo(
+    () =>
+      entityIdOfProposedEntity
+        ? getEntityRevisionTemporal(graph, entityIdOfProposedEntity)!
+        : blockEntity,
+    [graph, blockEntity, entityIdOfProposedEntity],
+  );
+
+  const entityIds = useMemo(
+    () =>
+      getEntitiesTemporal(graph)
+        .filter(
+          (entity) => entity.metadata.entityTypeId === selectedEntityTypeId,
+        )
+        .map((entity) => entity.metadata.recordId.entityId),
+    [graph, selectedEntityTypeId],
+  );
+
+  const entityTypeIds = useMemo(
+    () =>
+      getEntityTypesTemporal(graph).map(
+        ({ schema: entityType }) => entityType.$id,
+      ),
+    [graph],
+  );
+
+  return (
+    <EntitySwitcherComponent
+      blockEntity={blockEntity}
+      selectedEntity={selectedEntity}
+      entityIds={entityIds}
+      entityTypeIds={entityTypeIds}
+      entityIdOfProposedEntity={entityIdOfProposedEntity}
+      setEntityIdOfProposedEntity={setEntityIdOfProposedEntityForBlock}
+      selectedEntityTypeId={selectedEntityTypeId}
+      setSelectedEntityTypeId={setSelectedEntityTypeId}
+      setEntityRecordIdOfEntityForBlock={setEntityRecordIdOfEntityForBlock}
+      anchorEl={anchorEl}
+      setAnchorEl={setAnchorEl}
+    />
+  );
+};
+
+/**
+ * Interface to change the entity selected for loading into a block
+ * 1. Choose the entity type the user wants to look for entities from
+ * 2. Choose an entity of that type as a candidate for loading into the block
+ * 3. Confirm the choice to send the entityId of the chosen entity
+ */
+export const EntitySwitcher = ({ temporal }: { temporal: boolean }) =>
+  temporal ? <EntitySwitcherTemporal /> : <EntitySwitcherNonTemporal />;

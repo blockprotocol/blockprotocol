@@ -1,13 +1,16 @@
+import { SubgraphTemporalAxes } from "@blockprotocol/graph/temporal";
+
 import { MockData } from "../datastore/mock-data";
 import { createEntities } from "./entities";
-import { mockDataSubgraphTemporalAxes } from "./temporal-axes";
 
-export const mockData: MockData = (() => {
-  const subgraphTemporalAxes = mockDataSubgraphTemporalAxes();
-
+export const mockData = <Temporal extends boolean>(
+  subgraphTemporalAxes: Temporal extends true
+    ? SubgraphTemporalAxes
+    : undefined,
+): MockData<Temporal> => {
   return {
-    subgraphTemporalAxes,
-    entities: createEntities(subgraphTemporalAxes.resolved),
+    ...(subgraphTemporalAxes ? { subgraphTemporalAxes } : {}),
+    entities: createEntities(subgraphTemporalAxes?.resolved),
     // linkedAggregationDefinitions,
-  };
-})();
+  } as MockData<Temporal>;
+};

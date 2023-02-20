@@ -1,7 +1,7 @@
-import { experimental_sx as sx, Paper, styled } from "@mui/material";
+import { Paper, styled } from "@mui/material";
 
-export const BlockFormContainer = styled(Paper)(
-  sx({ flex: 1, width: "100%", p: 6 }),
+export const BlockFormContainer = styled(Paper)(({ theme }) =>
+  theme.unstable_sx({ flex: 1, width: "100%", p: 6 }),
 );
 
 export const BlockListContainer = styled(BlockFormContainer, {
@@ -9,9 +9,9 @@ export const BlockListContainer = styled(BlockFormContainer, {
 })<{
   hasBlocks?: boolean;
 }>(
-  ({ hasBlocks }) =>
+  ({ hasBlocks, theme }) =>
     hasBlocks &&
-    sx({
+    theme.unstable_sx({
       py: 1,
       pr: 4.5,
       pl: 0,

@@ -1,7 +1,7 @@
+import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import { FunctionComponent, useState } from "react";
 
-import { EntityType } from "../../../lib/api/model/entity-type.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { CreateSchemaModal } from "../../modal/create-schema-modal";
@@ -16,7 +16,7 @@ import { useUserStatus } from "./use-user-status";
 
 export interface TabPanelContentsWithOverviewProps {
   blocks: ExpandedBlockMetadata[];
-  entityTypes: EntityType[];
+  entityTypes: EntityTypeWithMetadata[];
   user: SerializedUser;
 }
 
@@ -98,16 +98,11 @@ export const TabPanelContentsWithOverview: FunctionComponent<
             </Grid>
           ),
         )}
-      {entityTypes.slice(0, 4).map(({ entityTypeId, schema, updatedAt }) => (
-        <Grid key={entityTypeId} item xs={12} md={6}>
+      {entityTypes.slice(0, 4).map(({ schema }) => (
+        <Grid key={schema.$id} item xs={12} md={6}>
           <OverviewCard
             url={schema.$id}
             description={schema.description as string}
-            lastUpdated={
-              typeof updatedAt === "string"
-                ? updatedAt
-                : updatedAt?.toISOString()
-            } // temporary hack to stop type error
             title={schema.title}
             type="schema"
           />

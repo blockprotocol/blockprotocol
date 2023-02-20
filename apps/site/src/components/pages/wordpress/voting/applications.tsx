@@ -3,16 +3,16 @@ import { ReactElement } from "react";
 import {
   CommentDotsIcon,
   ContentfulIcon,
-  GithubIcon,
   SanityIcon,
   StrapiIcon,
 } from "../../../icons";
+import { DrupalIcon } from "../../../icons/drupal-icon";
 
 export type ApplicationId =
   | "ECO_SANITY"
   | "ECO_STRAPI"
   | "ECO_CONFUL"
-  | "ECO_GITHUB"
+  | "ECO_DRUPAL"
   | "ECO_OTHER";
 export interface Application {
   id: ApplicationId;
@@ -43,10 +43,10 @@ export const applications: Record<ApplicationId, Application> = {
     twitterHref:
       "https://twitter.com/intent/tweet?text=The%20%40BlockProtocol%20is%20an%20open%20standard%20for%20building%20blocks%20which%20work%20across%20multiple%20apps%20(including%20WordPress).%20I%27ve%20voted%20for%20%40contentful%20support%20next%20at%20blockprotocol.org%2Fwordpress",
   },
-  ECO_GITHUB: {
-    id: "ECO_GITHUB",
-    name: "GitHub",
-    icon: <GithubIcon />,
+  ECO_DRUPAL: {
+    id: "ECO_DRUPAL",
+    name: "Drupal",
+    icon: <DrupalIcon />,
     twitterHref:
       "https://twitter.com/intent/tweet?text=The%20%40BlockProtocol%20is%20an%20open%20standard%20for%20building%20blocks%20which%20work%20across%20multiple%20apps%20(including%20WordPress).%20Join%20me%20in%20voting%20for%20%40GitHubNext%20support%20at%20blockprotocol.org%2Fwordpress",
   },

@@ -1,7 +1,21 @@
-import { Entity, SubgraphTemporalAxes } from "@blockprotocol/graph";
+import { Entity } from "@blockprotocol/graph";
+import {
+  Entity as EntityTemporal,
+  SubgraphTemporalAxes,
+} from "@blockprotocol/graph/temporal";
 
-export type MockData = {
-  subgraphTemporalAxes: SubgraphTemporalAxes;
-  entities: Entity<true>[];
+export type MockData<Temporal> = {
+  entities: Temporal extends true ? EntityTemporal[] : Entity[];
   // linkedAggregationDefinitions: LinkedAggregationDefinition[];
+} & (Temporal extends true
+  ? {
+      subgraphTemporalAxes: SubgraphTemporalAxes;
+    }
+  : {});
+
+export const isTemporalMockData = <Temporal>(
+  mockData: MockData<Temporal>,
+): mockData is MockData<true> => {
+  // this cast should be safe because we're only checking if subgraphTemporalAxes is defined
+  return (mockData as MockData<true>).subgraphTemporalAxes !== undefined;
 };

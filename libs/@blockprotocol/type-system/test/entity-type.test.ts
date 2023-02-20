@@ -40,9 +40,6 @@ const entityTypes: EntityType[] = [
       },
     },
     required: ["https://blockprotocol.org/@alice/types/property-type/name/"],
-    default: {
-      "https://blockprotocol.org/@alice/types/property-type/name/": "MyBlock",
-    },
     examples: [
       {
         "https://blockprotocol.org/@alice/types/property-type/name/":
@@ -88,9 +85,6 @@ const entityTypes: EntityType[] = [
         ordered: false,
       },
     },
-    requiredLinks: [
-      "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1",
-    ],
     examples: [],
     additionalProperties: false,
   },
@@ -372,32 +366,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
         inner: {
           reason: "MissingTrailingSlash",
         },
-      },
-    },
-  ],
-  [
-    "invalid default",
-    {
-      kind: "entityType",
-      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
-      type: "object",
-      title: "Broken",
-      properties: {
-        "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1":
-          {
-            $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
-          },
-      },
-      default: {
-        "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/2.3":
-          "My Address 32, My Street, Narnia",
-      },
-      additionalProperties: false,
-    },
-    {
-      reason: "InvalidDefaultKey",
-      inner: {
-        reason: "MissingTrailingSlash",
       },
     },
   ],
