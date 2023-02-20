@@ -7,9 +7,9 @@ import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
 import Ajv2020 from "ajv/dist/2020";
 import addFormats from "ajv-formats";
 
-import entityTypeMetaSchema from "./codegen/entity-type-meta-schema.json" assert { type: "json" };
-import { entityTypeToTypeScript } from "./codegen/entity-type-to-typescript";
-import { fetchTypeAsJson } from "./codegen/shared";
+import entityTypeMetaSchema from "../shared/codegen/entity-type-meta-schema.json" assert { type: "json" };
+import { entityTypeToTypeScript } from "../shared/codegen/entity-type-to-typescript";
+import { fetchTypeAsJson } from "../shared/codegen/shared";
 
 const ajv = new Ajv2020();
 addFormats(ajv);
@@ -54,5 +54,5 @@ export const generateTypeScriptFromEntityType = async (
 ) => {
   const entityTypeSchema = await fetchAndValidateEntityType(versionedUri);
 
-  return entityTypeToTypeScript(entityTypeSchema, depth);
+  return entityTypeToTypeScript(entityTypeSchema, true, depth);
 };

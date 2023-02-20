@@ -1,6 +1,8 @@
 // Generate imports for types we use from elsewhere
-export const generateImportStatements = () =>
-  `import { Entity, JsonObject } from "@blockprotocol/graph";\n\n`;
+export const generateImportStatements = (temporal: boolean) =>
+  temporal
+    ? `import { Entity, JsonObject } from "@blockprotocol/graph/temporal";\n\n`
+    : `import { Entity, JsonObject } from "@blockprotocol/graph";\n\n`;
 
 // Generate a typed Entity, given the name of the type to use in its Properties generic slot
 export const generateEntityDefinition = (
@@ -11,7 +13,7 @@ export const generateEntityDefinition = (
    * @todo - optionally support temporal versioning, for now we default to non-temporal support in blocks (hence `false`)
    */
   `
-export type ${name} = Entity<false, ${propertyTypeName}>;\n`;
+export type ${name} = Entity<${propertyTypeName}>;\n`;
 
 /*
  * Generate the type returned by functions which extract a link entity and its right entity from the subgraph

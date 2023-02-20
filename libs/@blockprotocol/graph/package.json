@@ -34,9 +34,14 @@
       "import": "./dist/es/main-temporal.js"
     },
     "./codegen": {
-      "types": "./dist/cjs/codegen.d.ts",
-      "require": "./dist/cjs/codegen.cjs",
-      "import": "./dist/es/codegen.js"
+      "types": "./dist/cjs/non-temporal/codegen.d.ts",
+      "require": "./dist/cjs/codegen-non-temporal.cjs",
+      "import": "./dist/es/codegen-non-temporal.js"
+    },
+    "./temporal/codegen": {
+      "types": "./dist/cjs/temporal/codegen.d.ts",
+      "require": "./dist/cjs/codegen-temporal.cjs",
+      "import": "./dist/es/codegen-temporal.js"
     },
     "./custom-element": {
       "types": "./dist/cjs/non-temporal/custom-element.d.ts",

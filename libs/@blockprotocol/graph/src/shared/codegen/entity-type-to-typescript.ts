@@ -6,8 +6,8 @@ import {
 } from "@blockprotocol/type-system/slim";
 import { compile, Options } from "json-schema-to-typescript";
 
-import { fetchAndValidateEntityType } from "../codegen";
-import { typedEntries } from "../shared/util";
+import { fetchAndValidateEntityType } from "../../non-temporal/codegen";
+import { typedEntries } from "../util";
 import { deduplicateTypeScriptStrings } from "./entity-type-to-typescript/deduplicate-ts-strings";
 import {
   generateEntityDefinition,
@@ -123,11 +123,13 @@ const generateTypeNameFromSchema = (
  * @param schema – the schema to generate types for
  * @param depth – the depth to which the graph of _entity type_ schemas linked from this schema will be resolved
  * @param resolvedUrisToType – a map of already-resolved schemas to skip type generation for
+ * @param temporal – whether or not the generated code should support temporal versioning
  */
 const _jsonSchemaToTypeScript = async (
   schema: EntityType,
   depth: number,
   resolvedUrisToType: UriToType,
+  temporal: boolean,
 ): Promise<CompiledType> => {
   if (resolvedUrisToType[schema.$id]) {
     return resolvedUrisToType[schema.$id]!;
@@ -146,7 +148,7 @@ const _jsonSchemaToTypeScript = async (
   const propertyTypeName = `${typeName}Properties`;
 
   // here we import the types defined elsewhere which we rely on, e.g. Entity
-  let compiledSchema = rootSchema ? generateImportStatements() : "";
+  let compiledSchema = rootSchema ? generateImportStatements(temporal) : "";
 
   // Generate the type for FooProperties, representing the entity's 'own properties' (not links or linked entities)
   compiledSchema += await compileSchema(
@@ -215,7 +217,12 @@ const _jsonSchemaToTypeScript = async (
         };
       }
       const typeSchema = await fetchAndValidateEntityType(uri as VersionedUri);
-      return _jsonSchemaToTypeScript(typeSchema, depth - 1, resolvedUrisToType);
+      return _jsonSchemaToTypeScript(
+        typeSchema,
+        depth - 1,
+        resolvedUrisToType,
+        temporal,
+      );
     };
 
     // get the schema for the linkEntity and possible rightEntities for this link, from this entity
@@ -234,10 +241,7 @@ const _jsonSchemaToTypeScript = async (
         linkEntityTypeName: linkEntityType.typeName,
         rightEntityTypeNames: (rightEntityTypes.length > 0
           ? rightEntityTypes
-          : /**
-             * @todo - optionally support temporal versioning, for now we default to non-temporal support in blocks (hence `false`)
-             */
-            [{ typeName: "Entity<false>" }]
+          : [{ typeName: "Entity" }]
         ).map((type) => type.typeName),
       });
 
@@ -277,7 +281,8 @@ export type RootLinkMap = ${mapTypeName};`;
  */
 export const entityTypeToTypeScript = async (
   rootSchema: EntityType,
+  temporal: boolean,
   depth = 0,
 ) => {
-  return _jsonSchemaToTypeScript(rootSchema, depth, {});
+  return _jsonSchemaToTypeScript(rootSchema, depth, {}, temporal);
 };
