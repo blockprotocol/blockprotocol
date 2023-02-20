@@ -115,30 +115,34 @@ export const useMockDatastore = (
             ],
           };
         }
-        const entityId = uuid();
-        const { entityTypeId, properties, linkData } = data;
 
-        const newEntity: Entity = {
-          metadata: {
-            recordId: {
-              entityId,
-              editionId: new Date().toISOString(),
+        return new Promise((resolve) => {
+          const entityId = uuid();
+          const { entityTypeId, properties, linkData } = data;
+
+          const newEntity: Entity = {
+            metadata: {
+              recordId: {
+                entityId,
+                editionId: new Date().toISOString(),
+              },
+              entityTypeId,
             },
-            entityTypeId,
-          },
-          properties,
-          linkData,
-        };
-
-        setGraph((currentGraph) => {
-          // A shallow copy should be enough to trigger a re-render
-          const newSubgraph = {
-            ...currentGraph,
+            properties,
+            linkData,
           };
-          addEntitiesToSubgraphByMutation(newSubgraph, [newEntity]);
-          return newSubgraph;
+
+          resolve({ data: newEntity });
+
+          setGraph((currentGraph) => {
+            const newSubgraph = JSON.parse(
+              JSON.stringify(currentGraph),
+            ) as Subgraph;
+
+            addEntitiesToSubgraphByMutation(newSubgraph, [newEntity]);
+            return newSubgraph;
+          });
         });
-        return { data: newEntity };
       },
       [readonly, setGraph],
     );
