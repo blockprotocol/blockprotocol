@@ -1,5 +1,6 @@
 import { BlockVariant } from "@blockprotocol/core";
-import { Entity } from "@blockprotocol/graph";
+import { Entity, EntityTemporalVersioningMetadata } from "@blockprotocol/graph";
+import { VersionedUri } from "@blockprotocol/type-system/slim";
 import {
   Box,
   FormControlLabel,
@@ -136,20 +137,39 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   const [props, errors] = useMemo<
     [(Entity<false> & { readonly: boolean }) | undefined, string[]]
   >(() => {
-    const result = {
-      metadata: {
-        entityTypeId: metadata.schema,
-        recordId: {
-          entityId: exampleEntityId,
-          editionId: new Date(0).toISOString(),
+    const intervalForAllTime =
+      (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {
+        return {
+          start: {
+            kind: "inclusive",
+            limit: new Date(0).toISOString(),
+          },
+          end: {
+            kind: "unbounded",
+          },
+        } as const;
+      };
+
+    const result: { blockEntity: Entity<true>; readonly: boolean } = {
+      blockEntity: {
+        metadata: {
+          entityTypeId: metadata.schema as VersionedUri,
+          recordId: {
+            entityId: exampleEntityId,
+            editionId: new Date(0).toISOString(),
+          },
+          temporalVersioning: {
+            transactionTime: intervalForAllTime(),
+            decisionTime: intervalForAllTime(),
+          },
         },
+        properties: {},
       },
-      properties: {},
       readonly,
     };
 
     try {
-      Object.assign(result.properties, JSON.parse(text));
+      Object.assign(result.blockEntity.properties, JSON.parse(text));
     } catch (err) {
       return [result, [(err as Error).message]];
     }
