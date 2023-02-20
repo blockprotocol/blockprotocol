@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/service",
-  "version": "0.0.1-canary.1",
+  "version": "0.0.1-canary.2",
   "description": "Implementation of the Block Protocol service module specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
