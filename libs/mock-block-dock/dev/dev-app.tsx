@@ -1,4 +1,4 @@
-import { extractBaseUri } from "@blockprotocol/type-system/slim";
+import { extractBaseUri } from "@blockprotocol/graph";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { createRoot } from "react-dom/client";
 
