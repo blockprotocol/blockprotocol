@@ -57,6 +57,7 @@ const script = async () => {
   await s3Client.send(
     new CreateBucketCommand({
       Bucket: getS3Bucket(),
+      ACL: "public-read",
     }),
   );
 
