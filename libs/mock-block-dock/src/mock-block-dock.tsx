@@ -4,6 +4,7 @@ import { useGraphEmbedderModule as useGraphEmbedderModuleNonTemporal } from "@bl
 import { useGraphEmbedderModule as useGraphEmbedderModuleTemporal } from "@blockprotocol/graph/temporal/react";
 import { HookData, HookEmbedderMessageCallbacks } from "@blockprotocol/hook/.";
 import { useHookEmbedderModule } from "@blockprotocol/hook/react";
+import { useServiceEmbedderModule } from "@blockprotocol/service/react";
 import {
   ComponentType,
   FunctionComponent,
@@ -11,6 +12,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -21,6 +23,7 @@ import { getDefaultTemporalAxes } from "./datastore/get-default-temporal-axes";
 import { getEntity } from "./datastore/hook-implementations/entity/get-entity";
 import { HookPortals } from "./hook-portals";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
+import { constructServiceModuleCallbacks } from "./service-module-callbacks";
 import { useDefaultState } from "./use-default-state";
 import {
   InitialData,
@@ -48,6 +51,7 @@ type BlockDefinition =
 type MockBlockDockProps<Temporal extends boolean> = {
   blockDefinition: BlockDefinition;
   blockEntityRecordId?: EntityRecordId;
+  blockProtocolApiKey?: string;
   temporal?: Temporal;
   debug?: boolean;
   hideDebugToggle?: boolean;
@@ -71,6 +75,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   blockDefinition,
   blockEntityRecordId: initialBlockEntityRecordId,
   blockInfo,
+  blockProtocolApiKey,
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
@@ -134,6 +139,15 @@ const MockBlockDockNonTemporal: FunctionComponent<
     // linkedAggregations,
     callbacks: graphModuleCallbacks,
     readonly,
+  });
+
+  const serviceModuleCallbacks = useMemo(
+    () => constructServiceModuleCallbacks({ blockProtocolApiKey }),
+    [blockProtocolApiKey],
+  );
+
+  const { serviceModule } = useServiceEmbedderModule(wrapperRef, {
+    callbacks: serviceModuleCallbacks,
   });
 
   const hookCallback = useCallback<HookEmbedderMessageCallbacks["hook"]>(
@@ -245,6 +259,23 @@ const MockBlockDockNonTemporal: FunctionComponent<
     }
   }, [graphModule, graphModuleCallbacks]);
 
+  useEffect(() => {
+    if (serviceModule && serviceModuleCallbacks) {
+      // The callbacks are reconstructed when the data in the store changes
+      // We need to register the updated callbacks or the data they use will be stale
+      try {
+        serviceModule.registerCallbacks(serviceModuleCallbacks);
+      } catch {
+        /**
+         * Registration can error when the user switches between preview and debug mode.
+         * Registration is attempted with the old service, which has been destroyed.
+         * It then succeeds with the new one.
+         * @todo can we avoid this error?
+         */
+      }
+    }
+  }, [serviceModule, serviceModuleCallbacks]);
+
   const blockRenderer = graphModule ? (
     <BlockRenderer
       customElement={
@@ -300,6 +331,7 @@ const MockBlockDockTemporal: FunctionComponent<
   blockDefinition,
   blockEntityRecordId: initialBlockEntityRecordId,
   blockInfo,
+  blockProtocolApiKey,
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
@@ -364,6 +396,15 @@ const MockBlockDockTemporal: FunctionComponent<
     // linkedAggregations,
     callbacks: graphModuleCallbacks,
     readonly,
+  });
+
+  const serviceModuleCallbacks = useMemo(
+    () => constructServiceModuleCallbacks({ blockProtocolApiKey }),
+    [blockProtocolApiKey],
+  );
+
+  const { serviceModule } = useServiceEmbedderModule(wrapperRef, {
+    callbacks: serviceModuleCallbacks,
   });
 
   const hookCallback = useCallback<HookEmbedderMessageCallbacks["hook"]>(
@@ -459,6 +500,23 @@ const MockBlockDockTemporal: FunctionComponent<
   });
 
   useEffect(() => {
+    if (serviceModule && serviceModuleCallbacks) {
+      // The callbacks are reconstructed when the data in the store changes
+      // We need to register the updated callbacks or the data they use will be stale
+      try {
+        serviceModule.registerCallbacks(serviceModuleCallbacks);
+      } catch {
+        /**
+         * Registration can error when the user switches between preview and debug mode.
+         * Registration is attempted with the old service, which has been destroyed.
+         * It then succeeds with the new one.
+         * @todo can we avoid this error?
+         */
+      }
+    }
+  }, [serviceModule, serviceModuleCallbacks]);
+
+  useEffect(() => {
     if (graphModule) {
       // The callbacks are reconstructed when the data in the store changes
       // We need to register the updated callbacks or the data they use will be stale
@@ -532,6 +590,7 @@ const MockBlockDockTemporal: FunctionComponent<
  * @param props.blockDefinition the source for the block and any additional metadata required
  * @param [props.blockEntityRecordId] the `EntityRecordId` of the starting block entity
  * @param [props.blockInfo] metadata about the block
+ * @param [props.blockProtocolApiKey] the BlockProtocol API Key
  * @param [props.debug=false] display debugging information
  * @param [props.hideDebugToggle=false] hide the ability to toggle the debug UI
  * @param [props.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
@@ -545,6 +604,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   blockDefinition,
   blockEntityRecordId: initialBlockEntityRecordId,
   blockInfo,
+  blockProtocolApiKey,
   temporal,
   debug: initialDebug = false,
   hideDebugToggle = false,
@@ -556,6 +616,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       blockDefinition={blockDefinition}
       blockEntityRecordId={initialBlockEntityRecordId}
       blockInfo={blockInfo}
+      blockProtocolApiKey={blockProtocolApiKey}
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData as InitialData<true>}
@@ -566,6 +627,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       blockDefinition={blockDefinition}
       blockEntityRecordId={initialBlockEntityRecordId}
       blockInfo={blockInfo}
+      blockProtocolApiKey={blockProtocolApiKey}
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData}

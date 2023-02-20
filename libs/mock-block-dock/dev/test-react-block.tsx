@@ -5,7 +5,9 @@ import {
 } from "@blockprotocol/graph/react";
 import { getRoots } from "@blockprotocol/graph/stdlib";
 import { useHook, useHookBlockModule } from "@blockprotocol/hook/react";
-import { useMemo, useRef } from "react";
+import { AutofillSuggestionResponse } from "@blockprotocol/service/dist/mapbox-types";
+import { useServiceBlockModule } from "@blockprotocol/service/dist/react";
+import { FormEvent, useCallback, useMemo, useRef, useState } from "react";
 
 import { propertyTypes } from "../src/data/property-types";
 
@@ -20,7 +22,15 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
 
   const { graphModule } = useGraphBlockModule(blockRef);
 
+  const { serviceModule } = useServiceBlockModule(blockRef);
+
   const { hookModule } = useHookBlockModule(blockRef);
+
+  const [mapboxSuggestSearchText, setMapboxSuggestSearchText] =
+    useState<string>("");
+  const [mapboxSuggestResponse, setMapboxSuggestResponse] = useState<
+    AutofillSuggestionResponse | undefined | null
+  >(null);
 
   useHook(
     hookModule,
@@ -33,6 +43,24 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
         "Fallback called – dock is not correctly handling text hook.",
       );
     },
+  );
+
+  const handleMapboxSuggestSubmit = useCallback(
+    async (event: FormEvent) => {
+      event.preventDefault();
+
+      const response = await serviceModule.mapboxSuggestAddress({
+        data: {
+          searchText: mapboxSuggestSearchText,
+          optionsArg: { sessionToken: "block" },
+        },
+      });
+
+      if (response.data) {
+        setMapboxSuggestResponse(response.data);
+      }
+    },
+    [mapboxSuggestSearchText],
   );
 
   if (readonly) {
@@ -109,6 +137,27 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
       />
       <h2>Hook-handled description editing</h2>
       <div ref={hookRef} />
+      <form onSubmit={handleMapboxSuggestSubmit}>
+        <label>
+          Mapbox Suggest API request
+          <br />
+          <input
+            type="text"
+            value={mapboxSuggestSearchText}
+            onChange={({ target }) => setMapboxSuggestSearchText(target.value)}
+          />
+        </label>
+        <button type="submit">Suggest</button>
+      </form>
+      {mapboxSuggestResponse === undefined ? (
+        <p>Loading...</p>
+      ) : mapboxSuggestResponse ? (
+        <ul>
+          {mapboxSuggestResponse.suggestions.map(({ place_name }, i) => (
+            <li key={i}>{place_name}</li>
+          ))}
+        </ul>
+      ) : null}
     </div>
   );
 };

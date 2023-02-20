@@ -1,5 +1,5 @@
 import { extractBaseUri } from "@blockprotocol/graph";
-import { ChangeEvent, FunctionComponent, useState } from "react";
+import { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 
 import { MockBlockDock } from "../src";
@@ -62,11 +62,19 @@ type TestBlockType = keyof typeof blockEntityMap;
 
 const DevApp: FunctionComponent = () => {
   const [testBlockType, setTestBlockType] = useState<TestBlockType>("react");
+  const [blockProtocolApiKey, setBlockProtocolApiKey] = useState<string>();
 
   const blockEntity = blockEntityMap[testBlockType];
 
   let blockDefinition;
   let blockType: "html" | "custom-element" | "react" | undefined;
+
+  useEffect(() => {
+    // Retrieve the blockprotocol API key environment variable
+    if (process.env.BP_API_KEY) {
+      setBlockProtocolApiKey(process.env.BP_API_KEY);
+    }
+  }, []);
 
   switch (testBlockType) {
     case "custom-element":
@@ -150,6 +158,7 @@ const DevApp: FunctionComponent = () => {
           icon: "public/icon.svg",
           image: "public/image",
         }}
+        blockProtocolApiKey={blockProtocolApiKey}
         debug
         key={testBlockType} // completely reset the state when block type has changed
         initialData={{
