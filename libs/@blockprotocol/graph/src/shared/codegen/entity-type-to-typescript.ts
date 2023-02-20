@@ -150,9 +150,17 @@ const _jsonSchemaToTypeScript = async (
   // here we import the types defined elsewhere which we rely on, e.g. Entity
   let compiledSchema = rootSchema ? generateImportStatements(temporal) : "";
 
+  if (!schema.allOf || (schema.allOf && schema.allOf.length === 0)) {
+    // eslint-disable-next-line no-param-reassign -- must be deleted. an empty array -> garbage output, null/undefined -> crash
+    delete schema.allOf;
+  }
+
   // Generate the type for FooProperties, representing the entity's 'own properties' (not links or linked entities)
   compiledSchema += await compileSchema(
-    { ...schema, title: propertyTypeName },
+    {
+      ...schema,
+      title: propertyTypeName,
+    },
     {
       additionalProperties: false, // @todo add additionalProperties: false to entity type JSON schemas
       bannerComment: rootSchema ? bannerComment(schema.$id, depth) : "",
