@@ -9,8 +9,55 @@ To get started:
 
 ## Blocks
 
+To create a `ServiceBlockHandler`, pass the constructor an element in your block, along with any callbacks you wish to register to handle incoming messages.
+
+### React example
+
+For React, we provide a `useServiceBlockService` hook, which accepts a `ref` to an element, and optionally any `callbacks` you wish to provide on initialization.
+
+See `npx create-block-app@latest my-block --template react` for an example.
+
+### Custom elements
+
 TODO
 
 ## Embedding applications
 
-TODO
+You should construct one `ServiceEmbedderHandler` per block.
+
+It is not currently possible to wrap multiple blocks with a single handler.
+
+To create a `ServiceEmbedderHandler`, pass the constructor:
+
+1.  An `element` wrapping your block
+1.  `callbacks` to respond to messages from the block
+
+```typescript
+import { ServiceEmbedderHandler } from "@blockprotocol/service";
+
+const serviceModule = new ServiceEmbedderHandler({
+  callbacks: { ... },
+  element: elementWrappingTheBlock,
+});
+```
+
+### React
+
+For React embedding applications, we provide a `useServiceEmbedderService` hook, which accepts a `ref` to an element, and optionally any additional constructor arguments you wish to pass.
+
+```tsx
+import { useServiceEmbedderService } from "@blockprotocol/service";
+import { useRef } from "react";
+
+export const App = () => {
+  const wrappingRef = useRef<HTMLDivElement>(null);
+
+  const { serviceModule } = useGraphEmbedderService(blockRef);
+
+  return (
+    <div ref={wrappingRef}>
+      <Block />
+    </div>
+  );
+};
+```
