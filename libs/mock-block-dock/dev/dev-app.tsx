@@ -1,7 +1,3 @@
-import {
-  EntityTemporalVersioningMetadata,
-  QueryTemporalAxes,
-} from "@blockprotocol/graph";
 import { extractBaseUri } from "@blockprotocol/type-system/slim";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { createRoot } from "react-dom/client";
@@ -15,42 +11,6 @@ import { TestReactBlock } from "./test-react-block";
 
 const node = document.getElementById("app");
 
-const intervalForAllTime =
-  (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {
-    return {
-      start: {
-        kind: "inclusive",
-        limit: new Date(0).toISOString(),
-      },
-      end: {
-        kind: "unbounded",
-      },
-    } as const;
-  };
-
-const entityTemporalMetadata = (): EntityTemporalVersioningMetadata => {
-  return {
-    transactionTime: intervalForAllTime(),
-    decisionTime: intervalForAllTime(),
-  };
-};
-
-const currentTime = new Date().toISOString();
-
-const temporalAxes: QueryTemporalAxes = {
-  pinned: {
-    axis: "transactionTime",
-    timestamp: currentTime,
-  },
-  variable: {
-    axis: "decisionTime",
-    interval: {
-      start: { kind: "unbounded" },
-      end: { kind: "inclusive", limit: currentTime },
-    },
-  },
-};
-
 const blockEntityMap = {
   react: {
     metadata: {
@@ -59,7 +19,6 @@ const blockEntityMap = {
         editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
-      temporalVersioning: entityTemporalMetadata(),
     },
     properties: {
       [extractBaseUri(propertyTypes.name.$id)]: "World",
@@ -73,7 +32,6 @@ const blockEntityMap = {
         editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
-      temporalVersioning: entityTemporalMetadata(),
     },
     properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
   },
@@ -84,7 +42,6 @@ const blockEntityMap = {
         editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
-      temporalVersioning: entityTemporalMetadata(),
     },
     properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
   },
@@ -95,7 +52,6 @@ const blockEntityMap = {
         editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
-      temporalVersioning: entityTemporalMetadata(),
     },
     properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
   },
@@ -198,8 +154,8 @@ const DevApp: FunctionComponent = () => {
         key={testBlockType} // completely reset the state when block type has changed
         initialData={{
           initialEntities: Object.values(blockEntityMap),
-          initialTemporalAxes: temporalAxes,
         }}
+        temporal={false}
       />
     </>
   );

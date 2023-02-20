@@ -9,7 +9,7 @@ import { useMemo, useRef } from "react";
 
 import { propertyTypes } from "../src/data/property-types";
 
-export const TestReactBlock: BlockComponent<true> = ({ graph }) => {
+export const TestReactBlock: BlockComponent = ({ graph }) => {
   const { blockEntitySubgraph, readonly } = graph;
   const blockRef = useRef<HTMLDivElement>(null);
   const hookRef = useRef<HTMLDivElement>(null);
