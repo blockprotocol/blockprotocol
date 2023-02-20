@@ -96,6 +96,8 @@ declare module "@mui/material/styles" {
       90: string;
       100: string;
     };
+    black: string;
+    white: string;
     grey: undefined;
   }
 

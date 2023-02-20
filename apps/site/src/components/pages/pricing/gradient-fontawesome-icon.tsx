@@ -13,28 +13,30 @@ export const GradientFontAwesomeIcon: FunctionComponent<
     ]}
   >
     {children}
-    <linearGradient
-      id="gradient-light"
-      x1="0"
-      y1="0"
-      x2="1"
-      y2="1"
-      gradientTransform="rotate(96.94)"
-    >
-      <stop offset="30.81%" stopColor="#b39afda5" />
-      <stop offset="92.56%" stopColor="#ffa2f6a5" />
-    </linearGradient>
+    <defs>
+      <linearGradient
+        id="gradient-light"
+        x1="0"
+        y1="0"
+        x2="1"
+        y2="1"
+        gradientTransform="rotate(96.94deg)"
+      >
+        <stop offset="30.81%" stopColor="#b39afda5" />
+        <stop offset="92.56%" stopColor="#ffa2f6a5" />
+      </linearGradient>
 
-    <linearGradient
-      id="gradient"
-      x1="0"
-      y1="0"
-      x2="1"
-      y2="1"
-      gradientTransform="rotate(96.94)"
-    >
-      <stop offset="30.81%" stopColor="#6834FB" />
-      <stop offset="92.56%" stopColor="#FF45EC" />
-    </linearGradient>
+      <linearGradient
+        id="gradient"
+        x1="0"
+        y1="0"
+        x2="1"
+        y2="1"
+        gradientTransform="rotate(96.94deg)"
+      >
+        <stop offset="30.81%" stopColor="#6834FB" />
+        <stop offset="92.56%" stopColor="#FF45EC" />
+      </linearGradient>
+    </defs>
   </FontAwesomeIcon>
 );

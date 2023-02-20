@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { FreeTierSection } from "../components/pages/pricing/free-tier-section";
 import { Header } from "../components/pages/pricing/header";
+import { PaidAddonsSection } from "../components/pages/pricing/paid-addons-section";
 import { PaidTiersSection } from "../components/pages/pricing/paid-tiers-section";
 import { useUser } from "../context/user-context";
 import { internalApi } from "../lib/internal-api-client";
@@ -60,6 +61,7 @@ const PricingPage: NextPage = () => {
           currentSubscriptionTier={currentSubscriptionTier}
           subscriptionTierPrices={subscriptionTierPrices}
         />
+        <PaidAddonsSection />
       </Box>
     </>
   );
