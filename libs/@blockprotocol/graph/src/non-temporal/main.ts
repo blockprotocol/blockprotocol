@@ -1,3 +1,11 @@
+/**
+ * Defines the main entrypoint to the Block Protocol Graph Module package, without support for temporal versioning.
+ * This defines the main types and type-guards used when working with the Graph module.
+ *
+ * Some commented out imports, and exports, are consciously left in the file as a quick indicator of what exports are
+ * different from the entrypoint of the package _with_ temporal support.
+ */
+
 import { BaseUri } from "@blockprotocol/type-system/slim";
 
 import {

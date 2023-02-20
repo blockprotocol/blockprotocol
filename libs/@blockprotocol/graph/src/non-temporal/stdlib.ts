@@ -1,3 +1,13 @@
+/**
+ * Defines the main entrypoint to the standard library for the Block Protocol Graph Module package, without support for
+ * temporal versioning.
+ *
+ * This defines a collection of helper functions and utilities for interacting with elements of the graph.
+ *
+ * Some commented out imports, and exports, are consciously left in the file as a quick indicator of what exports are
+ * different from the entrypoint of the package _with_ temporal support.
+ */
+
 import {
   buildSubgraph as buildSubgraphGeneral,
   getDataTypeById as getDataTypeByIdGeneral,
