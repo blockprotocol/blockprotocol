@@ -1,7 +1,67 @@
 # Working with types
 
+## Introduction
+
+When using the Block Protocol's [graph module](/docs/spec/graph-module), data is shared between applications and blocks
+in the form of 'entities', and each entity is assigned to at least one type, known as an 'entity type'.
+
+This type describes what properties an entity has, what type of value each is expected to be, and the relationship
+between the entity in question and other entities.
+
+Relationships between entities are known as 'links' and they too are entities, which may have properties and relations to other entities.
+
+The system by which types are defined is known as the 'type system'.
+
 ## The type system
+
+The Block Protocol type system is designed so that types are composed of re-usable, sharable parts, which can be
+referenced by other users and by other types.
+
+The type system consists of these primitive parts:
+
+1.  **Entity types**: define what properties an entity may have (which _property types_), and what relationships (links) it may have with other entities
+2.  **Property types**: define properties that can be referenced by entity types, and their expected values, which may be a reference to
+    _data types_ or objects which are made up of other property types
+3.  **Data types**: primitive data types, e.g. text, numbers, booleans.
 
 ## Creating types
 
+The easiest way to get started is to visit [your dashboard](/dashboard) and clicking 'create an entity type'.
+
+Give your entity type a name and a description, and then click 'create'.
+
+You can now define the _properties_ your entity expects:
+
+1.  Start typing to see if a suitable property already exists (e.g. called 'Name' with an expected data type of 'Text')
+2.  Either select an existing property type, or click 'create new' to create a new one
+3.  If creating a new one, specify a title, description, and expected value
+
+You can also define the _links_ your entity expects following a similar process:
+
+1.  Start typing to see if a suitable link entity type already exists (e.g. called 'Owner')
+2.  Either select an existing link entity type, or click 'create new' to create a new one
+3.  When creating a link entity type, you first specify a title and description
+4.  The expected _destination_ entity types for a given link are specified on each entity type it appears on
+
+Make sure to click 'publish update' when you're done to release a new version of the entity type.
+
 ## Using types
+
+Once you have a type which describes the data your block expects, copy the URL from your browser.
+
+You can enter this as the value for `schema` in the `blockprotocol` object of your block source's `package.json`, and
+run `yarn schema` to automatically generate TypeScript types from it.
+
+You can also view the raw JSON of any type by a simple fetch or curl:
+
+```ts
+fetch(
+  "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/entity-type/thing/v/2",
+)
+  .then((resp) => resp.json())
+  .then(console.log);
+```
+
+```shell
+curl https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/entity-type/thing/v/2
+```
