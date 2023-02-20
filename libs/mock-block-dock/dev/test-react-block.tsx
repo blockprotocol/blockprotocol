@@ -1,3 +1,4 @@
+import { Entity } from "@blockprotocol/graph";
 import {
   type BlockComponent,
   useGraphBlockModule,
@@ -5,7 +6,7 @@ import {
 import { getRoots } from "@blockprotocol/graph/stdlib";
 import { useHook, useHookBlockModule } from "@blockprotocol/hook/react";
 import { extractBaseUri } from "@blockprotocol/type-system/slim";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { propertyTypes } from "../src/data/property-types";
 
@@ -35,6 +36,8 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
     },
   );
 
+  const [entities, setEntities] = useState<Record<string, Entity>>({});
+
   if (readonly) {
     return (
       <div ref={blockRef}>
@@ -63,6 +66,143 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
 
   return (
     <div ref={blockRef}>
+      <button
+        onClick={async () => {
+          const { data, errors } = await graphModule.createEntity({
+            data: {
+              entityTypeId: blockEntity!.metadata!.entityTypeId,
+              properties: {
+                [extractBaseUri(propertyTypes.name.$id)]: "alice",
+              },
+            },
+          });
+
+          if (!data) {
+            console.error(errors);
+            throw new Error("Failed to create entity: alice");
+          }
+
+          setEntities((prevEntities) => ({ ...prevEntities, alice: data }));
+        }}
+      >
+        Create Alice
+      </button>
+      <button
+        onClick={async () => {
+          const { data, errors } = await graphModule.createEntity({
+            data: {
+              entityTypeId: blockEntity!.metadata!.entityTypeId,
+              properties: {
+                [extractBaseUri(propertyTypes.name.$id)]: "bob",
+              },
+            },
+          });
+
+          if (!data) {
+            console.error(errors);
+            throw new Error("Failed to create entity: bob");
+          }
+
+          setEntities((prevEntities) => ({ ...prevEntities, bob: data }));
+        }}
+      >
+        Create Bob
+      </button>
+      <button
+        onClick={async () => {
+          const { data, errors } = await graphModule.createEntity({
+            data: {
+              entityTypeId: blockEntity!.metadata!.entityTypeId,
+              properties: {
+                [extractBaseUri(propertyTypes.name.$id)]: "charlie",
+              },
+            },
+          });
+
+          if (!data) {
+            console.error(errors);
+            throw new Error("Failed to create entity: charlie");
+          }
+
+          setEntities((prevEntities) => ({ ...prevEntities, charlie: data }));
+        }}
+      >
+        Create Charlie
+      </button>
+      <button
+        onClick={async () => {
+          const { data, errors } = await graphModule.createEntity({
+            data: {
+              entityTypeId: blockEntity!.metadata!.entityTypeId,
+              properties: {},
+              linkData: {
+                leftEntityId: entities.alice!.metadata.recordId.entityId,
+                rightEntityId: entities.bob!.metadata.recordId.entityId,
+              },
+            },
+          });
+
+          if (!data) {
+            console.error(errors);
+            throw new Error(`Failed to create entity: aliceToBob`);
+          }
+
+          setEntities((prevEntities) => ({
+            ...prevEntities,
+            aliceToBob: data!,
+          }));
+        }}
+      >
+        Create Alice to Bob Link
+      </button>
+      <button
+        onClick={async () => {
+          const { data, errors } = await graphModule.createEntity({
+            data: {
+              entityTypeId: blockEntity!.metadata!.entityTypeId,
+              properties: {},
+              linkData: {
+                leftEntityId: entities.alice!.metadata.recordId.entityId,
+                rightEntityId: entities.charlie!.metadata.recordId.entityId,
+              },
+            },
+          });
+
+          if (!data) {
+            console.error(errors);
+            throw new Error(`Failed to create entity: aliceToCharlie`);
+          }
+
+          setEntities((prevEntities) => ({
+            ...prevEntities,
+            aliceToCharlie: data!,
+          }));
+        }}
+      >
+        Create Alice to Charlie Link
+      </button>
+      <button
+        onClick={async () => {
+          await graphModule.deleteEntity({
+            data: {
+              entityId: entities.aliceToBob!.metadata.recordId.entityId,
+            },
+          });
+        }}
+      >
+        Delete Alice To Bob
+      </button>
+      <button
+        onClick={async () => {
+          await graphModule.deleteEntity({
+            data: {
+              entityId: entities.charlie!.metadata.recordId.entityId,
+            },
+          });
+        }}
+      >
+        Delete Charlie
+      </button>
       <h1>
         <>
           Hello{" "}
