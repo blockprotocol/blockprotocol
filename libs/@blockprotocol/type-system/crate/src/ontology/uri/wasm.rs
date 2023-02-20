@@ -2,10 +2,10 @@ use tsify::Tsify;
 
 use crate::utils::{set_panic_hook, Result};
 
-// Generates the TypeScript alias: type VersionedUri = `${string}/v/${number}`
+// Generates the TypeScript alias: type VersionedUri = `${BaseUri}v/${number}`
 #[derive(Tsify)]
 #[serde(rename = "VersionedUri")]
-pub struct VersionedUriPatch(#[tsify(type = "`${string}/v/${number}`")] String);
+pub struct VersionedUriPatch(#[tsify(type = "`${BaseUri}v/${number}`")] String);
 
 // #[wasm_bindgen(typescript_custom_section)]
 // const VALIDATE_BASE_URI_DEF: &'static str = r#"

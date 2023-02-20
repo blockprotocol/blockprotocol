@@ -22,14 +22,12 @@ pub struct EntityType {
     property_object: Object<ValueOrArray<PropertyTypeReference>>,
     inherits_from: AllOf<EntityTypeReference>,
     links: Links,
-    default: HashMap<BaseUri, serde_json::Value>,
     examples: Vec<HashMap<BaseUri, serde_json::Value>>,
 }
 
 impl EntityType {
     /// Creates a new `EntityType`
     #[must_use]
-    #[expect(clippy::too_many_arguments)]
     pub fn new(
         id: VersionedUri,
         title: String,
@@ -37,7 +35,6 @@ impl EntityType {
         property_object: Object<ValueOrArray<PropertyTypeReference>>,
         inherits_from: AllOf<EntityTypeReference>,
         links: Links,
-        default: HashMap<BaseUri, serde_json::Value>,
         examples: Vec<HashMap<BaseUri, serde_json::Value>>,
     ) -> Self {
         Self {
@@ -47,7 +44,6 @@ impl EntityType {
             property_object,
             inherits_from,
             links,
-            default,
             examples,
         }
     }
@@ -87,16 +83,6 @@ impl EntityType {
         &self,
     ) -> &HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
         self.links.links()
-    }
-
-    #[must_use]
-    pub fn required_links(&self) -> &[VersionedUri] {
-        self.links.required()
-    }
-
-    #[must_use]
-    pub const fn default(&self) -> &HashMap<BaseUri, serde_json::Value> {
-        &self.default
     }
 
     #[must_use]
