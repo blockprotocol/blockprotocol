@@ -1,3 +1,10 @@
+/**
+ * Defines the main entrypoint to the standard library for the Block Protocol Graph Module package, with support for
+ * temporal versioning.
+ *
+ * This defines a collection of helper functions and utilities for interacting with elements of the graph.
+ */
+
 import {
   buildSubgraph as buildSubgraphGeneral,
   compareBounds as compareBoundsGeneral,
