@@ -91,6 +91,10 @@
           "additionalProperties": false
         }
       }
+    },
+    "additionalProperties": {
+      "type": "boolean",
+      "const": false
     }
   },
   "additionalProperties": false,
