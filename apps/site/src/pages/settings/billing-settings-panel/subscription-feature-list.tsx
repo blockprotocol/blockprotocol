@@ -1,4 +1,4 @@
-import { Box, Typography, TypographyProps } from "@mui/material";
+import { BoxProps, Stack, Typography, TypographyProps } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
 import {
@@ -7,23 +7,26 @@ import {
 } from "./subscription-feature-list-item";
 
 export const SubscriptionFeatureList: FunctionComponent<{
-  heading: ReactNode;
   features: SubscriptionFeature[];
+  heading?: ReactNode;
   headingSx?: TypographyProps["sx"];
-}> = ({ features, heading, headingSx }) => (
+  gap?: BoxProps["gap"];
+}> = ({ features, heading, headingSx, gap = 1.5 }) => (
   <>
-    <Typography
-      gutterBottom
-      component="p"
-      variant="bpSmallCopy"
-      sx={[
-        { fontFamily: "colfax-web" },
-        ...(Array.isArray(headingSx) ? headingSx : [headingSx]),
-      ]}
-    >
-      {heading}
-    </Typography>
-    <Box component="ul">
+    {heading ? (
+      <Typography
+        gutterBottom
+        component="p"
+        variant="bpSmallCopy"
+        sx={[
+          { fontFamily: "colfax-web" },
+          ...(Array.isArray(headingSx) ? headingSx : [headingSx]),
+        ]}
+      >
+        {heading}
+      </Typography>
+    ) : null}
+    <Stack gap={gap}>
       {features.map((feature, index) => (
         <SubscriptionFeatureListItem
           // eslint-disable-next-line react/no-array-index-key
@@ -31,6 +34,6 @@ export const SubscriptionFeatureList: FunctionComponent<{
           feature={feature}
         />
       ))}
-    </Box>
+    </Stack>
   </>
 );

@@ -1,26 +1,31 @@
 import {
+  faArrowRight,
   faCaretRight,
-  faCheck,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
+import { SubscriptionTierPrices } from "@local/internal-api-client";
 import {
   Box,
+  Collapse,
   Container,
   Grid,
-  Link,
   Stack,
-  styled,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { FunctionComponent, ReactNode } from "react";
+import Image from "next/legacy/image";
+import { FunctionComponent, ReactNode, useState } from "react";
 
-import { useUser } from "../../../context/user-context";
+import proTierBackground from "../../../../public/assets/pricing/pro-tier-background.svg";
 import { SubscriptionFeatureList } from "../../../pages/settings/billing-settings-panel/subscription-feature-list";
 import { SubscriptionFeature } from "../../../pages/settings/billing-settings-panel/subscription-feature-list-item";
-import { PaidSubscriptionTier } from "../../../pages/shared/subscription-utils";
-import { ArrowLeftIcon, ArrowRightIcon, FontAwesomeIcon } from "../../icons";
+import {
+  PaidSubscriptionTier,
+  priceToHumanReadable,
+} from "../../../pages/shared/subscription-utils";
+import { ArrowLeftIcon, FontAwesomeIcon } from "../../icons";
 import { AbstractAiIcon } from "../../icons/abstract-ai-icon";
-import { BoltRegularIcon } from "../../icons/bolt-regular-icon";
 import { CheckDoubleIcon } from "../../icons/check-double-icon";
 import { CoinsIcon } from "../../icons/coins-icon";
 import { FlaskVialIcon } from "../../icons/flask-vial-icon";
@@ -35,15 +40,18 @@ import { MapboxLogoIcon } from "../../icons/mapbox-logo-icon";
 import { MicrophoneLogoIcon } from "../../icons/microphone-icon";
 import { OpenAiIcon } from "../../icons/open-ai-icon";
 import { PeopleArrowsIcon } from "../../icons/people-arrows-icon";
+import { faBolt } from "../../icons/pro/fa-bolt";
 import { faImage } from "../../icons/pro/fa-image";
 import { faLocationDot } from "../../icons/pro/fa-location-dot";
+import { faMap } from "../../icons/pro/fa-map";
 import { faMapLocationDot } from "../../icons/pro/fa-map-location-dot";
+import { faRocketLaunch } from "../../icons/pro/fa-rocket-launch";
 import { faText } from "../../icons/pro/fa-text";
-import { RocketRegularIcon } from "../../icons/rocket-regular-icon";
+import { SparklesGradientIcon } from "../../icons/sparkles-gradient-icon";
 import { TagIcon } from "../../icons/tag-icon";
 import { TrophyIcon } from "../../icons/trophy-icon";
 import { TrophyStarIcon } from "../../icons/trophy-star-icon";
-import { LinkButton } from "../../link-button";
+import { CustomLinkButton } from "./custom-link-button";
 import { GradientFontAwesomeIcon } from "./gradient-fontawesome-icon";
 
 type PaidSubscription = {
@@ -58,27 +66,215 @@ export const paidSubscriptionFeatures: Record<
   hobby: {
     coreFeatures: [
       {
-        icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
+        icon: (
+          <Box mr={-1} mt={1}>
+            <GradientFontAwesomeIcon
+              icon={faImage}
+              sx={{ fontSize: 26 }}
+              light
+            />
+            <AbstractAiIcon
+              background="rgb(99,23,193)"
+              sx={{
+                fontSize: 24,
+                position: "relative",
+                bottom: 13,
+                right: 13,
+              }}
+            />
+          </Box>
+        ),
         title: (
-          <>
-            <strong>150k</strong> AI-generated words (powered by GPT-3)
-          </>
+          <Box
+            component="span"
+            sx={{ color: ({ palette }) => palette.purple[30] }}
+          >
+            <strong>50</strong> OpenAI DALL-E images
+            <br />
+            <Typography
+              component="span"
+              variant="bpMicroCopy"
+              sx={{
+                color: "inherit",
+                opacity: 0.6,
+                fontWeight: 400,
+              }}
+            >
+              Maximum quality (1024x1024 pixels)
+            </Typography>
+          </Box>
         ),
       },
       {
-        icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
+        icon: (
+          <Box mr={-1} mt={1}>
+            <GradientFontAwesomeIcon
+              icon={faText}
+              sx={{ fontSize: 26 }}
+              light
+            />
+            <AbstractAiIcon
+              background="rgb(99,23,193)"
+              sx={{
+                fontSize: 24,
+                position: "relative",
+                bottom: 13,
+                right: 13,
+              }}
+            />
+          </Box>
+        ),
         title: (
-          <>
-            <strong>50</strong> AI-generated images (powered by DALL-E)
-          </>
+          <Box
+            component="span"
+            sx={{ color: ({ palette }) => palette.purple[30] }}
+          >
+            <strong>200,000</strong> OpenAI GPT-3 tokens
+            <br />
+            <Typography
+              component="span"
+              variant="bpMicroCopy"
+              sx={{
+                color: "inherit",
+                opacity: 0.6,
+                fontWeight: 400,
+              }}
+            >
+              Equating to ~150k words
+            </Typography>
+          </Box>
+        ),
+        description: (
+          <Box mt={1.5}>
+            <SubscriptionFeatureList
+              features={[
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>10k</strong> OpenAI Davinci tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>40k</strong> OpenAI Curie tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>50k</strong> OpenAI Babbage tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>100k</strong> OpenAI Ada tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+              ]}
+            />
+          </Box>
         ),
       },
       {
-        icon: <MapboxLogoIcon sx={{ fontSize: 18 }} />,
+        icon: (
+          <Box mr={-1} mt={1}>
+            <GradientFontAwesomeIcon
+              icon={faLocationDot}
+              sx={{ fontSize: 26 }}
+              light
+            />
+            <SparklesGradientIcon
+              background="rgb(99,23,193)"
+              sx={{
+                fontSize: 20,
+                position: "relative",
+                bottom: 9,
+                right: 11,
+              }}
+            />
+          </Box>
+        ),
         title: (
-          <>
+          <Box
+            component="span"
+            sx={{ color: ({ palette }) => palette.purple[30] }}
+          >
             <strong>20</strong> Mapbox Address Autofills
-          </>
+            <br />
+            <Typography
+              component="span"
+              variant="bpMicroCopy"
+              sx={{
+                color: "inherit",
+                opacity: 0.6,
+                fontWeight: 400,
+              }}
+            >
+              Provides full addresses as structured data
+            </Typography>
+          </Box>
+        ),
+      },
+      {
+        icon: (
+          <Box mr={-1} mt={1}>
+            <GradientFontAwesomeIcon icon={faMap} sx={{ fontSize: 26 }} light />
+            <SparklesGradientIcon
+              background="rgb(99,23,193)"
+              sx={{
+                fontSize: 20,
+                position: "relative",
+                bottom: 9,
+                right: 11,
+              }}
+            />
+          </Box>
+        ),
+        title: (
+          <Box
+            component="span"
+            sx={{ color: ({ palette }) => palette.purple[30] }}
+          >
+            <strong>300</strong> Mapbox Static Images
+            <br />
+            <Typography
+              component="span"
+              variant="bpMicroCopy"
+              sx={{
+                color: "inherit",
+                opacity: 0.6,
+                fontWeight: 400,
+              }}
+            >
+              Provides unique map tiles
+            </Typography>
+          </Box>
         ),
       },
     ],
@@ -135,15 +331,15 @@ export const paidSubscriptionFeatures: Record<
           >
             <strong>Double</strong> the usage allowance of all hobby limits
             <br />
-            <Box
+            <Typography
               component="span"
+              variant="bpMicroCopy"
               sx={{
-                color: ({ palette }) => palette.common.white,
-                opacity: 0.6,
+                color: ({ palette }) => palette.purple[60],
               }}
             >
               e.g. 300k+ words, 100 images, and 40 address autofills
-            </Box>
+            </Typography>
           </Box>
         ),
       },
@@ -340,24 +536,16 @@ const HobbyTierPerk = ({
   );
 };
 
-const CustomLinkButton = styled(LinkButton)(({ theme }) => ({
-  "& .MuiTypography-root": {
-    color: theme.palette.common.white,
-  },
-  "&.Mui-disabled": {
-    backgroundColor: theme.palette.gray[10],
-    color: theme.palette.gray[50],
-    borderColor: theme.palette.gray[30],
-    borderStyle: "solid",
-    borderWidth: 1,
-    "& .MuiTypography-root": {
-      color: theme.palette.gray[50],
-    },
-  },
-}));
+export const PaidTiersSection: FunctionComponent<{
+  signedIn: boolean;
+  currentSubscriptionTier: "free" | "hobby" | "pro" | undefined;
+  subscriptionTierPrices: SubscriptionTierPrices | undefined;
+}> = ({ signedIn, currentSubscriptionTier, subscriptionTierPrices }) => {
+  const theme = useTheme();
+  const lg = useMediaQuery(theme.breakpoints.up("lg"));
 
-export const PaidTiersSection: FunctionComponent = () => {
-  const isCurrentSubscriptionTierHobby = true;
+  const [fullPlanDetailsOpen, setFullPlanDetailsOpen] = useState(false);
+
   return (
     <Container
       sx={{
@@ -430,21 +618,23 @@ export const PaidTiersSection: FunctionComponent = () => {
         </Typography>
       </Box>
 
-      <Grid container>
+      <Grid
+        container
+        sx={{
+          borderRadius: 4,
+          boxShadow: "0px 4.23704px 8.1px rgb(61 78 133 / 6%)",
+          overflow: "hidden",
+        }}
+      >
         <Grid
           item
-          md={6}
-          sm={12}
-          sx={{ display: "flex", flexDirection: "column" }}
+          lg={6}
+          md={12}
+          sx={{ display: "flex", flexDirection: "column", width: 1 }}
         >
           <Box
             sx={{
               flex: 1,
-              borderTopLeftRadius: 14,
-              borderTopRightRadius: {
-                xs: 14,
-                md: 0,
-              },
               background:
                 "url(/assets/pricing/grain.png), linear-gradient(0deg, rgba(48, 0, 149, 0.39), rgba(48, 0, 149, 0.39)), radial-gradient(128.95% 319.39% at 95.1% 4.09%, #DC569E 0%, #9956DC 35.71%, #8000FF 100%)",
             }}
@@ -469,12 +659,14 @@ export const PaidTiersSection: FunctionComponent = () => {
                     }}
                   >
                     <strong>
-                      {/* {priceToHumanReadable({
-                    amountInCents: subscriptionTierPrices.hobby.unit_amount!,
-                    currency: subscriptionTierPrices.hobby.currency,
-                    decimalPlaces: 0,
-                  })} */}
-                      2
+                      {subscriptionTierPrices
+                        ? priceToHumanReadable({
+                            amountInCents:
+                              subscriptionTierPrices?.hobby.unit_amount!,
+                            currency: subscriptionTierPrices?.hobby.currency!,
+                            decimalPlaces: 0,
+                          })
+                        : null}
                     </strong>
                     /month
                   </Typography>
@@ -502,37 +694,38 @@ export const PaidTiersSection: FunctionComponent = () => {
                 </Typography>
               </Stack>
 
-              <CustomLinkButton
-                href={{
-                  pathname: "/settings/billing/upgrade",
-                  query: { tier: "hobby" },
-                }}
-                variant="primary"
-                endIcon={
-                  isCurrentSubscriptionTierHobby ? undefined : (
-                    <ArrowRightIcon />
-                  )
-                }
-                disabled={isCurrentSubscriptionTierHobby}
-                size="small"
-                sx={{ height: 40 }}
-              >
-                {isCurrentSubscriptionTierHobby
-                  ? "Your current plan"
-                  : "Continue"}
-              </CustomLinkButton>
+              <Box>
+                <CustomLinkButton
+                  href={{
+                    pathname: "/settings/billing/upgrade",
+                    query: { tier: "hobby" },
+                  }}
+                  endIcon={
+                    <FontAwesomeIcon
+                      icon={faArrowRight}
+                      sx={{
+                        color: theme.palette.common.white,
+                      }}
+                    />
+                  }
+                >
+                  {signedIn ? "Continue" : "Sign up"}
+                </CustomLinkButton>
+              </Box>
             </Box>
             <Box
               sx={({ spacing }) => ({
-                padding: spacing(2, 4),
+                padding: spacing(4),
                 flexGrow: 1,
               })}
             >
               <Typography
-                variant="bpSmallCopy"
+                variant="bpSmallCaps"
                 sx={{
-                  fontFamily: "colfax-web",
                   color: ({ palette }) => palette.common.white,
+                  textTransform: "none",
+                  letterSpacing: "unset",
+                  fontWeight: 500,
                 }}
               >
                 Includes the following every month...
@@ -568,43 +761,49 @@ export const PaidTiersSection: FunctionComponent = () => {
                   poweredBy="MAPBOX"
                 />
               </Stack>
-              {/* <SubscriptionFeatureList
-                heading={
-                  <Box mb={3}>Includes the following every month...</Box>
-                }
-                headingSx={({ palette }) => ({ color: palette.common.white })}
-                features={paidSubscriptionFeatures.hobby.coreFeatures}
-              /> */}
-              <Link href="/pricing">
-                <Typography
-                  component="p"
-                  variant="bpSmallCopy"
-                  sx={({ palette, transitions }) => ({
-                    color: palette.purple[80],
-                    textTransform: "uppercase",
-                    transition: transitions.create("opacity"),
-                    "&:hover": {
-                      opacity: 0.8,
-                      "& svg": {
-                        marginLeft: 1,
-                      },
+
+              <Typography
+                onClick={() => setFullPlanDetailsOpen(!fullPlanDetailsOpen)}
+                component="p"
+                variant="bpSmallCaps"
+                sx={({ palette, transitions }) => ({
+                  display: "flex",
+                  cursor: "pointer",
+                  fontWeight: 500,
+                  lineHeight: 1.2,
+                  fontSize: "0.8125rem",
+                  color: palette.purple[40],
+                  transition: transitions.create("opacity"),
+                  "&:hover": {
+                    opacity: 0.8,
+                    "& svg": {
+                      marginLeft: 1,
                     },
-                    marginTop: 2,
-                  })}
-                >
-                  <strong>View full plan details</strong>
-                  <FontAwesomeIcon
-                    icon={faCaretRight}
-                    sx={{
-                      position: "relative",
-                      top: -1,
-                      marginLeft: 0.5,
-                      transition: ({ transitions }) =>
-                        transitions.create("margin-left"),
-                    }}
+                  },
+                  marginTop: 3,
+                })}
+              >
+                View full plan details
+                <FontAwesomeIcon
+                  icon={faCaretRight}
+                  sx={{
+                    position: "relative",
+                    top: -1,
+                    marginLeft: 0.5,
+                    transition: ({ transitions }) =>
+                      transitions.create(["margin-left", "transform"]),
+                    transform: `rotate(${fullPlanDetailsOpen ? 90 : 0}deg)`,
+                  }}
+                />
+              </Typography>
+
+              <Collapse in={fullPlanDetailsOpen}>
+                <Box mt={3} mb={2}>
+                  <SubscriptionFeatureList
+                    features={paidSubscriptionFeatures.hobby.coreFeatures}
                   />
-                </Typography>
-              </Link>
+                </Box>
+              </Collapse>
             </Box>
           </Box>
 
@@ -619,8 +818,8 @@ export const PaidTiersSection: FunctionComponent = () => {
                 md: 0,
               },
               borderBottomLeftRadius: {
-                xs: 0,
-                md: 14,
+                md: 0,
+                lg: 16,
               },
             }}
           >
@@ -635,49 +834,47 @@ export const PaidTiersSection: FunctionComponent = () => {
               marginTop={4}
               mb={1.5}
             >
-              <CustomLinkButton
-                href={{
-                  pathname: "/settings/billing/upgrade",
-                  query: { tier: "hobby" },
-                }}
-                size="small"
-                endIcon={
-                  isCurrentSubscriptionTierHobby ? (
-                    <FontAwesomeIcon icon={faCheck} />
+              {currentSubscriptionTier !== "hobby" &&
+              currentSubscriptionTier !== "pro" ? (
+                <CustomLinkButton
+                  href={{
+                    pathname: "/settings/billing/upgrade",
+                    query: { tier: "hobby" },
+                  }}
+                  endIcon={
+                    <FontAwesomeIcon
+                      icon={faRocketLaunch}
+                      sx={{
+                        color: ({ palette }) => palette.common.white,
+                      }}
+                    />
+                  }
+                  sx={{ width: "calc(100% - 64px)" }}
+                >
+                  {signedIn ? (
+                    <Box component="span">
+                      Upgrade to unlock <strong>HOBBY</strong>
+                    </Box>
                   ) : (
-                    <RocketRegularIcon />
-                  )
-                }
-                disabled={isCurrentSubscriptionTierHobby}
-                sx={{ height: 40 }}
-              >
-                <Typography variant="bpSmallCopy">
-                  {isCurrentSubscriptionTierHobby ? (
-                    <>Your current level of access</>
-                  ) : (
-                    <>
-                      Get started with <strong>HOBBY</strong>
-                    </>
+                    "Get started"
                   )}
-                </Typography>
-              </CustomLinkButton>
+                </CustomLinkButton>
+              ) : null}
             </Box>
           </Box>
         </Grid>
 
         <Grid
           item
-          md={6}
-          sm={12}
-          sx={{ display: "flex", flexDirection: "column" }}
+          lg={6}
+          md={12}
+          sx={{ display: "flex", flexDirection: "column", width: 1 }}
         >
           <Box
             sx={{
+              display: "flex",
               flex: 1,
-              borderTopRightRadius: {
-                xs: 0,
-                md: 14,
-              },
+              flexDirection: "column",
               background:
                 "url(/assets/pricing/grain.png), linear-gradient(180deg, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.434) 100%), linear-gradient(87.84deg, #3300FF 14.51%, #A54BFF 100.25%)",
             }}
@@ -702,12 +899,14 @@ export const PaidTiersSection: FunctionComponent = () => {
                     }}
                   >
                     <strong>
-                      {/* {priceToHumanReadable({
-                    amountInCents: subscriptionTierPrices.hobby.unit_amount!,
-                    currency: subscriptionTierPrices.hobby.currency,
-                    decimalPlaces: 0,
-                  })} */}
-                      2
+                      {subscriptionTierPrices
+                        ? priceToHumanReadable({
+                            amountInCents:
+                              subscriptionTierPrices?.pro.unit_amount!,
+                            currency: subscriptionTierPrices?.pro.currency!,
+                            decimalPlaces: 0,
+                          })
+                        : null}
                     </strong>
                     /month
                   </Typography>
@@ -735,24 +934,27 @@ export const PaidTiersSection: FunctionComponent = () => {
                 </Typography>
               </Stack>
 
-              <CustomLinkButton
-                href={{
-                  pathname: "/settings/billing/upgrade",
-                  query: { tier: "hobby" },
-                }}
-                variant="primary"
-                endIcon={
-                  isCurrentSubscriptionTierHobby ? undefined : (
-                    <ArrowRightIcon />
-                  )
-                }
-                disabled={isCurrentSubscriptionTierHobby}
-                size="small"
-              >
-                {isCurrentSubscriptionTierHobby
-                  ? "Your current plan"
-                  : "Continue"}
-              </CustomLinkButton>
+              {currentSubscriptionTier !== "pro" ? (
+                <Box>
+                  <CustomLinkButton
+                    pink
+                    href={{
+                      pathname: "/settings/billing/upgrade",
+                      query: { tier: "pro" },
+                    }}
+                    endIcon={
+                      <FontAwesomeIcon
+                        icon={faArrowRight}
+                        sx={{
+                          color: theme.palette.common.white,
+                        }}
+                      />
+                    }
+                  >
+                    {signedIn ? "Continue" : "Sign up"}
+                  </CustomLinkButton>
+                </Box>
+              ) : null}
             </Box>
 
             <Box
@@ -778,8 +980,20 @@ export const PaidTiersSection: FunctionComponent = () => {
                   color: ({ palette }) => palette.common.white,
                 }}
                 features={paidSubscriptionFeatures.pro.coreFeatures}
+                gap={2.25}
               />
             </Box>
+            {lg ? (
+              <Collapse in={fullPlanDetailsOpen}>
+                <Box sx={{ mt: 6.25 }}>
+                  <Image
+                    layout="responsive"
+                    src={proTierBackground}
+                    style={{ zIndex: 999 }}
+                  />
+                </Box>
+              </Collapse>
+            ) : null}
           </Box>
 
           <Box
@@ -789,10 +1003,10 @@ export const PaidTiersSection: FunctionComponent = () => {
               borderStyle: "solid",
               borderWidth: 1,
               borderColor: palette.gray[20],
-              borderBottomRightRadius: 14,
+              borderBottomRightRadius: 16,
               borderBottomLeftRadius: {
-                xs: 14,
-                md: 0,
+                md: 16,
+                lg: 0,
               },
             })}
           >
@@ -807,30 +1021,32 @@ export const PaidTiersSection: FunctionComponent = () => {
               marginTop={4}
               mb={1.5}
             >
-              <LinkButton
-                href={{
-                  pathname: "/settings/billing/upgrade",
-                  query: { tier: "pro" },
-                }}
-                size="small"
-                sx={{ height: 40 }}
-                endIcon={<BoltRegularIcon />}
-              >
-                <Typography
-                  variant="bpSmallCopy"
-                  sx={{ color: ({ palette }) => palette.common.white }}
+              {currentSubscriptionTier !== "pro" ? (
+                <CustomLinkButton
+                  pink
+                  href={{
+                    pathname: "/settings/billing/upgrade",
+                    query: { tier: "pro" },
+                  }}
+                  endIcon={
+                    <FontAwesomeIcon
+                      icon={faBolt}
+                      sx={{
+                        color: ({ palette }) => palette.common.white,
+                      }}
+                    />
+                  }
+                  sx={{ width: "calc(100% - 64px)" }}
                 >
-                  {isCurrentSubscriptionTierHobby ? (
-                    <>
+                  {signedIn ? (
+                    <Box component="span">
                       Upgrade to unlock <strong>PRO</strong>
-                    </>
+                    </Box>
                   ) : (
-                    <>
-                      Get started with <strong>PRO</strong>
-                    </>
+                    "Get started"
                   )}
-                </Typography>
-              </LinkButton>
+                </CustomLinkButton>
+              ) : null}
             </Box>
           </Box>
         </Grid>

@@ -8,19 +8,11 @@ import {
   faUser,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  Box,
-  buttonClasses,
-  Container,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Paper, Stack, Typography } from "@mui/material";
 import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode } from "react";
 
 import helix from "../../../../public/assets/pricing/helix.png";
-import { useUser } from "../../../context/user-context";
 import { FontAwesomeIcon } from "../../icons";
 import { faCloud } from "../../icons/pro/fa-cloud";
 import { faCubes } from "../../icons/pro/fa-cubes";
@@ -28,7 +20,7 @@ import { faEye } from "../../icons/pro/fa-eye";
 import { faHammer } from "../../icons/pro/fa-hammer";
 import { faServer } from "../../icons/pro/fa-server";
 import { faWindow } from "../../icons/pro/fa-window";
-import { LinkButton } from "../../link-button";
+import { CustomLinkButton } from "./custom-link-button";
 import { GradientFontAwesomeIcon } from "./gradient-fontawesome-icon";
 
 interface DescriptionItem {
@@ -146,10 +138,8 @@ const Section = ({
               mt: 2.25,
             }}
           >
-            <LinkButton
+            <CustomLinkButton
               href="/signup"
-              size="small"
-              variant={signedIn ? "tertiary" : "primary"}
               disabled={signedIn}
               endIcon={
                 <FontAwesomeIcon
@@ -160,26 +150,9 @@ const Section = ({
                   }}
                 />
               }
-              sx={({ palette }) => ({
-                color: palette.common.white,
-                background: palette.purple[90],
-                padding: "8px 20px",
-                "&::before": {
-                  background:
-                    "radial-gradient(171.94% 187.5% at 50.28% 0%, rgba(117, 86, 220, 0.5) 0%, rgba(192, 74, 234, 0.5) 100%), #4625AA",
-                },
-                [`&.${buttonClasses.disabled}`]: {
-                  color: palette.gray[50],
-                  background: palette.gray[10],
-                  "&::before": {
-                    borderColor: palette.gray[30],
-                    background: "none",
-                  },
-                },
-              })}
             >
               {signedIn ? "Included with all accounts" : "Create account"}
-            </LinkButton>
+            </CustomLinkButton>
           </Box>
         </Stack>
       </Paper>
@@ -201,10 +174,9 @@ const PurpleText: FunctionComponent<{ children: ReactNode }> = ({
   </Box>
 );
 
-export const FreeTierSection: FunctionComponent = () => {
-  const { user } = useUser();
-  const signedIn = !(user !== "loading" && !user?.id);
-
+export const FreeTierSection: FunctionComponent<{
+  signedIn: boolean;
+}> = ({ signedIn }) => {
   return (
     <Box sx={{ position: "relative" }}>
       <Box sx={{ position: "absolute", width: 1, top: 34 }}>
