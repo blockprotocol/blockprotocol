@@ -1,4 +1,4 @@
-import { QueryTemporalAxesUnresolved } from "@blockprotocol/graph";
+import { QueryTemporalAxesUnresolved } from "@blockprotocol/graph/temporal";
 
 /**
  * Creates an {@link QueryTemporalAxesUnresolved} that pins `transactionTime` to `null` and decision time to `null`,

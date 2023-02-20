@@ -1,4 +1,7 @@
-import { QueryTemporalAxes, SubgraphTemporalAxes } from "@blockprotocol/graph";
+import {
+  QueryTemporalAxes,
+  SubgraphTemporalAxes,
+} from "@blockprotocol/graph/temporal";
 
 export const mockDataSubgraphTemporalAxes = (): SubgraphTemporalAxes => {
   const now = new Date().toISOString();

@@ -1,7 +1,3 @@
-import {
-  EntityTemporalVersioningMetadata,
-  QueryTemporalAxes,
-} from "@blockprotocol/graph";
 import { VersionedUri } from "@blockprotocol/type-system/slim";
 import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
@@ -12,43 +8,7 @@ import { RootEntity } from "./types.gen";
 
 const node = document.getElementById("app");
 
-const intervalForAllTime =
-  (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {
-    return {
-      start: {
-        kind: "inclusive",
-        limit: new Date(0).toISOString(),
-      },
-      end: {
-        kind: "unbounded",
-      },
-    } as const;
-  };
-
-const entityTemporalMetadata = (): EntityTemporalVersioningMetadata => {
-  return {
-    transactionTime: intervalForAllTime(),
-    decisionTime: intervalForAllTime(),
-  };
-};
-
-const currentTime = new Date().toISOString();
-
-const temporalAxes: QueryTemporalAxes = {
-  pinned: {
-    axis: "transactionTime",
-    timestamp: currentTime,
-  },
-  variable: {
-    axis: "decisionTime",
-    interval: {
-      start: { kind: "unbounded" },
-      end: { kind: "inclusive", limit: currentTime },
-    },
-  },
-};
-
-// @todo make type blockprotocol.org/[etc]/ExampleEntity when we can host new types there
+// @todo-0.3 make type blockprotocol.org/[etc]/ExampleEntity when we can host new types there
 const testEntity: RootEntity = {
   metadata: {
     recordId: {
@@ -94,16 +54,7 @@ const DevApp = () => {
       blockInfo={packageJson.blockprotocol}
       debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
       initialData={{
-        initialEntities: [
-          {
-            ...testEntity,
-            metadata: {
-              ...testEntity.metadata,
-              temporalVersioning: entityTemporalMetadata(),
-            },
-          },
-        ],
-        initialTemporalAxes: temporalAxes,
+        initialEntities: [testEntity],
       }}
       // hideDebugToggle <- uncomment this to disable the debug UI entirely
       // initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it)

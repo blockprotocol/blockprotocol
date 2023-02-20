@@ -6,7 +6,7 @@ import { html } from "lit";
 
 import { propertyTypes } from "../src/data/property-types";
 
-export class TestCustomElementBlock extends BlockElementBase<true> {
+export class TestCustomElementBlock extends BlockElementBase {
   private handleInput(event: Event) {
     this.updateSelfProperties({
       [extractBaseUri(propertyTypes.name.$id)]: (

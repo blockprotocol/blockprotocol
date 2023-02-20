@@ -1,18 +1,21 @@
+import { Entity } from "@blockprotocol/graph";
 import {
-  Entity,
+  Entity as EntityTemporal,
   EntityTemporalVersioningMetadata,
   QueryTemporalAxes,
-} from "@blockprotocol/graph";
+} from "@blockprotocol/graph/temporal";
 import { extractBaseUri } from "@blockprotocol/type-system/slim";
 
 import { entityTypes } from "./entity-types";
 import { propertyTypes } from "./property-types";
 import { companyNames, personNames } from "./words";
 
-const createPerson = (
+const createPerson = <Temporal extends boolean>(
   entityId: number,
-  temporalVersioningMetadata: EntityTemporalVersioningMetadata,
-): Entity<true> => {
+  temporalVersioningMetadata: Temporal extends true
+    ? EntityTemporalVersioningMetadata
+    : undefined,
+): Temporal extends true ? EntityTemporal : Entity => {
   const name = personNames[entityId] ?? "Unknown Person";
   return {
     metadata: {
@@ -21,7 +24,9 @@ const createPerson = (
         editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.person.$id,
-      temporalVersioning: temporalVersioningMetadata,
+      ...(temporalVersioningMetadata !== undefined
+        ? { temporalVersioning: temporalVersioningMetadata }
+        : {}),
     },
     properties: {
       [extractBaseUri(propertyTypes.age.$id)]: Math.ceil(Math.random() * 100),
@@ -29,13 +34,15 @@ const createPerson = (
       [extractBaseUri(propertyTypes.name.$id)]: name,
       [extractBaseUri(propertyTypes.username.$id)]: name.toLowerCase(),
     },
-  };
+  } as Temporal extends true ? EntityTemporal : Entity;
 };
 
-const createCompany = (
+const createCompany = <Temporal extends boolean>(
   entityId: number,
-  temporalVersioningMetadata: EntityTemporalVersioningMetadata,
-): Entity<true> => {
+  temporalVersioningMetadata: Temporal extends true
+    ? EntityTemporalVersioningMetadata
+    : undefined,
+): Temporal extends true ? EntityTemporal : Entity => {
   const name = companyNames[entityId] ?? "Unknown Company";
   return {
     metadata: {
@@ -44,7 +51,9 @@ const createCompany = (
         editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.company.$id,
-      temporalVersioning: temporalVersioningMetadata,
+      ...(temporalVersioningMetadata !== undefined
+        ? { temporalVersioning: temporalVersioningMetadata }
+        : {}),
     },
     properties: {
       [extractBaseUri(propertyTypes.numberOfEmployees.$id)]: Math.ceil(
@@ -52,14 +61,16 @@ const createCompany = (
       ),
       [extractBaseUri(propertyTypes.name.$id)]: name,
     },
-  };
+  } as Temporal extends true ? EntityTemporal : Entity;
 };
 
-const createWorksForLink = (
+const createWorksForLink = <Temporal extends boolean>(
   sourceEntityId: string,
   destinationEntityId: string,
-  temporalVersioningMetadata: EntityTemporalVersioningMetadata,
-): Entity<true> => {
+  temporalVersioningMetadata: Temporal extends true
+    ? EntityTemporalVersioningMetadata
+    : undefined,
+): Temporal extends true ? EntityTemporal : Entity => {
   return {
     metadata: {
       recordId: {
@@ -67,21 +78,25 @@ const createWorksForLink = (
         editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.worksFor.$id,
-      temporalVersioning: temporalVersioningMetadata,
+      ...(temporalVersioningMetadata !== undefined
+        ? { temporalVersioning: temporalVersioningMetadata }
+        : {}),
     },
     properties: {},
     linkData: {
       leftEntityId: sourceEntityId,
       rightEntityId: destinationEntityId,
     },
-  };
+  } as Temporal extends true ? EntityTemporal : Entity;
 };
 
-const createFounderOfLink = (
+const createFounderOfLink = <Temporal extends boolean>(
   sourceEntityId: string,
   destinationEntityId: string,
-  temporalVersioningMetadata: EntityTemporalVersioningMetadata,
-): Entity<true> => {
+  temporalVersioningMetadata: Temporal extends true
+    ? EntityTemporalVersioningMetadata
+    : undefined,
+): Temporal extends true ? EntityTemporal : Entity => {
   return {
     metadata: {
       recordId: {
@@ -96,32 +111,39 @@ const createFounderOfLink = (
       leftEntityId: sourceEntityId,
       rightEntityId: destinationEntityId,
     },
-  };
+  } as Temporal extends true ? EntityTemporal : Entity;
 };
 
-const createEntities = (temporalAxes: QueryTemporalAxes): Entity<true>[] => {
+const createEntities = <Temporal extends boolean>(
+  temporalAxes: Temporal extends true ? QueryTemporalAxes : undefined,
+): (Temporal extends true ? EntityTemporal : Entity)[] => {
   // First create people and companies in separate lists
   const people = [];
   const companies = [];
 
-  const interval = {
-    start: {
-      kind: "inclusive",
-      limit:
-        temporalAxes.variable.interval.start.kind === "unbounded"
-          ? new Date(0).toISOString()
-          : temporalAxes.variable.interval.start.limit,
-    },
-    end: {
-      kind: "exclusive",
-      limit: temporalAxes.variable.interval.end.limit,
-    },
-  } as const;
+  let temporalVersioningMetadata: EntityTemporalVersioningMetadata | undefined =
+    undefined;
 
-  const temporalVersioningMetadata: EntityTemporalVersioningMetadata = {
-    transactionTime: interval,
-    decisionTime: interval,
-  };
+  if (temporalAxes !== undefined) {
+    const interval = {
+      start: {
+        kind: "inclusive",
+        limit:
+          temporalAxes.variable.interval.start.kind === "unbounded"
+            ? new Date(0).toISOString()
+            : temporalAxes.variable.interval.start.limit,
+      },
+      end: {
+        kind: "exclusive",
+        limit: temporalAxes.variable.interval.end.limit,
+      },
+    } as const;
+
+    temporalVersioningMetadata = {
+      transactionTime: interval,
+      decisionTime: interval,
+    };
+  }
 
   for (let idx = 0; idx < personNames.length; idx++) {
     people.push(createPerson(idx, temporalVersioningMetadata));
@@ -159,7 +181,9 @@ const createEntities = (temporalAxes: QueryTemporalAxes): Entity<true>[] => {
     );
   }
 
-  return [...entities, ...people, ...companies];
+  return [...entities, ...people, ...companies] as (Temporal extends true
+    ? EntityTemporal
+    : Entity)[];
 };
 
 export { createEntities };
