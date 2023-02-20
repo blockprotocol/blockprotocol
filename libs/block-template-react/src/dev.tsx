@@ -8,7 +8,6 @@ import { RootEntity } from "./types.gen";
 
 const node = document.getElementById("app");
 
-// @todo-0.3 make type blockprotocol.org/[etc]/ExampleEntity when we can host new types there
 const testEntity: RootEntity = {
   metadata: {
     recordId: {
@@ -18,8 +17,8 @@ const testEntity: RootEntity = {
     entityTypeId: packageJson.blockprotocol.schema as VersionedUri,
   },
   properties: {
-    "https://alpha.hash.ai/@hash/types/property-type/title/": "World",
-    "https://alpha.hash.ai/@hash/types/property-type/index/": "0",
+    "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/":
+      "World",
   },
 } as const;
 

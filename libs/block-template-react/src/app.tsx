@@ -65,10 +65,10 @@ export const App: BlockComponent<RootEntity> = ({
 
   const entityId = blockEntity.metadata.recordId.entityId;
 
-  const titleKey: keyof RootEntity["properties"] =
-    "https://alpha.hash.ai/@hash/types/property-type/title/";
+  const nameKey: keyof RootEntity["properties"] =
+    "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/";
 
-  const title = blockEntity.properties[titleKey];
+  const title = blockEntity.properties[nameKey];
 
   return (
     /**
@@ -99,7 +99,7 @@ export const App: BlockComponent<RootEntity> = ({
             data: {
               entityId,
               entityTypeId: blockEntity.metadata.entityTypeId,
-              properties: { [titleKey]: supplyRandomName() },
+              properties: { [nameKey]: supplyRandomName() },
             },
           })
         }

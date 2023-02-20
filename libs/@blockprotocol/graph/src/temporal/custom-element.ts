@@ -45,40 +45,12 @@ export abstract class BlockElementBase<
      * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list
      */
     graph: { type: Object },
-
-    /**
-     * These are properties derived from the block subgraph – the root entity, and those linked from it
-     * // @see https://lit.dev/docs/components/properties/#internal-reactive-state
-     */
-    blockEntity: { state: true },
-    linkedEntities: { state: true },
   };
-
-  private updateDerivedProperties() {
-    const blockEntitySubgraph = this.graph?.blockEntitySubgraph;
-
-    if (blockEntitySubgraph) {
-      const rootEntity = getRoots(blockEntitySubgraph)[0];
-      if (!rootEntity) {
-        throw new Error("Root entity not present in subgraph");
-      }
-      this.blockEntity = rootEntity;
-
-      this.linkedEntities =
-        getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
-          blockEntitySubgraph,
-          rootEntity.metadata.recordId.entityId,
-        );
-    }
-  }
 
   connectedCallback() {
     super.connectedCallback();
     if (!this.graphModule || this.graphModule.destroyed) {
       this.graphModule = new GraphBlockHandler({
-        callbacks: {
-          blockEntitySubgraph: () => this.updateDerivedProperties(),
-        },
         element: this,
       });
     }
@@ -92,6 +64,39 @@ export abstract class BlockElementBase<
   }
 
   /**
+   * A helper method that returns the root entity from blockEntitySubgraph,
+   * i.e. the 'block entity'
+   */
+  getBlockEntity() {
+    if (!this.graph || !this.graph.blockEntitySubgraph) {
+      throw new Error("graph.blockEntitySubgraph was not passed to block.");
+    }
+    const blockEntity = getRoots(this.graph.blockEntitySubgraph)[0];
+    if (!blockEntity) {
+      throw new Error(
+        "Cannot update self: no root entity on graph.blockEntitySubgraph passed to block",
+      );
+    }
+
+    return blockEntity;
+  }
+
+  /**
+   * A helper method that returns the entities linked from the root entity
+   * of blockEntitySubgraph, i.e. the 'block entity'
+   */
+  getLinkedEntities() {
+    if (!this.graph || !this.graph.blockEntitySubgraph) {
+      throw new Error("graph.blockEntitySubgraph was not passed to block.");
+    }
+
+    return getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
+      this.graph.blockEntitySubgraph,
+      this.getBlockEntity().metadata.recordId.entityId,
+    );
+  }
+
+  /**
    * A helper method to update the properties of the entity loaded into the block, i.e. this.graph.blockEntity
    * @param properties the properties object to assign to the entity, which will overwrite the existing object
    */
@@ -101,17 +106,9 @@ export abstract class BlockElementBase<
         "Cannot updateSelfProperties – graphModule not yet connected.",
       );
     }
-    if (!this.graph) {
-      throw new Error(
-        "Cannot update self: no 'graph' property object passed to block.",
-      );
-    } else if (!this.graph.blockEntitySubgraph) {
-      throw new Error(
-        "Cannot update self: no 'blockEntitySubgraph' on 'graph' object passed to block",
-      );
-    }
 
-    const blockEntity = getRoots(this.graph.blockEntitySubgraph)[0];
+    const blockEntity = this.getBlockEntity();
+
     if (!blockEntity) {
       throw new Error(
         "Cannot update self: no root entity on graph.blockEntitySubgraph passed to block",
