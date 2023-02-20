@@ -1,5 +1,16 @@
 # block-template-html
 
+## 0.2.0-canary-20230220234726
+
+### Minor Changes
+
+- [#985](https://github.com/blockprotocol/blockprotocol/pull/985) [`16871042`](https://github.com/blockprotocol/blockprotocol/commit/168710424e95d3f5f24d15527814a8067ad1e68b) Thanks [@CiaranMn](https://github.com/CiaranMn)! - rename block protocol 'services' to 'modules'
+
+### Patch Changes
+
+- Updated dependencies [[`f70d5484`](https://github.com/blockprotocol/blockprotocol/commit/f70d5484a84b1cee96bf37a1e73f56f1baf934ca)]:
+  - block-scripts@0.1.0-canary-20230220234726
+
 ## 0.1.9
 
 ### Patch Changes
