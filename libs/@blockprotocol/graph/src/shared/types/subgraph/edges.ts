@@ -1,7 +1,7 @@
 import { BaseUri } from "@blockprotocol/type-system/slim";
 
 import { EntityId } from "../entity.js";
-import { OntologyTypeRevisionId } from "../ontology";
+import { OntologyTypeRevisionId } from "../ontology.js";
 import { Timestamp } from "../temporal-versioning.js";
 import { KnowledgeGraphOutwardEdge } from "./edges/variants/knowledge.js";
 import { OntologyOutwardEdge } from "./edges/variants/ontology.js";

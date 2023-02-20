@@ -13,13 +13,13 @@ import {
   Subgraph,
 } from "../../../types/subgraph.js";
 import { TimeInterval } from "../../../types/temporal-versioning.js";
-import { typedEntries } from "../../../util";
+import { typedEntries } from "../../../util.js";
 import {
   intervalForTimestamp,
   intervalIntersectionWithInterval,
   intervalIsStrictlyAfterInterval,
 } from "../../interval.js";
-import { mustBeDefined } from "../../must-be-defined";
+import { mustBeDefined } from "../../must-be-defined.js";
 import {
   getEntityRevision,
   getEntityRevisionsByEntityId,

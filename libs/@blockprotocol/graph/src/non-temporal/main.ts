@@ -156,8 +156,8 @@ import {
   Vertices as VerticesGeneral,
 } from "../shared/types.js";
 
-export { GraphBlockHandler } from "./graph-block-handler";
-export { GraphEmbedderHandler } from "./graph-embedder-handler";
+export { GraphBlockHandler } from "./graph-block-handler.js";
+export { GraphEmbedderHandler } from "./graph-embedder-handler.js";
 
 // import {
 //   BoundedTimeInterval as BoundedTimeIntervalGeneral,

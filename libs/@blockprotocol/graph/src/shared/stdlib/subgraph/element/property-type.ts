@@ -8,7 +8,7 @@ import {
 import { PropertyTypeWithMetadata } from "../../../types/ontology/property-type.js";
 import { OntologyTypeVertexId, Subgraph } from "../../../types/subgraph.js";
 import { isPropertyTypeVertex } from "../../../types/subgraph/vertices.js";
-import { typedValues } from "../../../util";
+import { typedValues } from "../../../util.js";
 
 /**
  * Returns all `PropertyTypeWithMetadata`s within the vertices of the subgraph

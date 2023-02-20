@@ -49,9 +49,9 @@ import {
   mapElementsIntoRevisions as mapElementsIntoRevisionsGeneral,
   sortIntervals as sortIntervalsGeneral,
   unionOfIntervals as unionOfIntervalsGeneral,
-} from "../shared/stdlib";
-import { BaseIdToRevisions } from "../shared/stdlib/subgraph/element/map-revisions";
-import { GraphElementVertexId } from "../shared/types/subgraph/vertices";
+} from "../shared/stdlib.js";
+import { BaseIdToRevisions } from "../shared/stdlib/subgraph/element/map-revisions.js";
+import { GraphElementVertexId } from "../shared/types/subgraph/vertices.js";
 import {
   DataTypeWithMetadata,
   Entity,
@@ -67,7 +67,7 @@ import {
   TimeInterval,
   Timestamp,
   Vertex,
-} from "./main";
+} from "./main.js";
 
 export const compareBounds = compareBoundsGeneral;
 export const intervalCompareWithInterval = intervalCompareWithIntervalGeneral;

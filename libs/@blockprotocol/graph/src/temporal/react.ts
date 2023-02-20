@@ -9,7 +9,7 @@ import {
   GraphEmbedderHandler,
   LinkEntityAndRightEntity,
   Subgraph,
-} from "./main";
+} from "./main.js";
 import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib.js";
 
 export type BlockComponent<RootEntity extends Entity = Entity> =

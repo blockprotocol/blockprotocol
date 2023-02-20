@@ -1,6 +1,6 @@
 import { PropertyType, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { PropertyTypeRootType, Subgraph } from "../subgraph";
+import { PropertyTypeRootType, Subgraph } from "../subgraph.js";
 import { OntologyElementMetadata } from "./metadata.js";
 
 /**

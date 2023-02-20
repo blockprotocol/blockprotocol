@@ -3,7 +3,7 @@ import { ModuleHandler } from "@blockprotocol/core";
 import {
   AggregateEntitiesData as AggregateEntitiesDataGeneral,
   GetEntityData as GetEntityDataGeneral,
-} from "../shared/types/entity";
+} from "../shared/types/entity.js";
 /**
  * There's an issue when importing useGraphEmbedderModule from @blockprotocol/graph/react in hashintel/hash:
  * NextJS's output file tracing does not include graph-module.json, and yet an import statement for it is preserved.

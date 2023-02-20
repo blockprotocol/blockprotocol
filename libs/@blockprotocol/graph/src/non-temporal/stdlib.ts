@@ -35,8 +35,8 @@ import {
   isEntityRootedSubgraph as isEntityRootedSubgraphGeneral,
   isEntityTypeRootedSubgraph as isEntityTypeRootedSubgraphGeneral,
   isPropertyTypeRootedSubgraph as isPropertyTypeRootedSubgraphGeneral,
-} from "../shared/stdlib";
-import { GraphElementVertexId } from "../shared/types/subgraph/vertices";
+} from "../shared/stdlib.js";
+import { GraphElementVertexId } from "../shared/types/subgraph/vertices.js";
 import {
   DataTypeWithMetadata,
   Entity,
@@ -47,13 +47,13 @@ import {
   PropertyTypeWithMetadata,
   Subgraph,
   SubgraphRootType,
-} from "./main";
+} from "./main.js";
 
 // import {
 //   EntityRevisionId,
 //   TimeInterval,
 //   Timestamp,
-// } from "./main";
+// } from "./main.js";
 // import {
 //   getEntityRevisionsByEntityId as getEntityRevisionsByEntityIdGeneral,
 //   intervalCompareWithInterval as intervalCompareWithIntervalGeneral,
@@ -69,7 +69,7 @@ import {
 //   intervalUnionWithInterval as intervalUnionWithIntervalGeneral,
 //   sortIntervals as sortIntervalsGeneral,
 //   unionOfIntervals as unionOfIntervalsGeneral,
-// } from "../shared/stdlib";
+// } from "../shared/stdlib.js";
 
 // export const compareBounds = compareBoundsGeneral;
 // export const intervalCompareWithInterval = intervalCompareWithIntervalGeneral;

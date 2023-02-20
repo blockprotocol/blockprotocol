@@ -8,7 +8,7 @@ import {
 import { EntityTypeWithMetadata } from "../../../types/ontology/entity-type.js";
 import { OntologyTypeVertexId, Subgraph } from "../../../types/subgraph.js";
 import { isEntityTypeVertex } from "../../../types/subgraph/vertices.js";
-import { typedValues } from "../../../util";
+import { typedValues } from "../../../util.js";
 
 /**
  * Returns all `EntityTypeWithMetadata`s within the vertices of the subgraph

@@ -1,5 +1,5 @@
 import { Subtype } from "../../../../util.js";
-import { EntityId } from "../../../entity";
+import { EntityId } from "../../../entity.js";
 import { OntologyTypeVertexId } from "../../vertices.js";
 import { GenericOutwardEdge } from "../generic-outward-edge.js";
 import { OntologyEdgeKind, SharedEdgeKind } from "../kind.js";

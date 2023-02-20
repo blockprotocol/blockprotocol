@@ -177,8 +177,8 @@ import {
 //   BlockGraphProperties as BlockGraphPropertiesGeneral,
 // } from "../shared/types.js"
 
-export { GraphBlockHandler } from "./graph-block-handler";
-export { GraphEmbedderHandler } from "./graph-embedder-handler";
+export { GraphBlockHandler } from "./graph-block-handler.js";
+export { GraphEmbedderHandler } from "./graph-embedder-handler.js";
 
 /*
  @todo - For some reason, exporting this alias breaks inference of generics when passed into things
