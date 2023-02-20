@@ -51,14 +51,16 @@ This template uses the Lit custom element framework. Please see [the Lit docs](h
 
     - Bundles the component into a single source file
     - Generates a `block-metadata.json` file which:
-      - brings in metadata from the `blockprotocol` object in `package.json` you set in step 2
-      - defines the `externals` - libraries the block expects the host app to provide and won't bundle with itself – based on your stated `peerDependencies`
-
-Inside your custom element class, the following properties are available:
-
-- `this.blockEntity`: the entity associated with the block, which should comply with the entity type you specified
-- `this.linkedEntities`: the link entities attached to the block entity, and the entities they point to
-- `this.graph` an object containing the messages passed from the embedding application using the graph module, including `this.graph.blockEntitySubgraph` and `this.graph.readonly`
+      - points to the `schema` and `source` files
+      - brings in metadata from `package.json`, such as the block name and description
+      - additional brings in anything in the `blockprotocol` object in `package.json`, e.g.
+        - `displayName`: a friendly display name
+        - `examples`: an array of example data structures your block would accept and use
+        - `image`: a preview image showing your block in action
+        - `icon`: an icon to be associated with your block
+        - `name`: a slugified name for your block (which may differ to the package `name` in package.json); it can be defined as `blockname` or `@namespace/blockname`, where `namespace` must be your username on blockprotocol.org if you intend to publish it there
+      - lists the `externals` - libraries the block expects the host app to provide
+    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/docs/spec).
 
 Please see [the Block Protocol docs](https://blockprotocol.org/docs/developing-blocks)
 for a fuller explanation of querying, creating and updating entity data from your block.
