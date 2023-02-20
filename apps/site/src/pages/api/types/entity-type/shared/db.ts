@@ -1,7 +1,11 @@
-import type { EntityType, EntityTypeWithMetadata } from "@blockprotocol/graph";
-import { extractVersion } from "@blockprotocol/type-system";
-import type { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
-import { extractBaseUri } from "@blockprotocol/type-system/slim";
+import {
+  type BaseUri,
+  type VersionedUri,
+  EntityType,
+  EntityTypeWithMetadata,
+  extractBaseUri,
+  extractVersion,
+} from "@blockprotocol/graph";
 import { Db, ObjectId } from "mongodb";
 
 import { User } from "../../../../../lib/api/model/user.model";

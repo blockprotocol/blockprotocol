@@ -1,10 +1,9 @@
-import { Entity } from "@blockprotocol/graph";
+import { Entity, extractBaseUri } from "@blockprotocol/graph";
 import {
   Entity as EntityTemporal,
   EntityTemporalVersioningMetadata,
   QueryTemporalAxes,
 } from "@blockprotocol/graph/temporal";
-import { extractBaseUri } from "@blockprotocol/type-system/slim";
 
 import { entityTypes } from "./entity-types";
 import { propertyTypes } from "./property-types";

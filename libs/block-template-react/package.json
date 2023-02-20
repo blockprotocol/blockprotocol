@@ -33,8 +33,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.20",
-    "@blockprotocol/type-system": "0.0.4"
+    "@blockprotocol/graph": "0.0.20"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",

@@ -1,6 +1,7 @@
 import {
   Entity as EntityNonTemporal,
   EntityRecordId as EntityRecordIdNonTemporal,
+  VersionedUri,
 } from "@blockprotocol/graph";
 import {
   getEntities as getEntitiesNonTemporal,
@@ -18,7 +19,6 @@ import {
   getEntityTypes as getEntityTypesTemporal,
   getRoots as getRootsTemporal,
 } from "@blockprotocol/graph/temporal/stdlib";
-import { VersionedUri } from "@blockprotocol/type-system/slim";
 import {
   Box,
   Button,

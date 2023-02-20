@@ -1,5 +1,7 @@
-import { PropertyTypeWithMetadata } from "@blockprotocol/graph";
-import { PropertyType } from "@blockprotocol/type-system";
+import {
+  type PropertyType,
+  type PropertyTypeWithMetadata,
+} from "@blockprotocol/graph";
 
 import { generateOntologyUri } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";

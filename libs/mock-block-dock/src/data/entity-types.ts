@@ -1,5 +1,4 @@
-import { EntityType } from "@blockprotocol/graph";
-import { extractBaseUri } from "@blockprotocol/type-system/slim";
+import { EntityType, extractBaseUri } from "@blockprotocol/graph";
 
 import { propertyTypes } from "./property-types";
 

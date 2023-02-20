@@ -26,7 +26,6 @@ import {
   CreateLinkedAggregationData as CreateLinkedAggregationDataGeneral,
   CreatePropertyTypeData as CreatePropertyTypeDataGeneral,
   CreateResourceError as CreateResourceErrorGeneral,
-  DataType as DataTypeGeneral,
   DataTypeRootType as DataTypeRootTypeGeneral,
   DataTypeVertex as DataTypeVertexGeneral,
   DataTypeWithMetadata as DataTypeWithMetadataGeneral,
@@ -42,7 +41,6 @@ import {
   EntityRecordId as EntityRecordIdGeneral,
   EntityRevisionId as EntityRevisionIdGeneral,
   EntityRootType as EntityRootTypeGeneral,
-  EntityType as EntityTypeGeneral,
   EntityTypeRootType as EntityTypeRootTypeGeneral,
   EntityTypeVertex as EntityTypeVertexGeneral,
   EntityTypeWithMetadata as EntityTypeWithMetadataGeneral,
@@ -134,7 +132,6 @@ import {
   OutgoingLinkEdge as OutgoingLinkEdgeGeneral,
   OutwardEdge as OutwardEdgeGeneral,
   PropertiesConstrainedByEdge as PropertiesConstrainedByEdgeGeneral,
-  PropertyType as PropertyTypeGeneral,
   PropertyTypeRootType as PropertyTypeRootTypeGeneral,
   PropertyTypeVertex as PropertyTypeVertexGeneral,
   PropertyTypeWithMetadata as PropertyTypeWithMetadataGeneral,
@@ -158,6 +155,35 @@ import {
 
 export { GraphBlockHandler } from "./graph-block-handler.js";
 export { GraphEmbedderHandler } from "./graph-embedder-handler.js";
+export {
+  type AllOf,
+  type Array,
+  type BaseUri,
+  type DataType,
+  type DataTypeReference,
+  type EntityType,
+  type EntityTypeReference,
+  type Links,
+  type MaybeOneOfEntityTypeReference,
+  type MaybeOrderedArray,
+  type Object,
+  type OneOf,
+  type ParseBaseUriError,
+  type ParseVersionedUriError,
+  type PropertyType,
+  type PropertyTypeReference,
+  type PropertyValues,
+  type Result,
+  type ValueOrArray,
+  type VersionedUri,
+  extractBaseUri,
+  extractVersion,
+  getReferencedIdsFromEntityType,
+  getReferencedIdsFromPropertyType,
+  isPropertyValuesArray,
+  validateBaseUri,
+  validateVersionedUri,
+} from "@blockprotocol/type-system/slim";
 
 // import {
 //   BoundedTimeInterval as BoundedTimeIntervalGeneral,
@@ -263,9 +289,7 @@ export type GetLinkedAggregationData = GetLinkedAggregationDataGeneral;
 export type CreateLinkedAggregationData = CreateLinkedAggregationDataGeneral;
 export type UpdateLinkedAggregationData = UpdateLinkedAggregationDataGeneral;
 export type DeleteLinkedAggregationData = DeleteLinkedAggregationDataGeneral;
-export type DataType = DataTypeGeneral;
 export type DataTypeWithMetadata = DataTypeWithMetadataGeneral;
-export type EntityType = EntityTypeGeneral;
 export type EntityTypeWithMetadata = EntityTypeWithMetadataGeneral;
 export type AggregateEntityTypesData = AggregateEntityTypesDataGeneral;
 export type AggregateEntityTypesResult<T extends Subgraph<EntityTypeRootType>> =
@@ -274,7 +298,6 @@ export type GetEntityTypeData = GetEntityTypeDataGeneral;
 export type CreateEntityTypeData = CreateEntityTypeDataGeneral;
 export type UpdateEntityTypeData = UpdateEntityTypeDataGeneral;
 export type OntologyElementMetadata = OntologyElementMetadataGeneral;
-export type PropertyType = PropertyTypeGeneral;
 export type PropertyTypeWithMetadata = PropertyTypeWithMetadataGeneral;
 export type AggregatePropertyTypesData = AggregatePropertyTypesDataGeneral;
 export type AggregatePropertyTypesResult = AggregatePropertyTypesResultGeneral;

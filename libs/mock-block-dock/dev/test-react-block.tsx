@@ -1,10 +1,10 @@
+import { extractBaseUri } from "@blockprotocol/graph";
 import {
   type BlockComponent,
   useGraphBlockModule,
 } from "@blockprotocol/graph/react";
 import { getRoots } from "@blockprotocol/graph/stdlib";
 import { useHook, useHookBlockModule } from "@blockprotocol/hook/react";
-import { extractBaseUri } from "@blockprotocol/type-system/slim";
 import { useMemo, useRef } from "react";
 
 import { propertyTypes } from "../src/data/property-types";
