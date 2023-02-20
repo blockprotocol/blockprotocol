@@ -4,12 +4,12 @@
 // it will cause problems with e.g. webpack which would require polyfills for the node APIs
 
 import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
-import Ajv2020 from "ajv/dist/2020";
+import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
 import entityTypeMetaSchema from "../shared/codegen/entity-type-meta-schema.json" assert { type: "json" };
-import { entityTypeToTypeScript } from "../shared/codegen/entity-type-to-typescript";
-import { fetchTypeAsJson } from "../shared/codegen/shared";
+import { entityTypeToTypeScript } from "../shared/codegen/entity-type-to-typescript.js";
+import { fetchTypeAsJson } from "../shared/codegen/shared.js";
 
 const ajv = new Ajv2020();
 addFormats(ajv);

@@ -1,9 +1,9 @@
-import { GraphElementIdentifiers } from "../element-mappings";
+import { GraphElementIdentifiers } from "../element-mappings.js";
 import {
   KnowledgeGraphEdgeKind,
   OntologyEdgeKind,
   SharedEdgeKind,
-} from "./kind";
+} from "./kind.js";
 
 /**
  * A "partial" definition of an edge which is complete when joined with the missing left-endpoint (usually the source

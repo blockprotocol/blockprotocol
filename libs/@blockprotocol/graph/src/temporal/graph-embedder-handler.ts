@@ -7,7 +7,7 @@ import {
   GraphEmbedderMessageCallbacks,
   GraphEmbedderMessages,
   Subgraph,
-} from "./main";
+} from "./main.js";
 
 /**
  * Creates a handler for the graph module for the embedder.

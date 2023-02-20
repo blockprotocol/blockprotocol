@@ -6,17 +6,17 @@ import {
 } from "@blockprotocol/type-system/slim";
 import { compile, Options } from "json-schema-to-typescript";
 
-import { fetchAndValidateEntityType } from "../../non-temporal/codegen";
-import { typedEntries } from "../util";
-import { deduplicateTypeScriptStrings } from "./entity-type-to-typescript/deduplicate-ts-strings";
+import { fetchAndValidateEntityType } from "../../non-temporal/codegen.js";
+import { typedEntries } from "../util.js";
+import { deduplicateTypeScriptStrings } from "./entity-type-to-typescript/deduplicate-ts-strings.js";
 import {
   generateEntityDefinition,
   generateEntityLinkMapDefinition,
   generateImportStatements,
   generateLinkEntityAndRightEntityDefinition,
-} from "./entity-type-to-typescript/type-definition-generators";
-import { hardcodedBpTypes } from "./hardcoded-bp-types";
-import { fetchTypeAsJson } from "./shared";
+} from "./entity-type-to-typescript/type-definition-generators.js";
+import { hardcodedBpTypes } from "./hardcoded-bp-types.js";
+import { fetchTypeAsJson } from "./shared.js";
 
 const bannerComment = (uri: string, depth: number) => `/**
  * This file was automatically generated – do not edit it.

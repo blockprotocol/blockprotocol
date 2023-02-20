@@ -8,8 +8,8 @@ import {
   Entity,
   GetEntityData,
   UpdateEntityData,
-} from "./entity";
-import { UploadFileData, UploadFileReturn } from "./file";
+} from "./entity.js";
+import { UploadFileData, UploadFileReturn } from "./file.js";
 import {
   AggregatePropertyTypesData,
   AggregatePropertyTypesResult,
@@ -20,19 +20,19 @@ import {
   PropertyTypeWithMetadata,
   UpdateEntityTypeData,
   UpdatePropertyTypeData,
-} from "./ontology";
+} from "./ontology.js";
 import {
   AggregateEntityTypesData,
   AggregateEntityTypesResult,
   GetEntityTypeData,
-} from "./ontology/entity-type";
+} from "./ontology/entity-type.js";
 import {
   EntityRootType,
   EntityTypeRootType,
   EntityVertexId,
   PropertyTypeRootType,
   Subgraph,
-} from "./subgraph";
+} from "./subgraph.js";
 
 export type BlockGraphProperties<
   Temporal extends boolean,

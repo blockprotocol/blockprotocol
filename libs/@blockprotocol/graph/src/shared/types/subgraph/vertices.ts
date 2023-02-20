@@ -7,11 +7,11 @@ import {
   EntityPropertiesObject,
   EntityPropertyValue,
   EntityRevisionId,
-} from "../entity";
-import { OntologyTypeRevisionId } from "../ontology";
-import { DataTypeWithMetadata } from "../ontology/data-type";
-import { EntityTypeWithMetadata } from "../ontology/entity-type";
-import { PropertyTypeWithMetadata } from "../ontology/property-type";
+} from "../entity.js";
+import { OntologyTypeRevisionId } from "../ontology.js";
+import { DataTypeWithMetadata } from "../ontology/data-type.js";
+import { EntityTypeWithMetadata } from "../ontology/entity-type.js";
+import { PropertyTypeWithMetadata } from "../ontology/property-type.js";
 
 export type DataTypeVertex = {
   kind: "dataType";

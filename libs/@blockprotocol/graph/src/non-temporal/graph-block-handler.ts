@@ -31,7 +31,7 @@ import {
   UpdateEntityData,
   UploadFileData,
   UploadFileReturn,
-} from "./main";
+} from "./main.js";
 /**
  * Creates a handler for the graph module for the block.
  * Register callbacks in the constructor or afterwards using the 'on' method to react to messages from the embedder.

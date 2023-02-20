@@ -1,13 +1,13 @@
 import { BaseUri } from "@blockprotocol/type-system/slim";
 
-import { EntityId } from "../../shared/types/entity";
+import { EntityId } from "../../shared/types/entity.js";
 import {
   OntologyTypeRevisionId,
   OutwardEdge,
   Subgraph,
-} from "../../shared/types/subgraph";
-import { Timestamp } from "../../shared/types/temporal-versioning";
-import { isEqual } from "./is-equal";
+} from "../../shared/types/subgraph.js";
+import { Timestamp } from "../../shared/types/temporal-versioning.js";
+import { isEqual } from "./is-equal.js";
 
 /**
  * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`

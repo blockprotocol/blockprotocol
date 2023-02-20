@@ -1,9 +1,9 @@
 import { BaseUri, validateBaseUri } from "@blockprotocol/type-system/slim";
 
-export * from "./ontology/data-type";
-export * from "./ontology/entity-type";
-export * from "./ontology/metadata";
-export * from "./ontology/property-type";
+export * from "./ontology/data-type.js";
+export * from "./ontology/entity-type.js";
+export * from "./ontology/metadata.js";
+export * from "./ontology/property-type.js";
 
 /** @todo - Add documentation */
 /**

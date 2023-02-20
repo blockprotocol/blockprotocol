@@ -1,9 +1,9 @@
-import { Subtype } from "../../../../util";
+import { Subtype } from "../../../../util.js";
 import { EntityId } from "../../../entity";
-import { OntologyTypeVertexId } from "../../vertices";
-import { GenericOutwardEdge } from "../generic-outward-edge";
-import { OntologyEdgeKind, SharedEdgeKind } from "../kind";
-import { EntityIdWithInterval, OutwardEdge } from "../outward-edge";
+import { OntologyTypeVertexId } from "../../vertices.js";
+import { GenericOutwardEdge } from "../generic-outward-edge.js";
+import { OntologyEdgeKind, SharedEdgeKind } from "../kind.js";
+import { EntityIdWithInterval, OutwardEdge } from "../outward-edge.js";
 
 export type InheritsFromEdge = Subtype<
   GenericOutwardEdge,

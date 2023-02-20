@@ -5,9 +5,9 @@ import {
   VersionedUri,
 } from "@blockprotocol/type-system/slim";
 
-import { EntityTypeWithMetadata } from "../../../types/ontology/entity-type";
-import { OntologyTypeVertexId, Subgraph } from "../../../types/subgraph";
-import { isEntityTypeVertex } from "../../../types/subgraph/vertices";
+import { EntityTypeWithMetadata } from "../../../types/ontology/entity-type.js";
+import { OntologyTypeVertexId, Subgraph } from "../../../types/subgraph.js";
+import { isEntityTypeVertex } from "../../../types/subgraph/vertices.js";
 import { typedValues } from "../../../util";
 
 /**

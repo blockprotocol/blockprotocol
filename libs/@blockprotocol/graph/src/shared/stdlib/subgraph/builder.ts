@@ -3,7 +3,7 @@ import {
   addEntitiesToSubgraphByMutation,
   addEntityTypesToSubgraphByMutation,
   addPropertyTypesToSubgraphByMutation,
-} from "../../../internal/mutate-subgraph/element";
+} from "../../../internal/mutate-subgraph/element.js";
 import {
   DataTypeWithMetadata,
   Entity,
@@ -14,7 +14,7 @@ import {
   PropertyTypeWithMetadata,
   Subgraph,
   SubgraphTemporalAxes,
-} from "../../types";
+} from "../../types.js";
 
 /**
  * Builds a {@link Subgraph} from a given set of graph elements.

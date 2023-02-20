@@ -1,4 +1,4 @@
-import { Vertex } from "../../../types/subgraph/vertices";
+import { Vertex } from "../../../types/subgraph/vertices.js";
 
 export type BaseIdToRevisions<
   Temporal extends boolean,
