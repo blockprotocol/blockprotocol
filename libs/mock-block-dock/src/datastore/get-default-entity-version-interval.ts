@@ -1,4 +1,4 @@
-import { EntityTemporalVersioningMetadata } from "@blockprotocol/graph";
+import { EntityTemporalVersioningMetadata } from "@blockprotocol/graph/temporal";
 
 export const getDefaultEntityVersionInterval =
   (): EntityTemporalVersioningMetadata => {
