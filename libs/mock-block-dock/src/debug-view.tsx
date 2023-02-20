@@ -6,6 +6,7 @@ import { Header } from "./debug-view/header";
 import { darkTheme, lightTheme } from "./debug-view/theme";
 
 type DebugViewProps = {
+  temporal: boolean;
   children: ReactNode;
 };
 
@@ -20,7 +21,7 @@ export const MainContainer = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "light" ? "#FBFCFD" : "#1E1E1E", // @todo include these in palette
 }));
 
-export const DebugView = ({ children }: DebugViewProps) => {
+export const DebugView = ({ temporal, children }: DebugViewProps) => {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
@@ -32,13 +33,17 @@ export const DebugView = ({ children }: DebugViewProps) => {
         flexDirection="column"
         justifyContent="space-between"
       >
-        <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Header
+          temporal={temporal}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+        />
         <Box flex={1} display="flex">
           <MainContainer component="main">
             <Box flex={1} padding={3.75}>
               {children}
             </Box>
-            <DevTools />
+            <DevTools temporal={temporal} />
           </MainContainer>
         </Box>
       </Box>

@@ -36,13 +36,6 @@ const nextConfig = {
          * @see ./src/middleware.page.ts for middleware which serves the JSON
          */
         source: "/:shortname/types/:path*",
-        has: [
-          {
-            type: "header",
-            key: "accept",
-            value: "(.*application/json.*)",
-          },
-        ],
         headers: [
           {
             key: "access-control-allow-origin",
@@ -113,6 +106,11 @@ const nextConfig = {
       {
         source: "/docs/spec/hook-service",
         destination: "/docs/spec/hook-module",
+        permanent: true,
+      },
+      {
+        source: "/docs/embedding-blocks",
+        destination: "/docs/using-blocks",
         permanent: true,
       },
     ];

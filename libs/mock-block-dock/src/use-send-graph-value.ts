@@ -1,25 +1,42 @@
 import {
-  BlockGraphMessageCallbacks,
-  GraphEmbedderHandler,
+  BlockGraphMessageCallbacks as BlockGraphMessageCallbacksNonTemporal,
+  GraphEmbedderHandler as GraphEmbedderHandlerNonTemporal,
 } from "@blockprotocol/graph";
+import {
+  BlockGraphMessageCallbacks as BlockGraphMessageCallbacksTemporal,
+  GraphEmbedderHandler as GraphEmbedderHandlerTemporal,
+} from "@blockprotocol/graph/temporal";
 import { useEffect, useRef } from "react";
 
-type GraphValue = {
-  [Key in keyof BlockGraphMessageCallbacks<true>]: {
-    valueName: Key;
-    value: Parameters<BlockGraphMessageCallbacks<true>[Key]>[0]["data"];
-  };
-}[keyof BlockGraphMessageCallbacks<true>];
+type GraphValue<Temporal extends boolean> = Temporal extends true
+  ? {
+      [Key in keyof BlockGraphMessageCallbacksTemporal]: {
+        valueName: Key;
+        value: Parameters<BlockGraphMessageCallbacksTemporal[Key]>[0]["data"];
+      };
+    }[keyof BlockGraphMessageCallbacksTemporal]
+  : {
+      [Key in keyof BlockGraphMessageCallbacksNonTemporal]: {
+        valueName: Key;
+        value: Parameters<
+          BlockGraphMessageCallbacksNonTemporal[Key]
+        >[0]["data"];
+      };
+    }[keyof BlockGraphMessageCallbacksNonTemporal];
 
-type UseSendGraphValueArgs = {
-  graphModule: GraphEmbedderHandler<true> | null;
-} & GraphValue;
+type UseSendGraphValueArgs<Temporal extends boolean> = {
+  graphModule:
+    | (Temporal extends true
+        ? GraphEmbedderHandlerTemporal
+        : GraphEmbedderHandlerNonTemporal)
+    | null;
+} & GraphValue<Temporal>;
 
-export const useSendGraphValue = ({
+export const useSendGraphValue = <Temporal extends boolean>({
   graphModule,
   value,
   valueName,
-}: UseSendGraphValueArgs) => {
+}: UseSendGraphValueArgs<Temporal>) => {
   const sentValue = useRef(value);
   const sentInitially = useRef(false);
 

@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "@blockprotocol/graph": "0.0.20",
-    "@blockprotocol/type-system": "0.0.4",
     "lit": "^2.4.1"
   },
   "devDependencies": {
@@ -65,6 +64,6 @@
     "image": "public/block-preview.png",
     "name": "block-template-custom-element",
     "protocol": "0.3",
-    "schema": "https://alpha.hash.ai/@hash/types/entity-type/page/v/1"
+    "schema": "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/entity-type/thing/v/2"
   }
 }

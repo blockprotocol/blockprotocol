@@ -10,9 +10,18 @@ import {
   EntityTypeWithMetadata,
   MultiFilter,
   MultiSort,
-  QueryTemporalAxes,
   Subgraph,
 } from "@blockprotocol/graph";
+import {
+  AggregateEntitiesData as AggregateEntitiesDataTemporal,
+  AggregateEntitiesResult as AggregateEntitiesResultTemporal,
+  AggregateEntityTypesResult as AggregateEntityTypesResultTemporal,
+  Entity as EntityTemporal,
+  EntityRootType as EntityRootTypeTemporal,
+  EntityTypeRootType as EntityTypeRootTypeTemporal,
+  QueryTemporalAxes,
+  Subgraph as SubgraphTemporal,
+} from "@blockprotocol/graph/temporal";
 
 export const mustBeDefined = <T>(x: T | undefined, message?: string): T => {
   if (x === undefined) {
@@ -321,8 +330,7 @@ const contains = (item: JsonValue, value: JsonValue): boolean | null => {
 };
 
 const filterEntitiesOrEntityTypes = <
-  Temporal extends boolean,
-  Elements extends Entity<Temporal>[] | EntityTypeWithMetadata[],
+  Elements extends (Entity[] | EntityTemporal[]) | EntityTypeWithMetadata[],
 >(params: {
   elements: Elements;
   multiFilter: MultiFilter;
@@ -400,8 +408,7 @@ const filterEntitiesOrEntityTypes = <
 };
 
 const sortEntitiesOrTypes = <
-  Temporal extends boolean,
-  Elements extends Entity<Temporal>[] | EntityTypeWithMetadata[],
+  Elements extends (Entity[] | EntityTemporal[]) | EntityTypeWithMetadata[],
 >(params: {
   elements: Elements;
   multiSort: MultiSort;
@@ -427,43 +434,51 @@ const sortEntitiesOrTypes = <
 };
 
 export type FilterResult<
-  Temporal extends boolean,
-  T extends Entity<Temporal> | EntityTypeWithMetadata =
-    | Entity<Temporal>
+  T extends
+    | (Entity | EntityTypeWithMetadata)
+    | (EntityTemporal | EntityTypeWithMetadata) =
+    | Entity
     | EntityTypeWithMetadata,
 > = {
   results: T[];
   operation:
-    | AggregateEntitiesResult<
-        Temporal,
-        Subgraph<Temporal, EntityRootType<Temporal>>
+    | AggregateEntitiesResult<Subgraph<EntityRootType>>["operation"]
+    | AggregateEntityTypesResult<Subgraph<EntityTypeRootType>>["operation"]
+    | AggregateEntitiesResultTemporal<
+        SubgraphTemporal<EntityRootTypeTemporal>
       >["operation"]
-    | AggregateEntityTypesResult<
-        Subgraph<Temporal, EntityTypeRootType>
+    | AggregateEntityTypesResultTemporal<
+        SubgraphTemporal<EntityTypeRootTypeTemporal>
       >["operation"];
 };
 
-export function filterAndSortEntitiesOrTypes<Temporal extends boolean>(
-  elements: Entity<Temporal>[],
-  payload: Omit<AggregateEntitiesData<Temporal>, "temporalAxes"> & {
+export function filterAndSortEntitiesOrTypes(
+  elements: Entity[],
+  payload: AggregateEntitiesData,
+): FilterResult<Entity>;
+export function filterAndSortEntitiesOrTypes(
+  elements: EntityTemporal[],
+  payload: Omit<AggregateEntitiesDataTemporal, "temporalAxes"> & {
     temporalAxes: QueryTemporalAxes;
   },
-): FilterResult<Temporal, Entity<Temporal>>;
-export function filterAndSortEntitiesOrTypes<Temporal extends boolean>(
+): FilterResult<EntityTemporal>;
+export function filterAndSortEntitiesOrTypes(
   elements: EntityTypeWithMetadata[],
   payload: AggregateEntityTypesData,
-): FilterResult<Temporal, EntityTypeWithMetadata>;
+): FilterResult<EntityTypeWithMetadata>;
 export function filterAndSortEntitiesOrTypes<
-  Temporal extends boolean,
-  Elements extends Entity<Temporal>[] | EntityTypeWithMetadata[],
+  Elements extends
+    | (Entity[] | EntityTypeWithMetadata[])
+    | (EntityTemporal[] | EntityTypeWithMetadata[]),
 >(
   elements: Elements,
   payload:
-    | (Omit<AggregateEntitiesData<Temporal>, "temporalAxes"> & {
+    | AggregateEntitiesData
+    | (Omit<AggregateEntitiesDataTemporal, "temporalAxes"> & {
         temporalAxes: QueryTemporalAxes;
       })
     | AggregateEntityTypesData,
-): FilterResult<Temporal> {
+): FilterResult {
   const { operation } = payload;
 
   const multiSort = operation?.multiSort ?? [{ field: ["updatedAt"] }];

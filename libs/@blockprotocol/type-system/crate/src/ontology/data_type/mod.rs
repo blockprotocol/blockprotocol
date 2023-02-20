@@ -200,7 +200,7 @@ mod tests {
         let data_type_ref = DataTypeReference::new(uri.clone());
 
         data_type_ref
-            .validate_uri(uri.base_uri())
+            .validate_uri(&uri.base_uri)
             .expect("failed to validate against base URI");
     }
 
@@ -216,7 +216,7 @@ mod tests {
         let data_type_ref = DataTypeReference::new(uri_a);
 
         data_type_ref
-            .validate_uri(uri_b.base_uri()) // Try and validate against a different URI
+            .validate_uri(&uri_b.base_uri) // Try and validate against a different URI
             .expect_err("expected validation against base URI to fail but it didn't");
     }
 }

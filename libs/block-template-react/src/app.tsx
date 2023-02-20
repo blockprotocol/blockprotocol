@@ -29,7 +29,7 @@ const supplyRandomName = () => {
  * It is a function that takes a property object (known as "props" in React) and returns an element.
  * You should update this comment to describe what your block does, or remove the comment.
  */
-export const App: BlockComponent<false, RootEntity> = ({
+export const App: BlockComponent<RootEntity> = ({
   graph: {
     /**
      * The properties sent to the block represent the messages sent automatically from the application to the block.
@@ -59,17 +59,16 @@ export const App: BlockComponent<false, RootEntity> = ({
   }
 
   const { rootEntity: blockEntity } = useEntitySubgraph<
-    false,
     RootEntity,
     RootEntityLinkedEntities
   >(blockEntitySubgraph);
 
   const entityId = blockEntity.metadata.recordId.entityId;
 
-  const titleKey: keyof RootEntity["properties"] =
-    "https://alpha.hash.ai/@hash/types/property-type/title/";
+  const nameKey: keyof RootEntity["properties"] =
+    "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/";
 
-  const title = blockEntity.properties[titleKey];
+  const title = blockEntity.properties[nameKey];
 
   return (
     /**
@@ -100,7 +99,7 @@ export const App: BlockComponent<false, RootEntity> = ({
             data: {
               entityId,
               entityTypeId: blockEntity.metadata.entityTypeId,
-              properties: { [titleKey]: supplyRandomName() },
+              properties: { [nameKey]: supplyRandomName() },
             },
           })
         }

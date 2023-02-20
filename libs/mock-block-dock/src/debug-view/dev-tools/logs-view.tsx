@@ -14,9 +14,20 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-import { useMockBlockDockContext } from "../../mock-block-dock-context";
+import {
+  useMockBlockDockNonTemporalContext,
+  useMockBlockDockTemporalContext,
+} from "../../mock-block-dock-context";
 import { usePrevious } from "../../use-previous";
 import { JsonView } from "./json-view";
 
@@ -113,14 +124,19 @@ const ActiveLogsContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const LogsView = () => {
+const LogsViewComponent = ({
+  logs,
+  setLogs,
+}: {
+  logs: Message[];
+  setLogs: Dispatch<SetStateAction<Message[]>>;
+}) => {
   const [activeLog, setActiveLog] = useState<Message>();
   const [filters, setFilters] = useState({
     source: "all",
     module: "all",
   });
   const logsContainerRef = useRef<HTMLElement>();
-  const { logs, setLogs } = useMockBlockDockContext();
   const prevLogs = usePrevious(logs);
 
   const filteredLogs = useMemo(() => {
@@ -241,3 +257,16 @@ export const LogsView = () => {
     </Box>
   );
 };
+
+const LogsViewNonTemporal = () => {
+  const { logs, setLogs } = useMockBlockDockNonTemporalContext();
+  return <LogsViewComponent logs={logs} setLogs={setLogs} />;
+};
+
+const LogsViewTemporal = () => {
+  const { logs, setLogs } = useMockBlockDockTemporalContext();
+  return <LogsViewComponent logs={logs} setLogs={setLogs} />;
+};
+
+export const LogsView = ({ temporal }: { temporal: boolean }) =>
+  temporal ? <LogsViewTemporal /> : <LogsViewNonTemporal />;

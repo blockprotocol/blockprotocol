@@ -20,7 +20,7 @@ We provide three templates which allow you to define the entry point for your bl
 - `html`: create a block defined as an HTML file, with JavaScript added via `<script>` tags.
 - `react`: create a block defined as a React component.
 
-To create a new block, run `npx create-block-app@latest block-name --template template`, replacing `block-name` with the name to give your block, and `template` with one of the template names listed above.
+To create a new block, run `npx create-block-app@canary block-name --template template`, replacing `block-name` with the name to give your block, and `template` with one of the template names listed above.
 
 ### I want to use a different technology
 
@@ -28,68 +28,90 @@ If you want to write blocks **using other technologies or frameworks**, you have
 
 1.  use a `custom-element` template and use different approaches when constructing the element-i.e. use a custom element as a wrapper for anything else you like.
 1.  use an `html` template and import and use your additional libraries inside the `<script>` tag.
-1.  use a language which can be transpiled to JavaScript. As an example, see [this blog post](https://hash.dev/blog/build-blocks-in-any-language) on writing a block using F#. This block uses React, you can use transpiled JavaScript in blocks defined as HTML files or custom elements too.
+1.  use a language which can be transpiled to JavaScript. As an example, see [this blog post](https://hash.dev/blog/build-blocks-in-any-language) on writing a block using F#. This block uses React – you can use transpiled JavaScript in blocks defined as HTML files or custom elements too.
 
 ### I don’t want to use TypeScript
 
 You can write your block in regular JavaScript using the methods described above - just rename your files from `*.tsx/*.ts` to `*.jsx/*.js`, remove the types, and get coding.
 
-Bear in mind that a block schema will not be automatically generated as part of the build process – you can write your own `block-schema.json` file at the root of your block’s folder, giving the type of props your App component accepts in [JSON Schema format](https://json-schema.org/).
-
 ## Creating a block
 
 1.  Move to a folder where you want to create your block.
-1.  Run `npx create-block-app@latest your-block-name --template template`.
+1.  Run `npx create-block-app@canary your-block-name --template template`.
 1.  Switch to your new folder: `cd [your-block-name]`.
 1.  Run `yarn install && yarn dev` or `npm install && npm run dev`.
-1.  Open [http://localhost:63212](http://localhost:63212/) in your browser to see your block.
+1.  Open [http://localhost:63212](http://localhost:63212/) in your browser to see the starter template.
 
 ## The development environment
 
-The `create-block-app` package provides everything you need to develop a block.
+The `create-block-app` package and provides everything you need to develop a block.
 
 - `src/app.tsx` or `src/app.ts` contains your block’s code.
   - You can include dependencies in your block but bear in mind that the more dependencies you add, the bigger your block’s download size will be. Common dependencies which you can reasonably expect an embedding application to provide (e.g. React) can be defined as `peerDependencies` in `package.json`.
 - `yarn dev` or `npm run dev` will run your block in development mode, serving it locally with hot reloading at [http://localhost:63212](http://localhost:63212).
   - This uses the file at `src/dev.tsx` to render your block within a mock embedding application called `MockBlockDock`.
-  - By default, dev mode will also show you the properties that are being passed to your block and the contents of the mock datastore. Remove `debug` from `MockBlockDock` to turn this off.
+  - By default, dev mode will also show you the properties that are being passed to your block and the contents of the mock datastore. Remove `debug` from `MockBlockDock` to turn this off, or toggle it via the provided switch in the UI.
 - `yarn build` or `npm run build` will:
   - Bundle the component into a single source file (without any dependencies listed as `peerDependencies`).
-  - Generate a JSON schema from the `BlockEntityProperties` type representing the data interface with the block. If your block folder contains `block-schema.json`, this custom schema will be used instead.
   - Generate a `block-metadata.json` file which:
-    - points to the `schema` and `source` files.
-    - brings in metadata from `package.json`, such as the block name and description.
+    - points to the bundled `source` file.
+    - brings in metadata from `package.json`, such as the description.
     - brings in anything in the `blockprotocol` object in `package.json`, e.g.
       - `blockType`: the type of block this is.
-      - `displayName`: a friendly display name.
-      - `examples`: an array of example data structures your block would accept and use.
-      - `image`: a preview image showing your block in action.
-      - `icon`: an icon to be associated with your block.
+      - `displayName`: a friendly display name
+      - `examples`: an array of example data structures your block would accept and use
+      - `image`: a preview image showing your block in action (in place of `public/block-preview.png`)
+      - `icon`: an icon to be associated with your block (in place of `public/omega.svg`)
       - `name`: a slugified name for your block (which may differ to the package `name` in package.json); it can be defined as `blockname` or `@namespace/blockname`, where `namespace` must be your username on blockprotocol.org if you intend to publish it there
     - list the `externals`, which are generated from `peerDependencies` in package.json.
+
+### Updating the block schema
+
+A key part of the Block Protocol is the use of types to describe the data your block will work with.
+
+Your block should be associated with an “entity type” which will be used by embedding applications
+to understand what sorts of entities can be sent to it (e.g. what properties do they have?).
+
+When an embedding application loads your block, it should send an entity which complies with the structure of the block's
+declared entity type. We call such an entity the 'block entity'.
+
+See [working with types](/docs/working-with-types) for more information on the type system, or jump straight to
+[your dashboard](/dashboard) to create a type.
+
+Once you have created the type representing the data your block needs, copy its URL, and update the `schema` property
+in the `blockprotocol` object in `package.json`. In TypeScript block templates, you can then run `yarn schema` to
+regenerate the types for your block.
 
 ## Lifecycle of a block
 
 When a block is loaded into an embedding application:
 
-1.  the embedding application parses its `block-metadata.json` file and:
-1.  provides any external dependencies which the block needs.
-1.  sets up message handling as described in the core specification.
-1.  loads the block with the appropriate strategy for its `blockType`.
-1.  the block then receives any data which the embedder can provide straight away:
-1.  `custom-element` and `react`-type blocks will be sent this initial data as properties.
-1.  `html`-type blocks will be sent messages containing the initial data.
-1.  the block can then do whatever it chooses to do with those properties.
-1.  at any time after this initialization, the block may send further messages via a `Module` for specific purposes, such as reading and writing data within the embedding application.
+The embedding application parses its `block-metadata.json` file and:
 
-The starter blocks created by `create-block-app` implement a simple example of this lifecycle:
+- provides any external dependencies which the block needs.
+- sets up message handling as described in the core specification.
+- loads the block with the appropriate strategy for its `blockType`.
 
-1.  the `BlockEntityProperties` type in `src/app.tsx` defines the properties expected for the `blockEntity` (part of [the Graph Module](#using-the-graph-module)).
-1.  mock values for the `blockEntity` are passed to `MockBlockDock` in `dev.tsx`, including the `properties` it expects (in this case, a `name` of type `string`).
-1.  the block receives the data for `blockEntity`:
-1.  the `react` and `custom-element` blocks receive the `blockEntity` as part of the `graph` object in their properties.
-1.  the `html` block registers a callback for the `blockEntity` message.
-1.  the block accesses the properties in `blockEntity` and uses the `name` property to render its `Hello, World!` message.
+The block then receives any data which the embedder can provide straight away,
+for example as part of [the graph module](#using-the-graph-module):
+
+- `custom-element` and `react`-type blocks will be sent initial data as properties/props.
+- `html`-type blocks will be sent messages containing the initial data.
+- the block can then do whatever it chooses to do with those properties.
+
+At any time after this initialization, the block may send further messages via a `Module` for specific purposes,
+such as reading and writing data within the embedding application.
+
+The starter blocks created by `create-block-app` implement a simple example of this:
+
+1.  the `Thing` entity type referred to in `blockprotocol.schema` in `package.json`, for which types are found in `src/types.gen.ts`,
+    defines the properties expected for the block entity.
+1.  mock values for the block entity are passed to `MockBlockDock` in `dev.tsx`, including the `properties` it expects
+1.  the block receives the data for `blockEntitySubgraph` ([described below](#using-the-graph-module)):
+
+- the `react` and `custom-element` blocks extract the block entity from the `blockEntitySubgraph`
+- the `html` block registers a callback for the `blockEntitySubgraph` message.
+- each block then accesses the properties from the block entity and uses the name property to render its `Hello, World!` message.
 
 ## Using the Graph Module
 
@@ -101,11 +123,57 @@ Using these methods in combination, you can create complex graphs from within a 
 
 Each message payload is the same: an object containing `data` and `errors` keys.
 
-Depending on the template, you may need to check that the `graphModule` is available before using it (we will be removing the need for this shortly). These checks are omitted below.
+### The `graph` properties object
 
-### Updating the `blockEntity`
+The `graph` properties object is sent in `properties`/`props` for `custom-element` and `react`-type blocks, and as a message
+for `html`-type blocks.
 
-A common use for the Graph Module is to update the `blockEntity` to update the properties that are sent to the block (including when it is loaded again in the future).
+It contains data sent from the embedding application to the block related to the graph module. Importantly:
+
+- `readonly`: a boolean indicating whether the block is in a read-only context. This typically means that the embedding application
+  will reject any requests to update data, and the block should alter its UI and behaviour accordingly.
+
+- `blockEntitySubgraph`: this contains the 'block entity' and any entities immediately linked to it. It is a _graph_ of entities
+  _rooted_ at the block entity.
+
+We provide helper tools for extracting the key information from `blockEntitySubgraph`:
+
+- in the `react` template, a `useEntitySubgraph` hook can return the `rootEntity` (the block entity) and any `linkedEntities`
+- in the `custom-element` template, `this.getBlockEntity()` and `this.getLinkedEntities()` are available
+- in the `html` template (and everywhere), you can use functions available in `@blockprotocol/graph/stdlib`, for example:
+  - `getRoots` to get the roots from a subgraph (for a `blockEntitySubgraph`, there should only be one)
+  - `getOutgoingLinkAndTargetEntities` to get the entities _linked from_ a given entity (the 'target' entities), and the links themselves
+    (N.B this is equivalent to `linkedEntities` in the other templates, which are for outgoing links from the block entity onl)
+  - `getIncomingLinkAndTargetEntities` to get the entities _linking to_ a given entity, and the links
+
+Many of the messages sent from the application to the block as part of the graph module return a `Subgraph`.
+You shouldn't have to worry about the internal workings of a `Subgraph`, but it is worth knowing that a given subgraph
+represents the result of a query starting with a given entity (or entities) and following links from it to other entities.
+The links are also entities (they may have properties and relationships of their own), known as 'link entities'.
+
+The four components of a `Subgraph` are:
+
+- `roots`: the entities which were the starting point of the query (e.g. only the 'block entity' in the case of `blockEntitySubgraph`)
+- `depths`: which `edges` were followed from the `roots` when resolving the query, and how far
+- `edges`: connections between things in the graph. For example, a 'link entity' connects it and two other entities via `hasRightEntity`
+  and `hasLeftEntity` edges (conceptually, the link entity is in the middle with an entity on its left and on its right)
+- `vertices`: each thing (`vertex`, or `node`) which was encountered when starting from the roots and following the specified `edges
+to the specified`depths`.
+
+A `Subgraph` may also be rooted at _types_, and it may also contain types in its _vertices_, as well as have _edges_
+which are type-related connections between vertices – but when writing a block you will mostly be working with entities.
+Requesting types can be important for validating input when the type of data is not known ahead of time (e.g. for a generic table block).
+If you know that your block accepts or generates a specific data structure, you already know its type – but by defining its type,
+you are helping applications and end-users of your block choose what data can be sent to it.
+
+Again, you **probably don't need to worry about this when getting started** – but if you start to work with complex data networks
+made up of many entities with different relationships, the `Subgraph` and knowing how to query it becomes a powerful tool.
+
+### Updating the block entity
+
+A common use for the Graph Module is to update the block entity – to update the properties that are sent to the block.
+
+Each block template includes a demonstration of calling `graphModule.updateEntity` to update the block entity.
 
 To do this, you need to call `updateEntity` using the `entityId` of the `blockEntity`:
 
@@ -113,77 +181,102 @@ To do this, you need to call `updateEntity` using the `entityId` of the `blockEn
 // Update the block entity, and receive the updated entity in return
 const { data, errors } = await graphModule.updateEntity({
   data: {
-    entityId: blockEntity.entityId,
-    properties: { name: "Bob" },
+    entityId: blockEntity.metadata.recordId.entityId,
+    entityTypeId: blockEntity.metadata.entityTypeId,
+    properties: {
+      "https://blockprotocol.org/types/property-type/name/": "Bob",
+    },
   },
 });
 ```
 
-You can get the `blockEntity` from properties for `custom-element` and `react`-type blocks, and from a message callback for `html`-type blocks. There are examples in the templates.
+How you get a reference to `blockEntity` depends on the type of block, as described above and demonstrated in each template.
 
-As soon as the `updateEntity` call is processed, your block will be re-rendered with the updated properties, or in the case of `html` blocks, the `blockEntity` message re-sent with the updated data. You could therefore omit the `{ data, errors }` from the above snippet and rely on the updated properties or message.
+As soon as the `updateEntity` call is processed, for `react` and `custom-element` blocks your block will be re-rendered with
+the updated properties. You could therefore omit the `{ data, errors }` from the above snippet and rely on the updated properties
+when the block is re-rendered.
 
 If you’re using the `custom-element` template, you have a helper method to achieve the above:
 
 ```js
-this.updateSelfProperties({ name: "Bob" });
+this.updateSelfProperties({
+  "https://blockprotocol.org/types/property-type/name/": "Bob",
+});
 ```
+
+Because properties are identified by URIs, you may wish to alias them in your code if used in multiple places. For example:
+
+```js
+const nameKey = "https://blockprotocol.org/types/property-type/name/";
+
+if (blockEntity.properties[nameKey] !== "Bob") {
+  await graphModule.updateEntity({
+    data: {
+      entityId: blockEntity.metadata.recordId.entityId,
+      entityTypeId: blockEntity.metadata.entityTypeId,
+      properties: { [nameKey]: "Bob" },
+    },
+  });
+}
+```
+
+You can read more about how types are described on the [working with types](/docs/working-with-types) page.
+
+### Creating new entities
+
+You can create new entities using the `createEntity` method.
+
+New entities should be assigned starting `properties` and an `entityTypeId` (a URI pointing to their entity type).
+
+### Linking entities together
+
+Because links between entities are just a special kind of entity, you call `createEntity` to create them,
+specifying additional `linkData` to indicate which entities are on the 'left' and 'right' of the link.
+For now you can think of the 'left' entity as the source of the link, and the 'right' entity as the target or destination.
+
+For example, to link an entity to the block entity:
+
+```js
+// link the 'blockEntity' to some 'otherEntity' you have a reference to (e.g. if you have newly created it)
+graphModule.createEntity({
+  data: {
+    entityTypeId: "https://blockprotocol.org/types/entity-type/friend/v/1",
+    linkData: {
+      leftEntity: blockEntity.metadata.recordId.entityId,
+      destinationEntityId: otherEntity.metadata.recordId.entityId,
+    },
+    properties: {}, // this can contain metadata about the link, if you wish
+  },
+});
+```
+
+You can define the type of relationships between your block entity and other entities when [defining its type](/docs/working-with-types),
+and the `entityTypeId` of the relevant relationship will then be available in the generated types (after running `yarn schema`)/
+
+Any entities linked directly from the block will appear in the `blockEntitySubgraph` property.
+
+You can also link other entities together, but whether or not they appear in `blockEntitySubgraph` will depend on
+whether they are connected to the block entity at all, and far away they are (what `depths` are required to reach them).
 
 ### Exploring the data store
 
 There are messages for exploring the data available in the embedding application:
 
 - `aggregateEntities` allows you to request a list of available entities.
-- `aggregateEntityTypes` allows you to request a list of available entity *types-*entities typically belong to a type, which describes their expected structure.
 
-You can browse the available entities and types in order to display them, or create links between them.
+You can browse the available entities rder to display them, or create links between them.
 
-### Linking entities to the `blockEntity`
+If you want to retrieve more detailed information on a specific entity, you can call `getEntity`.
 
-To link other entities to the block, call `createLink` with the relevant source and destination:
-
-```js
-graphModule?.createLink({
-  data: {
-    sourceEntityId: blockEntity.entityId,
-    destinationEntityId: "person-1",
-    path: "friend",
-  },
-});
-```
-
-Any entities linked to the block will appear in the `linkedEntities` property, with the links themselves appearing in `linkGroups`. You can also link other arbitrary entities together.
-
-### Going further
+### Going further with the graph module
 
 If you are using TypeScript, the types for methods available on `graphModule` (as defined in the `@blockprotocol/graph` package) should help you understand what methods are available and how they operate.
-
-You can also review the messages defined in the graph specification [here](https://blockprotocol.org/docs/spec/graph-module). If you do so, bear in mind the following:
-
-- only the ones marked as `source: "block"` are available as methods to your block.
-- any message marked as `sentOnInitialization` with `source: "embeder"` will be passed to your block as soon as it’s loaded. Remember that `custom-element` and `react`-type blocks receive these messages as properties under a `graph` object, whereas `html` blocks can register callbacks for each message.
-- if a message has `respondedToBy`, it expects a response and the `graphModule` method will return a Promise which will resolve with the `{ data, errors }` object. If a message does not expect a response, the method will return void.
-
-## Testing your block in HASH
-
-[HASH](https://hash.ai) is an open-source, data-centric, all-in-one workspace built atop the Block Protocol. While it is not yet ready for production use, you can use it to test your block in a real embedding application with example data.
-
-To load your block into HASH:
-
-1.  Visit the [HASH repo](https://github.com/hashintel/hash/tree/main/apps/hash) and follow the instructions to run HASH locally.
-1.  In your block’s directory, run `yarn dev` or `npm run dev`. This will serve your block locally at a localhost URL in development mode and will reload if you make changes to your source code. Alternatively, you can run `yarn build && yarn serve` to test a production build of your block which will not automatically rebuild if you make changes to the source code.
-1.  Copy that localhost URL to your clipboard.
-1.  In HASH, create or navigate to a Page.
-1.  Find the […] menu button on the left of a block in the Page (you should see this button under the title on a new page).
-1.  Open that menu and paste the block’s localhost URL into the “Load block from URL…” input field and click "Load block".
-
-If you’re running your block in dev mode (`yarn dev` or `npm run dev`) and you make changes to the source code, your block will rebuild and HASH should automatically refresh the page. If you’re running your block in production mode, you will need to run `yarn build` from your block folder and reload your block manually in HASH by repeating steps 5-6 again.
 
 ## Build
 
 Once you’ve finished writing your block, run `yarn build` or `npm run build`.
 
-This will produce a compiled version of your code in the `dist` folder, along with metadata files describing your block (`block-metadata.json`), and the data it accepts (`block-schema.json`).
+This will produce a compiled version of your code in the `dist` folder, along with a metadata file describing your block (`block-metadata.json`).
 
 It is worth updating the `blockprotocol` object in `package.json` to include your own `icon`, `image`, and `examples` for your block. These will automatically be included in the `block-metadata.json` produced after running `yarn build` or `npm run build`.
 
@@ -204,20 +297,21 @@ To publish a block on the Hub take the following steps.
 ### Publish from your terminal
 
 - Run `npm run build` or `yarn build` to create a production build of your block (it will appear in the `dist` folder)
-- run `npx blockprotocol@latest publish` to generate a `.blockprotocolrc` file when prompted
+- run `npx blockprotocol@canary publish` to generate a `.blockprotocolrc` file when prompted
 - Replace the placeholder key in that file with your API key
-- now run `npx blockprotocol@latest publish` again
+- now run `npx blockprotocol@canary publish` again
 - See your block on the Hub!
 
 ### Updating your block
 
 You can update your published block at any time by running
-`npm run build && npx blockprotocol@latest publish` or `yarn build && npx blockprotocol@latest publish`
+`npm run build && npx blockprotocol@canary publish` or `yarn build && npx blockprotocol@canary publish`
 
 ### Changing the Hub preview
 
 - Take a screenshot of your block in action and replace `public/block-preview.png`
 - update the `description` in package.json
 - add an icon to the `public` folder and update `blockprotocol.icon` in `package.json`
-- update your block’s `README.md` – it will appear below your block on its hub page
-- update the example object in `blockprotocol.examples` in `package.json`
+- add a preview `image` to the `public` folder and update `blockprotocol.image` in `package.json`
+- update your block’s `README.md` – it will appear below your block on its hub page if you change it from the default
+- update the example properties object in `blockprotocol.examples` in `package.json`
