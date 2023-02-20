@@ -40,7 +40,7 @@ const temporalDependent = ["es", "cjs"].flatMap((fmt) =>
 
 const shared = ["es", "cjs"].flatMap((fmt) =>
   ["graph-module-json", "internal"].map((input) =>
-    rolls(fmt, `src/${input}.ts`, `${input}.js`),
+    rolls(fmt, `src/${input}.ts`, `${input}`),
   ),
 );
 export default [...temporalDependent, ...shared];
