@@ -131,7 +131,7 @@ mod tests {
                 Some(Object {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::from([(
-                        uri.base_uri().to_string(),
+                        uri.base_uri.to_string(),
                         PropertyTypeReference::new(uri.to_string()),
                     )]),
                     required: vec![],
@@ -158,11 +158,11 @@ mod tests {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::from([
                         (
-                            uri_a.base_uri().to_string(),
+                            uri_a.base_uri.to_string(),
                             PropertyTypeReference::new(uri_a.to_string()),
                         ),
                         (
-                            uri_b.base_uri().to_string(),
+                            uri_b.base_uri.to_string(),
                             PropertyTypeReference::new(uri_b.to_string()),
                         ),
                     ]),
@@ -192,7 +192,7 @@ mod tests {
                 Some(Object {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::from([(
-                        uri.base_uri().to_string(),
+                        uri.base_uri.to_string(),
                         PropertyTypeReference::new(uri.to_string()),
                     )]),
                     required: vec![],
@@ -219,11 +219,11 @@ mod tests {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::from([
                         (
-                            uri_a.base_uri().to_string(),
+                            uri_a.base_uri.to_string(),
                             PropertyTypeReference::new(uri_a.to_string()),
                         ),
                         (
-                            uri_b.base_uri().to_string(),
+                            uri_b.base_uri.to_string(),
                             PropertyTypeReference::new(uri_b.to_string()),
                         ),
                     ]),
@@ -255,15 +255,15 @@ mod tests {
                 r#type: ObjectTypeTag::Object,
                 properties: HashMap::from([
                     (
-                        uri_a.base_uri().to_string(),
+                        uri_a.base_uri.to_string(),
                         PropertyTypeReference::new(uri_a.to_string()),
                     ),
                     (
-                        uri_b.base_uri().to_string(),
+                        uri_b.base_uri.to_string(),
                         PropertyTypeReference::new(uri_b.to_string()),
                     ),
                 ]),
-                required: vec![uri_a.base_uri().to_string()],
+                required: vec![uri_a.base_uri.to_string()],
             }),
         );
     }

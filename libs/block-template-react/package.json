@@ -1,6 +1,6 @@
 {
   "name": "block-template-react",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "description": "Block Protocol template for a React-based block",
   "keywords": [
     "blockprotocol",
@@ -33,15 +33,14 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.19",
-    "@blockprotocol/type-system": "0.0.3"
+    "@blockprotocol/graph": "0.0.20"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@types/react-dom": "^18.0.9",
     "block-scripts": "0.0.19",
     "eslint": "8.33.0",
-    "mock-block-dock": "0.0.39",
+    "mock-block-dock": "0.0.40",
     "prettier": "2.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -67,6 +66,6 @@
     "image": "public/block-preview.png",
     "name": "block-template-react",
     "protocol": "0.3",
-    "schema": "https://alpha.hash.ai/@hash/types/entity-type/page/v/1"
+    "schema": "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/entity-type/thing/v/2"
   }
 }

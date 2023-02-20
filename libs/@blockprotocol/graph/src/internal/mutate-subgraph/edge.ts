@@ -1,12 +1,12 @@
 import { BaseUri } from "@blockprotocol/type-system/slim";
 
-import { EntityId } from "../../types/entity.js";
+import { EntityId } from "../../shared/types/entity.js";
 import {
   OntologyTypeRevisionId,
   OutwardEdge,
   Subgraph,
-} from "../../types/subgraph.js";
-import { Timestamp } from "../../types/temporal-versioning.js";
+} from "../../shared/types/subgraph.js";
+import { Timestamp } from "../../shared/types/temporal-versioning.js";
 import { isEqual } from "./is-equal.js";
 
 /**
@@ -26,16 +26,16 @@ export const addOutwardEdgeToSubgraphByMutation = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   sourceBaseId: EntityId | BaseUri,
   at: OntologyTypeRevisionId | Timestamp,
-  outwardEdge: OutwardEdge,
+  outwardEdge: OutwardEdge<Temporal>,
 ) => {
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   subgraph.edges[sourceBaseId] ??= {};
   subgraph.edges[sourceBaseId]![at] ??= [];
-  const outwardEdgesAtVersion: OutwardEdge[] =
+  const outwardEdgesAtVersion: OutwardEdge<Temporal>[] =
     subgraph.edges[sourceBaseId]![at]!;
 
   if (
-    !outwardEdgesAtVersion.find((otherOutwardEdge: OutwardEdge) =>
+    !outwardEdgesAtVersion.find((otherOutwardEdge: OutwardEdge<Temporal>) =>
       isEqual(otherOutwardEdge, outwardEdge),
     )
   ) {

@@ -1,5 +1,16 @@
 # mock-block-dock
 
+## 0.0.40
+
+### Patch Changes
+
+- [#922](https://github.com/blockprotocol/blockprotocol/pull/922) [`81f32f26`](https://github.com/blockprotocol/blockprotocol/commit/81f32f269153ee6e8464ab831827d8e6a42b43a0) Thanks [@nathggns](https://github.com/nathggns)! - Allow creating services before element is available
+
+- Updated dependencies [[`c9607f6b`](https://github.com/blockprotocol/blockprotocol/commit/c9607f6b67809f43291a6824ecf49691d061f1f9), [`81f32f26`](https://github.com/blockprotocol/blockprotocol/commit/81f32f269153ee6e8464ab831827d8e6a42b43a0), [`1089dc55`](https://github.com/blockprotocol/blockprotocol/commit/1089dc558004c26cd07f606542631873e5d0894d)]:
+  - @blockprotocol/graph@0.0.20
+  - @blockprotocol/core@0.0.14
+  - @blockprotocol/hook@0.0.10
+
 ## 0.0.39
 
 ### Patch Changes
@@ -38,13 +49,13 @@
 
 ### Patch Changes
 
-- [#695](https://github.com/blockprotocol/blockprotocol/pull/695) [`e09cbb4`](https://github.com/blockprotocol/blockprotocol/commit/e09cbb4afcaccf1a8d21c7301ded77a24f1e9c78) Thanks [@CiaranMn](https://github.com/CiaranMn)! - bug fix in setting property via hook service
+- [#695](https://github.com/blockprotocol/blockprotocol/pull/695) [`e09cbb4`](https://github.com/blockprotocol/blockprotocol/commit/e09cbb4afcaccf1a8d21c7301ded77a24f1e9c78) Thanks [@CiaranMn](https://github.com/CiaranMn)! - bug fix in setting property via hook module
 
 ## 0.0.34
 
 ### Patch Changes
 
-- [#656](https://github.com/blockprotocol/blockprotocol/pull/656) [`d025092`](https://github.com/blockprotocol/blockprotocol/commit/d025092b74ba79e27fcd4b28d129743a05e4fea7) Thanks [@CiaranMn](https://github.com/CiaranMn)! - implement hook service in mock block dock
+- [#656](https://github.com/blockprotocol/blockprotocol/pull/656) [`d025092`](https://github.com/blockprotocol/blockprotocol/commit/d025092b74ba79e27fcd4b28d129743a05e4fea7) Thanks [@CiaranMn](https://github.com/CiaranMn)! - implement hook module in mock block dock
 
 - Updated dependencies [[`97d8751`](https://github.com/blockprotocol/blockprotocol/commit/97d8751a8e700293869d86c6062db9e88c1e24af)]:
   - @blockprotocol/hook@0.0.7

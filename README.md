@@ -1,19 +1,21 @@
 [þ hub]: https://blockprotocol.org/hub?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol documentation]: https://blockprotocol.org/docs?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[Block Protocol for WordPress]: https://blockprotocol.org/docs/using-blocks#wordpress?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol specification]: https://blockprotocol.org/docs/spec?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [blockprotocol.org]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[becoming an embedder]: https://blockprotocol.org/docs/embedding-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[becoming an embedder]: https://blockprotocol.org/docs/using-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [create a new block]: https://blockprotocol.org/docs/developing-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [core specification]: https://blockprotocol.org/docs/spec/core?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [developing blocks]: https://blockprotocol.org/docs/developing-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[graph service]: https://blockprotocol.org/docs/spec/graph-service?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[hook service]: https://blockprotocol.org/docs/spec/hook-service?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[graph module]: https://blockprotocol.org/docs/spec/graph-module?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[hook module]: https://blockprotocol.org/docs/spec/hook-module?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [rfcs & roadmap]: https://blockprotocol.org/docs/spec/rfcs_and_roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [using blocks]: https://blockprotocol.org/docs/using-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [open issues]: https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen
 [hash]: https://github.com/hashintel/hash/tree/main/apps/hash
+[awesome blocks]: https://github.com/blockprotocol/awesome-blocks
 
 <!-- markdownlint-disable link-fragments -->
 
@@ -52,7 +54,12 @@ Please refer to the [Block Protocol documentation] for complete instructions on 
 
 ## [![a](/.github/assets/gh_icon_examples_20px-base.svg)][gh-examples] &nbsp; Examples
 
-[HASH] is an embedding application that supports the Block Protocol, enabling its users to insert arbitrary blocks from the [Þ Hub] at runtime.
+- **Environments**
+  - [HASH] is an embedding application that supports the Block Protocol, enabling its users to insert arbitrary blocks from the [Þ Hub] at runtime.
+  - The [Block Protocol for WordPress] plugin allows Þ blocks to be used within WordPress.
+- **Blocks**
+  - Please view the [Þ Hub].
+  - We'll also be adding star examples to the [Awesome Blocks] repo. Feel free to open a PR to suggest an addition there.
 
 For more examples, please refer to the [Block Protocol documentation] or browse the complete [Þ Hub].
 
@@ -72,8 +79,8 @@ Finding things within a monorepo isn't always straight forward, in particular if
 As a block developer, you probably care most about our utility libraries. All of those listed below are contained within the [`libs`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/) folder and are available via `yarn add <package_name>` or `npm install <package_name>`. Individual README files within each directory provide more details.
 
 - [`@blockprotocol/core`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/core): implements the Block Protocol [Core specification] for blocks and embedding applications
-- [`@blockprotocol/graph`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/graph): implements the Block Protocol [Graph service] for blocks and embedding applications
-- [`@blockprotocol/hook`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/hook): implements the Block Protocol [Hook service] for blocks and embedding applications
+- [`@blockprotocol/graph`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/graph): implements the Block Protocol [Graph module] for blocks and embedding applications
+- [`@blockprotocol/hook`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/hook): implements the Block Protocol [Hook module] for blocks and embedding applications
 - [`@blockprotocol/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/type-system): implements the type system as a WASM-based npm package (with code autogenerated from `crate` subfolder)
 - [`@local/*`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@local): auxiliary Yarn workspaces for local development and testing
 - [`block-scripts`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/block-scripts): scripts used by `block-template-*`

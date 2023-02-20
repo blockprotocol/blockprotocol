@@ -95,7 +95,7 @@ export const ZeroApplicationDevelopers = () => {
       </Typography>
 
       <LinkButton
-        href="/docs/embedding-blocks"
+        href="/docs/using-blocks"
         variant="primary"
         sx={{ color: theme.palette.common.white, whiteSpace: "nowrap" }}
         startIcon={

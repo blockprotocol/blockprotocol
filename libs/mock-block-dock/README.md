@@ -35,7 +35,7 @@ For example, if you call `updateEntity`, MockBlockDock will update the specified
 If the entity is part of the properties sent to your block, they will be updated and the block re-rendered.
 
 ```typescript
-const { data, errors } = await graphService.updateEntity({
+const { data, errors } = await graphModule.updateEntity({
   entityId,
   properties: newProps,
 });
@@ -43,14 +43,19 @@ const { data, errors } = await graphService.updateEntity({
 
 There are different ways of loading your block source depending on the entry point.
 
-For each, you can set the block's starting entity via the `blockEntity` prop:
+For each, you can set the block's starting entity by providing it among `initialData.initialEntities` and
+identifying it via the `blockEntityRecordId` prop (see examples below))
 
 ```typescript
 const blockEntity: Entity = {
-  entityId: "test-id-1",
-  properties: {
-    name: "World",
+  metadata: {
+    recordId: {
+      entityId: "entity-1", // the entity's unique, stable identifier
+      editionId: new Date(0).toISOString(), // the specific edition/version identifier
+    },
+    entityTypeId: "https://example.com/my-types/entity-types/person/v/1",
   },
+  properties: { "https://example.com/my-types/property-type/name/": "World" },
 };
 ```
 
@@ -64,8 +69,12 @@ import { MockBlockDock } from "mock-block-dock";
 import MyBlock from "./my-block.tsx";
 
 <MockBlockDock
-  blockDefinition={{ ReactComponent: MyBlock }}
-  blockEntity={blockEntity}
+  blockDefinition={{ ReactComponent: MyBlock }} // provide the block source code
+  blockEntityRecordId={blockEntity.metadata.recordId} // identifies the block entity among the initial entities
+  debug // show the debug UI on startup
+  initialData={{
+    initialEntities: [blockEntity], // initial entities to load into the mock datastore
+  }}
 />;
 ```
 
@@ -82,23 +91,34 @@ import MyCustomElement from "./my-custom-element.ts";
   blockDefinition={{
     customElement: { elementClass: MyCustomClass, tagName: "my-block" },
   }}
-  properties={blockEntity}
+  blockEntityRecordId={blockEntity.metadata.recordId} // identifies the block entity among the initial entities
+  debug // show the debug UI on startup
+  initialData={{
+    initialEntities: [blockEntity], // initial entities to load into the mock datastore
+  }}
 />;
 ```
 
 #### Debug mode
 
-When passed `debug=true`, `MockBlockDock` will also render a display of:
+When passed `debug={true}` (which can be shortened to `debug`), `MockBlockDock` will also render a display of:
 
 1.  the properties being passed to the blocks (for non-HTML blocks), which are derived from the mock datastore
 1.  the raw contents of the mock datastore
+
+### Readonly mode
+
+When passed `readonly={true}` (which can be shortened to `readonly`), `MockBlockDock` will send a `readonly: true`
+message to the block, and will reject any attempts to mutate data in the datastore.
+
+You can also toggle this option in the debug UI.
 
 ### Hook: custom, manual control
 
 If you want more control or visibility over the mock properties, you can retrieve them as a hook instead,
 and pass them to your block yourself.
 
-You should pass `blockProperties` to set your block's starting properties.
+You should pass `initialData` and `blockEntityRecordId` to set the starting datastore and identify the block entity.
 
 ```jsx
 import { useMockBlockProps } from "mock-block-dock";
@@ -111,36 +131,7 @@ const {
   linkedEntities,
   linkGroups,
 } = useMockBlockProps({
-  blockProperties,
-  blockSchema,
+  blockEntityRecordId: blockEntity.metadata.recordId,
+  initialData: { initialEntities: [blockEntity] },
 });
-```
-
-## Customising the mock data
-
-With either the hook or component you can also pass the following optional arguments to customise the datastore:
-
-- `initialEntities`
-- `initialEntityTypes`
-- `initialLinks`
-- `initialLinkedAggregations`
-
-For any omissions, the default mock data in `src/data/*` will be used.
-
-These dummy records will be in the data store, and your block can discover them by calling `aggregateEntityTypes` or `aggregateEntities`.
-
-```jsx
-<MockBlockDock
-  initialEntities={[
-    // other entities for your block to use can be loaded into the datastore here
-    {
-      entityId: "my-dummy-entity",
-      entityTypeId: "dummy",
-      myOtherEntitysProperty: "foo",
-    },
-  ]}
->
-  <TestBlock myBlockProperty="bar" /> // starting properties for your block
-  should still be set here
-</MockBlockDock>
 ```

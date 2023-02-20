@@ -1,7 +1,7 @@
 {
   "name": "@blockprotocol/hook",
-  "version": "0.0.9",
-  "description": "Implementation of the Block Protocol Hook service specification for blocks and embedding applications",
+  "version": "0.0.10",
+  "description": "Implementation of the Block Protocol Hook module specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
     "blocks",
@@ -25,7 +25,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./react": "./dist/react.js",
-    "./hook-service-json": "./dist/hook-service-json.js"
+    "./hook-module-json": "./dist/hook-module-json.js"
   },
   "types": "./dist/index.d.ts",
   "typesVersions": {
@@ -36,8 +36,8 @@
       "react": [
         "./dist/react.d.ts"
       ],
-      "hook-service-json": [
-        "./dist/hook-service-json.d.ts"
+      "hook-module-json": [
+        "./dist/hook-module-json.d.ts"
       ]
     }
   },
@@ -52,8 +52,8 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.13",
-    "@blockprotocol/graph": "0.0.19"
+    "@blockprotocol/core": "0.0.14",
+    "@blockprotocol/graph": "0.0.20"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",

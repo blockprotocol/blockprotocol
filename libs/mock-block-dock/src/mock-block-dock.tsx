@@ -1,13 +1,9 @@
 import { HtmlBlockDefinition } from "@blockprotocol/core";
-import {
-  BlockGraphProperties,
-  Entity,
-  EntityRecordId,
-  QueryTemporalAxes,
-} from "@blockprotocol/graph";
-import { useGraphEmbedderService } from "@blockprotocol/graph/react";
-import { EmbedderHookMessageCallbacks, HookData } from "@blockprotocol/hook/.";
-import { useHookEmbedderService } from "@blockprotocol/hook/react";
+import { EntityRecordId } from "@blockprotocol/graph";
+import { useGraphEmbedderModule as useGraphEmbedderModuleNonTemporal } from "@blockprotocol/graph/react";
+import { useGraphEmbedderModule as useGraphEmbedderModuleTemporal } from "@blockprotocol/graph/temporal/react";
+import { HookData, HookEmbedderMessageCallbacks } from "@blockprotocol/hook/.";
+import { useHookEmbedderModule } from "@blockprotocol/hook/react";
 import {
   ComponentType,
   FunctionComponent,
@@ -26,7 +22,11 @@ import { getEntity } from "./datastore/hook-implementations/entity/get-entity";
 import { HookPortals } from "./hook-portals";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useDefaultState } from "./use-default-state";
-import { useMockBlockProps } from "./use-mock-block-props";
+import {
+  InitialData,
+  useMockBlockPropsNonTemporal,
+  useMockBlockPropsTemporal,
+} from "./use-mock-block-props";
 import { useSendGraphValue } from "./use-send-graph-value";
 
 const MockBlockDockUi = lazy(async () => ({
@@ -45,16 +45,13 @@ type BlockDefinition =
       html: HtmlBlockDefinition;
     };
 
-type MockBlockDockProps = {
+type MockBlockDockProps<Temporal extends boolean> = {
   blockDefinition: BlockDefinition;
   blockEntityRecordId?: EntityRecordId;
+  temporal?: Temporal;
   debug?: boolean;
   hideDebugToggle?: boolean;
-  initialData?: {
-    initialTemporalAxes: QueryTemporalAxes;
-    initialEntities: Entity<true>[];
-    // initialLinkedAggregations: LinkedAggregationDefinition[];
-  };
+  initialData?: InitialData<Temporal>;
   readonly?: boolean;
   blockInfo?: {
     blockType: {
@@ -68,22 +65,9 @@ type MockBlockDockProps = {
   };
 };
 
-/**
- * A component which acts as a mock embedding application for Block Protocol blocks.
- * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
- * See README.md for usage instructions.
- * @param props component props
- * @param props.blockDefinition the source for the block and any additional metadata required
- * @param [props.blockEntityRecordId] the `EntityRecordId` of the starting block entity
- * @param [props.blockInfo] metadata about the block
- * @param [props.debug=false] display debugging information
- * @param [props.hideDebugToggle=false] hide the ability to toggle the debug UI
- * @param [props.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
- * @param [props.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
- * @param [props.initialData.initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
- * @param [props.readonly=false] whether the block should display in readonly mode or not
- */
-export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
+const MockBlockDockNonTemporal: FunctionComponent<
+  Omit<MockBlockDockProps<false>, "temporal">
+> = ({
   blockDefinition,
   blockEntityRecordId: initialBlockEntityRecordId,
   blockInfo,
@@ -91,7 +75,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   hideDebugToggle = false,
   initialData,
   readonly: initialReadonly = false,
-}) => {
+}: Omit<MockBlockDockProps<false>, "temporal">) => {
   const {
     blockEntityRecordId,
     mockDatastore,
@@ -99,9 +83,9 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     readonly,
     setEntityRecordIdOfEntityForBlock,
     setReadonly,
-  } = useMockBlockProps({
+  } = useMockBlockPropsNonTemporal({
     blockEntityRecordId: initialBlockEntityRecordId,
-    initialData,
+    initialData: initialData as InitialData<false>,
     readonly: !!initialReadonly,
   });
 
@@ -111,14 +95,13 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const blockEntitySubgraph = getEntity<true>(
+  const blockEntitySubgraph = getEntity<false>(
     {
       entityId: blockEntityRecordId.entityId,
       graphResolveDepths: {
         hasLeftEntity: { incoming: 2, outgoing: 2 },
         hasRightEntity: { incoming: 2, outgoing: 2 },
       },
-      temporalAxes: getDefaultTemporalAxes(),
     },
     mockDatastore.graph,
   );
@@ -136,7 +119,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       ? "html"
       : undefined;
 
-  const propsToInject: BlockGraphProperties<true> = {
+  const propsToInject = {
     graph: {
       blockEntitySubgraph,
       readonly,
@@ -144,16 +127,16 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     },
   };
 
-  const { graphServiceCallbacks } = mockDatastore;
+  const { graphModuleCallbacks } = mockDatastore;
 
-  const { graphService } = useGraphEmbedderService<true>(wrapperRef, {
+  const { graphModule } = useGraphEmbedderModuleNonTemporal(wrapperRef, {
     blockEntitySubgraph,
     // linkedAggregations,
-    callbacks: graphServiceCallbacks,
+    callbacks: graphModuleCallbacks,
     readonly,
   });
 
-  const hookCallback = useCallback<EmbedderHookMessageCallbacks["hook"]>(
+  const hookCallback = useCallback<HookEmbedderMessageCallbacks["hook"]>(
     async ({ data }) => {
       if (!data) {
         return {
@@ -217,52 +200,52 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     [hooks, setHooks],
   );
 
-  const { hookService } = useHookEmbedderService(wrapperRef, {
+  const { hookModule } = useHookEmbedderModule(wrapperRef, {
     callbacks: {
       hook: hookCallback,
     },
   });
 
   useEffect(() => {
-    if (hookService) {
-      hookService.on("hook", hookCallback);
+    if (hookModule) {
+      hookModule.on("hook", hookCallback);
     }
-  }, [hookCallback, hookService]);
+  }, [hookCallback, hookModule]);
 
-  useSendGraphValue({
-    graphService,
+  useSendGraphValue<false>({
+    graphModule,
     value: blockEntitySubgraph,
     valueName: "blockEntitySubgraph",
   });
-  // useSendGraphValue({
-  //   graphService,
+  // useSendGraphValue<false>({
+  //   graphModule,
   //   value: linkedAggregations,
   //   valueName: "linkedAggregations",
   // });
-  useSendGraphValue({
-    graphService,
+  useSendGraphValue<false>({
+    graphModule,
     value: readonly,
     valueName: "readonly",
   });
 
   useEffect(() => {
-    if (graphService) {
+    if (graphModule) {
       // The callbacks are reconstructed when the data in the store changes
       // We need to register the updated callbacks or the data they use will be stale
       try {
-        graphService.registerCallbacks(graphServiceCallbacks);
+        graphModule.registerCallbacks(graphModuleCallbacks);
       } catch {
         /**
          * Registration can error when the user switches between preview and debug mode.
-         * Registration is attempted with the old service, which has been destroyed.
+         * Registration is attempted with the old module, which has been destroyed.
          * It then succeeds with the new one.
          * @todo can we avoid this error?
          */
       }
     }
-  }, [graphService, graphServiceCallbacks]);
+  }, [graphModule, graphModuleCallbacks]);
 
-  const blockRenderer = graphService ? (
+  const blockRenderer = graphModule ? (
     <BlockRenderer
       customElement={
         "customElement" in blockDefinition
@@ -295,18 +278,298 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       setReadonly={setReadonly}
       setDebugMode={setDebugMode}
       setEntityRecordIdOfEntityForBlock={setEntityRecordIdOfEntityForBlock}
-      updateEntity={graphServiceCallbacks.updateEntity}
+      updateEntity={graphModuleCallbacks.updateEntity}
     >
-      <HookPortals hooks={hooks} />
+      <HookPortals temporal={false} hooks={hooks} />
       <div ref={wrapperRef}>
         <Suspense>
           {hideDebugToggle && !debugMode ? (
             blockRenderer
           ) : (
-            <MockBlockDockUi>{blockRenderer}</MockBlockDockUi>
+            <MockBlockDockUi temporal={false}>{blockRenderer}</MockBlockDockUi>
           )}
         </Suspense>
       </div>
     </MockBlockDockProvider>
+  );
+};
+
+const MockBlockDockTemporal: FunctionComponent<
+  Omit<MockBlockDockProps<true>, "temporal">
+> = ({
+  blockDefinition,
+  blockEntityRecordId: initialBlockEntityRecordId,
+  blockInfo,
+  debug: initialDebug = false,
+  hideDebugToggle = false,
+  initialData,
+  readonly: initialReadonly = false,
+}: Omit<MockBlockDockProps<true>, "temporal">) => {
+  const {
+    blockEntityRecordId,
+    mockDatastore,
+    // linkedAggregations,
+    readonly,
+    setEntityRecordIdOfEntityForBlock,
+    setReadonly,
+  } = useMockBlockPropsTemporal({
+    blockEntityRecordId: initialBlockEntityRecordId,
+    initialData: initialData as InitialData<true>,
+    readonly: !!initialReadonly,
+  });
+
+  const [debugMode, setDebugMode] = useDefaultState<boolean>(initialDebug);
+
+  const [hooks, setHooks] = useState<Map<string, HookData>>(new Map());
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const blockEntitySubgraph = getEntity<true>(
+    {
+      entityId: blockEntityRecordId.entityId,
+      graphResolveDepths: {
+        hasLeftEntity: { incoming: 2, outgoing: 2 },
+        hasRightEntity: { incoming: 2, outgoing: 2 },
+      },
+      temporalAxes: getDefaultTemporalAxes(),
+    },
+    mockDatastore.graph,
+  );
+
+  if (!blockEntitySubgraph) {
+    throw new Error(`Failed to get subgraph for block entity`);
+  }
+
+  const blockType =
+    "ReactComponent" in blockDefinition
+      ? "react"
+      : "customElement" in blockDefinition
+      ? "custom-element"
+      : "html" in blockDefinition
+      ? "html"
+      : undefined;
+
+  const propsToInject = {
+    graph: {
+      blockEntitySubgraph,
+      readonly,
+      // linkedAggregations,
+    },
+  };
+
+  const { graphModuleCallbacks } = mockDatastore;
+
+  const { graphModule } = useGraphEmbedderModuleTemporal(wrapperRef, {
+    blockEntitySubgraph,
+    // linkedAggregations,
+    callbacks: graphModuleCallbacks,
+    readonly,
+  });
+
+  const hookCallback = useCallback<HookEmbedderMessageCallbacks["hook"]>(
+    async ({ data }) => {
+      if (!data) {
+        return {
+          errors: [
+            {
+              code: "INVALID_INPUT",
+              message: "Data is required with hook",
+            },
+          ],
+        };
+      }
+      const { hookId, node, type } = data;
+
+      if (hookId) {
+        const existingHook = hooks.get(hookId);
+        if (!existingHook) {
+          return {
+            errors: [
+              {
+                code: "NOT_FOUND",
+                message: `Hook with id ${hookId} not found`,
+              },
+            ],
+          };
+        }
+      }
+
+      if (node === null && hookId) {
+        setHooks((currentHooks) => {
+          const draftHooks = new Map(currentHooks);
+          draftHooks.delete(hookId);
+          return draftHooks;
+        });
+        return { data: { hookId } };
+      }
+
+      if (data?.type === "text") {
+        const hookIdForReturn = hookId ?? uuid();
+
+        setHooks((currentHooks) => {
+          const draftHooks = new Map(currentHooks);
+          draftHooks.set(hookIdForReturn, {
+            ...data,
+            hookId: hookIdForReturn,
+          });
+          return draftHooks;
+        });
+
+        return { data: { hookId: hookIdForReturn } };
+      }
+
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `Hook type ${type} not supported`,
+          },
+        ],
+      };
+    },
+    [hooks, setHooks],
+  );
+
+  const { hookModule } = useHookEmbedderModule(wrapperRef, {
+    callbacks: {
+      hook: hookCallback,
+    },
+  });
+
+  useEffect(() => {
+    if (hookModule) {
+      hookModule.on("hook", hookCallback);
+    }
+  }, [hookCallback, hookModule]);
+
+  useSendGraphValue<true>({
+    graphModule,
+    value: blockEntitySubgraph,
+    valueName: "blockEntitySubgraph",
+  });
+  // useSendGraphValue<true>({
+  //   graphModule,
+  //   value: linkedAggregations,
+  //   valueName: "linkedAggregations",
+  // });
+  useSendGraphValue<true>({
+    graphModule,
+    value: readonly,
+    valueName: "readonly",
+  });
+
+  useEffect(() => {
+    if (graphModule) {
+      // The callbacks are reconstructed when the data in the store changes
+      // We need to register the updated callbacks or the data they use will be stale
+      try {
+        graphModule.registerCallbacks(graphModuleCallbacks);
+      } catch {
+        /**
+         * Registration can error when the user switches between preview and debug mode.
+         * Registration is attempted with the old module, which has been destroyed.
+         * It then succeeds with the new one.
+         * @todo can we avoid this error?
+         */
+      }
+    }
+  }, [graphModule, graphModuleCallbacks]);
+
+  const blockRenderer = graphModule ? (
+    <BlockRenderer
+      customElement={
+        "customElement" in blockDefinition
+          ? blockDefinition.customElement
+          : undefined
+      }
+      html={"html" in blockDefinition ? blockDefinition.html : undefined}
+      properties={propsToInject}
+      ReactComponent={
+        "ReactComponent" in blockDefinition
+          ? blockDefinition.ReactComponent
+          : undefined
+      }
+    />
+  ) : null;
+
+  return (
+    <MockBlockDockProvider
+      blockEntitySubgraph={blockEntitySubgraph}
+      blockInfo={
+        blockInfo ?? {
+          blockType: {
+            entryPoint: blockType,
+          },
+        }
+      }
+      graph={mockDatastore.graph}
+      debugMode={debugMode}
+      readonly={readonly}
+      setReadonly={setReadonly}
+      setDebugMode={setDebugMode}
+      setEntityRecordIdOfEntityForBlock={setEntityRecordIdOfEntityForBlock}
+      updateEntity={graphModuleCallbacks.updateEntity}
+    >
+      <HookPortals temporal hooks={hooks} />
+      <div ref={wrapperRef}>
+        <Suspense>
+          {hideDebugToggle && !debugMode ? (
+            blockRenderer
+          ) : (
+            <MockBlockDockUi temporal>{blockRenderer}</MockBlockDockUi>
+          )}
+        </Suspense>
+      </div>
+    </MockBlockDockProvider>
+  );
+};
+
+/**
+ * A component which acts as a mock embedding application for Block Protocol blocks.
+ * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
+ * See README.md for usage instructions.
+ * @param props component props
+ * @param props.blockDefinition the source for the block and any additional metadata required
+ * @param [props.blockEntityRecordId] the `EntityRecordId` of the starting block entity
+ * @param [props.blockInfo] metadata about the block
+ * @param [props.debug=false] display debugging information
+ * @param [props.hideDebugToggle=false] hide the ability to toggle the debug UI
+ * @param [props.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
+ * @param [props.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
+ * @param [props.initialData.initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param [props.readonly=false] whether the block should display in readonly mode or not
+ */
+export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
+  Temporal extends boolean,
+>({
+  blockDefinition,
+  blockEntityRecordId: initialBlockEntityRecordId,
+  blockInfo,
+  temporal,
+  debug: initialDebug = false,
+  hideDebugToggle = false,
+  initialData,
+  readonly: initialReadonly = false,
+}: MockBlockDockProps<Temporal>) => {
+  return temporal ? (
+    <MockBlockDockTemporal
+      blockDefinition={blockDefinition}
+      blockEntityRecordId={initialBlockEntityRecordId}
+      blockInfo={blockInfo}
+      debug={initialDebug}
+      hideDebugToggle={hideDebugToggle}
+      initialData={initialData as InitialData<true>}
+      readonly={initialReadonly}
+    />
+  ) : (
+    <MockBlockDockNonTemporal
+      blockDefinition={blockDefinition}
+      blockEntityRecordId={initialBlockEntityRecordId}
+      blockInfo={blockInfo}
+      debug={initialDebug}
+      hideDebugToggle={hideDebugToggle}
+      initialData={initialData}
+      readonly={initialReadonly}
+    />
   );
 };

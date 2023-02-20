@@ -47,13 +47,13 @@ In the future we intend to support non-web contexts more directly.
 
 <FAQ question="Why would anybody build a Block Protocol block?">
 
-Anybody with web development experience can build a block to add functionality to any application that implements the Block Protocol.
+Blocks built for the Block Protocol work inside of multiple embedding applications, with promised support in the future of even more. Creating a Þ block enables a developer to code a block _once_ and then use that same block in a variety of places, without having to make any application-specific affordances to ensure their block functions correctly or looks good.
 
-Individuals may be motivated by any of the factors that already motivate people to build open-source software: challenge, competition, fun, reputation, and the desire to contribute to and be part of a community.
+Anybody with web development experience can build a block to add functionality to an application that implements the Block Protocol. That means if you're the user of a protocol-supporting application such as WordPress or HASH, [developing a Þ block](https://blockprotocol.org/docs/developing-blocks) will enable you to extend that app's capabilities, and take your work with you to other Þ environments should you wish.
 
-Open-sourcing blocks allows other interested users to contribute back to improving those blocks further, enhancing their utility and fixing bugs.
+Blocks don't have to be open-sourced, but we strongly encourage publishing them to the [Þ Hub](https://blockprotocol.org/hub), sharing them with others. You may be motivated to do this by any of the factors that already result in thiriving open-source software ecosystems today: challenge, competition, fun, reputation, and the desire to contribute to and be part of a community.
 
-Stephen Walli writes that open-sourcing code isn't always "contributing back out of altruism. It was engineering economics. It was the right thing to do, and contributed back to the hardening of the [product] we were using ourselves. It was what makes well run open source projects work."
+Open-sourcing blocks can also be borne of self-interest. Making your code public allows other interested users to contribute back to improving your block further, enhancing its utility and fixing any bugs that may be hiding within. Stephen Walli writes that open-sourcing code isn't always "contributing back out of altruism", but sometimes "engineering economics". It can be the right commercial call, hardening and improving the product (in this case block) that you yourself are relying upon.
 
 </FAQ>
 
@@ -105,9 +105,9 @@ Entity data can be hosted in any application which implements the Block Protocol
 
 <FAQ question="Can blocks themselves choose where to fetch data from?">
 
-Yes. Blocks can fetch their own data from external services. For example, a map block might fetch data from a mapping service.
+Yes. Blocks can fetch their own data from external modules. For example, a map block might fetch data from a mapping module.
 
-We believe the best blocks will communicate data back and forth with the embedding application, making use of the operations defined in the [Graph Service specification](https://blockprotocol.org/docs/spec/graph-service).
+We believe the best blocks will communicate data back and forth with the embedding application, making use of the operations defined in the [Graph Module specification](https://blockprotocol.org/docs/spec/graph-module).
 
 For example: a mapping block might persist a user’s choices about map positioning or styling back to an embedding application, all without the application knowing anything about the block, or the block even being aware of which application it is being used within.
 
@@ -119,7 +119,7 @@ The Block Protocol enables blocks to store and retrieve data in an application w
 
 Blocks can have their own local state - they might use this to allow users to explore data or draft changes, without saving anything.
 
-To save data beyond the session, blocks should make use of the [operations defined in the spec](https://blockprotocol.org/docs/spec/graph-service) to send updates to the embedding application.
+To save data beyond the session, blocks should make use of the [operations defined in the spec](https://blockprotocol.org/docs/spec/graph-module) to send updates to the embedding application.
 
 </FAQ>
 
@@ -129,14 +129,21 @@ Similar to most programming language package managers, because anybody can publi
 
 Because those inserting blocks are often non-technical end users, this isn't always practical. As such, we recommend that embedders implement both sandboxing within their environments, and allow/deny lists.
 
-- **Sandboxing** will be covered in depth in our [guide for embedders](https://blockprotocol.org/docs/embedding-blocks).
+- **Sandboxing** will be covered in depth in our [guide for embedders](https://blockprotocol.org/docs/using-blocks).
 - **Allow/deny lists** can be used to resrict or control:
   - which blocks users are able to discover and insert within your environment
   - which blocks a user inserts are ultimately able to be run in either a sandboxed or unsandboxed fashion
 
-Today you might choose to allow/deny blocks on the basis of their authorship (published namespace), or based on their _verification status_. In the future we also plan to expose additional Þ _Hub_ metadata which may prove useful in the creating and maintaining whitelists.
+Today you might choose to allow/deny blocks on the basis of their authorship (published namespace), or based on their _verification status_.
 
-**Real-world example:** [HASH](https://hash.dev/) allows first-party blocks (i.e. those developed _by HASH_ and listed under their own `@hash` namespace on the Þ _Hub_), alongside third-party blocks that have been _verified_, to be run in an **unsandboxed** fashion within their application, because they trust the origins and quality of those blocks. By unsandboxing blocks HASH can deliver them more efficiently to users, while providing a richer user experience. The blocks in HASH's namespace are amongst the most used within their application, providing default basic text editing functionality, and so the ability to unsandbox these and run them optimally is considered valuable. HASH allows all other blocks on the Þ _Hub_ to be discovered and inserted by its users, but delivers these in a sandbox.
+In the future we also plan to expose:
+
+- additional Þ _Hub_ metadata which may prove useful in the creating and maintaining whitelists;
+- permission grants for blocks and block types, that allow for users to control the level and types of access blocks have (e.g. the ability to access information created through the Graph Service outside of themselves) or access to other services.
+
+**Example - HASH:** [HASH](https://hash.dev/) allows first-party blocks (i.e. those developed _by HASH_ and listed under their own `@hash` namespace on the Þ _Hub_), alongside third-party blocks that have been verified, to be run in an **unsandboxed** fashion within their application, because they trust the origins and quality of those blocks. By unsandboxing blocks HASH can deliver them more efficiently to users, while providing a richer user experience. The blocks in HASH's namespace are amongst the most used within their application, providing default basic text editing functionality, and so the ability to unsandbox these and run them optimally is considered valuable. HASH allows all other blocks on the Þ _Hub_ to be discovered and inserted by its users, but delivers these in a sandbox.
+
+**Example - WordPress:** The _Block Protocol for WordPress_ plugin restricts the insertion of blocks to verified blocks only. This can be turned off by WordPress administrations from the plugin settings panel, but prevents non-technical authors and editors from accidentally relying on blocks which have not been subjected to review. In the future the plugin will support sandboxing and more variable permissions, in addition.
 
 </FAQ>
   
@@ -164,7 +171,7 @@ Rich text editing is a core part of many modern block-based applications, but de
 - applications often provide special functionality inside rich text fields, e.g. being able to `@mention` or search for things inline
 
 We do not believe it feasible or desirable to impose a single rich text editing experience across applications,
-and instead have introduced the [Hook Service](https://blockprotocol.org/docs/spec/hook-service) to allow embedding applications to
+and instead have introduced the [Hook Module](https://blockprotocol.org/docs/spec/hook-module) to allow embedding applications to
 inject their own rich text editing display and input, at blocks' request.
 
 </FAQ>
@@ -178,13 +185,7 @@ A simple example is a `ListBlock` which is composed of a list of other blocks, a
 Blocks which are made up of other blocks may be referred to as “compound blocks”. We will be publishing example compound blocks soon.
 
 </FAQ>
-
-</Box>
-
-## Related technologies
-
-<Box>
-
+  
 <FAQ question="How do Block Protocol blocks differ from Web Components?">
 
 Web Components can _describe_ the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it within an application.
@@ -204,6 +205,31 @@ GraphQL provides a [“syntax and system for describing [application] data requi
 It would be possible to define the operations specified in the Block Protocol in GraphQL - e.g. `createEntity` - or to extend the GraphQL spec to include them.
 
 We do not yet believe it necessary to specify block-application requests in GraphQL syntax nor require that they be executed by the embedding application according to the GraphQL specification, although we are open to the idea. It may become more attractive as operations evolve to include more features already covered by GraphQL (e.g. subscriptions, selection sets).
+
+</FAQ>
+
+</Box>
+
+## Endpoints and APIs
+
+<Box>
+
+<FAQ question="Can blocks access external APIs?">
+
+Yes, blocks can make requests to external APIs. They can do this in one of two ways:
+
+- **directly:** all of the code require to access an API can be contained within a block. This is not recommended in circumstances where a service requires an API key in order to access it, as it will be impossible to keep this key secret if a block (and for a block to remain usable) once the block is published to the Þ Hub.
+- **through the Þ Hub:** in addition to blocks and types, endpoints (APIs) can also be made accessible via the Þ Hub. A limited set of endpoints will be available as of 28th February 2023, including ones providing access to _Mapbox_ and _OpenAI_.
+
+Facilitating external API access via the Þ Hub is a new addition to the protocol, and intructions for making additional endpoints available will be added in due course. In the meantime, we're able to manually add endpoints on behalf of block developers. If there's an endpoint you'd like to use within a new or existing block, please [message us on Discord](https://blockprotocol.org/discord).
+
+</FAQ>
+  
+<FAQ question="Can blocks access external APIs while authenticating as users?">
+  
+The ability for Þ blocks to access external services while (optionally) authenticated as an individual user is a capability which we intend to introduce in the coming months. This will enable blocks to be developed that allow for a much wider range of use-cases to be addressed.
+  
+**Example:** a block user has information synced to _Coda_ or _AirTable_ from multiple external locations. They want to display this data on their website, which uses WordPress. With the _Block Protocol for WordPress_ plugin, a user will in the future be able to use a _Coda_ or _AirTable_ block which allows them to select information contained within their external account, and insert this information onto their page or post in WordPress, which can then automatically keep itself in sync with the original source. This allows publishing from a wide variety of external sources.
 
 </FAQ>
 
@@ -340,7 +366,7 @@ We expect to have to add custom keywords to cover relationships which JSON Schem
 
 We encourage applications to include JSON-LD describing entities on their public pages to make them machine-readable.
 
-In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](https://blockprotocol.org/docs/spec/graph-service). We have also taken a different approach to identifying entities, which may not have a public URI and may require a combination of fields to identify.
+In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](https://blockprotocol.org/docs/spec/graph-module). We have also taken a different approach to identifying entities, which may not have a public URI and may require a combination of fields to identify.
 
 </FAQ>
 

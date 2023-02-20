@@ -8,7 +8,11 @@ import {
 } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
-import { useMockBlockDockContext } from "../mock-block-dock-context";
+import {
+  MockBlockDockInfo,
+  useMockBlockDockNonTemporalContext,
+  useMockBlockDockTemporalContext,
+} from "../mock-block-dock-context";
 import { MOCK_BLOCK_DOCK_VERSION } from "../version";
 import { Logo, OffSwitch } from "./icons";
 import { customColors } from "./theme/palette";
@@ -59,9 +63,15 @@ type Props = {
   setDarkMode: Dispatch<SetStateAction<boolean>>;
 };
 
-export const Header = ({ darkMode: _, setDarkMode: __ }: Props) => {
-  const { setDebugMode, blockInfo } = useMockBlockDockContext();
-
+const HeaderComponent = ({
+  darkMode: _,
+  setDarkMode: __,
+  setDebugMode,
+  blockInfo,
+}: Props & {
+  setDebugMode: MockBlockDockInfo<boolean>["setDebugMode"];
+  blockInfo: MockBlockDockInfo<boolean>["blockInfo"];
+}) => {
   return (
     <Container>
       <Box display="flex" alignItems="center" mr="auto">
@@ -135,7 +145,7 @@ export const Header = ({ darkMode: _, setDarkMode: __ }: Props) => {
         </Typography>
       </Link>
 
-      {/* @todo restore when styling service is implemented */}
+      {/* @todo restore when styling module is implemented */}
       {/* <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}> */}
       {/*  Dark Mode */}
       {/*  {darkMode ? ( */}
@@ -152,3 +162,38 @@ export const Header = ({ darkMode: _, setDarkMode: __ }: Props) => {
     </Container>
   );
 };
+
+const HeaderNonTemporal = ({ darkMode, setDarkMode }: Props) => {
+  const { setDebugMode, blockInfo } = useMockBlockDockNonTemporalContext();
+  return (
+    <HeaderComponent
+      darkMode={darkMode}
+      setDarkMode={setDarkMode}
+      setDebugMode={setDebugMode}
+      blockInfo={blockInfo}
+    />
+  );
+};
+
+const HeaderTemporal = ({ darkMode, setDarkMode }: Props) => {
+  const { setDebugMode, blockInfo } = useMockBlockDockTemporalContext();
+  return (
+    <HeaderComponent
+      darkMode={darkMode}
+      setDarkMode={setDarkMode}
+      setDebugMode={setDebugMode}
+      blockInfo={blockInfo}
+    />
+  );
+};
+
+export const Header = ({
+  darkMode,
+  setDarkMode,
+  temporal,
+}: Props & { temporal: boolean }) =>
+  temporal ? (
+    <HeaderTemporal darkMode={darkMode} setDarkMode={setDarkMode} />
+  ) : (
+    <HeaderNonTemporal darkMode={darkMode} setDarkMode={setDarkMode} />
+  );

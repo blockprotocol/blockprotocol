@@ -1,5 +1,16 @@
 # @blockprotocol/hook
 
+## 0.0.10
+
+### Patch Changes
+
+- [#926](https://github.com/blockprotocol/blockprotocol/pull/926) [`c9607f6b`](https://github.com/blockprotocol/blockprotocol/commit/c9607f6b67809f43291a6824ecf49691d061f1f9) Thanks [@nathggns](https://github.com/nathggns)! - Ensure callbacks to services passed via react are never stale
+
+- [#922](https://github.com/blockprotocol/blockprotocol/pull/922) [`81f32f26`](https://github.com/blockprotocol/blockprotocol/commit/81f32f269153ee6e8464ab831827d8e6a42b43a0) Thanks [@nathggns](https://github.com/nathggns)! - Allow creating services before element is available
+
+- Updated dependencies [[`c9607f6b`](https://github.com/blockprotocol/blockprotocol/commit/c9607f6b67809f43291a6824ecf49691d061f1f9), [`81f32f26`](https://github.com/blockprotocol/blockprotocol/commit/81f32f269153ee6e8464ab831827d8e6a42b43a0), [`1089dc55`](https://github.com/blockprotocol/blockprotocol/commit/1089dc558004c26cd07f606542631873e5d0894d)]:
+  - @blockprotocol/core@0.0.14
+
 ## 0.0.9
 
 ### Patch Changes
@@ -19,7 +30,7 @@
 
 ### Patch Changes
 
-- [#676](https://github.com/blockprotocol/blockprotocol/pull/676) [`97d8751`](https://github.com/blockprotocol/blockprotocol/commit/97d8751a8e700293869d86c6062db9e88c1e24af) Thanks [@CiaranMn](https://github.com/CiaranMn)! - export hook-service.json. add error codes. bug fix in useHook
+- [#676](https://github.com/blockprotocol/blockprotocol/pull/676) [`97d8751`](https://github.com/blockprotocol/blockprotocol/commit/97d8751a8e700293869d86c6062db9e88c1e24af) Thanks [@CiaranMn](https://github.com/CiaranMn)! - export hook-module.json. add error codes. bug fix in useHook
 
 ## 0.0.6
 

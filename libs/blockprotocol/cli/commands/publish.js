@@ -80,8 +80,6 @@ const run = async (providedOptions) => {
   const { path: providedPath, tmp: tmpDir, yes } = providedOptions ?? {};
   const dryRun = providedOptions?.["dry-run"];
 
-  const apiKey = await findApiKey();
-
   const blockFolderPath = providedPath ?? (await findBlockFolder());
 
   const metadataPath = path.resolve(blockFolderPath, "block-metadata.json");
@@ -113,20 +111,36 @@ const run = async (providedOptions) => {
   }
 
   const blockName = metadataJson.name;
+
   if (!blockName) {
     console.log(
       `block-metadata.json does ${chalk.red("not")} contain 'name' key`,
     );
     process.exit();
-  } else if (!/^[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*$/.test(blockName)) {
-    console.log(
-      `'name' in block-metadata.json must be a slug. Try updating it to '${slugify(
-        blockName,
-        { lower: true, strict: true },
-      )}'`,
-    );
+  }
+
+  const { blockNamespace, blockNameWithoutNamespace } =
+    blockName.match(
+      /^(@(?<blockNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)\/)?(?<blockNameWithoutNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)$/,
+    )?.groups ?? {};
+
+  if (!blockNameWithoutNamespace) {
+    if (!blockNamespace) {
+      console.log(
+        `'name' in block-metadata.json must be a slug. Try updating it to '${slugify(
+          blockName,
+          { lower: true, strict: true },
+        )}'`,
+      );
+    } else {
+      console.log(
+        `'name' in block-metadata.json must be a slug or defined as '@namespace/block-name' (all lowercase). Current value: '${blockName}'`,
+      );
+    }
     process.exit();
   }
+
+  const apiKey = await findApiKey(blockNamespace);
 
   console.log(
     chalk.bgYellow(`Ready to publish block '${chalk.underline(blockName)}'`),

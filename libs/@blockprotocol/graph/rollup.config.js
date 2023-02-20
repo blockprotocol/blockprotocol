@@ -6,10 +6,10 @@ const production = !process.env.ROLLUP_WATCH;
 
 const outDir = (fmt) => `dist/${fmt}`;
 
-const rolls = (fmt, input) => ({
+const rolls = (fmt, input, outFileName) => ({
   input,
   output: {
-    dir: outDir(fmt),
+    file: `${outDir(fmt)}/${outFileName}.${fmt === "cjs" ? "cjs" : "js"}`,
     format: fmt,
     entryFileNames: `[name].${fmt === "cjs" ? "cjs" : "js"}`,
     name: "graph",
@@ -30,14 +30,17 @@ const rolls = (fmt, input) => ({
   ],
 });
 
-export default ["es", "cjs"].flatMap((fmt) =>
-  [
-    "src/index.ts",
-    "src/codegen.ts",
-    "src/custom-element.ts",
-    "src/graph-service-json.ts",
-    "src/internal.ts",
-    "src/react.ts",
-    "src/stdlib.ts",
-  ].map((input) => rolls(fmt, input)),
+const temporalDependent = ["es", "cjs"].flatMap((fmt) =>
+  ["temporal", "non-temporal"].flatMap((temporal) =>
+    ["main", "custom-element", "react", "stdlib", "codegen"].map((input) =>
+      rolls(fmt, `src/${temporal}/${input}.ts`, `${input}-${temporal}`),
+    ),
+  ),
 );
+
+const shared = ["es", "cjs"].flatMap((fmt) =>
+  ["graph-module-json", "internal"].map((input) =>
+    rolls(fmt, `src/${input}.ts`, `${input}`),
+  ),
+);
+export default [...temporalDependent, ...shared];

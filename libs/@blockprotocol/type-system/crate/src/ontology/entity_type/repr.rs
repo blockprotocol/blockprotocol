@@ -32,10 +32,6 @@ pub struct EntityType {
     description: Option<String>,
     #[serde(flatten)]
     all_of: repr::AllOf<EntityTypeReference>,
-    // TODO - Improve the typing of the values
-    #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "Record<BaseUri, any>"))]
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    default: HashMap<String, serde_json::Value>,
     #[cfg_attr(
         target_arch = "wasm32",
         tsify(optional, type = "Record<BaseUri, any>[]")
@@ -56,18 +52,6 @@ impl TryFrom<EntityType> for super::EntityType {
     fn try_from(entity_type_repr: EntityType) -> Result<Self, Self::Error> {
         let id = VersionedUri::from_str(&entity_type_repr.id)
             .map_err(ParseEntityTypeError::InvalidVersionedUri)?;
-
-        // TODO - validate default against the entity type
-        let default = entity_type_repr
-            .default
-            .into_iter()
-            .map(|(uri, val)| {
-                Ok((
-                    BaseUri::new(uri).map_err(ParseEntityTypeError::InvalidDefaultKey)?,
-                    val,
-                ))
-            })
-            .collect::<Result<_, _>>()?;
 
         // TODO - validate examples against the entity type
         let examples = entity_type_repr
@@ -101,7 +85,7 @@ impl TryFrom<EntityType> for super::EntityType {
             .try_into()
             .map_err(ParseEntityTypeError::InvalidLinks)?;
 
-        if entity_type_repr.additional_properties == true {
+        if entity_type_repr.additional_properties {
             return Err(ParseEntityTypeError::InvalidAdditionalPropertiesValue);
         }
 
@@ -112,7 +96,6 @@ impl TryFrom<EntityType> for super::EntityType {
             property_object,
             inherits_from,
             links,
-            default,
             examples,
         ))
     }
@@ -120,12 +103,6 @@ impl TryFrom<EntityType> for super::EntityType {
 
 impl From<super::EntityType> for EntityType {
     fn from(entity_type: super::EntityType) -> Self {
-        let default = entity_type
-            .default
-            .into_iter()
-            .map(|(uri, val)| (uri.to_string(), val))
-            .collect();
-
         let examples = entity_type
             .examples
             .into_iter()
@@ -144,7 +121,6 @@ impl From<super::EntityType> for EntityType {
             description: entity_type.description,
             property_object: entity_type.property_object.into(),
             all_of: entity_type.inherits_from.into(),
-            default,
             examples,
             links: entity_type.links.into(),
             additional_properties: false,

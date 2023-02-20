@@ -69,7 +69,10 @@ pub(crate) mod tests {
         R: Debug + PartialEq + Clone + From<T> + Serialize + DeserializeOwned,
     {
         let deserialized_repr: R = serde_json::from_str(input).expect("failed to deserialize");
-        let value: T = deserialized_repr.clone().try_into().expect("failed to convert");
+        let value: T = deserialized_repr
+            .clone()
+            .try_into()
+            .expect("failed to convert");
         let re_serialized_repr: R = value.clone().into();
 
         assert_eq!(deserialized_repr, re_serialized_repr);

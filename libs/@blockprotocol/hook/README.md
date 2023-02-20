@@ -1,11 +1,11 @@
-## Block Protocol – Hook Service
+## Block Protocol – Hook Module
 
-This package implements the Block Protocol Hook service for blocks and embedding applications.
+This package implements the Block Protocol Hook module for blocks and embedding applications.
 
 To get started:
 
 1.  `yarn add @blockprotocol/hook` or `npm install @blockprotocol/hook`
-1.  Follow the instructions to use the hook service as a [block](#blocks) or an [embedding application](#embedding-applications)
+1.  Follow the instructions to use the hook module as a [block](#blocks) or an [embedding application](#embedding-applications)
 
 ## Blocks
 
@@ -24,27 +24,33 @@ handler.hook({
     node, // a reference to the DOM node to render into
     type: "text", // the type of hook
     entityId: "entity1", // the id of the entity this hook will show/edit data for
-    path: "$.text", // the path in the entity's properties data will be taken from/saved to
+    path: ["http://example.com/property-type/text/"], // the path in the entity's properties data will be taken from/saved to
   },
 });
 ```
 
 ### React example
 
-For React, we provide a `useHookBlockService` hook, which accepts a `ref` to an element. This will return an object with the shape of `{ hookService: HookBlockHandler | null }` which you can use to send hook messages.
+For React, we provide a `useHookBlockModule` hook, which accepts a `ref` to an element. This will return an object with the shape of `{ hookModule: HookBlockHandler | null }` which you can use to send hook messages.
 
 We also provide a `useHook` hook to make sending hook messages easier.
 
 ```typescript
 import { useHook } from "@blockprotocol/hook/react";
 
-useHook(hookService, nodeRef, "text", "$.text", (node) => {
-  node.innerText = "hook fallback";
+useHook(
+  hookModule,
+  nodeRef,
+  "text",
+  ["http://example.com/property-type/text/"],
+  (node) => {
+    node.innerText = "hook fallback";
 
-  return () => {
-    node.innerText = "";
-  };
-});
+    return () => {
+      node.innerText = "";
+    };
+  },
+);
 ```
 
 Where `nodeRef` is a `RefObject` containing the DOM node you'd like to pass to the embedding application.
@@ -71,7 +77,7 @@ const nodes = new Map<string, HTMLElement>();
 
 const generateId = () => (Math.random() + 1).toString(36).substring(7);
 
-const hookService = new HookEmbedderHandler({
+const hookModule = new HookEmbedderHandler({
   callbacks: {
     hook({ data }) {
       if (data.hookId) {
@@ -97,16 +103,16 @@ const hookService = new HookEmbedderHandler({
 
 ### React
 
-For React embedding applications, we provide a `useHookEmbedderService` hook, which accepts a `ref` to an element, and optionally any additional constructor arguments you wish to pass.
+For React embedding applications, we provide a `useHookEmbedderModule` hook, which accepts a `ref` to an element, and optionally any additional constructor arguments you wish to pass.
 
 ```tsx
-import { useHookEmbedderService } from "@blockprotocol/hook/react";
+import { useHookEmbedderModule } from "@blockprotocol/hook/react";
 import { useRef } from "react";
 
 export const App = () => {
   const wrappingRef = useRef<HTMLDivElement>(null);
 
-  useHookEmbedderService(blockRef, {
+  useHookEmbedderModule(blockRef, {
     hook({ data }) {
       // As above
     },

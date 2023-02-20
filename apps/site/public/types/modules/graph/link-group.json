@@ -1,0 +1,20 @@
+{
+  "$id": "https://blockprotocol.org/types/modules/graph/link-group",
+  "title": "LinkGroup",
+  "type": "object",
+  "properties": {
+    "sourceEntityId": {
+      "type": "string"
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "$ref": "https://blockprotocol.org/types/modules/graph/link"
+      }
+    },
+    "path": {
+      "type": "string"
+    }
+  },
+  "required": ["sourceEntityId", "links", "path"]
+}

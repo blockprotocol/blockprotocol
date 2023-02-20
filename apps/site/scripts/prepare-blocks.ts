@@ -56,6 +56,7 @@ const storedBlockInfoSchema: JSONSchemaType<StoredBlockInfo> = {
     distDir: { type: "string", nullable: true },
     folder: { type: "string", nullable: true },
     workspace: { type: "string", nullable: true },
+    verified: { type: "boolean", nullable: true },
   },
   required: ["repository", "commit"],
   additionalProperties: false, // protects against typos in field names
@@ -555,6 +556,7 @@ const script = async () => {
 
       const blockMetadataToWrite: BlockMetadataOnDisk = {
         ...extendedBlockMetadata,
+        verified: blockInfo.verified,
         unstable_hubInfo: {
           ...hubInfo,
           checksum: blockInfoChecksum,

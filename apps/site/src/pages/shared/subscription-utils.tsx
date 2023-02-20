@@ -1,3 +1,5 @@
+import { Theme } from "@mui/material";
+import { StripeElementsOptions } from "@stripe/stripe-js";
 import getSymbolFromCurrency from "currency-symbol-map";
 
 export const paidSubscriptionTiers = ["hobby", "pro"] as const;
@@ -43,3 +45,26 @@ export const dateToHumanReadable = (date: Date) => {
     month < 10 ? "0" : ""
   }${month}/${year}`;
 };
+
+const cardBrands = {
+  amex: "American Express",
+  diners: "Diners",
+  discover: "Discover",
+  jcb: "JCB",
+  mastercard: "Mastercard",
+  unionpay: "UnionPay",
+  visa: "Visa",
+} as const;
+
+type CardBrand = keyof typeof cardBrands;
+
+export const cardBrandToHumanReadable = (cardBrand: string) =>
+  cardBrands[cardBrand as CardBrand] ?? "Unknown";
+
+export const createStripeOptions = (params: {
+  clientSecret?: string;
+  theme: Theme;
+}): StripeElementsOptions => ({
+  clientSecret: params.clientSecret,
+  appearance: { variables: { colorDanger: params.theme.palette.error.main } },
+});

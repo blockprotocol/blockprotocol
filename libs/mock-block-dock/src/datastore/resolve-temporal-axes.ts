@@ -1,7 +1,7 @@
 import {
   QueryTemporalAxes,
   QueryTemporalAxesUnresolved,
-} from "@blockprotocol/graph";
+} from "@blockprotocol/graph/temporal";
 
 /**
  * Takes an {@link QueryTemporalAxesUnresolved} and converts it into a {@link QueryTemporalAxes} by replacing any `null`

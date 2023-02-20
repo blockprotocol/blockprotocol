@@ -1,5 +1,5 @@
 import { CoreHandler } from "./core-handler";
-import { ServiceHandler } from "./service-handler";
+import { ModuleHandler } from "./module-handler";
 
 // ---------------------------- UTILITIES ----------------------------- //
 
@@ -145,8 +145,8 @@ export interface Message extends MessageContents {
   requestId: string;
   // the name of the message expected to respond to this message, if any
   respondedToBy?: string;
-  // the name of the service this message is sent under
-  service: string;
+  // the name of the module this message is sent under
+  module: string;
   // the source of the message
   source: "block" | "embedder";
   // when the message was sent
@@ -187,12 +187,12 @@ export type GenericMessageCallback =
   | MessageCallback<any, null, any>
   | MessageCallback<any, null, any, string>;
 
-export type MessageCallbacksByService = {
-  [serviceName: string]: Map<string, GenericMessageCallback> | undefined;
+export type MessageCallbacksByModule = {
+  [moduleName: string]: Map<string, GenericMessageCallback> | undefined;
 };
 
 export type EmbedderInitMessage = {
-  [serviceName: string]: {
+  [moduleName: string]: {
     [messageName: string]: any;
   };
 };
@@ -201,7 +201,7 @@ export type SendMessageArgs = {
   partialMessage: MessageContents;
   requestId?: string;
   respondedToBy?: string;
-  sender: CoreHandler | ServiceHandler;
+  sender: CoreHandler | ModuleHandler;
 };
 
 type PromiseConstructorFnArgs = Parameters<
@@ -220,21 +220,21 @@ export type ResponseSettlersByRequestIdMap = Map<
   }
 >;
 
-export type ServiceMessageDefinition = {
+export type ModuleMessageDefinition = {
   messageName: string;
   description: string;
   source: "embedder" | "block";
-  data: Record<string, unknown>;
+  data: JsonObject;
   sentOnInitialization?: boolean;
   errorCodes?: string[];
   respondedToBy?: string | null;
 };
 
-export type ServiceDefinition = {
+export type ModuleDefinition = {
   name: string;
   version: string;
   coreVersion: string;
-  messages: ServiceMessageDefinition[];
+  messages: ModuleMessageDefinition[];
 };
 
 export type HtmlBlockDefinition = {
