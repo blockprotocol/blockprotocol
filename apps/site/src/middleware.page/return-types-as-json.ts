@@ -8,6 +8,9 @@ import {
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+import { FRONTEND_URL } from "../lib/config";
+import { ApiEntityTypeByUriResponse } from "../pages/api/types/entity-type/get.api";
+import { ApiPropertyTypeByUriResponse } from "../pages/api/types/property-type/get.api";
 import { hardcodedTypes } from "./return-types-as-json/hardcoded-types";
 
 const generateErrorResponse = (
@@ -32,6 +35,19 @@ export const versionedTypeUriRegExp =
 const validateVersionedUri = (uri: string): uri is VersionedUri =>
   !!uri.match(versionedTypeUriRegExp);
 
+const getTypeByVersionedUri = (
+  versionedUri: VersionedUri,
+  kind: "entity-type" | "property-type",
+) =>
+  fetch(
+    `${FRONTEND_URL}/api/types/${kind}/get?versionedUri=${versionedUri}`,
+  ).then(
+    (resp) =>
+      resp.json() as Promise<
+        ApiPropertyTypeByUriResponse | ApiEntityTypeByUriResponse
+      >,
+  );
+
 export const returnTypeAsJson = async (request: NextRequest) => {
   const { url } = request;
 
@@ -48,9 +64,23 @@ export const returnTypeAsJson = async (request: NextRequest) => {
 
   const productionUrl = url.replace(origin, "https://blockprotocol.org");
 
-  const type = hardcodedTypes[productionUrl as keyof typeof hardcodedTypes];
+  const kind = url.match(versionedTypeUriRegExp)?.[1];
 
-  // @todo implement fetching of entity and property types from the db when new type hosting available
+  let type: DataType | PropertyType | EntityType =
+    hardcodedTypes[productionUrl as keyof typeof hardcodedTypes];
+
+  // Our hardcoded types have ALL data types and a single entity-type
+  // If it's not in there, it'll be an entity or property type
+  if (!type && kind !== "data-type") {
+    type = await getTypeByVersionedUri(
+      url,
+      kind as "entity-type" | "property-type",
+    ).then((apiResponse) => {
+      return "propertyType" in apiResponse
+        ? apiResponse.propertyType.schema
+        : apiResponse.entityType.schema;
+    });
+  }
 
   if (!type) {
     return generateErrorResponse(

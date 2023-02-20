@@ -224,7 +224,7 @@ export type ModuleMessageDefinition = {
   messageName: string;
   description: string;
   source: "embedder" | "block";
-  data: Record<string, unknown>;
+  data: JsonObject;
   sentOnInitialization?: boolean;
   errorCodes?: string[];
   respondedToBy?: string | null;

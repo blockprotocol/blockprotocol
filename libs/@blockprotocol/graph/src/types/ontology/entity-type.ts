@@ -33,11 +33,17 @@ export type GetEntityTypeData = {
   entityTypeId: VersionedUri;
 };
 
+type SystemDefinedEntityTypeProperties =
+  | "$id"
+  | "additionalProperties"
+  | "kind"
+  | "type";
+
 export type CreateEntityTypeData = {
-  entityType: Omit<EntityType, "$id" | "additionalProperties">;
+  entityType: Omit<EntityType, SystemDefinedEntityTypeProperties>;
 };
 
 export type UpdateEntityTypeData = {
   entityTypeId: VersionedUri;
-  entityType: Omit<EntityType, "$id" | "additionalProperties">;
+  entityType: Omit<EntityType, SystemDefinedEntityTypeProperties>;
 };
