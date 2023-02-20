@@ -3,6 +3,9 @@ import { css, html } from "lit";
 
 import { RootEntity } from "./types.gen";
 
+const nameKey: keyof RootEntity["properties"] =
+  "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/";
+
 /**
  * This is the entry point for your block – the class that embedding applications will use to register your element.
  * You should update this comment to describe what your block does, or remove the comment.
@@ -18,7 +21,7 @@ export class BlockElement extends BlockElementBase<RootEntity> {
   `;
 
   private handleInput(event: InputEvent) {
-    if (!this.graphModule || !this.blockEntity) {
+    if (!this.graphModule) {
       return;
     }
     /**
@@ -33,13 +36,11 @@ export class BlockElement extends BlockElementBase<RootEntity> {
     this.graphModule
       .updateEntity<RootEntity["properties"]>({
         data: {
-          entityId: this.blockEntity.metadata.recordId.entityId,
-          entityTypeId: this.blockEntity.metadata.entityTypeId,
+          entityId: this.getBlockEntity().metadata.recordId.entityId,
+          entityTypeId: this.getBlockEntity().metadata.entityTypeId,
           properties: {
-            ...this.blockEntity.properties,
-            "https://alpha.hash.ai/@hash/types/property-type/title/": (
-              event.target as HTMLInputElement
-            ).value,
+            ...this.getBlockEntity().properties,
+            [nameKey]: (event.target as HTMLInputElement).value,
           },
         },
       })
@@ -48,23 +49,16 @@ export class BlockElement extends BlockElementBase<RootEntity> {
 
   /** @see https://lit.dev/docs/components/rendering */
   render() {
-    return html`<h1>
-        Hello,
-        ${this.blockEntity?.properties[
-          "https://alpha.hash.ai/@hash/types/property-type/title/"
-        ]}
-      </h1>
+    return html`<h1>Hello, ${this.getBlockEntity().properties[nameKey]}</h1>
       <p>
         The entityId of this block is
-        ${this.blockEntity?.metadata.recordId.entityId}. Use it to update its
-        data when calling updateEntity.
+        ${this.getBlockEntity()?.metadata.recordId.entityId}. Use it to update
+        its data when calling updateEntity.
       </p>
       <!-- @see https://lit.dev/docs/components/events -->
       <input
         @change=${this.handleInput}
-        value=${this.blockEntity?.properties[
-          "https://alpha.hash.ai/@hash/types/property-type/title/"
-        ]}
+        value=${this.getBlockEntity()?.properties[nameKey]}
       />`;
   }
 }
