@@ -6,15 +6,14 @@ const production = !process.env.ROLLUP_WATCH;
 
 const outDir = (fmt) => `dist/${fmt}`;
 
-const rolls = (fmt, input) => ({
+const rolls = (fmt, input, outFileName) => ({
   input,
   output: {
-    dir: outDir(fmt),
+    file: `${outDir(fmt)}/${outFileName}.${fmt === "cjs" ? "cjs" : "js"}`,
     format: fmt,
     entryFileNames: `[name].${fmt === "cjs" ? "cjs" : "js"}`,
     name: "graph",
     sourcemap: !production,
-    preserveModules: true,
   },
   plugins: [
     typescript({
@@ -31,18 +30,17 @@ const rolls = (fmt, input) => ({
   ],
 });
 
-export default ["es", "cjs"].flatMap((fmt) =>
-  [
-    "src/non-temporal/main.ts",
-    "src/temporal/main.ts",
-    "src/codegen.ts",
-    // "src/non-temporal/custom-element.ts",
-    // "src/temporal/custom-element.ts",
-    "src/graph-module-json.ts",
-    "src/internal.ts",
-    // "src/non-temporal/react.ts",
-    // "src/temporal/react.ts",
-    // "src/non-temporal/stdlib.ts",
-    // "src/temporal/stdlib.ts",
-  ].map((input) => rolls(fmt, input)),
+const temporalDependent = ["es", "cjs"].flatMap((fmt) =>
+  ["temporal", "non-temporal"].flatMap((temporal) =>
+    ["main", "custom-element", "react", "stdlib"].map((input) =>
+      rolls(fmt, `src/${temporal}/${input}.ts`, `${input}-${temporal}`),
+    ),
+  ),
 );
+
+const shared = ["es", "cjs"].flatMap((fmt) =>
+  ["codegen", "graph-module-json", "internal"].map((input) =>
+    rolls(fmt, `src/${input}.ts`, `${input}.js`),
+  ),
+);
+export default [...temporalDependent, ...shared];

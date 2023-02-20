@@ -1,5 +1,9 @@
 import { ModuleHandler } from "@blockprotocol/core";
 
+import {
+  AggregateEntitiesData as AggregateEntitiesDataGeneral,
+  GetEntityData as GetEntityDataGeneral,
+} from "../shared/types/entity";
 /**
  * There's an issue when importing useGraphEmbedderModule from @blockprotocol/graph/react in hashintel/hash:
  * NextJS's output file tracing does not include graph-module.json, and yet an import statement for it is preserved.
@@ -9,7 +13,6 @@ import { ModuleHandler } from "@blockprotocol/core";
  */
 // import graphModuleJson from "./graph-module.json" assert { type: "json" };
 import {
-  AggregateEntitiesData,
   AggregateEntitiesResult,
   AggregateEntityTypesData,
   AggregateEntityTypesResult,
@@ -21,7 +24,6 @@ import {
   EntityPropertiesObject,
   EntityRootType,
   EntityTypeRootType,
-  GetEntityData,
   GetEntityTypeData,
   GraphBlockMessages,
   ReadOrModifyResourceError,
@@ -29,18 +31,18 @@ import {
   UpdateEntityData,
   UploadFileData,
   UploadFileReturn,
-} from "./types.js";
+} from "./main.js";
 
 /**
  * Creates a handler for the graph module for the block.
  * Register callbacks in the constructor or afterwards using the 'on' method to react to messages from the embedder.
  * Call the relevant methods to send messages to the embedder.
  */
-export class GraphBlockHandler<Temporal extends boolean>
+export class GraphBlockHandler
   extends ModuleHandler
   implements
     Omit<
-      GraphBlockMessages<Temporal>,
+      GraphBlockMessages,
       | "createEntityType"
       | "updateEntityType"
       | "createPropertyType"
@@ -53,7 +55,7 @@ export class GraphBlockHandler<Temporal extends boolean>
     callbacks,
     element,
   }: {
-    callbacks?: Partial<BlockGraphMessageCallbacks<Temporal>>;
+    callbacks?: Partial<BlockGraphMessageCallbacks>;
     element?: HTMLElement | null;
   }) {
     super({ element, callbacks, moduleName: "graph", sourceType: "block" });
@@ -68,7 +70,7 @@ export class GraphBlockHandler<Temporal extends boolean>
    * Registers multiple callbacks at once.
    * Useful for bulk updates to callbacks after the module is first initialised.
    */
-  registerCallbacks(callbacks: Partial<BlockGraphMessageCallbacks<Temporal>>) {
+  registerCallbacks(callbacks: Partial<BlockGraphMessageCallbacks>) {
     super.registerCallbacks(callbacks);
   }
 
@@ -76,7 +78,7 @@ export class GraphBlockHandler<Temporal extends boolean>
    * Removes multiple callbacks at once.
    * Useful when replacing previously registered callbacks
    */
-  removeCallbacks(callbacks: Partial<BlockGraphMessageCallbacks<Temporal>>) {
+  removeCallbacks(callbacks: Partial<BlockGraphMessageCallbacks>) {
     super.removeCallbacks(callbacks);
   }
 
@@ -86,10 +88,10 @@ export class GraphBlockHandler<Temporal extends boolean>
    * @param messageName the message name to listen for
    * @param handlerFunction the function to call when the message is received, with the message data / errors
    */
-  on<K extends keyof BlockGraphMessageCallbacks<Temporal>>(
-    this: GraphBlockHandler<Temporal>,
+  on<K extends keyof BlockGraphMessageCallbacks>(
+    this: GraphBlockHandler,
     messageName: K,
-    handlerFunction: BlockGraphMessageCallbacks<Temporal>[K],
+    handlerFunction: BlockGraphMessageCallbacks[K],
   ) {
     // @todo restore this when module resolution issue resolved
     // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
@@ -115,7 +117,7 @@ export class GraphBlockHandler<Temporal extends boolean>
   createEntity<
     ValidProperties extends EntityPropertiesObject = EntityPropertiesObject,
   >({ data }: { data?: CreateEntityData & { properties: ValidProperties } }) {
-    return this.sendMessage<Entity<Temporal>, CreateResourceError>({
+    return this.sendMessage<Entity, CreateResourceError>({
       message: {
         messageName: "createEntity",
         data,
@@ -127,7 +129,7 @@ export class GraphBlockHandler<Temporal extends boolean>
   updateEntity<
     ValidProperties extends EntityPropertiesObject = EntityPropertiesObject,
   >({ data }: { data?: UpdateEntityData & { properties: ValidProperties } }) {
-    return this.sendMessage<Entity<Temporal>, ReadOrModifyResourceError>({
+    return this.sendMessage<Entity, ReadOrModifyResourceError>({
       message: {
         messageName: "updateEntity",
         data,
@@ -147,9 +149,9 @@ export class GraphBlockHandler<Temporal extends boolean>
     });
   }
 
-  getEntity({ data }: { data?: GetEntityData<Temporal> }) {
+  getEntity({ data }: { data?: GetEntityDataGeneral<boolean> }) {
     return this.sendMessage<
-      Subgraph<Temporal, EntityRootType<Temporal>>,
+      Subgraph<EntityRootType>,
       ReadOrModifyResourceError
     >({
       message: {
@@ -160,12 +162,13 @@ export class GraphBlockHandler<Temporal extends boolean>
     });
   }
 
-  aggregateEntities({ data }: { data?: AggregateEntitiesData<Temporal> }) {
+  aggregateEntities({
+    data,
+  }: {
+    data?: AggregateEntitiesDataGeneral<boolean>;
+  }) {
     return this.sendMessage<
-      AggregateEntitiesResult<
-        Temporal,
-        Subgraph<Temporal, EntityRootType<Temporal>>
-      >,
+      AggregateEntitiesResult<Subgraph<EntityRootType>>,
       ReadOrModifyResourceError
     >({
       message: {
@@ -210,7 +213,7 @@ export class GraphBlockHandler<Temporal extends boolean>
 
   getEntityType({ data }: { data?: GetEntityTypeData }) {
     return this.sendMessage<
-      Subgraph<Temporal, EntityTypeRootType>,
+      Subgraph<EntityTypeRootType>,
       ReadOrModifyResourceError
     >({
       message: {
@@ -223,7 +226,7 @@ export class GraphBlockHandler<Temporal extends boolean>
 
   aggregateEntityTypes({ data }: { data?: AggregateEntityTypesData }) {
     return this.sendMessage<
-      AggregateEntityTypesResult<Subgraph<Temporal, EntityTypeRootType>>,
+      AggregateEntityTypesResult<Subgraph<EntityTypeRootType>>,
       ReadOrModifyResourceError
     >({
       message: {

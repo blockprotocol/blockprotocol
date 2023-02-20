@@ -1,7 +1,5 @@
 import { BaseUri } from "@blockprotocol/type-system/slim";
 
-import { GraphBlockHandler as GraphBlockHandlerGeneral } from "../shared/graph-block-handler";
-import { GraphEmbedderHandler as GraphEmbedderHandlerGeneral } from "../shared/graph-embedder-handler";
 import {
   AggregateEntitiesData as AggregateEntitiesDataGeneral,
   AggregateEntitiesResult as AggregateEntitiesResultGeneral,
@@ -11,7 +9,6 @@ import {
   AggregatePropertyTypesData as AggregatePropertyTypesDataGeneral,
   AggregatePropertyTypesResult as AggregatePropertyTypesResultGeneral,
   BlockGraphMessageCallbacks as BlockGraphMessageCallbacksGeneral,
-  BlockGraphProperties as BlockGraphPropertiesGeneral,
   BoundedTimeInterval as BoundedTimeIntervalGeneral,
   ConstrainsLinkDestinationsOnEdge as ConstrainsLinkDestinationsOnEdgeGeneral,
   ConstrainsLinksOnEdge as ConstrainsLinksOnEdgeGeneral,
@@ -171,10 +168,33 @@ import {
   Vertices as VerticesGeneral,
 } from "../shared/types.js";
 
-export type GraphBlockHandler = GraphBlockHandlerGeneral<true>;
-export type GraphEmbedderHandler = GraphEmbedderHandlerGeneral<true>;
-export type BlockGraphProperties<RootEntity extends Entity = Entity> =
-  BlockGraphPropertiesGeneral<true, RootEntity>;
+// import {
+//   BlockGraphProperties as BlockGraphPropertiesGeneral,
+// } from "../shared/types.js"
+
+export { GraphBlockHandler } from "./graph-block-handler";
+export { GraphEmbedderHandler } from "./graph-embedder-handler";
+
+/*
+ @todo - For some reason, exporting this alias breaks inference of generics when passed into things
+ */
+// export type BlockGraphProperties<RootEntity extends Entity = Entity> =
+//   BlockGraphPropertiesGeneral<true, RootEntity>
+export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
+  /**
+   * The 'graph' object contains messages sent under the graph module from the app to the block.
+   * They are sent on initialization and again when the application has new values to send.
+   * One such message is 'graph.blockEntity', which is a data entity fitting the block's schema (its type).
+   * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list
+   */
+  graph: {
+    blockEntitySubgraph?: Subgraph<{
+      vertexId: EntityVertexId;
+      element: RootEntity;
+    }>;
+    readonly?: boolean;
+  };
+};
 export type BlockGraphMessageCallbacks =
   BlockGraphMessageCallbacksGeneral<true>;
 export type GraphEmbedderMessages<

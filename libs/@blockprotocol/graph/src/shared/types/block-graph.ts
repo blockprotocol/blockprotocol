@@ -109,13 +109,13 @@ export type GraphEmbedderMessageCallbacks<Temporal extends boolean> = {
     ReadOrModifyResourceError
   >;
   getEntity: MessageCallback<
-    GetEntityData<Temporal>,
+    GetEntityData<boolean>,
     null,
     MessageReturn<Subgraph<Temporal, EntityRootType<Temporal>>>,
     ReadOrModifyResourceError
   >;
   aggregateEntities: MessageCallback<
-    AggregateEntitiesData<Temporal>,
+    AggregateEntitiesData<boolean>,
     null,
     MessageReturn<
       AggregateEntitiesResult<

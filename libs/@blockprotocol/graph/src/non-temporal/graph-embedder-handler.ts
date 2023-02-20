@@ -7,18 +7,18 @@ import {
   GraphEmbedderMessageCallbacks,
   GraphEmbedderMessages,
   Subgraph,
-} from "./types.js";
+} from "./main.js";
 
 /**
  * Creates a handler for the graph module for the embedder.
  * Register callbacks in the constructor or afterwards using the 'on' method to react to messages from the block.
  * Call the relevant methods to send messages to the block.
  */
-export class GraphEmbedderHandler<Temporal extends boolean>
+export class GraphEmbedderHandler
   extends ModuleHandler
-  implements GraphEmbedderMessages<Temporal>
+  implements GraphEmbedderMessages
 {
-  private _blockEntitySubgraph?: Subgraph<Temporal, EntityRootType<Temporal>>;
+  private _blockEntitySubgraph?: Subgraph<EntityRootType>;
   // private _linkedAggregations?: LinkedAggregations;
   private _readonly?: boolean;
 
@@ -29,8 +29,8 @@ export class GraphEmbedderHandler<Temporal extends boolean>
     // linkedAggregations,
     readonly,
   }: {
-    blockEntitySubgraph?: Subgraph<Temporal, EntityRootType<Temporal>>;
-    callbacks?: Partial<GraphEmbedderMessageCallbacks<Temporal>>;
+    blockEntitySubgraph?: Subgraph<EntityRootType>;
+    callbacks?: Partial<GraphEmbedderMessageCallbacks>;
     element?: HTMLElement | null;
     // linkedAggregations?: LinkedAggregations;
     readonly?: boolean;
@@ -45,9 +45,7 @@ export class GraphEmbedderHandler<Temporal extends boolean>
    * Registers multiple callbacks at once.
    * Useful for bulk updates to callbacks after the module is first initialised.
    */
-  registerCallbacks(
-    callbacks: Partial<GraphEmbedderMessageCallbacks<Temporal>>,
-  ) {
+  registerCallbacks(callbacks: Partial<GraphEmbedderMessageCallbacks>) {
     super.registerCallbacks(callbacks);
   }
 
@@ -55,7 +53,7 @@ export class GraphEmbedderHandler<Temporal extends boolean>
    * Removes multiple callbacks at once.
    * Useful when replacing previously registered callbacks
    */
-  removeCallbacks(callbacks: Partial<GraphEmbedderMessageCallbacks<Temporal>>) {
+  removeCallbacks(callbacks: Partial<GraphEmbedderMessageCallbacks>) {
     super.removeCallbacks(callbacks);
   }
 
@@ -65,10 +63,10 @@ export class GraphEmbedderHandler<Temporal extends boolean>
    * @param messageName the message name to listen for
    * @param handlerFunction the function to call when the message is received, with the message data / errors
    */
-  on<K extends keyof GraphEmbedderMessageCallbacks<Temporal>>(
-    this: GraphEmbedderHandler<Temporal>,
+  on<K extends keyof GraphEmbedderMessageCallbacks>(
+    this: GraphEmbedderHandler,
     messageName: K,
-    handlerFunction: NonNullable<GraphEmbedderMessageCallbacks<Temporal>[K]>,
+    handlerFunction: NonNullable<GraphEmbedderMessageCallbacks[K]>,
   ) {
     // @todo restore this when module resolution issue resolved
     // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
@@ -89,7 +87,7 @@ export class GraphEmbedderHandler<Temporal extends boolean>
     });
   }
 
-  getInitPayload(this: GraphEmbedderHandler<Temporal>): Record<string, any> {
+  getInitPayload(this: GraphEmbedderHandler): Record<string, any> {
     return {
       blockEntitySubgraph: this._blockEntitySubgraph,
       // linkedAggregations: this._linkedAggregations,
@@ -97,11 +95,7 @@ export class GraphEmbedderHandler<Temporal extends boolean>
     };
   }
 
-  blockEntitySubgraph({
-    data,
-  }: {
-    data?: Subgraph<Temporal, EntityRootType<Temporal>>;
-  }) {
+  blockEntitySubgraph({ data }: { data?: Subgraph<EntityRootType> }) {
     this._blockEntitySubgraph = data;
     this.sendMessage({
       message: {

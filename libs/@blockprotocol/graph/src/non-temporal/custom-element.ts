@@ -1,29 +1,26 @@
 import { LitElement } from "lit";
 
-import { GraphBlockHandler } from "./graph-block-handler.js";
-import { getOutgoingLinkAndTargetEntities } from "./stdlib.js";
-import { getRoots } from "./stdlib/subgraph/roots.js";
 import {
   BlockGraphProperties,
   Entity,
   EntityPropertiesObject,
+  GraphBlockHandler,
   LinkEntityAndRightEntity,
-} from "./types";
+} from "./main";
+import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib";
 
 export interface BlockElementBase<
-  Temporal extends boolean,
-  RootEntity extends Entity<Temporal> = Entity<Temporal>,
+  RootEntity extends Entity = Entity,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- this is used in the class definition
-  RootEntityLinkedEntities extends LinkEntityAndRightEntity<Temporal>[] = LinkEntityAndRightEntity<Temporal>[],
+  RootEntityLinkedEntities extends LinkEntityAndRightEntity[] = LinkEntityAndRightEntity[],
 > extends LitElement,
-    BlockGraphProperties<Temporal, RootEntity> {}
+    BlockGraphProperties<RootEntity> {}
 
 /**
  * A class to use as a base for implementing Block Protocol blocks as custom elements.
  * This class handles establishing communication with the embedding application.
  */
 export abstract class BlockElementBase<
-  Temporal extends boolean,
   RootEntity,
   RootEntityLinkedEntities,
 > extends LitElement {
@@ -32,9 +29,9 @@ export abstract class BlockElementBase<
    * It starts off undefined and will be available once the initial exchange of messages has taken place (handled internally)
    * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list of available messages
    */
-  protected graphModule?: GraphBlockHandler<Temporal>;
+  protected graphModule?: GraphBlockHandler;
   protected blockEntity?: RootEntity;
-  protected linkedEntities?: LinkEntityAndRightEntity<Temporal>[];
+  protected linkedEntities?: LinkEntityAndRightEntity[];
 
   /**
    * The properties sent to the block represent the messages sent automatically from the application to the block.
@@ -67,10 +64,11 @@ export abstract class BlockElementBase<
       }
       this.blockEntity = rootEntity;
 
-      this.linkedEntities = getOutgoingLinkAndTargetEntities<
-        Temporal,
-        RootEntityLinkedEntities
-      >(blockEntitySubgraph, rootEntity.metadata.recordId.entityId);
+      this.linkedEntities =
+        getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
+          blockEntitySubgraph,
+          rootEntity.metadata.recordId.entityId,
+        );
     }
   }
 

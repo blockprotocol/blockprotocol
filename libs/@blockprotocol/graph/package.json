@@ -25,13 +25,13 @@
   "exports": {
     ".": {
       "types": "./dist/cjs/non-temporal/main.d.ts",
-      "require": "./dist/cjs/non-temporal/main.cjs",
-      "import": "./dist/es/non-temporal/main.js"
+      "require": "./dist/cjs/main-non-temporal.cjs",
+      "import": "./dist/es/main-non-temporal.js"
     },
     "./temporal": {
       "types": "./dist/cjs/temporal/main.d.ts",
-      "require": "./dist/cjs/temporal/main.cjs",
-      "import": "./dist/es/temporal/main.js"
+      "require": "./dist/cjs/main-temporal.cjs",
+      "import": "./dist/es/main-temporal.js"
     },
     "./codegen": {
       "types": "./dist/cjs/codegen.d.ts",
@@ -40,8 +40,13 @@
     },
     "./custom-element": {
       "types": "./dist/cjs/non-temporal/custom-element.d.ts",
-      "require": "./dist/cjs/non-temporal/custom-element.cjs",
-      "import": "./dist/es/non-temporal/custom-element.js"
+      "require": "./dist/cjs/custom-element-non-temporal.cjs",
+      "import": "./dist/es/custom-element-non-temporal.js"
+    },
+    "./temporal/custom-element": {
+      "types": "./dist/cjs/temporal/custom-element.d.ts",
+      "require": "./dist/cjs/custom-element-temporal.cjs",
+      "import": "./dist/es/custom-element-temporal.js"
     },
     "./graph-module-json": {
       "types": "./dist/cjs/graph-module-json.d.ts",
@@ -55,18 +60,23 @@
     },
     "./react": {
       "types": "./dist/cjs/non-temporal/react.d.ts",
-      "require": "./dist/cjs/non-temporal/react.cjs",
-      "import": "./dist/es/non-temporal/react.js"
+      "require": "./dist/cjs/react-non-temporal.cjs",
+      "import": "./dist/es/react-non-temporal.js"
+    },
+    "./temporal/react": {
+      "types": "./dist/cjs/temporal/react.d.ts",
+      "require": "./dist/cjs/react-temporal.cjs",
+      "import": "./dist/es/react-temporal.js"
     },
     "./stdlib": {
       "types": "./dist/cjs/non-temporal/stdlib.d.ts",
-      "require": "./dist/cjs/non-temporal/stdlib.cjs",
-      "import": "./dist/es/non-temporal/stdlib.js"
+      "require": "./dist/cjs/stdlib-non-temporal.cjs",
+      "import": "./dist/es/stdlib-non-temporal.js"
     },
     "./temporal/stdlib": {
       "types": "./dist/cjs/temporal/stdlib.d.ts",
-      "require": "./dist/cjs/temporal/stdlib.cjs",
-      "import": "./dist/es/temporal/stdlib.js"
+      "require": "./dist/cjs/stdlib-temporal.cjs",
+      "import": "./dist/es/stdlib-temporal.js"
     }
   },
   "module": "./dist/es/non-temporal/main.js",
@@ -85,6 +95,9 @@
       "custom-element": [
         "./dist/cjs/non-temporal/custom-element.d.ts"
       ],
+      "temporal/custom-element": [
+        "./dist/cjs/temporal/custom-element.d.ts"
+      ],
       "graph-module-json": [
         "./dist/cjs/graph-module-json.d.ts"
       ],
@@ -93,6 +106,9 @@
       ],
       "react": [
         "./dist/cjs/non-temporal/react.d.ts"
+      ],
+      "temporal/react": [
+        "./dist/cjs/temporal/react.d.ts"
       ],
       "stdlib": [
         "./dist/cjs/non-temporal/stdlib.d.ts"
