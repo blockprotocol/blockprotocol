@@ -7,7 +7,6 @@ import {
   useCallback,
   useState,
 } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
