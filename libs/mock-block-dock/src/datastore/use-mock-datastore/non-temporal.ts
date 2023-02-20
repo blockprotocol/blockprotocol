@@ -5,6 +5,10 @@ import {
   GraphEmbedderMessageCallbacks,
   isFileAtUrlData,
   isFileData,
+  isHasLeftEntityEdge,
+  isHasRightEntityEdge,
+  KnowledgeGraphOutwardEdge,
+  OntologyOutwardEdge,
   Subgraph,
 } from "@blockprotocol/graph";
 import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
@@ -18,6 +22,7 @@ import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
 import { useDefaultState } from "../../use-default-state";
+import { typedEntries } from "../../util";
 import { aggregateEntities as aggregateEntitiesImpl } from "../hook-implementations/entity/aggregate-entities";
 import { getEntity as getEntityImpl } from "../hook-implementations/entity/get-entity";
 import { MockData } from "../mock-data";
@@ -110,30 +115,34 @@ export const useMockDatastore = (
             ],
           };
         }
-        const entityId = uuid();
-        const { entityTypeId, properties, linkData } = data;
 
-        const newEntity: Entity = {
-          metadata: {
-            recordId: {
-              entityId,
-              editionId: new Date().toISOString(),
+        return new Promise((resolve) => {
+          const entityId = uuid();
+          const { entityTypeId, properties, linkData } = data;
+
+          const newEntity: Entity = {
+            metadata: {
+              recordId: {
+                entityId,
+                editionId: new Date().toISOString(),
+              },
+              entityTypeId,
             },
-            entityTypeId,
-          },
-          properties,
-          linkData,
-        };
-
-        setGraph((currentGraph) => {
-          // A shallow copy should be enough to trigger a re-render
-          const newSubgraph = {
-            ...currentGraph,
+            properties,
+            linkData,
           };
-          addEntitiesToSubgraphByMutation(newSubgraph, [newEntity]);
-          return newSubgraph;
+
+          resolve({ data: newEntity });
+
+          setGraph((currentGraph) => {
+            const newSubgraph = JSON.parse(
+              JSON.stringify(currentGraph),
+            ) as Subgraph;
+
+            addEntitiesToSubgraphByMutation(newSubgraph, [newEntity]);
+            return newSubgraph;
+          });
         });
-        return { data: newEntity };
       },
       [readonly, setGraph],
     );
@@ -295,17 +304,6 @@ export const useMockDatastore = (
   const deleteEntity: GraphEmbedderMessageCallbacks["deleteEntity"] =
     useCallback(
       async ({ data }) => {
-        return {
-          errors: [
-            {
-              code: "NOT_IMPLEMENTED",
-              message: `Entity deletion is not currently supported`,
-            },
-          ],
-        };
-
-        /** @todo - implement entity deletion */
-        // eslint-disable-next-line no-unreachable -- currently unimplemented
         if (readonly) {
           return readonlyErrorReturn;
         }
@@ -320,10 +318,90 @@ export const useMockDatastore = (
             ],
           };
         }
-        return new Promise((_resolve) => {
+
+        return new Promise((resolve) => {
+          const { entityId } = data;
           setGraph((currentGraph) => {
-            // resolve();
-            return currentGraph;
+            const currentEntity = getEntityRevision(currentGraph, entityId);
+
+            if (!currentEntity) {
+              resolve({
+                errors: [
+                  {
+                    code: "NOT_FOUND",
+                    message: `Could not find entity with ID: ${entityId}`,
+                  },
+                ],
+              });
+            }
+
+            const newGraph = JSON.parse(
+              JSON.stringify(currentGraph),
+            ) as Subgraph;
+
+            const toRemove = [entityId];
+
+            const removeEntityAndLinks = (entityIdToRemove: string) => {
+              delete newGraph.vertices[entityIdToRemove];
+              delete newGraph.edges[entityIdToRemove];
+
+              for (const [baseId, outwardEdgeObject] of typedEntries(
+                newGraph.edges,
+              )) {
+                for (const [at, outwardEdges] of typedEntries(
+                  outwardEdgeObject,
+                )) {
+                  const filteredEdges = (
+                    outwardEdges as (typeof outwardEdges)[number][]
+                  ).filter((outwardEdge) => {
+                    // cascading delete link entities if their endpoints are deleted
+                    if (
+                      isHasLeftEntityEdge(outwardEdge) ||
+                      isHasRightEntityEdge(outwardEdge)
+                    ) {
+                      if (
+                        typeof outwardEdge.rightEndpoint === "string" &&
+                        outwardEdge.rightEndpoint === entityIdToRemove &&
+                        !toRemove.includes(baseId)
+                      ) {
+                        // `baseId` is a link entity, and either its left or right entity has been deleted, so we must
+                        // also delete the link
+                        toRemove.push(baseId);
+                      }
+                    }
+
+                    // `baseId` had an edge to a deleted entity, so we remove the edge
+                    return !(
+                      typeof outwardEdge.rightEndpoint === "string" &&
+                      outwardEdge.rightEndpoint === entityIdToRemove
+                    );
+                  });
+
+                  if (filteredEdges.length > 0) {
+                    newGraph.edges[baseId]![at] = filteredEdges as
+                      | OntologyOutwardEdge[]
+                      | KnowledgeGraphOutwardEdge[];
+                  } else {
+                    delete newGraph.edges[baseId]![at];
+
+                    if (Object.entries(newGraph.edges[baseId]!).length === 0) {
+                      delete newGraph.edges[baseId];
+                    }
+                  }
+                }
+              }
+            };
+
+            while (toRemove.length > 0) {
+              const entityIdToRemove = toRemove.pop()!;
+              removeEntityAndLinks(entityIdToRemove);
+            }
+
+            resolve({
+              data: true,
+            });
+
+            return newGraph;
           });
         });
       },
