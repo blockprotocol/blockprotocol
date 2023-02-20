@@ -48,7 +48,7 @@ type BlockDefinition =
 type MockBlockDockProps<Temporal extends boolean> = {
   blockDefinition: BlockDefinition;
   blockEntityRecordId?: EntityRecordId;
-  temporal: Temporal;
+  temporal?: Temporal;
   debug?: boolean;
   hideDebugToggle?: boolean;
   initialData?: InitialData<Temporal>;
