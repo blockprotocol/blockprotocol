@@ -48,6 +48,7 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   pathWithNamespace: string;
   // the repository URL as a string (including commit and folder info where appropriate)
   repository?: string;
+  verified?: boolean;
 };
 
 /**
@@ -70,6 +71,7 @@ export interface StoredBlockInfo {
   distDir?: string;
   folder?: string;
   workspace?: string;
+  verified?: boolean;
 }
 
 // Generate an absolute url to a block file

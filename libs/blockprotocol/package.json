@@ -1,6 +1,6 @@
 {
   "name": "blockprotocol",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Command Line Interface (CLI) for the Block Protocol API",
   "keywords": [
     "blockprotocol",

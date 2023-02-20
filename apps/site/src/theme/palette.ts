@@ -44,6 +44,7 @@ export const customColors = {
     700: "#8F2F14",
   },
   red: {
+    80: "#CC1B3B",
     100: "#FCF3F6",
     200: "#F4C2D4",
     300: "#EE9BB9",

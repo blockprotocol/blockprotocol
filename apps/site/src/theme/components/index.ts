@@ -19,6 +19,8 @@ import { MuiTextFieldThemeOptions } from "./inputs/mui-text-field-theme-options"
 import { MuiContainerThemeOptions } from "./layout/mui-container-theme-options";
 import { MuiBreadcrumbsThemeOptions } from "./navigation/mui-breadcrumbs-theme-options";
 import { MuiLinkThemeOptions } from "./navigation/mui-link-theme-options";
+import { MuiMenuItemThemeOptions } from "./navigation/mui-menu-item-theme-options";
+import { MuiMenuThemeOptions } from "./navigation/mui-menu-theme-options";
 import { MuiTabThemeOptions } from "./navigation/mui-tab-theme-options";
 import { MuiTabsThemeOptions } from "./navigation/mui-tabs-theme-options";
 import { MuiPaperThemeOptions } from "./surfaces/mui-paper-theme-options";
@@ -55,6 +57,8 @@ export const components: ThemeOptions["components"] = {
   MuiLink: MuiLinkThemeOptions,
   MuiTabs: MuiTabsThemeOptions,
   MuiTab: MuiTabThemeOptions,
+  MuiMenu: MuiMenuThemeOptions,
+  MuiMenuItem: MuiMenuItemThemeOptions,
 
   /** ===== FEEDBACK ===== */
   MuiSkeleton: MuiSkeletonThemeOptions,

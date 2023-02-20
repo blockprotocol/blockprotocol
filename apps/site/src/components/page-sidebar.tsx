@@ -83,11 +83,13 @@ const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
     pathWithoutParams === sectionHref ||
     (isSelectedByDefault &&
       (pathWithoutParams === pageHref || pathWithoutParams === `${pageHref}#`));
+
   const hasSelectedSubSection =
     subSections?.find(
       ({ anchor: subSectionAnchor }) =>
         pathWithoutParams === `${pageHref}#${subSectionAnchor}`,
     ) !== undefined;
+
   const isSectionOpen = openedPages.includes(sectionHref);
 
   return (
@@ -196,7 +198,11 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
   const { href, title, sections = [], subPages = [] } = page;
 
   const isSelected =
-    pathWithoutParams === href || pathWithoutParams === `${href}#`;
+    pathWithoutParams === href ||
+    pathWithoutParams === `${href}#` ||
+    ((!page.subPages || page.subPages.length === 0) &&
+      (!page.sections || page.sections.length === 0) &&
+      pathWithoutParams.startsWith(href));
 
   const isOpen = openedPages.includes(href);
   const hasChildren = (sections?.length ?? 0) + (subPages?.length ?? 0) > 0;

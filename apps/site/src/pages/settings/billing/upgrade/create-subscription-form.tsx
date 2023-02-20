@@ -126,7 +126,7 @@ export const CreateSubscriptionCheckoutForm: FunctionComponent<{
         <Collapse in={!!errorMessage} sx={{ marginBottom: 1 }}>
           <Typography
             variant="bpSmallCopy"
-            sx={{ color: ({ palette }) => palette.red[800] }}
+            sx={{ color: ({ palette }) => palette.error.main }}
           >
             {errorMessage}
           </Typography>
