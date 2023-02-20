@@ -149,7 +149,7 @@ export const OverviewCard: FunctionComponent<OverviewCardProps> = ({
                 variant="bpMicroCopy"
                 sx={{ lineHeight: 1, color: ({ palette }) => palette.gray[70] }}
               >
-                {type === "block" ? "Block" : "Schema"}
+                {type === "block" ? "Block" : "Entity Type"}
               </Typography>
             </Box>
           </Box>

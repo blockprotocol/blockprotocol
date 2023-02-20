@@ -1,11 +1,9 @@
+import type { EntityType, EntityTypeWithMetadata } from "@blockprotocol/graph";
+import type { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 import {
-  type BaseUri,
-  type VersionedUri,
-  EntityType,
-  EntityTypeWithMetadata,
   extractBaseUri,
   extractVersion,
-} from "@blockprotocol/graph";
+} from "@blockprotocol/type-system/slim";
 import { Db, ObjectId } from "mongodb";
 
 import { User } from "../../../../../lib/api/model/user.model";
