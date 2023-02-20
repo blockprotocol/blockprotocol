@@ -90,11 +90,6 @@ impl EntityType {
     }
 
     #[must_use]
-    pub fn required_links(&self) -> &[VersionedUri] {
-        self.links.required()
-    }
-
-    #[must_use]
     pub const fn default(&self) -> &HashMap<BaseUri, serde_json::Value> {
         &self.default
     }

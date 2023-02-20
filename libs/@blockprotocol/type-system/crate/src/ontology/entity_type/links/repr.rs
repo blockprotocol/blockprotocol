@@ -22,9 +22,6 @@ pub struct Links {
     )]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     links: HashMap<String, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>,
-    #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "VersionedUri[]"))]
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    required_links: Vec<String>,
 }
 
 impl TryFrom<Links> for super::Links {
@@ -42,34 +39,19 @@ impl TryFrom<Links> for super::Links {
             })
             .collect::<Result<HashMap<_, _>, Self::Error>>()?;
 
-        let required_links = links_repr
-            .required_links
-            .into_iter()
-            .map(|uri| VersionedUri::from_str(&uri).map_err(ParseLinksError::InvalidRequiredKey))
-            .collect::<Result<Vec<_>, Self::Error>>()?;
-
-        Self::new(links, required_links).map_err(ParseLinksError::ValidationError)
+        Ok(Self::new(links))
     }
 }
 
 impl From<super::Links> for Links {
     fn from(object: super::Links) -> Self {
         let links = object
-            .links
+            .0
             .into_iter()
             .map(|(uri, val)| (uri.to_string(), val.into()))
             .collect();
 
-        let required_links = object
-            .required_links
-            .into_iter()
-            .map(|uri| uri.to_string())
-            .collect();
-
-        Self {
-            links,
-            required_links,
-        }
+        Self { links }
     }
 }
 

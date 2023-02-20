@@ -13,57 +13,22 @@ use crate::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Links {
-    links: HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
-    required_links: Vec<VersionedUri>,
-}
+pub struct Links(HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>);
 
 impl Links {
-    /// Creates a new `Links` without validating.
+    /// Creates a new `Links` object.
     #[must_use]
-    pub const fn new_unchecked(
+    pub const fn new(
         links: HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
-        required: Vec<VersionedUri>,
     ) -> Self {
-        Self {
-            links,
-            required_links: required,
-        }
-    }
-
-    /// Creates a new `Links`.
-    ///
-    /// # Errors
-    ///
-    /// - [`ValidationError::MissingRequiredLink`] if a required link is not a key in `links`.
-    pub fn new(
-        links: HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
-        required: Vec<VersionedUri>,
-    ) -> Result<Self, ValidationError> {
-        let links = Self::new_unchecked(links, required);
-        links.validate()?;
-        Ok(links)
-    }
-
-    fn validate(&self) -> Result<(), ValidationError> {
-        for link in self.required() {
-            if !self.links().contains_key(link) {
-                return Err(ValidationError::MissingRequiredLink(link.clone()));
-            }
-        }
-        Ok(())
+        Self(links)
     }
 
     #[must_use]
     pub const fn links(
         &self,
     ) -> &HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
-        &self.links
-    }
-
-    #[must_use]
-    pub fn required(&self) -> &[VersionedUri] {
-        &self.required_links
+        &self.0
     }
 }
 
