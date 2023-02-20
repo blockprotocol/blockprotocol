@@ -14,8 +14,8 @@ import {
   TimeInterval,
   Timestamp,
   Unbounded,
-} from "../types.js";
-import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
+} from "../types";
+import { GraphResolveDepths } from "./subgraph/graph-resolve-depths";
 
 export type JsonObject = CoreJsonObject;
 export type JsonValue = CoreJsonValue;

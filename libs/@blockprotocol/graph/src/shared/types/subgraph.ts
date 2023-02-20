@@ -1,22 +1,22 @@
-import { Entity } from "./entity.js";
-import { DataTypeWithMetadata } from "./ontology/data-type.js";
-import { EntityTypeWithMetadata } from "./ontology/entity-type.js";
-import { PropertyTypeWithMetadata } from "./ontology/property-type.js";
-import { Edges } from "./subgraph/edges.js";
-import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
-import { SubgraphTemporalAxes } from "./subgraph/temporal-axes.js";
+import { Entity } from "./entity";
+import { DataTypeWithMetadata } from "./ontology/data-type";
+import { EntityTypeWithMetadata } from "./ontology/entity-type";
+import { PropertyTypeWithMetadata } from "./ontology/property-type";
+import { Edges } from "./subgraph/edges";
+import { GraphResolveDepths } from "./subgraph/graph-resolve-depths";
+import { SubgraphTemporalAxes } from "./subgraph/temporal-axes";
 import {
   EntityVertexId,
   OntologyTypeVertexId,
   Vertices,
-} from "./subgraph/vertices.js";
+} from "./subgraph/vertices";
 
-export * from "./ontology.js";
-export * from "./subgraph/edges.js";
-export * from "./subgraph/element-mappings.js";
-export * from "./subgraph/graph-resolve-depths.js";
-export * from "./subgraph/temporal-axes.js";
-export * from "./subgraph/vertices.js";
+export * from "./ontology";
+export * from "./subgraph/edges";
+export * from "./subgraph/element-mappings";
+export * from "./subgraph/graph-resolve-depths";
+export * from "./subgraph/temporal-axes";
+export * from "./subgraph/vertices";
 
 export type DataTypeRootType = {
   vertexId: OntologyTypeVertexId;

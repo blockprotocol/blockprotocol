@@ -1,8 +1,8 @@
 import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { AggregateOperationInput } from "../entity.js";
-import { EntityTypeRootType, Subgraph } from "../subgraph.js";
-import { OntologyElementMetadata } from "./metadata.js";
+import { AggregateOperationInput } from "../entity";
+import { EntityTypeRootType, Subgraph } from "../subgraph";
+import { OntologyElementMetadata } from "./metadata";
 
 /**
  * @todo - Should we re-export this? Should the type-system package be an implementation detail of the graph module?

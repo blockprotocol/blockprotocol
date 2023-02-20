@@ -1,5 +1,5 @@
-import { AggregateEntitiesResult, AggregateOperationInput } from "./entity.js";
-import { EntityRootType, Subgraph } from "./subgraph.js";
+import { AggregateEntitiesResult, AggregateOperationInput } from "./entity";
+import { EntityRootType, Subgraph } from "./subgraph";
 
 export type LinkedAggregationDefinition = {
   aggregationId: string;

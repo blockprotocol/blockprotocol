@@ -146,7 +146,7 @@ import {
   Vertex as VertexGeneral,
   VertexId as VertexIdGeneral,
   Vertices as VerticesGeneral,
-} from "../shared/types.js";
+} from "../shared/types";
 
 export { GraphBlockHandler } from "./graph-block-handler";
 export { GraphEmbedderHandler } from "./graph-embedder-handler";
@@ -174,7 +174,7 @@ export { GraphEmbedderHandler } from "./graph-embedder-handler";
 //   Unbounded as UnboundedGeneral,
 //   VariableTemporalAxis as VariableTemporalAxisGeneral,
 //   VariableTemporalAxisUnresolved as VariableTemporalAxisUnresolvedGeneral,
-// } from "../shared/types.js";
+// } from "../shared/types";
 
 // export type BlockGraphProperties<RootEntity extends Entity = Entity> =
 //   BlockGraphPropertiesGeneral<false, RootEntity>

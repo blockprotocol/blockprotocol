@@ -1,7 +1,7 @@
 import { PropertyType, VersionedUri } from "@blockprotocol/type-system/slim";
 
 import { PropertyTypeRootType, Subgraph } from "../subgraph";
-import { OntologyElementMetadata } from "./metadata.js";
+import { OntologyElementMetadata } from "./metadata";
 
 /**
  * @todo - Should we re-export this? Should the type-system package be an implementation detail of the graph module?

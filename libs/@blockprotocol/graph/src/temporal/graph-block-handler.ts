@@ -31,7 +31,7 @@ import {
   UpdateEntityData,
   UploadFileData,
   UploadFileReturn,
-} from "./main.js";
+} from "./main";
 
 /**
  * Creates a handler for the graph module for the block.

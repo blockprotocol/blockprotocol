@@ -166,11 +166,11 @@ import {
   Vertex as VertexGeneral,
   VertexId as VertexIdGeneral,
   Vertices as VerticesGeneral,
-} from "../shared/types.js";
+} from "../shared/types";
 
 // import {
 //   BlockGraphProperties as BlockGraphPropertiesGeneral,
-// } from "../shared/types.js"
+// } from "../shared/types"
 
 export { GraphBlockHandler } from "./graph-block-handler";
 export { GraphEmbedderHandler } from "./graph-embedder-handler";

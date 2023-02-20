@@ -1,7 +1,7 @@
-export { addOutwardEdgeToSubgraphByMutation } from "./mutate-subgraph/edge.js";
+export { addOutwardEdgeToSubgraphByMutation } from "./mutate-subgraph/edge";
 export {
   addDataTypesToSubgraphByMutation,
   addEntitiesToSubgraphByMutation,
   addEntityTypesToSubgraphByMutation,
   addPropertyTypesToSubgraphByMutation,
-} from "./mutate-subgraph/element.js";
+} from "./mutate-subgraph/element";

@@ -5,8 +5,8 @@ import {
   getReferencedIdsFromPropertyType,
 } from "@blockprotocol/type-system/slim";
 
-import { unionOfIntervals } from "../../shared/stdlib/interval.js";
-import { Entity, EntityId } from "../../shared/types/entity.js";
+import { unionOfIntervals } from "../../shared/stdlib/interval";
+import { Entity, EntityId } from "../../shared/types/entity";
 import {
   DataTypeVertex,
   DataTypeWithMetadata,
@@ -18,8 +18,8 @@ import {
   PropertyTypeVertex,
   PropertyTypeWithMetadata,
   Subgraph,
-} from "../../shared/types/subgraph.js";
-import { addOutwardEdgeToSubgraphByMutation } from "./edge.js";
+} from "../../shared/types/subgraph";
+import { addOutwardEdgeToSubgraphByMutation } from "./edge";
 
 /**
  * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`

@@ -10,7 +10,7 @@ import {
   LinkEntityAndRightEntity,
   Subgraph,
 } from "./main";
-import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib.js";
+import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib";
 
 export type BlockComponent<RootEntity extends Entity = Entity> =
   FunctionComponent<BlockGraphProperties<RootEntity>>;

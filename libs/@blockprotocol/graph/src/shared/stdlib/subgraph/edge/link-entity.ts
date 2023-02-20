@@ -2,7 +2,7 @@ import {
   Entity,
   EntityId,
   LinkEntityAndRightEntity,
-} from "../../../types/entity.js";
+} from "../../../types/entity";
 import {
   isHasLeftEntityEdge,
   isHasRightEntityEdge,
@@ -11,20 +11,20 @@ import {
   isTemporalSubgraph,
   OutwardEdge,
   Subgraph,
-} from "../../../types/subgraph.js";
-import { TimeInterval } from "../../../types/temporal-versioning.js";
+} from "../../../types/subgraph";
+import { TimeInterval } from "../../../types/temporal-versioning";
 import { typedEntries } from "../../../util";
 import {
   intervalForTimestamp,
   intervalIntersectionWithInterval,
   intervalIsStrictlyAfterInterval,
-} from "../../interval.js";
+} from "../../interval";
 import { mustBeDefined } from "../../must-be-defined";
 import {
   getEntityRevision,
   getEntityRevisionsByEntityId,
-} from "../element/entity.js";
-import { getLatestInstantIntervalForSubgraph } from "../temporal-axes.js";
+} from "../element/entity";
+import { getLatestInstantIntervalForSubgraph } from "../temporal-axes";
 
 const getUniqueEntitiesFilter = <Temporal extends boolean>() => {
   const set = new Set();
