@@ -25,7 +25,8 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
   onClose,
 }) => {
   const [newSchemaTitle, setNewSchemaTitle] = useState("");
-  const [touchedInput, setTouchedInput] = useState(false);
+  const [touchedTitleInput, setTouchedTitleInput] = useState(false);
+  const [newDescription, setNewDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>(undefined);
   const router = useRouter();
@@ -33,7 +34,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
 
   const handleSchemaTitleChange = (value: string) => {
     // trim surrounding whitespace and remove most special characters
-    const formattedText = value.trim().replace(/[^a-zA-Z0-9-_ ]/g, "");
+    const formattedText = value.replace(/[^a-zA-Z0-9-_ ]/g, "");
 
     setNewSchemaTitle(formattedText);
   };
@@ -45,15 +46,14 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
         return;
       }
 
-      unstable_batchedUpdates(() => {
-        setTouchedInput(true);
-        setLoading(true);
-        setApiErrorMessage(undefined);
-      });
+      setTouchedTitleInput(true);
+      setLoading(true);
+      setApiErrorMessage(undefined);
 
       const { data, error } = await apiClient.createEntityType({
         schema: {
-          title: newSchemaTitle,
+          description: newDescription.trim(),
+          title: newSchemaTitle.trim(),
         },
       });
       setLoading(false);
@@ -63,18 +63,18 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
         void router.push(new URL(data.entityType.schema.$id).pathname);
       }
     },
-    [user, newSchemaTitle, router],
+    [user, newDescription, newSchemaTitle, router],
   );
 
   // @todo introduce a library for handling forms
-  const helperText = touchedInput
+  const helperText = touchedTitleInput
     ? apiErrorMessage ||
       (newSchemaTitle === "" ? "Please enter a valid value" : undefined)
     : undefined;
 
   const isSchemaTitleInvalid = !!apiErrorMessage || newSchemaTitle === "";
 
-  const displayError = touchedInput && isSchemaTitleInvalid;
+  const displayError = touchedTitleInput && isSchemaTitleInvalid;
 
   return (
     <Modal
@@ -93,7 +93,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
             display: "block",
           }}
         >
-          Create New <strong>Schema</strong>
+          Create New <strong>Entity Type</strong>
         </Typography>
         <Typography
           sx={{
@@ -103,14 +103,14 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
             width: { xs: "90%", md: "85%" },
           }}
         >
-          Schemas are used to define the structure of entities - in other words,
-          define a ‘type’ of entity
+          Types are used to define the structure of entities and their
+          relationships to other entities.
         </Typography>
         <Box component="form" onSubmit={handleCreateSchema}>
           <TextField
             sx={{ mb: 3 }}
             autoFocus
-            label="Schema Title"
+            label="Title"
             fullWidth
             helperText={helperText}
             value={newSchemaTitle}
@@ -122,6 +122,15 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
             }}
             required
             error={displayError}
+          />
+
+          <TextField
+            sx={{ mb: 3 }}
+            label="Description"
+            fullWidth
+            value={newDescription}
+            onChange={(evt) => setNewDescription(evt.target.value)}
+            required
           />
 
           <Button

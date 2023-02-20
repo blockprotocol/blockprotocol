@@ -89,7 +89,7 @@ export const UserPageComponent: FunctionComponent<UserPageProps> = ({
               activeTab={activeTab}
               tabItemsCount={{
                 blocks: blocks.length,
-                schemas: entityTypes.length,
+                "all-types": entityTypes.length,
               }}
             />
             {/* TAB PANELS  */}
@@ -103,7 +103,7 @@ export const UserPageComponent: FunctionComponent<UserPageProps> = ({
             <TabPanel activeTab={activeTab} value="blocks" index={1}>
               <TabPanelContentsWithBlocks user={user} blocks={blocks} />
             </TabPanel>
-            <TabPanel activeTab={activeTab} value="schemas" index={2}>
+            <TabPanel activeTab={activeTab} value="all-types" index={2}>
               <TabPanelContentsWithSchemas
                 user={user}
                 entityTypes={entityTypes}
