@@ -114,49 +114,49 @@ export interface ErrorInfo {
 /**
  *
  * @export
- * @interface ExternalApiMethod200Response
+ * @interface ExternalServiceMethod200Response
  */
-export interface ExternalApiMethod200Response {
+export interface ExternalServiceMethod200Response {
   /**
    *
    * @type {any}
-   * @memberof ExternalApiMethod200Response
+   * @memberof ExternalServiceMethod200Response
    */
-  externalApiMethodResponse: any;
+  externalServiceMethodResponse: any;
 }
 /**
  *
  * @export
- * @interface ExternalApiMethodRequest
+ * @interface ExternalServiceMethodRequest
  */
-export interface ExternalApiMethodRequest {
+export interface ExternalServiceMethodRequest {
   /**
    *
    * @type {string}
-   * @memberof ExternalApiMethodRequest
+   * @memberof ExternalServiceMethodRequest
    */
-  providerName: ExternalApiMethodRequestProviderNameEnum;
+  providerName: ExternalServiceMethodRequestProviderNameEnum;
   /**
    *
    * @type {string}
-   * @memberof ExternalApiMethodRequest
+   * @memberof ExternalServiceMethodRequest
    */
   methodName: string;
   /**
    *
    * @type {{ [key: string]: any; }}
-   * @memberof ExternalApiMethodRequest
+   * @memberof ExternalServiceMethodRequest
    */
   payload: { [key: string]: any };
 }
 
-export const ExternalApiMethodRequestProviderNameEnum = {
+export const ExternalServiceMethodRequestProviderNameEnum = {
   OpenAi: "openAI",
   Mapbox: "mapbox",
 } as const;
 
-export type ExternalApiMethodRequestProviderNameEnum =
-  (typeof ExternalApiMethodRequestProviderNameEnum)[keyof typeof ExternalApiMethodRequestProviderNameEnum];
+export type ExternalServiceMethodRequestProviderNameEnum =
+  (typeof ExternalServiceMethodRequestProviderNameEnum)[keyof typeof ExternalServiceMethodRequestProviderNameEnum];
 
 /**
  *
@@ -658,22 +658,22 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary External API method
-     * @param {ExternalApiMethodRequest} externalApiMethodRequest
+     * @summary Call an external service method
+     * @param {ExternalServiceMethodRequest} externalServiceMethodRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    externalApiMethod: async (
-      externalApiMethodRequest: ExternalApiMethodRequest,
+    externalServiceMethod: async (
+      externalServiceMethodRequest: ExternalServiceMethodRequest,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
-      // verify required parameter 'externalApiMethodRequest' is not null or undefined
+      // verify required parameter 'externalServiceMethodRequest' is not null or undefined
       assertParamExists(
-        "externalApiMethod",
-        "externalApiMethodRequest",
-        externalApiMethodRequest,
+        "externalServiceMethod",
+        "externalServiceMethodRequest",
+        externalServiceMethodRequest,
       );
-      const localVarPath = `/external-api-method`;
+      const localVarPath = `/external-service-method`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -700,7 +700,7 @@ export const DefaultApiAxiosParamCreator = function (
         ...options.headers,
       };
       localVarRequestOptions.data = serializeDataIfNeeded(
-        externalApiMethodRequest,
+        externalServiceMethodRequest,
         localVarRequestOptions,
         configuration,
       );
@@ -1143,23 +1143,23 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary External API method
-     * @param {ExternalApiMethodRequest} externalApiMethodRequest
+     * @summary Call an external service method
+     * @param {ExternalServiceMethodRequest} externalServiceMethodRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async externalApiMethod(
-      externalApiMethodRequest: ExternalApiMethodRequest,
+    async externalServiceMethod(
+      externalServiceMethodRequest: ExternalServiceMethodRequest,
       options?: AxiosRequestConfig,
     ): Promise<
       (
         axios?: AxiosInstance,
         basePath?: string,
-      ) => AxiosPromise<ExternalApiMethod200Response>
+      ) => AxiosPromise<ExternalServiceMethod200Response>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.externalApiMethod(
-          externalApiMethodRequest,
+        await localVarAxiosParamCreator.externalServiceMethod(
+          externalServiceMethodRequest,
           options,
         );
       return createRequestFunction(
@@ -1413,17 +1413,17 @@ export const DefaultApiFactory = function (
     },
     /**
      *
-     * @summary External API method
-     * @param {ExternalApiMethodRequest} externalApiMethodRequest
+     * @summary Call an external service method
+     * @param {ExternalServiceMethodRequest} externalServiceMethodRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    externalApiMethod(
-      externalApiMethodRequest: ExternalApiMethodRequest,
+    externalServiceMethod(
+      externalServiceMethodRequest: ExternalServiceMethodRequest,
       options?: any,
-    ): AxiosPromise<ExternalApiMethod200Response> {
+    ): AxiosPromise<ExternalServiceMethod200Response> {
       return localVarFp
-        .externalApiMethod(externalApiMethodRequest, options)
+        .externalServiceMethod(externalServiceMethodRequest, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -1580,16 +1580,16 @@ export interface DefaultApiInterface {
 
   /**
    *
-   * @summary External API method
-   * @param {ExternalApiMethodRequest} externalApiMethodRequest
+   * @summary Call an external service method
+   * @param {ExternalServiceMethodRequest} externalServiceMethodRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
-  externalApiMethod(
-    externalApiMethodRequest: ExternalApiMethodRequest,
+  externalServiceMethod(
+    externalServiceMethodRequest: ExternalServiceMethodRequest,
     options?: AxiosRequestConfig,
-  ): AxiosPromise<ExternalApiMethod200Response>;
+  ): AxiosPromise<ExternalServiceMethod200Response>;
 
   /**
    *
@@ -1735,18 +1735,18 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
   /**
    *
-   * @summary External API method
-   * @param {ExternalApiMethodRequest} externalApiMethodRequest
+   * @summary Call an external service method
+   * @param {ExternalServiceMethodRequest} externalServiceMethodRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public externalApiMethod(
-    externalApiMethodRequest: ExternalApiMethodRequest,
+  public externalServiceMethod(
+    externalServiceMethodRequest: ExternalServiceMethodRequest,
     options?: AxiosRequestConfig,
   ) {
     return DefaultApiFp(this.configuration)
-      .externalApiMethod(externalApiMethodRequest, options)
+      .externalServiceMethod(externalServiceMethodRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
