@@ -45,10 +45,12 @@ const Section: FunctionComponent<
       item
       sx={({ breakpoints }) => ({
         gridArea: sectionName,
-        overflow: "hidden",
         [breakpoints.down("lg")]: {
+          overflow: "hidden",
           display: "flex",
           justifyContent: "center",
+          pb: 2.5,
+          mb: -2.5,
         },
       })}
     >
@@ -62,6 +64,7 @@ const Section: FunctionComponent<
           justifyContent: "center",
           alignItems: "center",
           borderRadius: 4,
+          boxShadow: "0px 4.23704px 8.1px rgb(61 78 133 / 6%)",
         })}
       >
         <Box sx={{ ...(fullWidth ? { width: 1 } : {}), paddingX: 1.5 }}>
