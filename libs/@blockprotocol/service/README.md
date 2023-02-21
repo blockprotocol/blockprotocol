@@ -13,7 +13,7 @@ To create a `ServiceBlockHandler`, pass the constructor an element in your block
 
 ### React example
 
-For React, we provide a `useServiceBlockService` hook, which accepts a `ref` to an element, and optionally any `callbacks` you wish to provide on initialization.
+For React, we provide a `useServiceBlockModule` hook, which accepts a `ref` to an element, and optionally any `callbacks` you wish to provide on initialization.
 
 See `npx create-block-app@latest my-block --template react` for an example.
 
