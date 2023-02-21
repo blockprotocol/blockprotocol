@@ -26,10 +26,12 @@ export abstract class ModuleHandler {
   private coreQueue: CoreHandlerCallback[] = [];
 
   /**
-   * Before we process the coreQueue, we want to be sure any callbacks are
-   * registered, so we have a seperate queue for callbacks
+   * If we register callbacks prior to creating the core handler, we want to
+   * register those on the core handler once it is available, but before we
+   * call initialise on it, to ensure callbacks which would catch messages sent
+   * during initialise are registered. To enable that, we have a separate queue.
    */
-  private coreCallbackQueue: CoreHandlerCallback[] = [];
+  private preCoreInitialiseQueue: CoreHandlerCallback[] = [];
 
   /** whether the instance of CoreHandler belongs to a block or embedding application */
   protected readonly sourceType: "block" | "embedder";
@@ -105,7 +107,7 @@ export abstract class ModuleHandler {
       throw new Error("Could not initialize – missing core handler");
     }
 
-    this.processCoreHandlerQueue(this.coreCallbackQueue);
+    this.processCoreCallbackQueue(this.preCoreInitialiseQueue);
 
     coreHandler.initialize();
 
@@ -187,7 +189,7 @@ export abstract class ModuleHandler {
   ) {
     this.checkIfDestroyed();
 
-    this.coreCallbackQueue.push((coreHandler) =>
+    this.getRelevantQueueForCallbacks().push((coreHandler) =>
       coreHandler.registerCallback({
         callback,
         messageName,
@@ -196,6 +198,16 @@ export abstract class ModuleHandler {
     );
 
     this.processCoreQueue();
+  }
+
+  /**
+   * When adding/removing callbacks before calling the core handler is
+   * available, we want to queue these in a queue which will be processed before
+   * calling initialising once we create the core handler, to ensure callbacks
+   * are properly set up before calling initialise
+   */
+  private getRelevantQueueForCallbacks() {
+    return this.coreHandler ? this.coreQueue : this.preCoreInitialiseQueue;
   }
 
   /** Remove a callback from the CoreHandler for an incoming messages of a specific type */
@@ -211,7 +223,7 @@ export abstract class ModuleHandler {
   ) {
     this.checkIfDestroyed();
 
-    this.coreCallbackQueue.push((coreHandler) =>
+    this.getRelevantQueueForCallbacks().push((coreHandler) =>
       coreHandler.removeCallback({
         callback,
         messageName,
@@ -222,7 +234,11 @@ export abstract class ModuleHandler {
     this.processCoreQueue();
   }
 
-  private processCoreHandlerQueue(queue: CoreHandlerCallback[]) {
+  private processCoreQueue() {
+    this.processCoreCallbackQueue(this.coreQueue);
+  }
+
+  private processCoreCallbackQueue(queue: CoreHandlerCallback[]) {
     const coreHandler = this.coreHandler;
     if (coreHandler) {
       while (queue.length) {
@@ -232,11 +248,6 @@ export abstract class ModuleHandler {
         }
       }
     }
-  }
-
-  private processCoreQueue() {
-    this.processCoreHandlerQueue(this.coreCallbackQueue);
-    this.processCoreHandlerQueue(this.coreQueue);
   }
 
   protected sendMessage(
