@@ -71,8 +71,8 @@ const DevApp: FunctionComponent = () => {
 
   useEffect(() => {
     // Retrieve the blockprotocol API key environment variable
-    if (process.env.BP_API_KEY) {
-      setBlockProtocolApiKey(process.env.BP_API_KEY);
+    if (process.env.BLOCK_PROTOCOL_API_KEY) {
+      setBlockProtocolApiKey(process.env.BLOCK_PROTOCOL_API_KEY);
     }
   }, []);
 
