@@ -186,14 +186,14 @@ export const FreeTierSection: FunctionComponent<{
       <Container
         sx={{
           position: "relative",
-          mb: { xs: 6, md: 10 },
+          mb: { xs: 8, md: 12.5 },
           maxWidth: { md: 800, lg: 1200 },
           px: "6.5%",
         }}
       >
         <Typography
           variant="bpHeading4"
-          sx={{ textTransform: "uppercase", mb: 2.25, lineHeight: 1.4 }}
+          sx={{ textTransform: "uppercase", mb: 1.75, lineHeight: 1.4 }}
         >
           <strong>Free</strong>{" "}
           <Box

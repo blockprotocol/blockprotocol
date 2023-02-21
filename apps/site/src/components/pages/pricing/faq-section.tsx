@@ -98,7 +98,7 @@ export const FaqSection: FunctionComponent = () => {
     <Container
       sx={{
         position: "relative",
-        mb: { xs: 6, md: 10 },
+        mb: { xs: 8, md: 12.5 },
         maxWidth: { md: 800, lg: 1200 },
         px: "6.5%",
       }}

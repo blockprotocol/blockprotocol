@@ -550,7 +550,7 @@ export const PaidTiersSection: FunctionComponent<{
     <Container
       sx={{
         position: "relative",
-        mb: { xs: 6, md: 10 },
+        mb: { xs: 8, md: 12.5 },
         maxWidth: { md: 800, lg: 1200 },
         px: "6.5%",
       }}
@@ -570,7 +570,7 @@ export const PaidTiersSection: FunctionComponent<{
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "space-between",
-          mb: 3,
+          mb: 2.5,
         }}
       >
         <Typography
