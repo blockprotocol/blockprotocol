@@ -58,3 +58,4 @@ export {
   isPropertyTypeRootedSubgraph,
 } from "./stdlib/subgraph/roots.js";
 export { getLatestInstantIntervalForSubgraph } from "./stdlib/subgraph/temporal-axes.js";
+export { getVertexIdForRecordId } from "./stdlib/subgraph/vertex-id-for-element.js";
