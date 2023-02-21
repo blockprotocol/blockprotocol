@@ -35,6 +35,7 @@ import { faMap } from "../../icons/pro/fa-map";
 import { faText } from "../../icons/pro/fa-text";
 import { Link } from "../../link";
 import { Table } from "../../table";
+import { CustomLink } from "./custom-link";
 import { CustomLinkButton } from "./custom-link-button";
 import { GradientFontAwesomeIcon } from "./gradient-fontawesome-icon";
 
@@ -468,13 +469,8 @@ export const PaidAddonsSection: FunctionComponent = () => {
                   line with the below.
                 </strong>{" "}
                 Hobby and Pro users can prevent overage charges by setting a{" "}
-                <Box
-                  component="strong"
-                  sx={{ color: ({ palette }) => palette.purple[70] }}
-                >
-                  spend cap
-                </Box>{" "}
-                from the account billing page.
+                <CustomLink href="">spend cap</CustomLink> from the account
+                billing page.
               </Typography>
 
               <Box sx={{ overflowX: "auto" }}>
@@ -495,26 +491,24 @@ export const PaidAddonsSection: FunctionComponent = () => {
                 </strong>{" "}
                 If you believe any of these prices are out of sync with the
                 costs charged by the underlying provider,{" "}
-                <Box
-                  component="strong"
-                  sx={{ color: ({ palette }) => palette.purple[70] }}
-                >
-                  please let us know
-                </Box>
-                . A Platform Service Fee of <i>25%</i> for Hobby users, and{" "}
+                <CustomLink href="/contact">please let us know</CustomLink>. A
+                Platform Service Fee of <i>25%</i> for Hobby users, and{" "}
                 <i>20%</i> for Pro users, is applied to Additional API Usage
                 calls to cover costs.
               </Typography>
 
               <Typography variant="bpBodyCopy" sx={{ lineHeight: 1.4 }}>
                 <strong>Want to list an endpoint?</strong>{" "}
-                <Box
-                  component="strong"
-                  sx={{ color: ({ palette }) => palette.purple[70] }}
+                <CustomLink
+                  href=""
+                  sx={{ display: "inline-flex", alignItems: "center" }}
                 >
                   Find out more
-                  <FontAwesomeIcon icon={faChevronRight} />
-                </Box>
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    sx={{ fontSize: 14 }}
+                  />
+                </CustomLink>
               </Typography>
             </Stack>
           </Section>

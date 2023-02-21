@@ -3,7 +3,7 @@ import { Box, Collapse, Container, Stack, Typography } from "@mui/material";
 import { FunctionComponent, ReactNode, useState } from "react";
 
 import { FontAwesomeIcon } from "../../icons";
-import { Link } from "../../link";
+import { CustomLink } from "./custom-link";
 
 const FAQ_QUESTIONS = [
   {
@@ -11,17 +11,9 @@ const FAQ_QUESTIONS = [
     description: (
       <>
         This is just example text{" "}
-        <Link
-          href=""
-          sx={{
-            color: ({ palette }) => `${palette.purple[70]} !important`,
-            borderBottomWidth: "0px !important",
-          }}
-        >
-          with a link in
-        </Link>
-        . You can ignore the copy here which exists for illustrative purposes
-        only. It’s going to be about Cluedo. You really don’t need to read it.
+        <CustomLink href="">with a link in</CustomLink>. You can ignore the copy
+        here which exists for illustrative purposes only. It’s going to be about
+        Cluedo. You really don’t need to read it.
       </>
     ),
   },

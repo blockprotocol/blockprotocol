@@ -20,7 +20,7 @@ import { faEye } from "../../icons/pro/fa-eye";
 import { faHammer } from "../../icons/pro/fa-hammer";
 import { faServer } from "../../icons/pro/fa-server";
 import { faWindow } from "../../icons/pro/fa-window";
-import { Link, LinkProps } from "../../link";
+import { CustomLink } from "./custom-link";
 import { CustomLinkButton } from "./custom-link-button";
 import { GradientFontAwesomeIcon } from "./gradient-fontawesome-icon";
 
@@ -161,20 +161,6 @@ const Section = ({
   );
 };
 
-const CustomLink: FunctionComponent<LinkProps> = ({ children, ...props }) => (
-  <Link
-    {...props}
-    sx={{
-      color: ({ palette }) => `${palette.purple[70]} !important`,
-      fontWeight: 700,
-      whiteSpace: "nowrap",
-      borderBottomWidth: "0px !important",
-    }}
-  >
-    {children}
-  </Link>
-);
-
 export const FreeTierSection: FunctionComponent<{
   signedIn: boolean;
 }> = ({ signedIn }) => {
@@ -236,17 +222,15 @@ export const FreeTierSection: FunctionComponent<{
                       GitHub
                     </CustomLink>
                     ,{" "}
-                    <CustomLink href="http://localhost:3000/docs/using-blocks#wordpress">
+                    <CustomLink href="/docs/using-blocks#wordpress">
                       WordPress
                     </CustomLink>
                     ,{" "}
-                    <CustomLink href="http://localhost:3000/docs/using-blocks#figma">
+                    <CustomLink href="/docs/using-blocks#figma">
                       Figma
                     </CustomLink>
                     , and{" "}
-                    <CustomLink href="http://localhost:3000/docs/using-blocks#hash">
-                      HASH
-                    </CustomLink>
+                    <CustomLink href="/docs/using-blocks#hash">HASH</CustomLink>
                   </>
                 ),
               },
