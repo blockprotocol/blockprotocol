@@ -566,7 +566,7 @@ export const PaidAddonsSection: FunctionComponent = () => {
                 connect you with a community developer.
               </Typography>
 
-              <Box>
+              <Box mb={1.5}>
                 <CustomLinkButton
                   href="/contact"
                   endIcon={<FontAwesomeIcon icon={faEnvelope} />}
@@ -636,7 +636,7 @@ export const PaidAddonsSection: FunctionComponent = () => {
                 </Typography>
               </List>
 
-              <Box>
+              <Box mb={1.5}>
                 <CustomLinkButton
                   href="/contact"
                   endIcon={<FontAwesomeIcon icon={faEnvelope} />}
