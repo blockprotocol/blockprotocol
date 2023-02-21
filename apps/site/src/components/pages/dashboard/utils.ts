@@ -122,7 +122,7 @@ export const getDashboardSectionCards = (props: {
           "View and update the types you’ve created and made public on the Hub",
         link: {
           title: "Manage types",
-          href: `${props.profileLink}/schemas`,
+          href: `${props.profileLink}/all-types`,
         },
         icon: faAsterisk,
         variant: "secondary",
