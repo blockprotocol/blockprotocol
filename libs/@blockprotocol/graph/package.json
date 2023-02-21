@@ -95,7 +95,10 @@
         "./dist/cjs/temporal/main.d.ts"
       ],
       "codegen": [
-        "./dist/cjs/codegen.d.ts"
+        "./dist/cjs/non-temporal/codegen.d.ts"
+      ],
+      "temporal/codegen": [
+        "./dist/cjs/temporal/codegen.d.ts"
       ],
       "custom-element": [
         "./dist/cjs/non-temporal/custom-element.d.ts"
