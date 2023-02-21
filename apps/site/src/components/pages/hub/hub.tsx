@@ -28,7 +28,7 @@ export type HubItemDescription = {
   description?: string;
   author: string;
   version: string;
-  updated: string;
+  updated?: string;
   url: string;
 };
 
@@ -84,7 +84,7 @@ const HubItem = ({
             @{author}
           </Box>
           <Box>V{version}</Box>
-          <Box>{updated}</Box>
+          {updated ? <Box>{updated}</Box> : null}
         </Stack>
       </Typography>
     </Stack>

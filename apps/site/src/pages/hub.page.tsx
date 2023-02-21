@@ -1,3 +1,4 @@
+import { extractVersion } from "@blockprotocol/type-system";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Box, Chip, Container, Grid, Stack, Typography } from "@mui/material";
 import { GetServerSideProps, NextPage } from "next";
@@ -8,6 +9,7 @@ import { BlockProtocolIcon, FontAwesomeIcon } from "../components/icons";
 import { Link } from "../components/link";
 import { HubItemDescription, HubList } from "../components/pages/hub/hub";
 import { getRouteHubBrowseType } from "../components/pages/hub/hub-utils";
+import { apiClient } from "../lib/api-client";
 import { getAllBlocks, getFeaturedBlocks } from "../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
@@ -40,7 +42,19 @@ const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
       );
     },
     async types() {
-      return [];
+      const types = await apiClient.getEntityTypes({ latestOnly: true });
+
+      return (
+        types.data?.entityTypes.map(
+          (type): HubItemDescription => ({
+            title: type.schema.title,
+            author: type.schema.$id.match(/@(.*?)\//)?.[1] ?? "",
+            description: type.schema.description,
+            url: type.schema.$id,
+            version: `${extractVersion(type.schema.$id)}`,
+          }),
+        ) ?? []
+      );
     },
     async services() {
       return HUB_SERVICES_ENABLED ? [] : null;
