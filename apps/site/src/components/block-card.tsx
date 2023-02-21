@@ -6,6 +6,7 @@ import { BlockProtocolLogoIcon } from "./icons";
 import { ClientOnlyLastUpdated } from "./last-updated";
 import { Link } from "./link";
 import { Spacer } from "./spacer";
+import { VerifiedBadge } from "./verified-badge";
 
 type BlockCardProps = {
   loading?: boolean;
@@ -80,6 +81,7 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({
     lastUpdated,
     blockSitePath,
     icon,
+    verified,
   } = data;
 
   return (
@@ -203,6 +205,7 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({
               variant="bpLargeText"
             >
               {displayName ?? undefined}
+              {verified ? <VerifiedBadge compact /> : null}
             </Typography>
           </Box>
           <Typography
