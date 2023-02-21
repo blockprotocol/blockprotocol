@@ -465,7 +465,7 @@ export const PaidAddonsSection: FunctionComponent = () => {
             <Stack flexDirection="row" alignItems="center" mb={2.25}>
               <GradientFontAwesomeIcon
                 icon={faCode}
-                sx={{ mr: 1.5, fontSize: 32 }}
+                sx={{ mr: 1.5, height: 32, width: 42 }}
                 light
               />
 

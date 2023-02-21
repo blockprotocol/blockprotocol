@@ -27,33 +27,36 @@ import {
 } from "../../../pages/shared/subscription-utils";
 import { ArrowLeftIcon, FontAwesomeIcon } from "../../icons";
 import { AbstractAiIcon } from "../../icons/abstract-ai-icon";
-import { CheckDoubleIcon } from "../../icons/check-double-icon";
-import { CoinsIcon } from "../../icons/coins-icon";
-import { FlaskVialIcon } from "../../icons/flask-vial-icon";
-import { HandIcon } from "../../icons/hand-icon";
-import { JetFighterUpIcon } from "../../icons/jet-fighter-up-icon";
-import { LocationArrowIcon } from "../../icons/location-arrow-icon";
-import { LocationIcon } from "../../icons/location-icon";
-import { LockIcon } from "../../icons/lock-icon";
-import { MapLocationDotIcon } from "../../icons/map-location-dot-icon";
 import { MapboxIcon } from "../../icons/mapbox-icon";
 import { MapboxLogoIcon } from "../../icons/mapbox-logo-icon";
-import { MicrophoneLogoIcon } from "../../icons/microphone-icon";
 import { OpenAiIcon } from "../../icons/open-ai-icon";
-import { PeopleArrowsIcon } from "../../icons/people-arrows-icon";
 import { faBolt } from "../../icons/pro/fa-bolt";
+import { faCheckDouble } from "../../icons/pro/fa-check-double";
+import { faCoins } from "../../icons/pro/fa-coins";
+import { faFlaskVial } from "../../icons/pro/fa-flask-vial";
+import { faHand } from "../../icons/pro/fa-hand";
 import { faImage } from "../../icons/pro/fa-image";
+import { faJetFighterUp } from "../../icons/pro/fa-jet-fighter-up";
+import { faLocationCrosshairs } from "../../icons/pro/fa-location";
+import { faLocationArrow } from "../../icons/pro/fa-location-arrow";
 import { faLocationDot } from "../../icons/pro/fa-location-dot";
+import { faLock } from "../../icons/pro/fa-lock";
 import { faMap } from "../../icons/pro/fa-map";
 import { faMapLocationDot } from "../../icons/pro/fa-map-location-dot";
+import { faMicrophone } from "../../icons/pro/fa-microphone";
+import { faPeopleArrows } from "../../icons/pro/fa-people-arrows";
 import { faRocketLaunch } from "../../icons/pro/fa-rocket-launch";
+import { faTag } from "../../icons/pro/fa-tag";
 import { faText } from "../../icons/pro/fa-text";
+import { faTrophy } from "../../icons/pro/fa-trophy";
+import { faTrophyStar } from "../../icons/pro/fa-trophy-star";
 import { SparklesGradientIcon } from "../../icons/sparkles-gradient-icon";
-import { TagIcon } from "../../icons/tag-icon";
-import { TrophyIcon } from "../../icons/trophy-icon";
-import { TrophyStarIcon } from "../../icons/trophy-star-icon";
 import { CustomLinkButton } from "./custom-link-button";
 import { GradientFontAwesomeIcon } from "./gradient-fontawesome-icon";
+
+const getListIcon = (icon: IconDefinition) => (
+  <GradientFontAwesomeIcon icon={icon} sx={{ width: 20, height: 15 }} light />
+);
 
 type PaidSubscription = {
   coreFeatures: SubscriptionFeature[];
@@ -281,7 +284,7 @@ export const paidSubscriptionFeatures: Record<
     ],
     additionalFeatures: [
       {
-        icon: <TrophyIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faTrophy),
         title: (
           <>
             Unique <strong>“Early Supporter”</strong> profile badge
@@ -289,7 +292,7 @@ export const paidSubscriptionFeatures: Record<
         ),
       },
       {
-        icon: <PeopleArrowsIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faPeopleArrows),
         title: (
           <>
             Access to <strong>3rd party APIs</strong>
@@ -298,7 +301,7 @@ export const paidSubscriptionFeatures: Record<
         planned: true,
       },
       {
-        icon: <CoinsIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faCoins),
         title: (
           <>
             <strong>Usage-based billing</strong> for additional credits/tokens
@@ -306,7 +309,7 @@ export const paidSubscriptionFeatures: Record<
         ),
       },
       {
-        icon: <HandIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faHand),
         title: (
           <>
             Ability to <strong>prevent or cap</strong> overage charges{" "}
@@ -324,7 +327,7 @@ export const paidSubscriptionFeatures: Record<
   pro: {
     coreFeatures: [
       {
-        icon: <CheckDoubleIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faCheckDouble),
         title: (
           <Box
             component="span"
@@ -345,7 +348,7 @@ export const paidSubscriptionFeatures: Record<
         ),
       },
       {
-        icon: <LocationIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faLocationCrosshairs),
         title: (
           <Box
             component="span"
@@ -356,7 +359,7 @@ export const paidSubscriptionFeatures: Record<
         ),
       },
       {
-        icon: <LocationArrowIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faLocationArrow),
         title: (
           <Box
             component="span"
@@ -367,7 +370,7 @@ export const paidSubscriptionFeatures: Record<
         ),
       },
       {
-        icon: <MapLocationDotIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faMapLocationDot),
         title: (
           <Box
             component="span"
@@ -378,7 +381,7 @@ export const paidSubscriptionFeatures: Record<
         ),
       },
       {
-        icon: <MicrophoneLogoIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faMicrophone),
         title: (
           <Box
             component="span"
@@ -395,7 +398,7 @@ export const paidSubscriptionFeatures: Record<
         },
       },
       {
-        icon: <FlaskVialIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faFlaskVial),
         title: (
           <Box
             component="span"
@@ -408,7 +411,7 @@ export const paidSubscriptionFeatures: Record<
     ],
     additionalFeatures: [
       {
-        icon: <TrophyStarIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faTrophyStar),
         title: (
           <>
             Additional unique <strong>“Founder Member”</strong> profile badge
@@ -416,7 +419,7 @@ export const paidSubscriptionFeatures: Record<
         ),
       },
       {
-        icon: <TagIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faTag),
         title: (
           <>
             <strong>Discounted access</strong> to additional API calls
@@ -424,7 +427,7 @@ export const paidSubscriptionFeatures: Record<
         ),
       },
       {
-        icon: <LockIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faLock),
         title: (
           <>
             <strong>Private</strong> blocks and types
@@ -433,7 +436,7 @@ export const paidSubscriptionFeatures: Record<
         planned: true,
       },
       {
-        icon: <JetFighterUpIcon sx={{ fontSize: 18 }} />,
+        icon: getListIcon(faJetFighterUp),
         title: (
           <>
             <strong>Bonus</strong> features, updates and special event invites
@@ -476,7 +479,7 @@ const HobbyTierPerk = ({
         <Stack flexDirection="row" gap={1} alignItems="center" mb={0.25}>
           <GradientFontAwesomeIcon
             icon={headerIcon}
-            sx={{ fontSize: 17 }}
+            sx={{ height: 17, width: 20 }}
             light
           />
           <Typography

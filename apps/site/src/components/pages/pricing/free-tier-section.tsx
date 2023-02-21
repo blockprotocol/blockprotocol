@@ -72,7 +72,7 @@ const Section = ({
         >
           <GradientFontAwesomeIcon
             icon={typeIcon}
-            sx={{ mt: 0.75, mb: 2.25, fontSize: 27 }}
+            sx={{ mt: 0.75, mb: 2.25, height: 27, width: 49 }}
           />
 
           <Typography
@@ -123,7 +123,10 @@ const Section = ({
                 gap: 2.25,
               }}
             >
-              <GradientFontAwesomeIcon icon={icon} sx={{ fontSize: 15 }} />
+              <GradientFontAwesomeIcon
+                icon={icon}
+                sx={{ height: 15, width: 20 }}
+              />
 
               <Typography variant="bpBodyCopy" sx={{ lineHeight: 1.2 }}>
                 {text}
