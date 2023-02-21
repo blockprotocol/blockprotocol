@@ -25,6 +25,12 @@ export abstract class ModuleHandler {
    */
   private coreQueue: CoreHandlerCallback[] = [];
 
+  /**
+   * Before we process the coreQueue, we want to be sure any callbacks are
+   * registered, so we have a seperate queue for callbacks
+   */
+  private coreCallbackQueue: CoreHandlerCallback[] = [];
+
   /** whether the instance of CoreHandler belongs to a block or embedding application */
   protected readonly sourceType: "block" | "embedder";
 
@@ -98,6 +104,8 @@ export abstract class ModuleHandler {
     if (!coreHandler) {
       throw new Error("Could not initialize – missing core handler");
     }
+
+    this.processCoreHandlerQueue(this.coreCallbackQueue);
 
     coreHandler.initialize();
 
@@ -179,7 +187,7 @@ export abstract class ModuleHandler {
   ) {
     this.checkIfDestroyed();
 
-    this.coreQueue.push((coreHandler) =>
+    this.coreCallbackQueue.push((coreHandler) =>
       coreHandler.registerCallback({
         callback,
         messageName,
@@ -203,7 +211,7 @@ export abstract class ModuleHandler {
   ) {
     this.checkIfDestroyed();
 
-    this.coreQueue.push((coreHandler) =>
+    this.coreCallbackQueue.push((coreHandler) =>
       coreHandler.removeCallback({
         callback,
         messageName,
@@ -214,16 +222,21 @@ export abstract class ModuleHandler {
     this.processCoreQueue();
   }
 
-  private processCoreQueue() {
+  private processCoreHandlerQueue(queue: CoreHandlerCallback[]) {
     const coreHandler = this.coreHandler;
     if (coreHandler) {
-      while (this.coreQueue.length) {
-        const callback = this.coreQueue.shift();
+      while (queue.length) {
+        const callback = queue.shift();
         if (callback) {
           callback(coreHandler);
         }
       }
     }
+  }
+
+  private processCoreQueue() {
+    this.processCoreHandlerQueue(this.coreCallbackQueue);
+    this.processCoreHandlerQueue(this.coreQueue);
   }
 
   protected sendMessage(
