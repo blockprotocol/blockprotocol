@@ -1,7 +1,7 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
 /**
- * There's an issue when importing useServiceEmbedderService from @blockprotocol/service/react in hashintel/hash:
+ * There's an issue when importing useServiceEmbedderModule from @blockprotocol/service/react in hashintel/hash:
  * NextJS's output file tracing does not include service-service.json, and yet an import statement for it is preserved.
  * This leads to a 'module cannot be found error'. For now, commenting out the import of the JSON from this file.
  * @todo restore this when module resolution issue resolved

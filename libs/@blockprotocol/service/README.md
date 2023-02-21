@@ -43,10 +43,10 @@ const serviceModule = new ServiceEmbedderHandler({
 
 ### React
 
-For React embedding applications, we provide a `useServiceEmbedderService` hook, which accepts a `ref` to an element, and optionally any additional constructor arguments you wish to pass.
+For React embedding applications, we provide a `useServiceEmbedderModule` hook, which accepts a `ref` to an element, and optionally any additional constructor arguments you wish to pass.
 
 ```tsx
-import { useServiceEmbedderService } from "@blockprotocol/service";
+import { useServiceEmbedderModule } from "@blockprotocol/service";
 import { useRef } from "react";
 
 export const App = () => {
