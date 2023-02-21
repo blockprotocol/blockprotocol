@@ -1,5 +1,8 @@
 import { BlockVariant } from "@blockprotocol/core";
-import { Entity, EntityTemporalVersioningMetadata } from "@blockprotocol/graph";
+import {
+  Entity,
+  EntityTemporalVersioningMetadata,
+} from "@blockprotocol/graph/temporal";
 import { VersionedUri } from "@blockprotocol/type-system/slim";
 import {
   Box,
@@ -135,7 +138,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<
-    [(Entity<false> & { readonly: boolean }) | undefined, string[]]
+    [(Entity & { readonly: boolean }) | undefined, string[]]
   >(() => {
     const intervalForAllTime =
       (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {
@@ -150,7 +153,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
         } as const;
       };
 
-    const result: { blockEntity: Entity<true>; readonly: boolean } = {
+    const result: { blockEntity: Entity; readonly: boolean } = {
       blockEntity: {
         metadata: {
           entityTypeId: metadata.schema as VersionedUri,

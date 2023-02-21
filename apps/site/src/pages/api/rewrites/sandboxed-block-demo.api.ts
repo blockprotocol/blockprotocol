@@ -1,4 +1,4 @@
-import { QueryTemporalAxes } from "@blockprotocol/graph";
+import { QueryTemporalAxes } from "@blockprotocol/graph/temporal";
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
@@ -108,7 +108,7 @@ const handler: NextApiHandler = async (req, res) => {
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
       // @todo-0.3 revert this hardcoded version to ${mockBlockDockVersion}
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230214141700/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230220234726/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
 
       const requireLookup = {
         "react-dom": ReactDOM,
