@@ -84,7 +84,7 @@ const PUBLISH_NAVIGATION_LINKS: NavigationSection = {
     //   arrow: true,
     // },
     // {
-    //   name: "an endpoint",
+    //   name: "a service",
     //   href: "/",
     //   arrow: true,
     // },

@@ -67,7 +67,7 @@ test("page footer navigation works", async ({ page, browserName }) => {
   //   "/",
   // );
   // await expect(
-  //   page.locator("footer >> a:text-is('an endpoint')"),
+  //   page.locator("footer >> a:text-is('a service')"),
   // ).toHaveAttribute("href", "/");
 
   // Legal section
