@@ -1,11 +1,17 @@
+import { faSlack } from "@fortawesome/free-brands-svg-icons";
 import {
+  faChevronRight,
   faCode,
   faImage,
+  faMessage,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
+  BoxProps,
   Container,
+  Grid,
+  List,
   Stack,
   TableCell,
   TableCellProps,
@@ -20,6 +26,8 @@ import { FontAwesomeIcon } from "../../icons";
 import { AbstractAiIcon } from "../../icons/abstract-ai-icon";
 import { CircleInfoRegularIcon } from "../../icons/circle-info-regular";
 import { MapboxLogoIcon } from "../../icons/mapbox-logo-icon";
+import { faEnvelope } from "../../icons/pro/fa-envelope";
+import { faHammer } from "../../icons/pro/fa-hammer";
 import { faLocationCrosshairs } from "../../icons/pro/fa-location";
 import { faLocationArrow } from "../../icons/pro/fa-location-arrow";
 import { faLocationPin } from "../../icons/pro/fa-location-pin";
@@ -27,7 +35,40 @@ import { faMap } from "../../icons/pro/fa-map";
 import { faText } from "../../icons/pro/fa-text";
 import { Link } from "../../link";
 import { Table } from "../../table";
+import { CustomLinkButton } from "./custom-link-button";
 import { GradientFontAwesomeIcon } from "./gradient-fontawesome-icon";
+
+const Section: FunctionComponent<{ sectionName: string } & BoxProps> = ({
+  sectionName,
+  children,
+}) => {
+  return (
+    <Grid
+      item
+      sx={({ breakpoints }) => ({
+        gridArea: sectionName,
+        [breakpoints.down("lg")]: {
+          display: "flex",
+          justifyContent: "center",
+        },
+      })}
+    >
+      <Stack
+        sx={({ palette }) => ({
+          background: `${palette.common.white}80`,
+          border: `1px solid ${palette.gray[20]}`,
+          backdropFilter: "blur(7.5px)",
+          padding: 4.25,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 4,
+        })}
+      >
+        <Box sx={{ paddingX: 1.5 }}>{children}</Box>
+      </Stack>
+    </Grid>
+  );
+};
 
 const API_USAGE_HEADER = ["Provider", "Service", "Price", "Unit"];
 
@@ -357,8 +398,8 @@ const createTableRow = ({
 
 export const PaidAddonsSection: FunctionComponent = () => {
   return (
-    <Box sx={{ position: "relative" }}>
-      <Box sx={{ position: "absolute", width: 1, top: 34 }}>
+    <Box sx={{ pt: 11.15, position: "relative" }}>
+      <Box sx={{ position: "absolute", width: 1, top: 0 }}>
         <Image layout="responsive" src={circleBackground} />
       </Box>
 
@@ -383,18 +424,19 @@ export const PaidAddonsSection: FunctionComponent = () => {
           </Box>
         </Typography>
 
-        <Stack
-          sx={({ palette }) => ({
-            background: `${palette.common.white}80`,
-            border: `1px solid ${palette.gray[20]}`,
-            backdropFilter: "blur(7.5px)",
-            padding: 4.25,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 4,
-          })}
+        <Grid
+          container
+          sx={{
+            display: "grid",
+            gridTemplateAreas: {
+              xs: `'usage' 'dev' 'support'`,
+              lg: `'usage dev'
+            'usage support'`,
+            },
+            gridGap: 20,
+          }}
         >
-          <Box sx={{ paddingX: 1.5 }}>
+          <Section sectionName="usage">
             <Stack flexDirection="row" alignItems="center" mb={2.25}>
               <GradientFontAwesomeIcon
                 icon={faCode}
@@ -457,17 +499,130 @@ export const PaidAddonsSection: FunctionComponent = () => {
               </Typography>
 
               <Typography variant="bpBodyCopy" sx={{ lineHeight: 1.4 }}>
-                <strong>Want to list an endpoint?</strong>
+                <strong>Want to list an endpoint?</strong>{" "}
                 <Box
                   component="strong"
                   sx={{ color: ({ palette }) => palette.purple[70] }}
                 >
-                  Find out more chevron-right
+                  Find out more
+                  <FontAwesomeIcon icon={faChevronRight} />
                 </Box>
               </Typography>
             </Stack>
-          </Box>
-        </Stack>
+          </Section>
+
+          <Section sectionName="dev">
+            <Stack flexDirection="row" alignItems="center" mb={2.25}>
+              <GradientFontAwesomeIcon
+                icon={faHammer}
+                sx={{ mr: 1.5, fontSize: 32 }}
+                light
+              />
+
+              <Typography
+                variant="bpHeading3"
+                sx={{
+                  lineHeight: 1.4,
+                  color: ({ palette }) => palette.gray[90],
+                }}
+              >
+                Dev Services
+              </Typography>
+            </Stack>
+
+            <Stack gap={2.25}>
+              <Typography variant="bpBodyCopy" sx={{ lineHeight: 1.4 }}>
+                <strong>
+                  Anybody can suggest amendments to the Þ specification.
+                </strong>{" "}
+                The protocol is openly debated and governed, and you don’t need
+                to hire us (in fact, you can’t!) in order to change the spec.
+              </Typography>
+
+              <Typography variant="bpBodyCopy" sx={{ lineHeight: 1.4 }}>
+                <strong>Similarly, anyone can build a Þ block.</strong> However,
+                if you’d like a block built for you, or are looking to partner
+                on a particularly complex block, we provide support or can
+                connect you with a community developer.
+              </Typography>
+
+              <CustomLinkButton
+                href="/contact"
+                endIcon={<FontAwesomeIcon icon={faEnvelope} />}
+              >
+                Contact us
+              </CustomLinkButton>
+            </Stack>
+          </Section>
+
+          <Section sectionName="support">
+            <Stack flexDirection="row" alignItems="center" mb={2.25}>
+              <GradientFontAwesomeIcon
+                icon={faSlack}
+                sx={{ mr: 1.5, fontSize: 32 }}
+                light
+              />
+
+              <Typography
+                variant="bpHeading3"
+                sx={{
+                  lineHeight: 1.4,
+                  color: ({ palette }) => palette.gray[90],
+                }}
+              >
+                1:1 Support
+              </Typography>
+            </Stack>
+
+            <Stack gap={2.25}>
+              <Typography variant="bpBodyCopy" sx={{ lineHeight: 1.4 }}>
+                <strong>
+                  We offer dedicated 1:1 premium support with guaranteed SLAs
+                  via email and Slack.
+                </strong>
+              </Typography>
+
+              <List sx={{ marginLeft: 3, listStyle: "disc" }}>
+                <Typography
+                  variant="bpBodyCopy"
+                  sx={{ lineHeight: 1.4 }}
+                  component="li"
+                >
+                  For embedders integrating the Block Protocol into their
+                  application or framework
+                </Typography>
+                <Typography
+                  variant="bpBodyCopy"
+                  sx={{ lineHeight: 1.4 }}
+                  component="li"
+                >
+                  For block developers building complex applications
+                </Typography>
+                <Typography
+                  variant="bpBodyCopy"
+                  sx={{ lineHeight: 1.4 }}
+                  component="li"
+                >
+                  For API providers listing on the Hub
+                </Typography>
+                <Typography
+                  variant="bpBodyCopy"
+                  sx={{ lineHeight: 1.4 }}
+                  component="li"
+                >
+                  For users of blocks who are heavily dependent on them for work
+                </Typography>
+              </List>
+
+              <CustomLinkButton
+                href="/contact"
+                endIcon={<FontAwesomeIcon icon={faEnvelope} />}
+              >
+                Contact us
+              </CustomLinkButton>
+            </Stack>
+          </Section>
+        </Grid>
       </Container>
     </Box>
   );

@@ -47,20 +47,23 @@ const PricingPage: NextPage = () => {
       <Box
         sx={{
           mb: 60,
-          position: "relative",
-          backgroundImage: "url(/assets/hub-gradient.svg)",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "30% 50%",
-          backgroundSize: "100% 100%",
         }}
       >
-        <Header />
-        <FreeTierSection signedIn={signedIn} />
-        <PaidTiersSection
-          signedIn={signedIn}
-          currentSubscriptionTier={currentSubscriptionTier}
-          subscriptionTierPrices={subscriptionTierPrices}
-        />
+        <Box
+          sx={{
+            background:
+              "radial-gradient(116.02% 95.04% at 50% 100.79%, #F3F0F9 0%, #FFFFFF 70.54%)",
+            borderBottom: ({ palette }) => `1px solid ${palette.gray[20]}`,
+          }}
+        >
+          <Header />
+          <FreeTierSection signedIn={signedIn} />
+          <PaidTiersSection
+            signedIn={signedIn}
+            currentSubscriptionTier={currentSubscriptionTier}
+            subscriptionTierPrices={subscriptionTierPrices}
+          />
+        </Box>
         <PaidAddonsSection />
       </Box>
     </>
