@@ -45,11 +45,7 @@ const PricingPage: NextPage = () => {
         title="Block Protocol – Pricing"
         description="The Block Protocol's registry of open-source blocks and types"
       />
-      <Box
-        sx={{
-          mb: 60,
-        }}
-      >
+      <Box>
         <Box
           sx={{
             background:

@@ -353,6 +353,20 @@ export const BANNERS: Banner[] = [
       />
     ),
   },
+  {
+    shouldDisplay: ({ pathname }) => pathname === "/pricing",
+    overlapsFooter: true,
+    contents: (
+      <BannerCard
+        sx={{
+          padding: "0 !important",
+        }}
+        contents={<FinalCTA />}
+        fullHeight
+        fullWidth
+      />
+    ),
+  },
 ];
 
 type FooterBannerProps = {
