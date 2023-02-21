@@ -227,6 +227,6 @@ const serviceDefinition = {
 };
 
 writeFileSync(
-  "./src/service-service.json",
+  "./src/service-module.json",
   JSON.stringify(serviceDefinition, null, 2),
 );

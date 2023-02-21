@@ -48,7 +48,7 @@
     "build": "yarn clean && tsc --skipLibCheck",
     "clean": "rimraf ./dist/",
     "fix:eslint": "eslint --fix .",
-    "generate-service-json": "ts-node-esm --project tsconfig.json ./src/scripts/generate-service-json.ts",
+    "generate-service-module-json": "ts-node-esm --project tsconfig.json ./src/scripts/generate-service-module-json.ts && prettier --write ./src/service-module.json",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit"
   },
