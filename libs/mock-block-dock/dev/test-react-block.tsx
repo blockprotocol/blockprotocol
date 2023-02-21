@@ -18,13 +18,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
     return blockEntitySubgraph ? getRoots(blockEntitySubgraph)[0]! : undefined;
   }, [blockEntitySubgraph]);
 
-  const { graphModule } = useGraphBlockModule(blockRef, {
-    callbacks: {
-      blockEntitySubgraph(...args) {
-        console.log(args);
-      },
-    },
-  });
+  const { graphModule } = useGraphBlockModule(blockRef);
 
   const { hookModule } = useHookBlockModule(blockRef);
 
