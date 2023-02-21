@@ -501,7 +501,7 @@ export const PaidAddonsSection: FunctionComponent = () => {
               <Typography variant="bpBodyCopy" sx={{ lineHeight: 1.4 }}>
                 <strong>Want to list an endpoint?</strong>{" "}
                 <CustomLink
-                  href=""
+                  href="/docs/services"
                   sx={{ display: "inline-flex", alignItems: "center" }}
                 >
                   Find out more
