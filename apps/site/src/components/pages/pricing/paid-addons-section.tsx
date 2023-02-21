@@ -307,7 +307,9 @@ const createTableRow = ({
       }}
     >
       <Box display="flex" gap={1.25} alignItems="center">
-        <Box>{providerIcon}</Box>
+        <Box sx={{ lineHeight: 1, position: "relative", bottom: 1 }}>
+          {providerIcon}
+        </Box>
         <Typography
           variant="bpBodyCopy"
           sx={{
@@ -388,7 +390,7 @@ const createTableRow = ({
         </Typography>
 
         <Tooltip title={unitTooltip} placement="top">
-          <Box>
+          <Box sx={{ lineHeight: 1 }}>
             <CircleInfoRegularIcon
               sx={{
                 cursor: "pointer",
