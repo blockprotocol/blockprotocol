@@ -3,8 +3,8 @@ import { Box } from "@mui/material";
 import { NextPage } from "next";
 import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { FaqSection } from "../components/pages/pricing/faq-section";
 
+import { FaqSection } from "../components/pages/pricing/faq-section";
 import { FreeTierSection } from "../components/pages/pricing/free-tier-section";
 import { Header } from "../components/pages/pricing/header";
 import { PaidAddonsSection } from "../components/pages/pricing/paid-addons-section";
