@@ -1,6 +1,5 @@
 import {
   Entity as EntityNonTemporal,
-  EntityRecordId as EntityRecordIdNonTemporal,
   EntityRevisionId as EntityRevisionIdNonTemporal,
   EntityVertex as EntityVertexNonTemporal,
   EntityVertexId as EntityVertexIdNonTemporal,
@@ -16,10 +15,10 @@ import {
   getEntityTypeById as getEntityTypeByIdNonTemporal,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesNonTemporal,
   getPropertyTypesByBaseUri as getPropertyTypesByBaseUriNonTemporal,
+  getVertexIdForRecordId as getVertexIdForRecordIdNonTemporal,
 } from "@blockprotocol/graph/stdlib";
 import {
   Entity as EntityTemporal,
-  EntityRecordId as EntityRecordIdTemporal,
   EntityRevisionId as EntityRevisionIdTemporal,
   EntityVertex as EntityVertexTemporal,
   EntityVertexId as EntityVertexIdTemporal,
@@ -34,6 +33,7 @@ import {
   getEntityTypeById as getEntityTypeByIdTemporal,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesTemporal,
   getPropertyTypesByBaseUri as getPropertyTypesByBaseUriTemporal,
+  getVertexIdForRecordId as getVertexIdForRecordIdTemporal,
   intervalOverlapsInterval,
 } from "@blockprotocol/graph/temporal/stdlib";
 import { Box } from "@mui/material";
@@ -429,45 +429,21 @@ const DataStoreGraphVisualizationComponent = ({
             ).baseId,
           );
 
+      const getVertexIdForRecordId = isTemporalSubgraph(graph)
+        ? getVertexIdForRecordIdTemporal
+        : getVertexIdForRecordIdNonTemporal;
+
       const neighbourIds = outgoingLinkAndTargetEntities.flatMap(
         ({ linkEntity, rightEntity }) => {
-          const vertexIdForRecordId = (
-            recordId: EntityRecordIdNonTemporal | EntityRecordIdTemporal,
-          ): EntityVertexIdNonTemporal | EntityVertexIdTemporal => {
-            for (const [baseId, revisionObject] of typedEntries(
-              graph.vertices,
-            )) {
-              for (const [revisionId, vertex] of typedEntries(revisionObject)) {
-                if (
-                  ((isTemporalSubgraph(graph) &&
-                    isEntityVertexTemporal(vertex as EntityVertexTemporal)) ||
-                    (!isTemporalSubgraph(graph) &&
-                      isEntityVertexNonTemporal(
-                        vertex as EntityVertexNonTemporal,
-                      ))) &&
-                  vertex.inner.metadata.recordId === recordId
-                ) {
-                  return {
-                    baseId,
-                    revisionId,
-                  };
-                }
-              }
-            }
-
-            throw new Error(
-              `Could not find entity vertex for recordId ${recordId}`,
-            );
-          };
           return [
-            JSON.stringify(
-              vertexIdForRecordId(
-                (Array.isArray(linkEntity) ? linkEntity[0]! : linkEntity)
-                  .metadata.recordId,
-              ),
+            getVertexIdForRecordId(
+              graph as SubgraphTemporal & SubgraphNonTemporal,
+              (Array.isArray(linkEntity) ? linkEntity[0]! : linkEntity).metadata
+                .recordId,
             ),
             JSON.stringify(
-              vertexIdForRecordId(
+              getVertexIdForRecordId(
+                graph as SubgraphTemporal & SubgraphNonTemporal,
                 (Array.isArray(rightEntity) ? rightEntity[0]! : rightEntity)
                   .metadata.recordId,
               ),
