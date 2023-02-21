@@ -38,15 +38,15 @@ import { Table } from "../../table";
 import { CustomLinkButton } from "./custom-link-button";
 import { GradientFontAwesomeIcon } from "./gradient-fontawesome-icon";
 
-const Section: FunctionComponent<{ sectionName: string } & BoxProps> = ({
-  sectionName,
-  children,
-}) => {
+const Section: FunctionComponent<
+  { sectionName: string; fullWidth?: boolean } & BoxProps
+> = ({ sectionName, fullWidth, children }) => {
   return (
     <Grid
       item
       sx={({ breakpoints }) => ({
         gridArea: sectionName,
+        overflow: "hidden",
         [breakpoints.down("lg")]: {
           display: "flex",
           justifyContent: "center",
@@ -55,6 +55,7 @@ const Section: FunctionComponent<{ sectionName: string } & BoxProps> = ({
     >
       <Stack
         sx={({ palette }) => ({
+          ...(fullWidth ? { width: 1 } : {}),
           background: `${palette.common.white}80`,
           border: `1px solid ${palette.gray[20]}`,
           backdropFilter: "blur(7.5px)",
@@ -64,7 +65,9 @@ const Section: FunctionComponent<{ sectionName: string } & BoxProps> = ({
           borderRadius: 4,
         })}
       >
-        <Box sx={{ paddingX: 1.5 }}>{children}</Box>
+        <Box sx={{ ...(fullWidth ? { width: 1 } : {}), paddingX: 1.5 }}>
+          {children}
+        </Box>
       </Stack>
     </Grid>
   );
@@ -436,7 +439,7 @@ export const PaidAddonsSection: FunctionComponent = () => {
             gridGap: 20,
           }}
         >
-          <Section sectionName="usage">
+          <Section sectionName="usage" fullWidth>
             <Stack flexDirection="row" alignItems="center" mb={2.25}>
               <GradientFontAwesomeIcon
                 icon={faCode}
@@ -471,14 +474,16 @@ export const PaidAddonsSection: FunctionComponent = () => {
                 from the account billing page.
               </Typography>
 
-              <Table
-                header={API_USAGE_HEADER.map((title) => (
-                  <UsageTableHeaderCell key={title}>
-                    {title}
-                  </UsageTableHeaderCell>
-                ))}
-                rows={API_USAGE_ROWS.map((row) => createTableRow(row))}
-              />
+              <Box sx={{ overflowX: "auto" }}>
+                <Table
+                  header={API_USAGE_HEADER.map((title) => (
+                    <UsageTableHeaderCell key={title}>
+                      {title}
+                    </UsageTableHeaderCell>
+                  ))}
+                  rows={API_USAGE_ROWS.map((row) => createTableRow(row))}
+                />
+              </Box>
 
               <Typography variant="bpBodyCopy" sx={{ lineHeight: 1.4 }}>
                 <strong>
