@@ -324,34 +324,34 @@ const createTableRow = ({
     <TableCell
       key="service"
       sx={{
+        display: "flex",
+        alignItems: "center",
         pt: 1.5,
         pb: 1,
       }}
     >
-      <Tooltip title={serviceTooltip} placement="top">
-        <Link
-          href=""
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1.25,
-          }}
-        >
-          <FontAwesomeIcon
-            icon={serviceIcon}
-            sx={{ fontSize: 15, fill: ({ palette }) => palette.purple[40] }}
-          />
-          <Typography
+      <FontAwesomeIcon
+        icon={serviceIcon}
+        sx={{
+          fontSize: 15,
+          fill: ({ palette }) => palette.purple[40],
+          mr: 1.25,
+        }}
+      />
+      <Tooltip title={serviceTooltip} placement="top" followCursor>
+        <Box display="flex">
+          <CustomLink
+            href=""
             variant="bpBodyCopy"
             sx={{
-              color: ({ palette }) => palette.purple[70],
+              display: "inline-flex",
               fontWeight: 600,
               lineHeight: 1.2,
             }}
           >
             {service}
-          </Typography>
-        </Link>
+          </CustomLink>
+        </Box>
       </Tooltip>
     </TableCell>,
     <TableCell
