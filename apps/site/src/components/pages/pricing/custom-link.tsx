@@ -32,6 +32,7 @@ export const CustomLink: FunctionComponent<Partial<LinkProps>> = ({
   ) : (
     <Typography
       {...props}
+      component="span"
       sx={[
         {
           cursor: "pointer",
