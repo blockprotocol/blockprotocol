@@ -20,6 +20,7 @@ import { faEye } from "../../icons/pro/fa-eye";
 import { faHammer } from "../../icons/pro/fa-hammer";
 import { faServer } from "../../icons/pro/fa-server";
 import { faWindow } from "../../icons/pro/fa-window";
+import { Link, LinkProps } from "../../link";
 import { CustomLinkButton } from "./custom-link-button";
 import { GradientFontAwesomeIcon } from "./gradient-fontawesome-icon";
 
@@ -160,18 +161,18 @@ const Section = ({
   );
 };
 
-const PurpleText: FunctionComponent<{ children: ReactNode }> = ({
-  children,
-}) => (
-  <Box
-    component="span"
+const CustomLink: FunctionComponent<LinkProps> = ({ children, ...props }) => (
+  <Link
+    {...props}
     sx={{
-      color: ({ palette }) => palette.purple[70],
+      color: ({ palette }) => `${palette.purple[70]} !important`,
       fontWeight: 700,
+      whiteSpace: "nowrap",
+      borderBottomWidth: "0px !important",
     }}
   >
     {children}
-  </Box>
+  </Link>
 );
 
 export const FreeTierSection: FunctionComponent<{
@@ -222,7 +223,7 @@ export const FreeTierSection: FunctionComponent<{
                 text: (
                   <>
                     <strong>Access to all public blocks</strong> on the{" "}
-                    <PurpleText>Þ Hub</PurpleText>
+                    <CustomLink href="/hub">Þ Hub</CustomLink>
                   </>
                 ),
               },
@@ -231,10 +232,21 @@ export const FreeTierSection: FunctionComponent<{
                 text: (
                   <>
                     <strong>Multi-app support:</strong>{" "}
-                    <PurpleText>GitHub</PurpleText>,{" "}
-                    <PurpleText>WordPress</PurpleText>,{" "}
-                    <PurpleText>Figma</PurpleText>, and{" "}
-                    <PurpleText>HASH</PurpleText>
+                    <CustomLink href="/docs/using-blocks#github-blocks">
+                      GitHub
+                    </CustomLink>
+                    ,{" "}
+                    <CustomLink href="http://localhost:3000/docs/using-blocks#wordpress">
+                      WordPress
+                    </CustomLink>
+                    ,{" "}
+                    <CustomLink href="http://localhost:3000/docs/using-blocks#figma">
+                      Figma
+                    </CustomLink>
+                    , and{" "}
+                    <CustomLink href="http://localhost:3000/docs/using-blocks#hash">
+                      HASH
+                    </CustomLink>
                   </>
                 ),
               },
@@ -269,7 +281,8 @@ export const FreeTierSection: FunctionComponent<{
                 text: (
                   <>
                     <strong>Host blocks and types</strong> on the{" "}
-                    <PurpleText>Þ Hub</PurpleText> for free, without limits
+                    <CustomLink href="/hub">Þ Hub</CustomLink> for free, without
+                    limits
                   </>
                 ),
               },
@@ -303,7 +316,7 @@ export const FreeTierSection: FunctionComponent<{
                 text: (
                   <>
                     <strong>Access to all public blocks</strong> on the{" "}
-                    <PurpleText>Þ Hub</PurpleText>
+                    <CustomLink href="/hub">Þ Hub</CustomLink>
                   </>
                 ),
               },
