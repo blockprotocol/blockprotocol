@@ -203,7 +203,15 @@ const HubBrowseHeaderComponents = {
     );
   },
   types: () => {
-    return <HubHeading>Types</HubHeading>;
+    return (
+      <>
+        <HubHeading>Types</HubHeading>
+        <HubSubHeading>
+          Types provide a standardized way of describing things, and can used by
+          blocks and services
+        </HubSubHeading>
+      </>
+    );
   },
   services: () => {
     return <HubHeading>Services</HubHeading>;
