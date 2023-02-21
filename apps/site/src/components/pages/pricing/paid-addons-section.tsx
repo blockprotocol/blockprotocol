@@ -406,7 +406,7 @@ const createTableRow = ({
           {unit}
         </Typography>
 
-        <Tooltip title={unitTooltip} placement="top">
+        <Tooltip title={unitTooltip} placement="top" followCursor>
           <Box sx={{ lineHeight: 1 }}>
             <CircleInfoRegularIcon
               sx={{
