@@ -553,12 +553,14 @@ export const PaidAddonsSection: FunctionComponent = () => {
                 connect you with a community developer.
               </Typography>
 
-              <CustomLinkButton
-                href="/contact"
-                endIcon={<FontAwesomeIcon icon={faEnvelope} />}
-              >
-                Contact us
-              </CustomLinkButton>
+              <Box>
+                <CustomLinkButton
+                  href="/contact"
+                  endIcon={<FontAwesomeIcon icon={faEnvelope} />}
+                >
+                  Contact us
+                </CustomLinkButton>
+              </Box>
             </Stack>
           </Section>
 
@@ -621,12 +623,14 @@ export const PaidAddonsSection: FunctionComponent = () => {
                 </Typography>
               </List>
 
-              <CustomLinkButton
-                href="/contact"
-                endIcon={<FontAwesomeIcon icon={faEnvelope} />}
-              >
-                Contact us
-              </CustomLinkButton>
+              <Box>
+                <CustomLinkButton
+                  href="/contact"
+                  endIcon={<FontAwesomeIcon icon={faEnvelope} />}
+                >
+                  Contact us
+                </CustomLinkButton>
+              </Box>
             </Stack>
           </Section>
         </Grid>
