@@ -4,6 +4,7 @@ import { useGraphEmbedderModule as useGraphEmbedderModuleNonTemporal } from "@bl
 import { useGraphEmbedderModule as useGraphEmbedderModuleTemporal } from "@blockprotocol/graph/temporal/react";
 import { HookData, HookEmbedderMessageCallbacks } from "@blockprotocol/hook/.";
 import { useHookEmbedderModule } from "@blockprotocol/hook/react";
+import { EmbedderServiceMessageCallbacks } from "@blockprotocol/service";
 import { useServiceEmbedderModule } from "@blockprotocol/service/react";
 import {
   ComponentType,
@@ -57,6 +58,7 @@ type MockBlockDockProps<Temporal extends boolean> = {
   hideDebugToggle?: boolean;
   initialData?: InitialData<Temporal>;
   readonly?: boolean;
+  serviceModuleCallbacks?: EmbedderServiceMessageCallbacks;
   blockInfo?: {
     blockType: {
       entryPoint: "react" | "html" | "custom-element" | string;
@@ -80,6 +82,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   hideDebugToggle = false,
   initialData,
   readonly: initialReadonly = false,
+  serviceModuleCallbacks: serviceModuleCallbacksFromProps,
 }: Omit<MockBlockDockProps<false>, "temporal">) => {
   const {
     blockEntityRecordId,
@@ -142,8 +145,10 @@ const MockBlockDockNonTemporal: FunctionComponent<
   });
 
   const serviceModuleCallbacks = useMemo(
-    () => constructServiceModuleCallbacks({ blockProtocolApiKey }),
-    [blockProtocolApiKey],
+    () =>
+      serviceModuleCallbacksFromProps ??
+      constructServiceModuleCallbacks({ blockProtocolApiKey }),
+    [blockProtocolApiKey, serviceModuleCallbacksFromProps],
   );
 
   const { serviceModule } = useServiceEmbedderModule(wrapperRef, {
@@ -336,6 +341,7 @@ const MockBlockDockTemporal: FunctionComponent<
   hideDebugToggle = false,
   initialData,
   readonly: initialReadonly = false,
+  serviceModuleCallbacks: serviceModuleCallbacksFromProps,
 }: Omit<MockBlockDockProps<true>, "temporal">) => {
   const {
     blockEntityRecordId,
@@ -399,8 +405,10 @@ const MockBlockDockTemporal: FunctionComponent<
   });
 
   const serviceModuleCallbacks = useMemo(
-    () => constructServiceModuleCallbacks({ blockProtocolApiKey }),
-    [blockProtocolApiKey],
+    () =>
+      serviceModuleCallbacksFromProps ??
+      constructServiceModuleCallbacks({ blockProtocolApiKey }),
+    [blockProtocolApiKey, serviceModuleCallbacksFromProps],
   );
 
   const { serviceModule } = useServiceEmbedderModule(wrapperRef, {
@@ -597,6 +605,7 @@ const MockBlockDockTemporal: FunctionComponent<
  * @param [props.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
  * @param [props.initialData.initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [props.readonly=false] whether the block should display in readonly mode or not
+ * @param [props.serviceModuleCallbacks] overrides the default service module callbacks
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   Temporal extends boolean,
@@ -610,6 +619,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   hideDebugToggle = false,
   initialData,
   readonly: initialReadonly = false,
+  serviceModuleCallbacks,
 }: MockBlockDockProps<Temporal>) => {
   return temporal ? (
     <MockBlockDockTemporal
@@ -621,6 +631,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       hideDebugToggle={hideDebugToggle}
       initialData={initialData as InitialData<true>}
       readonly={initialReadonly}
+      serviceModuleCallbacks={serviceModuleCallbacks}
     />
   ) : (
     <MockBlockDockNonTemporal
@@ -632,6 +643,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       hideDebugToggle={hideDebugToggle}
       initialData={initialData}
       readonly={initialReadonly}
+      serviceModuleCallbacks={serviceModuleCallbacks}
     />
   );
 };
