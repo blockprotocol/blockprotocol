@@ -3,7 +3,6 @@ import {
   faChevronRight,
   faCode,
   faImage,
-  faMessage,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import {
