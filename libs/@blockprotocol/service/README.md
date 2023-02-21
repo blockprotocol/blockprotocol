@@ -17,7 +17,28 @@ For React, we provide a `useServiceBlockModule` hook, which accepts a `ref` to a
 
 ### Custom elements
 
-<!-- TODO - https://app.asana.com/0/0/1204003986334469/f -->
+Create a `ServiceBlockHandler` in your element. If you are using our template, you can add this in the constructedCallback instance method ([Lit docs](https://lit.dev/docs/components/lifecycle/#connectedcallback)) and make it available for use in your element.
+
+```ts
+  ...
+  connectedCallback() {
+    super.connectedCallback();
+    if (!this.serviceModule || this.serviceModule.destroyed) {
+      this.serviceModule = new ServiceBlockHandler({
+        element: this,
+      });
+    }
+  }
+
+  retrieveDirections(data) {
+    if (!this.serviceModule) {
+      throw new Error("Service module not available");
+    }
+    this.serviceModule.mapboxRetrieveDirections(args).then(() => { ... });
+  }
+
+  ...
+```
 
 ## Embedding applications
 
