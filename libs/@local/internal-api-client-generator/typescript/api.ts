@@ -114,6 +114,53 @@ export interface ErrorInfo {
 /**
  *
  * @export
+ * @interface ExternalApiMethod200Response
+ */
+export interface ExternalApiMethod200Response {
+  /**
+   *
+   * @type {any}
+   * @memberof ExternalApiMethod200Response
+   */
+  externalApiMethodResponse: any;
+}
+/**
+ *
+ * @export
+ * @interface ExternalApiMethodRequest
+ */
+export interface ExternalApiMethodRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof ExternalApiMethodRequest
+   */
+  providerName: ExternalApiMethodRequestProviderNameEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof ExternalApiMethodRequest
+   */
+  methodName: string;
+  /**
+   *
+   * @type {{ [key: string]: any; }}
+   * @memberof ExternalApiMethodRequest
+   */
+  payload: { [key: string]: any };
+}
+
+export const ExternalApiMethodRequestProviderNameEnum = {
+  OpenAi: "openAI",
+  Mapbox: "mapbox",
+} as const;
+
+export type ExternalApiMethodRequestProviderNameEnum =
+  (typeof ExternalApiMethodRequestProviderNameEnum)[keyof typeof ExternalApiMethodRequestProviderNameEnum];
+
+/**
+ *
+ * @export
  * @interface GetPaymentMethods200Response
  */
 export interface GetPaymentMethods200Response {
@@ -611,6 +658,60 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary External API method
+     * @param {ExternalApiMethodRequest} externalApiMethodRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    externalApiMethod: async (
+      externalApiMethodRequest: ExternalApiMethodRequest,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'externalApiMethodRequest' is not null or undefined
+      assertParamExists(
+        "externalApiMethod",
+        "externalApiMethodRequest",
+        externalApiMethodRequest,
+      );
+      const localVarPath = `/external-api-method`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "POST",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        externalApiMethodRequest,
+        localVarRequestOptions,
+        configuration,
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary Retrieve the payment methods of the BP user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1042,6 +1143,34 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary External API method
+     * @param {ExternalApiMethodRequest} externalApiMethodRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async externalApiMethod(
+      externalApiMethodRequest: ExternalApiMethodRequest,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<ExternalApiMethod200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.externalApiMethod(
+          externalApiMethodRequest,
+          options,
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
      * @summary Retrieve the payment methods of the BP user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1284,6 +1413,21 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary External API method
+     * @param {ExternalApiMethodRequest} externalApiMethodRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    externalApiMethod(
+      externalApiMethodRequest: ExternalApiMethodRequest,
+      options?: any,
+    ): AxiosPromise<ExternalApiMethod200Response> {
+      return localVarFp
+        .externalApiMethod(externalApiMethodRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Retrieve the payment methods of the BP user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1436,6 +1580,19 @@ export interface DefaultApiInterface {
 
   /**
    *
+   * @summary External API method
+   * @param {ExternalApiMethodRequest} externalApiMethodRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  externalApiMethod(
+    externalApiMethodRequest: ExternalApiMethodRequest,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<ExternalApiMethod200Response>;
+
+  /**
+   *
    * @summary Retrieve the payment methods of the BP user
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -1573,6 +1730,23 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   ) {
     return DefaultApiFp(this.configuration)
       .detachPaymentMethod(paymentMethodId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary External API method
+   * @param {ExternalApiMethodRequest} externalApiMethodRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public externalApiMethod(
+    externalApiMethodRequest: ExternalApiMethodRequest,
+    options?: AxiosRequestConfig,
+  ) {
+    return DefaultApiFp(this.configuration)
+      .externalApiMethod(externalApiMethodRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
