@@ -1,7 +1,23 @@
 import type { GeoJSON } from "geojson";
 
 /**
- * @todo: fix this
+ * This file contains copied and pasted types from the
+ * existing `@mapbox/search-js-core` package, which are
+ * used to define the mapbox API methods.
+ *
+ * Directly importing these types would be preferable,
+ * however when doing so a typescript incompatibility error
+ * is thrown by the `typescript-json-schema` package when
+ * generating the `service-module.json` file.
+ *
+ * @todo address this so these types become more maintainable
+ * @see https://app.asana.com/0/0/1204004000163864/f
+ */
+
+/**
+ * `MatchCodeConfidence` is defined as a scalar in `@mapbox/search-js-core`,
+ * and therefore can't be redefined without causing an incompatibility.
+ * Therefore it's assigned to be `any` for now.
  */
 type MatchCodeConfidence = any;
 
