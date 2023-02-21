@@ -143,13 +143,7 @@ const Section = ({
               href="/signup"
               disabled={signedIn}
               endIcon={
-                <FontAwesomeIcon
-                  icon={signedIn ? faCheck : faArrowRight}
-                  sx={{
-                    color: ({ palette }) =>
-                      signedIn ? palette.gray[40] : palette.common.white,
-                  }}
-                />
+                <FontAwesomeIcon icon={signedIn ? faCheck : faArrowRight} />
               }
             >
               {signedIn ? "Included with all accounts" : "Create account"}

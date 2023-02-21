@@ -1,6 +1,7 @@
 import {
   faArrowRight,
   faCaretRight,
+  faCheck,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { SubscriptionTierPrices } from "@local/internal-api-client";
@@ -834,32 +835,48 @@ export const PaidTiersSection: FunctionComponent<{
               marginTop={4}
               mb={1.5}
             >
-              {currentSubscriptionTier !== "hobby" &&
-              currentSubscriptionTier !== "pro" ? (
-                <CustomLinkButton
-                  href={{
-                    pathname: "/settings/billing/upgrade",
-                    query: { tier: "hobby" },
-                  }}
-                  endIcon={
-                    <FontAwesomeIcon
-                      icon={faRocketLaunch}
-                      sx={{
-                        color: ({ palette }) => palette.common.white,
-                      }}
-                    />
-                  }
-                  sx={{ width: "calc(100% - 64px)" }}
-                >
-                  {signedIn ? (
-                    <Box component="span">
-                      Upgrade to unlock <strong>HOBBY</strong>
-                    </Box>
-                  ) : (
-                    "Get started"
-                  )}
-                </CustomLinkButton>
-              ) : null}
+              <CustomLinkButton
+                href={{
+                  pathname: "/settings/billing/upgrade",
+                  query: { tier: "hobby" },
+                }}
+                endIcon={
+                  <FontAwesomeIcon
+                    icon={
+                      currentSubscriptionTier === "hobby" ||
+                      currentSubscriptionTier === "pro"
+                        ? faCheck
+                        : faRocketLaunch
+                    }
+                  />
+                }
+                disabled={
+                  currentSubscriptionTier === "hobby" ||
+                  currentSubscriptionTier === "pro"
+                }
+                sx={{ width: "calc(100% - 64px)" }}
+              >
+                {signedIn ? (
+                  <Box component="span">
+                    {currentSubscriptionTier === "hobby"
+                      ? "Your current tier"
+                      : null}
+                    {currentSubscriptionTier === "pro" ? (
+                      <>
+                        You already have <strong>PRO</strong>
+                      </>
+                    ) : null}
+                    {currentSubscriptionTier !== "hobby" &&
+                    currentSubscriptionTier !== "pro" ? (
+                      <>
+                        Upgrade to unlock <strong>HOBBY</strong>
+                      </>
+                    ) : null}
+                  </Box>
+                ) : (
+                  "Get started"
+                )}
+              </CustomLinkButton>
             </Box>
           </Box>
         </Grid>
@@ -1021,32 +1038,35 @@ export const PaidTiersSection: FunctionComponent<{
               marginTop={4}
               mb={1.5}
             >
-              {currentSubscriptionTier !== "pro" ? (
-                <CustomLinkButton
-                  pink
-                  href={{
-                    pathname: "/settings/billing/upgrade",
-                    query: { tier: "pro" },
-                  }}
-                  endIcon={
-                    <FontAwesomeIcon
-                      icon={faBolt}
-                      sx={{
-                        color: ({ palette }) => palette.common.white,
-                      }}
-                    />
-                  }
-                  sx={{ width: "calc(100% - 64px)" }}
-                >
-                  {signedIn ? (
-                    <Box component="span">
-                      Upgrade to unlock <strong>PRO</strong>
-                    </Box>
-                  ) : (
-                    "Get started"
-                  )}
-                </CustomLinkButton>
-              ) : null}
+              <CustomLinkButton
+                pink
+                href={{
+                  pathname: "/settings/billing/upgrade",
+                  query: { tier: "pro" },
+                }}
+                endIcon={
+                  <FontAwesomeIcon
+                    icon={currentSubscriptionTier === "pro" ? faCheck : faBolt}
+                  />
+                }
+                disabled={currentSubscriptionTier === "pro"}
+                sx={{ width: "calc(100% - 64px)" }}
+              >
+                {signedIn ? (
+                  <Box component="span">
+                    {currentSubscriptionTier === "pro"
+                      ? "Your current tier"
+                      : null}
+                    {currentSubscriptionTier !== "pro" ? (
+                      <>
+                        Upgrade to unlock <strong>PRO</strong>
+                      </>
+                    ) : null}
+                  </Box>
+                ) : (
+                  "Get started"
+                )}
+              </CustomLinkButton>
             </Box>
           </Box>
         </Grid>
