@@ -41,12 +41,7 @@ const HubItem = ({
   <Stack direction="row" spacing={2} alignItems="start">
     {image ? (
       <Link href={url}>
-        <Box
-          component="img"
-          sx={{ width: 24 }}
-          // @todo make this correct
-          src={image}
-        />
+        <Box component="img" sx={{ width: 24 }} src={image} />
       </Link>
     ) : null}
     <Stack spacing={0.75}>
