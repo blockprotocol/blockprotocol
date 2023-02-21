@@ -71,12 +71,12 @@ test("page footer navigation works", async ({ page, browserName }) => {
   // ).toHaveAttribute("href", "/");
 
   // Legal section
-  // await expect(page.locator("footer >> a:text-is('Terms')")).toHaveAttribute(
-  //   "href",
-  //   "/legal/terms",
-  // );
-  // await expect(page.locator("footer >> a:text-is('Privacy')")).toHaveAttribute(
-  //   "href",
-  //   "/legal/privacy",
-  // );
+  await expect(page.locator("footer >> a:text-is('Terms')")).toHaveAttribute(
+    "href",
+    "/legal/terms",
+  );
+  await expect(page.locator("footer >> a:text-is('Privacy')")).toHaveAttribute(
+    "href",
+    "/legal/privacy",
+  );
 });

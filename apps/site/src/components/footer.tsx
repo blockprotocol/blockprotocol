@@ -302,9 +302,8 @@ export const Footer: FunctionComponent<FooterProps> = ({
               {Socials}
             </Grid>
           )}
-          {/* Uncomment when we have the pages to link this to
-          Don't forget to uncomment in tests aswell */}
-          {/* <Grid item xs={12}>
+
+          <Grid item xs={12}>
             {[
               { title: "Terms", href: "/legal/terms" },
               { title: "Privacy", href: "/legal/privacy" },
@@ -328,7 +327,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
                 {title}
               </Link>
             ))}
-          </Grid> */}
+          </Grid>
         </Grid>
       </Container>
     </Box>
