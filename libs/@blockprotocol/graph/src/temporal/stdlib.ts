@@ -96,11 +96,11 @@ export const buildSubgraph = (
     propertyTypes: PropertyTypeWithMetadata[];
     dataTypes: DataTypeWithMetadata[];
   },
-  rootVertexIds: GraphElementVertexId[],
+  rootRecordIds: (EntityRecordId | OntologyTypeRecordId)[],
   depths: GraphResolveDepths,
   subgraphTemporalAxes: SubgraphTemporalAxes,
 ) =>
-  buildSubgraphGeneral<true>(data, rootVertexIds, depths, subgraphTemporalAxes);
+  buildSubgraphGeneral<true>(data, rootRecordIds, depths, subgraphTemporalAxes);
 
 export const getPropertyTypesReferencedByEntityType =
   getPropertyTypesReferencedByEntityTypeGeneral;
