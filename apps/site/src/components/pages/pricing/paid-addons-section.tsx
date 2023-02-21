@@ -34,7 +34,6 @@ import { faLocationArrow } from "../../icons/pro/fa-location-arrow";
 import { faLocationPin } from "../../icons/pro/fa-location-pin";
 import { faMap } from "../../icons/pro/fa-map";
 import { faText } from "../../icons/pro/fa-text";
-import { Link } from "../../link";
 import { Table } from "../../table";
 import { CustomLink } from "./custom-link";
 import { CustomLinkButton } from "./custom-link-button";
