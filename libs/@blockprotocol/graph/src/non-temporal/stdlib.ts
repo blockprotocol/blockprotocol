@@ -31,22 +31,25 @@ import {
   getPropertyTypesReferencedByEntityType as getPropertyTypesReferencedByEntityTypeGeneral,
   getRightEntityForLinkEntity as getRightEntityForLinkEntityGeneral,
   getRoots as getRootsGeneral,
+  getVertexIdForRecordId as getVertexIdForRecordIdGeneral,
   isDataTypeRootedSubgraph as isDataTypeRootedSubgraphGeneral,
   isEntityRootedSubgraph as isEntityRootedSubgraphGeneral,
   isEntityTypeRootedSubgraph as isEntityTypeRootedSubgraphGeneral,
   isPropertyTypeRootedSubgraph as isPropertyTypeRootedSubgraphGeneral,
 } from "../shared/stdlib.js";
-import { GraphElementVertexId } from "../shared/types/subgraph/vertices.js";
 import {
-  DataTypeWithMetadata,
-  Entity,
-  EntityId,
-  EntityTypeWithMetadata,
-  GraphResolveDepths,
-  LinkEntityAndRightEntity,
-  PropertyTypeWithMetadata,
-  Subgraph,
-  SubgraphRootType,
+  type DataTypeWithMetadata,
+  type Entity,
+  type EntityId,
+  type EntityRecordId,
+  type EntityTypeWithMetadata,
+  type GraphElementVertexId,
+  type GraphResolveDepths,
+  type LinkEntityAndRightEntity,
+  type OntologyTypeRecordId,
+  type PropertyTypeWithMetadata,
+  type Subgraph,
+  type SubgraphRootType,
 } from "./main.js";
 
 // import {
@@ -155,6 +158,10 @@ export const getPropertyTypesByBaseUri = getPropertyTypesByBaseUriGeneral;
 export const getRoots = <RootType extends SubgraphRootType>(
   subgraph: Subgraph<RootType>,
 ): RootType["element"][] => getRootsGeneral<false, RootType>(subgraph);
+export const getVertexIdForRecordId = (
+  subgraph: Subgraph,
+  recordId: EntityRecordId | OntologyTypeRecordId,
+): GraphElementVertexId => getVertexIdForRecordIdGeneral(subgraph, recordId);
 export const isDataTypeRootedSubgraph = isDataTypeRootedSubgraphGeneral<false>;
 export const isEntityRootedSubgraph = isEntityRootedSubgraphGeneral<false>;
 export const isEntityTypeRootedSubgraph =

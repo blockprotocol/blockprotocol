@@ -31,6 +31,7 @@ import {
   getPropertyTypesReferencedByEntityType as getPropertyTypesReferencedByEntityTypeGeneral,
   getRightEntityForLinkEntity as getRightEntityForLinkEntityGeneral,
   getRoots as getRootsGeneral,
+  getVertexIdForRecordId as getVertexIdForRecordIdGeneral,
   intervalCompareWithInterval as intervalCompareWithIntervalGeneral,
   intervalContainsInterval as intervalContainsIntervalGeneral,
   intervalContainsTimestamp as intervalContainsTimestampGeneral,
@@ -50,23 +51,25 @@ import {
   sortIntervals as sortIntervalsGeneral,
   unionOfIntervals as unionOfIntervalsGeneral,
 } from "../shared/stdlib.js";
-import { BaseIdToRevisions } from "../shared/stdlib/subgraph/element/map-revisions.js";
-import { GraphElementVertexId } from "../shared/types/subgraph/vertices.js";
+import { type BaseIdToRevisions } from "../shared/stdlib/subgraph/element/map-revisions.js";
 import {
-  DataTypeWithMetadata,
-  Entity,
-  EntityId,
-  EntityRevisionId,
-  EntityTypeWithMetadata,
-  GraphResolveDepths,
-  LinkEntityAndRightEntity,
-  PropertyTypeWithMetadata,
-  Subgraph,
-  SubgraphRootType,
-  SubgraphTemporalAxes,
-  TimeInterval,
-  Timestamp,
-  Vertex,
+  type DataTypeWithMetadata,
+  type Entity,
+  type EntityId,
+  type EntityRecordId,
+  type EntityRevisionId,
+  type EntityTypeWithMetadata,
+  type GraphElementVertexId,
+  type GraphResolveDepths,
+  type LinkEntityAndRightEntity,
+  type OntologyTypeRecordId,
+  type PropertyTypeWithMetadata,
+  type Subgraph,
+  type SubgraphRootType,
+  type SubgraphTemporalAxes,
+  type TimeInterval,
+  type Timestamp,
+  type Vertex,
 } from "./main.js";
 
 export const compareBounds = compareBoundsGeneral;
@@ -167,6 +170,10 @@ export const getPropertyTypesByBaseUri = getPropertyTypesByBaseUriGeneral;
 export const getRoots = <RootType extends SubgraphRootType>(
   subgraph: Subgraph<RootType>,
 ): RootType["element"][] => getRootsGeneral<true, RootType>(subgraph);
+export const getVertexIdForRecordId = (
+  subgraph: Subgraph,
+  recordId: EntityRecordId | OntologyTypeRecordId,
+): GraphElementVertexId => getVertexIdForRecordIdGeneral(subgraph, recordId);
 export const isDataTypeRootedSubgraph = isDataTypeRootedSubgraphGeneral<true>;
 export const isEntityRootedSubgraph = isEntityRootedSubgraphGeneral<true>;
 export const isEntityTypeRootedSubgraph =
