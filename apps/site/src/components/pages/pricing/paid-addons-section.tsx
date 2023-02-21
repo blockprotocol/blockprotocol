@@ -341,7 +341,6 @@ const createTableRow = ({
       <Tooltip title={serviceTooltip} placement="top" followCursor>
         <Box display="flex">
           <CustomLink
-            href=""
             variant="bpBodyCopy"
             sx={{
               display: "inline-flex",
