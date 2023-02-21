@@ -4,6 +4,8 @@ import { resolve } from "node:path";
 
 import { generateSchema, getProgramFromFiles } from "typescript-json-schema";
 
+import { ServiceMessageDefinition } from "@blockprotocol/core";
+
 export type ServiceJsonMessage = {
   messageName: string;
   description: string;
@@ -16,7 +18,9 @@ export type ServiceJsonMessage = {
 
 const program = getProgramFromFiles([resolve("./src/types.ts")]);
 
-const generateServiceSchema = (params: { typeName: string }) => {
+const generateServiceSchema = (params: {
+  typeName: string;
+}): Record<string, unknown> => {
   const schema = generateSchema(program, params.typeName, {
     required: true,
     ref: false,
@@ -28,10 +32,10 @@ const generateServiceSchema = (params: { typeName: string }) => {
     );
   }
 
-  return schema;
+  return schema as Record<string, unknown>;
 };
 
-export const mapboxMessages: ServiceJsonMessage[] = [
+export const mapboxMessages: ServiceMessageDefinition[] = [
   /** Mapbox Geocoding API */
   {
     messageName: "mapboxForwardGeocoding",
