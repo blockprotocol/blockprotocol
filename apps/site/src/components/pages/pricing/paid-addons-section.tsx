@@ -21,6 +21,7 @@ import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode } from "react";
 
 import circleBackground from "../../../../public/assets/pricing/circle-background.png";
+import { theme } from "../../../theme";
 import { FontAwesomeIcon } from "../../icons";
 import { AbstractAiIcon } from "../../icons/abstract-ai-icon";
 import { CircleInfoRegularIcon } from "../../icons/circle-info-regular";
@@ -83,8 +84,8 @@ const API_USAGE_ROWS = [
       <AbstractAiIcon
         sx={{
           fontSize: 16,
-          fill: ({ palette }) => palette.gray[50],
         }}
+        fill={theme.palette.gray[50]}
       />
     ),
     provider: "OpenAI",
@@ -102,8 +103,8 @@ const API_USAGE_ROWS = [
       <AbstractAiIcon
         sx={{
           fontSize: 16,
-          fill: ({ palette }) => palette.gray[50],
         }}
+        fill={theme.palette.gray[50]}
       />
     ),
     provider: "OpenAI",
@@ -121,8 +122,8 @@ const API_USAGE_ROWS = [
       <AbstractAiIcon
         sx={{
           fontSize: 16,
-          fill: ({ palette }) => palette.gray[50],
         }}
+        fill={theme.palette.gray[50]}
       />
     ),
     provider: "OpenAI",
@@ -140,8 +141,8 @@ const API_USAGE_ROWS = [
       <AbstractAiIcon
         sx={{
           fontSize: 16,
-          fill: ({ palette }) => palette.gray[50],
         }}
+        fill={theme.palette.gray[50]}
       />
     ),
     provider: "OpenAI",
@@ -159,8 +160,8 @@ const API_USAGE_ROWS = [
       <AbstractAiIcon
         sx={{
           fontSize: 16,
-          fill: ({ palette }) => palette.gray[50],
         }}
+        fill={theme.palette.gray[50]}
       />
     ),
     provider: "OpenAI",
@@ -178,8 +179,8 @@ const API_USAGE_ROWS = [
       <MapboxLogoIcon
         sx={{
           fontSize: 16,
-          fill: ({ palette }) => palette.gray[50],
         }}
+        fill={theme.palette.gray[50]}
       />
     ),
     provider: "Mapbox",
@@ -197,8 +198,8 @@ const API_USAGE_ROWS = [
       <MapboxLogoIcon
         sx={{
           fontSize: 16,
-          fill: ({ palette }) => palette.gray[50],
         }}
+        fill={theme.palette.gray[50]}
       />
     ),
     provider: "Mapbox",
@@ -216,8 +217,8 @@ const API_USAGE_ROWS = [
       <MapboxLogoIcon
         sx={{
           fontSize: 16,
-          fill: ({ palette }) => palette.gray[50],
         }}
+        fill={theme.palette.gray[50]}
       />
     ),
     provider: "Mapbox",
@@ -235,8 +236,8 @@ const API_USAGE_ROWS = [
       <MapboxLogoIcon
         sx={{
           fontSize: 16,
-          fill: ({ palette }) => palette.gray[50],
         }}
+        fill={theme.palette.gray[50]}
       />
     ),
     provider: "Mapbox",
@@ -304,7 +305,7 @@ const createTableRow = ({
         pb: 1,
       }}
     >
-      <Box display="flex" gap={1.25}>
+      <Box display="flex" gap={1.25} alignItems="center">
         <Box>{providerIcon}</Box>
         <Typography
           variant="bpBodyCopy"
