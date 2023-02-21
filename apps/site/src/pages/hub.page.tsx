@@ -113,7 +113,6 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
         <Typography
           mb={3.25}
           variant="bpSubtitle"
-          // @todo check this
           fontSize={42}
           fontFamily={COPY_FONT_FAMILY}
           fontWeight={300}
