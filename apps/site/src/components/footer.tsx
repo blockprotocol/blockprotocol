@@ -39,12 +39,10 @@ const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
       name: "Specification",
       href: "/docs/spec",
     },
-    // Uncomment when we have the pricing page
-    // Don't forget to uncomment in tests aswell
-    // {
-    //   name: "Pricing",
-    //   href: "/pricing",
-    // },
+    {
+      name: "Pricing",
+      href: "/pricing",
+    },
     {
       name: "Contact Us",
       href: "/contact",
