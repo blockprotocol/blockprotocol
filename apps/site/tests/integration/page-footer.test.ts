@@ -54,7 +54,7 @@ test("page footer navigation works", async ({ page, browserName }) => {
     page.locator("footer >> a:text-is('Semantic types')"),
   ).toHaveAttribute("href", "/hub");
   await expect(
-    page.locator("footer >> a:text-is('API endpoints')"),
+    page.locator("footer >> a:text-is('API services')"),
   ).toHaveAttribute("href", "/hub");
 
   // Publish section

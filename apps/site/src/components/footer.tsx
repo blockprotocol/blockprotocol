@@ -62,7 +62,7 @@ const DISCOVER_NAVIGATION_LINKS: NavigationSection = {
       href: "/hub",
     },
     {
-      name: "API endpoints",
+      name: "API services",
       href: "/hub",
     },
   ],
