@@ -468,8 +468,8 @@ export const PaidAddonsSection: FunctionComponent = () => {
                   line with the below.
                 </strong>{" "}
                 Hobby and Pro users can prevent overage charges by setting a{" "}
-                <CustomLink href="">spend cap</CustomLink> from the account
-                billing page.
+                <CustomLink href="/account/billing">spend cap</CustomLink> from
+                the account billing page.
               </Typography>
 
               <Box sx={{ overflowX: "auto" }}>
