@@ -14,6 +14,7 @@ import { HUB_SERVICES_ENABLED } from "../../../pages/hub.page";
 import { FontAwesomeIcon } from "../../icons";
 import { faBinary } from "../../icons/fa/binary";
 import { faBoxesStacked } from "../../icons/fa/boxes-stacked";
+import { ClientOnlyLastUpdated } from "../../last-updated";
 import { Link } from "../../link";
 import { getHubBrowseQuery, getRouteHubBrowseType } from "./hub-utils";
 
@@ -84,7 +85,11 @@ const HubItem = ({
             @{author}
           </Box>
           <Box>V{version}</Box>
-          {updated ? <Box>{updated}</Box> : null}
+          {updated ? (
+            <Box>
+              <ClientOnlyLastUpdated value={updated} />
+            </Box>
+          ) : null}
         </Stack>
       </Typography>
     </Stack>
@@ -117,7 +122,7 @@ const HubListBrowseType = ({
           [`.${svgIconClasses.root}`]: {
             marginRight: 1,
             fontSize: 15,
-            color: theme.palette.gray[80],
+            color: theme.palette.gray[50],
           },
         }),
         active &&
@@ -241,6 +246,7 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
                 borderColor: theme.palette.gray[30],
               })}
               pt={6.5}
+              pb={5}
             >
               <HubListBrowse />
             </Grid>
@@ -261,9 +267,7 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
                 borderColor: theme.palette.gray[30],
               })}
               pt={6.5}
-            >
-              Left
-            </Grid>
+            />
             <Grid item xs={9} pt={6.5} pb={9}>
               <Stack spacing={6}>
                 {listing.map((item) => (

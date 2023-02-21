@@ -9,8 +9,8 @@ import { BlockProtocolIcon, FontAwesomeIcon } from "../components/icons";
 import { Link } from "../components/link";
 import { HubItemDescription, HubList } from "../components/pages/hub/hub";
 import { getRouteHubBrowseType } from "../components/pages/hub/hub-utils";
-import { apiClient } from "../lib/api-client";
 import { getAllBlocks, getFeaturedBlocks } from "../lib/api/blocks/get";
+import { apiClient } from "../lib/api-client";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,

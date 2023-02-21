@@ -9,8 +9,8 @@ import {
 import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode } from "react";
 
-import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";
 import backgroundCornerBlocks from "../../public/assets/background-corner-blocks.png";
+import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";
 import { ArrowRightIcon, BoltIcon } from "./icons";
 import { Link as LinkComponent, LinkProps } from "./link";
 import { LinkButton } from "./link-button";
