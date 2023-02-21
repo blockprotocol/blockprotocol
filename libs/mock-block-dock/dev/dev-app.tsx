@@ -62,19 +62,11 @@ type TestBlockType = keyof typeof blockEntityMap;
 
 const DevApp: FunctionComponent = () => {
   const [testBlockType, setTestBlockType] = useState<TestBlockType>("react");
-  const [blockProtocolApiKey, setBlockProtocolApiKey] = useState<string>();
 
   const blockEntity = blockEntityMap[testBlockType];
 
   let blockDefinition;
   let blockType: "html" | "custom-element" | "react" | undefined;
-
-  useEffect(() => {
-    // Retrieve the blockprotocol API key environment variable
-    if (process.env.BLOCK_PROTOCOL_API_KEY) {
-      setBlockProtocolApiKey(process.env.BLOCK_PROTOCOL_API_KEY);
-    }
-  }, []);
 
   switch (testBlockType) {
     case "custom-element":
@@ -158,7 +150,7 @@ const DevApp: FunctionComponent = () => {
           icon: "public/icon.svg",
           image: "public/image",
         }}
-        blockProtocolApiKey={blockProtocolApiKey}
+        blockProtocolApiKey={process.env.BLOCK_PROTOCOL_API_KEY}
         debug
         key={testBlockType} // completely reset the state when block type has changed
         initialData={{
