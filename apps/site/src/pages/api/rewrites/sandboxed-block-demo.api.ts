@@ -1,3 +1,4 @@
+import { QueryTemporalAxes } from "@blockprotocol/graph/temporal";
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
@@ -9,6 +10,22 @@ import { retrieveBlockFileContent } from "../../../lib/blocks";
  */
 const hotfixPackageName = (packageName: string): string => {
   return packageName === "lodash" ? "lodash-es" : packageName;
+};
+
+const currentTime = new Date().toISOString();
+
+const temporalAxes: QueryTemporalAxes = {
+  pinned: {
+    axis: "transactionTime",
+    timestamp: currentTime,
+  },
+  variable: {
+    axis: "decisionTime",
+    interval: {
+      start: { kind: "unbounded" },
+      end: { kind: "inclusive", limit: currentTime },
+    },
+  },
 };
 
 const handler: NextApiHandler = async (req, res) => {
@@ -61,11 +78,14 @@ const handler: NextApiHandler = async (req, res) => {
     )}@${packageVersion}?target=es2021`;
   }
 
+  // The initial datastore is set from a static file, example-graph.json
+  // We will dynamically update initialEntities in response to updated prop messages in the iFrame code
   const mockBlockDockInitialData = {
-    initialEntities: exampleGraph?.entities,
+    initialEntities: exampleGraph?.entities ?? [],
     initialEntityTypes: exampleGraph?.entityTypes,
     initialLinks: exampleGraph?.links,
     initialLinkedAggregations: exampleGraph?.linkedAggregations,
+    initialTemporalAxes: temporalAxes,
   };
 
   const html = `
@@ -88,7 +108,7 @@ const handler: NextApiHandler = async (req, res) => {
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
       // @todo-0.3 revert this hardcoded version to ${mockBlockDockVersion}
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230206110959/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230220234726/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
 
       const requireLookup = {
         "react-dom": ReactDOM,
@@ -152,8 +172,26 @@ const handler: NextApiHandler = async (req, res) => {
           )}
       
           const render = (props) => {
-            const { readonly, ...blockEntityProps } = props;
-            const mockBlockDockProps = { blockDefinition, ...mockBlockDockInitialData, hideDebugToggle: true, readonly  };
+            const { blockEntity, readonly } = props;
+            
+            const mockBlockDockProps = { blockDefinition, initialData: mockBlockDockInitialData, hideDebugToggle: true, readonly  };
+            
+            // Check if we've previously added the block entity from the props message
+            const existingBlockEntity = mockBlockDockProps.initialData.initialEntities.find(entity => 
+               entity.metadata.recordId.entityId === blockEntity.metadata.recordId.entityId
+                  && entity.metadata.recordId.editionId === blockEntity.metadata.recordId.editionId
+            );
+            
+            if (existingBlockEntity) {
+              // We don't want to end up with two entities at the same record id, so we overwrite if it's been set previously
+              existingBlockEntity.metadata = blockEntity.metadata;
+              existingBlockEntity.properties = blockEntity.properties ?? {};
+            } else {
+              // This is the first render - add the block entity
+              mockBlockDockProps.initialData.initialEntities.push(blockEntity);
+            }
+
+            mockBlockDockProps.blockEntityRecordId = blockEntity.metadata.recordId;
             
             document.getElementById("loading-indicator")?.remove();
           
@@ -169,7 +207,7 @@ const handler: NextApiHandler = async (req, res) => {
           
           window.addEventListener(
               "message", 
-              ({ data }) => { 
+              ({ data }) => {
                 if (typeof data === "string") { 
                   render(JSON.parse(data)) 
                 }
