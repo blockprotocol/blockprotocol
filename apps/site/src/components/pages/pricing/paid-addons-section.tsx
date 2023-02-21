@@ -91,12 +91,11 @@ const API_USAGE_ROWS = [
     ),
     provider: "OpenAI",
     serviceTooltip:
-      "DALL-E is a generative AI that creates realistic images and art from natural language descriptions",
+      "DALL-E is a generative AI that creates realistic images and art from natural language descriptions.",
     serviceIcon: faImage,
     service: "DALL-E",
     price: "$0.020",
-    unitTooltip:
-      "Corresponds to a single point-to-point lookup between two locations",
+    unitTooltip: "Corresponds to a single generated image",
     unit: "/image",
   },
   {
@@ -110,12 +109,12 @@ const API_USAGE_ROWS = [
     ),
     provider: "OpenAI",
     serviceTooltip:
-      "DALL-E is a generative AI that creates realistic images and art from natural language descriptions",
+      "Davinci is the most advanced GPT-3 large language model, providing the highest-quality, longest-length outputs.",
     serviceIcon: faText,
     service: "GPT-3 Davinci",
     price: "$0.0200",
     unitTooltip:
-      "Corresponds to a single point-to-point lookup between two locations",
+      "Text provided to GPT-3 models is split into tokens. 1,000 tokens equates to roughly 750 words (i.e. approximately 4000 characters) in English",
     unit: "/1k tokens",
   },
   {
@@ -129,12 +128,12 @@ const API_USAGE_ROWS = [
     ),
     provider: "OpenAI",
     serviceTooltip:
-      "DALL-E is a generative AI that creates realistic images and art from natural language descriptions",
+      "Curie is the second-most advanced GPT-3 model, very capable, but faster and lower cost than Davinci.",
     serviceIcon: faText,
     service: "GPT-3 Curie",
     price: "$0.0020",
     unitTooltip:
-      "Corresponds to a single point-to-point lookup between two locations",
+      "Text provided to GPT-3 models is split into tokens. 1,000 tokens equates to roughly 750 words (i.e. approximately 4000 characters) in English",
     unit: "/1k tokens",
   },
   {
@@ -148,12 +147,12 @@ const API_USAGE_ROWS = [
     ),
     provider: "OpenAI",
     serviceTooltip:
-      "DALL-E is a generative AI that creates realistic images and art from natural language descriptions",
+      "The Babbage GPT-3 model is capable of straightforward tasks, and is both faster and lower cost than Curie.",
     serviceIcon: faText,
     service: "GPT-3 Babbage",
     price: "$0.0005",
     unitTooltip:
-      "Corresponds to a single point-to-point lookup between two locations",
+      "Text provided to GPT-3 models is split into tokens. 1,000 tokens equates to roughly 750 words (i.e. approximately 4000 characters) in English",
     unit: "/1k tokens",
   },
   {
@@ -167,12 +166,12 @@ const API_USAGE_ROWS = [
     ),
     provider: "OpenAI",
     serviceTooltip:
-      "DALL-E is a generative AI that creates realistic images and art from natural language descriptions",
+      "Ada is the lowest cost GPT-3 model. While being the most basic, it is also generally the fastest.",
     serviceIcon: faText,
     service: "GPT-3 Ada",
     price: "$0.0004",
     unitTooltip:
-      "Corresponds to a single point-to-point lookup between two locations",
+      "Text provided to GPT-3 models is split into tokens. 1,000 tokens equates to roughly 750 words (i.e. approximately 4000 characters) in English",
     unit: "/1k tokens",
   },
   {
@@ -186,12 +185,12 @@ const API_USAGE_ROWS = [
     ),
     provider: "Mapbox",
     serviceTooltip:
-      "DALL-E is a generative AI that creates realistic images and art from natural language descriptions",
+      "Address Autofill provides address search and autocomplete functionality. Users can search for an address from a single search bar, then select an address from a list of validated results that dynamically responds to user input. Property values and form fields then automatically populate with the correct address components (e.g., street number, name, suffix, city, state/region, and zip/postcode).",
     serviceIcon: faLocationPin,
     service: "Address Autofill",
     price: "$0.0125",
     unitTooltip:
-      "Corresponds to a single point-to-point lookup between two locations",
+      "Corresponds to a single autofill session, as determined by Mapbox",
     unit: "/request",
   },
   {
@@ -205,12 +204,11 @@ const API_USAGE_ROWS = [
     ),
     provider: "Mapbox",
     serviceTooltip:
-      "DALL-E is a generative AI that creates realistic images and art from natural language descriptions",
+      "The Mapbox Isochrone API computes areas that are reachable within a specified amount of time from a location, and returns the reachable regions as contours of polygons or lines that you can display on a map.",
     serviceIcon: faLocationCrosshairs,
     service: "Isochrone",
     price: "$0.002",
-    unitTooltip:
-      "Corresponds to a single point-to-point lookup between two locations",
+    unitTooltip: "Corresponds to a single lookup from a given location",
     unit: "/request",
   },
   {
@@ -224,7 +222,7 @@ const API_USAGE_ROWS = [
     ),
     provider: "Mapbox",
     serviceTooltip:
-      "DALL-E is a generative AI that creates realistic images and art from natural language descriptions",
+      "The Mapbox Directions API shows users how to travel between points on a map. It can calculate optimal driving, walking, and cycling routes using traffic- and incident-aware routing; produce turn-by-turn instructions; determine routes with up to 25 coordinates; and calculate routes for electric vehicles to reach destinations with optimal charging stops as well as battery prediction.",
     serviceIcon: faLocationArrow,
     service: "Directions",
     price: "$0.002",
@@ -243,12 +241,12 @@ const API_USAGE_ROWS = [
     ),
     provider: "Mapbox",
     serviceTooltip:
-      "DALL-E is a generative AI that creates realistic images and art from natural language descriptions",
+      "Temporary Geocoding allows users to convert location text into geographic coordinates (e.g. turning `2 Lincoln Memorial Circle NW` into `-77.050,38.889`), as well as the inverse.",
     serviceIcon: faMap,
     service: "Temporary Geocoding",
     price: "$0.00075",
     unitTooltip:
-      "Corresponds to a single point-to-point lookup between two locations",
+      "Corresponds to a single request to either forward or reverse geocode a location or set of coordinates",
     unit: "/request",
   },
 ];
