@@ -28,6 +28,7 @@ import { CircleInfoRegularIcon } from "../../icons/circle-info-regular";
 import { MapboxLogoIcon } from "../../icons/mapbox-logo-icon";
 import { faEnvelope } from "../../icons/pro/fa-envelope";
 import { faHammer } from "../../icons/pro/fa-hammer";
+import { faImagePolaroid } from "../../icons/pro/fa-image-polaroid";
 import { faLocationCrosshairs } from "../../icons/pro/fa-location";
 import { faLocationArrow } from "../../icons/pro/fa-location-arrow";
 import { faLocationPin } from "../../icons/pro/fa-location-pin";
@@ -94,7 +95,7 @@ const API_USAGE_ROWS = [
       "DALL-E is a generative AI that creates realistic images and art from natural language descriptions.",
     serviceIcon: faImage,
     service: "DALL-E",
-    price: "$0.020",
+    price: "$0.0200",
     unitTooltip: "Corresponds to a single generated image",
     unit: "/image",
   },
@@ -185,6 +186,25 @@ const API_USAGE_ROWS = [
     ),
     provider: "Mapbox",
     serviceTooltip:
+      "The Mapbox Static Images API serves standalone, static map images. The lowest-cost way to show maps on the web.",
+    serviceIcon: faImagePolaroid,
+    service: "Static Map Image",
+    price: "$0.0010",
+    unitTooltip:
+      "Corresponds to each image generated for a given location, per zoom-level",
+    unit: "/request",
+  },
+  {
+    providerIcon: (
+      <MapboxLogoIcon
+        sx={{
+          fontSize: 16,
+        }}
+        fill={theme.palette.gray[50]}
+      />
+    ),
+    provider: "Mapbox",
+    serviceTooltip:
       "Address Autofill provides address search and autocomplete functionality. Users can search for an address from a single search bar, then select an address from a list of validated results that dynamically responds to user input. Property values and form fields then automatically populate with the correct address components (e.g., street number, name, suffix, city, state/region, and zip/postcode).",
     serviceIcon: faLocationPin,
     service: "Address Autofill",
@@ -207,7 +227,7 @@ const API_USAGE_ROWS = [
       "The Mapbox Isochrone API computes areas that are reachable within a specified amount of time from a location, and returns the reachable regions as contours of polygons or lines that you can display on a map.",
     serviceIcon: faLocationCrosshairs,
     service: "Isochrone",
-    price: "$0.002",
+    price: "$0.0020",
     unitTooltip: "Corresponds to a single lookup from a given location",
     unit: "/request",
   },
@@ -225,7 +245,7 @@ const API_USAGE_ROWS = [
       "The Mapbox Directions API shows users how to travel between points on a map. It can calculate optimal driving, walking, and cycling routes using traffic- and incident-aware routing; produce turn-by-turn instructions; determine routes with up to 25 coordinates; and calculate routes for electric vehicles to reach destinations with optimal charging stops as well as battery prediction.",
     serviceIcon: faLocationArrow,
     service: "Directions",
-    price: "$0.002",
+    price: "$0.0020",
     unitTooltip:
       "Corresponds to a single point-to-point lookup between two locations",
     unit: "/request",
