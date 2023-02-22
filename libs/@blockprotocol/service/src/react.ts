@@ -1,4 +1,4 @@
-import { useServiceConstructor } from "@blockprotocol/core/react";
+import { useModuleConstructor } from "@blockprotocol/core/react";
 import { RefObject } from "react";
 
 import { ServiceBlockHandler, ServiceEmbedderHandler } from "./index.js";
@@ -16,7 +16,7 @@ export const useServiceBlockModule = (
     "element"
   >,
 ): { serviceModule: ServiceBlockHandler } => ({
-  serviceModule: useServiceConstructor({
+  serviceModule: useModuleConstructor({
     Handler: ServiceBlockHandler,
     constructorArgs,
     ref,
@@ -38,7 +38,7 @@ export const useServiceEmbedderModule = (
     "element"
   >,
 ): { serviceModule: ServiceEmbedderHandler } => ({
-  serviceModule: useServiceConstructor({
+  serviceModule: useModuleConstructor({
     Handler: ServiceEmbedderHandler,
     ref,
     constructorArgs,

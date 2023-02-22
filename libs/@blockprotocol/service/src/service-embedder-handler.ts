@@ -1,4 +1,4 @@
-import { ServiceHandler } from "@blockprotocol/core";
+import { ModuleHandler } from "@blockprotocol/core";
 
 // @todo restore this when an issue with module resolution has been resolved
 // import serviceModuleJson from "./service-service.json" assert { type: "json" };
@@ -14,7 +14,7 @@ import {
  * to the block.
  */
 export class ServiceEmbedderHandler
-  extends ServiceHandler
+  extends ModuleHandler
   implements EmbedderServiceMessages
 {
   constructor({
@@ -27,7 +27,7 @@ export class ServiceEmbedderHandler
     super({
       element,
       callbacks,
-      serviceName: "service",
+      moduleName: "service",
       sourceType: "embedder",
     });
   }

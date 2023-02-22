@@ -2,14 +2,12 @@ import { writeFileSync } from "node:fs";
 /* eslint-disable import/no-extraneous-dependencies */
 import { resolve } from "node:path";
 
-import { ServiceMessageDefinition } from "@blockprotocol/core";
+import { JsonObject, ModuleMessageDefinition } from "@blockprotocol/core";
 import { generateSchema, getProgramFromFiles } from "typescript-json-schema";
 
 const program = getProgramFromFiles([resolve("./src/types.ts")]);
 
-const generateServiceSchema = (params: {
-  typeName: string;
-}): Record<string, unknown> => {
+const generateServiceSchema = (params: { typeName: string }): JsonObject => {
   const schema = generateSchema(program, params.typeName, {
     required: true,
     ref: false,
@@ -21,10 +19,10 @@ const generateServiceSchema = (params: {
     );
   }
 
-  return schema as Record<string, unknown>;
+  return schema as JsonObject;
 };
 
-export const mapboxMessages: ServiceMessageDefinition[] = [
+export const mapboxMessages: ModuleMessageDefinition[] = [
   /** Mapbox Geocoding API */
   {
     messageName: "mapboxForwardGeocoding",

@@ -231,14 +231,14 @@ export type EmbedderServiceMessageCallbacks = {
   mapboxForwardGeocoding: MessageCallback<
     MapboxForwardGeocodingData,
     null,
-    MapboxForwardGeocodingResponseData,
+    { data: MapboxForwardGeocodingResponseData },
     null
   >;
 
   mapboxReverseGeocoding: MessageCallback<
     MapboxReverseGeocodingData,
     null,
-    MapboxReverseGeocodingResponseData,
+    { data: MapboxReverseGeocodingResponseData },
     null
   >;
 
@@ -247,7 +247,7 @@ export type EmbedderServiceMessageCallbacks = {
   mapboxRetrieveDirections: MessageCallback<
     MapboxRetrieveDirectionsData,
     null,
-    MapboxRetrieveDirectionsResponseData,
+    { data: MapboxRetrieveDirectionsResponseData },
     null
   >;
 
@@ -256,7 +256,7 @@ export type EmbedderServiceMessageCallbacks = {
   mapboxRetrieveIsochrones: MessageCallback<
     MapboxRetrieveIsochronesData,
     null,
-    MapboxRetrieveIsochronesResponseData,
+    { data: MapboxRetrieveIsochronesResponseData },
     null
   >;
 
@@ -265,21 +265,21 @@ export type EmbedderServiceMessageCallbacks = {
   mapboxSuggestAddress: MessageCallback<
     MapboxSuggestAddressData,
     null,
-    MapboxSuggestAddressResponseData,
+    { data: MapboxSuggestAddressResponseData },
     null
   >;
 
   mapboxRetrieveAddress: MessageCallback<
     MapboxRetrieveAddressData,
     null,
-    MapboxRetrieveAddressResponseData,
+    { data: MapboxRetrieveAddressResponseData },
     null
   >;
 
   mapboxCanRetrieveAddress: MessageCallback<
     MapboxCanRetrieveAddressData,
     null,
-    MapboxCanRetrieveAddressResponseData,
+    { data: MapboxCanRetrieveAddressResponseData },
     null
   >;
 
@@ -288,7 +288,7 @@ export type EmbedderServiceMessageCallbacks = {
   mapboxRetrieveStaticMap: MessageCallback<
     MapboxRetrieveStaticMapData,
     null,
-    MapboxRetrieveStaticMapResponseData,
+    { data: MapboxRetrieveStaticMapResponseData },
     null
   >;
 };

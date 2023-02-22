@@ -1,4 +1,4 @@
-import { ServiceHandler } from "@blockprotocol/core";
+import { ModuleHandler } from "@blockprotocol/core";
 
 /**
  * There's an issue when importing useServiceEmbedderModule from @blockprotocol/service/react in hashintel/hash:
@@ -35,7 +35,7 @@ import {
  * Call the relevant methods to send messages to the embedder.
  */
 export class ServiceBlockHandler
-  extends ServiceHandler
+  extends ModuleHandler
   implements BlockServiceMessages
 {
   constructor({
@@ -48,7 +48,7 @@ export class ServiceBlockHandler
     super({
       element,
       callbacks,
-      serviceName: "service",
+      moduleName: "service",
       sourceType: "block",
     });
   }
