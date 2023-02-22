@@ -2,19 +2,8 @@ import { writeFileSync } from "node:fs";
 /* eslint-disable import/no-extraneous-dependencies */
 import { resolve } from "node:path";
 
-import { generateSchema, getProgramFromFiles } from "typescript-json-schema";
-
 import { ServiceMessageDefinition } from "@blockprotocol/core";
-
-export type ServiceJsonMessage = {
-  messageName: string;
-  description: string;
-  source: "block" | "embedder";
-  respondedToBy: string | null;
-  sentOnInitialization: boolean;
-  data: any;
-  errorCodes: string[];
-};
+import { generateSchema, getProgramFromFiles } from "typescript-json-schema";
 
 const program = getProgramFromFiles([resolve("./src/types.ts")]);
 
