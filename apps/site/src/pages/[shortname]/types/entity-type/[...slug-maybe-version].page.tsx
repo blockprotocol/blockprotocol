@@ -77,6 +77,8 @@ const EntityTypePage: NextPage = () => {
           links: newLinksAndProperties.links ?? existingSchema.links ?? {},
           properties:
             newLinksAndProperties.properties ?? existingSchema.properties ?? {},
+          required:
+            newLinksAndProperties.required ?? existingSchema.required ?? [],
         },
       });
 
