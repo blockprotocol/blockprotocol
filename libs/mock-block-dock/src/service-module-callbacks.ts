@@ -19,7 +19,7 @@ const callExternalApiMethod = async (params: {
 
   if (!blockProtocolApiKey) {
     throw new Error(
-      `A block protocol API key is required to make calls to the "${methodName}" method of the BP service module`,
+      `Visit ${bpSiteHost}/dashboard to generate a Block Protocol API key, which is required to make calls to the "${methodName}" method of the BP service module, and ensure it is passed to the "MockBlockDock" component as `blockProtocolApiKey`.`,
     );
   }
 
