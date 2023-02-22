@@ -1,26 +1,36 @@
 # Graph Module
 
-This document (version 0.2) defines a **graph module** according to the terms set out in the [core specification](https://blockprotocol.org/docs/spec/core).
+This document (version 0.3) defines a **graph module** according to the terms set out in the [core specification](https://blockprotocol.org/docs/spec/core).
 
-The graph module describes how **entities** can be created, queried, updated, and linked together – including the **block entity**, represented by the **properties** sent to the block.
+The graph module describes how **ontology types** and **entities** can be created, queried, updated, and linked together – including the **block entity**, represented by the **properties** sent to the block.
 
 ## Glossary
 
-**Block entity**: an instance of data associated with the block, conforming to the block’s schema.
+**Block entity**: an entity associated with the specific instance of the block, conforming to the entity type that makes up the block’s schema.
 
-**Entity:** an instance of data, often corresponding to a thing in the world, of a particular entity type.
+**Entity:** an instance of data, often corresponding to a thing in the world, constrained by a particular entity type.
 
-**Entity type:** a specific type of entity, with a schema defining its structure. Entities have a type, and types have a schema.
+**Link Entity:** a kind of entity which represents a connection or relation between its left and right entity, constrained by a link entity type.
 
-**Graph:** a network of entities connected by links.
+**Left Entity:** the entity which is on the "left" of a specific link entity, in most situations this can be thought of as the "source" of the link.
 
-**Link:** a connection or relation between two entities.
+**Right Entity:** the entity which is on the "right" of a specific link entity, in most situations this can be thought of as the "target" of the link.
 
-**Linked entities**: entities which are linked to the block entity, whether directly or via other entities.
+**Ontology Type:** an element of the Block Protocol Type System, represented as a self-contained schema accessible via a URI. Ontology types are composed together to describe the shape of entities within the graph.
 
-**Properties:** the fields on a schema, what types of data are permitted as their values, and any other validation rules. Field types may be scalar (integer, string etc.), complex objects, collections (lists/arrays), or refer to another schema.
+**Entity type:** an ontology type that defines the structure of an entity and its link entities. An entity type references other entity types and property types.
 
-**Schema:** a definition of a data structure, associated with an entity type. Entities of a given type must have properties which conform to the type’s schema.
+**Link Entity type:** an entity type which has a special marker to say it constrains a link entity.
+
+**Property type:** an ontology type that defines the structure of an individual property within an entity. A property type references other property types and data types.
+
+**Data type:** an ontology type that defines the possible space of possible values that an individual property can take within an entity.
+
+**Graph:** a network of graph elements (entities, entity types, property types, and data types) connected by edges.
+
+**Edge:** a directed connection between two graph elements which describes their relationship. Possible edges include those that describe references between types, or the relationship between the left and right entities of link entities.
+
+**Subgraph:** a specific subset of a graph, usually returned as a result of a query. Can contain a set of roots which are distinguished elements of the subgraph, and usually correspond to the direct results of the query as the subgraph may contain other elements of the graph that were connected to the root elements through various edges.
 
 ## Defining blocks
 
