@@ -1,7 +1,9 @@
 import { EmbedderServiceMessageCallbacks } from "@blockprotocol/service";
 import axios from "axios";
 
-const bpApiBaseURL = process.env.BP_API_BASE_URL ?? "http://localhost:3000/api";
+const bpApiBaseURL = `${
+  process.env.BLOCK_PROTOCOL_SITE_HOST ?? "https://blockprotocol.org"
+}/api`;
 
 const externalApiHttpClient = axios.create({
   baseURL: bpApiBaseURL,
