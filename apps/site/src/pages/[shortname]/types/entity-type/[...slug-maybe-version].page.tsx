@@ -65,15 +65,18 @@ const EntityTypePage: NextPage = () => {
       return;
     }
 
-    const schema = getSchemaFromFormData(data);
+    const newLinksAndProperties = getSchemaFromFormData(data);
+
+    const existingSchema = entityType.schema;
 
     const { data: responseData, error: responseError } =
       await apiClient.updateEntityType({
         versionedUri: entityType.schema.$id,
         schema: {
-          ...schema,
-          properties: schema.properties ?? {},
-          title: schema.title ?? entityType.schema.title,
+          ...existingSchema,
+          links: newLinksAndProperties.links ?? existingSchema.links ?? {},
+          properties:
+            newLinksAndProperties.properties ?? existingSchema.properties ?? {},
         },
       });
 
