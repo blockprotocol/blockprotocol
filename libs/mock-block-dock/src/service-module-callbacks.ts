@@ -1,12 +1,12 @@
 import { EmbedderServiceMessageCallbacks } from "@blockprotocol/service";
 import axios from "axios";
 
-const bpApiBaseURL = `${
+const bpSiteHost = `${
   process.env.BLOCK_PROTOCOL_SITE_HOST ?? "https://blockprotocol.org"
 }/api`;
 
 const externalApiHttpClient = axios.create({
-  baseURL: bpApiBaseURL,
+  baseURL: bpSiteHost,
 });
 
 const callExternalApiMethod = async (params: {
@@ -19,7 +19,7 @@ const callExternalApiMethod = async (params: {
 
   if (!blockProtocolApiKey) {
     throw new Error(
-      `Visit ${bpSiteHost}/dashboard to generate a Block Protocol API key, which is required to make calls to the "${methodName}" method of the BP service module, and ensure it is passed to the "MockBlockDock" component as `blockProtocolApiKey`.`,
+      `Visit ${bpSiteHost}/dashboard to generate a Block Protocol API key, which is required to make calls to the "${methodName}" method of the BP service module, and ensure it is passed to the \`MockBlockDock\` component as \`${blockProtocolApiKey}\`.`,
     );
   }
 
