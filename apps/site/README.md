@@ -33,7 +33,7 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     MONGODB_DB_NAME=local
     
     S3_API_ENDPOINT=http://localhost:9000
-    S3_BASE_URL=http://localhost:9001/dev-bucket
+    S3_BASE_URL=http://localhost:9000/dev-bucket
     S3_BUCKET=dev-bucket
     S3_ACCESS_KEY_ID=dev-access-key
     S3_SECRET_ACCESS_KEY=dev-secret-key

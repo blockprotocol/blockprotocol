@@ -50,6 +50,7 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   repository?: string;
   // metadata.schema rewritten to be an absolute URL
   schema?: string | null;
+  verified?: boolean;
 };
 
 /**
@@ -72,6 +73,7 @@ export interface StoredBlockInfo {
   distDir?: string;
   folder?: string;
   workspace?: string;
+  verified?: boolean;
 }
 
 // Generate an absolute url to a block file
