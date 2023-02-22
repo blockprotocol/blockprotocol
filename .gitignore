@@ -1,52 +1,70 @@
-# Logs
+#################################
+## Shared between git and linters
+#################################
+
+## Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Dependency directories
-node_modules/
+## Dependency directories
+node_modules
 
-# TypeScript cache
+## TypeScript cache
 *.tsbuildinfo
 
-# Optional eslint cache
+## Optional eslint cache
 .eslintcache
 
-# Yarn Integrity file
+## Yarn Integrity file
 .yarn-integrity
 
-# macOS directory file
+## macOS directory file
 .DS_Store
 
-# Next.js build output
+## Next.js build output
 .next
 
-# Environment variables
+## Environment variables
 .env.local
+.blockprotocolrc
 
-# Build artifacts
+## Build artifacts
 dist
 
-# vscode config
+## VScode config
 .vscode
 
-# vercel
+## Vercel
 .vercel
 
-# Testing
+## Testing
 .nyc_output
 coverage
 
-# workspace specific
-site/blocks-data.json
-site/playwright-report
-site/public/blocks
-site/public/schemas
-site/site-map.json
-site/test-results
-
+## Local files
 var
 
-# Sentry
+## Sentry
 .sentryclirc
+
+## Rust / WASM
+*.rs.bk
+bin
+Cargo.lock
+pkg
+target
+wasm-pack.log
+
+## Workspace-specific
+apps/site/blocks-data.json
+apps/site/playwright-report
+apps/site/public/blocks
+apps/site/public/schemas
+apps/site/site-map.json
+apps/site/test-results
+libs/@blockprotocol/type-system/.rollup.cache
+libs/@blockprotocol/type-system/wasm
+libs/block-template-html/dev/src
+libs/mock-block-dock/src/version.ts

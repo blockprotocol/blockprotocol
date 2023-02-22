@@ -1,0 +1,9 @@
+pub(crate) const ADDRESS_V1: &str = include_str!("address.json");
+pub(crate) const BLOCK_V1: &str = include_str!("block.json");
+pub(crate) const BOOK_V1: &str = include_str!("book.json");
+pub(crate) const BUILDING_V1: &str = include_str!("building.json");
+pub(crate) const ORGANIZATION_V1: &str = include_str!("organization.json");
+pub(crate) const PAGE: &str = include_str!("page.json");
+pub(crate) const PERSON_V1: &str = include_str!("person.json");
+pub(crate) const PLAYLIST_V1: &str = include_str!("playlist.json");
+pub(crate) const SONG_V1: &str = include_str!("song.json");

@@ -1,0 +1,7 @@
+{
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "all": true,
+  "silent": true,
+  "include": "apps",
+  "exclude": ["apps/site/.next", "apps/site/public/blocks", "apps/site/tests"]
+}

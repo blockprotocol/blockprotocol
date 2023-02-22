@@ -15,6 +15,7 @@ jobs:
     name: Warm up Vercel
     if: github.event.deployment_status.state == 'success' || github.event_name == 'schedule'
     runs-on: ubuntu-20.04
+
     steps:
       - name: Fetch URLs that use AWS Lambda
         run: |
@@ -37,6 +38,8 @@ jobs:
     needs: [warm_up_vercel]
     if: github.event.deployment_status.state == 'success' || github.event.schedule == '0 4 * * *'
     runs-on: ubuntu-20.04
+    timeout-minutes: 60
+
     steps:
       - uses: actions/checkout@v3
 
@@ -47,13 +50,13 @@ jobs:
       - run: yarn playwright install-deps chrome
 
       - name: Run Playwright tests
-        run: yarn workspace @blockprotocol/site playwright test --project=e2e
+        run: yarn workspace @apps/site playwright test --project=e2e
         env:
           PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: site-e2e-tests-playwright-report
-          path: site/playwright-report
+          path: apps/site/playwright-report

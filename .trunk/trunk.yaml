@@ -1,0 +1,18 @@
+version: 0.1
+cli:
+  version: 1.4.1
+plugins:
+  sources:
+    - id: trunk
+      ref: v0.0.9
+      uri: https://github.com/trunk-io/plugins
+merge:
+  required_statuses:
+    - Linting
+    - NPM Packages
+    - Site integration tests (Chrome)
+    - E2E tests
+actions:
+  enabled:
+    - trunk-announce
+    - trunk-upgrade-available

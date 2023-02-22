@@ -1,0 +1,62 @@
+{
+  "name": "hook",
+  "version": "0.1",
+  "coreVersion": "0.2",
+  "messages": [
+    {
+      "messageName": "hook",
+      "description": "A request from a block for an embedding application to render a view of the specified type, at the specified node, using the data for the specified property path.",
+      "source": "block",
+      "respondedToBy": "hookResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "node": {
+            "type": ["object", "null"],
+            "description": "The DOM node the embedding application will render a view into, or modifying an already rendered view. If null, the view should be destroyed."
+          },
+          "type": {
+            "oneOf": [
+              { "type": "string" },
+              { "enum": ["text", "image", "video"] }
+            ],
+            "description": "The type of view for the hook. Technically permits any string, although we anticipate 'text', and to a lesser extent 'image' and 'video' being common."
+          },
+          "entityId": {
+            "type": "string",
+            "description": "The entityId of the entity which owns the data the hook should be rendered using. i.e. the entity which has the hook data stored in its properties in the separately provided 'path'"
+          },
+          "path": {
+            "type": "string",
+            "description": "A path expressed as a JSON path to a property present in the entity's schema, where the value used in rendering this view should be retrieved from and persisted to (if updated)"
+          },
+          "hookId": {
+            "type": ["string", "null"],
+            "description": "The ID of the hook as provided in the response when first sending a hook message. This should be null in the first 'hook' message for a given node, and use the value provided by the embedding application in 'hookResponse' on subsequent messages."
+          }
+        },
+        "required": ["node", "type", "path", "hookId"]
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "hookResponse",
+      "description": "A message acknowledging that the embedding application will render a view in the hook.",
+      "source": "embedder",
+      "respondedToBy": "hookResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "hookId": {
+            "type": "string",
+            "description": "The id of the hook, which the block can use in subsequent 'hook' messages to request that a given hook is updated."
+          }
+        },
+        "required": ["hookId"]
+      },
+      "errorCodes": ["INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED"]
+    }
+  ]
+}

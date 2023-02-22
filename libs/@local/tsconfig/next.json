@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "extends": "./dom+jsx.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "jsx": "preserve"
+  },
+  "exclude": ["node_modules"]
+}

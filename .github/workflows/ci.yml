@@ -5,15 +5,41 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: hashintel
+  TURBO_REMOTE_ONLY: true
+
 jobs:
   linting:
     name: Linting
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
+
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 ## Needed for Changesets to find `main` branch
+
+        ## https://github.com/changesets/changesets/issues/517
+      - name: Create git reference to main branch (for Changesets)
+        if: ${{ github.event.pull_request.title != 'Version Packages' }}
+        run: git pull --force --no-tags origin main:main
 
       - uses: ./.github/actions/warm-up-repo
+
+      - name: Run yarn lint:changeset
+        if: ${{ (success() || failure()) && github.event.pull_request.title != 'Version Packages' }}
+        run: |
+          if ! yarn lint:changeset; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Please fix the above errors locally for the check to pass.'
+            echo 'If you don’t see them, try merging target branch into yours.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
 
       - name: Run yarn lint:dependency-version-consistency
         if: ${{ success() || failure() }}
@@ -35,6 +61,18 @@ jobs:
             echo ''
             echo 'ℹ️ ℹ️ ℹ️'
             echo 'Try running `yarn fix:eslint` locally to apply autofixes.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
+      - name: Run yarn lint:knip
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:knip; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Please fix the above errors locally for the check to pass.'
             echo 'ℹ️ ℹ️ ℹ️'
             exit 1
           fi
@@ -130,9 +168,7 @@ jobs:
     name: NPM Packages
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
-    env:
-      BLOCK_NAME: test-block
-      BLOCK_DIR_PATH: ~/test-block
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v3
@@ -149,11 +185,45 @@ jobs:
           yarn wait-on --timeout 30000 http://localhost:4873
 
       - name: Publish NPM packages to local registry
-        run: yarn exe scripts/packages/publish-to-local-registry.ts
+        run: yarn workspace @local/package-chores exe scripts/publish-to-local-registry.ts
 
-      - name: e2e-test create-block-app
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+      - name: Smoke-test create-block-app (default template)
+        if: ${{ success() || failure() }}
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
+          BLOCK_DIR_PATH: ~/test-blocks/default
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: Smoke-test create-block-app (custom-element template)
+        if: ${{ success() || failure() }}
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
+        env:
+          BLOCK_DIR_PATH: ~/test-blocks/custom-element
+          BLOCK_TEMPLATE: custom-element
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: Smoke-test create-block-app (html template)
+        if: ${{ success() || failure() }}
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
+        env:
+          BLOCK_DIR_PATH: ~/test-blocks/html
+          BLOCK_TEMPLATE: html
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: Smoke-test create-block-app (react template)
+        if: ${{ success() || failure() }}
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
+        env:
+          BLOCK_DIR_PATH: ~/test-blocks/react
+          BLOCK_TEMPLATE: react
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: Smoke-test create-block-app (unknown template)
+        if: ${{ success() || failure() }}
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
+        env:
+          BLOCK_DIR_PATH: ~/test-blocks/unknown
+          BLOCK_TEMPLATE: unknown
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
       - name: Show local registry logs and stop it
@@ -163,42 +233,64 @@ jobs:
           docker stop verdaccio
 
       - name: Upload block folder as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
           name: ${{ env.BLOCK_NAME }}
           path: |
             ${{ env.BLOCK_DIR_PATH }}
             !${{ env.BLOCK_DIR_PATH }}/node_modules/**
+          retention-days: 14
 
   site-integration-tests:
     name: "Site integration tests"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        device:
+          - chrome
+          - firefox
+          - iphone
+          - pixel
+          - safari
+    timeout-minutes: 60
+
     steps:
       - uses: actions/checkout@v3
 
       - uses: actions/cache@v3
         with:
-          path: site/.next/cache
-          key: ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-${{ hashFiles('site/**') }}
+          path: apps/site/.next/cache
+          key: ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-${{ hashFiles('apps/site/**') }}
           restore-keys: |
             ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-
             ${{ runner.os }}-site-next-cache
 
       - uses: ./.github/actions/warm-up-repo
         with:
-          playwright-deps: chrome firefox webkit
+          playwright-deps: ${{ ((matrix.device == 'iphone' || matrix.device == 'safari') && 'webkit') || (matrix.device == 'firefox' && 'firefox') || 'chrome' }}
 
       - name: Create temp files and folders
         run: |
           mkdir -p var/logs
+          mkdir -p var/site
 
-          cat << EOF > site/.env.local
+          cat << EOF > apps/site/.env.local
           SESSION_SECRET=dev-session-secret
           HASHING_SECRET=dev-hashing-secret
 
           MONGODB_URI=mongodb://root:password@localhost:27017/
           MONGODB_DB_NAME=local
+
+          S3_API_ENDPOINT=http://localhost:9000
+          S3_BUCKET=dev-bucket
+          S3_ACCESS_KEY_ID=dev-access-key
+          S3_SECRET_ACCESS_KEY=dev-secret-key
+          S3_BASE_URL=http://localhost:9000/dev-bucket
+
+          NEXT_PUBLIC_NPM_PUBLISHING=true
+
           EOF
 
       - name: Launch DB
@@ -214,15 +306,15 @@ jobs:
       - name: Build and launch frontend
         if: ${{ success() || failure() }}
         run: |
-          yarn workspace @blockprotocol/site build
-          yarn workspace @blockprotocol/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
+          yarn workspace @apps/site build
+          yarn workspace @apps/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
           yarn wait-on --timeout 10000 http://0.0.0.0:3000
         env:
           TEST_COVERAGE: true
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site playwright test --project=integration-chrome --project=integration-firefox --project=integration-safari --project=integration-iphone --project=integration-pixel
+        run: yarn workspace @apps/site playwright test --project=integration-${{ matrix.device }}
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
@@ -230,6 +322,10 @@ jobs:
         ## TODO: Replace with kill-port when SIGINT is supported as an argument
         ## https://github.com/tiaanduplessis/kill-port/issues/48
         # run: yarn kill-port 3000
+
+      - name: Stop DB
+        if: ${{ success() || failure() }}
+        run: docker-compose -f apps/site/docker-compose.dev.yml down
 
       - name: Generate coverage report
         if: ${{ success() || failure() }}
@@ -240,8 +336,9 @@ jobs:
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
           fail_ci_if_error: true
-          flags: site-integration
           files: coverage/lcov.info
+          flags: site-integration-${{ matrix.device }}
+          token: ${{ secrets.CODECOV_TOKEN }} ## not required for public repos, can be removed when https://github.com/codecov/codecov-action/issues/837 is resolved
 
       - name: Show DB logs
         if: ${{ success() || failure() }}
@@ -253,15 +350,16 @@ jobs:
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: site-integration-tests-playwright-report
-          path: site/playwright-report
+          name: site-integration-tests-playwright-report-${{ matrix.device }}
+          path: apps/site/playwright-report
+          retention-days: 14
 
       - name: Upload artifact playwright-var
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
-          name: site-integration-tests-var
-          path: |
-            var
+          name: site-integration-tests-var-${{ matrix.device }}
+          path: var
+          retention-days: 14

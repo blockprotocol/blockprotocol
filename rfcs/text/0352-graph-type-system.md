@@ -1,7 +1,7 @@
-- Feature Name: graph-type-system
-- Start Date: 2022-06-14
-- RFC PR: [blockprotocol/blockprotocol#352](https://github.com/blockprotocol/blockprotocol/pull/352)
-- Block Protocol Discussion: [blockprotocol/blockprotocol#418](https://github.com/blockprotocol/blockprotocol/discussions/418)
+- **Feature Name:** `graph-type-system`
+- **Start Date:** 2022-06-14
+- **RFC PR:** [blockprotocol/blockprotocol#352](https://github.com/blockprotocol/blockprotocol/pull/352)
+- **RFC Discussion:** [blockprotocol/blockprotocol#418](https://github.com/blockprotocol/blockprotocol/discussions/418)
 
 <!-- markdownlint-disable  MD036 -->
 
@@ -34,7 +34,7 @@ The Block Protocol operates in-between parties that otherwise have limited to no
 
 By getting both parties to agree to a prescriptive standard, new technological possibilities become viable. The Block Protocol is an example of this, enabling a new class of applications, ones that are able to dynamically load complex front-end components at run-time which are immediately usable and functional, even if the component was previously unknown to the application.
 
-The foundation of this capability is standardizing how requirements are expressed. Most notably, the block and entity schemas expressed through [the graph service](https://blockprotocol.org/docs/spec/graph-service-specification) allow for dynamic resolution of expected input data.
+The foundation of this capability is standardizing how requirements are expressed. Most notably, the block and entity schemas expressed through [the graph service](https://blockprotocol.org/docs/spec/graph-service) allow for dynamic resolution of expected input data.
 
 ---
 
@@ -1662,7 +1662,7 @@ Assuming that:
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/written-by": {}
+    "https://blockprotocol.org/types/@alice/link-type/written-by": {}
   }
 }
 ```
@@ -1688,7 +1688,7 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/types/@alice/property-type/blurb": "brulb"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/written-by": 111 // referring to the Person entity ID
+      "https://blockprotocol.org/types/@alice/link-type/written-by": 111 // referring to the Person entity ID
     }
   }
 ]
@@ -1749,8 +1749,8 @@ The `Building` Entity Type could contain a `Located At` link, and a `Tenant` lin
   "title": "Bulding",
   "properties": {},
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/located-at": {},
-    "https://blockprotocol.org/types/@alice/property-type/tenant": {}
+    "https://blockprotocol.org/types/@alice/link-type/located-at": {},
+    "https://blockprotocol.org/types/@alice/link-type/tenant": {}
   }
 }
 ```
@@ -1779,8 +1779,8 @@ This would accept Entity instances with the following shape
   {
     "entityId": 115,
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/located-at": 113, // referring to the UK Address entity ID
-      "https://blockprotocol.org/types/@alice/property-type/tenant": 114 // referring to the Organization entity ID
+      "https://blockprotocol.org/types/@alice/link-type/located-at": 113, // referring to the UK Address entity ID
+      "https://blockprotocol.org/types/@alice/link-type/tenant": 114 // referring to the Organization entity ID
     }
   }
 ]
@@ -1816,10 +1816,10 @@ Assuming that:
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/written-by": {}
+    "https://blockprotocol.org/types/@alice/link-type/written-by": {}
   },
   "requiredLinks": [
-    "https://blockprotocol.org/types/@alice/property-type/written-by"
+    "https://blockprotocol.org/types/@alice/link-type/written-by"
   ]
 }
 ```
@@ -1845,7 +1845,7 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/types/@alice/property-type/blurb": ...
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/written-by": 111 // referring to the Person entity ID
+      "https://blockprotocol.org/types/@alice/link-type/written-by": 111 // referring to the Person entity ID
     }
   }
 ]
@@ -1872,7 +1872,7 @@ The `Person` Entity Type could contain some Property Types, and multiple `Friend
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/friend-of": {
+    "https://blockprotocol.org/types/@alice/link-type/friend-of": {
       "type": "array",
       "ordered": false
     }
@@ -1903,9 +1903,7 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/types/@alice/property-type/name": "Charlie"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/friend-of": [
-        211, 212
-      ] // referring to the Person entity IDs, where the array ordering is unstable
+      "https://blockprotocol.org/types/@alice/link-type/friend-of": [211, 212] // referring to the Person entity IDs, where the array ordering is unstable
     }
   }
 ]
@@ -1931,7 +1929,7 @@ The `Playlist` Entity Type could contain some Property Types, and an _ordered_ l
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/contains": {
+    "https://blockprotocol.org/types/@alice/link-type/contains": {
       "type": "array",
       "ordered": true
     }
@@ -1985,7 +1983,7 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/types/@alice/property-type/name": "Favorite Songs"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/contains": [
+      "https://blockprotocol.org/types/@alice/link-type/contains": [
         312, 314, 313
       ] // referring to the song entity IDs, ordering is intentional and stable
     }
@@ -2009,8 +2007,8 @@ The `Page` Entity Type could contain some Property Types, a `Written By` link, a
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/written-by": {},
-    "https://blockprotocol.org/types/@alice/property-type/contains": {
+    "https://blockprotocol.org/types/@alice/link-type/written-by": {},
+    "https://blockprotocol.org/types/@alice/link-type/contains": {
       "type": "array",
       "ordered": true
     }
@@ -2059,8 +2057,8 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/types/@alice/property-type/name": "Lorum Ipsum"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/written-by": 319, // referring to the User entity ID
-      "https://blockprotocol.org/types/@alice/property-type/contains": [
+      "https://blockprotocol.org/types/@alice/link-type/written-by": 319, // referring to the User entity ID
+      "https://blockprotocol.org/types/@alice/link-type/contains": [
         317, 316, 318
       ] // referring to IDs above, ordering is intentional and stable
     }
@@ -2176,7 +2174,7 @@ Using the proposed type system for Block Protocol imposes changes on the Graph S
 
 While the examples so far have shown `properties` and `links` side by side in the Entity instances, the Block Protocol would treat these two concepts separately.
 
-Messages in the Graph Service are currently specified under [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json) with additional requirements specified [here](https://blockprotocol.org/docs/spec/graph-service-specification).
+Messages in the Graph Service are currently specified under [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json) with additional requirements specified [here](https://blockprotocol.org/docs/spec/graph-service).
 
 ### Interfacing with properties on Entities
 
@@ -2302,7 +2300,7 @@ As for the linked entities returned by `linkedEntities`, the imposed changes to 
 
 Link creation will not be using arbitrary `path`s, instead Link Types must be used through Link Type URIs.
 
-**An example of a [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
+**An example of a [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
 
 ```json
 {
@@ -2330,7 +2328,7 @@ Links in the proposed system have the notion of cardinality. A link can be one-t
 
 Links can be ordered in the current system, and the behavior will stay mostly the same in the proposed system
 
-**An example of an _ordered_ [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
+**An example of an _ordered_ [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
 
 ```json
 {
@@ -2439,7 +2437,7 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
   },
   "links": {
     // Employer
-    "https://blockprotocol.org/types/@alice/property-type/company": {}
+    "https://blockprotocol.org/types/@alice/link-type/company": {}
   }
 }
 ```
@@ -2467,7 +2465,7 @@ With the proposed system, this needs to be expanded such that we can CRUD Proper
 
 The current system also supplies a way to "aggregate" Entity Types, which is a filtering operation on all Entity Types within the embedding application. On a side note, "aggregation" is a place where Structure-based Queries could be used.
 
-**Type-related [CRUD operations](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json) in the current system:**
+**Type-related [CRUD operations](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json) in the current system:**
 
 - `createEntityType`
 - `updateEntityType`
@@ -2682,14 +2680,14 @@ A more immediately apparent concern is if schemas are versioned, but their use i
 
 ## The Big Picture
 
-As outlined in the [Main Motivation section](#main-motivation), there are some clear shortcomings to how the Graph service works at the moment in regards to how it expresses data structure. It's also important to mention that there is a tough balance between comprehensive functionality for:
+As outlined in the [Motivation section](#motivation), there are some clear shortcomings to how the Graph service works at the moment in regards to how it expresses data structure. It's also important to mention that there is a tough balance between comprehensive functionality for:
 
 - Complex use-cases (such as those that are able to dynamically load and use a block at run-time)
 - Simple use-cases (such as those that include a handful of blocks in the source code at build-time).
 
 **This RFC is heavily weighted towards facilitating useful, complex use-cases, and explicitly recognises that it likely makes the development experience worse for simpler use-cases.**
 
-This decision is guided by the thoughts outlined in the [Main Motivation section](#main-motivation), most notably the acknowledgement that a standard being prescriptive can actually lead to new functionalities. Although there are [drawbacks](#drawbacks), the system allows parties on either side of the communication channel to have greater confidence, and to be able to express themselves more comprehensively. The compromise is argued for by first understanding the concept of consensus, and then exploring its practical implications.
+This decision is guided by the thoughts outlined in the [Motivation section](#motivation), most notably the acknowledgement that a standard being prescriptive can actually lead to new functionalities. Although there are [drawbacks](#drawbacks), the system allows parties on either side of the communication channel to have greater confidence, and to be able to express themselves more comprehensively. The compromise is argued for by first understanding the concept of consensus, and then exploring its practical implications.
 
 ### Convergence and divergence of consensus
 
@@ -2701,7 +2699,7 @@ As such, the key identified benefit of this type system is that _continues_ to a
 
 #### Reusability
 
-An issue with the current system is that for each block developed, the developer needs to describe its requirements autonomously. They decide what data it needs, and importantly, decide _how to describe that data_. The toolkit they're provided with right now is to embed semantic meaning into the key of the JSON blob. But as shown in the [Main Motivation](#main-motivation), this falls short quickly in the real world as language is imperfect, and words chosen as keys can have synonyms, they can prove ambiguous, etc.
+An issue with the current system is that for each block developed, the developer needs to describe its requirements autonomously. They decide what data it needs, and importantly, decide _how to describe that data_. The toolkit they're provided with right now is to embed semantic meaning into the key of the JSON blob. But as shown in the [Motivation section](#motivation), this falls short quickly in the real world as language is imperfect, and words chosen as keys can have synonyms, they can prove ambiguous, etc.
 
 This is rectified through the following:
 

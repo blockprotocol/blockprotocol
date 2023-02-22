@@ -1,0 +1,31 @@
+diff --git a/node_modules/echarts/types/dist/shared.d.ts b/node_modules/echarts/types/dist/shared.d.ts
+index 0d454cc..52986db 100644
+--- a/node_modules/echarts/types/dist/shared.d.ts
++++ b/node_modules/echarts/types/dist/shared.d.ts
+@@ -2869,7 +2869,7 @@ declare class Axis {
+     calculateCategoryInterval(): ReturnType<typeof calculateCategoryInterval>;
+ }
+ 
+-interface BaseBarSeriesOption<StateOption, ExtraStateOption = DefaultStatesMixin> extends SeriesOption<StateOption, ExtraStateOption>, SeriesOnCartesianOptionMixin, SeriesOnPolarOptionMixin {
++interface BaseBarSeriesOption<StateOption, ExtraStateOption extends StatesMixinBase = DefaultStatesMixin > extends SeriesOption<StateOption, ExtraStateOption>, SeriesOnCartesianOptionMixin, SeriesOnPolarOptionMixin {
+     /**
+      * Min height of bar
+      */
+@@ -5741,7 +5741,7 @@ declare type AnimateOrSetPropsOption = {
+  *         position: [100, 100]
+  *     }, seriesModel, function () { console.log('Animation done!'); });
+  */
+-declare function updateProps<Props>(el: Element<Props>, props: Props, animatableModel?: Model<AnimationOptionMixin>, dataIndex?: AnimateOrSetPropsOption['dataIndex'] | AnimateOrSetPropsOption['cb'] | AnimateOrSetPropsOption, cb?: AnimateOrSetPropsOption['cb'] | AnimateOrSetPropsOption['during'], during?: AnimateOrSetPropsOption['during']): void;
++declare function updateProps<Props extends ElementProps>(el: Element<Props>, props: Props, animatableModel?: Model<AnimationOptionMixin>, dataIndex?: AnimateOrSetPropsOption['dataIndex'] | AnimateOrSetPropsOption['cb'] | AnimateOrSetPropsOption, cb?: AnimateOrSetPropsOption['cb'] | AnimateOrSetPropsOption['during'], during?: AnimateOrSetPropsOption['during']): void;
+ 
+ /**
+  * Init graphic element properties with or without animation according to the
+@@ -5751,7 +5751,7 @@ declare function updateProps<Props>(el: Element<Props>, props: Props, animatable
+  * So do not use this method to one element twice before
+  * animation starts, unless you know what you are doing.
+  */
+-declare function initProps<Props>(el: Element<Props>, props: Props, animatableModel?: Model<AnimationOptionMixin>, dataIndex?: AnimateOrSetPropsOption['dataIndex'] | AnimateOrSetPropsOption['cb'] | AnimateOrSetPropsOption, cb?: AnimateOrSetPropsOption['cb'] | AnimateOrSetPropsOption['during'], during?: AnimateOrSetPropsOption['during']): void;
++declare function initProps<Props extends ElementProps>(el: Element<Props>, props: Props, animatableModel?: Model<AnimationOptionMixin>, dataIndex?: AnimateOrSetPropsOption['dataIndex'] | AnimateOrSetPropsOption['cb'] | AnimateOrSetPropsOption, cb?: AnimateOrSetPropsOption['cb'] | AnimateOrSetPropsOption['during'], during?: AnimateOrSetPropsOption['during']): void;
+ 
+ declare type ExtendShapeOpt = Parameters<typeof Path.extend>[0];
+ declare type ExtendShapeReturn = ReturnType<typeof Path.extend>;

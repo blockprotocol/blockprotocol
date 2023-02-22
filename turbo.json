@@ -1,0 +1,53 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "build": {
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "public/blocks/**",
+        "public/schemas/**"
+      ],
+      "dependsOn": ["codegen", "^build"]
+    },
+    "codegen": {
+      "outputs": ["blocks-data.json", "site-map.json", "src/version.ts"]
+    },
+    "fix:eslint": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "lint:eslint": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "lint:tsc": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "@blockprotocol/type-system#build": {
+      "dependsOn": [],
+      "outputs": ["dist/**", "wasm/**"]
+    },
+    "@blockprotocol/type-system#fix:eslint": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "@blockprotocol/type-system#lint:eslint": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "@blockprotocol/type-system#lint:tsc": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "@blockprotocol/type-system#test": {
+      "dependsOn": ["build"],
+      "outputs": []
+    }
+  }
+}
