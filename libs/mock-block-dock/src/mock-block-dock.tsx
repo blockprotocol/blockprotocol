@@ -264,23 +264,6 @@ const MockBlockDockNonTemporal: FunctionComponent<
     }
   }, [graphModule, graphModuleCallbacks]);
 
-  useEffect(() => {
-    if (serviceModule && serviceModuleCallbacks) {
-      // The callbacks are reconstructed when the data in the store changes
-      // We need to register the updated callbacks or the data they use will be stale
-      try {
-        serviceModule.registerCallbacks(serviceModuleCallbacks);
-      } catch {
-        /**
-         * Registration can error when the user switches between preview and debug mode.
-         * Registration is attempted with the old service, which has been destroyed.
-         * It then succeeds with the new one.
-         * @todo can we avoid this error?
-         */
-      }
-    }
-  }, [serviceModule, serviceModuleCallbacks]);
-
   const blockRenderer = graphModule ? (
     <BlockRenderer
       customElement={
