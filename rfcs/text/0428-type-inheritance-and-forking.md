@@ -185,7 +185,19 @@ name◄─────Being───┐
    occupation◄────┘
 ```
 
-From the perspective of the user duplicating a type, the `Person` and `Employee` entity types were squashed together or "expanded" in order for duplication to have the desired effect. The `Being` supertype relation is still kept, while changing a property on the `Employee`. But in the process, the entity type loses the ability to trivially be treated as a `Person`, as there is no subtyping relation with `Person` on the new `MyEmployee` duplicated type.
+From the perspective of the user duplicating a type, the `Person` and `Employee` entity types were squashed together or "expanded" for duplication to have the desired effect. The `Being` supertype relation is still kept when changing a property on the `MyEmployee` duplicated type. But in this process, the `MyEmployee` entity type loses the ability to trivially be treated as a `Person`, as there is no subtyping relation with `Person` on the new `MyEmployee` duplicated type.
+
+The duplicatio nhappened on the expanded type resulting in combining/expanding `Person` and `Employee`, but it would also have been possible expand the entire type, getting rid of `Being`. This would have resulted in the following type hierarchy:
+
+```txt
+      name◄────┐
+               │
+    tenure◄────MyEmployee
+               │
+occupation◄────┘
+```
+
+And like the previous example, the `MyEmployee` type would not be a subtype of `Person` anymore. It also wouldn't be a subtype of `Being` either - reusability of the types is lost in this case. Ideally type duplcation would be able to preserve as many supertype relations as possible.
 
 ## Addressing previous considerations
 
