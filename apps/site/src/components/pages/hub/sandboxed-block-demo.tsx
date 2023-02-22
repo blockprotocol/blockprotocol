@@ -1,3 +1,4 @@
+import { QueryTemporalAxes } from "@blockprotocol/graph";
 import { FunctionComponent, useCallback, useEffect, useRef } from "react";
 
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
@@ -17,14 +18,12 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const postBlockProps = useCallback(() => {
-    if (loadedRef.current) {
-      iframeRef.current?.contentWindow?.postMessage(JSON.stringify(props), "*");
-    }
+    iframeRef.current?.contentWindow?.postMessage(JSON.stringify(props), "*");
   }, [props]);
 
   useEffect(() => {
     postBlockProps();
-  }, [postBlockProps]);
+  }, [postBlockProps, props]);
 
   const sandboxedDemoUrl = `${sandboxBaseUrl}/${metadata.pathWithNamespace.replace(
     "/",
@@ -39,6 +38,7 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
       sandbox="allow-forms allow-scripts allow-same-origin"
       allow="clipboard-write"
       onLoad={() => {
+        // @todo-0.3 this isn't triggering – why not?
         loadedRef.current = true;
         postBlockProps();
       }}

@@ -277,3 +277,25 @@ export const validateExpandAndUploadBlockFiles = async ({
 
   return { expandedMetadata };
 };
+
+export const uploadOriginalTarballToS3 = async ({
+  pathWithNamespace,
+  tarballFilePath,
+  version,
+}: {
+  pathWithNamespace: string;
+  tarballFilePath: string;
+  version: string;
+}) => {
+  await getS3Client().send(
+    new PutObjectCommand({
+      Bucket: getS3Bucket(),
+      Body: await fs.readFile(tarballFilePath),
+      ContentType: "application/x-gtar",
+      Key: resolveS3ResourceKey(
+        "block-uploads",
+        `${stripLeadingAt(pathWithNamespace)}/${version}.tar.gz`,
+      ),
+    }),
+  );
+};

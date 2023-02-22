@@ -95,7 +95,10 @@
         "./dist/cjs/temporal/main.d.ts"
       ],
       "codegen": [
-        "./dist/cjs/codegen.d.ts"
+        "./dist/cjs/non-temporal/codegen.d.ts"
+      ],
+      "temporal/codegen": [
+        "./dist/cjs/temporal/codegen.d.ts"
       ],
       "custom-element": [
         "./dist/cjs/non-temporal/custom-element.d.ts"
@@ -128,7 +131,7 @@
   ],
   "scripts": {
     "build": "yarn clean && yarn build:bundle",
-    "build:bundle": "node --max-old-space-size=4096 ../../../node_modules/rollup/dist/bin/rollup -c --bundleConfigAsCjs",
+    "build:bundle": "node --max-old-space-size=8192 ../../../node_modules/rollup/dist/bin/rollup -c --bundleConfigAsCjs",
     "clean": "rimraf ./dist/",
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
