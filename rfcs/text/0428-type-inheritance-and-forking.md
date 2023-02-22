@@ -74,7 +74,21 @@ occupation◄─────────────────┘
 ```
 
 We can visually see how selecting `Person` in the type hierarchy would provide `name` and `age` properties but exclude the `occupation` property.
-Assuming that we are able to project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype. This is a somewhat strong assumption to make, but it unlocks expressing how to extend types. The reason the selection/projection of properties is important for coercive subtyping will be explained in more detail in the coming sections, specifically in the [`additionalProperties` problem explanation section](#the-additionalproperties-problem).
+Assuming that we can project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype. This is a somewhat strong assumption to make, but it unlocks expressing how to extend types. The reason the selection/projection of properties is important for coercive subtyping will be explained in more detail in the coming sections, specifically in the [`additionalProperties` problem explanation section](#the-additionalproperties-problem).
+
+While it was mentioned that we don't allow overriding properties, we do allow it to a certain extent. When properties are still _compatible_ (using the definition of compatible given in the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility)), properties can be overridden. For example, if `Person` had an optional property `name`, `Employee` could override it to be a required property. This is because the property is still compatible, but it is now more specific. This is also the reason why we can't allow overriding properties to be arrays or objects, as that would make the property incompatible.
+
+```txt
+       age◄┐ (supertype)    (subtype)
+           ├───Person───────Employee
+      name◄┘                │
+ [optional]                 │
+                            │
+      name◄─────────────────┘
+ [required]
+```
+
+The same compatibility rules apply to other constraints, such as `minLength` and `maxLength`. If a supertype has a `minLength` of `1`, a subtype can override it to be `2`, but not `0`. The reason why this is still accepted is that JSON Schemas semantics would apply all rules given in the schema, so if a property is required, it must be present.
 
 ## Multiple supertypes
 
