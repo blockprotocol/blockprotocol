@@ -41,7 +41,7 @@ export const getS3Bucket = (): string => {
 };
 
 export const resolveS3ResourceKey = (
-  category: "blocks" | "avatars",
+  category: "blocks" | "block-uploads" | "avatars",
   subkey: string,
 ): string => {
   return `${category}/${subkey}`;
