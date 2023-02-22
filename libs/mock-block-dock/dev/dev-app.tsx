@@ -1,5 +1,5 @@
 import { extractBaseUri } from "@blockprotocol/graph";
-import { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
+import { ChangeEvent, FunctionComponent, useState } from "react";
 import { createRoot } from "react-dom/client";
 
 import { MockBlockDock } from "../src";

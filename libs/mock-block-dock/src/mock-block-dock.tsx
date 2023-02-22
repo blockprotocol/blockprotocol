@@ -151,7 +151,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
     [blockProtocolApiKey, serviceModuleCallbacksFromProps],
   );
 
-  const { serviceModule } = useServiceEmbedderModule(wrapperRef, {
+  useServiceEmbedderModule(wrapperRef, {
     callbacks: serviceModuleCallbacks,
   });
 

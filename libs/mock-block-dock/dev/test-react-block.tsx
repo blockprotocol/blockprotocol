@@ -60,7 +60,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
         setMapboxSuggestResponse(response.data);
       }
     },
-    [mapboxSuggestSearchText],
+    [mapboxSuggestSearchText, serviceModule],
   );
 
   if (readonly) {
@@ -154,7 +154,8 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
       ) : mapboxSuggestResponse ? (
         <ul>
           {mapboxSuggestResponse.suggestions.map(({ place_name }, i) => (
-            <li key={i}>{place_name}</li>
+            // eslint-disable-next-line react/no-array-index-key
+            <li key={`${place_name}${i}`}>{place_name}</li>
           ))}
         </ul>
       ) : null}
