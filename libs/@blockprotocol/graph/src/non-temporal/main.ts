@@ -45,7 +45,6 @@ import {
   EntityTypeVertex as EntityTypeVertexGeneral,
   EntityTypeWithMetadata as EntityTypeWithMetadataGeneral,
   EntityVertex as EntityVertexGeneral,
-  EntityVertexId as EntityVertexIdGeneral,
   FileAtUrlData as FileAtUrlDataGeneral,
   FileData as FileDataGeneral,
   FileEntity as FileEntityGeneral,
