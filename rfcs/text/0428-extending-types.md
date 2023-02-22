@@ -883,7 +883,6 @@ Using the above setup would mean that we need to specify `#open` at the end of t
 [unresolved-questions]: #unresolved-questions
 
 - We haven't specified how projecting/selecting properties of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact properties of a subtype to provide a valid supertype instance in embedding applications.
-- Duplicating types of "forking" is not solved by this RFC.
 - The current argument for not allowing cyclic type hierarchies mostly build on a feeling that type hierarchies shouldn't be too indirect/obfuscated, but there could be stronger arguments for allowing/disallowing it.
 - The decision to have type substitution between subtype and supertype does mean the extended types are restrictive in that they do not allow for removing/changing existing properties. Without a way to transform data between types, allowing overrides is not possible while keeping compatibility.
 
