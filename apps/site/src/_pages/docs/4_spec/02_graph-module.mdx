@@ -6,8 +6,6 @@ The graph module describes how **ontology types** and **entities** can be create
 
 ## Glossary
 
-**Block entity**: an entity associated with the specific instance of the block, conforming to the entity type that makes up the block’s schema.
-
 **Entity:** an instance of data, often corresponding to a thing in the world, constrained by a particular entity type.
 
 **Link Entity:** a kind of entity which represents a connection or relation between its left and right entity, constrained by a link entity type.
@@ -32,17 +30,115 @@ The graph module describes how **ontology types** and **entities** can be create
 
 **Subgraph:** a specific subset of a graph, usually returned as a result of a query. Can contain a set of roots which are distinguished elements of the subgraph, and usually correspond to the direct results of the query as the subgraph may contain other elements of the graph that were connected to the root elements through various edges.
 
+**Block entity**: an entity associated with the specific instance of the block, conforming to block's specified entity type.
+
+**Block Entity Subgraph:** a subgraph which contains the block entity as its root, with connected elements to a given depth.
+
+## The Type System
+
+The data model of the graph module is defined through its **Type System**.
+The type system describes how a graph of **entities** is structured, through a composition of the 3 classes of **ontology types**, **data types**, **property types**, and **entity types**.
+
+When composed, these types are capable of describing any JSON object.
+
+### Data Types
+
+A **data type** describes a space of possible valid _values_.
+These cover all possible primitive values that can be represented within JSON, as well as `Object` and `Null` which are included for completeness of the system ([see the RFC for rationale](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0352-graph-type-system.md#including-an-empty-list-data-type)).
+
+At present, there are 6 primitive data types.
+New ones cannot be created, although that is a planned extension in the near-future, whereby new ones will be defined by combining the primitive data types and constraints such as max lengths, minimum values, etc. ([see the associated in-development RFC](https://github.com/blockprotocol/blockprotocol/pull/355)).
+
+When represented as JSON schema, the 6 primitive data types are:
+
+#### Text
+
+```
+{
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+  "title": "Text",
+  "description": "An ordered sequence of characters",
+  "type": "string"
+}
+```
+
+#### Number
+
+```
+{
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
+  "title": "Number",
+  "description": "An arithmetical value (in the Real number system)",
+  "type": "number"
+}
+```
+
+#### Boolean
+
+```
+{
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1",
+  "title": "Boolean",
+  "description": "A True or False value",
+  "type": "boolean"
+}
+```
+
+#### Null
+
+```
+{
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/null/v/1",
+  "title": "Null",
+  "description": "A placeholder value representing 'nothing'",
+  "type": "null"
+}
+```
+
+#### Object
+
+```
+{
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1",
+  "title": "Object",
+  "description": "A plain JSON object with no pre-defined structure",
+  "type": "object"
+}
+```
+
+#### Empty List
+
+```
+{
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1",
+  "title": "Empty List",
+  "description": "An Empty List",
+  "type": "array",
+  "const": []
+}
+```
+
+### Property Types
+
+A **property type** describes the .
+
 ## Defining blocks
 
 ### Block package
 
 #### <Hidden>Block package </Hidden>Summary
 
-Blocks using the graph module may provide a **schema** which describes the shape of their own **properties**, if any. Embedding applications should use this to constrain the properties they send to blocks. These properties are part of the **block entity**.
+Blocks using the graph module provide an **entity type** which describes the shape of their **block entity**. Embedding applications should use this to constrain the properties they send to blocks when they are instantiated.
 
-The block’s schema may be included as a file in the **block package**, or referred to by remote address (a URL). If the block has a schema, a path to it must be added to their `block-metadata.json`, under a `schema` key.
+The URI of the entity type's schema must be referenced in the block's `block-metadata.json` under a `schema` key.
 
-Blocks may also add `default` and `examples` keys to `block-metadata.json` to define default and example properties conforming to their schema. If more complex example data is required that involves specifying _other_ entities and links between them, which the block will make use of, a block package may also include an `example-graph.json`.
+Blocks may also add `default` and `examples` keys to `block-metadata.json` to define default and example properties conforming to their schema. If more complex example data is required that involves specifying _other_ entities and link entities between them, which the block will make use of, a block package may also include an `example-graph.json`.
 
 #### <Hidden>Block package </Hidden>Specification
 
@@ -50,29 +146,19 @@ Blocks may also add `default` and `examples` keys to `block-metadata.json` to de
 
 A block using the graph module MAY expand `block-metadata.json` to specify:
 
-- `schema`: a path to a JSON file describing the **properties** the block accepts as part of the **block entity,** using [JSON Schema vocabulary](https://json-schema.org/). This file may be included in the block package, or hosted at a remote address. If the schema hosted at a remote address is subject to change, bear in mind that changes in the schema may invalidate other values in the block metadata (e.g. `default`) or the block’s functioning (e.g. if important constraints are removed).
-- `default`: an object, conforming to the block’s schema, representing the default data that applications should provide when creating a block, unless (a) the block can handle being provided no data when first instantiated or (b) `variants` is provided (see below)
-- `examples`: an array of objects conforming to the block's schema which provide examples of the data that can be passed to it
-- `variants`: an array of objects, each with a `name` and `properties`, and optionally `description`, `icon`, and `examples`. These objects represents different variants of the block that the user can create, where `properties` sets the starting properties. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as `properties`, respectively
+- `schema`: the URI of the **entity type** associated with the block entity. As per the specification, the schema hosted at the remote address should not be subject to change and versions of entity types should be treated as immutable, permanently available, records.
 
-If `schema` is defined, the JSON schema file it refers to:
+[//]: # (- `default`: an **entity**, conforming to the block’s schema, representing the default data that applications should provide when creating a block, unless &#40;a&#41; the block can handle being provided no data when first instantiated or &#40;b&#41; `variants` is provided &#40;see below&#41;)
 
-- MUST specify a **[`required`](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.3)** array naming any properties the block will not function without (this MAY be omitted if there are no such properties)
-- SHOULD specify any further constraints or **[validation](https://json-schema.org/draft/2020-12/json-schema-validation.html)** requirements which improve the block’s functionality
-- MAY specify an additional root-level field, `configProperties`, which is an array of `string` values which MUST be present as a key on the block schema's `properties`, i.e. each must name a property the block expects. This field is used to indicate which properties a block considers to be part of 'configuring' how it appears or behaves, rather than data users are creating or viewing via the blocks.
+[//]: # (- `examples`: an array of objects conforming to the block's schema which provide examples of the data that can be passed to it)
 
-If more complex example data is required, a block’s package may also include a file at the root named `example-graph.json`, which MUST be a JSON object, and MAY contain one or more of:
+[//]: # (- `variants`: an array of objects, each with a `name` and `properties`, and optionally `description`, `icon`, and `examples`. These objects represents different variants of the block that the user can create, where `properties` sets the starting properties. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as `properties`, respectively)
 
-- `entities`
-- `entityTypes`
-- `links`
-- `linkedAggregations`
-
-If defined, each field MUST be an array of JSON objects, which MUST conform to the structure defined for each of these resources, as specified in [entity definition](#structure-specification).
+If more complex example data is required, a block’s package may also include a file at the root named `example-graph.json`, which MUST be a JSON object, and MUST contain an `entities` key where each element is a JSON representation of an entity which MUST conform to the structure specified in [entity definition](#structure-specification).
 
 ##### Embedding applications
 
-Embedding applications MUST use the constraints set in the block’s schema, if defined, to constrain the data it sends under `properties` in the **block entity**, assuming the embedding application implements the `blockEntity` message.
+Embedding applications MUST use the constraints set in the associated entity type, to constrain the data it sends to the block in the **block entity subgraph**, assuming the embedding application implements the `blockEntitySubgraph` message.
 
 Embedding applications MAY choose to display their own UI to allow users to set any values on the block entity described in `configProperties`, and could allow users to set values for them for all blocks of a type (rather than on a per-block instance basis)
 
@@ -82,17 +168,13 @@ Embedding applications MAY choose to display their own UI to allow users to set 
 
 #### <Hidden>Structure </Hidden>Summary
 
-An entity is a combination of **identifying fields** and **properties**.
+An entity is a combination of **metadata** and **properties**.
 
-The **identifying fields** are fixed and specified in this document, and appear as keys at the root of the entity data object.
+The **metadata** is a minimum collection of fields that are fixed and specified in this document, although embedding applications MAY choose to add their own.
 
-The **properties** can be any JSON object which is valid for the entity’s type. This object is nested under a `properties` key on the entity data object.
+The **properties** is a JSON object which satisfies the constraints of the entity’s **entity type**. This object is nested under a `properties` key on the entity data object.
 
-Each entity has an **entity type** representing the type of thing that it is. In turn, an entity type has a **schema** which sets constraints on the permitted **properties** belonging to an entity.
-
-**Links** represent connections or relations between entities. In the language of an entity graph, the links are the edges, and the entities are the nodes.
-
-**Linked aggregations** represent a link from a block to a particular aggregation of entities, e.g. the top 10 entities of type Person, sorted by a particular property.
+[//]: # (**Linked aggregations** represent a link from a block to a particular aggregation of entities, e.g. the top 10 entities of type Person, sorted by a particular property.)
 
 #### <Hidden>Structure </Hidden>Specification
 
@@ -100,7 +182,8 @@ Each entity has an **entity type** representing the type of thing that it is. In
 
 When embedding applications pass entities to blocks, whether the **block entity** or any other:
 
-- entities MUST be represented by an object, which contains one or more **identifying fields** at the top level. The object:
+- entities MUST be represented by an object, which contains the following:
+  -
   - MUST contain an `entityId` identifying the entity, which MUST be a string.
   - MAY contain an `entityTypeId` identifying the entity type the entity belongs to, which MUST be a string (if defined).
 - MUST contain a `properties` field if the block has defined any `required` properties in its schema, and otherwise MAY be omitted. If present, it:
