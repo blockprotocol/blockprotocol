@@ -515,9 +515,9 @@ export const PaidAddonsSection: FunctionComponent = () => {
                 If you believe any of these prices are out of sync with the
                 costs charged by the underlying provider,{" "}
                 <CustomLink href="/contact">please let us know</CustomLink>. A
-                Platform Service Fee of <i>25%</i> for Hobby users, and{" "}
-                <i>20%</i> for Pro users, is applied to Additional API Usage
-                calls to cover costs.
+                Platform Service Fee of <i>30%</i> for Free users, <i>25%</i>{" "}
+                for Hobby users, and <i>20%</i> for Pro users, is applied to
+                Additional API Usage calls to cover costs.
               </Typography>
 
               <Typography variant="bpBodyCopy" sx={{ lineHeight: 1.4 }}>
