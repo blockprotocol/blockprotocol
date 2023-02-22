@@ -35,7 +35,7 @@ export const App: BlockComponent<RootEntity> = ({
      * The properties sent to the block represent the messages sent automatically from the application to the block.
      * All block <> application messages are split into modules, and so is this property object.
      * Here, we're extracting the 'graph' module messages from the property object.
-     * – and then taking a single message from it, 'blockEntity'
+     * – and then taking a single message from it, 'blockEntitySubgraph'
      * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for other such messages
      */
     blockEntitySubgraph,

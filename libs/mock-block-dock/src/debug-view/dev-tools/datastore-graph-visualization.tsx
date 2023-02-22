@@ -1,21 +1,26 @@
 import {
   Entity as EntityNonTemporal,
-  EntityRecordId as EntityRecordIdNonTemporal,
+  EntityRevisionId as EntityRevisionIdNonTemporal,
+  EntityVertex as EntityVertexNonTemporal,
   EntityVertexId as EntityVertexIdNonTemporal,
   GraphElementVertexId as GraphElementVertexIdNonTemporal,
+  isEntityVertex as isEntityVertexNonTemporal,
+  isHasRightEntityEdge as isHasRightEntityEdgeNonTemporal,
+  isOutgoingLinkEdge as isOutgoingLinkEdgeNonTemporal,
   OutwardEdge as OutwardEdgeNonTemporal,
   Subgraph as SubgraphNonTemporal,
 } from "@blockprotocol/graph";
 import { isTemporalSubgraph } from "@blockprotocol/graph/internal";
 import {
-  getEntities as getEntitiesNonTemporal,
   getEntityTypeById as getEntityTypeByIdNonTemporal,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesNonTemporal,
   getPropertyTypesByBaseUri as getPropertyTypesByBaseUriNonTemporal,
+  getVertexIdForRecordId as getVertexIdForRecordIdNonTemporal,
 } from "@blockprotocol/graph/stdlib";
 import {
   Entity as EntityTemporal,
-  EntityRecordId as EntityRecordIdTemporal,
+  EntityRevisionId as EntityRevisionIdTemporal,
+  EntityVertex as EntityVertexTemporal,
   EntityVertexId as EntityVertexIdTemporal,
   GraphElementVertexId as GraphElementVertexIdTemporal,
   isEntityVertex as isEntityVertexTemporal,
@@ -25,16 +30,20 @@ import {
   Subgraph as SubgraphTemporal,
 } from "@blockprotocol/graph/temporal";
 import {
-  getEntities as getEntitiesTemporal,
   getEntityTypeById as getEntityTypeByIdTemporal,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesTemporal,
   getPropertyTypesByBaseUri as getPropertyTypesByBaseUriTemporal,
+  getVertexIdForRecordId as getVertexIdForRecordIdTemporal,
   intervalOverlapsInterval,
 } from "@blockprotocol/graph/temporal/stdlib";
 import { Box } from "@mui/material";
 import { GraphChart, GraphSeriesOption } from "echarts/charts";
 import * as echarts from "echarts/core";
 import { SVGRenderer } from "echarts/renderers";
+import {
+  GraphEdgeItemOption,
+  GraphNodeItemOption,
+} from "echarts/types/src/chart/graph/GraphSeries";
 import { useEffect, useRef, useState } from "react";
 
 import {
@@ -48,7 +57,7 @@ const parseLabelFromEntity = (
   subgraph: SubgraphTemporal | SubgraphNonTemporal,
 ) => {
   const getFallbackLabel = () => {
-    // fallback to the entity type and a few characters of the entityUuid
+    // fallback to the entity type and a few characters of the entityId
     const entityId = entityToLabel.metadata.recordId.entityId;
 
     const entityType = isTemporalSubgraph(subgraph)
@@ -149,34 +158,20 @@ const createDefaultEChartOptions = (params?: {
 // Register the required components
 echarts.use([GraphChart, SVGRenderer]);
 
-type EChartNode = {
-  id: string;
-  name: string;
-  fixed?: boolean;
-  x?: number;
-  y?: number;
-  label: {
-    show?: boolean;
-  };
-};
+type EChartNode = GraphNodeItemOption & { id: string };
 
 const mapEntityToEChartNode = (
   entity: EntityNonTemporal | EntityTemporal,
+  vertexId: EntityVertexIdNonTemporal | EntityVertexIdTemporal,
   subgraph: SubgraphNonTemporal | SubgraphTemporal,
 ): EChartNode => ({
-  id: JSON.stringify(entity.metadata.recordId),
+  id: JSON.stringify(vertexId),
   name: parseLabelFromEntity(entity, subgraph),
   label: { show: false },
 });
 
-type EChartEdge = {
-  id: string;
-  source: string;
+type EChartEdge = GraphEdgeItemOption & {
   target: string;
-  kind: string;
-  label: {
-    show?: boolean;
-  };
 };
 
 /** todo - render ontology-related edges */
@@ -184,33 +179,63 @@ const mapGraphEdgeToEChartEdge = (
   sourceVertexId: EntityVertexIdNonTemporal | EntityVertexIdTemporal,
   targetVertexId: EntityVertexIdNonTemporal | EntityVertexIdTemporal,
   edgeKind: (OutwardEdgeNonTemporal | OutwardEdgeTemporal)["kind"],
+  edgeLabel: "has outgoing link" | "has target",
 ): EChartEdge => ({
   /** @todo - Can we do better than this, this assumes that this triple is unique, which it might not be */
   id: `${JSON.stringify(sourceVertexId)}-${edgeKind}->${JSON.stringify(
     targetVertexId,
   )}`,
+  name: edgeLabel,
   source: JSON.stringify(sourceVertexId),
   target: JSON.stringify(targetVertexId),
-  kind: edgeKind,
-  label: { show: false },
+  label: {
+    show: false,
+    formatter: edgeLabel,
+  },
 });
 
 const getSubgraphEntitiesAsEChartNodes = (
   subgraph: SubgraphNonTemporal | SubgraphTemporal,
 ): EChartNode[] => {
-  const allEntities = isTemporalSubgraph(subgraph)
-    ? getEntitiesTemporal(subgraph)
-    : getEntitiesNonTemporal(subgraph);
+  const entitiesAndVertexIds = isTemporalSubgraph(subgraph)
+    ? typedEntries(subgraph.vertices).flatMap(([baseId, revisionObject]) =>
+        typedEntries(revisionObject)
+          .filter(
+            (
+              entry,
+            ): entry is [EntityRevisionIdTemporal, EntityVertexTemporal] =>
+              isEntityVertexTemporal(entry[1]),
+          )
+          .map(([revisionId, vertex]) => {
+            return [vertex.inner, { baseId, revisionId }] as const;
+          }),
+      )
+    : typedEntries(subgraph.vertices).flatMap(([baseId, revisionObject]) =>
+        typedEntries(revisionObject)
+          .filter(
+            (
+              entry,
+            ): entry is [
+              EntityRevisionIdNonTemporal,
+              EntityVertexNonTemporal,
+            ] => isEntityVertexNonTemporal(entry[1]),
+          )
+          .map(([revisionId, vertex]) => {
+            return [vertex.inner, { baseId, revisionId }] as const;
+          }),
+      );
 
   /** @todo - Render link entities differently */
   // const [linkEntities, nonLinkEntities] = partitionArrayByCondition(
-  //   allEntities,
-  //   (entity) =>
+  //   entitiesAndVertexIds,
+  //   ([entity, _]) =>
   //     entity.linkData?.leftEntityId !== undefined &&
   //     entity.linkData?.rightEntityId !== undefined,
   // );
 
-  return allEntities.map((entity) => mapEntityToEChartNode(entity, subgraph));
+  return entitiesAndVertexIds.map(([entity, entityVertexId]) =>
+    mapEntityToEChartNode(entity, entityVertexId, subgraph),
+  );
 };
 
 const getSubgraphEdgesAsEChartEdges = (
@@ -266,31 +291,27 @@ const getSubgraphEdgesAsEChartEdges = (
           return sourceRevisions.flatMap((sourceRevisionId) =>
             targetVersions
               .flatMap((targetRevisionId) => {
-                const sourceVertexId:
-                  | GraphElementVertexIdNonTemporal
-                  | GraphElementVertexIdTemporal = {
-                  baseId: sourceBaseId,
-                  revisionId: sourceRevisionId,
-                };
+                if (
+                  isOutgoingLinkEdgeTemporal(outwardEdgeTemporal) ||
+                  isHasRightEntityEdgeTemporal(outwardEdgeTemporal)
+                ) {
+                  const sourceVertexId: GraphElementVertexIdTemporal = {
+                    baseId: sourceBaseId,
+                    revisionId: sourceRevisionId,
+                  };
 
-                const targetVertexId:
-                  | GraphElementVertexIdNonTemporal
-                  | GraphElementVertexIdTemporal = {
-                  baseId: targetBaseId,
-                  revisionId: targetRevisionId,
-                };
+                  const targetVertexId: GraphElementVertexIdTemporal = {
+                    baseId: targetBaseId,
+                    revisionId: targetRevisionId,
+                  };
 
-                if (isOutgoingLinkEdgeTemporal(outwardEdgeTemporal)) {
                   return mapGraphEdgeToEChartEdge(
                     sourceVertexId,
                     targetVertexId,
                     outwardEdge.kind,
-                  );
-                } else if (isHasRightEntityEdgeTemporal(outwardEdgeTemporal)) {
-                  return mapGraphEdgeToEChartEdge(
-                    sourceVertexId,
-                    targetVertexId,
-                    outwardEdge.kind,
+                    isOutgoingLinkEdgeTemporal(outwardEdgeTemporal)
+                      ? "has outgoing link"
+                      : "has target",
                   );
                 }
                 return undefined;
@@ -307,40 +328,28 @@ const getSubgraphEdgesAsEChartEdges = (
           }
           const targetBaseId = outwardEdgeTemporal.rightEndpoint;
 
-          const sourceVertexId:
-            | GraphElementVertexIdNonTemporal
-            | GraphElementVertexIdTemporal = {
-            baseId: sourceBaseId,
-            revisionId: mustBeDefined(
-              Object.keys(subgraph.vertices[sourceBaseId]!).pop(),
-            ),
-          };
+          if (
+            isOutgoingLinkEdgeNonTemporal(outwardEdgeTemporal) ||
+            isHasRightEntityEdgeNonTemporal(outwardEdgeTemporal)
+          ) {
+            const sourceVertexId: GraphElementVertexIdNonTemporal = {
+              baseId: sourceBaseId,
+              revisionId: Object.keys(subgraph.vertices[sourceBaseId]!).pop()!,
+            };
 
-          const targetVertexId:
-            | GraphElementVertexIdNonTemporal
-            | GraphElementVertexIdTemporal = {
-            baseId: targetBaseId,
-            revisionId: mustBeDefined(
-              Object.keys(subgraph.vertices[targetBaseId]!).pop(),
-            ),
-          };
+            const targetVertexId: GraphElementVertexIdNonTemporal = {
+              baseId: targetBaseId,
+              revisionId: Object.keys(subgraph.vertices[targetBaseId]!).pop()!,
+            };
 
-          if (isOutgoingLinkEdgeTemporal(outwardEdge)) {
-            return [
-              mapGraphEdgeToEChartEdge(
-                sourceVertexId,
-                targetVertexId,
-                outwardEdge.kind,
-              ),
-            ];
-          } else if (isHasRightEntityEdgeTemporal(outwardEdge)) {
-            return [
-              mapGraphEdgeToEChartEdge(
-                sourceVertexId,
-                targetVertexId,
-                outwardEdge.kind,
-              ),
-            ];
+            return mapGraphEdgeToEChartEdge(
+              sourceVertexId,
+              targetVertexId,
+              outwardEdge.kind,
+              isOutgoingLinkEdgeNonTemporal(outwardEdgeTemporal)
+                ? "has outgoing link"
+                : "has target",
+            );
           }
           return [];
         }
@@ -388,14 +397,8 @@ const DataStoreGraphVisualizationComponent = ({
     setEChartEdges(getSubgraphEdgesAsEChartEdges(graph));
   }, [graph]);
 
-  const [selectedEntityRecordIdString, setSelectedEntityRecordIdString] =
+  const [selectedEntityVertexIdString, setSelectedEntityVertexIdString] =
     useState<string>();
-
-  /** @todo: un-comment if we want to display something about the currently selected entity */
-  // const selectedEntity = useMemo(
-  //   () => entities.find(({ entityId }) => entityId === selectedEntityRecordIdString),
-  //   [entities, selectedEntityRecordIdString],
-  // );
 
   useEffect(() => {
     if (chart) {
@@ -410,37 +413,47 @@ const DataStoreGraphVisualizationComponent = ({
   }, [chart, eChartEdges]);
 
   useEffect(() => {
-    if (chart && selectedEntityRecordIdString) {
+    if (chart && selectedEntityVertexIdString) {
       const outgoingLinkAndTargetEntities = isTemporalSubgraph(graph)
         ? getOutgoingLinkAndTargetEntitiesTemporal(
             graph,
-            (JSON.parse(selectedEntityRecordIdString) as EntityRecordIdTemporal)
-              .entityId,
+            (JSON.parse(selectedEntityVertexIdString) as EntityVertexIdTemporal)
+              .baseId,
           )
         : getOutgoingLinkAndTargetEntitiesNonTemporal(
             graph,
             (
               JSON.parse(
-                selectedEntityRecordIdString,
-              ) as EntityRecordIdNonTemporal
-            ).entityId,
+                selectedEntityVertexIdString,
+              ) as EntityVertexIdNonTemporal
+            ).baseId,
           );
 
+      const getVertexIdForRecordId = isTemporalSubgraph(graph)
+        ? getVertexIdForRecordIdTemporal
+        : getVertexIdForRecordIdNonTemporal;
+
       const neighbourIds = outgoingLinkAndTargetEntities.flatMap(
-        ({ linkEntity, rightEntity }) => [
-          JSON.stringify(
-            (Array.isArray(linkEntity) ? linkEntity[0]! : linkEntity).metadata
-              .recordId,
-          ),
-          JSON.stringify(
-            (Array.isArray(rightEntity) ? rightEntity[0]! : rightEntity)
-              .metadata.recordId,
-          ),
-        ],
+        ({ linkEntity, rightEntity }) => {
+          return [
+            getVertexIdForRecordId(
+              graph as SubgraphTemporal & SubgraphNonTemporal,
+              (Array.isArray(linkEntity) ? linkEntity[0]! : linkEntity).metadata
+                .recordId,
+            ),
+            JSON.stringify(
+              getVertexIdForRecordId(
+                graph as SubgraphTemporal & SubgraphNonTemporal,
+                (Array.isArray(rightEntity) ? rightEntity[0]! : rightEntity)
+                  .metadata.recordId,
+              ),
+            ),
+          ];
+        },
       );
 
       const nodesWithVisibleLabelsIds = [
-        selectedEntityRecordIdString,
+        selectedEntityVertexIdString,
         ...neighbourIds,
       ];
 
@@ -463,14 +476,14 @@ const DataStoreGraphVisualizationComponent = ({
         })),
       );
     }
-  }, [chart, graph, selectedEntityRecordIdString]);
+  }, [chart, graph, selectedEntityVertexIdString]);
 
   useEffect(() => {
     if (!chart && eChartWrapperRef.current) {
       const initialisedChart = echarts.init(eChartWrapperRef.current);
 
       initialisedChart.on("click", { dataType: "node" }, ({ data: node }) =>
-        setSelectedEntityRecordIdString((node as EChartNode).id),
+        setSelectedEntityVertexIdString((node as EChartNode).id),
       );
 
       const initialOptions = createDefaultEChartOptions();

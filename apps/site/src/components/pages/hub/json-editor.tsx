@@ -146,6 +146,7 @@ export const JsonEditor = ({ onChange, value, height }: JsonEditorProps) => {
           tabSize: 2,
           fontFamily: CODE_FONT_FAMILY,
           fontSize: "1em",
+          whiteSpace: "pre-wrap",
         })}
         wrap="off"
         component="textarea"

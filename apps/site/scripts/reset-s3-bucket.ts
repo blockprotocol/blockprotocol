@@ -3,6 +3,7 @@ import {
   DeleteBucketCommand,
   DeleteObjectsCommand,
   ListObjectsV2Command,
+  PutBucketPolicyCommand,
 } from "@aws-sdk/client-s3";
 import chalk from "chalk";
 
@@ -54,9 +55,34 @@ const script = async () => {
     }
   }
 
+  const Bucket = getS3Bucket();
+
   await s3Client.send(
     new CreateBucketCommand({
+      Bucket,
+    }),
+  );
+
+  // Calling CreateBucketCommand with `ACL: "public-read",` does not make bucket files available
+  // to the public. We set permissions separately to fix that.
+  // https://stackoverflow.com/a/69079415/1818285
+  await s3Client.send(
+    new PutBucketPolicyCommand({
       Bucket: getS3Bucket(),
+      Policy: JSON.stringify({
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Action: ["s3:GetObject"],
+            Effect: "Allow",
+            Principal: {
+              AWS: ["*"],
+            },
+            Resource: [`arn:aws:s3:::${Bucket}/*`],
+            Sid: "",
+          },
+        ],
+      }),
     }),
   );
 
