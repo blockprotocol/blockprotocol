@@ -24,6 +24,7 @@ import {
   BlockExampleGraph,
   BlockSchema,
 } from "../../../components/pages/hub/hub-utils";
+import { VerifiedBadge } from "../../../components/verified-badge";
 import { getAllBlocks } from "../../../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
@@ -287,7 +288,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
           ) : null}
 
           <Box>
-            <Box sx={{ mt: 2, display: { xs: "flex", md: "unset" } }}>
+            <Box sx={{ display: { xs: "flex", md: "unset" } }}>
               {!isDesktopSize && (
                 <Box
                   sx={{
@@ -301,10 +302,18 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 />
               )}
               <Typography
-                sx={{ display: { xs: "flex", md: "unset" } }}
                 variant="bpHeading1"
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  columnGap: 2.5,
+                  rowGap: 0.5,
+                }}
               >
-                {blockMetadata.displayName}
+                <Box component="span">{blockMetadata.displayName} </Box>
+
+                {blockMetadata.verified ? <VerifiedBadge /> : null}
               </Typography>
             </Box>
 

@@ -7,56 +7,55 @@ import tmp from "tmp-promise";
 
 import { ExpandedBlockMetadata } from "../../blocks";
 import { insertDbBlock, updateDbBlock } from "./db";
-import { validateExpandAndUploadBlockFiles } from "./s3";
+import {
+  uploadOriginalTarballToS3,
+  validateExpandAndUploadBlockFiles,
+} from "./s3";
 
 /**
  * Unpacks and uploads a tarball to remote storage
  * @param payload
  *  - createdAt: if this block was created previously, an ISO string of when it was created, otherwise null
  *  - pathWithNamespace: the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
- *  - tarball: the tarball containing the block's latest files
+ *  - tarballFilePath: the tarball containing the block's latest files
  */
 const mirrorTarballToS3 = async ({
   createdAt,
   pathWithNamespace,
-  tarball,
+  tarballFilePath,
 }: {
   createdAt: string | null;
   pathWithNamespace: string;
-  tarball: Buffer;
+  tarballFilePath: string;
 }): Promise<{
   expandedMetadata: ExpandedBlockMetadata;
 }> => {
-  const { path: tarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
-    unsafeCleanup: true,
-  });
-
-  const tarballPath = path.resolve(tarballFolder, "tarball.tar.gz");
-
-  await fs.writeFile(tarballPath, tarball);
-
-  const extractionFolderPath = path.resolve(tarballFolder, "package");
-  await fs.ensureDir(extractionFolderPath);
+  const { path: extractionFolderPath, cleanup: cleanupExtractionFolder } =
+    await tmp.dir({
+      unsafeCleanup: true,
+    });
 
   try {
-    // we use a library because tar is not installed in Vercel lambdas
-    await tar.x({
-      cwd: extractionFolderPath,
-      file: tarballPath,
+    try {
+      // we use a library because tar is not installed in Vercel lambdas
+      await tar.x({
+        cwd: extractionFolderPath,
+        file: tarballFilePath,
+      });
+    } catch (err) {
+      throw new Error("Could not extract tarball");
+    }
+
+    const { expandedMetadata } = await validateExpandAndUploadBlockFiles({
+      createdAt,
+      localFolderPath: extractionFolderPath,
+      pathWithNamespace,
     });
-  } catch (err) {
-    throw new Error("Could not extract tarball");
+
+    return { expandedMetadata };
+  } finally {
+    await cleanupExtractionFolder();
   }
-
-  const { expandedMetadata } = await validateExpandAndUploadBlockFiles({
-    createdAt,
-    localFolderPath: extractionFolderPath,
-    pathWithNamespace,
-  });
-
-  await cleanupDistFolder();
-
-  return { expandedMetadata };
 };
 
 /**
@@ -76,15 +75,32 @@ export const publishBlockFromTarball = async (
 ) => {
   const { createdAt, pathWithNamespace, tarball } = params;
 
-  const { expandedMetadata } = await mirrorTarballToS3({
-    createdAt,
-    pathWithNamespace,
-    tarball,
+  const { path: tarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
+    unsafeCleanup: true,
   });
 
-  await (createdAt
-    ? updateDbBlock(expandedMetadata)
-    : insertDbBlock(expandedMetadata));
+  try {
+    const tarballFilePath = path.resolve(tarballFolder, "tarball.tar.gz");
 
-  return expandedMetadata;
+    await fs.writeFile(tarballFilePath, tarball);
+
+    const { expandedMetadata } = await mirrorTarballToS3({
+      createdAt,
+      pathWithNamespace,
+      tarballFilePath,
+    });
+
+    await uploadOriginalTarballToS3({
+      pathWithNamespace,
+      version: expandedMetadata.version,
+      tarballFilePath,
+    });
+
+    await (createdAt
+      ? updateDbBlock(expandedMetadata)
+      : insertDbBlock(expandedMetadata));
+    return expandedMetadata;
+  } finally {
+    await cleanupDistFolder();
+  }
 };

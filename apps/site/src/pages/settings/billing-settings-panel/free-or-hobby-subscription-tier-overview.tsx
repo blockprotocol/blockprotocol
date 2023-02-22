@@ -70,6 +70,14 @@ export const paidSubscriptionFeatures: Record<
           </>
         ),
       },
+      {
+        icon: <MapLocationDotIcon sx={{ fontSize: 18 }} />,
+        title: (
+          <>
+            <strong>300</strong> Mapbox Static Maps
+          </>
+        ),
+      },
     ],
     additionalFeatures: [
       {
@@ -125,7 +133,7 @@ export const paidSubscriptionFeatures: Record<
               component="span"
               sx={{ color: ({ palette }) => palette.gray[60] }}
             >
-              300k+ words, 100 images, 40 address fills
+              300k+ words, 100 images, 40 address fills, etc.
             </Box>
           </>
         ),
