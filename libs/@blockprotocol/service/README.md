@@ -71,7 +71,7 @@ import { useRef } from "react";
 export const App = () => {
   const wrappingRef = useRef<HTMLDivElement>(null);
 
-  const { serviceModule } = useGraphEmbedderService(blockRef);
+  const { serviceModule } = useServiceEmbedderModule(blockRef);
 
   return (
     <div ref={wrappingRef}>
