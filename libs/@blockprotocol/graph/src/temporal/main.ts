@@ -428,7 +428,10 @@ export type TimeIntervalUnresolved<
   StartBound extends TemporalBound | null,
   EndBound extends TemporalBound | null,
 > = TimeIntervalUnresolvedGeneral<StartBound, EndBound>;
-export type TimeInterval = TimeIntervalGeneral;
+export type TimeInterval<
+  StartBound extends TemporalBound = TemporalBound,
+  EndBound extends TemporalBound = TemporalBound,
+> = TimeIntervalGeneral<StartBound, EndBound>;
 export type BoundedTimeInterval = BoundedTimeIntervalGeneral;
 export type VariableTemporalAxisUnresolved<
   Axis extends TemporalAxis,
