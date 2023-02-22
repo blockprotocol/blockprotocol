@@ -62,14 +62,19 @@ const Section: FunctionComponent<
           background: `${palette.common.white}80`,
           border: `1px solid ${palette.gray[20]}`,
           backdropFilter: "blur(7.5px)",
-          padding: 4.25,
+          padding: { xs: 2.5, md: 4.25 },
           justifyContent: "center",
           alignItems: "center",
           borderRadius: 4,
           boxShadow: "0px 4.23704px 8.1px rgb(61 78 133 / 6%)",
         })}
       >
-        <Box sx={{ ...(fullWidth ? { width: 1 } : {}), paddingX: 1.5 }}>
+        <Box
+          sx={{
+            ...(fullWidth ? { width: 1 } : {}),
+            paddingX: { xs: 0, md: 1.5 },
+          }}
+        >
           {children}
         </Box>
       </Stack>
