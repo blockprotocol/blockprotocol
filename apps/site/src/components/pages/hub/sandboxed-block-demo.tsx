@@ -1,4 +1,3 @@
-import { QueryTemporalAxes } from "@blockprotocol/graph";
 import { FunctionComponent, useCallback, useEffect, useRef } from "react";
 
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
