@@ -44,7 +44,7 @@ const Question: FunctionComponent<{
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Box mb={3}>
+    <Box sx={{ mb: { xs: 2, md: 3 } }}>
       <Typography
         onClick={() => setExpanded(!expanded)}
         variant="bpBodyCopy"
@@ -112,14 +112,14 @@ export const FaqSection: FunctionComponent = () => {
           background: `${palette.common.white}80`,
           border: `1px solid ${palette.gray[20]}`,
           backdropFilter: "blur(7.5px)",
-          padding: 4.25,
+          padding: { xs: 2.5, md: 4.25 },
           justifyContent: "center",
           alignItems: "flex-start",
           borderRadius: 4,
           boxShadow: "0px 4.23704px 8.1px rgb(61 78 133 / 6%)",
         })}
       >
-        <Box sx={{ paddingX: 1.5 }}>
+        <Box sx={{ paddingX: { xs: 0, md: 1.5 } }}>
           {FAQ_QUESTIONS.map((question) => (
             <Question key={question.title} {...question} />
           ))}
