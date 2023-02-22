@@ -3,7 +3,7 @@
  * This defines the main types and type-guards used when working with the Graph module.
  */
 
-import { BaseUri } from "@blockprotocol/type-system/slim";
+import {BaseUri} from "@blockprotocol/type-system/slim";
 
 import {
   AggregateEntitiesData as AggregateEntitiesDataGeneral,
@@ -428,7 +428,10 @@ export type TimeIntervalUnresolved<
   StartBound extends TemporalBound | null,
   EndBound extends TemporalBound | null,
 > = TimeIntervalUnresolvedGeneral<StartBound, EndBound>;
-export type TimeInterval = TimeIntervalGeneral;
+export type TimeInterval<
+  StartBound extends TemporalBound = TemporalBound,
+  EndBound extends TemporalBound = TemporalBound,
+> = TimeIntervalGeneral<StartBound, EndBound>;
 export type BoundedTimeInterval = BoundedTimeIntervalGeneral;
 export type VariableTemporalAxisUnresolved<
   Axis extends TemporalAxis,
