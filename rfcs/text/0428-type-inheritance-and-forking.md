@@ -677,7 +677,7 @@ As the intermediate expanded entity type does not declare any supertypes, we are
 
 ## Detecting cycles
 
-> 💭 Because of versioning mechanics in the type system added in the [versioning RFC](./0408-versioning-types.md), type versions are not able to make out proper dependency cyles, and would not allow cyclic type hierachy to exist in the literal sense as updates to types would always result in a new version identifier. Instead cycles in the below explanation is more about indirection and obfuscation of types.
+> 💭 Because of how verisoning is specified in the [versioning RFC](./0408-versioning-types.md), entity types cannot create proper dependency cyles. The dependency cycles explained below are not about the literal type hierarchy, but rather about indirection and obfuscation of types and potential incompatabiliites that can be introduced. Cycles across type versions can still result in valid types because the types are immutable and that we are dealing with composition.
 
 An extension cycle happens when a part of an inheritance tree revisits a base URI it has already seen. As a contrived example, an entity type `Country` could be the supertype of `Region`, which in turn could be a supertype of the same `Country` entity type.
 
