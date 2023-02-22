@@ -11,7 +11,7 @@ const nameKey: keyof RootEntity["properties"] =
  * You should update this comment to describe what your block does, or remove the comment.
  * This uses the Lit framework as a base - @see https://lit.dev
  * It makes two special Block Protocol properties available:
- * 1. 'graph': contains properties representing messages sent from the embedding application to the block, e.g. 'blockEntity'
+ * 1. 'graph': contains properties representing messages sent from the embedding application to the block, e.g. 'blockEntitySubgraph'
  * 2. 'graphModule': has various methods you can use to send messages to the embedding application, e.g. 'updateEntity'
  */
 export class BlockElement extends BlockElementBase<RootEntity> {

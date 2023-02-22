@@ -36,6 +36,7 @@ const propertyTypes: PropertyType[] = [
         required: [
           "https://blockprotocol.org/@blockprotocol/types/property-type/email/",
         ],
+        additionalProperties: false,
       },
     ],
   },
@@ -94,6 +95,7 @@ const propertyTypes: PropertyType[] = [
               },
             },
         },
+        additionalProperties: false,
       },
     ],
   },
@@ -248,6 +250,7 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
                 $ref: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
               },
           },
+          additionalProperties: false,
         },
       ],
     },
@@ -289,7 +292,7 @@ const brokenTypes: [any, ParsePropertyTypeError][] = [
   [
     {
       kind: "propertyType",
-      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/empty-one-of/v/1",
       title: "Broken",
       oneOf: [],
     },
@@ -301,6 +304,60 @@ const brokenTypes: [any, ParsePropertyTypeError][] = [
           type: "EmptyOneOf",
         },
       },
+    },
+  ],
+  [
+    {
+      kind: "propertyType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/true-additional-properties/v/1",
+      title: "Broken",
+      oneOf: [
+        {
+          type: "object",
+          properties: {
+            "https://blockprotocol.org/@blockprotocol/types/property-type/broken/":
+              {
+                $ref: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
+              },
+          },
+          additionalProperties: true,
+        },
+      ],
+    },
+    {
+      reason: "InvalidOneOf",
+      inner: {
+        reason: "PropertyValuesError",
+        inner: {
+          reason: "InvalidPropertyTypeObject",
+          inner: {
+            reason: "InvalidAdditionalPropertiesValue",
+          },
+        },
+      },
+    },
+  ],
+  [
+    {
+      kind: "propertyType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/missing-additional-properties/v/1",
+      title: "Broken",
+      oneOf: [
+        {
+          type: "object",
+          properties: {
+            "https://blockprotocol.org/@blockprotocol/types/property-type/broken/":
+              {
+                $ref: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
+              },
+          },
+        },
+      ],
+    },
+    {
+      inner:
+        "data did not match any variant of untagged enum PropertyValues at line 1 column 340",
+      reason: "InvalidJson",
     },
   ],
 ];
