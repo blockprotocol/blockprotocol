@@ -1,4 +1,4 @@
-- Feature Name: extending-and-duplicating-types
+- Feature Name: type-inheritance-and-forking
 - Start Date: 2022-07-11
 - RFC PR: [blockprotocol/blockprotocol#428](https://github.com/blockprotocol/blockprotocol/pull/428)
 - Block Protocol Discussion: [blockprotocol/blockprotocol#439](https://github.com/blockprotocol/blockprotocol/discussions/439)
