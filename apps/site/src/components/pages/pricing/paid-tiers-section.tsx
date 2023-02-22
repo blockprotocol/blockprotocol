@@ -582,7 +582,6 @@ export const PaidTiersSection: FunctionComponent<{
         }}
       >
         <Typography
-          component="p"
           variant="bpSmallCopy"
           sx={{
             lineHeight: 1.4,
@@ -616,7 +615,6 @@ export const PaidTiersSection: FunctionComponent<{
         </Typography>
 
         <Typography
-          component="p"
           variant="bpSmallCopy"
           sx={{
             fontWeight: 400,
@@ -777,7 +775,6 @@ export const PaidTiersSection: FunctionComponent<{
 
               <Typography
                 onClick={() => setFullPlanDetailsOpen(!fullPlanDetailsOpen)}
-                component="p"
                 variant="bpSmallCaps"
                 sx={({ palette, transitions }) => ({
                   display: "flex",

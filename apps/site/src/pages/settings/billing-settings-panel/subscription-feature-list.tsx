@@ -16,7 +16,6 @@ export const SubscriptionFeatureList: FunctionComponent<{
     {heading ? (
       <Typography
         gutterBottom
-        component="p"
         variant="bpSmallCopy"
         sx={[
           { fontFamily: "colfax-web" },
