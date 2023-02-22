@@ -26,6 +26,4 @@ pub enum ParseEntityTypeError {
     InvalidVersionedUri(ParseVersionedUriError),
     #[error("error in JSON: `{0}`")]
     InvalidJson(String),
-    #[error("additional properties was set to `true` but must be `false`")]
-    InvalidAdditionalPropertiesValue,
 }
