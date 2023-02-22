@@ -25,14 +25,7 @@ export const GradientFontAwesomeIcon: FunctionComponent<
 
       {children}
       <defs>
-        <linearGradient
-          id="gradient"
-          x1="0"
-          y1="0"
-          x2="1"
-          y2="1"
-          gradientTransform="rotate(96.94deg)"
-        >
+        <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="1">
           <stop offset="30.81%" stopColor="#6834FB" />
           <stop offset="92.56%" stopColor="#FF45EC" />
         </linearGradient>
