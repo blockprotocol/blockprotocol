@@ -1,11 +1,15 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
+const Dotenv = require("dotenv-webpack");
 
 /** @type import("webpack").Configuration */
 module.exports = {
   devtool: "eval-cheap-module-source-map",
   entry: "./dev/dev-app.tsx",
   plugins: [
+    new Dotenv({
+      path: "../../.env.local",
+    }),
     new HtmlWebpackPlugin({
       filename: "index.html",
       template: "./dev/index.html",
