@@ -1,6 +1,7 @@
 import { SubscriptionTierPrices } from "@local/internal-api-client";
 import { Box } from "@mui/material";
 import { NextPage } from "next";
+import NextErrorComponent from "next/error";
 import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -10,6 +11,7 @@ import { Header } from "../components/pages/pricing/header";
 import { PaidAddonsSection } from "../components/pages/pricing/paid-addons-section";
 import { PaidTiersSection } from "../components/pages/pricing/paid-tiers-section";
 import { useUser } from "../context/user-context";
+import { isBillingFeatureFlagEnabled } from "../lib/config";
 import { internalApi } from "../lib/internal-api-client";
 
 const PricingPage: NextPage = () => {
@@ -36,8 +38,14 @@ const PricingPage: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    void fetchSubscriptionTierPrices();
+    if (isBillingFeatureFlagEnabled) {
+      void fetchSubscriptionTierPrices();
+    }
   }, [fetchSubscriptionTierPrices]);
+
+  if (!isBillingFeatureFlagEnabled) {
+    return <NextErrorComponent statusCode={404} />;
+  }
 
   return (
     <>
