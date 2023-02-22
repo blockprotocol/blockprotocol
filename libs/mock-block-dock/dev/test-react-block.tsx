@@ -5,8 +5,8 @@ import {
 } from "@blockprotocol/graph/react";
 import { getRoots } from "@blockprotocol/graph/stdlib";
 import { useHook, useHookBlockModule } from "@blockprotocol/hook/react";
-import { AutofillSuggestionResponse } from "@blockprotocol/service/dist/mapbox-types";
-import { useServiceBlockModule } from "@blockprotocol/service/dist/react";
+import { AutofillSuggestionResponse } from "@blockprotocol/service";
+import { useServiceBlockModule } from "@blockprotocol/service/react";
 import { FormEvent, useCallback, useMemo, useRef, useState } from "react";
 
 import { propertyTypes } from "../src/data/property-types";
