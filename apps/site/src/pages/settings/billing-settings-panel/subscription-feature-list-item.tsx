@@ -15,7 +15,7 @@ export const SubscriptionFeatureListItem: FunctionComponent<{
 }> = ({
   feature: { icon, title, description, planned, plannedSx, iconCentered },
 }) => (
-  <Box display="flex" alignItems="center">
+  <Box display="flex" alignItems="flex-start">
     <Box
       marginRight={2}
       display="flex"
