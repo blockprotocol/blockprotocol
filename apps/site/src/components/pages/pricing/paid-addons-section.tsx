@@ -481,7 +481,7 @@ export const PaidAddonsSection: FunctionComponent = () => {
                   color: ({ palette }) => palette.gray[90],
                 }}
               >
-                Additional API Usage
+                Additional Usage
               </Typography>
             </Stack>
 
