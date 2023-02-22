@@ -71,19 +71,19 @@ export const paidSubscriptionFeatures: Record<
     coreFeatures: [
       {
         icon: (
-          <Box mr={-1} mt={1}>
+          <Box mr={1.75} mt={1} position="relative">
             <GradientFontAwesomeIcon
               icon={faImage}
-              sx={{ fontSize: 26 }}
+              sx={{ height: 30, width: 30 }}
               light
             />
             <AbstractAiIcon
               background="rgb(99,23,193)"
               sx={{
                 fontSize: 24,
-                position: "relative",
-                bottom: 13,
-                right: 13,
+                position: "absolute",
+                top: -12,
+                right: -12,
               }}
             />
           </Box>
@@ -111,19 +111,19 @@ export const paidSubscriptionFeatures: Record<
       },
       {
         icon: (
-          <Box mr={-1} mt={1}>
+          <Box mr={1.75} mt={1} position="relative">
             <GradientFontAwesomeIcon
               icon={faText}
-              sx={{ fontSize: 26 }}
+              sx={{ height: 29, width: 30 }}
               light
             />
             <AbstractAiIcon
               background="rgb(99,23,193)"
               sx={{
                 fontSize: 24,
-                position: "relative",
-                bottom: 13,
-                right: 13,
+                position: "absolute",
+                top: -12,
+                right: -12,
               }}
             />
           </Box>
@@ -207,19 +207,19 @@ export const paidSubscriptionFeatures: Record<
       },
       {
         icon: (
-          <Box mr={-1} mt={1}>
+          <Box mr={1.75} mt={1} position="relative">
             <GradientFontAwesomeIcon
               icon={faLocationDot}
-              sx={{ fontSize: 26 }}
+              sx={{ height: 34, width: 30 }}
               light
             />
             <SparklesGradientIcon
               background="rgb(99,23,193)"
               sx={{
-                fontSize: 20,
-                position: "relative",
-                bottom: 9,
-                right: 11,
+                fontSize: 21,
+                position: "absolute",
+                top: -6,
+                right: -10,
               }}
             />
           </Box>
@@ -247,15 +247,19 @@ export const paidSubscriptionFeatures: Record<
       },
       {
         icon: (
-          <Box mr={-1} mt={1}>
-            <GradientFontAwesomeIcon icon={faMap} sx={{ fontSize: 26 }} light />
+          <Box mr={1.75} mt={1} position="relative">
+            <GradientFontAwesomeIcon
+              icon={faMap}
+              sx={{ height: 27, width: 30 }}
+              light
+            />
             <SparklesGradientIcon
               background="rgb(99,23,193)"
               sx={{
-                fontSize: 20,
-                position: "relative",
-                bottom: 9,
-                right: 11,
+                fontSize: 21,
+                position: "absolute",
+                top: -6,
+                right: -10,
               }}
             />
           </Box>
@@ -587,25 +591,28 @@ export const PaidTiersSection: FunctionComponent<{
             color: ({ palette }) => palette.gray[70],
           }}
         >
-          Includes access to
-          <OpenAiIcon
-            sx={{
-              ml: 1.75,
-              height: 24,
-              width: "auto",
-              position: "relative",
-              top: -1,
-            }}
-          />
-          <MapboxIcon
-            sx={{
-              ml: 1.75,
-              height: 24,
-              width: "auto",
-              position: "relative",
-              top: -1,
-            }}
-          />
+          <Box component="span" sx={{ mr: 1.75 }}>
+            Includes access to
+          </Box>
+          <Box component="span" sx={{ whiteSpace: "nowrap" }}>
+            <OpenAiIcon
+              sx={{
+                mr: 1.75,
+                height: 24,
+                width: "auto",
+                position: "relative",
+                top: -1,
+              }}
+            />
+            <MapboxIcon
+              sx={{
+                height: 24,
+                width: "auto",
+                position: "relative",
+                top: -1,
+              }}
+            />
+          </Box>
         </Typography>
 
         <Typography
@@ -647,6 +654,8 @@ export const PaidTiersSection: FunctionComponent<{
               sx={{
                 display: "inline-flex",
                 justifyContent: "space-between",
+                flexWrap: "wrap",
+                rowGap: 1,
                 width: 1,
                 padding: 4,
                 borderBottomStyle: "solid",
@@ -903,6 +912,8 @@ export const PaidTiersSection: FunctionComponent<{
               sx={{
                 display: "inline-flex",
                 justifyContent: "space-between",
+                flexWrap: "wrap",
+                rowGap: 1,
                 width: 1,
                 padding: 4,
                 borderBottomStyle: "solid",

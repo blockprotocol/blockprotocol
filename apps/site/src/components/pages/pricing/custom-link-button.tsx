@@ -22,6 +22,7 @@ export const CustomLinkButton = ({
       disabled={disabled}
       sx={[
         ({ palette }) => ({
+          whiteSpace: "nowrap",
           fontWeight: 500,
           color: palette.common.white,
           background: backgroundColor,
