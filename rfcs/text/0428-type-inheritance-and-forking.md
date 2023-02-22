@@ -587,17 +587,11 @@ and a _subtype_ `Employee`:
     { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }
   ],
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
-    },
     "https://blockprotocol.org/@alice/property-type/occupation": {
       "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
     }
   },
-  "required": [
-    "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/occupation"
-  ]
+  "required": ["https://blockprotocol.org/@alice/property-type/occupation"]
 }
 ```
 
@@ -613,17 +607,11 @@ a user, Bob, wishes to use Alice's `Employee` entity type but must change the `o
     { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }
   ],
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
-    },
     "https://blockprotocol.org/@bob/property-type/tenure": {
       "$ref": "https://blockprotocol.org/@bob/property-type/tenure/v/1"
     }
   },
-  "required": [
-    "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/tenure"
-  ]
+  "required": ["https://blockprotocol.org/@bob/property-type/tenure"]
 }
 ```
 
@@ -652,13 +640,13 @@ The original, conceptually expanded `Employee` entity type:
   },
   "required": [
     "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/age"
+    "https://blockprotocol.org/@alice/property-type/age",
     "https://blockprotocol.org/@alice/property-type/occupation"
   ]
 }
 ```
 
-This expanded entity is equivalent to the original `Employee` entity type, but without any extended type declaration. If Bob wanted to change the `age` property instead of `occupation`, that would be possible by duplicating this intermediate representation of `Employee` as follows:
+This expanded entity is equivalent to the original `Employee` entity type, but without any extended type declaration. If Bob wanted to change the `age` property to `tenure`, that would be possible by duplicating this intermediate representation of `Employee` as follows:
 
 ```json
 {
@@ -670,8 +658,8 @@ This expanded entity is equivalent to the original `Employee` entity type, but w
     "https://blockprotocol.org/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/tenure": {
-      "$ref": "https://blockprotocol.org/@alice/property-type/tenure/v/1"
+    "https://blockprotocol.org/@bob/property-type/tenure": {
+      "$ref": "https://blockprotocol.org/@bob/property-type/tenure/v/1"
     },
     "https://blockprotocol.org/@alice/property-type/occupation": {
       "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
@@ -679,7 +667,7 @@ This expanded entity is equivalent to the original `Employee` entity type, but w
   },
   "required": [
     "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/tenure"
+    "https://blockprotocol.org/@bob/property-type/tenure",
     "https://blockprotocol.org/@alice/property-type/occupation"
   ]
 }
@@ -738,7 +726,7 @@ The second, cyclic version of the `Country` entity type
   // Because of versioning, we cannot change this version to /v/1 and create a "proper" cycle.
   "$id": "https://blockprotocol.org/@alice/entity-type/country/v/2",
   "type": "object",
-  "title": "Region",
+  "title": "Country",
   "allOf": [
     { "$ref": "https://blockprotocol.org/@alice/entity-type/region/v/1" }
   ],
@@ -754,7 +742,7 @@ The second, cyclic version of the `Country` entity type
 }
 ```
 
-This sort of type hierarchy should _not_ be accepted within the type extension system, as the circular dependencies make types difficult to resolve/reason about. While the type hierarchy might be completely valid (as it would be in this case), we should safeguard users from making redundant type structures that look like the above.
+This sort of type hierarchy should _not_ be encouraged within the type extension system, as the circular dependencies make types difficult to reason about. While the type hierarchy might be completely valid (as it would be in this case), we should safeguard users from making redundant type structures that look like the above.
 
 In this specific contrived example, creating a new entity type based on `Region` instead of a new version of `Country` might even encode semantic meaning better than re-defining `Country`.
 
@@ -875,13 +863,13 @@ The above change applies to these Block Protocol operations (`updateEntityType` 
 
 which must all make use of complete schemas in place of partial ones. These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1).
 
-While not explained in detail in the Type System RFC the `aggregateEntities` operation would need to change behavior slightly. When calling `aggregateEntities` for a specific entity type, entities that are returned might be of that entity type or subtypes of it. This is because the entities of the subtype will be able to be coerced to the requested entity type.
+The `aggregateEntities` operation may need to change its behavior slightly. When calling `aggregateEntities` for a specific entity type, entities that are returned might be of that entity type or subtypes of it when allowing extended types. This is because the entities of the subtype can be coerced to the requested entity type.
 
 # Drawbacks
 
 [drawbacks]: #drawbacks
 
-- The way this proposal adds type extension means that we must implement some version of property selection/projection for types, which comes with non-trivial implementation details for embedding applications.
+- The way this proposal adds type extension means that embedding application must be able to handle subtype entities that contain more properties than the supertype
 - This drifts further away from JSON Schema by introducing a different meaning to the `unevaluatedProperties` keyword and using it implicitly for our schemas.
 - The way compatibility is defined could result in newer versions of supertypes becoming incompatible over time. This is not unique to extending types and can be an "issue" in many parts of the type system as different versions of property types become incompatible.
 
@@ -938,7 +926,7 @@ Here, referencing `https://example.com/schema` in a `$ref` will result in a _clo
 
 (Thanks Jason Desrosiers for the suggestions!)
 
-Using the above setup would mean that we need to specify `#open` at the end of type URIs when URIs appear in `allOf`. We would also need to serve type schemas with one of the above structures, such that they conform with JSON Schema. Although this does add some ceremony around extending types, we would end up with a type extension system that would conform to JSON Schema without implicitness or redefining keywords.
+Using the above setup would mean that we need to specify `#open` at the end of type URIs when URIs appear in `allOf`. We would also need to serve type schemas with one of the above structures, such that they conform with JSON Schema. Although this does add some ceremony around extending types, we would end up with a type extension system that would conform to JSON Schema without implicitness or redefining keyword semantics.
 
 # Prior art
 
@@ -954,11 +942,11 @@ Using the above setup would mean that we need to specify `#open` at the end of t
 
 - We haven't specified how projecting/selecting properties of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact properties of a subtype to provide a valid supertype instance in embedding applications.
 - The current argument for not allowing cyclic type hierarchies mostly build on a feeling that type hierarchies shouldn't be too indirect/obfuscated, but there could be stronger arguments for allowing/disallowing it.
-- The decision to have type substitution between subtype and supertype does mean the extended types are restrictive in that they do not allow for removing/changing existing properties. Without a way to transform data between types, allowing overrides is not possible while keeping compatibility.
+- The decision to have type substitution between subtype and supertype does mean the extended types are restrictive in that they do not allow for removing/changing existing properties. Without a way to transform data between types (mappings), allowing overrides is not possible while keeping compatibility.
 
 # Future possibilities
 
 [future-possibilities]: #future-possibilities
 
-- The conservative way type extension is introduced in this PR allows for future work in the "data mapping" space to apply to type inheritance as well. Being able to map between entity types could enable a shared mapping for otherwise incompatible (as supertypes) entity types.
+- The conservative way type extension is introduced in this RFC allows for future work in the "data mapping" space to apply to type inheritance as well. Being able to map between entity types could enable a shared mapping for otherwise incompatible entity types.
 - Implementations of the upcoming "Structure-based Queries" RFC could benefit from some of the ground-work set out by this RFC, as the selection/projection of supertypes could be the basis of structure-based queries.
