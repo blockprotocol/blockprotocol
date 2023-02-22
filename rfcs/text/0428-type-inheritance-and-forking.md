@@ -21,7 +21,7 @@ The types in the type systems all specify JSON Schema's `{ "additionalProperties
 
 Allowing entity types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain. As an alternative to extending types, type duplication (or type forking) is a less compatible way to make use of existing public types, without a direct data mapping strategy.
 
-This RFC introduces a way for types to be extended in a way where the reusability and sharing design philosophies of the Block Protocol are maintained, and a way for types to be duplicated for use-cases where extending types is insufficient.
+This RFC introduces a way for types to be extended in a way where the reusability and sharing design philosophies of the Block Protocol are maintained, and a way for types to be duplicated for use cases where extending a type is insufficient.
 
 # Guide-level explanation
 
@@ -36,13 +36,13 @@ For example, an `Employee` entity type could extend `Person`. This `Employee` ty
 
 If the `Person` entity type contains the required properties `name` and `age`, the `Employee` entity type would inherit these properties and could add other properties (e.g. an `occupation` property). `Employee` would _not_ be able to override any of the properties inherited from `Person` (e.g. it's not possible to turn `name` into an array or make it optional) to ensure that instances of `Employee` are also valid instances of `Person` (i.e. compatibility with `Person` is preserved).
 
-Type duplication can be seen as a literal copy of an entity type's contents, providing full control over any properties present on the source entity type. If a user wants to use the `Employee` entity type from above, removing the `occupation` property and adding a `tenure` in its place, it would have to be through duplication, as we are talking about overriding properties from `Employee`.
+Type duplication can be seen as a literal copy of an entity type's contents, providing full control over any properties present on the source entity type. If a user wants to use the `Employee` entity type from above, removing the `occupation` property and adding a `tenure` property in its place, it would have to be through duplication, as we are talking about overriding properties from `Employee` in a schema-breaking way.
 
-Duplication can behave in different ways for extended types, such as acting on an "expanded" version of an extended type where the duplicated type would inherit all properties from the type hierarchy and be able to change any of them **or** duplication could act on only an immediate (sub)type, and reuse any extended type declarations. Alternatively, a hybrid version of the two ways to duplicate could be used where materialization could happen up to a certain part of the type hierarchy before reusing extended type declarations such that we empower partial consensus as outlined in the [Type System RFC](./0352-graph-type-system.md##convergence-and-divergence-of-consensus).
+Duplication can behave in different ways for extended types, such as acting on an "expanded" version of an extended type where the duplicated type would inherit all properties from the type hierarchy and be able to change any of them **or** duplication could act on only an immediate (sub)type, and reuse any extended type declarations. Alternatively, a hybrid version of the two ways to duplicate could be used where "expansion" could happen up to a certain part of the type hierarchy before reusing extended type declarations such that we empower partial consensus as outlined in the [Type System RFC](./0352-graph-type-system.md##convergence-and-divergence-of-consensus).
 
 As a consequence of the above definition, these questions arise:
 
-- How do we ensure that `Employee` instances can, in fact, be used in place of `Person` instances in practice?
+- How do we ensure that `Employee` instances can be used in place of `Person` instances in practice? (we refer to this as "subtyping")
 - Do multiple supertypes impose constraints on extending types?
 - How does having `additionalProperties` in existing schemas influence extended types?
 - How should the Block Protocol type system support extending types?
@@ -117,7 +117,7 @@ occupation◄───────────────┘
 - Supertype `Person` contains the required properties `name` and `age`
 - Supertype `Superhero` contains the required properties `superpower` and `name`
 
-In this example, `name` overlaps as a required property in both supertypes. Compatibility of overlapping properties is defined in the [versioning RFC's definition of "compatible"](./0408-versioning-types.md#determining-type-compatibility) .
+In this example, `name` overlaps as a required property in both supertypes. Compatibility of overlapping properties is defined in the [versioning RFC's definition of "compatible"](./0408-versioning-types.md#determining-type-compatibility).
 
 ```txt
               (supertypes)
@@ -135,7 +135,7 @@ occupation◄───────────────┘
 **An example of _incompatible_, overlapping properties**:
 
 - Supertype `Person` contains the required properties `name` and `age`
-- Supertype `Superhero` contains the required property `superpower` and an array of `name`s
+- Supertype `Superhero` contains the required property `superpower` and an _array_ of `name`s
 
 In this example, the array of `name`s on the `Superhero` type would not be compatible with the required `name` property of `Person`, which means that the two types cannot be supertypes together.
 
@@ -145,7 +145,7 @@ In the proposed [Versioning RFC](./0408-versioning-types.md) for the type system
 
 The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping strictness in JSON Schemas.
 
-We propose slight modifications to how `{ "additionalProperties": true }` and `{ "unevaluatedProperties": false }` behave and may be used within our type extension system to let supertypes keep strictness while allowing composition.
+We propose slight modifications to how `{ "additionalProperties": true }` and `{ "unevaluatedProperties": false }` behave and may be used within our type extension system to let supertypes keep strictness while allowing composition. This modification is a semantic change and does not change any syntax.
 
 Concrete examples of how JSON Schema breaks with these validation constraints are shown in the [Reference-level explanation](#problems-with-unevaluatedproperties).
 
@@ -160,7 +160,7 @@ As extended types can extend other extended types we must also make sure that th
 
 When looking for public types, if extending an entity type is insufficient, an alternative is to duplicate the type so that individual properties can be removed or overridden. Duplicated types become new complete, standalone types.
 
-Type duplication, unlike extended types, does not imply that instances of the original type can be substituted by instances of the duplicated type because the types may be incompatible. A mapping may be used to persist some of the compatibility (mapping is yet to be defined within the type system).
+Type duplication, unlike extended types, does not imply that instances of the original type can be substituted by instances of the duplicated type because the types may be incompatible. A mapping may be used to persist some of the compatibility, but mapping is yet to be defined within the type system.
 
 ### Duplication strategy
 
@@ -174,7 +174,7 @@ name◄─────Being───┐
    occupation◄───────────────┘
 ```
 
-where `Employee` is a subtype of `Person` which in turn is a subtype of `Being`. The three properties `name`, `age` and `occupation` would be present on `Employee` and considered all properties for `Employee`.
+where `Employee` is a subtype of `Person` which in turn is a subtype of `Being`. The three properties `name`, `age` and `occupation` would be present on `Employee` and considered all expanded properties for `Employee`.
 The user wants to change the `age` property to a `tenure` property through duplication. They would have to create a new subtype of `Being` with the desired changes:
 
 ```txt
@@ -219,7 +219,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
 
 ```json
 {
-  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/entity-type",
+  "$id": "https://blockprotocol.org/type-system/0.3/schema/meta/entity-type",
   "type": "object",
   ...,
   "properties": {
