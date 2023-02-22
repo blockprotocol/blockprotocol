@@ -7,14 +7,18 @@ import {
 import {
   DataTypeWithMetadata,
   Entity,
+  EntityRecordId,
   EntityRootType,
   EntityTypeWithMetadata,
-  GraphElementVertexId,
   GraphResolveDepths,
+  isEntityRecordId,
+  isOntologyTypeRecordId,
+  OntologyTypeRecordId,
   PropertyTypeWithMetadata,
   Subgraph,
   SubgraphTemporalAxes,
 } from "../../types.js";
+import { getVertexIdForRecordId } from "./vertex-id-for-element";
 
 /**
  * Builds a {@link Subgraph} from a given set of graph elements.
@@ -35,9 +39,10 @@ import {
  * @param data.entityTypes – the entity types to include in the subgraph
  * @param data.entities – the entities to include in the subgraph
  * @param depths – the depth values to provide in the returned subgraph
- * @param rootVertexIds – the vertexIds of the root elements to provide in the returned subgraph
+ * @param rootRecordIds – the {@link EntityRecordId}s and {@link OntologyTypeRecordId}s of the root elements to provide
+ *   in the returned subgraph
  * @param {SubgraphTemporalAxes} subgraphTemporalAxes - the sets of temporal axes that were used when originally
- * selecting the provided data
+ *   selecting the provided data
  *
  * @returns a Subgraph containing:
  *   - 'vertices' containing the provided entities
@@ -55,48 +60,41 @@ export const buildSubgraph = <Temporal extends boolean>(
     propertyTypes: PropertyTypeWithMetadata[];
     dataTypes: DataTypeWithMetadata[];
   },
-  rootVertexIds: GraphElementVertexId[],
+  rootRecordIds: (EntityRecordId | OntologyTypeRecordId)[],
   depths: GraphResolveDepths,
   subgraphTemporalAxes: Temporal extends true
     ? SubgraphTemporalAxes
     : undefined,
 ): Subgraph<Temporal, EntityRootType<Temporal>> => {
-  const isTemporal = subgraphTemporalAxes !== undefined;
-
-  const missingRoots = rootVertexIds.filter(
-    ({ baseId, revisionId }) =>
+  const missingRoots = rootRecordIds.filter(
+    (recordId) =>
       !(
-        data.entities.find(
-          (entity) =>
-            entity.metadata.recordId.entityId === baseId &&
-            (isTemporal
-              ? (entity as Entity<true>).metadata.temporalVersioning[
-                  subgraphTemporalAxes.resolved.variable.axis
-                ].start.limit === revisionId
-              : true),
-        ) ||
-        [...data.dataTypes, ...data.propertyTypes, ...data.entityTypes].find(
-          (ontologyType) =>
-            ontologyType.metadata.recordId.baseUri === baseId &&
-            `${ontologyType.metadata.recordId.version}` === revisionId,
-        )
+        (isEntityRecordId(recordId) &&
+          data.entities.find(
+            (entity) =>
+              entity.metadata.recordId.entityId === recordId.entityId &&
+              entity.metadata.recordId.editionId === recordId.editionId,
+          )) ||
+        (isOntologyTypeRecordId(recordId) &&
+          [...data.dataTypes, ...data.propertyTypes, ...data.entityTypes].find(
+            (ontologyType) =>
+              ontologyType.metadata.recordId.baseUri === recordId.baseUri &&
+              ontologyType.metadata.recordId.version === recordId.version,
+          ))
       ),
   );
 
   if (missingRoots.length > 0) {
     throw new Error(
-      `Root(s) not present in data: ${missingRoots
-        .map(
-          (missingRoot) =>
-            `${missingRoot.baseId} with revisionId: ${missingRoot.revisionId}`,
-        )
+      `Elements associated with these root RecordId(s) were not present in data: ${missingRoots
+        .map((missingRoot) => `${JSON.stringify(missingRoot)}`)
         .join(", ")}`,
     );
   }
 
   // @ts-expect-error -- @todo, how do we convince TS that we're only setting this when the generic is satisfied
   const subgraph: Subgraph<Temporal, EntityRootType<Temporal>> = {
-    roots: rootVertexIds,
+    roots: [],
     vertices: {},
     edges: {},
     depths,
@@ -111,6 +109,22 @@ export const buildSubgraph = <Temporal extends boolean>(
   addPropertyTypesToSubgraphByMutation(subgraph, data.propertyTypes);
   addEntityTypesToSubgraphByMutation(subgraph, data.entityTypes);
   addEntitiesToSubgraphByMutation(subgraph, data.entities);
+
+  const missingRootVertexIds = [];
+  for (const rootRecordId of rootRecordIds) {
+    try {
+      const vertexId = getVertexIdForRecordId(subgraph, rootRecordId);
+      subgraph.roots.push(vertexId);
+    } catch (error) {
+      missingRootVertexIds.push(rootRecordId);
+    }
+  }
+
+  if (missingRootVertexIds.length > 0) {
+    throw new Error(
+      `Internal implementation error, could not find VertexId for root RecordId(s): ${missingRootVertexIds}`,
+    );
+  }
 
   return subgraph;
 };

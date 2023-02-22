@@ -36,7 +36,7 @@ export const TabPanelContentsWithOverview: FunctionComponent<
     return userStatus === "current" ? (
       <>
         <Placeholder
-          header="You haven’t created any blocks or schemas yet"
+          header="You haven’t created any blocks or types yet"
           tip="Start building to see your creations show up here."
           actions={
             <>
@@ -52,8 +52,8 @@ export const TabPanelContentsWithOverview: FunctionComponent<
       </>
     ) : (
       <Placeholder
-        header={`@${user.shortname} hasn’t published any blocks or schemas yet`}
-        tip="You can browse existing blocks and schemas on the Hub."
+        header={`@${user.shortname} hasn’t published any blocks or types yet`}
+        tip="You can browse existing blocks and types on the Hub."
         actions={<BrowseHubButton />}
       />
     );
