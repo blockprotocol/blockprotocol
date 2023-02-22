@@ -382,6 +382,50 @@ which can be coerced into the following `Person` instance:
 }
 ```
 
+**Another example of _compatible_, overlapping properties**:
+
+Given a _supertype_ `Person`:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/person/v/3",
+  "type": "object",
+  "title": "Person",
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/age": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
+    }
+  },
+  "required": ["https://blockprotocol.org/@alice/property-type/age"]
+}
+```
+
+and a _subtype_ `Employee`:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/3",
+  "type": "object",
+  "title": "Employee",
+  "allOf": [
+    { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/3" }
+  ],
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    }
+  },
+  "required": ["https://blockprotocol.org/@alice/property-type/name"]
+}
+```
+
+In this example, `Person` has an optional `name` property and `Employee` defines `name` as required. These are still compatible as it's possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
+
 ### Problems with `unevaluatedProperties`
 
 `unevaluatedProperties` _almost_ provides the functionality we're after, but unfortunately it just barely misses. If supertypes themselves specify `{ "unevaluatedProperties": false }`, they are not able to be part of an `allOf` validator, as they will error out as soon as they see properties that are not part of the supertype itself.
