@@ -34,16 +34,28 @@ const callExternalApiMethod = async (params: {
 
 export const constructServiceModuleCallbacks = (params: {
   blockProtocolApiKey?: string;
-}): Omit<
-  EmbedderServiceMessageCallbacks,
-  "openaiCreateImage" | "openaiCompleteText"
-> & {
-  openaiCreateImage?: never;
-  openaiCompleteText?: never;
-} => {
+}): EmbedderServiceMessageCallbacks => {
   const { blockProtocolApiKey } = params;
 
   return {
+    /** OpenAI */
+
+    openaiCreateImage: async ({ data: payload }) =>
+      callExternalApiMethod({
+        providerName: "openai",
+        methodName: "createImage",
+        payload,
+        blockProtocolApiKey,
+      }),
+
+    openaiCompleteText: async ({ data: payload }) =>
+      callExternalApiMethod({
+        providerName: "openai",
+        methodName: "completeText",
+        payload,
+        blockProtocolApiKey,
+      }),
+
     /** Mapbox Geocoding API */
 
     mapboxForwardGeocoding: async ({ data: payload }) =>
