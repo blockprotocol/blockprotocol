@@ -151,7 +151,7 @@ export interface ExternalServiceMethodRequest {
 }
 
 export const ExternalServiceMethodRequestProviderNameEnum = {
-  OpenAi: "openAI",
+  OpenAi: "openai",
   Mapbox: "mapbox",
 } as const;
 
