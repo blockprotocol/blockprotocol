@@ -14,6 +14,8 @@ use crate::{
 pub enum ParsePropertyTypeObjectError {
     #[error("invalid property type reference: `{0}`")]
     InvalidPropertyTypeReference(ParseVersionedUriError),
+    #[error("additional properties was set to `true` but must be `false`")]
+    InvalidAdditionalPropertiesValue,
     #[error("invalid array definition: `{0}`")]
     InvalidArray(ParsePropertyTypeReferenceArrayError),
     #[error("invalid property key: `{0}`")]

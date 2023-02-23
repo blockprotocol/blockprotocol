@@ -1,0 +1,73 @@
+{
+  "name": "@blockprotocol/service",
+  "version": "0.0.1-canary.2",
+  "description": "Implementation of the Block Protocol service module specification for blocks and embedding applications",
+  "keywords": [
+    "blockprotocol",
+    "blocks",
+    "service"
+  ],
+  "homepage": "https://blockprotocol.org",
+  "bugs": {
+    "url": "https://github.com/blockprotocol/blockprotocol/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "libs/@blockprotocol/service"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./react": "./dist/react.js",
+    "./service-module-json": "./dist/service-module-json.js"
+  },
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "react": [
+        "./dist/react.d.ts"
+      ],
+      "service-module-json": [
+        "./dist/service-module-json.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn clean && tsc --skipLibCheck",
+    "clean": "rimraf ./dist/",
+    "fix:eslint": "eslint --fix .",
+    "generate-service-module-json": "ts-node-esm --project tsconfig.json ./src/scripts/generate-service-module-json.ts && prettier --write ./src/service-module.json",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
+    "lint:tsc": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@blockprotocol/core": "0.0.14"
+  },
+  "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
+    "@local/tsconfig": "0.0.0-private",
+    "@mapbox/search-js-core": "^1.0.0-beta.14",
+    "@types/geojson": "^7946.0.10",
+    "@types/node": "^18.13.0",
+    "eslint": "8.33.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "4.9.4",
+    "typescript-json-schema": "^0.55.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  }
+}

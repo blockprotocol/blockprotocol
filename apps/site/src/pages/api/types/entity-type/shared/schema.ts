@@ -23,14 +23,14 @@ export const generateEntityTypeWithMetadata = (data: {
     version,
   });
 
-  const entityType = {
+  const entityType: Required<EntityType> = {
     additionalProperties: false,
     allOf: incompleteSchema.allOf ?? [],
     description: incompleteSchema.description ?? "",
     examples: incompleteSchema.examples ?? [],
     $id: versionedUri,
     kind,
-    links: incompleteSchema.links,
+    links: incompleteSchema.links ?? {},
     properties: incompleteSchema.properties ?? {},
     required: incompleteSchema.required ?? [],
     title: incompleteSchema.title,

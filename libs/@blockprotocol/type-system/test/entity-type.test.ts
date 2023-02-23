@@ -500,7 +500,10 @@ const brokenTypes: [any, ParseEntityTypeError][] = [
       additionalProperties: true,
     },
     {
-      reason: "InvalidAdditionalPropertiesValue",
+      reason: "InvalidPropertyTypeObject",
+      inner: {
+        reason: "InvalidAdditionalPropertiesValue",
+      },
     },
   ],
 ];
