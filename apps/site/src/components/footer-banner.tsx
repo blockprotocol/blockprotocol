@@ -20,6 +20,7 @@ type Banner = {
   shouldDisplay: (params: { pathname: string; asPath: string }) => boolean;
   contents: ReactNode;
   overlapsFooter?: boolean;
+  hideWhenSignedIn?: boolean;
 };
 
 type BannerCardProps = {
@@ -131,6 +132,7 @@ export const BANNERS: Banner[] = [
         fullWidth
       />
     ),
+    hideWhenSignedIn: true,
   },
   {
     shouldDisplay: ({ pathname }) => pathname === "/hub",
@@ -366,6 +368,7 @@ export const BANNERS: Banner[] = [
         fullWidth
       />
     ),
+    hideWhenSignedIn: true,
   },
 ];
 
