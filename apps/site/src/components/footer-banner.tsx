@@ -132,7 +132,6 @@ export const BANNERS: Banner[] = [
         fullWidth
       />
     ),
-    hideWhenSignedIn: true,
   },
   {
     shouldDisplay: ({ pathname }) => pathname === "/hub",
