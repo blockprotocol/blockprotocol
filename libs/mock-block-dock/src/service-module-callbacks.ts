@@ -34,13 +34,7 @@ const callExternalApiMethod = async (params: {
 
 export const constructServiceModuleCallbacks = (params: {
   blockProtocolApiKey?: string;
-}): Omit<
-  EmbedderServiceMessageCallbacks,
-  "openaiCreateImage" | "openaiCompleteText"
-> & {
-  openaiCreateImage?: never;
-  openaiCompleteText?: never;
-} => {
+}): EmbedderServiceMessageCallbacks => {
   const { blockProtocolApiKey } = params;
 
   return {
