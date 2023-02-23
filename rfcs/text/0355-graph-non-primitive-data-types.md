@@ -51,14 +51,12 @@ In the next sections we will explore what kind of constraints we will allow and 
 
 The constraints we will be supporting for non-primitive data types are a subset of the constraints that JSON Schema supports. The constraints can be roughly grouped by the value(s) they operate on.
 
-### For all primitive data types
+### For all data types
 
 - `enum`: a list of values that the data type can take
 - `const`: a single value that the data type can take
 
 ### Text (primitive data type)
-
-The supported text constraints are:
 
 - `minLength`: a number that defines the minimum length of the text value
 - `maxLength`: a number that defines the maximum length of the text value
@@ -77,32 +75,35 @@ The supported text constraints are:
 - `minItems`: a number that defines the minimum number of items in the list value
 - `maxItems`: a number that defines the maximum number of items in the list value
 
-## ..
+## Composition
 
-- **Constraining another Data Type** - Defining constraints on an existing Data Type restricts the value space to a subset of the existing one
+### Constraining another Data Type
 
-  - Allowed constraints
-
-> 💭 Do we want to list all of the allowed constraints in plain-english here? Somewhat similar to the work being done in ‣. Alternatively we really do view this section as a nice plain-english intro but to see the **full** list of constraints they have to read the technical description below
-> if we don’t list them here then we should be explicit that the constraints available operate on the primitive top-level type (so using them on a different one wouldn’t make sense), although there are list constraints, and we can point that there aren’t constraints on Null or Object for example)
+This kind of composition defines constraints on an existing Data Type, restricting the value space to a subset of the original.
 
 **Example 1**
 
-`Positive Number` is a new Data Type which is also a `Number` Data Type with the additional constraint that the values are greater than 0
+`Positive Integer` is a new Data Type which is also a `Number` Data Type where the constraint `minimum` is set to `0` and `multipleOf` is set to `1`.
+
+Valid values include: `0`, `1`, `2`, and so forth.
 
 **Example 2**
 
-`Cardinal Direction` is a new Data Type which is also a `Text` Data Type with the additional constraint that the value needs to be one of `[”North”, “East”, “South”, “West”]`
+`Cardinal Direction` is a new Data Type which is also a `Text` Data Type where the constraint `enum` is set to `["North", "East", "South", "West"]`
+
+Valid values are only: `"North"`, `"East"`, `"South"`, `"West"`.
 
 **Example 3**
 
-`Alphanumeric` is a new Data Type which is also a `Text` Data Type with the additional constraint that values match the regular-expression **`/[A-Za-z0-9]/`**
+`Alphanumeric` is a new Data Type which is also a `Text` Data Type with the additional constraint that values match the regular expression **`/[A-Za-z0-9]/`**
 
-- **Combining Data Types** - Data Types can be combined into “union” types which express an **or** relationship
+Valid values include: `"a"`, `"b"`, `"c"`, `"1"`, `"2"`, `"3"`, and so forth.
 
-  **Example 1**
+### **Combining Data Types** - Data Types can be combined into “union” types which express an **or** relationship
 
-  `Text or Number` is a Data Type where the value is _either_ an instance of the `Text` Data Type **or** an instance of the `Number` Data Type
+**Example 1**
+
+`Text or Number` is a Data Type where the value is _either_ an instance of the `Text` Data Type **or** an instance of the `Number` Data Type
 
 - **Creating Collections of Data Types** - Data Types can also be lists of other Data Types
   **Example 1**
