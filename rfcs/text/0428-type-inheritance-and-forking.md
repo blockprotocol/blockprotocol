@@ -775,7 +775,7 @@ To illustrate what this means, given we have a subtype `C` that extends supertyp
       This imposes an implicit constraint `x: [0, 2]` on the subtype `C` as it extends both `A` and `C`.
       The above constraints are considered valid, as an overlapping constraint can be found.
 
-2.  Example of multiple cardinality constraints on property `x` with subtype constraint on the property
+1.  Example of multiple cardinality constraints on property `x` with subtype constraint on the property
 
     - Supertype `A` has constraint `x: [0, 3]`
     - Supertype `B` has constraint `x: [-1, 2]`
