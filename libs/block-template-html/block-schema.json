@@ -1,5 +1,5 @@
 {
-  "$id": "http://example.com/types/entity-type/example/",
+  "$id": "http://example.com/types/entity-type/example/v/1",
   "description": "Define the properties the block expects to be passed.\nThey will be provided using the blockEntity callback of the graph module.",
   "kind": "entityType",
   "type": "object",

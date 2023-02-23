@@ -18,12 +18,27 @@
     <div id="app"></div>
     <script type="module">
       import htm from "https://esm.sh/htm?dev&deps=react@18.2.0,react-dom@18.2.0";
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock?dev&deps=react@18.2.0,react-dom@18.2.0";
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230223103409?dev&deps=react@18.2.0,react-dom@18.2.0";
       import { createElement } from "https://esm.sh/react@18.2.0?dev&deps=react@18.2.0,react-dom@18.2.0";
       import ReactDOM from "https://esm.sh/react-dom@18.2.0?dev&deps=react@18.2.0,react-dom@18.2.0";
 
       const html = htm.bind(createElement);
       const node = document.getElementById("app");
+
+      const blockEntity = {
+        metadata: {
+          recordId: {
+            entityId: "my-entity-1",
+            editionId: new Date(0).toISOString()
+          },
+          entityTypeId: "http://example.com/types/entity-type/example/v/1",
+        },
+        properties: { "http://example.com/types/property-type/name/": "World" },
+      };
+
+      const initialData = {
+        initialEntities: [blockEntity],
+      };
 
       const DevApp = () => {
         return html`
@@ -33,17 +48,13 @@
               url: new URL("./src/app.html", import.meta.url).toString(),
             },
           }}
-          blockEntity=${{
-            entityId: "my-entity-1",
-            properties: { name: "World" },
-          }}
+          initialData=${initialData}
+          blockEntityRecordId=${blockEntity.metadata.recordId}
           debug
+          <!-- initialData allows you to customise the entities in the datastore -->
+          <!-- blockEntityRecordId identifies the block entity from the set of entities in initialData customise the entities in the datastore -->
           <!-- remove 'debug' above to start with the debug UI minimised. You can also toggle it in the UI -->
           <!-- hideDebugToggle <- add 'hideDebugToggle' to disable the debug UI entirely -->
-          <!-- initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it) -->
-          <!-- initialEntityTypes={[]} <- customise the entity types in the datastore -->
-          <!-- initialLinks={[]} <- customise the links in the datastore -->
-          <!-- initialLinkedQueries={[]} <- customise the linkedQueries in the datastore -->
           <!-- readonly <- uncomment this to start your block in readonly mode. You can also toggle it in the UI -->
           />
         `;
