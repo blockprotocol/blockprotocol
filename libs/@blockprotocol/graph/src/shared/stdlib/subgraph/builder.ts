@@ -78,7 +78,7 @@ export const buildSubgraph = <Temporal extends boolean>(
         (isOntologyTypeRecordId(recordId) &&
           [...data.dataTypes, ...data.propertyTypes, ...data.entityTypes].find(
             (ontologyType) =>
-              ontologyType.metadata.recordId.baseUri === recordId.baseUri &&
+              ontologyType.metadata.recordId.baseUrl === recordId.baseUrl &&
               ontologyType.metadata.recordId.version === recordId.version,
           ))
       ),

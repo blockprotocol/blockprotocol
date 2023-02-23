@@ -6,7 +6,7 @@ export type BaseIdToRevisions<
 > = Record<
   /*
    * @todo - we _should_ be able to use `Extract<GraphElementForIdentifier<Temporal, VertexId<any, any>>`
-   *   here to actually get a strong type (like `EntityId` or `BaseUri`). TypeScript seems to break on using it with a
+   *   here to actually get a strong type (like `EntityId` or `BaseUrl`). TypeScript seems to break on using it with a
    *   generic though. So for now we write `string` because all of the baseId's of `VertexId` are string aliases anyway.
    */
   string,
@@ -29,7 +29,7 @@ export const mapElementsIntoRevisions = <
     const baseId =
       "entityId" in element.metadata.recordId
         ? element.metadata.recordId.entityId
-        : element.metadata.recordId.baseUri;
+        : element.metadata.recordId.baseUrl;
 
     // eslint-disable-next-line no-param-reassign
     revisionMap[baseId] ??= [];

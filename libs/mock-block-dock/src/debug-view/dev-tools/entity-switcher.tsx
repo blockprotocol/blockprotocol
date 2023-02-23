@@ -1,7 +1,7 @@
 import {
   Entity as EntityNonTemporal,
   EntityRecordId as EntityRecordIdNonTemporal,
-  VersionedUri,
+  VersionedUrl,
 } from "@blockprotocol/graph";
 import {
   getEntities as getEntitiesNonTemporal,
@@ -51,11 +51,11 @@ const EntitySwitcherComponent = ({
   blockEntity: EntityNonTemporal | EntityTemporal;
   selectedEntity: EntityNonTemporal | EntityTemporal;
   entityIds: string[];
-  entityTypeIds: VersionedUri[];
+  entityTypeIds: VersionedUrl[];
   entityIdOfProposedEntity: string | undefined;
   setEntityIdOfProposedEntity: Dispatch<SetStateAction<string | undefined>>;
-  selectedEntityTypeId: VersionedUri | undefined;
-  setSelectedEntityTypeId: Dispatch<SetStateAction<VersionedUri>>;
+  selectedEntityTypeId: VersionedUrl | undefined;
+  setSelectedEntityTypeId: Dispatch<SetStateAction<VersionedUrl>>;
   setEntityRecordIdOfEntityForBlock: Dispatch<
     SetStateAction<EntityRecordIdNonTemporal | EntityRecordIdTemporal>
   >;
@@ -129,7 +129,7 @@ const EntitySwitcherComponent = ({
                 if (event.target.value !== selectedEntityTypeId) {
                   setEntityIdOfProposedEntity(undefined);
                 }
-                setSelectedEntityTypeId(event.target.value as VersionedUri);
+                setSelectedEntityTypeId(event.target.value as VersionedUrl);
               }}
               sx={{ mb: 2 }}
               fullWidth

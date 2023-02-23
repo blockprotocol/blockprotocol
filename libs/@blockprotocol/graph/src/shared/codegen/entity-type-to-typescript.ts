@@ -1,8 +1,8 @@
 import {
   EntityType,
-  extractBaseUri,
+  extractBaseUrl,
   extractVersion,
-  VersionedUri,
+  VersionedUrl,
 } from "@blockprotocol/type-system/slim";
 import { compile, Options } from "json-schema-to-typescript";
 
@@ -18,9 +18,9 @@ import {
 import { hardcodedBpTypes } from "./hardcoded-bp-types.js";
 import { fetchTypeAsJson } from "./shared.js";
 
-const bannerComment = (uri: string, depth: number) => `/**
+const bannerComment = (url: string, depth: number) => `/**
  * This file was automatically generated – do not edit it.
- * @see ${uri} for the root JSON Schema these types were generated from
+ * @see ${url} for the root JSON Schema these types were generated from
  * Types for link entities and their destination were generated to a depth of ${depth} from the root
  */`;
 
@@ -28,7 +28,7 @@ const bannerComment = (uri: string, depth: number) => `/**
  * Uses json-schema-to-typescript to chase down $refs and create a TypeScript type for the provided schema
  * Ignores 'links' which are followed manually elsewhere in order to manage depth
  * @todo
- * - type name is generated from schema title. Clashes append 1, 2 etc. Patch this to distinguish on URI/$id segments?
+ * - type name is generated from schema title. Clashes append 1, 2 etc. Patch this to distinguish on URL/$id segments?
  *   @see https://github.com/bcherny/json-schema-to-typescript/blob/34de194e87cd54f43809efae110732569e0891c1/src/parser.ts#L303
  *
  */
@@ -63,12 +63,12 @@ type CompiledType = {
   typeScriptString: string;
 };
 
-// A map of schema URIs to their TS type name and definition
-type UriToType = { [entityTypeId: VersionedUri]: CompiledType };
+// A map of schema URLs to their TS type name and definition
+type UrlToType = { [entityTypeId: VersionedUrl]: CompiledType };
 
 const generateTypeNameFromSchema = (
   schema: EntityType,
-  existingTypes: UriToType,
+  existingTypes: UrlToType,
 ): string => {
   if (!schema.title) {
     throw new Error("Schema must have a 'title'");
@@ -88,7 +88,7 @@ const generateTypeNameFromSchema = (
     return proposedName;
   }
 
-  if (extractBaseUri(typeWithProposedName[0]) === extractBaseUri(schema.$id)) {
+  if (extractBaseUrl(typeWithProposedName[0]) === extractBaseUrl(schema.$id)) {
     // this is the same type at a different version, so we distinguish by version
     const nameWithVersionSuffix = `${proposedName}V${extractVersion(
       schema.$id,
@@ -104,7 +104,7 @@ const generateTypeNameFromSchema = (
   }
 
   // fallback to a simple counter
-  // @todo use URI segments or something else to distinguish, not a counter
+  // @todo use URL segments or something else to distinguish, not a counter
   let i = 0;
   do {
     i++;
@@ -122,23 +122,23 @@ const generateTypeNameFromSchema = (
  * If depth > 0, follows 'links' from the schema to include types for link entities and their possible destinations
  * @param schema – the schema to generate types for
  * @param depth – the depth to which the graph of _entity type_ schemas linked from this schema will be resolved
- * @param resolvedUrisToType – a map of already-resolved schemas to skip type generation for
+ * @param resolvedUrlsToType – a map of already-resolved schemas to skip type generation for
  * @param temporal – whether or not the generated code should support temporal versioning
  */
 const _jsonSchemaToTypeScript = async (
   schema: EntityType,
   depth: number,
-  resolvedUrisToType: UriToType,
+  resolvedUrlsToType: UrlToType,
   temporal: boolean,
 ): Promise<CompiledType> => {
-  if (resolvedUrisToType[schema.$id]) {
-    return resolvedUrisToType[schema.$id]!;
+  if (resolvedUrlsToType[schema.$id]) {
+    return resolvedUrlsToType[schema.$id]!;
   }
 
   // if the cache is empty, this is the schema the external caller provided. we need to know to add boilerplate up top
-  const rootSchema = Object.keys(resolvedUrisToType).length === 0;
+  const rootSchema = Object.keys(resolvedUrlsToType).length === 0;
 
-  const typeName = generateTypeNameFromSchema(schema, resolvedUrisToType);
+  const typeName = generateTypeNameFromSchema(schema, resolvedUrlsToType);
 
   if (!typeName) {
     throw new Error("Schema is missing a title");
@@ -200,7 +200,7 @@ const _jsonSchemaToTypeScript = async (
 
   // add the compiled type to our map of already-resolved types in case it's encountered again when following links
   // eslint-disable-next-line no-param-reassign -- this is intentionally mutated when this function is called
-  resolvedUrisToType[schema.$id] = compiledType;
+  resolvedUrlsToType[schema.$id] = compiledType;
 
   if (depth === 0) {
     return compiledType;
@@ -209,37 +209,37 @@ const _jsonSchemaToTypeScript = async (
   // if we're following links, we want to generate various types that can be plugged into subgraph functions
 
   // keep track of the possible destination types from this entity type for each link type it includes
-  const typeLinkMap: Record<VersionedUri, string> = {};
+  const typeLinkMap: Record<VersionedUrl, string> = {};
 
   for (const [linkEntityTypeId, destinationSchema] of typedEntries(
     schema.links ?? {},
   )) {
-    const retrieveOrCompileSchemaFromUri = async (
-      uri: VersionedUri,
+    const retrieveOrCompileSchemaFromUrl = async (
+      url: VersionedUrl,
     ): Promise<CompiledType> => {
-      const cachedType = resolvedUrisToType[uri];
+      const cachedType = resolvedUrlsToType[url];
       if (cachedType) {
         return {
           typeName: cachedType.typeName,
           typeScriptString: "",
         };
       }
-      const typeSchema = await fetchAndValidateEntityType(uri as VersionedUri);
+      const typeSchema = await fetchAndValidateEntityType(url as VersionedUrl);
       return _jsonSchemaToTypeScript(
         typeSchema,
         depth - 1,
-        resolvedUrisToType,
+        resolvedUrlsToType,
         temporal,
       );
     };
 
     // get the schema for the linkEntity and possible rightEntities for this link, from this entity
     const [linkEntityType, ...rightEntityTypes] = await Promise.all([
-      retrieveOrCompileSchemaFromUri(linkEntityTypeId),
+      retrieveOrCompileSchemaFromUrl(linkEntityTypeId),
       ...("oneOf" in destinationSchema.items
         ? destinationSchema.items.oneOf
         : []
-      ).map((option) => retrieveOrCompileSchemaFromUri(option.$ref)),
+      ).map((option) => retrieveOrCompileSchemaFromUrl(option.$ref)),
     ]);
 
     // generate the appropriate type, a narrower version of the type e.g. getOutgoingLinkAndTargetEntities returns
@@ -265,7 +265,7 @@ const _jsonSchemaToTypeScript = async (
     typeLinkMap[linkEntityTypeId] = linkTypeName;
   }
 
-  // add a map of all the link type URIs we processed -> the possible linkEntity/rightEntities they link to
+  // add a map of all the link type URLs we processed -> the possible linkEntity/rightEntities they link to
   const { linkDefinitionString, linkAndRightEntitiesUnionName, mapTypeName } =
     generateEntityLinkMapDefinition(typeName, typeLinkMap);
 

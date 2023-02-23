@@ -1,4 +1,4 @@
-import { BaseUri } from "@blockprotocol/type-system/slim";
+import { BaseUrl } from "@blockprotocol/type-system/slim";
 
 import { EntityId } from "../entity.js";
 import { OntologyTypeRevisionId } from "../ontology.js";
@@ -11,7 +11,7 @@ export * from "./edges/outward-edge.js";
 export * from "./edges/variants.js";
 
 export type OntologyRootedEdges<Temporal extends boolean> = Record<
-  BaseUri,
+  BaseUrl,
   Record<OntologyTypeRevisionId, OntologyOutwardEdge<Temporal>[]>
 >;
 

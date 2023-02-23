@@ -6,7 +6,7 @@
  * different from the entrypoint of the package _with_ temporal support.
  */
 
-import { BaseUri } from "@blockprotocol/type-system/slim";
+import { BaseUrl } from "@blockprotocol/type-system/slim";
 
 import {
   AggregateEntitiesData as AggregateEntitiesDataGeneral,
@@ -157,7 +157,7 @@ export { GraphEmbedderHandler } from "./graph-embedder-handler.js";
 export {
   type AllOf,
   type Array,
-  type BaseUri,
+  type BaseUrl,
   type DataType,
   type DataTypeReference,
   type EntityType,
@@ -167,21 +167,21 @@ export {
   type MaybeOrderedArray,
   type Object,
   type OneOf,
-  type ParseBaseUriError,
-  type ParseVersionedUriError,
+  type ParseBaseUrlError,
+  type ParseVersionedUrlError,
   type PropertyType,
   type PropertyTypeReference,
   type PropertyValues,
   type Result,
   type ValueOrArray,
-  type VersionedUri,
-  extractBaseUri,
+  type VersionedUrl,
+  extractBaseUrl,
   extractVersion,
   getReferencedIdsFromEntityType,
   getReferencedIdsFromPropertyType,
   isPropertyValuesArray,
-  validateBaseUri,
-  validateVersionedUri,
+  validateBaseUrl,
+  validateVersionedUrl,
 } from "@blockprotocol/type-system/slim";
 
 // import {
@@ -252,7 +252,7 @@ export type EntityMetadata = EntityMetadataGeneral<false>;
 export type LinkData = LinkDataGeneral;
 export type Entity<
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = EntityGeneral<false, Properties>;
@@ -377,20 +377,20 @@ export type PropertyTypeVertex = PropertyTypeVertexGeneral;
 export type EntityTypeVertex = EntityTypeVertexGeneral;
 export type EntityVertex<
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = EntityVertexGeneral<false, Properties>;
 export type OntologyVertex = OntologyVertexGeneral;
 export type KnowledgeGraphVertex<
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = KnowledgeGraphVertexGeneral<false, Properties>;
 export type Vertex<
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = VertexGeneral<false, Properties>;

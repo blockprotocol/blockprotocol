@@ -1,16 +1,16 @@
 import {
-  BaseUri,
-  extractBaseUri,
+  BaseUrl,
+  extractBaseUrl,
   extractVersion,
-  ParseBaseUriError,
-  ParseVersionedUriError,
+  ParseBaseUrlError,
+  ParseVersionedUrlError,
   TypeSystemInitializer,
-  validateBaseUri,
-  validateVersionedUri,
-  VersionedUri,
+  validateBaseUrl,
+  validateVersionedUrl,
+  VersionedUrl,
 } from "..";
 
-const invalidBaseUriCases: [string, ParseBaseUriError][] = [
+const invalidBaseUrlCases: [string, ParseBaseUrlError][] = [
   ["http://example.com", { reason: "MissingTrailingSlash" }],
   [
     "\\example\\..\\demo/.\\/",
@@ -52,30 +52,30 @@ const invalidBaseUriCases: [string, ParseBaseUriError][] = [
   // ["data:text/plain,Hello?World#/", { reason: "CannotBeABase" }],
 ];
 
-describe("validateBaseUri", () => {
+describe("validateBaseUrl", () => {
   test.each([
     ["http://example.com/"],
     ["file://localhost/documents/myfolder/"],
     ["ftp://rms@example.com/"],
     ["https://////example.com///"],
     ["file://loc%61lhost/"],
-  ])("`parseBaseUri(%s)` succeeds", (input) => {
-    expect(validateBaseUri(input)).toEqual({ type: "Ok", inner: input });
+  ])("`parseBaseUrl(%s)` succeeds", (input) => {
+    expect(validateBaseUrl(input)).toEqual({ type: "Ok", inner: input });
   });
 
-  test.each(invalidBaseUriCases)(
-    "`parseBaseUri(%s)` errors",
+  test.each(invalidBaseUrlCases)(
+    "`parseBaseUrl(%s)` errors",
     (input, expected) => {
-      expect(validateBaseUri(input)).toEqual({ type: "Err", inner: expected });
+      expect(validateBaseUrl(input)).toEqual({ type: "Err", inner: expected });
     },
   );
 });
 
-const invalidVersionedUriCases: [string, ParseVersionedUriError][] = [
+const invalidVersionedUrlCases: [string, ParseVersionedUrlError][] = [
   [
     "example/v/2",
     {
-      reason: "InvalidBaseUri",
+      reason: "InvalidBaseUrl",
       inner: {
         reason: "UrlParseError",
         inner: '{"input":"example/","code":"ERR_INVALID_URL"}',
@@ -90,19 +90,19 @@ const invalidVersionedUriCases: [string, ParseVersionedUriError][] = [
   ["http://example.com/v/foo", { reason: "IncorrectFormatting" }],
 ];
 
-describe("validateVersionedUri", () => {
+describe("validateVersionedUrl", () => {
   test.each([
     ["http://example.com/v/0"],
     ["http://example.com/v/1"],
     ["http://example.com/v/20"],
-  ])("`validateVersionedUri(%s)` succeeds", (input) => {
-    expect(validateVersionedUri(input)).toEqual({ type: "Ok", inner: input });
+  ])("`validateVersionedUrl(%s)` succeeds", (input) => {
+    expect(validateVersionedUrl(input)).toEqual({ type: "Ok", inner: input });
   });
 
-  test.each(invalidVersionedUriCases)(
-    "validateVersionedUri(%s) returns errors",
+  test.each(invalidVersionedUrlCases)(
+    "validateVersionedUrl(%s) returns errors",
     (input, expected) => {
-      expect(validateVersionedUri(input)).toEqual({
+      expect(validateVersionedUrl(input)).toEqual({
         type: "Err",
         inner: expected,
       });
@@ -110,7 +110,7 @@ describe("validateVersionedUri", () => {
   );
 });
 
-const extractBaseUriCases: [VersionedUri, BaseUri][] = [
+const extractBaseUrlCases: [VersionedUrl, BaseUrl][] = [
   ["http://example.com/v/0", "http://example.com/"],
   ["http://example.com/sandwich/v/1", "http://example.com/sandwich/"],
   [
@@ -120,16 +120,16 @@ const extractBaseUriCases: [VersionedUri, BaseUri][] = [
   ["ftp://rms@example.com/foo/v/5", "ftp://rms@example.com/foo/"],
 ];
 
-describe("extractBaseUri", () => {
-  test.each(extractBaseUriCases)(
-    "`extractBaseUri(%s)` succeeds",
+describe("extractBaseUrl", () => {
+  test.each(extractBaseUrlCases)(
+    "`extractBaseUrl(%s)` succeeds",
     (input, expected) => {
-      expect(extractBaseUri(input)).toEqual(expected);
+      expect(extractBaseUrl(input)).toEqual(expected);
     },
   );
 });
 
-const extractVersionCases: [VersionedUri, number][] = [
+const extractVersionCases: [VersionedUrl, number][] = [
   ["http://example.com/v/0", 0],
   ["http://example.com/sandwich/v/1", 1],
   ["file://localhost/documents/myfolder/v/10", 10],

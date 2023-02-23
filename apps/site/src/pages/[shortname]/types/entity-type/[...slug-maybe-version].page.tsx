@@ -1,5 +1,5 @@
 import { EntityTypeWithMetadata } from "@blockprotocol/graph";
-import { extractBaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
+import { extractBaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
   EntityTypeEditorFormData,
   EntityTypeFormProvider,
@@ -50,7 +50,7 @@ const EntityTypePage: NextPage = () => {
   });
   const { handleSubmit: wrapHandleSubmit, reset } = formMethods;
 
-  // When loading or updating a type, set local and form state, and set the URI
+  // When loading or updating a type, set local and form state, and set the URL
   const setEntityType = useCallback(
     (stateToSet: EntityTypeState) => {
       setEntityTypeState(stateToSet);
@@ -69,7 +69,7 @@ const EntityTypePage: NextPage = () => {
 
     const { data: responseData, error: responseError } =
       await apiClient.updateEntityType({
-        versionedUri: entityType.schema.$id,
+        versionedUrl: entityType.schema.$id,
         schema: {
           ...schema,
           properties: schema.properties ?? {},
@@ -91,11 +91,11 @@ const EntityTypePage: NextPage = () => {
 
   // Handle fetching of types on initial load (subsequent updates in form submission)
   useEffect(() => {
-    const pageUri = window.location.href;
+    const pageUrl = window.location.href;
 
     if (
-      entityType?.metadata.recordId.baseUri &&
-      pageUri.startsWith(entityType.metadata.recordId.baseUri)
+      entityType?.metadata.recordId.baseUrl &&
+      pageUrl.startsWith(entityType.metadata.recordId.baseUrl)
     ) {
       // We don't need to fetch again unless we've switched types completely
       return;
@@ -103,13 +103,13 @@ const EntityTypePage: NextPage = () => {
 
     const initialEntityTypeFetch = async () => {
       const [requestedEntityTypeVersion, latestEntityTypeVersion] =
-        await fetchEntityType(pageUri);
+        await fetchEntityType(pageUrl);
 
       if (!requestedEntityTypeVersion && latestEntityTypeVersion) {
         // eslint-disable-next-line no-console -- intentional debugging logging
         console.warn(
-          `Requested version ${extractBaseUri(
-            pageUri as VersionedUri,
+          `Requested version ${extractBaseUrl(
+            pageUrl as VersionedUrl,
           )} not found – redirecting to latest.`,
         );
         setEntityType({
@@ -129,7 +129,7 @@ const EntityTypePage: NextPage = () => {
     };
 
     void initialEntityTypeFetch();
-  }, [entityType?.metadata.recordId.baseUri, router, setEntityType]);
+  }, [entityType?.metadata.recordId.baseUrl, router, setEntityType]);
 
   if (isLoading || !shortname) {
     // @todo proper loading state
@@ -144,7 +144,7 @@ const EntityTypePage: NextPage = () => {
   const latestVersionNumber = latestVersion.metadata.recordId.version;
 
   const isLatest = currentVersionNumber === latestVersionNumber;
-  const latestVersionUri = entityType.schema.$id.replace(
+  const latestVersionUrl = entityType.schema.$id.replace(
     /\d$/,
     latestVersionNumber.toString(),
   );
@@ -195,7 +195,7 @@ const EntityTypePage: NextPage = () => {
                 </Typography>
                 {!isLatest && (
                   <Link
-                    href={latestVersionUri}
+                    href={latestVersionUrl}
                     onClick={(event) => {
                       event.preventDefault();
                       setEntityType({
