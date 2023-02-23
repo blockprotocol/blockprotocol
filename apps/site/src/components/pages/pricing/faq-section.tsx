@@ -143,6 +143,10 @@ const Question: FunctionComponent<{
 }> = ({ title, description }) => {
   const [expanded, setExpanded] = useState(false);
 
+  const words = title.split(" ");
+  const lastWord = words.pop();
+  const restOfSentence = words.join(" ");
+
   return (
     <Box sx={{ mb: { xs: 2, md: 3 } }}>
       <Typography
@@ -156,18 +160,20 @@ const Question: FunctionComponent<{
           maxWidth: "unset",
         }}
       >
-        {title}
-
-        <FontAwesomeIcon
-          icon={faChevronRight}
-          sx={{
-            ml: 1,
-            mb: 0.25,
-            fontSize: 12,
-            transform: `rotate(${expanded ? 90 : 0}deg)`,
-            transition: ({ transitions }) => transitions.create("transform"),
-          }}
-        />
+        {restOfSentence}{" "}
+        <Box component="span" sx={{ whiteSpace: "nowrap" }}>
+          {lastWord}
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            sx={{
+              ml: 1,
+              mb: 0.25,
+              fontSize: 12,
+              transform: `rotate(${expanded ? 90 : 0}deg)`,
+              transition: ({ transitions }) => transitions.create("transform"),
+            }}
+          />
+        </Box>
       </Typography>
 
       <Collapse in={expanded}>
