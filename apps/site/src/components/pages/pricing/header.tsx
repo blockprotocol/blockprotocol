@@ -8,8 +8,8 @@ export const Header: FunctionComponent = () => {
         position: "relative",
         zIndex: 3,
         pt: {
-          xs: "128px",
-          md: "160px",
+          xs: 8,
+          md: 20,
         },
         mb: { xs: 8, md: 12.5 },
         px: "6.5%",
