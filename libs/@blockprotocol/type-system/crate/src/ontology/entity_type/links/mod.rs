@@ -64,8 +64,8 @@ impl<T> MaybeOrderedArray<T> {
 }
 
 impl<T: ValidateUrl> ValidateUrl for MaybeOrderedArray<T> {
-    fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
-        self.array().items().validate_uri(base_url)
+    fn validate_url(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
+        self.array().items().validate_url(base_url)
     }
 }
 

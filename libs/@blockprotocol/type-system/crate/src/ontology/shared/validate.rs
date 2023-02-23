@@ -34,10 +34,10 @@ pub enum ValidationError {
 impl Display for ValidationError {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
         match self {
-            Self::MissingRequiredProperty(uri) => {
+            Self::MissingRequiredProperty(url) => {
                 write!(
                     fmt,
-                    "the schema has marked the \"{uri}\" property as required, but it wasn't \
+                    "the schema has marked the \"{url}\" property as required, but it wasn't \
                      defined in the `\"properties\"` object"
                 )
             }
@@ -75,5 +75,5 @@ pub trait ValidateUrl {
     /// TODO: DOC
     ///
     /// # Errors
-    fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError>;
+    fn validate_url(&self, base_url: &BaseUrl) -> Result<(), ValidationError>;
 }

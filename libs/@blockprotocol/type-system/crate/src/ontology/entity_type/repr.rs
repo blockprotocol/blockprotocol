@@ -58,9 +58,9 @@ impl TryFrom<EntityType> for super::EntityType {
             .map(|example_hash_map| {
                 example_hash_map
                     .into_iter()
-                    .map(|(uri, val)| {
+                    .map(|(url, val)| {
                         Ok((
-                            BaseUrl::new(uri).map_err(ParseEntityTypeError::InvalidExamplesKey)?,
+                            BaseUrl::new(url).map_err(ParseEntityTypeError::InvalidExamplesKey)?,
                             val,
                         ))
                     })
@@ -103,7 +103,7 @@ impl From<super::EntityType> for EntityType {
             .map(|example_hash_map| {
                 example_hash_map
                     .into_iter()
-                    .map(|(uri, val)| (uri.to_string(), val))
+                    .map(|(url, val)| (url.to_string(), val))
                     .collect()
             })
             .collect();

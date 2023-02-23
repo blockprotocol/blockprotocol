@@ -12,7 +12,7 @@ pub struct VersionedUrlPatch(#[tsify(type = "`${BaseUrl}v/${number}`")] String);
 // /**
 //  * Checks if a given URL string is a valid base URL.
 //  *
-//  * @param {BaseUrl} uri - The URL string.
+//  * @param {BaseUrl} url - The URL string.
 //  * @returns {(Result.Ok|Result.Err<ParseBaseUrlError>)} - an Ok with an inner of the string as a
 //  * BaseUrl if valid, or an Err with an inner ParseBaseUrlError
 //  */

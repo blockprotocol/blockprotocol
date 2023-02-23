@@ -31,9 +31,9 @@ impl TryFrom<Links> for super::Links {
         let links = links_repr
             .links
             .into_iter()
-            .map(|(uri, val)| {
+            .map(|(url, val)| {
                 Ok((
-                    VersionedUrl::from_str(&uri).map_err(ParseLinksError::InvalidLinkKey)?,
+                    VersionedUrl::from_str(&url).map_err(ParseLinksError::InvalidLinkKey)?,
                     val.try_into().map_err(ParseLinksError::InvalidArray)?,
                 ))
             })
@@ -48,7 +48,7 @@ impl From<super::Links> for Links {
         let links = object
             .0
             .into_iter()
-            .map(|(uri, val)| (uri.to_string(), val.into()))
+            .map(|(url, val)| (url.to_string(), val.into()))
             .collect();
 
         Self { links }

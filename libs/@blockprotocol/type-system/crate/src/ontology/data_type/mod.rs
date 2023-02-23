@@ -101,7 +101,7 @@ impl From<&VersionedUrl> for &DataTypeReference {
 }
 
 impl ValidateUrl for DataTypeReference {
-    fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
+    fn validate_url(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
         if base_url == &self.url().base_url {
             Ok(())
         } else {
@@ -200,23 +200,23 @@ mod tests {
         let data_type_ref = DataTypeReference::new(url.clone());
 
         data_type_ref
-            .validate_uri(&url.base_url)
+            .validate_url(&url.base_url)
             .expect("failed to validate against base URL");
     }
 
     #[test]
     fn validate_data_type_ref_invalid() {
-        let uri_a =
+        let url_a =
             VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
                 .expect("failed to parse VersionedUrl");
-        let uri_b =
+        let url_b =
             VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/name/v/1")
                 .expect("failed to parse VersionedUrl");
 
-        let data_type_ref = DataTypeReference::new(uri_a);
+        let data_type_ref = DataTypeReference::new(url_a);
 
         data_type_ref
-            .validate_uri(&uri_b.base_url) // Try and validate against a different URI
+            .validate_url(&url_b.base_url) // Try and validate against a different URI
             .expect_err("expected validation against base URL to fail but it didn't");
     }
 }

@@ -46,7 +46,7 @@ export const generateLinkEntityAndRightEntityDefinition = (
 // Also generates a type for just the values of that map
 export const generateEntityLinkMapDefinition = (
   entityTypeName: string,
-  uriToLinkEntityAndRightEntityDefinitionName: {
+  urlToLinkEntityAndRightEntityDefinitionName: {
     [versionedUrl: string]: string;
   },
 ) => {
@@ -57,7 +57,7 @@ export const generateEntityLinkMapDefinition = (
     mapTypeName,
     linkAndRightEntitiesUnionName,
     linkDefinitionString: `export type ${mapTypeName} = {
-${Object.entries(uriToLinkEntityAndRightEntityDefinitionName)
+${Object.entries(urlToLinkEntityAndRightEntityDefinitionName)
   .map(([versionedUrl, typeName]) => `  "${versionedUrl}": ${typeName};`)
   .join("\n")}
 };

@@ -47,14 +47,14 @@ impl<T: ValidateUrl, const MIN: usize> Object<T, MIN> {
             });
         };
 
-        for uri in self.required() {
-            if !self.properties().contains_key(uri) {
-                return Err(ValidationError::MissingRequiredProperty(uri.clone()));
+        for url in self.required() {
+            if !self.properties().contains_key(url) {
+                return Err(ValidationError::MissingRequiredProperty(url.clone()));
             }
         }
 
         for (base_url, reference) in self.properties() {
-            reference.validate_uri(base_url)?;
+            reference.validate_url(base_url)?;
         }
 
         Ok(())
@@ -103,7 +103,7 @@ mod tests {
     }
 
     #[test]
-    fn invalid_uri() {
+    fn invalid_url() {
         ensure_failed_validation::<ObjectRepr, Object>(
             &json!({
                 "type": "object",

@@ -95,7 +95,7 @@ impl EntityType {
         self.properties()
             .iter()
             .map(|(_, property_def)| match property_def {
-                ValueOrArray::Value(uri) => uri,
+                ValueOrArray::Value(url) => url,
                 ValueOrArray::Array(array) => array.items(),
             })
             .collect()
@@ -133,7 +133,7 @@ impl EntityTypeReference {
     }
 
     #[must_use]
-    pub const fn uri(&self) -> &VersionedUrl {
+    pub const fn url(&self) -> &VersionedUrl {
         &self.url
     }
 }
@@ -146,13 +146,13 @@ impl From<&VersionedUrl> for &EntityTypeReference {
 }
 
 impl ValidateUrl for EntityTypeReference {
-    fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
-        if base_url == &self.uri().base_url {
+    fn validate_url(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
+        if base_url == &self.url().base_url {
             Ok(())
         } else {
             Err(ValidationError::BaseUrlMismatch {
                 base_url: base_url.clone(),
-                versioned_url: self.uri().clone(),
+                versioned_url: self.url().clone(),
             })
         }
     }
@@ -167,17 +167,17 @@ mod tests {
 
     fn test_property_type_references(
         entity_type: &EntityType,
-        uris: impl IntoIterator<Item = &'static str>,
+        urls: impl IntoIterator<Item = &'static str>,
     ) {
-        let expected_property_type_references = uris
+        let expected_property_type_references = urls
             .into_iter()
-            .map(|uri| VersionedUrl::from_str(uri).expect("invalid URL"))
+            .map(|url| VersionedUrl::from_str(url).expect("invalid URL"))
             .collect::<HashSet<_>>();
 
         let property_type_references = entity_type
             .property_type_references()
             .into_iter()
-            .map(PropertyTypeReference::uri)
+            .map(PropertyTypeReference::url)
             .cloned()
             .collect::<HashSet<_>>();
 
@@ -190,13 +190,13 @@ mod tests {
     ) {
         let expected_link_entity_type_references = links
             .into_iter()
-            .map(|(link_entity_type_uri, entity_type_uris)| {
+            .map(|(link_entity_type_url, entity_type_urls)| {
                 (
-                    VersionedUrl::from_str(link_entity_type_uri).expect("invalid URL"),
-                    entity_type_uris
+                    VersionedUrl::from_str(link_entity_type_url).expect("invalid URL"),
+                    entity_type_urls
                         .into_iter()
-                        .map(|entity_type_uri| {
-                            VersionedUrl::from_str(entity_type_uri).expect("invalid URL")
+                        .map(|entity_type_url| {
+                            VersionedUrl::from_str(entity_type_url).expect("invalid URL")
                         })
                         .collect::<Vec<_>>(),
                 )
@@ -206,13 +206,13 @@ mod tests {
         let link_entity_type_references = entity_type
             .link_mappings()
             .into_iter()
-            .map(|(link_entity_type_uri, entity_type_ref)| {
+            .map(|(link_entity_type_url, entity_type_ref)| {
                 (
-                    link_entity_type_uri.uri().clone(),
+                    link_entity_type_url.url().clone(),
                     entity_type_ref.map_or(vec![], |inner| {
                         inner
                             .iter()
-                            .map(|reference| reference.uri().clone())
+                            .map(|reference| reference.url().clone())
                             .collect()
                     }),
                 )

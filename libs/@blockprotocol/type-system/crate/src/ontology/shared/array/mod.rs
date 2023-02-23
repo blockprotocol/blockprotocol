@@ -43,10 +43,10 @@ pub enum ValueOrArray<T> {
 }
 
 impl<T: ValidateUrl> ValidateUrl for ValueOrArray<T> {
-    fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
+    fn validate_url(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
         match self {
-            Self::Value(value) => value.validate_uri(base_url),
-            Self::Array(array) => array.items().validate_uri(base_url),
+            Self::Value(value) => value.validate_url(base_url),
+            Self::Array(array) => array.items().validate_url(base_url),
         }
     }
 }
@@ -76,30 +76,30 @@ mod tests {
     }
 
     #[test]
-    fn valid_uri() {
+    fn valid_url() {
         let url =
             VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
                 .expect("failed to parse VersionedUrl");
         let array = get_test_value_or_array(&url);
 
         array
-            .validate_uri(&url.base_url)
+            .validate_url(&url.base_url)
             .expect("failed to validate against base URL");
     }
 
     #[test]
-    fn invalid_uri() {
-        let uri_a =
+    fn invalid_url() {
+        let url_a =
             VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
                 .expect("failed to parse VersionedUrl");
-        let uri_b =
+        let url_b =
             VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/name/v/1")
                 .expect("failed to parse VersionedUrl");
 
-        let array = get_test_value_or_array(&uri_a);
+        let array = get_test_value_or_array(&url_a);
 
         array
-            .validate_uri(&uri_b.base_url) // Try and validate against a different URI
+            .validate_url(&url_b.base_url) // Try and validate against a different URI
             .expect_err("expected validation against base URL to fail but it didn't");
     }
 }

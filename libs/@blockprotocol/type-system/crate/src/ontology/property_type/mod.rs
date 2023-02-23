@@ -90,7 +90,7 @@ impl PropertyTypeReference {
     }
 
     #[must_use]
-    pub const fn uri(&self) -> &VersionedUrl {
+    pub const fn url(&self) -> &VersionedUrl {
         &self.url
     }
 }
@@ -103,13 +103,13 @@ impl From<&VersionedUrl> for &PropertyTypeReference {
 }
 
 impl ValidateUrl for PropertyTypeReference {
-    fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
-        if base_url == &self.uri().base_url {
+    fn validate_url(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
+        if base_url == &self.url().base_url {
             Ok(())
         } else {
             Err(ValidationError::BaseUrlMismatch {
                 base_url: base_url.clone(),
-                versioned_url: self.uri().clone(),
+                versioned_url: self.url().clone(),
             })
         }
     }
@@ -175,11 +175,11 @@ mod tests {
 
     fn test_property_type_data_refs(
         property_type: &PropertyType,
-        uris: impl IntoIterator<Item = &'static str>,
+        urls: impl IntoIterator<Item = &'static str>,
     ) {
-        let expected_data_type_references = uris
+        let expected_data_type_references = urls
             .into_iter()
-            .map(|uri| VersionedUrl::from_str(uri).expect("invalid URL"))
+            .map(|url| VersionedUrl::from_str(url).expect("invalid URL"))
             .collect::<HashSet<_>>();
 
         let data_type_references = property_type
@@ -194,17 +194,17 @@ mod tests {
 
     fn test_property_type_property_refs(
         property_type: &PropertyType,
-        uris: impl IntoIterator<Item = &'static str>,
+        urls: impl IntoIterator<Item = &'static str>,
     ) {
-        let expected_property_type_references = uris
+        let expected_property_type_references = urls
             .into_iter()
-            .map(|uri| VersionedUrl::from_str(uri).expect("invalid URL"))
+            .map(|url| VersionedUrl::from_str(url).expect("invalid URL"))
             .collect::<HashSet<_>>();
 
         let property_type_references = property_type
             .property_type_references()
             .into_iter()
-            .map(PropertyTypeReference::uri)
+            .map(PropertyTypeReference::url)
             .cloned()
             .collect::<HashSet<_>>();
 
@@ -384,23 +384,23 @@ mod tests {
         let property_type_ref = PropertyTypeReference::new(url.clone());
 
         property_type_ref
-            .validate_uri(&url.base_url)
+            .validate_url(&url.base_url)
             .expect("failed to validate against base URL");
     }
 
     #[test]
     fn validate_property_type_ref_invalid() {
-        let uri_a =
+        let url_a =
             VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
                 .expect("failed to parse VersionedUrl");
-        let uri_b =
+        let url_b =
             VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/name/v/1")
                 .expect("failed to parse VersionedUrl");
 
-        let property_type_ref = PropertyTypeReference::new(uri_a);
+        let property_type_ref = PropertyTypeReference::new(url_a);
 
         property_type_ref
-            .validate_uri(&uri_b.base_url) // Try and validate against a different URI
+            .validate_url(&url_b.base_url) // Try and validate against a different URI
             .expect_err("expected validation against base URL to fail but it didn't");
     }
 }
