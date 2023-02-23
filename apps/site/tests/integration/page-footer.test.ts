@@ -1,4 +1,3 @@
-import { isBillingFeatureFlagEnabled } from "../../src/lib/config";
 import { expect, test } from "../shared/wrapped-playwright.js";
 
 test("page footer navigation works", async ({ page, browserName }) => {
@@ -37,11 +36,6 @@ test("page footer navigation works", async ({ page, browserName }) => {
   await expect(
     page.locator("footer >> a:has-text('Specification')"),
   ).toHaveAttribute("href", "/docs/spec");
-  if (isBillingFeatureFlagEnabled) {
-    await expect(
-      page.locator("footer >> a:has-text('Pricing')"),
-    ).toHaveAttribute("href", "/pricing");
-  }
   await expect(
     page.locator("footer >> a:has-text('Contact Us')"),
   ).toHaveAttribute("href", "/contact");
@@ -80,5 +74,17 @@ test("page footer navigation works", async ({ page, browserName }) => {
   await expect(page.locator("footer >> a:text-is('Privacy')")).toHaveAttribute(
     "href",
     "/legal/privacy",
+  );
+});
+
+test("pricing footer link works", async ({ page }) => {
+  test.skip(
+    !process.env.NEXT_PUBLIC_BILLING_FEATURE_FLAG,
+    "NEXT_PUBLIC_BILLING_FEATURE_FLAG is not set",
+  );
+
+  await expect(page.locator("footer >> a:has-text('Pricing')")).toHaveAttribute(
+    "href",
+    "/pricing",
   );
 });
