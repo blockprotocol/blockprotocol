@@ -9,33 +9,33 @@ use std::collections::{HashMap, HashSet};
 pub use error::ParseEntityTypeError;
 
 use crate::{
-    uri::{BaseUri, VersionedUri},
+    uri::{BaseUrl, VersionedUrl},
     AllOf, Links, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, ValidateUri,
     ValidationError, ValueOrArray,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EntityType {
-    id: VersionedUri,
+    id: VersionedUrl,
     title: String,
     description: Option<String>,
     property_object: Object<ValueOrArray<PropertyTypeReference>>,
     inherits_from: AllOf<EntityTypeReference>,
     links: Links,
-    examples: Vec<HashMap<BaseUri, serde_json::Value>>,
+    examples: Vec<HashMap<BaseUrl, serde_json::Value>>,
 }
 
 impl EntityType {
     /// Creates a new `EntityType`
     #[must_use]
     pub fn new(
-        id: VersionedUri,
+        id: VersionedUrl,
         title: String,
         description: Option<String>,
         property_object: Object<ValueOrArray<PropertyTypeReference>>,
         inherits_from: AllOf<EntityTypeReference>,
         links: Links,
-        examples: Vec<HashMap<BaseUri, serde_json::Value>>,
+        examples: Vec<HashMap<BaseUrl, serde_json::Value>>,
     ) -> Self {
         Self {
             id,
@@ -49,7 +49,7 @@ impl EntityType {
     }
 
     #[must_use]
-    pub const fn id(&self) -> &VersionedUri {
+    pub const fn id(&self) -> &VersionedUrl {
         &self.id
     }
 
@@ -69,24 +69,24 @@ impl EntityType {
     }
 
     #[must_use]
-    pub const fn properties(&self) -> &HashMap<BaseUri, ValueOrArray<PropertyTypeReference>> {
+    pub const fn properties(&self) -> &HashMap<BaseUrl, ValueOrArray<PropertyTypeReference>> {
         self.property_object.properties()
     }
 
     #[must_use]
-    pub fn required(&self) -> &[BaseUri] {
+    pub fn required(&self) -> &[BaseUrl] {
         self.property_object.required()
     }
 
     #[must_use]
     pub const fn links(
         &self,
-    ) -> &HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
+    ) -> &HashMap<VersionedUrl, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
         self.links.links()
     }
 
     #[must_use]
-    pub const fn examples(&self) -> &Vec<HashMap<BaseUri, serde_json::Value>> {
+    pub const fn examples(&self) -> &Vec<HashMap<BaseUrl, serde_json::Value>> {
         &self.examples
     }
 
@@ -122,37 +122,37 @@ impl EntityType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[repr(transparent)]
 pub struct EntityTypeReference {
-    uri: VersionedUri,
+    uri: VersionedUrl,
 }
 
 impl EntityTypeReference {
-    /// Creates a new `EntityTypeReference` from the given [`VersionedUri`].
+    /// Creates a new `EntityTypeReference` from the given [`VersionedUrl`].
     #[must_use]
-    pub const fn new(uri: VersionedUri) -> Self {
+    pub const fn new(uri: VersionedUrl) -> Self {
         Self { uri }
     }
 
     #[must_use]
-    pub const fn uri(&self) -> &VersionedUri {
+    pub const fn uri(&self) -> &VersionedUrl {
         &self.uri
     }
 }
 
-impl From<&VersionedUri> for &EntityTypeReference {
-    fn from(uri: &VersionedUri) -> Self {
+impl From<&VersionedUrl> for &EntityTypeReference {
+    fn from(uri: &VersionedUrl) -> Self {
         // SAFETY: Self is `repr(transparent)`
-        unsafe { &*(uri as *const VersionedUri).cast::<EntityTypeReference>() }
+        unsafe { &*(uri as *const VersionedUrl).cast::<EntityTypeReference>() }
     }
 }
 
 impl ValidateUri for EntityTypeReference {
-    fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
-        if base_uri == &self.uri().base_uri {
+    fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
+        if base_url == &self.uri().base_url {
             Ok(())
         } else {
-            Err(ValidationError::BaseUriMismatch {
-                base_uri: base_uri.clone(),
-                versioned_uri: self.uri().clone(),
+            Err(ValidationError::BaseUrlMismatch {
+                base_url: base_url.clone(),
+                versioned_url: self.uri().clone(),
             })
         }
     }
@@ -171,7 +171,7 @@ mod tests {
     ) {
         let expected_property_type_references = uris
             .into_iter()
-            .map(|uri| VersionedUri::from_str(uri).expect("invalid URI"))
+            .map(|uri| VersionedUrl::from_str(uri).expect("invalid URL"))
             .collect::<HashSet<_>>();
 
         let property_type_references = entity_type
@@ -192,11 +192,11 @@ mod tests {
             .into_iter()
             .map(|(link_entity_type_uri, entity_type_uris)| {
                 (
-                    VersionedUri::from_str(link_entity_type_uri).expect("invalid URI"),
+                    VersionedUrl::from_str(link_entity_type_uri).expect("invalid URL"),
                     entity_type_uris
                         .into_iter()
                         .map(|entity_type_uri| {
-                            VersionedUri::from_str(entity_type_uri).expect("invalid URI")
+                            VersionedUrl::from_str(entity_type_uri).expect("invalid URL")
                         })
                         .collect::<Vec<_>>(),
                 )

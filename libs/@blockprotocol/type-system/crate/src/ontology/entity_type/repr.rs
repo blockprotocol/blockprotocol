@@ -6,7 +6,7 @@ use tsify::Tsify;
 
 use crate::{
     repr,
-    uri::{BaseUri, ParseVersionedUriError, VersionedUri},
+    uri::{BaseUrl, ParseVersionedUrlError, VersionedUrl},
     ParseEntityTypeError,
 };
 
@@ -23,7 +23,7 @@ enum EntityTypeTag {
 pub struct EntityType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'entityType'"))]
     kind: EntityTypeTag,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$id")]
     id: String,
     title: String,
@@ -34,7 +34,7 @@ pub struct EntityType {
     all_of: repr::AllOf<EntityTypeReference>,
     #[cfg_attr(
         target_arch = "wasm32",
-        tsify(optional, type = "Record<BaseUri, any>[]")
+        tsify(optional, type = "Record<BaseUrl, any>[]")
     )]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     examples: Vec<HashMap<String, serde_json::Value>>,
@@ -48,8 +48,8 @@ impl TryFrom<EntityType> for super::EntityType {
     type Error = ParseEntityTypeError;
 
     fn try_from(entity_type_repr: EntityType) -> Result<Self, Self::Error> {
-        let id = VersionedUri::from_str(&entity_type_repr.id)
-            .map_err(ParseEntityTypeError::InvalidVersionedUri)?;
+        let id = VersionedUrl::from_str(&entity_type_repr.id)
+            .map_err(ParseEntityTypeError::InvalidVersionedUrl)?;
 
         // TODO - validate examples against the entity type
         let examples = entity_type_repr
@@ -60,7 +60,7 @@ impl TryFrom<EntityType> for super::EntityType {
                     .into_iter()
                     .map(|(uri, val)| {
                         Ok((
-                            BaseUri::new(uri).map_err(ParseEntityTypeError::InvalidExamplesKey)?,
+                            BaseUrl::new(uri).map_err(ParseEntityTypeError::InvalidExamplesKey)?,
                             val,
                         ))
                     })
@@ -125,16 +125,16 @@ impl From<super::EntityType> for EntityType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct EntityTypeReference {
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
     uri: String,
 }
 
 impl TryFrom<EntityTypeReference> for super::EntityTypeReference {
-    type Error = ParseVersionedUriError;
+    type Error = ParseVersionedUrlError;
 
     fn try_from(entity_type_ref_repr: EntityTypeReference) -> Result<Self, Self::Error> {
-        let uri = VersionedUri::from_str(&entity_type_ref_repr.uri)?;
+        let uri = VersionedUrl::from_str(&entity_type_ref_repr.uri)?;
         Ok(Self::new(uri))
     }
 }

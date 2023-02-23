@@ -6,7 +6,7 @@ use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
     repr,
-    uri::{ParseVersionedUriError, VersionedUri},
+    uri::{ParseVersionedUrlError, VersionedUrl},
     ParsePropertyTypeError,
 };
 
@@ -23,7 +23,7 @@ enum PropertyTypeTag {
 pub struct PropertyType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'propertyType'"))]
     kind: PropertyTypeTag,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$id")]
     id: String,
     title: String,
@@ -38,8 +38,8 @@ impl TryFrom<PropertyType> for super::PropertyType {
     type Error = ParsePropertyTypeError;
 
     fn try_from(property_type_repr: PropertyType) -> Result<Self, Self::Error> {
-        let id = VersionedUri::from_str(&property_type_repr.id)
-            .map_err(ParsePropertyTypeError::InvalidVersionedUri)?;
+        let id = VersionedUrl::from_str(&property_type_repr.id)
+            .map_err(ParsePropertyTypeError::InvalidVersionedUrl)?;
         Ok(Self::new(
             id,
             property_type_repr.title,
@@ -68,7 +68,7 @@ impl From<super::PropertyType> for PropertyType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PropertyTypeReference {
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
     uri: String,
 }
@@ -81,10 +81,10 @@ impl PropertyTypeReference {
 }
 
 impl TryFrom<PropertyTypeReference> for super::PropertyTypeReference {
-    type Error = ParseVersionedUriError;
+    type Error = ParseVersionedUrlError;
 
     fn try_from(property_type_ref_repr: PropertyTypeReference) -> Result<Self, Self::Error> {
-        let uri = VersionedUri::from_str(&property_type_ref_repr.uri)?;
+        let uri = VersionedUrl::from_str(&property_type_ref_repr.uri)?;
         Ok(Self::new(uri))
     }
 }

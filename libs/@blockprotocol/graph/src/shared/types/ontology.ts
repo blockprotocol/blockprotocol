@@ -1,4 +1,4 @@
-import { BaseUri, validateBaseUri } from "@blockprotocol/type-system/slim";
+import { BaseUrl, validateBaseUrl } from "@blockprotocol/type-system/slim";
 
 export * from "./ontology/data-type.js";
 export * from "./ontology/entity-type.js";
@@ -13,7 +13,7 @@ export * from "./ontology/property-type.js";
  *      of the type system? Not sure the type system == ontology, it's more like the type system describes the ontology.
  */
 export type OntologyTypeRecordId = {
-  baseUri: BaseUri;
+  baseUrl: BaseUrl;
   version: number;
 };
 
@@ -23,16 +23,16 @@ export const isOntologyTypeRecordId = (
   return (
     recordId != null &&
     typeof recordId === "object" &&
-    "baseUri" in recordId &&
-    typeof recordId.baseUri === "string" &&
-    validateBaseUri(recordId.baseUri).type === "Ok" &&
+    "baseUrl" in recordId &&
+    typeof recordId.baseUrl === "string" &&
+    validateBaseUrl(recordId.baseUrl).type === "Ok" &&
     "version" in recordId &&
     typeof recordId.version === "number"
   );
 };
 
 /**
- * The second component of the [{@link BaseUri}, RevisionId] tuple needed to identify a specific ontology type vertex
+ * The second component of the [{@link BaseUrl}, RevisionId] tuple needed to identify a specific ontology type vertex
  * within a {@link Subgraph}. This should be the version number as a string.
  *
  * Although it would be possible to create a template literal type, this confuses TypeScript when traversing the

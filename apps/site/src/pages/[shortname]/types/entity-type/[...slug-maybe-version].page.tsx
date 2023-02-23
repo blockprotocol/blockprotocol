@@ -1,5 +1,5 @@
 import { EntityTypeWithMetadata } from "@blockprotocol/graph";
-import { extractBaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
+import { extractBaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
   EntityTypeEditorFormData,
   EntityTypeFormProvider,
@@ -69,7 +69,7 @@ const EntityTypePage: NextPage = () => {
 
     const { data: responseData, error: responseError } =
       await apiClient.updateEntityType({
-        versionedUri: entityType.schema.$id,
+        versionedUrl: entityType.schema.$id,
         schema: {
           ...schema,
           properties: schema.properties ?? {},
@@ -94,8 +94,8 @@ const EntityTypePage: NextPage = () => {
     const pageUri = window.location.href;
 
     if (
-      entityType?.metadata.recordId.baseUri &&
-      pageUri.startsWith(entityType.metadata.recordId.baseUri)
+      entityType?.metadata.recordId.baseUrl &&
+      pageUri.startsWith(entityType.metadata.recordId.baseUrl)
     ) {
       // We don't need to fetch again unless we've switched types completely
       return;
@@ -108,8 +108,8 @@ const EntityTypePage: NextPage = () => {
       if (!requestedEntityTypeVersion && latestEntityTypeVersion) {
         // eslint-disable-next-line no-console -- intentional debugging logging
         console.warn(
-          `Requested version ${extractBaseUri(
-            pageUri as VersionedUri,
+          `Requested version ${extractBaseUrl(
+            pageUri as VersionedUrl,
           )} not found – redirecting to latest.`,
         );
         setEntityType({
@@ -129,7 +129,7 @@ const EntityTypePage: NextPage = () => {
     };
 
     void initialEntityTypeFetch();
-  }, [entityType?.metadata.recordId.baseUri, router, setEntityType]);
+  }, [entityType?.metadata.recordId.baseUrl, router, setEntityType]);
 
   if (isLoading || !shortname) {
     // @todo proper loading state

@@ -2,9 +2,9 @@ import type {
   PropertyType,
   PropertyTypeWithMetadata,
 } from "@blockprotocol/graph";
-import type { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
+import type { BaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
-  extractBaseUri,
+  extractBaseUrl,
   extractVersion,
 } from "@blockprotocol/type-system/slim";
 import { Db, ObjectId } from "mongodb";
@@ -18,7 +18,7 @@ export const COLLECTION_NAME = "bp-property-types";
 
 export type DbPropertyType = {
   recordId: {
-    baseUri: BaseUri;
+    baseUrl: BaseUrl;
     version: number;
   };
   createdAt: Date;
@@ -42,7 +42,7 @@ export const getPropertyTypes = async (
         { $sort: { "recordId.version": -1 } },
         {
           $group: {
-            _id: "$recordId.baseUri",
+            _id: "$recordId.baseUrl",
             doc_with_max_ver: { $first: "$$ROOT" },
           },
         },
@@ -60,36 +60,36 @@ export const getPropertyTypes = async (
 export const getPropertyType = async (
   db: Db,
   params: {
-    baseUri?: BaseUri;
-    versionedUri?: VersionedUri;
+    baseUrl?: BaseUrl;
+    versionedUrl?: VersionedUrl;
   },
 ): Promise<DbPropertyType | null> => {
-  const { baseUri, versionedUri } = params;
+  const { baseUrl, versionedUrl } = params;
 
-  if (versionedUri && baseUri) {
+  if (versionedUrl && baseUrl) {
     throw new Error(
-      "Please provide only one of baseUri or versionedUri. You sent both.",
+      "Please provide only one of baseUrl or versionedUrl. You sent both.",
     );
   }
 
-  if (versionedUri) {
+  if (versionedUrl) {
     const propertyType = await db
       .collection<DbPropertyType>(COLLECTION_NAME)
       .findOne({
-        "propertyTypeWithMetadata.schema.$id": versionedUri,
+        "propertyTypeWithMetadata.schema.$id": versionedUrl,
       });
 
     return propertyType ?? null;
   }
 
-  if (!baseUri) {
-    throw new Error("You must provide one of baseUri or versionedUri");
+  if (!baseUrl) {
+    throw new Error("You must provide one of baseUrl or versionedUrl");
   }
 
   const propertyTypes = await db
     .collection(COLLECTION_NAME)
     .aggregate<DbPropertyType>([
-      { $match: { "recordId.baseUri": baseUri } },
+      { $match: { "recordId.baseUrl": baseUrl } },
       { $sort: { "recordId.version": -1 } },
       { $limit: 1 },
     ])
@@ -108,7 +108,7 @@ export const createPropertyType = async (
 ): Promise<DbPropertyType> => {
   const { schema, user } = params;
 
-  const { versionedUri } = generateOntologyUri({
+  const { versionedUrl } = generateOntologyUri({
     author: `@${user.shortname!}`,
     kind: "propertyType",
     title: schema.title,
@@ -116,12 +116,12 @@ export const createPropertyType = async (
   });
 
   const propertyTypeWithExistingId = await getPropertyType(db, {
-    versionedUri,
+    versionedUrl,
   });
 
   if (propertyTypeWithExistingId) {
     throw new Error(
-      `User already has an property type with id ${versionedUri}`,
+      `User already has an property type with id ${versionedUrl}`,
     );
   }
 
@@ -157,20 +157,20 @@ export const createPropertyType = async (
 export const updatePropertyType = async (
   db: Db,
   params: {
-    versionedUri: VersionedUri;
+    versionedUrl: VersionedUrl;
     schema: Omit<PropertyType, SystemDefinedProperties>;
     user: User;
   },
 ): Promise<DbPropertyType> => {
-  const { versionedUri, schema, user } = params;
+  const { versionedUrl, schema, user } = params;
 
-  const baseUri = extractBaseUri(versionedUri);
+  const baseUrl = extractBaseUrl(versionedUrl);
 
-  const existingPropertyType = await getPropertyType(db, { baseUri });
+  const existingPropertyType = await getPropertyType(db, { baseUrl });
 
   if (!existingPropertyType) {
     throw new Error(
-      `Cannot find property type with versionedUri ${versionedUri}`,
+      `Cannot find property type with versionedUrl ${versionedUrl}`,
     );
   }
 
@@ -180,10 +180,10 @@ export const updatePropertyType = async (
 
   const latestVersion =
     existingPropertyType.propertyTypeWithMetadata.metadata.recordId.version;
-  const versionUpdateRequestAt = extractVersion(versionedUri);
+  const versionUpdateRequestAt = extractVersion(versionedUrl);
 
   if (versionUpdateRequestAt !== latestVersion) {
-    const updateRequestAgainstVersion = extractVersion(versionedUri);
+    const updateRequestAgainstVersion = extractVersion(versionedUrl);
     throw new Error(
       `Can only request an update using the latest type version, which is ${latestVersion} – the provided URI used ${updateRequestAgainstVersion}`,
     );

@@ -3,7 +3,7 @@ use thiserror::Error;
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::{uri::ParseVersionedUriError, ParseOneOfError};
+use crate::{uri::ParseVersionedUrlError, ParseOneOfError};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
@@ -20,7 +20,7 @@ pub enum ParseOneOfArrayError {
 #[serde(tag = "reason", content = "inner")]
 pub enum ParsePropertyTypeReferenceArrayError {
     #[error("invalid property type reference inside items: `{0}`")]
-    InvalidReference(ParseVersionedUriError),
+    InvalidReference(ParseVersionedUrlError),
     #[error("error in JSON: `{0}`")]
     InvalidJson(String),
 }

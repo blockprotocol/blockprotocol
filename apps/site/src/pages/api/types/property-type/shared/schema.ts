@@ -17,7 +17,7 @@ export const generatePropertyTypeWithMetadata = (data: {
 
   const kind = "propertyType";
 
-  const { baseUri, versionedUri } = generateOntologyUri({
+  const { baseUrl, versionedUrl } = generateOntologyUri({
     author,
     kind,
     title: incompleteSchema.title,
@@ -25,7 +25,7 @@ export const generatePropertyTypeWithMetadata = (data: {
   });
 
   const propertyType: Required<PropertyType> = {
-    $id: versionedUri,
+    $id: versionedUrl,
     description: incompleteSchema.description ?? "",
     oneOf: incompleteSchema.oneOf ?? [],
     kind,
@@ -35,7 +35,7 @@ export const generatePropertyTypeWithMetadata = (data: {
   return {
     metadata: {
       recordId: {
-        baseUri,
+        baseUrl,
         version,
       },
     },

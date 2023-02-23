@@ -1,37 +1,37 @@
 import {
-  extractBaseUri,
-  validateVersionedUri,
-  VersionedUri,
+  extractBaseUrl,
+  validateVersionedUrl,
+  VersionedUrl,
 } from "@blockprotocol/type-system/slim";
 
 import { apiClient } from "../../../../../lib/api-client";
 
 export const fetchEntityType = async (requestedUri: string) => {
-  const isVersionedUri = validateVersionedUri(requestedUri).type === "Ok";
+  const isVersionedUrl = validateVersionedUrl(requestedUri).type === "Ok";
 
-  const baseUri = isVersionedUri
-    ? extractBaseUri(requestedUri as VersionedUri)
+  const baseUrl = isVersionedUrl
+    ? extractBaseUrl(requestedUri as VersionedUrl)
     : requestedUri.endsWith("/")
     ? requestedUri
     : `${requestedUri}/`;
 
   const requestedVersionPromise = apiClient
     .getEntityTypeByUri(
-      isVersionedUri
-        ? { versionedUri: requestedUri }
+      isVersionedUrl
+        ? { versionedUrl: requestedUri }
         : {
-            baseUri,
+            baseUrl,
           },
     )
     .then(({ data }) => data?.entityType);
 
-  const latestVersionPromise = isVersionedUri
+  const latestVersionPromise = isVersionedUrl
     ? apiClient
         .getEntityTypeByUri({
-          baseUri,
+          baseUrl,
         })
         .then(({ data }) => data?.entityType)
-    : // if we were given a non-versioned URI this will be getting the latest anyway
+    : // if we were given a non-versioned URL this will be getting the latest anyway
       requestedVersionPromise;
 
   const [requestedVersion, latestVersion] = await Promise.all([

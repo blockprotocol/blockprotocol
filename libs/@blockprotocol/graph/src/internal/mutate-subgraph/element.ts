@@ -1,5 +1,5 @@
 import {
-  extractBaseUri,
+  extractBaseUrl,
   extractVersion,
   getReferencedIdsFromEntityType,
   getReferencedIdsFromPropertyType,
@@ -41,15 +41,15 @@ export const addDataTypesToSubgraphByMutation = (
 ) => {
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   for (const dataType of dataTypes) {
-    const { baseUri, version } = dataType.metadata.recordId;
+    const { baseUrl, version } = dataType.metadata.recordId;
 
     const dataTypeVertex: DataTypeVertex = {
       kind: "dataType",
       inner: dataType,
     };
 
-    subgraph.vertices[baseUri] ??= {};
-    subgraph.vertices[baseUri]![version] = dataTypeVertex;
+    subgraph.vertices[baseUrl] ??= {};
+    subgraph.vertices[baseUrl]![version] = dataTypeVertex;
 
     /** @todo - with the introduction of non-primitive data types edges will need to be added here */
   }
@@ -76,15 +76,15 @@ export const addPropertyTypesToSubgraphByMutation = (
 ) => {
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   for (const propertyType of propertyTypes) {
-    const { baseUri, version } = propertyType.metadata.recordId;
+    const { baseUrl, version } = propertyType.metadata.recordId;
 
     const propertyTypeVertex: PropertyTypeVertex = {
       kind: "propertyType",
       inner: propertyType,
     };
 
-    subgraph.vertices[baseUri] ??= {};
-    subgraph.vertices[baseUri]![version] = propertyTypeVertex;
+    subgraph.vertices[baseUrl] ??= {};
+    subgraph.vertices[baseUrl]![version] = propertyTypeVertex;
 
     const { constrainsValuesOnDataTypes, constrainsPropertiesOnPropertyTypes } =
       getReferencedIdsFromPropertyType(propertyType.schema);
@@ -99,19 +99,19 @@ export const addPropertyTypesToSubgraphByMutation = (
         endpoints: constrainsPropertiesOnPropertyTypes,
       },
     ]) {
-      for (const versionedUri of endpoints) {
-        const targetBaseUri = extractBaseUri(versionedUri);
-        const targetRevisionId = extractVersion(versionedUri).toString();
+      for (const versionedUrl of endpoints) {
+        const targetBaseUrl = extractBaseUrl(versionedUrl);
+        const targetRevisionId = extractVersion(versionedUrl).toString();
 
         addOutwardEdgeToSubgraphByMutation(
           subgraph,
-          baseUri,
+          baseUrl,
           version.toString(),
           {
             kind: edgeKind,
             reversed: false,
             rightEndpoint: {
-              baseId: targetBaseUri,
+              baseId: targetBaseUrl,
               revisionId: targetRevisionId,
             },
           },
@@ -119,13 +119,13 @@ export const addPropertyTypesToSubgraphByMutation = (
 
         addOutwardEdgeToSubgraphByMutation(
           subgraph,
-          targetBaseUri,
+          targetBaseUrl,
           targetRevisionId,
           {
             kind: edgeKind,
             reversed: true,
             rightEndpoint: {
-              baseId: baseUri,
+              baseId: baseUrl,
               revisionId: version.toString(),
             },
           },
@@ -156,15 +156,15 @@ export const addEntityTypesToSubgraphByMutation = (
 ) => {
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   for (const entityType of entityTypes) {
-    const { baseUri, version } = entityType.metadata.recordId;
+    const { baseUrl, version } = entityType.metadata.recordId;
 
     const entityTypeVertex: EntityTypeVertex = {
       kind: "entityType",
       inner: entityType,
     };
 
-    subgraph.vertices[baseUri] ??= {};
-    subgraph.vertices[baseUri]![version] = entityTypeVertex;
+    subgraph.vertices[baseUrl] ??= {};
+    subgraph.vertices[baseUrl]![version] = entityTypeVertex;
 
     const {
       constrainsPropertiesOnPropertyTypes,
@@ -186,19 +186,19 @@ export const addEntityTypesToSubgraphByMutation = (
         endpoints: constrainsLinkDestinationsOnEntityTypes,
       },
     ]) {
-      for (const versionedUri of endpoints) {
-        const targetBaseUri = extractBaseUri(versionedUri);
-        const targetRevisionId = extractVersion(versionedUri).toString();
+      for (const versionedUrl of endpoints) {
+        const targetBaseUrl = extractBaseUrl(versionedUrl);
+        const targetRevisionId = extractVersion(versionedUrl).toString();
 
         addOutwardEdgeToSubgraphByMutation(
           subgraph,
-          baseUri,
+          baseUrl,
           version.toString(),
           {
             kind: edgeKind,
             reversed: false,
             rightEndpoint: {
-              baseId: targetBaseUri,
+              baseId: targetBaseUrl,
               revisionId: targetRevisionId,
             },
           },
@@ -206,13 +206,13 @@ export const addEntityTypesToSubgraphByMutation = (
 
         addOutwardEdgeToSubgraphByMutation(
           subgraph,
-          targetBaseUri,
+          targetBaseUrl,
           targetRevisionId,
           {
             kind: edgeKind,
             reversed: true,
             rightEndpoint: {
-              baseId: baseUri,
+              baseId: baseUrl,
               revisionId: version.toString(),
             },
           },

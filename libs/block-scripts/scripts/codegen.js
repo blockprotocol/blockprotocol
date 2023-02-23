@@ -2,7 +2,7 @@ import { writeFileSync } from "node:fs";
 import path, { join } from "node:path";
 
 import { generateTypeScriptFromEntityType } from "@blockprotocol/graph/codegen";
-import { validateVersionedUri } from "@blockprotocol/type-system/slim";
+import { validateVersionedUrl } from "@blockprotocol/type-system/slim";
 import chalk from "chalk";
 import fs from "fs-extra";
 
@@ -24,7 +24,7 @@ const script = async () => {
     process.exit(1);
   }
 
-  const validationResult = validateVersionedUri(schema);
+  const validationResult = validateVersionedUrl(schema);
   if (validationResult.type === "Err") {
     console.error(
       chalk.red(`Invalid 'schema' URI: ${validationResult.inner.reason}`),

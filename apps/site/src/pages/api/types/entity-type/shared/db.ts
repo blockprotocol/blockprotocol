@@ -1,7 +1,7 @@
 import type { EntityType, EntityTypeWithMetadata } from "@blockprotocol/graph";
-import type { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
+import type { BaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
-  extractBaseUri,
+  extractBaseUrl,
   extractVersion,
 } from "@blockprotocol/type-system/slim";
 import { Db, ObjectId } from "mongodb";
@@ -15,7 +15,7 @@ export const COLLECTION_NAME = "bp-entity-types";
 
 export type DbEntityType = {
   recordId: {
-    baseUri: BaseUri;
+    baseUrl: BaseUrl;
     version: number;
   };
   createdAt: Date;
@@ -39,7 +39,7 @@ export const getEntityTypes = async (
         { $sort: { "recordId.version": -1 } },
         {
           $group: {
-            _id: "$recordId.baseUri",
+            _id: "$recordId.baseUrl",
             doc_with_max_ver: { $first: "$$ROOT" },
           },
         },
@@ -57,36 +57,36 @@ export const getEntityTypes = async (
 export const getEntityType = async (
   db: Db,
   params: {
-    baseUri?: BaseUri;
-    versionedUri?: VersionedUri;
+    baseUrl?: BaseUrl;
+    versionedUrl?: VersionedUrl;
   },
 ): Promise<DbEntityType | null> => {
-  const { baseUri, versionedUri } = params;
+  const { baseUrl, versionedUrl } = params;
 
-  if (versionedUri && baseUri) {
+  if (versionedUrl && baseUrl) {
     throw new Error(
-      "Please provide only one of baseUri or versionedUri. You sent both.",
+      "Please provide only one of baseUrl or versionedUrl. You sent both.",
     );
   }
 
-  if (versionedUri) {
+  if (versionedUrl) {
     const entityType = await db
       .collection<DbEntityType>(COLLECTION_NAME)
       .findOne({
-        "entityTypeWithMetadata.schema.$id": versionedUri,
+        "entityTypeWithMetadata.schema.$id": versionedUrl,
       });
 
     return entityType ?? null;
   }
 
-  if (!baseUri) {
-    throw new Error("You must provide one of baseUri or versionedUri");
+  if (!baseUrl) {
+    throw new Error("You must provide one of baseUrl or versionedUrl");
   }
 
   const entityTypes = await db
     .collection(COLLECTION_NAME)
     .aggregate<DbEntityType>([
-      { $match: { "recordId.baseUri": baseUri } },
+      { $match: { "recordId.baseUrl": baseUrl } },
       { $sort: { "recordId.version": -1 } },
       { $limit: 1 },
     ])
@@ -106,7 +106,7 @@ export const createEntityType = async (
 ): Promise<DbEntityType> => {
   const { schema, user } = params;
 
-  const { versionedUri } = generateOntologyUri({
+  const { versionedUrl } = generateOntologyUri({
     author: `@${user.shortname!}`,
     kind: "entityType",
     title: schema.title,
@@ -114,11 +114,11 @@ export const createEntityType = async (
   });
 
   const entityTypeWithExistingId = await getEntityType(db, {
-    versionedUri,
+    versionedUrl,
   });
 
   if (entityTypeWithExistingId) {
-    throw new Error(`User already has an entity type with id ${versionedUri}`);
+    throw new Error(`User already has an entity type with id ${versionedUrl}`);
   }
 
   let entityTypeWithMetadata;
@@ -158,18 +158,18 @@ export const updateEntityType = async (
   params: {
     schema: Omit<EntityType, SystemDefinedProperties>;
     user: User;
-    versionedUri: VersionedUri;
+    versionedUrl: VersionedUrl;
   },
 ): Promise<DbEntityType> => {
-  const { versionedUri, schema, user } = params;
+  const { versionedUrl, schema, user } = params;
 
-  const baseUri = extractBaseUri(versionedUri);
+  const baseUrl = extractBaseUrl(versionedUrl);
 
-  const existingEntityType = await getEntityType(db, { baseUri });
+  const existingEntityType = await getEntityType(db, { baseUrl });
 
   if (!existingEntityType) {
     throw new Error(
-      `Cannot find entity type with versionedUri ${versionedUri}`,
+      `Cannot find entity type with versionedUrl ${versionedUrl}`,
     );
   }
 
@@ -179,7 +179,7 @@ export const updateEntityType = async (
 
   const latestVersion =
     existingEntityType.entityTypeWithMetadata.metadata.recordId.version;
-  const versionUpdateRequestAt = extractVersion(versionedUri);
+  const versionUpdateRequestAt = extractVersion(versionedUrl);
 
   if (versionUpdateRequestAt !== latestVersion) {
     throw new Error(

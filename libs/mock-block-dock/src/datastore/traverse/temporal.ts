@@ -318,7 +318,7 @@ export const traverseElement = ({
         } else {
           newIntersection = interval;
           neighborVertexId = {
-            baseId: neighborVertex.inner.metadata.recordId.baseUri,
+            baseId: neighborVertex.inner.metadata.recordId.baseUrl,
             revisionId:
               neighborVertex.inner.metadata.recordId.version.toString(),
           };

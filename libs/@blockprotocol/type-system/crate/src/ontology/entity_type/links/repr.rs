@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
-    repr, uri::VersionedUri, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
+    repr, uri::VersionedUrl, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
     ParseLinksError, ParseOneOfError,
 };
 
@@ -17,7 +17,7 @@ pub struct Links {
         target_arch = "wasm32",
         tsify(
             optional,
-            type = "Record<VersionedUri, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>"
+            type = "Record<VersionedUrl, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>"
         )
     )]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
@@ -33,7 +33,7 @@ impl TryFrom<Links> for super::Links {
             .into_iter()
             .map(|(uri, val)| {
                 Ok((
-                    VersionedUri::from_str(&uri).map_err(ParseLinksError::InvalidLinkKey)?,
+                    VersionedUrl::from_str(&uri).map_err(ParseLinksError::InvalidLinkKey)?,
                     val.try_into().map_err(ParseLinksError::InvalidArray)?,
                 ))
             })

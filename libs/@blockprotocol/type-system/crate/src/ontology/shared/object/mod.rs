@@ -3,18 +3,18 @@ pub(in crate::ontology) mod repr;
 
 use std::collections::HashMap;
 
-use crate::{uri::BaseUri, ValidateUri, ValidationError};
+use crate::{uri::BaseUrl, ValidateUri, ValidationError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Object<T, const MIN: usize = 0> {
-    properties: HashMap<BaseUri, T>,
-    required: Vec<BaseUri>,
+    properties: HashMap<BaseUrl, T>,
+    required: Vec<BaseUrl>,
 }
 
 impl<T: ValidateUri, const MIN: usize> Object<T, MIN> {
     /// Creates a new `Object` without validating.
     #[must_use]
-    pub fn new_unchecked(properties: HashMap<BaseUri, T>, required: Vec<BaseUri>) -> Self {
+    pub fn new_unchecked(properties: HashMap<BaseUrl, T>, required: Vec<BaseUrl>) -> Self {
         Self {
             properties,
             required,
@@ -30,8 +30,8 @@ impl<T: ValidateUri, const MIN: usize> Object<T, MIN> {
     /// - [`ValidationError::MismatchedPropertyCount`] if the number of properties is less than
     ///   `MIN`.
     pub fn new(
-        properties: HashMap<BaseUri, T>,
-        required: Vec<BaseUri>,
+        properties: HashMap<BaseUrl, T>,
+        required: Vec<BaseUrl>,
     ) -> Result<Self, ValidationError> {
         let object = Self::new_unchecked(properties, required);
         object.validate()?;
@@ -53,20 +53,20 @@ impl<T: ValidateUri, const MIN: usize> Object<T, MIN> {
             }
         }
 
-        for (base_uri, reference) in self.properties() {
-            reference.validate_uri(base_uri)?;
+        for (base_url, reference) in self.properties() {
+            reference.validate_uri(base_url)?;
         }
 
         Ok(())
     }
 
     #[must_use]
-    pub const fn properties(&self) -> &HashMap<BaseUri, T> {
+    pub const fn properties(&self) -> &HashMap<BaseUrl, T> {
         &self.properties
     }
 
     #[must_use]
-    pub fn required(&self) -> &[BaseUri] {
+    pub fn required(&self) -> &[BaseUrl] {
         &self.required
     }
 }
@@ -79,7 +79,7 @@ mod tests {
 
     use super::*;
     use crate::{
-        repr, uri::VersionedUri, utils::tests::ensure_failed_validation,
+        repr, uri::VersionedUrl, utils::tests::ensure_failed_validation,
         ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray,
     };
 
@@ -111,11 +111,11 @@ mod tests {
                     "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_b/v/1" }
                 }
             }),
-            ParsePropertyTypeObjectError::ValidationError(ValidationError::BaseUriMismatch {
-                base_uri: BaseUri::new("https://example.com/property_type_a/".to_owned())
+            ParsePropertyTypeObjectError::ValidationError(ValidationError::BaseUrlMismatch {
+                base_url: BaseUrl::new("https://example.com/property_type_a/".to_owned())
                     .expect("failed to create BaseURI"),
-                versioned_uri: VersionedUri::from_str("https://example.com/property_type_b/v/1")
-                    .expect("failed to create VersionedUri"),
+                versioned_url: VersionedUrl::from_str("https://example.com/property_type_b/v/1")
+                    .expect("failed to create VersionedUrl"),
             }),
         );
     }
@@ -135,7 +135,7 @@ mod tests {
             }),
             ParsePropertyTypeObjectError::ValidationError(
                 ValidationError::MissingRequiredProperty(
-                    BaseUri::new("https://example.com/property_type_c/".to_owned())
+                    BaseUrl::new("https://example.com/property_type_c/".to_owned())
                         .expect("failed to create BaseURI"),
                 ),
             ),

@@ -3,7 +3,7 @@ import {
   DataType,
   EntityType,
   PropertyType,
-  VersionedUri,
+  VersionedUrl,
 } from "@blockprotocol/type-system/slim";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -32,15 +32,15 @@ const generateJsonResponse = (object: DataType | EntityType | PropertyType) =>
 export const versionedTypeUriRegExp =
   /types\/(entity-type|data-type|property-type)\/.+\/v\/\d+$/;
 
-const validateVersionedUri = (uri: string): uri is VersionedUri =>
+const validateVersionedUrl = (uri: string): uri is VersionedUrl =>
   !!uri.match(versionedTypeUriRegExp);
 
-const getTypeByVersionedUri = (
-  versionedUri: VersionedUri,
+const getTypeByVersionedUrl = (
+  versionedUrl: VersionedUrl,
   kind: "entity-type" | "property-type",
 ) =>
   fetch(
-    `${FRONTEND_URL}/api/types/${kind}/get?versionedUri=${versionedUri}`,
+    `${FRONTEND_URL}/api/types/${kind}/get?versionedUrl=${versionedUrl}`,
   ).then(
     (resp) =>
       resp.json() as Promise<
@@ -51,7 +51,7 @@ const getTypeByVersionedUri = (
 export const returnTypeAsJson = async (request: NextRequest) => {
   const { url } = request;
 
-  const isUriValid = validateVersionedUri(url);
+  const isUriValid = validateVersionedUrl(url);
 
   if (!isUriValid) {
     return generateErrorResponse(
@@ -72,7 +72,7 @@ export const returnTypeAsJson = async (request: NextRequest) => {
   // Our hardcoded types have ALL data types and a single entity-type
   // If it's not in there, it'll be an entity or property type
   if (!type && kind !== "data-type") {
-    type = await getTypeByVersionedUri(
+    type = await getTypeByVersionedUrl(
       url,
       kind as "entity-type" | "property-type",
     ).then((apiResponse) => {

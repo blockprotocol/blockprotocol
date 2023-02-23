@@ -938,7 +938,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
         "properties": {
           "type": "object",
           "propertyNames": {
-            "$comment": "Property names must be a valid URI to a Property Type",
+            "$comment": "Property names must be a valid URL to a Property Type",
             "type": "string",
             "format": "uri"
           },
@@ -989,7 +989,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
       "type": "object",
       "properties": {
         "$ref": {
-          "$comment": "Property Object values must be defined through references to the same valid URI to a Property Type",
+          "$comment": "Property Object values must be defined through references to the same valid URL to a Property Type",
           "type": "string",
           "format": "uri"
         }
@@ -1342,7 +1342,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
       "$comment": "Default Entity instance",
       "type": "object",
       "propertyNames": {
-        "$comment": "Property names must be a valid URI to a Property Type",
+        "$comment": "Property names must be a valid URL to a Property Type",
         "type": "string",
         "format": "uri"
       }
@@ -1353,7 +1353,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
       "items": {
         "type": "object",
         "propertyNames": {
-          "$comment": "Property names must be a valid URI to a Property Type",
+          "$comment": "Property names must be a valid URL to a Property Type",
           "type": "string",
           "format": "uri"
         }
@@ -1375,7 +1375,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
     "links": {
       "type": "object",
       "propertyNames": {
-        "$comment": "Property names must be a valid URI to a link-type",
+        "$comment": "Property names must be a valid URL to a link-type",
         "type": "string",
         "format": "uri"
       },
@@ -1417,7 +1417,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
         "properties": {
           "type": "object",
           "propertyNames": {
-            "$comment": "Property names must be a valid URI to a Property Type",
+            "$comment": "Property names must be a valid URL to a Property Type",
             "type": "string",
             "format": "uri"
           },
@@ -1468,7 +1468,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
       "type": "object",
       "properties": {
         "$ref": {
-          "$comment": "Property Object values must be defined through references to the same valid URI to a Property Type",
+          "$comment": "Property Object values must be defined through references to the same valid URL to a Property Type",
           "type": "string",
           "format": "uri"
         }
@@ -2080,7 +2080,7 @@ We can define the new JSON Schema keywords that the system uses through JSON Sch
   "links": {
     "type": "object",
     "propertyNames": {
-      "$comment": "Property names must be a valid URI to a link-type",
+      "$comment": "Property names must be a valid URL to a link-type",
       "type": "string",
       "format": "uri"
     },

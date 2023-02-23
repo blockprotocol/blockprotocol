@@ -8,18 +8,18 @@ use std::collections::HashMap;
 pub use error::ParseLinksError;
 
 use crate::{
-    uri::{BaseUri, VersionedUri},
+    uri::{BaseUrl, VersionedUrl},
     Array, EntityTypeReference, OneOf, ValidateUri, ValidationError,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Links(HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>);
+pub struct Links(HashMap<VersionedUrl, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>);
 
 impl Links {
     /// Creates a new `Links` object.
     #[must_use]
     pub const fn new(
-        links: HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
+        links: HashMap<VersionedUrl, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
     ) -> Self {
         Self(links)
     }
@@ -27,7 +27,7 @@ impl Links {
     #[must_use]
     pub const fn links(
         &self,
-    ) -> &HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
+    ) -> &HashMap<VersionedUrl, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
         &self.0
     }
 }
@@ -64,8 +64,8 @@ impl<T> MaybeOrderedArray<T> {
 }
 
 impl<T: ValidateUri> ValidateUri for MaybeOrderedArray<T> {
-    fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
-        self.array().items().validate_uri(base_uri)
+    fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
+        self.array().items().validate_uri(base_url)
     }
 }
 

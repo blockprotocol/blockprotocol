@@ -3,7 +3,7 @@ import {
   EntityTypeWithMetadata,
   PropertyType,
 } from "@blockprotocol/graph";
-import { VersionedUri } from "@blockprotocol/type-system/slim";
+import { VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
   EntityTypeEditor,
   EntityTypeEditorProps,
@@ -25,11 +25,11 @@ export const EntityTypeForm = ({
   readonly: _readonly,
 }: EntityTypeFormProps) => {
   const [entityTypeOptions, setEntityTypeOptions] = useState<Record<
-    VersionedUri,
+    VersionedUrl,
     EntityType
   > | null>(null);
   const [propertyTypeOptions, setPropertyTypeOptions] = useState<Record<
-    VersionedUri,
+    VersionedUrl,
     PropertyType
   > | null>(null);
 
@@ -40,7 +40,7 @@ export const EntityTypeForm = ({
 
     if (responseData) {
       setEntityTypeOptions(
-        responseData.entityTypes.reduce<Record<VersionedUri, EntityType>>(
+        responseData.entityTypes.reduce<Record<VersionedUrl, EntityType>>(
           (acc, entityTypeOption) => {
             acc[entityTypeOption.schema.$id] = entityTypeOption.schema;
 
@@ -59,7 +59,7 @@ export const EntityTypeForm = ({
 
     if (responseData) {
       setPropertyTypeOptions(
-        responseData.propertyTypes.reduce<Record<VersionedUri, PropertyType>>(
+        responseData.propertyTypes.reduce<Record<VersionedUrl, PropertyType>>(
           (acc, propertyType) => {
             acc[propertyType.schema.$id] = propertyType.schema;
 
@@ -144,7 +144,7 @@ export const EntityTypeForm = ({
 
           const { data: updatedData, error } = await apiClient.updateEntityType(
             {
-              versionedUri: data.entityTypeId,
+              versionedUrl: data.entityTypeId,
               schema: data.entityType,
             },
           );
@@ -174,7 +174,7 @@ export const EntityTypeForm = ({
 
           const { data: updatedData, error } =
             await apiClient.updatePropertyType({
-              versionedUri: data.propertyTypeId,
+              versionedUrl: data.propertyTypeId,
               schema: data.propertyType,
             });
 
@@ -197,7 +197,7 @@ export const EntityTypeForm = ({
           return { data: updatedData.propertyType };
         },
         validateTitle: async ({ kind, title }) => {
-          const { versionedUri } = generateOntologyUri({
+          const { versionedUrl } = generateOntologyUri({
             author,
             kind: kind === "entity-type" ? "entityType" : "propertyType",
             title,
@@ -210,7 +210,7 @@ export const EntityTypeForm = ({
               : apiClient.getPropertyTypeByUri;
 
           const { data: existingType } = await fetchFunction({
-            versionedUri,
+            versionedUrl,
           });
 
           if (existingType) {

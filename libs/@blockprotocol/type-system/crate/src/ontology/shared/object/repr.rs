@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 use crate::{
-    repr, uri::BaseUri, ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray,
+    repr, uri::BaseUrl, ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray,
 };
 
 /// Will serialize as a constant value `"object"`
@@ -21,9 +21,9 @@ enum ObjectTypeTag {
 pub struct Object<T> {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'object'"))]
     r#type: ObjectTypeTag,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUri, T>"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUrl, T>"))]
     properties: HashMap<String, T>,
-    #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "BaseUri[]"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "BaseUrl[]"))]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     required: Vec<String>,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "false"))]
@@ -41,9 +41,9 @@ impl<const MIN: usize> TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeRefer
         let properties = object_repr
             .properties
             .into_iter()
-            .map(|(base_uri, val)| {
+            .map(|(base_url, val)| {
                 Ok((
-                    BaseUri::new(base_uri)
+                    BaseUrl::new(base_url)
                         .map_err(ParsePropertyTypeObjectError::InvalidPropertyKey)?,
                     val.try_into()?,
                 ))
@@ -53,8 +53,8 @@ impl<const MIN: usize> TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeRefer
         let required = object_repr
             .required
             .into_iter()
-            .map(|base_uri| {
-                BaseUri::new(base_uri).map_err(ParsePropertyTypeObjectError::InvalidRequiredKey)
+            .map(|base_url| {
+                BaseUrl::new(base_url).map_err(ParsePropertyTypeObjectError::InvalidRequiredKey)
             })
             .collect::<Result<Vec<_>, Self::Error>>()?;
 
@@ -99,7 +99,7 @@ mod tests {
     use super::*;
     use crate::{
         repr::PropertyTypeReference,
-        uri::VersionedUri,
+        uri::VersionedUrl,
         utils::tests::{check_repr_serialization_from_value, ensure_repr_failed_deserialization},
     };
 
@@ -126,8 +126,8 @@ mod tests {
 
         #[test]
         fn one() {
-            let uri = VersionedUri::from_str("https://example.com/property_type/v/1")
-                .expect("invalid Versioned URI");
+            let uri = VersionedUrl::from_str("https://example.com/property_type/v/1")
+                .expect("invalid Versioned URL");
 
             check_repr_serialization_from_value(
                 json!({
@@ -139,7 +139,7 @@ mod tests {
                 Some(Object {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::from([(
-                        uri.base_uri.to_string(),
+                        uri.base_url.to_string(),
                         PropertyTypeReference::new(uri.to_string()),
                     )]),
                     required: vec![],
@@ -150,10 +150,10 @@ mod tests {
 
         #[test]
         fn multiple() {
-            let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
-                .expect("invalid Versioned URI");
-            let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
-                .expect("invalid Versioned URI");
+            let uri_a = VersionedUrl::from_str("https://example.com/property_type_a/v/1")
+                .expect("invalid Versioned URL");
+            let uri_b = VersionedUrl::from_str("https://example.com/property_type_b/v/1")
+                .expect("invalid Versioned URL");
 
             check_repr_serialization_from_value(
                 json!({
@@ -167,11 +167,11 @@ mod tests {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::from([
                         (
-                            uri_a.base_uri.to_string(),
+                            uri_a.base_url.to_string(),
                             PropertyTypeReference::new(uri_a.to_string()),
                         ),
                         (
-                            uri_b.base_uri.to_string(),
+                            uri_b.base_url.to_string(),
                             PropertyTypeReference::new(uri_b.to_string()),
                         ),
                     ]),
@@ -189,8 +189,8 @@ mod tests {
 
         #[test]
         fn one() {
-            let uri = VersionedUri::from_str("https://example.com/property_type/v/1")
-                .expect("invalid Versioned URI");
+            let uri = VersionedUrl::from_str("https://example.com/property_type/v/1")
+                .expect("invalid Versioned URL");
 
             check_repr_serialization_from_value(
                 json!({
@@ -202,7 +202,7 @@ mod tests {
                 Some(Object {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::from([(
-                        uri.base_uri.to_string(),
+                        uri.base_url.to_string(),
                         PropertyTypeReference::new(uri.to_string()),
                     )]),
                     required: vec![],
@@ -213,10 +213,10 @@ mod tests {
 
         #[test]
         fn multiple() {
-            let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
-                .expect("invalid Versioned URI");
-            let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
-                .expect("invalid Versioned URI");
+            let uri_a = VersionedUrl::from_str("https://example.com/property_type_a/v/1")
+                .expect("invalid Versioned URL");
+            let uri_b = VersionedUrl::from_str("https://example.com/property_type_b/v/1")
+                .expect("invalid Versioned URL");
 
             check_repr_serialization_from_value(
                 json!({
@@ -230,11 +230,11 @@ mod tests {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::from([
                         (
-                            uri_a.base_uri.to_string(),
+                            uri_a.base_url.to_string(),
                             PropertyTypeReference::new(uri_a.to_string()),
                         ),
                         (
-                            uri_b.base_uri.to_string(),
+                            uri_b.base_url.to_string(),
                             PropertyTypeReference::new(uri_b.to_string()),
                         ),
                     ]),
@@ -247,10 +247,10 @@ mod tests {
 
     #[test]
     fn required() {
-        let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
-            .expect("invalid Versioned URI");
-        let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
-            .expect("invalid Versioned URI");
+        let uri_a = VersionedUrl::from_str("https://example.com/property_type_a/v/1")
+            .expect("invalid Versioned URL");
+        let uri_b = VersionedUrl::from_str("https://example.com/property_type_b/v/1")
+            .expect("invalid Versioned URL");
 
         check_repr_serialization_from_value(
             json!({
@@ -267,15 +267,15 @@ mod tests {
                 r#type: ObjectTypeTag::Object,
                 properties: HashMap::from([
                     (
-                        uri_a.base_uri.to_string(),
+                        uri_a.base_url.to_string(),
                         PropertyTypeReference::new(uri_a.to_string()),
                     ),
                     (
-                        uri_b.base_uri.to_string(),
+                        uri_b.base_url.to_string(),
                         PropertyTypeReference::new(uri_b.to_string()),
                     ),
                 ]),
-                required: vec![uri_a.base_uri.to_string()],
+                required: vec![uri_a.base_url.to_string()],
                 additional_properties: false,
             }),
         );

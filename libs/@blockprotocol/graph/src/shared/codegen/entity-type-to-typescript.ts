@@ -1,8 +1,8 @@
 import {
   EntityType,
-  extractBaseUri,
+  extractBaseUrl,
   extractVersion,
-  VersionedUri,
+  VersionedUrl,
 } from "@blockprotocol/type-system/slim";
 import { compile, Options } from "json-schema-to-typescript";
 
@@ -64,7 +64,7 @@ type CompiledType = {
 };
 
 // A map of schema URIs to their TS type name and definition
-type UriToType = { [entityTypeId: VersionedUri]: CompiledType };
+type UriToType = { [entityTypeId: VersionedUrl]: CompiledType };
 
 const generateTypeNameFromSchema = (
   schema: EntityType,
@@ -88,7 +88,7 @@ const generateTypeNameFromSchema = (
     return proposedName;
   }
 
-  if (extractBaseUri(typeWithProposedName[0]) === extractBaseUri(schema.$id)) {
+  if (extractBaseUrl(typeWithProposedName[0]) === extractBaseUrl(schema.$id)) {
     // this is the same type at a different version, so we distinguish by version
     const nameWithVersionSuffix = `${proposedName}V${extractVersion(
       schema.$id,
@@ -209,13 +209,13 @@ const _jsonSchemaToTypeScript = async (
   // if we're following links, we want to generate various types that can be plugged into subgraph functions
 
   // keep track of the possible destination types from this entity type for each link type it includes
-  const typeLinkMap: Record<VersionedUri, string> = {};
+  const typeLinkMap: Record<VersionedUrl, string> = {};
 
   for (const [linkEntityTypeId, destinationSchema] of typedEntries(
     schema.links ?? {},
   )) {
     const retrieveOrCompileSchemaFromUri = async (
-      uri: VersionedUri,
+      uri: VersionedUrl,
     ): Promise<CompiledType> => {
       const cachedType = resolvedUrisToType[uri];
       if (cachedType) {
@@ -224,7 +224,7 @@ const _jsonSchemaToTypeScript = async (
           typeScriptString: "",
         };
       }
-      const typeSchema = await fetchAndValidateEntityType(uri as VersionedUri);
+      const typeSchema = await fetchAndValidateEntityType(uri as VersionedUrl);
       return _jsonSchemaToTypeScript(
         typeSchema,
         depth - 1,

@@ -1,4 +1,4 @@
-import { BaseUri, validateBaseUri } from "@blockprotocol/type-system/slim";
+import { BaseUrl, validateBaseUrl } from "@blockprotocol/type-system/slim";
 
 import { stringIsNonNegativeInteger } from "../../util.js";
 import {
@@ -31,7 +31,7 @@ export type EntityTypeVertex = {
 export type EntityVertex<
   Temporal extends boolean,
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = { kind: "entity"; inner: Entity<Temporal, Properties> };
@@ -44,7 +44,7 @@ export type OntologyVertex =
 export type KnowledgeGraphVertex<
   Temporal extends boolean,
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = EntityVertex<Temporal, Properties>;
@@ -52,7 +52,7 @@ export type KnowledgeGraphVertex<
 export type Vertex<
   Temporal extends boolean,
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = OntologyVertex | KnowledgeGraphVertex<Temporal, Properties>;
@@ -86,7 +86,7 @@ export type VertexId<BaseId, RevisionId> = {
   revisionId: RevisionId;
 };
 export type EntityVertexId = VertexId<EntityId, EntityRevisionId>;
-export type OntologyTypeVertexId = VertexId<BaseUri, OntologyTypeRevisionId>;
+export type OntologyTypeVertexId = VertexId<BaseUrl, OntologyTypeRevisionId>;
 export type GraphElementVertexId = EntityVertexId | OntologyTypeVertexId;
 
 export const isOntologyTypeVertexId = (
@@ -97,7 +97,7 @@ export const isOntologyTypeVertexId = (
     typeof vertexId === "object" &&
     "baseId" in vertexId &&
     typeof vertexId.baseId === "string" &&
-    validateBaseUri(vertexId.baseId).type === "Ok" &&
+    validateBaseUrl(vertexId.baseId).type === "Ok" &&
     "revisionId" in vertexId &&
     typeof vertexId.revisionId === "string" &&
     stringIsNonNegativeInteger(vertexId.revisionId)
@@ -120,7 +120,7 @@ export const isEntityVertexId = (
 };
 
 export type OntologyVertices = Record<
-  BaseUri,
+  BaseUrl,
   Record<OntologyTypeRevisionId, OntologyVertex>
 >;
 

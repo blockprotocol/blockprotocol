@@ -8,23 +8,23 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::uri::{BaseUri, VersionedUri};
+use crate::uri::{BaseUrl, VersionedUrl};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type", content = "inner")]
 pub enum ValidationError {
-    /// A schema has marked a property with a [`BaseUri`] as required but the [`BaseUri`] does not
+    /// A schema has marked a property with a [`BaseUrl`] as required but the [`BaseUrl`] does not
     /// exist in the `properties`.
-    MissingRequiredProperty(BaseUri),
+    MissingRequiredProperty(BaseUrl),
     /// When associating a property name with a reference to a Type, we expect the name to match
-    /// the [`VersionedUri::base_uri`] inside the reference.
-    BaseUriMismatch {
-        base_uri: BaseUri,
-        versioned_uri: VersionedUri,
+    /// the [`VersionedUrl::base_url`] inside the reference.
+    BaseUrlMismatch {
+        base_url: BaseUrl,
+        versioned_url: VersionedUrl,
     },
     /// A schema has marked a link as required but the link does not exist in the schema.
-    MissingRequiredLink(VersionedUri),
+    MissingRequiredLink(VersionedUrl),
     /// At least `expected` number of properties are required, but only `actual` were provided.
     MismatchedPropertyCount { actual: usize, expected: usize },
     /// `oneOf` requires at least one element.
@@ -41,14 +41,14 @@ impl Display for ValidationError {
                      defined in the `\"properties\"` object"
                 )
             }
-            Self::BaseUriMismatch {
-                base_uri,
-                versioned_uri,
+            Self::BaseUrlMismatch {
+                base_url,
+                versioned_url,
             } => {
                 write!(
                     fmt,
-                    "expected base URI ({base_uri}) differed from the base URI of \
-                     ({versioned_uri})"
+                    "expected base URL ({base_url}) differed from the base URL of \
+                     ({versioned_url})"
                 )
             }
             Self::MissingRequiredLink(link) => {
@@ -75,5 +75,5 @@ pub trait ValidateUri {
     /// TODO: DOC
     ///
     /// # Errors
-    fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError>;
+    fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError>;
 }

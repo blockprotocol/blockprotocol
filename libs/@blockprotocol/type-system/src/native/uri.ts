@@ -1,27 +1,27 @@
 import {
-  BaseUri,
-  ParseBaseUriError,
-  ParseVersionedUriError,
+  BaseUrl,
+  ParseBaseUrlError,
+  ParseVersionedUrlError,
   Result,
-  VersionedUri,
+  VersionedUrl,
 } from "../../wasm/type-system";
 
 /**
  * Checks if a given URL string is a valid base URL.
  *
- * @param {BaseUri} uri - The URL string.
- * @returns {(Result<BaseUri, ParseBaseUriError>)} - an Ok with an inner of the string as a
- * BaseUri if valid, or an Err with an inner ParseBaseUriError
+ * @param {BaseUrl} uri - The URL string.
+ * @returns {(Result<BaseUrl, ParseBaseUrlError>)} - an Ok with an inner of the string as a
+ * BaseUrl if valid, or an Err with an inner ParseBaseUrlError
  */
-export const validateBaseUri = (
+export const validateBaseUrl = (
   uri: string,
-): Result<BaseUri, ParseBaseUriError> => {
+): Result<BaseUrl, ParseBaseUrlError> => {
   try {
     void new URL(uri);
     if (uri.endsWith("/")) {
       return {
         type: "Ok",
-        inner: uri as BaseUri,
+        inner: uri as BaseUrl,
       };
     } else {
       return {
@@ -37,20 +37,20 @@ export const validateBaseUri = (
   }
 };
 
-const versionedUriRegExp = /(.+\/)v\/(\d+)(.*)/;
+const versionedUrlRegExp = /(.+\/)v\/(\d+)(.*)/;
 
 /**
- * Checks if a given URL string is a Block Protocol compliant Versioned URI.
+ * Checks if a given URL string is a Block Protocol compliant Versioned URL.
  *
  * @param {string} uri - The URL string.
- * @returns {(Result<VersionedUri, ParseVersionedUriError>)} - an Ok with an inner of the string
+ * @returns {(Result<VersionedUrl, ParseVersionedUrlError>)} - an Ok with an inner of the string
  as
- * a VersionedUri if valid, or an Err with an inner ParseVersionedUriError
+ * a VersionedUrl if valid, or an Err with an inner ParseVersionedUrlError
  */
-export const validateVersionedUri = (
+export const validateVersionedUrl = (
   uri: string,
-): Result<VersionedUri, ParseVersionedUriError> => {
-  const groups = versionedUriRegExp.exec(uri);
+): Result<VersionedUrl, ParseVersionedUrlError> => {
+  const groups = versionedUrlRegExp.exec(uri);
 
   if (groups === null) {
     return {
@@ -58,7 +58,7 @@ export const validateVersionedUri = (
       inner: { reason: "IncorrectFormatting" },
     };
   } else {
-    const [_match, baseUri, version, trailingContent] = groups;
+    const [_match, baseUrl, version, trailingContent] = groups;
 
     if (trailingContent) {
       return {
@@ -74,19 +74,19 @@ export const validateVersionedUri = (
       };
     }
 
-    if (!baseUri) {
+    if (!baseUrl) {
       return {
         type: "Err",
-        inner: { reason: "MissingBaseUri" },
+        inner: { reason: "MissingBaseUrl" },
       };
     }
 
-    const validBaseUriResult = validateBaseUri(baseUri);
+    const validBaseUrlResult = validateBaseUrl(baseUrl);
 
-    if (validBaseUriResult.type === "Err") {
+    if (validBaseUrlResult.type === "Err") {
       return {
         type: "Err",
-        inner: { reason: "InvalidBaseUri", inner: validBaseUriResult.inner },
+        inner: { reason: "InvalidBaseUrl", inner: validBaseUrlResult.inner },
       };
     }
 
@@ -102,46 +102,46 @@ export const validateVersionedUri = (
       };
     }
 
-    return { type: "Ok", inner: uri as VersionedUri };
+    return { type: "Ok", inner: uri as VersionedUrl };
   }
 };
 
 /**
- * Extracts the base URI from a Versioned URI.
+ * Extracts the base URL from a Versioned URL.
  *
- * @param {VersionedUri} uri - The versioned URI.
- * @throws if the versioned URI is invalid.
+ * @param {VersionedUrl} uri - The versioned URL.
+ * @throws if the versioned URL is invalid.
  */
-export const extractBaseUri = (uri: VersionedUri): BaseUri => {
-  const groups = versionedUriRegExp.exec(uri);
+export const extractBaseUrl = (uri: VersionedUrl): BaseUrl => {
+  const groups = versionedUrlRegExp.exec(uri);
 
   if (groups === null) {
-    throw new Error(`Not a valid VersionedUri: ${uri}`);
+    throw new Error(`Not a valid VersionedUrl: ${uri}`);
   }
 
-  const [_match, baseUri, _version] = groups;
+  const [_match, baseUrl, _version] = groups;
 
-  if (baseUri === undefined) {
-    throw new Error(`Not a valid VersionedUri: ${uri}`);
+  if (baseUrl === undefined) {
+    throw new Error(`Not a valid VersionedUrl: ${uri}`);
   }
 
-  return baseUri;
+  return baseUrl;
 };
 
 /**
- * Extracts the version from a Versioned URI.
+ * Extracts the version from a Versioned URL.
  *
- * @param {VersionedUri} uri - The versioned URI.
- * @throws if the versioned URI is invalid.
+ * @param {VersionedUrl} uri - The versioned URL.
+ * @throws if the versioned URL is invalid.
  */
-export const extractVersion = (uri: VersionedUri): number => {
-  const groups = versionedUriRegExp.exec(uri);
+export const extractVersion = (uri: VersionedUrl): number => {
+  const groups = versionedUrlRegExp.exec(uri);
 
   if (groups === null) {
-    throw new Error(`Not a valid VersionedUri: ${uri}`);
+    throw new Error(`Not a valid VersionedUrl: ${uri}`);
   }
 
-  const [_match, _baseUri, version] = groups;
+  const [_match, _baseUrl, version] = groups;
 
   return Number(version);
 };

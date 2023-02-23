@@ -3,14 +3,14 @@ use thiserror::Error;
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::{uri::ParseVersionedUriError, ParseEntityTypeReferenceArrayError};
+use crate::{uri::ParseVersionedUrlError, ParseEntityTypeReferenceArrayError};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseLinksError {
     #[error("invalid link key: `{0}`")]
-    InvalidLinkKey(ParseVersionedUriError),
+    InvalidLinkKey(ParseVersionedUrlError),
     #[error("invalid array definition: `{0}`")]
     InvalidArray(ParseEntityTypeReferenceArrayError),
     #[error("error in JSON: `{0}`")]
