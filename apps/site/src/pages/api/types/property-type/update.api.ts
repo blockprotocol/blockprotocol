@@ -1,5 +1,5 @@
 import { PropertyType, PropertyTypeWithMetadata } from "@blockprotocol/graph";
-import { VersionedUri } from "@blockprotocol/type-system/slim";
+import { VersionedUrl } from "@blockprotocol/type-system/slim";
 import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 
 import { createAuthenticatedHandler } from "../../../../lib/api/handler/authenticated-handler";
@@ -8,7 +8,7 @@ import { SystemDefinedProperties } from "../shared/constants";
 import { updatePropertyType } from "./shared/db";
 
 export type ApiPropertyTypeUpdateRequest = {
-  versionedUri: VersionedUri;
+  versionedUrl: VersionedUrl;
   schema: Omit<PropertyType, SystemDefinedProperties>;
 };
 
@@ -22,16 +22,16 @@ export default createAuthenticatedHandler<
 >()
   .use(
     bodyValidator("schema").isObject(),
-    bodyValidator("versionedUri").isString().notEmpty(),
+    bodyValidator("versionedUrl").isString().notEmpty(),
   )
   .put(async (req, res) => {
     const { db, user } = req;
 
-    const { versionedUri, schema } = req.body;
+    const { versionedUrl, schema } = req.body;
 
     try {
       const dbRecord = await updatePropertyType(db, {
-        versionedUri,
+        versionedUrl,
         schema,
         user,
       });

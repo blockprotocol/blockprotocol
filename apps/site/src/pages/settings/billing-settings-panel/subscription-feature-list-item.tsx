@@ -10,7 +10,7 @@ export type SubscriptionFeature = {
 export const SubscriptionFeatureListItem: FunctionComponent<{
   feature: SubscriptionFeature;
 }> = ({ feature: { icon, title, planned } }) => (
-  <Box component="li" display="flex" alignItems="center" marginBottom={1}>
+  <Box component="li" display="flex" alignItems="flex-start" marginBottom={1}>
     <Box marginRight={2}>{icon}</Box>
     <Typography variant="bpSmallCopy">
       {title}

@@ -177,14 +177,14 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
       ],
     },
     {
-      reason: "InvalidVersionedUri",
+      reason: "InvalidVersionedUrl",
       inner: {
         reason: "AdditionalEndContent",
       },
     },
   ],
   [
-    "invalid base URI",
+    "invalid base URL",
     {
       kind: "propertyType",
       $id: "https://  /broken/v/1",
@@ -196,9 +196,9 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
       ],
     },
     {
-      reason: "InvalidVersionedUri",
+      reason: "InvalidVersionedUrl",
       inner: {
-        reason: "InvalidBaseUri",
+        reason: "InvalidBaseUrl",
         inner: {
           reason: "UrlParseError",
           inner: "invalid domain character",
@@ -225,7 +225,7 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
         inner: {
           reason: "InvalidDataTypeReference",
           inner: {
-            reason: "InvalidBaseUri",
+            reason: "InvalidBaseUrl",
             inner: {
               reason: "UrlParseError",
               inner: "relative URL without a base",

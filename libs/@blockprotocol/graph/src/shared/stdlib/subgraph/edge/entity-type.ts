@@ -1,8 +1,8 @@
 import {
-  BaseUri,
-  extractBaseUri,
+  BaseUrl,
+  extractBaseUrl,
   extractVersion,
-  VersionedUri,
+  VersionedUrl,
 } from "@blockprotocol/type-system/slim";
 
 import {
@@ -18,25 +18,25 @@ import {
  * "ConstrainsPropertiesOn" `Edge`s from the respective `Vertex` within a `Subgraph`.
  *
  * @param subgraph {Subgraph} - The `Subgraph` containing the type tree of the `EntityType`
- * @param entityTypeId {OntologyTypeVertexId | VersionedUri} - The identifier of the `EntityType` to search for
+ * @param entityTypeId {OntologyTypeVertexId | VersionedUrl} - The identifier of the `EntityType` to search for
  * @returns {OntologyTypeVertexId[]} - The identifiers of the `PropertyType`s referenced from the `EntityType`
  */
 export const getPropertyTypesReferencedByEntityType = (
   subgraph: Subgraph<boolean>,
-  entityTypeId: OntologyTypeVertexId | VersionedUri,
+  entityTypeId: OntologyTypeVertexId | VersionedUrl,
 ): OntologyTypeVertexId[] => {
-  let baseUri: BaseUri;
+  let baseUrl: BaseUrl;
   let revisionId: OntologyTypeRevisionId;
 
   if (typeof entityTypeId === "string") {
-    baseUri = extractBaseUri(entityTypeId);
+    baseUrl = extractBaseUrl(entityTypeId);
     revisionId = extractVersion(entityTypeId).toString();
   } else {
-    baseUri = entityTypeId.baseId;
+    baseUrl = entityTypeId.baseId;
     revisionId = entityTypeId.revisionId;
   }
 
-  const outwardEdges = subgraph.edges[baseUri]?.[
+  const outwardEdges = subgraph.edges[baseUrl]?.[
     revisionId
   ] as OntologyOutwardEdge<boolean>[];
 

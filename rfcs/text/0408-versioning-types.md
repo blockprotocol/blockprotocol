@@ -17,7 +17,7 @@ The Type System is intended to allow for **reusable and shared** descriptions of
 
 Being able to refer to specific, immutable versions of types should mitigate or solve the majority of the issues stemming from changes to types that are relied on by blocks or other types.
 
-This RFC proposes that every iteration of every Type (i.e. data type, property type, entity type, or link type) should be associated with a unique version number. This version number will be part of the URI that is used to uniquely identify the specific instance of the Type, to access the Type's schema, and to refer to the Type from other Types.
+This RFC proposes that every iteration of every Type (i.e. data type, property type, entity type, or link type) should be associated with a unique version number. This version number will be part of the URL that is used to uniquely identify the specific instance of the Type, to access the Type's schema, and to refer to the Type from other Types.
 
 We also outline a method to determine compatibility between types, and use this in the [Rationale and Alternatives](#rationale-and-alternatives) section to explain how it replaces the need for, and is preferable over, some other versioning scheme such as semantic versioning.
 
@@ -29,25 +29,25 @@ We also outline a method to determine compatibility between types, and use this 
 
 The _version number_ of a type is an incrementing positive integer that increases by 1 with each new version, starting from 1.
 
-## Type URIs
+## Type URLs
 
-The _base URI_ of a type is a _unique_ identifier for the type irrespective of its version.
+The _base URL_ of a type is a _unique_ identifier for the type irrespective of its version, _ending with a trailing slash_.
 
-The _versioned URI_ of a type is made up of:
+The _versioned URL_ of a type is a URL string (with max-length of 2048) of the form:
 
 ```json
-"${base_uri}/v/${version_number}"
+"${base_url}v/${version_number}"
 ```
 
-We opt not to constrain the format of the `base_uri` to enable flexibility in non-public use-cases or in domains with constraints that we cannot predict. Despite this, we _suggest_ that the base URIs should have a consistent format for all types hosted on your domain, and should generally be humanly readable in a way that describes your type. For example, one could choose:
+We opt not to constrain the format of the `base_url` to enable flexibility in non-public use-cases or in domains with constraints that we cannot predict. Despite this, we _suggest_ that the base URLs should have a consistent format for all types hosted on your domain, and should generally be humanly readable in a way that describes your type. For example, one could choose:
 
 ```jsonc
-"http://example.com/${namespace}/${type_class}/${type_name}" // where type_class is "data-type", "property-type", "entity-type", or "link-type"
+"http://example.com/${namespace}/${type_class}/${type_name}/" // where type_class is "data-type", "property-type", "entity-type", or "link-type"
 ```
 
 as the identifier (assuming that the domain decides that type names are unique across a namespace).
 
-Where it's possible to guarantee, the _versioned_ URI should be valid, and refer to the same iteration of the type, indefinitely.
+Where it's possible to guarantee, the _versioned_ URL should be valid, and refer to the same iteration of the type, indefinitely.
 
 > ⚠️ New iterations and changes to the type _must occur_ under new version numbers. An important reason for this, in addition to the ones outlined above, is that components of the Block Protocol ecosystem will certainly implement caching and local-persistence logic, and the spec consciously makes no recommendation that they look for updates, or that these caches are updated.
 >
@@ -57,16 +57,16 @@ Where it's possible to guarantee, the _versioned_ URI should be valid, and refer
 
 ## What is a "version" of a Type
 
-Any published (accessible) iteration of a Type can be considered a "version" of the Type. Once a specific iteration of a type is made accessible via a URI, it should be considered immutable.
+Any published (accessible) iteration of a Type can be considered a "version" of the Type. Once a specific iteration of a type is made accessible via a URL, it should be considered immutable.
 
 - This means that any change made to the Type (for example changing the description, adding a field, etc) constitutes reason for a new version.
 - If multiple changes are made prior to making it accessible (i.e. batching the changes), then a separate version is not needed for each individual change, but they can all be 'released' together.
 
-## URI Format and Version Numbers
+## URL Format and Version Numbers
 
-Type URIs, and their version numbers are defined as outlined in the [Guide-level explanation](#guide-level-explanation).
+Type URLs, and their version numbers are defined as outlined in the [Guide-level explanation](#guide-level-explanation).
 
-### Support for 'Canonical URIs'
+### Support for 'Canonical URLs'
 
 Other systems often allow for "canonical" URLs which can extend a versioned URL scheme with some more functionality. [W3C recommends](https://www.w3.org/2005/05/tr-versions) the use of:
 
@@ -75,15 +75,15 @@ Other systems often allow for "canonical" URLs which can extend a versioned URL 
 
 and some other canonical URLs. This scheme is relatively consistent with other systems such as Git.
 
-> \*\*We recommend that schema hosts support `${base_uri}/v/latest`, redirecting to (or directly serving) the most recent published version of a type.
+> \*\*We recommend that schema hosts support `${base_url}v/latest`, redirecting to (or directly serving) the most recent published version of a type.
 
-Outside of that recommendation we opt to not provision for other canonical URIs at this time.
+Outside of that recommendation we opt to not provision for other canonical URLs at this time.
 
 ### Schemas
 
-1.  The `"$id"` field of a Type should be equal to the Type's _versioned URI_.
-1.  When referencing another Type using `"$ref"`, the reference should be equal to the Type's _versioned URI_.
-1.  When used as the key of a property, the _base URI_ should be used (and consequently only a single version of a type may be used in any given property object).
+1.  The `"$id"` field of a Type should be equal to the Type's _versioned URL_.
+1.  When referencing another Type using `"$ref"`, the reference should be equal to the Type's _versioned URL_.
+1.  When used as the key of a property, the _base URL_ should be used (and consequently only a single version of a type may be used in any given property object).
 
 Example Type schema:
 
@@ -94,17 +94,17 @@ Example Type schema:
   "type": "object",
   "title": "Book",
   "properties": {
-    "https://example.com/@alice/property-type/name": {
+    "https://example.com/@alice/property-type/name/": {
       "$ref": "https://example.com/@alice/property-type/name/v/13"
     },
-    "https://example.com/@alice/property-type/published-on": {
+    "https://example.com/@alice/property-type/published-on/": {
       "$ref": "https://example.com/@alice/property-type/published-on/v/23"
     },
-    "https://example.com/@alice/property-type/blurb": {
+    "https://example.com/@alice/property-type/blurb/": {
       "$ref": "https://example.com/@alice/property-type/blurb/v/4"
     }
   },
-  "required": ["https://example.com/@alice/property-type/name"]
+  "required": ["https://example.com/@alice/property-type/name/"]
 }
 ```
 
@@ -112,9 +112,9 @@ Example `properties` object conforming to the above schema:
 
 ```json
 {
-  "https://example.com/@alice/property-type/name": "The Time Machine",
-  "https://example.com/@alice/property-type/published-on": "1895-05",
-  "https://example.com/@alice/property-type/blurb": ...
+  "https://example.com/@alice/property-type/name/": "The Time Machine",
+  "https://example.com/@alice/property-type/published-on/": "1895-05",
+  "https://example.com/@alice/property-type/blurb/": ...
 }
 ```
 
@@ -137,12 +137,12 @@ At the present data types represent completely disjoint value spaces, and the ba
 
 ### Property Types
 
-1.  Due to how property types are used, they implicitly affect the structure of the data in that they require the existence of a key that matches their base URI.
+1.  Due to how property types are used, they implicitly affect the structure of the data in that they require the existence of a key that matches their base URL.
 1.  Property types define their constraints through a `oneOf` field. This `oneOf` is a collection of one or more values where each value is a variant of the "Property Values" (defined below).
 
 A property type `A` is therefore compatible with another property type `B` if and only if
 
-1.  they have the same base URI (which implies they are the same property type but perhaps different versions), and
+1.  they have the same base URL (which implies they are the same property type but perhaps different versions), and
 1.  every element of `A`'s `oneOf` is compatible with one element of `B`'s `oneOf`
 
 The "Property Values" is a recursive definition which refers to the sub-schemas defined within the [property types meta-schema](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0352-graph-type-system.md#property-types-1). It defines the element as being one of the following:
@@ -157,13 +157,13 @@ A data type reference will be compatible with another data type reference if the
 
 A property type object is JSON object defining a schema which is used as `oneOf` the permitted values for a property type, where the schema is of `type: "object`, and within its own `properties` definition:
 
-1.  The keys are base URIs to a property type
+1.  The keys are base URLs to a property type
 1.  The values are defined by either:
     1.  A reference to a property type
     1.  An array definition, where
         1.  the `items` are defined by a reference to a property type
         1.  `minItems` and/or `maxItems` are optionally defined
-1.  The required fields are defined by a `required` list where the elements are base URIs that are a subset of the keys in the `properties`
+1.  The required fields are defined by a `required` list where the elements are base URLs that are a subset of the keys in the `properties`
 
 A property type Object `X` is therefore compatible with another property type Object `Y` if and only if
 
@@ -171,8 +171,8 @@ A property type Object `X` is therefore compatible with another property type Ob
 1.  If a property in `X` is defined as an array, then it's also defined as an array in `Y` (and therefore the same for direct references)
 1.  If a property in `X` is defined as an array with a `minItems`, then there is a `minItems` constraint on the respective property in `Y` that is equal to or larger to that in `X`
 1.  If a property in `X` is defined as an array with a `maxItems`, then there is a `maxItems` constraint on the respective property in `Y` that is less than or equal to that in `X`
-1.  Each property type referenced in `X` is compatible with the respective property type referenced in `Y`. Where respective is defined by having the same base URI (property key)
-1.  Each URI in the `required` list of `X` is also in the `required` list of `Y`
+1.  Each property type referenced in `X` is compatible with the respective property type referenced in `Y`. Where respective is defined by having the same base URL (property key)
+1.  Each URL in the `required` list of `X` is also in the `required` list of `Y`
 
 #### An Array of "Property Values"
 
@@ -187,23 +187,23 @@ A definition of an array of "Property Values" `X` is compatible with another def
 ### Entity Types
 
 1.  Entity types define their constraints on the structure of an entity through their `properties`, where
-    1.  The keys are base URIs to a property type
+    1.  The keys are base URLs to a property type
     1.  The values are defined by either:
         1.  A reference to a property type
         1.  An array definition, where
             1.  the `items` are defined by a reference to a property type
             1.  `minItems` and/or `maxItems` are optionally defined
-1.  The required fields are defined by a `required` list where the elements are base URIs that are a subset of the keys in the `properties`
+1.  The required fields are defined by a `required` list where the elements are base URLs that are a subset of the keys in the `properties`
 1.  Entity types also define additional constraints on links from their entity through their:
     1.  `links`, where
-        1.  The keys are _versioned URIs_ to a link type
+        1.  The keys are _versioned URLs_ to a link type
         1.  The values are defined by either:
             1.  An empty object (until Link Constraints are implemented)
             1.  An array definition, where
                 1.  the `items` are an empty object (until Link Constraints are implemented)
                 1.  `ordered` is optionally defined
                 1.  `minItems` and/or `maxItems` are optionally defined
-    1.  `requiredLinks` array, where the elements are _versioned URIs_, and is a subset of the keys in the `links`
+    1.  `requiredLinks` array, where the elements are _versioned URLs_, and is a subset of the keys in the `links`
 
 An entity type `A` is therefore compatible with another entity type `B` if and only if:
 
@@ -211,18 +211,18 @@ An entity type `A` is therefore compatible with another entity type `B` if and o
 1.  If a property in `A` is defined as an array, then it's also defined as an array in `B` (and therefore the same for direct references)
 1.  If a property in `A` is defined as an array with a `minItems`, then there is a `minItems` constraint on the respective property in `B` that is equal to or larger to that in `A`
 1.  If a property in `A` is defined as an array with a `maxItems`, then there is a `maxItems` constraint on the respective property in `B` that is less than or equal to that in `B`
-1.  Each property type referenced in `A` is compatible with the respective property type referenced in `B`. Where respective is defined by having the same base URI (property key)
-1.  Each URI in the `required` list of `A` is also in the `required` list of `B`
+1.  Each property type referenced in `A` is compatible with the respective property type referenced in `B`. Where respective is defined by having the same base URL (property key)
+1.  Each URL in the `required` list of `A` is also in the `required` list of `B`
 1.  Each key in the `links` of `A` is also in the `links` of `B`
 1.  If a link in `links` of `A` is defined as an array, then it's also defined as an array in `B` (and therefore the same for direct references)
 1.  If a link in `links` of `A` is defined as an array with a `minItems`, then there is a `minItems` constraint on the respective link in `B` that is equal to or larger to that in `A`
 1.  If a link in `links` of `A` is defined as an array with a `maxItems`, then there is a `maxItems` constraint on the respective link in `B` that is less than or equal to that in `B`
 1.  If a link in `links` of `A` is defined as an array with `ordered` as `true`, then there is an `ordered` as `true` on the respective link in `B`
-1.  Each URI in the `requiredLinks` list of `A` is also in the `requiredLinks` list of `B`
+1.  Each URL in the `requiredLinks` list of `A` is also in the `requiredLinks` list of `B`
 
 ### Link Types
 
-Link types are only able to be changed through _semantic annotations_ and as such, any link type `X`, with the same Base URI as another link type `Y` (i.e. a different version of the same link type), are _compatible_ (this is likely to change in the near future).
+Link types are only able to be changed through _semantic annotations_ and as such, any link type `X`, with the same Base URL as another link type `Y` (i.e. a different version of the same link type), are _compatible_ (this is likely to change in the near future).
 
 ## When to Check Compatibility of Types
 
@@ -340,12 +340,18 @@ This allows us to compare the versions depending on the circumstance outlined ab
 
 ## Other Decisions
 
-### Versioned vs Base URIs in Types
+### Versioned vs Base URLs in Types
 
 - `$schema` needs to be versioned as it uniquely identifies the instance of the schema and makes it referenceable
-- Similarly, uses of `$ref` need to use versioned URIs so they can reference a specific iteration of the schema
-- Properties inside objects use _base_ URIs because otherwise _any_ version of an entity type would always be incompatible with another version of an entity type, as the keys in the underlying possible entities wouldn't match
-- The items in `links` are _versioned_ URIs because they do _not_ affect the underlying data structure of an entity. Furthermore the format of `links`, and the associated constraints, don't actually use `$ref` at the moment, so using a _base_ URI would link the entity type to some undetermined version of the link type. This could cause problems if a new version of a link type majorly changes the semantic meaning.
+- Similarly, uses of `$ref` need to use versioned URLs so they can reference a specific iteration of the schema
+- Properties inside objects use _base_ URLs because otherwise _any_ version of an entity type would always be incompatible with another version of an entity type, as the keys in the underlying possible entities wouldn't match
+- The items in `links` are _versioned_ URLs because they do _not_ affect the underlying data structure of an entity. Furthermore the format of `links`, and the associated constraints, don't actually use `$ref` at the moment, so using a _base_ URL would link the entity type to some undetermined version of the link type. This could cause problems if a new version of a link type majorly changes the semantic meaning.
+
+### Trailing slashes on Base URLs
+
+Various implementations of URL resolution have different behaviors when resolving a URL with a trailing slash vs without one.
+Often "join"ing a URL that doesn't end in a trailing slash, and another path component, will _replace_ the last path component of the URL.
+Due to this, we opt to require that all Base URL's end in a trailing slash, and joining a Base URL with the `v/${version}` path component will always result in the intended state.
 
 # Prior art
 
@@ -357,9 +363,9 @@ This allows us to compare the versions depending on the circumstance outlined ab
 
 [unresolved-questions]: #unresolved-questions
 
-- [x] How should we constrain valid URI formats
+- [x] How should we constrain valid URL formats
   - [x] How should the version be formatted? Should we use query parameters?
-  - [x] Should it be possible to go to a URI _without_ expressing a version, if so should returning the latest version be the expected behavior
+  - [x] Should it be possible to go to a URL _without_ expressing a version, if so should returning the latest version be the expected behavior
   - [x] Do we want to reserve some suffix such as `/latest`
 
 # Future possibilities

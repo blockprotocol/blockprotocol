@@ -1,8 +1,8 @@
 import {
-  BaseUri,
-  extractBaseUri,
+  BaseUrl,
+  extractBaseUrl,
   extractVersion,
-  VersionedUri,
+  VersionedUrl,
 } from "@blockprotocol/type-system/slim";
 
 import { EntityTypeWithMetadata } from "../../../types/ontology/entity-type.js";
@@ -26,7 +26,7 @@ export const getEntityTypes = (
 };
 
 /**
- * Gets an `EntityTypeWithMetadata` by its `VersionedUri` from within the vertices of the subgraph. Returns `undefined`
+ * Gets an `EntityTypeWithMetadata` by its `VersionedUrl` from within the vertices of the subgraph. Returns `undefined`
  * if the entity type couldn't be found.
  *
  * @param subgraph
@@ -35,13 +35,13 @@ export const getEntityTypes = (
  */
 export const getEntityTypeById = (
   subgraph: Subgraph<boolean>,
-  entityTypeId: VersionedUri,
+  entityTypeId: VersionedUrl,
 ): EntityTypeWithMetadata | undefined => {
-  const [baseUri, version] = [
-    extractBaseUri(entityTypeId),
+  const [baseUrl, version] = [
+    extractBaseUrl(entityTypeId),
     extractVersion(entityTypeId),
   ];
-  const vertex = subgraph.vertices[baseUri]?.[version];
+  const vertex = subgraph.vertices[baseUrl]?.[version];
 
   if (!vertex) {
     return undefined;
@@ -80,16 +80,16 @@ export const getEntityTypeByVertexId = (
 };
 
 /**
- * Returns all `EntityTypeWithMetadata`s within the vertices of the subgraph that match a given `BaseUri`
+ * Returns all `EntityTypeWithMetadata`s within the vertices of the subgraph that match a given `BaseUrl`
  *
  * @param subgraph
- * @param baseUri
+ * @param baseUrl
  */
-export const getEntityTypesByBaseUri = (
+export const getEntityTypesByBaseUrl = (
   subgraph: Subgraph<boolean>,
-  baseUri: BaseUri,
+  baseUrl: BaseUrl,
 ): EntityTypeWithMetadata[] => {
-  const versionObject = subgraph.vertices[baseUri];
+  const versionObject = subgraph.vertices[baseUrl];
 
   if (!versionObject) {
     return [];

@@ -25,6 +25,14 @@ export abstract class ModuleHandler {
    */
   private coreQueue: CoreHandlerCallback[] = [];
 
+  /**
+   * If we register callbacks prior to creating the core handler, we want to
+   * register those on the core handler once it is available, but before we
+   * call initialize on it, to ensure callbacks which would catch messages sent
+   * during initialize are registered. To enable that, we have a separate queue.
+   */
+  private preCoreInitializeQueue: CoreHandlerCallback[] = [];
+
   /** whether the instance of CoreHandler belongs to a block or embedding application */
   protected readonly sourceType: "block" | "embedder";
 
@@ -98,6 +106,8 @@ export abstract class ModuleHandler {
     if (!coreHandler) {
       throw new Error("Could not initialize – missing core handler");
     }
+
+    this.processCoreCallbackQueue(this.preCoreInitializeQueue);
 
     coreHandler.initialize();
 
@@ -179,7 +189,7 @@ export abstract class ModuleHandler {
   ) {
     this.checkIfDestroyed();
 
-    this.coreQueue.push((coreHandler) =>
+    this.getRelevantQueueForCallbacks().push((coreHandler) =>
       coreHandler.registerCallback({
         callback,
         messageName,
@@ -188,6 +198,16 @@ export abstract class ModuleHandler {
     );
 
     this.processCoreQueue();
+  }
+
+  /**
+   * When adding/removing callbacks before calling the core handler is
+   * available, we want to queue these in a queue which will be processed before
+   * calling initializing once we create the core handler, to ensure callbacks
+   * are properly set up before calling initialize
+   */
+  private getRelevantQueueForCallbacks() {
+    return this.coreHandler ? this.coreQueue : this.preCoreInitializeQueue;
   }
 
   /** Remove a callback from the CoreHandler for an incoming messages of a specific type */
@@ -203,7 +223,7 @@ export abstract class ModuleHandler {
   ) {
     this.checkIfDestroyed();
 
-    this.coreQueue.push((coreHandler) =>
+    this.getRelevantQueueForCallbacks().push((coreHandler) =>
       coreHandler.removeCallback({
         callback,
         messageName,
@@ -215,10 +235,14 @@ export abstract class ModuleHandler {
   }
 
   private processCoreQueue() {
+    this.processCoreCallbackQueue(this.coreQueue);
+  }
+
+  private processCoreCallbackQueue(queue: CoreHandlerCallback[]) {
     const coreHandler = this.coreHandler;
     if (coreHandler) {
-      while (this.coreQueue.length) {
-        const callback = this.coreQueue.shift();
+      while (queue.length) {
+        const callback = queue.shift();
         if (callback) {
           callback(coreHandler);
         }

@@ -1,4 +1,4 @@
-import { VersionedUri } from "@blockprotocol/graph";
+import { VersionedUrl } from "@blockprotocol/graph";
 import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
@@ -14,7 +14,7 @@ const testEntity: RootEntity = {
       entityId: "test-entity",
       editionId: new Date().toISOString(),
     },
-    entityTypeId: packageJson.blockprotocol.schema as VersionedUri,
+    entityTypeId: packageJson.blockprotocol.schema as VersionedUrl,
   },
   properties: {
     "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/":

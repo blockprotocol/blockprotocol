@@ -14,7 +14,7 @@ import { isTemporalSubgraph } from "@blockprotocol/graph/internal";
 import {
   getEntityTypeById as getEntityTypeByIdNonTemporal,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesNonTemporal,
-  getPropertyTypesByBaseUri as getPropertyTypesByBaseUriNonTemporal,
+  getPropertyTypesByBaseUrl as getPropertyTypesByBaseUrlNonTemporal,
   getVertexIdForRecordId as getVertexIdForRecordIdNonTemporal,
 } from "@blockprotocol/graph/stdlib";
 import {
@@ -32,7 +32,7 @@ import {
 import {
   getEntityTypeById as getEntityTypeByIdTemporal,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesTemporal,
-  getPropertyTypesByBaseUri as getPropertyTypesByBaseUriTemporal,
+  getPropertyTypesByBaseUrl as getPropertyTypesByBaseUrlTemporal,
   getVertexIdForRecordId as getVertexIdForRecordIdTemporal,
   intervalOverlapsInterval,
 } from "@blockprotocol/graph/temporal/stdlib";
@@ -88,21 +88,21 @@ const parseLabelFromEntity = (
     "shortname",
   ];
 
-  const propertyTypes: { title?: string; propertyTypeBaseUri: string }[] =
-    Object.keys(entityToLabel.properties).map((propertyTypeBaseUri) => {
+  const propertyTypes: { title?: string; propertyTypeBaseUrl: string }[] =
+    Object.keys(entityToLabel.properties).map((propertyTypeBaseUrl) => {
       /** @todo - pick the latest version, or the version in the entity type, rather than first element? */
       const [propertyType] = isTemporalSubgraph(subgraph)
-        ? getPropertyTypesByBaseUriTemporal(subgraph, propertyTypeBaseUri)
-        : getPropertyTypesByBaseUriNonTemporal(subgraph, propertyTypeBaseUri);
+        ? getPropertyTypesByBaseUrlTemporal(subgraph, propertyTypeBaseUrl)
+        : getPropertyTypesByBaseUrlNonTemporal(subgraph, propertyTypeBaseUrl);
 
       return propertyType
         ? {
             title: propertyType.schema.title.toLowerCase(),
-            propertyTypeBaseUri,
+            propertyTypeBaseUrl,
           }
         : {
             title: undefined,
-            propertyTypeBaseUri,
+            propertyTypeBaseUrl,
           };
     });
 
@@ -111,7 +111,7 @@ const parseLabelFromEntity = (
 
     if (found) {
       return getFallbackIfNotString(
-        entityToLabel.properties[found.propertyTypeBaseUri],
+        entityToLabel.properties[found.propertyTypeBaseUrl],
       );
     }
   }

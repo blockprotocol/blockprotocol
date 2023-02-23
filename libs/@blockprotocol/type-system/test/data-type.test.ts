@@ -57,13 +57,13 @@ const invalidDataTypes: [DataType, ParseDataTypeError][] = [
   [
     {
       kind: "dataType",
-      $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/2.3", // incorrectly versioned URI
+      $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/2.3", // incorrectly versioned URL
       title: "Text",
       description: "An ordered sequence of characters",
       type: "string",
     },
     {
-      reason: "InvalidVersionedUri",
+      reason: "InvalidVersionedUrl",
       inner: {
         reason: "AdditionalEndContent",
       },

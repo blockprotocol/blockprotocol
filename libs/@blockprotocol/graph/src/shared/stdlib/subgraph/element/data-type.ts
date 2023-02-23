@@ -1,8 +1,8 @@
 import {
-  BaseUri,
-  extractBaseUri,
+  BaseUrl,
+  extractBaseUrl,
   extractVersion,
-  VersionedUri,
+  VersionedUrl,
 } from "@blockprotocol/type-system/slim";
 
 import { DataTypeWithMetadata } from "../../../types/ontology/data-type.js";
@@ -26,7 +26,7 @@ export const getDataTypes = (
 };
 
 /**
- * Gets a `DataTypeWithMetadata` by its `VersionedUri` from within the vertices of the subgraph. Returns `undefined` if
+ * Gets a `DataTypeWithMetadata` by its `VersionedUrl` from within the vertices of the subgraph. Returns `undefined` if
  * the data type couldn't be found.
  *
  * @param subgraph
@@ -35,13 +35,13 @@ export const getDataTypes = (
  */
 export const getDataTypeById = (
   subgraph: Subgraph<boolean>,
-  dataTypeId: VersionedUri,
+  dataTypeId: VersionedUrl,
 ): DataTypeWithMetadata | undefined => {
-  const [baseUri, version] = [
-    extractBaseUri(dataTypeId),
+  const [baseUrl, version] = [
+    extractBaseUrl(dataTypeId),
     extractVersion(dataTypeId),
   ];
-  const vertex = subgraph.vertices[baseUri]?.[version];
+  const vertex = subgraph.vertices[baseUrl]?.[version];
 
   if (!vertex) {
     return undefined;
@@ -80,16 +80,16 @@ export const getDataTypeByVertexId = (
 };
 
 /**
- * Returns all `DataTypeWithMetadata`s within the vertices of the subgraph that match a given `BaseUri`
+ * Returns all `DataTypeWithMetadata`s within the vertices of the subgraph that match a given `BaseUrl`
  *
  * @param subgraph
- * @param baseUri
+ * @param baseUrl
  */
-export const getDataTypesByBaseUri = (
+export const getDataTypesByBaseUrl = (
   subgraph: Subgraph<boolean>,
-  baseUri: BaseUri,
+  baseUrl: BaseUrl,
 ): DataTypeWithMetadata[] => {
-  const versionObject = subgraph.vertices[baseUri];
+  const versionObject = subgraph.vertices[baseUrl];
 
   if (!versionObject) {
     return [];

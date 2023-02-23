@@ -1,4 +1,4 @@
-import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
+import { EntityType, VersionedUrl } from "@blockprotocol/type-system/slim";
 
 import { AggregateOperationInput } from "../entity.js";
 import { EntityTypeRootType, Subgraph } from "../subgraph.js";
@@ -24,7 +24,7 @@ export type AggregateEntityTypesResult<
 };
 
 export type GetEntityTypeData = {
-  entityTypeId: VersionedUri;
+  entityTypeId: VersionedUrl;
 };
 
 type SystemDefinedEntityTypeProperties =
@@ -38,6 +38,6 @@ export type CreateEntityTypeData = {
 };
 
 export type UpdateEntityTypeData = {
-  entityTypeId: VersionedUri;
+  entityTypeId: VersionedUrl;
   entityType: Omit<EntityType, SystemDefinedEntityTypeProperties>;
 };
