@@ -3,7 +3,7 @@ use thiserror::Error;
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::uri::ParseVersionedUrlError;
+use crate::url::ParseVersionedUrlError;
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]

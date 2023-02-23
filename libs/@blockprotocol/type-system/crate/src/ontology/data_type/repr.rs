@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 use crate::{
-    uri::{ParseVersionedUrlError, VersionedUrl},
+    url::{ParseVersionedUrlError, VersionedUrl},
     ParseDataTypeError,
 };
 

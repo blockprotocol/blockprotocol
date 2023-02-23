@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 use crate::{
-    repr, uri::BaseUrl, ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray,
+    repr, url::BaseUrl, ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray,
 };
 
 /// Will serialize as a constant value `"object"`
@@ -99,7 +99,7 @@ mod tests {
     use super::*;
     use crate::{
         repr::PropertyTypeReference,
-        uri::VersionedUrl,
+        url::VersionedUrl,
         utils::tests::{check_repr_serialization_from_value, ensure_repr_failed_deserialization},
     };
 

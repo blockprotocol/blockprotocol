@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
-    repr, uri::VersionedUrl, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
+    repr, url::VersionedUrl, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
     ParseLinksError, ParseOneOfError,
 };
 

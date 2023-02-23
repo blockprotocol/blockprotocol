@@ -6,7 +6,7 @@ use tsify::Tsify;
 
 use crate::{
     repr,
-    uri::{BaseUrl, ParseVersionedUrlError, VersionedUrl},
+    url::{BaseUrl, ParseVersionedUrlError, VersionedUrl},
     ParseEntityTypeError,
 };
 

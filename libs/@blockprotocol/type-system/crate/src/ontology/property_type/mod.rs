@@ -8,7 +8,7 @@ use std::collections::HashSet;
 pub use error::ParsePropertyTypeError;
 
 use crate::{
-    uri::{BaseUrl, VersionedUrl},
+    url::{BaseUrl, VersionedUrl},
     Array, DataTypeReference, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
 };
 
@@ -168,7 +168,7 @@ mod tests {
     use super::*;
     use crate::{
         test_data,
-        uri::ParseVersionedUrlError,
+        url::ParseVersionedUrlError,
         utils::tests::{check_serialization_from_str, ensure_failed_validation},
         ParseOneOfError,
     };

@@ -1,7 +1,7 @@
 pub(crate) mod error;
 pub(in crate::ontology) mod repr;
 
-use crate::{uri::BaseUrl, ValidateUri, ValidationError};
+use crate::{url::BaseUrl, ValidateUri, ValidationError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Array<T> {
@@ -58,7 +58,7 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::{repr, uri::VersionedUrl, PropertyTypeReference};
+    use crate::{repr, url::VersionedUrl, PropertyTypeReference};
 
     fn get_test_value_or_array(uri: &VersionedUrl) -> ValueOrArray<PropertyTypeReference> {
         let json_repr = json!({

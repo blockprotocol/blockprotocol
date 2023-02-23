@@ -8,7 +8,7 @@ use std::collections::HashMap;
 pub use error::ParseLinksError;
 
 use crate::{
-    uri::{BaseUrl, VersionedUrl},
+    url::{BaseUrl, VersionedUrl},
     Array, EntityTypeReference, OneOf, ValidateUri, ValidationError,
 };
 

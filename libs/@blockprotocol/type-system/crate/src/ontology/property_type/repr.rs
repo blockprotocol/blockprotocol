@@ -6,7 +6,7 @@ use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
     repr,
-    uri::{ParseVersionedUrlError, VersionedUrl},
+    url::{ParseVersionedUrlError, VersionedUrl},
     ParsePropertyTypeError,
 };
 

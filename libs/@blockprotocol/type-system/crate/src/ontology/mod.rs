@@ -8,9 +8,7 @@
 mod data_type;
 mod entity_type;
 mod property_type;
-// TODO: reconsider calling these URIs in the spec, it seems to be a redundant term nowadays and
-//  we should probably just go with URL
-pub mod uri;
+pub mod url;
 
 mod shared;
 

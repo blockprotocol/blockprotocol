@@ -3,7 +3,7 @@ pub(in crate::ontology) mod repr;
 
 use std::collections::HashMap;
 
-use crate::{uri::BaseUrl, ValidateUri, ValidationError};
+use crate::{url::BaseUrl, ValidateUri, ValidationError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Object<T, const MIN: usize = 0> {
@@ -79,7 +79,7 @@ mod tests {
 
     use super::*;
     use crate::{
-        repr, uri::VersionedUrl, utils::tests::ensure_failed_validation,
+        repr, url::VersionedUrl, utils::tests::ensure_failed_validation,
         ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray,
     };
 

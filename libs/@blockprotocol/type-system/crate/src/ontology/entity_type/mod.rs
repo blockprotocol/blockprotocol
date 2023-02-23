@@ -9,7 +9,7 @@ use std::collections::{HashMap, HashSet};
 pub use error::ParseEntityTypeError;
 
 use crate::{
-    uri::{BaseUrl, VersionedUrl},
+    url::{BaseUrl, VersionedUrl},
     AllOf, Links, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, ValidateUri,
     ValidationError, ValueOrArray,
 };

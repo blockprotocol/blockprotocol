@@ -8,7 +8,7 @@ use std::collections::HashMap;
 pub use error::ParseDataTypeError;
 
 use crate::{
-    uri::{BaseUrl, VersionedUrl},
+    url::{BaseUrl, VersionedUrl},
     ValidateUri, ValidationError,
 };
 
@@ -122,7 +122,7 @@ mod tests {
     use super::*;
     use crate::{
         test_data,
-        uri::ParseVersionedUrlError,
+        url::ParseVersionedUrlError,
         utils::tests::{check_serialization_from_str, ensure_failed_validation},
     };
 

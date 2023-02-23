@@ -4,7 +4,7 @@ use thiserror::Error;
 use tsify::Tsify;
 
 use crate::{
-    uri::{ParseBaseUrlError, ParseVersionedUrlError},
+    url::{ParseBaseUrlError, ParseVersionedUrlError},
     ParseAllOfError, ParseLinksError, ParsePropertyTypeObjectError,
 };
 
