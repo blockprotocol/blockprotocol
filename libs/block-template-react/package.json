@@ -1,6 +1,6 @@
 {
   "name": "block-template-react",
-  "version": "0.1.23",
+  "version": "0.2.0-canary-20230223103409",
   "description": "Block Protocol template for a React-based block",
   "keywords": [
     "blockprotocol",
@@ -33,14 +33,14 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.20"
+    "@blockprotocol/graph": "0.1.0-canary-20230223103409"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@types/react-dom": "^18.0.9",
-    "block-scripts": "0.0.19",
+    "block-scripts": "0.1.0-canary-20230223103409",
     "eslint": "8.33.0",
-    "mock-block-dock": "0.0.40",
+    "mock-block-dock": "0.1.0-canary-20230223103409",
     "prettier": "2.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
