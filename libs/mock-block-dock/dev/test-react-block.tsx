@@ -5,7 +5,7 @@ import {
 } from "@blockprotocol/graph/react";
 import { getRoots } from "@blockprotocol/graph/stdlib";
 import { useHook, useHookBlockModule } from "@blockprotocol/hook/react";
-import { AutofillSuggestionResponse } from "@blockprotocol/service";
+import { MapboxSuggestAddressResponseData } from "@blockprotocol/service";
 import { useServiceBlockModule } from "@blockprotocol/service/react";
 import { FormEvent, useCallback, useMemo, useRef, useState } from "react";
 
@@ -29,7 +29,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
   const [mapboxSuggestSearchText, setMapboxSuggestSearchText] =
     useState<string>("");
   const [mapboxSuggestResponse, setMapboxSuggestResponse] = useState<
-    AutofillSuggestionResponse | undefined | null
+    MapboxSuggestAddressResponseData | undefined | null
   >(null);
 
   useHook(

@@ -65,15 +65,19 @@ const EntityTypePage: NextPage = () => {
       return;
     }
 
-    const schema = getSchemaFromFormData(data);
+    const newPartialSchema = getSchemaFromFormData(data);
+
+    const existingSchema = entityType.schema;
 
     const { data: responseData, error: responseError } =
       await apiClient.updateEntityType({
         versionedUrl: entityType.schema.$id,
         schema: {
-          ...schema,
-          properties: schema.properties ?? {},
-          title: schema.title ?? entityType.schema.title,
+          ...existingSchema,
+          links: newPartialSchema.links ?? existingSchema.links ?? {},
+          properties:
+            newPartialSchema.properties ?? existingSchema.properties ?? {},
+          required: newPartialSchema.required ?? existingSchema.required ?? [],
         },
       });
 

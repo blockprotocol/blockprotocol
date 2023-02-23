@@ -1,12 +1,5 @@
 import { MessageCallback } from "@blockprotocol/core";
 
-import type {
-  CreateImageRequest,
-  ImagesResponse,
-  CreateCompletionRequest,
-  CreateCompletionResponse,
-} from "./openai-types";
-
 import {
   AutofillOptions,
   AutofillRetrieveResponse,
@@ -20,6 +13,12 @@ import {
   PermanentOptions,
   SessionTokenOptions,
 } from "./mapbox-types";
+import type {
+  CreateCompletionRequest,
+  CreateCompletionResponse,
+  CreateImageRequest,
+  ImagesResponse,
+} from "./openai-types";
 
 export type BlockServiceMessageCallbacks = {};
 

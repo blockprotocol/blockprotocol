@@ -138,7 +138,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<
-    [(Entity & { readonly: boolean }) | undefined, string[]]
+    [{ blockEntity: Entity; readonly: boolean } | undefined, string[]]
   >(() => {
     const intervalForAllTime =
       (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {

@@ -1,4 +1,7 @@
 {
   "extends": "@local/tsconfig/node.json",
-  "include": ["bin.js", "scripts", "shared"]
+  "include": ["bin.js", "scripts", "shared"],
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
 }
