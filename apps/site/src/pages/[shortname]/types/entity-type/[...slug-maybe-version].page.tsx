@@ -50,7 +50,7 @@ const EntityTypePage: NextPage = () => {
   });
   const { handleSubmit: wrapHandleSubmit, reset } = formMethods;
 
-  // When loading or updating a type, set local and form state, and set the URI
+  // When loading or updating a type, set local and form state, and set the URL
   const setEntityType = useCallback(
     (stateToSet: EntityTypeState) => {
       setEntityTypeState(stateToSet);

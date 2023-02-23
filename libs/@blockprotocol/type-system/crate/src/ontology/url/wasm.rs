@@ -8,7 +8,7 @@ use crate::utils::{set_panic_hook, Result};
 pub struct VersionedUrlPatch(#[tsify(type = "`${BaseUrl}v/${number}`")] String);
 
 // #[wasm_bindgen(typescript_custom_section)]
-// const VALIDATE_BASE_URI_DEF: &'static str = r#"
+// const VALIDATE_BASE_URL_DEF: &'static str = r#"
 // /**
 //  * Checks if a given URL string is a valid base URL.
 //  *
@@ -30,7 +30,7 @@ pub struct VersionedUrlPatch(#[tsify(type = "`${BaseUrl}v/${number}`")] String);
 // }
 //
 // #[wasm_bindgen(typescript_custom_section)]
-// const VALIDATE_VERSIONED_URI_DEF: &'static str = r#"
+// const VALIDATE_VERSIONED_URL_DEF: &'static str = r#"
 // /**
 //  * Checks if a given URL string is a Block Protocol compliant Versioned URL.
 //  *
@@ -52,7 +52,7 @@ pub struct VersionedUrlPatch(#[tsify(type = "`${BaseUrl}v/${number}`")] String);
 // }
 //
 // #[wasm_bindgen(typescript_custom_section)]
-// const EXTRACT_BASE_URI_DEF: &'static str = r#"
+// const EXTRACT_BASE_URL_DEF: &'static str = r#"
 // /**
 //  * Extracts the base URL from a Versioned URL.
 //  *

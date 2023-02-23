@@ -27,10 +27,10 @@ impl fmt::Display for BaseUrl {
 }
 
 impl BaseUrl {
-    /// Creates a new [`BaseUrl`] from a given URI string
+    /// Creates a new [`BaseUrl`] from a given URL string
     ///
     /// # Errors
-    /// - `ParseBaseUrlError` if the given URI string is invalid
+    /// - `ParseBaseUrlError` if the given URL string is invalid
     pub fn new(url: String) -> Result<BaseUrl, ParseBaseUrlError> {
         Self::validate_str(&url)?;
 

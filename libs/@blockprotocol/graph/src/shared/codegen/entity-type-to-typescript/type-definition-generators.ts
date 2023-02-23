@@ -42,7 +42,7 @@ export const generateLinkEntityAndRightEntityDefinition = (
   return { typeDefinition, typeName };
 };
 
-// Generate a type which is a map of link URIs on an entity's schema to how those links are returned by subgraph utility fns
+// Generate a type which is a map of link URLs on an entity's schema to how those links are returned by subgraph utility fns
 // Also generates a type for just the values of that map
 export const generateEntityLinkMapDefinition = (
   entityTypeName: string,

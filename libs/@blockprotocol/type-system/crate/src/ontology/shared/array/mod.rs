@@ -99,7 +99,7 @@ mod tests {
         let array = get_test_value_or_array(&url_a);
 
         array
-            .validate_url(&url_b.base_url) // Try and validate against a different URI
+            .validate_url(&url_b.base_url) // Try and validate against a different URL
             .expect_err("expected validation against base URL to fail but it didn't");
     }
 }

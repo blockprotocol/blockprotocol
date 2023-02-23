@@ -28,7 +28,7 @@ const bannerComment = (url: string, depth: number) => `/**
  * Uses json-schema-to-typescript to chase down $refs and create a TypeScript type for the provided schema
  * Ignores 'links' which are followed manually elsewhere in order to manage depth
  * @todo
- * - type name is generated from schema title. Clashes append 1, 2 etc. Patch this to distinguish on URI/$id segments?
+ * - type name is generated from schema title. Clashes append 1, 2 etc. Patch this to distinguish on URL/$id segments?
  *   @see https://github.com/bcherny/json-schema-to-typescript/blob/34de194e87cd54f43809efae110732569e0891c1/src/parser.ts#L303
  *
  */
@@ -63,12 +63,12 @@ type CompiledType = {
   typeScriptString: string;
 };
 
-// A map of schema URIs to their TS type name and definition
-type UriToType = { [entityTypeId: VersionedUrl]: CompiledType };
+// A map of schema URLs to their TS type name and definition
+type UrlToType = { [entityTypeId: VersionedUrl]: CompiledType };
 
 const generateTypeNameFromSchema = (
   schema: EntityType,
-  existingTypes: UriToType,
+  existingTypes: UrlToType,
 ): string => {
   if (!schema.title) {
     throw new Error("Schema must have a 'title'");
@@ -104,7 +104,7 @@ const generateTypeNameFromSchema = (
   }
 
   // fallback to a simple counter
-  // @todo use URI segments or something else to distinguish, not a counter
+  // @todo use URL segments or something else to distinguish, not a counter
   let i = 0;
   do {
     i++;
@@ -128,7 +128,7 @@ const generateTypeNameFromSchema = (
 const _jsonSchemaToTypeScript = async (
   schema: EntityType,
   depth: number,
-  resolvedUrlsToType: UriToType,
+  resolvedUrlsToType: UrlToType,
   temporal: boolean,
 ): Promise<CompiledType> => {
   if (resolvedUrlsToType[schema.$id]) {
@@ -265,7 +265,7 @@ const _jsonSchemaToTypeScript = async (
     typeLinkMap[linkEntityTypeId] = linkTypeName;
   }
 
-  // add a map of all the link type URIs we processed -> the possible linkEntity/rightEntities they link to
+  // add a map of all the link type URLs we processed -> the possible linkEntity/rightEntities they link to
   const { linkDefinitionString, linkAndRightEntitiesUnionName, mapTypeName } =
     generateEntityLinkMapDefinition(typeName, typeLinkMap);
 

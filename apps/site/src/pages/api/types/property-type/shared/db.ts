@@ -185,7 +185,7 @@ export const updatePropertyType = async (
   if (versionUpdateRequestAt !== latestVersion) {
     const updateRequestAgainstVersion = extractVersion(versionedUrl);
     throw new Error(
-      `Can only request an update using the latest type version, which is ${latestVersion} – the provided URI used ${updateRequestAgainstVersion}`,
+      `Can only request an update using the latest type version, which is ${latestVersion} – the provided URL used ${updateRequestAgainstVersion}`,
     );
   }
 

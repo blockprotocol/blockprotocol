@@ -11,7 +11,7 @@ pub enum ParseBaseUrlError {
     MissingTrailingSlash,
     #[error("{0}")]
     UrlParseError(String), // TODO: can we do better than a string here
-    #[error("URI cannot cannot be a base")]
+    #[error("URL cannot cannot be a base")]
     CannotBeABase,
 }
 

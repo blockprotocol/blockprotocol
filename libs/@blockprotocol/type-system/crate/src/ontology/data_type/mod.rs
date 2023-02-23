@@ -216,7 +216,7 @@ mod tests {
         let data_type_ref = DataTypeReference::new(url_a);
 
         data_type_ref
-            .validate_url(&url_b.base_url) // Try and validate against a different URI
+            .validate_url(&url_b.base_url) // Try and validate against a different URL
             .expect_err("expected validation against base URL to fail but it didn't");
     }
 }

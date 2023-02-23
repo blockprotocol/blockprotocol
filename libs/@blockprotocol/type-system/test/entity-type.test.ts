@@ -370,7 +370,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
     },
   ],
   [
-    "invalid link uri",
+    "invalid link url",
     {
       kind: "entityType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",

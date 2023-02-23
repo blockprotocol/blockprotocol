@@ -183,7 +183,7 @@ type BeforeTrailingLast<
   : PreviouslyExtractedSegment;
 
 /**
- * A properties object where the URI keys have been replaced by the last segment of the URI
+ * A properties object where the URL keys have been replaced by the last segment of the URL
  * To experiment with in block building – might be useful in patterns to make block building easier.
  * @todo remove this if we settle on a pattern that doesn't benefit from it
  */

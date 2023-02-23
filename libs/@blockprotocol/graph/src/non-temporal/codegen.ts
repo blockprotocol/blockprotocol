@@ -16,7 +16,7 @@ addFormats(ajv);
 
 /**
  * Validates that the schema at a given URL is a valid Entity Type
- * @param versionedUrl – the URI / $id of the schema
+ * @param versionedUrl – the URL / $id of the schema
  * @throws if there are validation errors or if the schema is unreachable
  */
 export const fetchAndValidateEntityType = async (
@@ -42,7 +42,7 @@ export const fetchAndValidateEntityType = async (
 
 /**
  * Generates a string containing TypeScript type definitions for a given Entity Type
- * @param versionedUrl – the URI at which the Entity Type is available
+ * @param versionedUrl – the URL at which the Entity Type is available
  * @param depth – how many links to follow when generating types.
  *   - 0 will generate types for the Entity Type's properties only
  *   - 1 will generate types for the links from the Entity Type and their possible destination entities
