@@ -75,11 +75,9 @@ The constraints we will be supporting for non-primitive data types are a subset 
 - `minItems`: a number that defines the minimum number of items in the list value
 - `maxItems`: a number that defines the maximum number of items in the list value
 
-## Composition
+### Using the constraints
 
-### Constraining another Data Type
-
-This kind of composition defines constraints on an existing Data Type, restricting the value space to a subset of the original.
+When using constraints, we still rely on existing Data Types to add constraints to. Constraining is equivalent to restricting some Data Type's original value-space.
 
 **Example 1**
 
@@ -99,21 +97,44 @@ Valid values are only: `"North"`, `"East"`, `"South"`, `"West"`.
 
 Valid values include: `"a"`, `"b"`, `"c"`, `"1"`, `"2"`, `"3"`, and so forth.
 
-### **Combining Data Types** - Data Types can be combined into “union” types which express an **or** relationship
+## Composition
+
+With the constraints defined above, we can define how non-primitive data types can expand their value spaces using composition.
+
+### Uniting value-spaces
+
+This kind of composition allows data types to be combined into "union" types which express an **or** relationship. Conceptually the value-spaces of the unioned Data Types are combined into a single value-space.
 
 **Example 1**
 
-`Text or Number` is a Data Type where the value is _either_ an instance of the `Text` Data Type **or** an instance of the `Number` Data Type
+`Text or Number` is a Data Type where the value is _either_ an instance of the `Text` Data Type **or** an instance of the `Number` Data Type.
 
-- **Creating Collections of Data Types** - Data Types can also be lists of other Data Types
-  **Example 1**
-  `Number List` is a Data Type which is a list of instances of `Number` Data Types
+Valid values include: `"Hello"`, `-1`, `0.5`, `2`, and so forth.
 
-As mentioned above, these mechanisms can be used together in a combination
+**Example 2**
+
+`Positive Integer or Object` is a Data Type where the value is _either_ an instance of the `Positive Integer` Data Type **or** an instance of the `Object` Data Type.
+
+Valid values include: `0`, `1`, `2`, `{ "foo": "bar" }`, and so forth.
+
+### Collection of value-spaces
+
+This type of composition allows for data types to represent a collection of values. Conceptually the value-space of the Data Type is a list of values, where each value is an instance of one of the Data Types in the list.
+
+**Example 1**
+`Number List` is a Data Type which is a list of instances of `Number` Data Types
+
+Valid values include: `[]`, `[1]`, `[1, 2]`, `[1, 2, 3]`, and so forth.
+
+### Constraining and composing
+
+It is possible to apply these features of non-primitive Data Types in combination with each other to allow for the creation of more complex Data Types.
 
 **Example 1**
 
-`Positive Number List or Text` is a Data Type where the values are _either_ a list of instances of the `Number` Data Type **or** an instance of the `Text` Data Type
+`Positive Integer List or Text` is a Data Type where the values are _either_ a list of instances of the `Number` Data Type **or** an instance of the `Text` Data Type
+
+Valid values include: `[]`, `[1, 2]`, `[1, 2, 3]`, `"Hello"`, and so forth.
 
 > 💭 Note that all ways of creating _new_ Data Types involve using and further modifying at least one other Data Type. A nice consequence of this is that all Data Types are indirectly (or directly) related to top-level primitive Data Types.
 
