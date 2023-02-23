@@ -1,4 +1,4 @@
-import { EntityType, VersionedUri } from "../../wasm/type-system";
+import { EntityType, VersionedUrl } from "../../wasm/type-system";
 
 /**
  * Returns all the IDs of all types referenced in a given property type.
@@ -8,13 +8,13 @@ import { EntityType, VersionedUri } from "../../wasm/type-system";
 export const getReferencedIdsFromEntityType = (
   entityType: EntityType,
 ): {
-  constrainsPropertiesOnPropertyTypes: VersionedUri[];
-  constrainsLinksOnEntityTypes: VersionedUri[];
-  constrainsLinkDestinationsOnEntityTypes: VersionedUri[];
+  constrainsPropertiesOnPropertyTypes: VersionedUrl[];
+  constrainsLinksOnEntityTypes: VersionedUrl[];
+  constrainsLinkDestinationsOnEntityTypes: VersionedUrl[];
 } => {
-  const constrainsPropertiesOnPropertyTypes: Set<VersionedUri> = new Set();
-  const constrainsLinksOnEntityTypes: Set<VersionedUri> = new Set();
-  const constrainsLinkDestinationsOnEntityTypes: Set<VersionedUri> = new Set();
+  const constrainsPropertiesOnPropertyTypes: Set<VersionedUrl> = new Set();
+  const constrainsLinksOnEntityTypes: Set<VersionedUrl> = new Set();
+  const constrainsLinkDestinationsOnEntityTypes: Set<VersionedUrl> = new Set();
 
   for (const propertyDefinition of Object.values(entityType.properties)) {
     if ("items" in propertyDefinition) {
@@ -31,7 +31,7 @@ export const getReferencedIdsFromEntityType = (
     entityType.links ?? {},
   )) {
     /** @todo - if we had the `typedEntries` helper here we wouldn't need this cast */
-    constrainsLinksOnEntityTypes.add(linkTypeId as VersionedUri);
+    constrainsLinksOnEntityTypes.add(linkTypeId as VersionedUrl);
 
     if (linkDefinition.items.oneOf !== undefined) {
       linkDefinition.items.oneOf

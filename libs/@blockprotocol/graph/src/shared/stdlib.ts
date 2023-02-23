@@ -30,7 +30,7 @@ export {
   getDataTypeById,
   getDataTypeByVertexId,
   getDataTypes,
-  getDataTypesByBaseUri,
+  getDataTypesByBaseUrl,
 } from "./stdlib/subgraph/element/data-type.js";
 export {
   getEntities,
@@ -41,14 +41,14 @@ export {
   getEntityTypeById,
   getEntityTypeByVertexId,
   getEntityTypes,
-  getEntityTypesByBaseUri,
+  getEntityTypesByBaseUrl,
 } from "./stdlib/subgraph/element/entity-type.js";
 export { mapElementsIntoRevisions } from "./stdlib/subgraph/element/map-revisions.js";
 export {
   getPropertyTypeById,
   getPropertyTypeByVertexId,
   getPropertyTypes,
-  getPropertyTypesByBaseUri,
+  getPropertyTypesByBaseUrl,
 } from "./stdlib/subgraph/element/property-type.js";
 export {
   getRoots,

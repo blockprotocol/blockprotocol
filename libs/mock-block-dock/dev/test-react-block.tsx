@@ -1,4 +1,4 @@
-import { extractBaseUri } from "@blockprotocol/graph";
+import { extractBaseUrl } from "@blockprotocol/graph";
 import {
   type BlockComponent,
   useGraphBlockModule,
@@ -37,7 +37,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
     hookRef,
     "text",
     blockEntity?.metadata.recordId.entityId ?? "",
-    [extractBaseUri(propertyTypes.description.$id)],
+    [extractBaseUrl(propertyTypes.description.$id)],
     () => {
       throw new Error(
         "Fallback called – dock is not correctly handling text hook.",
@@ -69,7 +69,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
         <h1>
           Hello{" "}
           {
-            blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)] as
+            blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)] as
               | string
               | undefined
           }
@@ -78,7 +78,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
         <h2>Block-handled name display</h2>
         <p style={{ marginBottom: 30 }}>
           {
-            blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)] as
+            blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)] as
               | string
               | undefined
           }
@@ -94,7 +94,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
       <h1>
         <>
           Hello{" "}
-          {blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}! The
+          {blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)]}! The
           id of this block is {blockEntity?.metadata.recordId.entityId}
         </>
       </h1>
@@ -103,7 +103,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
         type="text"
         placeholder="This block's entity's 'name' property"
         value={
-          blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)] as
+          blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)] as
             | string
             | undefined
         }
@@ -118,7 +118,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
                 entityTypeId: blockEntity.metadata.entityTypeId,
                 properties: {
                   ...blockEntity.properties,
-                  [extractBaseUri(propertyTypes.name.$id)]: event.target.value,
+                  [extractBaseUrl(propertyTypes.name.$id)]: event.target.value,
                 },
                 leftToRightOrder: blockEntity.linkData?.leftToRightOrder,
                 rightToLeftOrder: blockEntity.linkData?.rightToLeftOrder,

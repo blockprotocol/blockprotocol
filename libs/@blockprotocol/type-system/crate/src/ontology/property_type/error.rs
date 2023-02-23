@@ -4,7 +4,7 @@ use thiserror::Error;
 use tsify::Tsify;
 
 use crate::{
-    uri::ParseVersionedUriError, ParseOneOfArrayError, ParseOneOfError,
+    url::ParseVersionedUrlError, ParseOneOfArrayError, ParseOneOfError,
     ParsePropertyTypeObjectError,
 };
 
@@ -12,10 +12,10 @@ use crate::{
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParsePropertyTypeError {
-    #[error("invalid versioned URI: `{0}`")]
-    InvalidVersionedUri(ParseVersionedUriError),
+    #[error("invalid versioned URL: `{0}`")]
+    InvalidVersionedUrl(ParseVersionedUrlError),
     #[error("invalid data type reference: `{0}`")]
-    InvalidDataTypeReference(ParseVersionedUriError),
+    InvalidDataTypeReference(ParseVersionedUrlError),
     #[error("invalid property type object: `{0}`")]
     InvalidPropertyTypeObject(ParsePropertyTypeObjectError),
     // Boxes to avoid infinitely sized enum due to recursion

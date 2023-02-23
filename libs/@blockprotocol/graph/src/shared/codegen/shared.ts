@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 
-export const fetchTypeAsJson = (versionedUri: string) =>
-  fetch(versionedUri, {
+export const fetchTypeAsJson = (versionedUrl: string) =>
+  fetch(versionedUrl, {
     headers: {
       accept: "application/json",
     },

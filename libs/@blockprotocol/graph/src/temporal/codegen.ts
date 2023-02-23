@@ -3,7 +3,7 @@
 // we don't want users importing from other files in the package to have to evaluate it.
 // it will cause problems with e.g. webpack which would require polyfills for the node APIs
 
-import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
+import { EntityType, VersionedUrl } from "@blockprotocol/type-system/slim";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
@@ -15,23 +15,23 @@ const ajv = new Ajv2020();
 addFormats(ajv);
 
 /**
- * Validates that the schema at a given URI is a valid Entity Type
- * @param versionedUri – the URI / $id of the schema
+ * Validates that the schema at a given URL is a valid Entity Type
+ * @param versionedUrl – the URL / $id of the schema
  * @throws if there are validation errors or if the schema is unreachable
  */
 export const fetchAndValidateEntityType = async (
-  versionedUri: VersionedUri,
+  versionedUrl: VersionedUrl,
 ) => {
   const entityTypeValidator = await ajv.compile<EntityType>(
     entityTypeMetaSchema,
   );
 
-  const entityTypeSchema = await fetchTypeAsJson(versionedUri);
+  const entityTypeSchema = await fetchTypeAsJson(versionedUrl);
 
   if (!entityTypeValidator(entityTypeSchema)) {
     // eslint-disable-next-line no-console -- useful for debugging, intended as a CLI tool
     console.error(
-      `Error validating entity type schema at ${versionedUri}:\n`,
+      `Error validating entity type schema at ${versionedUrl}:\n`,
       JSON.stringify(entityTypeValidator.errors, undefined, 2),
     );
     throw entityTypeValidator.errors;
@@ -42,17 +42,17 @@ export const fetchAndValidateEntityType = async (
 
 /**
  * Generates a string containing TypeScript type definitions for a given Entity Type
- * @param versionedUri – the URI at which the Entity Type is available
+ * @param versionedUrl – the URL at which the Entity Type is available
  * @param depth – how many links to follow when generating types.
  *   - 0 will generate types for the Entity Type's properties only
  *   - 1 will generate types for the links from the Entity Type and their possible destination entities
  *   - 2 will generate types for the linked entities plus _their_ links and destinations, and so on
  */
 export const generateTypeScriptFromEntityType = async (
-  versionedUri: VersionedUri,
+  versionedUrl: VersionedUrl,
   depth: number = 0,
 ) => {
-  const entityTypeSchema = await fetchAndValidateEntityType(versionedUri);
+  const entityTypeSchema = await fetchAndValidateEntityType(versionedUrl);
 
   return entityTypeToTypeScript(entityTypeSchema, true, depth);
 };
