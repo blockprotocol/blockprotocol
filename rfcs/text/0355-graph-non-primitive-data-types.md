@@ -19,15 +19,17 @@ It is a follow-up of the [Graph Type System RFC](https://github.com/blockprotoco
 
 The set of **primitive** data types (`Text`, `Number`, `Boolean`, `Null`, `Object`, `Empty List`) are sufficient to define the structure of any valid JSON value for property types in the existing type system.
 
-However, in many situations it will be useful to further constrain the value-space of a property type using further **constraints**.
+However, in many situations it will be useful to further constrain the value-space of a data type using further **constraints**. These value-space constraints will help users model their domain more precisely, and allow for additional validation to be performed.
+
+The value-space can be thought of as the set of all possible values that a data type can take. Constraints define rules that this value-space must be reduced by. For example, the value-space of the `Number` data type is the set of all possible numbers, but the value-space of a non-primitive data type `Positive Integer` is the set of all possible non-deciaml numbers greater than 0.
 
 **Example 1:** defining an `age` property type
 
-For an `age` property type which represents the age of a person, rather than being restricted to using the `Number` primitive data type it may be more precise to use a `PositiveInteger` non-primitive data type (which further constrains the value-space of the `Number` primitive data type).
+A user wants to model a person's `age` within the type system. Currently, they would have to use the `Number` primitive data type. However, this is too permissive, as the value-space of the `Number` primitive data type includes negative numbers and decimal numbers. Instead, the user can define or discover the `Positive Integer` non-primitive data type to capture allowed values of a person's age more accurately.
 
-In theory these constraints could be defined in the property type, but this would inhibit these data type constraints from being re-usable, and therefore - and re-usability is a core design consideration behidn the type system of the block protocol.
+In theory these constraints could be defined in the property type, but this would inhibit these data type constraints from being re-usable. Since re-usability is a core design consideration behind the type system of the block protocol, it is important to allow for the definition of non-primitive data types.
 
-The rationale for introducing **non-primitive** data type is therefore to allow for the type system to further constrain the value-space of its data types, in a re-usable manor.
+The rationale for introducing **non-primitive** data type is therefore to allow for the type system to further constrain the value-space of its data types, in a re-usable manner.
 
 # Guide-level explanation
 
