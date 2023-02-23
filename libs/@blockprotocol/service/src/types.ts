@@ -1,5 +1,12 @@
 import { MessageCallback } from "@blockprotocol/core";
 
+import type {
+  CreateImageRequest,
+  ImagesResponse,
+  CreateCompletionRequest,
+  CreateCompletionResponse,
+} from "./openai-types";
+
 import {
   AutofillOptions,
   AutofillRetrieveResponse,
@@ -23,6 +30,16 @@ export type EmbedderServiceMessages = {};
  * @see https://app.asana.com/0/0/1204004000163863/f
  */
 // export type ServiceError = ...;
+
+/** OpenAI */
+
+export type OpenAICreateImageData = Omit<CreateImageRequest, "user">;
+
+export type OpenAICreateImageResponseData = ImagesResponse;
+
+export type OpenAICompleteTextData = Omit<CreateCompletionRequest, "user">;
+
+export type OpenAICompleteTextResponseData = CreateCompletionResponse;
 
 /** Mapbox Geocoding API */
 
@@ -226,6 +243,22 @@ export type MapboxRetrieveStaticMapData = {
 export type MapboxRetrieveStaticMapResponseData = string;
 
 export type EmbedderServiceMessageCallbacks = {
+  /** OpenAI */
+
+  openaiCreateImage: MessageCallback<
+    OpenAICreateImageData,
+    null,
+    { data: OpenAICreateImageResponseData },
+    null
+  >;
+
+  openaiCompleteText: MessageCallback<
+    OpenAICompleteTextData,
+    null,
+    { data: OpenAICompleteTextResponseData },
+    null
+  >;
+
   /** Mapbox Geocoding API */
 
   mapboxForwardGeocoding: MessageCallback<

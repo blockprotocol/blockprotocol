@@ -27,6 +27,10 @@ import {
   MapboxReverseGeocodingResponseData,
   MapboxSuggestAddressData,
   MapboxSuggestAddressResponseData,
+  OpenAICompleteTextData,
+  OpenAICompleteTextResponseData,
+  OpenAICreateImageData,
+  OpenAICreateImageResponseData,
 } from "./types.js";
 
 /**
@@ -105,6 +109,28 @@ export class ServiceBlockHandler
   }
 
   // @todo automate creation of these methods from service-service.json and types.ts
+
+  /** OpenAI */
+
+  openaiCreateImage({ data }: { data?: OpenAICreateImageData }) {
+    return this.sendMessage<OpenAICreateImageResponseData, null>({
+      message: {
+        messageName: "openaiCreateImage",
+        data,
+      },
+      respondedToBy: "openaiCreateImageResponse",
+    });
+  }
+
+  openaiCompleteText({ data }: { data?: OpenAICompleteTextData }) {
+    return this.sendMessage<OpenAICompleteTextResponseData, null>({
+      message: {
+        messageName: "openaiCompleteText",
+        data,
+      },
+      respondedToBy: "openaiCompleteTextResponse",
+    });
+  }
 
   /** Mapbox Geocoding API */
 
