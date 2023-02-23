@@ -56,6 +56,14 @@ export const proSubscriptionFeatures: Record<
       ),
     },
     {
+      icon: <MapLocationDotIcon sx={{ fontSize: 18 }} />,
+      title: (
+        <>
+          <strong>600</strong> Mapbox Static Maps
+        </>
+      ),
+    },
+    {
       icon: <LocationIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
