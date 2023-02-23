@@ -394,9 +394,12 @@ const MockBlockDockTemporal: FunctionComponent<
     [blockProtocolApiKey, serviceModuleCallbacksFromProps],
   );
 
-  const { serviceModule } = useServiceEmbedderModule(wrapperRef, {
-    callbacks: serviceModuleCallbacks,
-  });
+  useServiceEmbedderModule(
+    wrapperRef,
+    {
+      callbacks: serviceModuleCallbacks,
+    },
+  );
 
   const hookCallback = useCallback<HookEmbedderMessageCallbacks["hook"]>(
     async ({ data }) => {
