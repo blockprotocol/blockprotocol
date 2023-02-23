@@ -1,12 +1,11 @@
 use std::{fmt, result::Result, str::FromStr, sync::LazyLock};
 
+pub use error::{ParseBaseUrlError, ParseVersionedUrlError};
 use regex::Regex;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 use url::Url;
-
-pub use error::{ParseBaseUrlError, ParseVersionedUrlError};
 
 mod error;
 #[cfg(target_arch = "wasm32")]
@@ -174,7 +173,7 @@ impl<'de> Deserialize<'de> for VersionedUrl {
 mod tests {
     use super::*;
 
-// TODO: add some unit tests for base URL
+    // TODO: add some unit tests for base URL
 
     #[test]
     fn versioned_url() {
