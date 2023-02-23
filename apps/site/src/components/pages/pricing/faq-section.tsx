@@ -1,5 +1,12 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { Box, Collapse, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Collapse,
+  Container,
+  List,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { FunctionComponent, ReactNode, useState } from "react";
 
 import { FontAwesomeIcon } from "../../icons";
@@ -7,33 +14,126 @@ import { CustomLink } from "./custom-link";
 
 const FAQ_QUESTIONS = [
   {
-    title: "Whodunnit?",
+    title: "How does overage charging work?",
     description: (
       <>
-        This is just example text{" "}
-        <CustomLink href="">with a link in</CustomLink>. You can ignore the copy
-        here which exists for illustrative purposes only. It’s going to be about
-        Cluedo. You really don’t need to read it.
+        Charges for external services/API usage beyond the allowances included
+        in a plan are billed in line with the rates shown on the{" "}
+        <CustomLink href="/pricing">pricing</CustomLink> page. Every effort is
+        taken to ensure these costs match the prices charged by the original
+        service provider (e.g. OpenAI/Mapbox), and as a result these overage
+        prices may be subject to change at any time. You can view the current
+        active pricing for a service at any time by visiting this page. Upon the
+        issuance of each invoice, a <strong>platform fee</strong> will be
+        calculated based on the total amount of unpaid overage charges accrued,
+        and appended to your bill. The platform fee you pay varies depending on
+        your account tier:
+        <br />
+        <List sx={{ marginLeft: 3, listStyle: "disc" }}>
+          <li>
+            <strong>Free</strong> - 30%
+          </li>
+
+          <li>
+            <strong>Hobby</strong> - 25%
+          </li>
+
+          <li>
+            <strong>Pro</strong> - 20%
+          </li>
+        </List>
+        If you have any additional questions about overage charges, please{" "}
+        <CustomLink href="/contact">contact us</CustomLink>.
       </>
     ),
   },
   {
-    title: "Who is the real owner of Tudor Close?",
-    description: <>And yes, multiple answers can be open at once.</>,
+    title: "How do I upgrade from Hobby to Pro?",
+    description: (
+      <>
+        While logged in to the <i>Hobby</i> account you wish to upgrade, you can
+        upgrade at any time by navigating to your{" "}
+        <CustomLink href="/settings/billing">Account Billing</CustomLink> page
+        and clicking the “Upgrade” button under the “Plans” section.
+        <br />
+        <br /> If you experience any difficulty with this, please{" "}
+        <CustomLink href="/contact">contact us</CustomLink>.
+      </>
+    ),
   },
   {
-    title: "Did Professor Plum really blackmail Ambassador Peacock?",
-    description: <>And yes, multiple answers can be open at once.</>,
+    title: "How can I downgrade from Pro to Hobby?",
+    description: (
+      <>
+        While logged in to the <i>Pro</i> account you wish to downgrade,
+        navigate to your <i>Account Billing</i> page and clicking the link next
+        to the text that reads “Trying to cancel or downgrade?”
+        <br /> <br /> If you experience any difficulty with this, please{" "}
+        <CustomLink href="/contact">contact us</CustomLink>.
+      </>
+    ),
+  },
+  {
+    title: "What is the process for canceling a paid subscription?",
+    description: (
+      <>
+        You can end a paid subscription at any time by navigating to your
+        <i>Account Billing</i> page while logged in, and clicking the link next
+        to the text that reads “Trying to cancel or downgrade?”
+        <br />
+        <br /> If you experience any difficulty with this, please{" "}
+        <CustomLink href="/contact">contact us</CustomLink>.
+      </>
+    ),
   },
   {
     title:
-      "Question 4 title is a big longer than the others and shows what happens when it bleeds over onto two lines. It will take a really long question to get this big, at least on desktop, but maybe not on mobile?",
-    description: <>And yes, multiple answers can be open at once.</>,
+      "A service provider’s pricing appears different to the cost shown on this page - what should I do?",
+    description: (
+      <>
+        This is an error, and is most likely the result of a change in the price
+        charged by the original service provider. Please{" "}
+        <CustomLink href="/contact">contact us</CustomLink>, and we’ll send a
+        special something your way as a token of our thanks!
+      </>
+    ),
   },
   {
-    title:
-      "Was it Miss Scarlett with the lead pipe in the dining room? No? Oh hell.",
-    description: <>And yes, multiple answers can be open at once.</>,
+    title: "Can I change the payment method associated with my account?",
+    description: (
+      <>
+        Yes! Provided you already have a payment method associated with your
+        account you can navigate to your{" "}
+        <CustomLink href="/settings/billing">Account Billing</CustomLink> page
+        and click “Change payment method” in the top-right of the main section.
+        If you see a message that says “Upgrade to get more” instead, you can
+        add a payment method by first upgrading your account to <i>Hobby</i> or{" "}
+        <i>Pro</i>.
+      </>
+    ),
+  },
+  {
+    title: "Can I change my tax information?",
+    description: (
+      <>
+        Yes. This will soon be possible from the{" "}
+        <CustomLink href="/settings/billing">Account Billing</CustomLink> page.
+        In the meantime, please{" "}
+        <CustomLink href="/contact">contact us</CustomLink>.
+      </>
+    ),
+  },
+  {
+    title: "Can I get a tax receipt?",
+    description: (
+      <>
+        Yes, please navigate to your{" "}
+        <CustomLink href="/settings/billing">Account Billing</CustomLink> page
+        and scroll down to the “Payment History” section. If you cannot see
+        this, please <CustomLink href="/contact">contact us</CustomLink> for a
+        manually-issued receipt.
+      </>
+    ),
   },
 ];
 
