@@ -28,10 +28,10 @@ export abstract class ModuleHandler {
   /**
    * If we register callbacks prior to creating the core handler, we want to
    * register those on the core handler once it is available, but before we
-   * call initialise on it, to ensure callbacks which would catch messages sent
-   * during initialise are registered. To enable that, we have a separate queue.
+   * call initialize on it, to ensure callbacks which would catch messages sent
+   * during initialize are registered. To enable that, we have a separate queue.
    */
-  private preCoreInitialiseQueue: CoreHandlerCallback[] = [];
+  private preCoreInitializeQueue: CoreHandlerCallback[] = [];
 
   /** whether the instance of CoreHandler belongs to a block or embedding application */
   protected readonly sourceType: "block" | "embedder";
@@ -107,7 +107,7 @@ export abstract class ModuleHandler {
       throw new Error("Could not initialize – missing core handler");
     }
 
-    this.processCoreCallbackQueue(this.preCoreInitialiseQueue);
+    this.processCoreCallbackQueue(this.preCoreInitializeQueue);
 
     coreHandler.initialize();
 
@@ -203,11 +203,11 @@ export abstract class ModuleHandler {
   /**
    * When adding/removing callbacks before calling the core handler is
    * available, we want to queue these in a queue which will be processed before
-   * calling initialising once we create the core handler, to ensure callbacks
-   * are properly set up before calling initialise
+   * calling initializing once we create the core handler, to ensure callbacks
+   * are properly set up before calling initialize
    */
   private getRelevantQueueForCallbacks() {
-    return this.coreHandler ? this.coreQueue : this.preCoreInitialiseQueue;
+    return this.coreHandler ? this.coreQueue : this.preCoreInitializeQueue;
   }
 
   /** Remove a callback from the CoreHandler for an incoming messages of a specific type */
