@@ -33,7 +33,7 @@ const script = async () => {
     return;
   }
   const { typeScriptString } = await generateTypeScriptFromEntityType(
-    schema,
+    validationResult.inner,
     2, // @todo blocks should be able to statically declare desired subgraph depth from EA
   );
 
