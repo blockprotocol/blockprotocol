@@ -35,9 +35,49 @@ The rationale for introducing **non-primitive** data type is therefore to allow 
 
 [guide-level-explanation]: #guide-level-explanation
 
-Non-primitive data types are data types which further constrain an exisiting data type (which can be either non-primitive or primitive).
+Non-primitive data types are data types that further constrain an existing data type (which can be either non-primitive or primitive). In other words, non-primitive data types further restrict the _value space_ of an existing data type.
 
-In other words, non-primitive data types further restrict the _value space_ of an existing data type.
+JSON Schema allows for various constraints to be defined on schemas, and they can be combined in a variety of ways. When multiple constraints are defined in a JSON Schema, validators will try to apply each one even if they define unsatisfiable types. The Block Protocol type system will allow for the definition of non-primitive data types by combining these constraints in a similar way.
+
+To provide a way for these constraints to be composable and re-usable, the Block Protocol type system will allow for data types to _inherit_ from other data types. This will allow for data type constraints to be reusable and composable among non-primitive data types. This inheritance will lean on how the `allOf` keyword works in JSON Schema. All data types referenced in the `allOf` array of a data type schema will provide value-space constraints to the inheritor.
+
+A second kind of composability of data types will also be possible by allowing data types to be defined as choices between data types. Conceptually this is similar to JSON Schema's `oneOf` keyword where a schema can take on the shape of _one of_ a list of schemas. This composability, instead of constraining the value-space, will allow data types to expand their value-space.
+
+Lastly, we will allow for data types to compose through the use of lists. This means that a data type can be of `{ type: "array" }` and use the `items` keyword to define its value-space(s).
+
+In the next sections we will explore what kind of constraints we will allow and how the mentioned three kinds of composition could look like.
+
+## Constraints
+
+The constraints we will be supporting for non-primitive data types are a subset of the constraints that JSON Schema supports. The constraints can be roughly grouped by the value(s) they operate on.
+
+### For all primitive data types
+
+- `enum`: a list of values that the data type can take
+- `const`: a single value that the data type can take
+
+### Text (primitive data type)
+
+The supported text constraints are:
+
+- `minLength`: a number that defines the minimum length of the text value
+- `maxLength`: a number that defines the maximum length of the text value
+- `regex`: a regular expression that the text value must match
+
+### Number (primitive data type)
+
+- `minimum`: a number that defines the minimum value of the number value (`x >= minimum`)
+- `exclusiveMinimum`: a number that defines the minimum value of the number value excluding the value itself (`x > minimum`)
+- `maximum`: a number that defines the maximum value of the number value (`x <= maximum`)
+- `exclusiveMaximum`: a number that defines the maximum value of the number value excluding the value itself (`x < maximum`)
+- `multipleOf`: a number that defines the value that the number value must be a multiple of (`x % multipleOf == 0`)
+
+### List (composition)
+
+- `minItems`: a number that defines the minimum number of items in the list value
+- `maxItems`: a number that defines the maximum number of items in the list value
+
+## ..
 
 - **Constraining another Data Type** - Defining constraints on an existing Data Type restricts the value space to a subset of the existing one
 
