@@ -11,7 +11,7 @@
   },
   "protocol": "0.2",
   "displayName": "Template",
-  "examples": [{ "name": "World" }],
+  "examples": [{ "http://example.com/types/property-type/name/": "World" }],
   "icon": "public/omega.svg",
   "image": "public/block-preview.png",
   "source": "app.html"
