@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, ReactNode, useMemo, useState } from "react";
 import { useUser } from "../context/user-context";
-
 import { ComingSoonBanner } from "./coming-soon-banner";
 import { Footer } from "./footer";
 import { BANNERS, FooterBanner } from "./footer-banner";
