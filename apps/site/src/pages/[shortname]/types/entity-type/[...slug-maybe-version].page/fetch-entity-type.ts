@@ -6,19 +6,19 @@ import {
 
 import { apiClient } from "../../../../../lib/api-client";
 
-export const fetchEntityType = async (requestedUri: string) => {
-  const isVersionedUrl = validateVersionedUrl(requestedUri).type === "Ok";
+export const fetchEntityType = async (requestedUrl: string) => {
+  const isVersionedUrl = validateVersionedUrl(requestedUrl).type === "Ok";
 
   const baseUrl = isVersionedUrl
-    ? extractBaseUrl(requestedUri as VersionedUrl)
-    : requestedUri.endsWith("/")
-    ? requestedUri
-    : `${requestedUri}/`;
+    ? extractBaseUrl(requestedUrl as VersionedUrl)
+    : requestedUrl.endsWith("/")
+    ? requestedUrl
+    : `${requestedUrl}/`;
 
   const requestedVersionPromise = apiClient
-    .getEntityTypeByUri(
+    .getEntityTypeByUrl(
       isVersionedUrl
-        ? { versionedUrl: requestedUri }
+        ? { versionedUrl: requestedUrl }
         : {
             baseUrl,
           },
@@ -27,7 +27,7 @@ export const fetchEntityType = async (requestedUri: string) => {
 
   const latestVersionPromise = isVersionedUrl
     ? apiClient
-        .getEntityTypeByUri({
+        .getEntityTypeByUrl({
           baseUrl,
         })
         .then(({ data }) => data?.entityType)

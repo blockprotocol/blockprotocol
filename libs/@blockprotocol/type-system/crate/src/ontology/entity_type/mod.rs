@@ -122,26 +122,26 @@ impl EntityType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[repr(transparent)]
 pub struct EntityTypeReference {
-    uri: VersionedUrl,
+    url: VersionedUrl,
 }
 
 impl EntityTypeReference {
     /// Creates a new `EntityTypeReference` from the given [`VersionedUrl`].
     #[must_use]
-    pub const fn new(uri: VersionedUrl) -> Self {
-        Self { uri }
+    pub const fn new(url: VersionedUrl) -> Self {
+        Self { url }
     }
 
     #[must_use]
     pub const fn uri(&self) -> &VersionedUrl {
-        &self.uri
+        &self.url
     }
 }
 
 impl From<&VersionedUrl> for &EntityTypeReference {
-    fn from(uri: &VersionedUrl) -> Self {
+    fn from(url: &VersionedUrl) -> Self {
         // SAFETY: Self is `repr(transparent)`
-        unsafe { &*(uri as *const VersionedUrl).cast::<EntityTypeReference>() }
+        unsafe { &*(url as *const VersionedUrl).cast::<EntityTypeReference>() }
     }
 }
 

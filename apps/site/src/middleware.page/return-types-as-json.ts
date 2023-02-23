@@ -32,8 +32,8 @@ const generateJsonResponse = (object: DataType | EntityType | PropertyType) =>
 export const versionedTypeUriRegExp =
   /types\/(entity-type|data-type|property-type)\/.+\/v\/\d+$/;
 
-const validateVersionedUrl = (uri: string): uri is VersionedUrl =>
-  !!uri.match(versionedTypeUriRegExp);
+const validateVersionedUrl = (url: string): url is VersionedUrl =>
+  !!url.match(versionedTypeUriRegExp);
 
 const getTypeByVersionedUrl = (
   versionedUrl: VersionedUrl,

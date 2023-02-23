@@ -126,7 +126,7 @@ mod tests {
 
         #[test]
         fn one() {
-            let uri = VersionedUrl::from_str("https://example.com/property_type/v/1")
+            let url = VersionedUrl::from_str("https://example.com/property_type/v/1")
                 .expect("invalid Versioned URL");
 
             check_repr_serialization_from_value(
@@ -139,8 +139,8 @@ mod tests {
                 Some(Object {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::from([(
-                        uri.base_url.to_string(),
-                        PropertyTypeReference::new(uri.to_string()),
+                        url.base_url.to_string(),
+                        PropertyTypeReference::new(url.to_string()),
                     )]),
                     required: vec![],
                     additional_properties: false,
@@ -189,7 +189,7 @@ mod tests {
 
         #[test]
         fn one() {
-            let uri = VersionedUrl::from_str("https://example.com/property_type/v/1")
+            let url = VersionedUrl::from_str("https://example.com/property_type/v/1")
                 .expect("invalid Versioned URL");
 
             check_repr_serialization_from_value(
@@ -202,8 +202,8 @@ mod tests {
                 Some(Object {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::from([(
-                        uri.base_url.to_string(),
-                        PropertyTypeReference::new(uri.to_string()),
+                        url.base_url.to_string(),
+                        PropertyTypeReference::new(url.to_string()),
                     )]),
                     required: vec![],
                     additional_properties: false,

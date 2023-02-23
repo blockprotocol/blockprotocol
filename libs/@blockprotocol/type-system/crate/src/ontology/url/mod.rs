@@ -31,18 +31,18 @@ impl BaseUrl {
     ///
     /// # Errors
     /// - `ParseBaseUrlError` if the given URI string is invalid
-    pub fn new(uri: String) -> Result<BaseUrl, ParseBaseUrlError> {
-        Self::validate_str(&uri)?;
+    pub fn new(url: String) -> Result<BaseUrl, ParseBaseUrlError> {
+        Self::validate_str(&url)?;
 
-        Ok(Self(uri))
+        Ok(Self(url))
     }
 
-    fn validate_str(uri: &str) -> Result<(), ParseBaseUrlError> {
-        if !uri.ends_with('/') {
+    fn validate_str(url: &str) -> Result<(), ParseBaseUrlError> {
+        if !url.ends_with('/') {
             return Err(ParseBaseUrlError::MissingTrailingSlash);
         }
         // TODO: Propagate more useful errors
-        if Url::parse(uri)
+        if Url::parse(url)
             .map_err(|err| ParseBaseUrlError::UrlParseError(err.to_string()))?
             .cannot_be_a_base()
         {
@@ -110,11 +110,11 @@ impl fmt::Display for VersionedUrl {
 impl FromStr for VersionedUrl {
     type Err = ParseVersionedUrlError;
 
-    fn from_str(uri: &str) -> Result<Self, ParseVersionedUrlError> {
+    fn from_str(url: &str) -> Result<Self, ParseVersionedUrlError> {
         static RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("regex failed to compile"));
         let captures = RE
-            .captures(uri)
+            .captures(url)
             .ok_or(ParseVersionedUrlError::IncorrectFormatting)?;
         let base_url = captures
             .get(1)
@@ -170,7 +170,7 @@ mod tests {
     #[test]
     fn versioned_url() {
         let input_str = "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1";
-        let uri = VersionedUrl::from_str(input_str).expect("parsing versioned URL failed");
-        assert_eq!(&uri.to_string(), input_str);
+        let url = VersionedUrl::from_str(input_str).expect("parsing versioned URL failed");
+        assert_eq!(&url.to_string(), input_str);
     }
 }

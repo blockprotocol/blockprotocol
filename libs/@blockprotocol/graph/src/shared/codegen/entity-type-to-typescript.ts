@@ -18,9 +18,9 @@ import {
 import { hardcodedBpTypes } from "./hardcoded-bp-types.js";
 import { fetchTypeAsJson } from "./shared.js";
 
-const bannerComment = (uri: string, depth: number) => `/**
+const bannerComment = (url: string, depth: number) => `/**
  * This file was automatically generated – do not edit it.
- * @see ${uri} for the root JSON Schema these types were generated from
+ * @see ${url} for the root JSON Schema these types were generated from
  * Types for link entities and their destination were generated to a depth of ${depth} from the root
  */`;
 
@@ -215,16 +215,16 @@ const _jsonSchemaToTypeScript = async (
     schema.links ?? {},
   )) {
     const retrieveOrCompileSchemaFromUri = async (
-      uri: VersionedUrl,
+      url: VersionedUrl,
     ): Promise<CompiledType> => {
-      const cachedType = resolvedUrisToType[uri];
+      const cachedType = resolvedUrisToType[url];
       if (cachedType) {
         return {
           typeName: cachedType.typeName,
           typeScriptString: "",
         };
       }
-      const typeSchema = await fetchAndValidateEntityType(uri as VersionedUrl);
+      const typeSchema = await fetchAndValidateEntityType(url as VersionedUrl);
       return _jsonSchemaToTypeScript(
         typeSchema,
         depth - 1,

@@ -173,7 +173,7 @@ export const apiClient = {
     apiClient.get<ApiAggregateEntityTypesResponse>(
       `types/entity-type/aggregate?latestOnly=${latestOnly}`,
     ),
-  getEntityTypeByUri: ({ baseUrl, versionedUrl }: ApiEntityTypeByUriGetQuery) =>
+  getEntityTypeByUrl: ({ baseUrl, versionedUrl }: ApiEntityTypeByUriGetQuery) =>
     apiClient.get<ApiEntityTypeByUriResponse>(
       `types/entity-type/get?${
         baseUrl ? `baseUrl=${baseUrl}` : `versionedUrl=${versionedUrl}`
@@ -193,7 +193,7 @@ export const apiClient = {
     apiClient.get<ApiAggregatePropertyTypesResponse>(
       `types/property-type/aggregate?latestOnly=${latestOnly}`,
     ),
-  getPropertyTypeByUri: ({
+  getPropertyTypeByUrl: ({
     baseUrl,
     versionedUrl,
   }: ApiPropertyTypeByUriGetQuery) =>

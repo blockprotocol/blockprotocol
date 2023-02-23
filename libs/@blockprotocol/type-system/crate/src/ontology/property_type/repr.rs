@@ -70,13 +70,13 @@ impl From<super::PropertyType> for PropertyType {
 pub struct PropertyTypeReference {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
-    uri: String,
+    url: String,
 }
 
 impl PropertyTypeReference {
     #[must_use]
-    pub const fn new(uri: String) -> Self {
-        Self { uri }
+    pub const fn new(url: String) -> Self {
+        Self { url }
     }
 }
 
@@ -84,15 +84,15 @@ impl TryFrom<PropertyTypeReference> for super::PropertyTypeReference {
     type Error = ParseVersionedUrlError;
 
     fn try_from(property_type_ref_repr: PropertyTypeReference) -> Result<Self, Self::Error> {
-        let uri = VersionedUrl::from_str(&property_type_ref_repr.uri)?;
-        Ok(Self::new(uri))
+        let url = VersionedUrl::from_str(&property_type_ref_repr.url)?;
+        Ok(Self::new(url))
     }
 }
 
 impl From<super::PropertyTypeReference> for PropertyTypeReference {
     fn from(property_type_ref: super::PropertyTypeReference) -> Self {
         Self {
-            uri: property_type_ref.uri.to_string(),
+            url: property_type_ref.url.to_string(),
         }
     }
 }

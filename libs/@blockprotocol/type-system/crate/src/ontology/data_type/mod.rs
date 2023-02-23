@@ -77,37 +77,37 @@ impl DataType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[repr(transparent)]
 pub struct DataTypeReference {
-    uri: VersionedUrl,
+    url: VersionedUrl,
 }
 
 impl DataTypeReference {
     /// Creates a new `DataTypeReference` from the given [`VersionedUrl`].
     #[must_use]
-    pub const fn new(uri: VersionedUrl) -> Self {
-        Self { uri }
+    pub const fn new(url: VersionedUrl) -> Self {
+        Self { url }
     }
 
     #[must_use]
-    pub const fn uri(&self) -> &VersionedUrl {
-        &self.uri
+    pub const fn url(&self) -> &VersionedUrl {
+        &self.url
     }
 }
 
 impl From<&VersionedUrl> for &DataTypeReference {
-    fn from(uri: &VersionedUrl) -> Self {
+    fn from(url: &VersionedUrl) -> Self {
         // SAFETY: Self is `repr(transparent)`
-        unsafe { &*(uri as *const VersionedUrl).cast::<DataTypeReference>() }
+        unsafe { &*(url as *const VersionedUrl).cast::<DataTypeReference>() }
     }
 }
 
 impl ValidateUri for DataTypeReference {
     fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
-        if base_url == &self.uri().base_url {
+        if base_url == &self.url().base_url {
             Ok(())
         } else {
             Err(ValidationError::BaseUrlMismatch {
                 base_url: base_url.clone(),
-                versioned_url: self.uri().clone(),
+                versioned_url: self.url().clone(),
             })
         }
     }
@@ -192,15 +192,15 @@ mod tests {
 
     #[test]
     fn validate_data_type_ref_valid() {
-        let uri = VersionedUrl::from_str(
+        let url = VersionedUrl::from_str(
             "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
         )
         .expect("failed to create VersionedUrl");
 
-        let data_type_ref = DataTypeReference::new(uri.clone());
+        let data_type_ref = DataTypeReference::new(url.clone());
 
         data_type_ref
-            .validate_uri(&uri.base_url)
+            .validate_uri(&url.base_url)
             .expect("failed to validate against base URL");
     }
 

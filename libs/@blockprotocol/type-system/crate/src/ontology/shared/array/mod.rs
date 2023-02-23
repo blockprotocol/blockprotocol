@@ -60,11 +60,11 @@ mod tests {
     use super::*;
     use crate::{repr, url::VersionedUrl, PropertyTypeReference};
 
-    fn get_test_value_or_array(uri: &VersionedUrl) -> ValueOrArray<PropertyTypeReference> {
+    fn get_test_value_or_array(url: &VersionedUrl) -> ValueOrArray<PropertyTypeReference> {
         let json_repr = json!({
             "type": "array",
             "items": {
-                "$ref": uri.to_string()
+                "$ref": url.to_string()
             },
             "minItems": 10,
             "maxItems": 20,
@@ -77,13 +77,13 @@ mod tests {
 
     #[test]
     fn valid_uri() {
-        let uri =
+        let url =
             VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
                 .expect("failed to parse VersionedUrl");
-        let array = get_test_value_or_array(&uri);
+        let array = get_test_value_or_array(&url);
 
         array
-            .validate_uri(&uri.base_url)
+            .validate_uri(&url.base_url)
             .expect("failed to validate against base URL");
     }
 

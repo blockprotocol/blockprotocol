@@ -127,22 +127,22 @@ impl From<super::EntityType> for EntityType {
 pub struct EntityTypeReference {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
-    uri: String,
+    url: String,
 }
 
 impl TryFrom<EntityTypeReference> for super::EntityTypeReference {
     type Error = ParseVersionedUrlError;
 
     fn try_from(entity_type_ref_repr: EntityTypeReference) -> Result<Self, Self::Error> {
-        let uri = VersionedUrl::from_str(&entity_type_ref_repr.uri)?;
-        Ok(Self::new(uri))
+        let url = VersionedUrl::from_str(&entity_type_ref_repr.url)?;
+        Ok(Self::new(url))
     }
 }
 
 impl From<super::EntityTypeReference> for EntityTypeReference {
     fn from(entity_type_ref: super::EntityTypeReference) -> Self {
         Self {
-            uri: entity_type_ref.uri.to_string(),
+            url: entity_type_ref.url.to_string(),
         }
     }
 }

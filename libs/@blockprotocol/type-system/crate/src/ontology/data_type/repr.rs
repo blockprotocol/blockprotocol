@@ -76,22 +76,22 @@ impl From<super::DataType> for DataType {
 pub struct DataTypeReference {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
-    uri: String,
+    url: String,
 }
 
 impl TryFrom<DataTypeReference> for super::DataTypeReference {
     type Error = ParseVersionedUrlError;
 
     fn try_from(data_type_ref_repr: DataTypeReference) -> Result<Self, Self::Error> {
-        let uri = VersionedUrl::from_str(&data_type_ref_repr.uri)?;
-        Ok(Self::new(uri))
+        let url = VersionedUrl::from_str(&data_type_ref_repr.url)?;
+        Ok(Self::new(url))
     }
 }
 
 impl From<super::DataTypeReference> for DataTypeReference {
     fn from(data_type_ref: super::DataTypeReference) -> Self {
         Self {
-            uri: data_type_ref.uri.to_string(),
+            url: data_type_ref.url.to_string(),
         }
     }
 }

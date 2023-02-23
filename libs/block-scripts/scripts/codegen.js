@@ -27,7 +27,7 @@ const script = async () => {
   const validationResult = validateVersionedUrl(schema);
   if (validationResult.type === "Err") {
     console.error(
-      chalk.red(`Invalid 'schema' URI: ${validationResult.inner.reason}`),
+      chalk.red(`Invalid 'schema' URL: ${validationResult.inner.reason}`),
     );
     process.exit(1);
     return;

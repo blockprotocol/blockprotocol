@@ -79,26 +79,26 @@ impl PropertyType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[repr(transparent)]
 pub struct PropertyTypeReference {
-    uri: VersionedUrl,
+    url: VersionedUrl,
 }
 
 impl PropertyTypeReference {
     /// Creates a new `PropertyTypeReference` from the given [`VersionedUrl`].
     #[must_use]
-    pub const fn new(uri: VersionedUrl) -> Self {
-        Self { uri }
+    pub const fn new(url: VersionedUrl) -> Self {
+        Self { url }
     }
 
     #[must_use]
     pub const fn uri(&self) -> &VersionedUrl {
-        &self.uri
+        &self.url
     }
 }
 
 impl From<&VersionedUrl> for &PropertyTypeReference {
-    fn from(uri: &VersionedUrl) -> Self {
+    fn from(url: &VersionedUrl) -> Self {
         // SAFETY: Self is `repr(transparent)`
-        unsafe { &*(uri as *const VersionedUrl).cast::<PropertyTypeReference>() }
+        unsafe { &*(url as *const VersionedUrl).cast::<PropertyTypeReference>() }
     }
 }
 
@@ -185,7 +185,7 @@ mod tests {
         let data_type_references = property_type
             .data_type_references()
             .into_iter()
-            .map(DataTypeReference::uri)
+            .map(DataTypeReference::url)
             .cloned()
             .collect::<HashSet<_>>();
 
@@ -376,15 +376,15 @@ mod tests {
 
     #[test]
     fn validate_property_type_ref_valid() {
-        let uri = VersionedUrl::from_str(
+        let url = VersionedUrl::from_str(
             "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
         )
         .expect("failed to create VersionedUrl");
 
-        let property_type_ref = PropertyTypeReference::new(uri.clone());
+        let property_type_ref = PropertyTypeReference::new(url.clone());
 
         property_type_ref
-            .validate_uri(&uri.base_url)
+            .validate_uri(&url.base_url)
             .expect("failed to validate against base URL");
     }
 

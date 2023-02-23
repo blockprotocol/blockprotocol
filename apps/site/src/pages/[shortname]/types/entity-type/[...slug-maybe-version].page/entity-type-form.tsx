@@ -206,8 +206,8 @@ export const EntityTypeForm = ({
 
           const fetchFunction =
             kind === "entity-type"
-              ? apiClient.getEntityTypeByUri
-              : apiClient.getPropertyTypeByUri;
+              ? apiClient.getEntityTypeByUrl
+              : apiClient.getPropertyTypeByUrl;
 
           const { data: existingType } = await fetchFunction({
             versionedUrl,
