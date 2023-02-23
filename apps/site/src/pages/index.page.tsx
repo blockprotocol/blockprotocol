@@ -10,10 +10,8 @@ import { SupportedApplications } from "../components/pages/home/supported-applic
 import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
 import { ZeroApplicationDevelopers } from "../components/pages/home/zero-application-developers";
 import { getAllBlocks } from "../lib/api/blocks/get";
-import {
-  excludeHiddenBlocks,
-  ExpandedBlockMetadata as BlockMetadata,
-} from "../lib/blocks";
+import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
+import { excludeHiddenBlocks } from "../lib/excluded-blocks";
 
 // @todo how does this magic number work?
 export const HOME_PAGE_HEADER_HEIGHT = 750;
