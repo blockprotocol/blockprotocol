@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    branches: [main, 0.3]
 
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}

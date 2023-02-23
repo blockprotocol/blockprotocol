@@ -17,11 +17,9 @@ test("schema page should contain key elements", async ({ page }) => {
     page,
   });
 
-  await page.goto(`/@alice/types/${entityType.schema.title}`);
+  await page.goto(`/@alice/types/${entityType.title}`);
 
-  await expect(
-    page.locator(`text=${entityType.schema.title} Schema`),
-  ).toBeVisible();
+  await expect(page.locator(`text=${entityType.title} Schema`)).toBeVisible();
 
   await expect(page.locator("text=@alice >")).toBeVisible();
 
@@ -38,20 +36,20 @@ test("schema page should contain key elements", async ({ page }) => {
 
   await expect(
     page.locator(
-      "text=You can use these entity types as the expected value for a property in another schema.",
+      "text=You can use these entity types as the expected value for a property in another ",
     ),
   ).toBeVisible();
 
-  await expect(page.locator(`text=${entityType.schema.$id}`)).toBeVisible();
+  await expect(page.locator(`text=${entityType.$id}`)).toBeVisible();
 
-  await expect(page.locator(`text=${entityType.schema.$id}`)).toHaveAttribute(
+  await expect(page.locator(`text=${entityType.$id}`)).toHaveAttribute(
     "href",
-    entityType.schema.$id,
+    entityType.$id,
   );
 
   await expect(page.locator(`a:has-text('this link')`)).toHaveAttribute(
     "href",
-    `${entityType.schema.$id}?json`,
+    `${entityType.$id}?json`,
   );
 
   const schemaPropertiesTable = page.locator(
@@ -81,7 +79,7 @@ test("authenticated user should be able to update their schema in schema page", 
     page,
   });
 
-  await page.goto(`/@alice/types/${entityType.schema.title}`);
+  await page.goto(`/@alice/types/${entityType.title}`);
 
   const schemaPropertiesTable = page.locator(
     "[data-testid='schema-properties-table']",

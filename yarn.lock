@@ -2065,38 +2065,31 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blockprotocol/core@0.0.14-canary-20230214141700":
-  version "0.0.14-canary-20230214141700"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.0.14-canary-20230214141700.tgz#7b943296561a4b9eece1f6394d656e100867444d"
-  integrity sha512-pMTZWVWbmf2fxrHzhClVK8qZICaES/OEQ/n5J1yWP++/r7H8SVrk4FhWvUX9q//08lvZtW9Yuo56ekwfnO2yHQ==
+"@blockprotocol/core@0.1.0-canary-20230222150704":
+  version "0.1.0-canary-20230222150704"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.1.0-canary-20230222150704.tgz#5ef4fd3acea3fd6727eb989ca970868722286d59"
+  integrity sha512-6d9Aaraz9bWZlmFP/HYw4xNqbspVq7zRNmc3bTfk7cSbtlErM2O90YRg8bkr5OqSmlP/P0OKkLcviIClM4uvCA==
   dependencies:
     es-module-lexer "^0.10.5"
     uuid "^8.3.2"
 
-"@blockprotocol/graph@0.1.0-canary-20230214141700":
-  version "0.1.0-canary-20230214141700"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.1.0-canary-20230214141700.tgz#bc1acc15de3f27874cf45b58a13d51640eb09742"
-  integrity sha512-r9fDToHn/X74mkPzu4CDRaLUtm/OPCdgkuYcTDtGbPThv6+x9iXNj9B1x3P05IwbMmBAtsk0UrhXYrM8sTdkZQ==
+"@blockprotocol/graph@0.1.0-canary-20230222150704":
+  version "0.1.0-canary-20230222150704"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.1.0-canary-20230222150704.tgz#6b9726da3fbb2f72beb08bbab62589bdecd76927"
+  integrity sha512-hndsDZ7rSM5Jg50ENyDhHMmqrbaCeYQE2z5ImkEs34CTZiKo52Uy8FwTBt1hbuOLRUJAOgGmCAGaLyjyUK03lg==
   dependencies:
-    "@blockprotocol/core" "0.0.14-canary-20230214141700"
-    "@blockprotocol/type-system" "0.0.4-canary-20230214141700"
+    "@blockprotocol/core" "0.1.0-canary-20230222150704"
+    "@blockprotocol/type-system" "0.1.0-canary-20230222150704"
     ajv "^8.11.2"
     ajv-formats "^2.1.1"
     json-schema-to-typescript "^11.0.2"
     lit "^2.4.1"
     node-fetch "^3.3.0"
 
-"@blockprotocol/service@0.0.1-canary.2":
-  version "0.0.1-canary.2"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/service/-/service-0.0.1-canary.2.tgz#6e2d51f22d818abadedc63b92a609356c4c585cd"
-  integrity sha512-sByJfiawF8RfjzqfP4RojlVhfJkRkalz/ikEJoDF4ypnot8wUiLJ6EqiyB3sPYfiSsL7+Xqu0YvVBmvSsVFPgw==
-  dependencies:
-    "@blockprotocol/core" "0.0.14"
-
-"@blockprotocol/type-system@0.0.4-canary-20230214141700":
-  version "0.0.4-canary-20230214141700"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/type-system/-/type-system-0.0.4-canary-20230214141700.tgz#35e592c54a33aedbc4465c117c5e411a27c2108c"
-  integrity sha512-kpYBQGy/Tro7dBacggBoJZ8QHqNbrAPSnPm4wQrbSbC85eFGWwbVNhVwe8ykEZ3jXOGv4yy1kZL1a866uHsJ8w==
+"@blockprotocol/type-system@0.1.0-canary-20230222150704":
+  version "0.1.0-canary-20230222150704"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/type-system/-/type-system-0.1.0-canary-20230222150704.tgz#adeee52b340bab0d5124da4d1e69e4574dc4a9ac"
+  integrity sha512-Di02aSZuys4c1Yh2QLGPkYoQWjYbdrF0WRegTNfSlfM58YyYsFl5A11ypZWfCFYMrs145++w5awqGPWHkJd6Vg==
 
 "@changesets/apply-release-plan@^6.1.3":
   version "6.1.3"
@@ -2713,13 +2706,13 @@
     "@fortawesome/free-solid-svg-icons" "6.0.0"
     clsx "1.2.1"
 
-"@hashintel/type-editor@0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@hashintel/type-editor/-/type-editor-0.0.10.tgz#4c739546435a3fb325c675fc4f90e9eda5a0e3a1"
-  integrity sha512-xv/RRejjB+eZrfP4Vue5ICfwQFJWpc71vqy7DwCHgqUvE/hFI/BJw/03ZLG3xNhik1/ufLlmPXweSYm+vp+edA==
+"@hashintel/type-editor@0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@hashintel/type-editor/-/type-editor-0.0.11.tgz#fa5a80fd5ace21939463b84454ac752fa91aa3de"
+  integrity sha512-h4pwq7ff7tVt5+ps+wypd1HREgHerjjTege5VILLSc2IOlmQ5n6kMuuRsP01YYrGlMrLNUga0+xg/OhHbSoClQ==
   dependencies:
-    "@blockprotocol/graph" "0.1.0-canary-20230214141700"
-    "@blockprotocol/type-system" "0.0.4-canary-20230214141700"
+    "@blockprotocol/graph" "0.1.0-canary-20230222150704"
+    "@blockprotocol/type-system" "0.1.0-canary-20230222150704"
     "@fortawesome/free-regular-svg-icons" "6.0.0"
     "@fortawesome/free-solid-svg-icons" "6.0.0"
     "@hashintel/design-system" "0.0.3"
@@ -6705,13 +6698,13 @@ easy-table@^1.2.0:
   optionalDependencies:
     wcwidth "^1.0.1"
 
-echarts@^5.3.3:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/echarts/-/echarts-5.3.3.tgz#df97b09c4c0e2ffcdfb44acf518d50c50e0b838e"
-  integrity sha512-BRw2serInRwO5SIwRviZ6Xgm5Lb7irgz+sLiFMmy/HOaf4SQ+7oYqxKzRHAKp4xHQ05AuHw1xvoQWJjDQq/FGw==
+echarts@5.4.1:
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/echarts/-/echarts-5.4.1.tgz#d7f65a584d78beff62568d878b16151b3381811c"
+  integrity sha512-9ltS3M2JB0w2EhcYjCdmtrJ+6haZcW6acBolMGIuf01Hql1yrIV01L1aRj7jsaaIULJslEP9Z3vKlEmnJaWJVQ==
   dependencies:
     tslib "2.3.0"
-    zrender "5.3.2"
+    zrender "5.4.1"
 
 edit-json-file@^1.7.0:
   version "1.7.0"
@@ -15605,10 +15598,10 @@ zod@^3.20.2:
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.20.2.tgz#068606642c8f51b3333981f91c0a8ab37dfc2807"
   integrity sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==
 
-zrender@5.3.2:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/zrender/-/zrender-5.3.2.tgz#f67b11d36d3d020d62411d3bb123eb1c93cccd69"
-  integrity sha512-8IiYdfwHj2rx0UeIGZGGU4WEVSDEdeVCaIg/fomejg1Xu6OifAL1GVzIPHg2D+MyUkbNgPWji90t0a8IDk+39w==
+zrender@5.4.1:
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/zrender/-/zrender-5.4.1.tgz#892f864b885c71e1dc25dcb3c7a4ba42678d3f11"
+  integrity sha512-M4Z05BHWtajY2241EmMPHglDQAJ1UyHQcYsxDNzD9XLSkPDqMq4bB28v9Pb4mvHnVQ0GxyTklZ/69xCFP6RXBA==
   dependencies:
     tslib "2.3.0"
 

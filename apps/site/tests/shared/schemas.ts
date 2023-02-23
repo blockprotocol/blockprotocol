@@ -1,4 +1,5 @@
-import type { EntityType } from "../../src/lib/api/model/entity-type.model";
+import { EntityType } from "@blockprotocol/graph";
+
 import { type Page, expect } from "./wrapped-playwright.js";
 
 /**
@@ -26,7 +27,7 @@ export const createSchema = async ({
     entityType: EntityType;
   };
 
-  expect(entityType.schema.title).toBe(title);
+  expect(entityType.title).toBe(title);
 
   await page.reload();
   await page.waitForLoadState("networkidle");

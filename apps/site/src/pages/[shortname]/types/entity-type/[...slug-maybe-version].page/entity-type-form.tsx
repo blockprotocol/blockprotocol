@@ -22,7 +22,7 @@ type EntityTypeFormProps = {
 export const EntityTypeForm = ({
   author,
   entityType,
-  readonly: _readonly,
+  readonly,
 }: EntityTypeFormProps) => {
   const [entityTypeOptions, setEntityTypeOptions] = useState<Record<
     VersionedUrl,
@@ -244,6 +244,7 @@ export const EntityTypeForm = ({
       entityTypeOptions={entityTypeOptions}
       ontologyFunctions={ontologyFunctions}
       propertyTypeOptions={propertyTypeOptions}
+      readonly={readonly}
     />
   );
 };
