@@ -6,29 +6,47 @@ import {
   List,
   Stack,
   Typography,
+  TypographyProps,
 } from "@mui/material";
 import { FunctionComponent, ReactNode, useState } from "react";
 
 import { FontAwesomeIcon } from "../../icons";
 import { CustomLink } from "./custom-link";
 
+const DescriptionTypography: FunctionComponent<TypographyProps> = ({
+  children,
+  ...props
+}) => (
+  <Typography
+    {...props}
+    variant="bpBodyCopy"
+    sx={{
+      lineHeight: 1.3,
+      maxWidth: "unset",
+    }}
+  >
+    {children}
+  </Typography>
+);
+
 const FAQ_QUESTIONS = [
   {
     title: "How does overage charging work?",
     description: (
       <>
-        Charges for external services/API usage beyond the allowances included
-        in a plan are billed in line with the rates shown on the{" "}
-        <CustomLink href="/pricing">pricing</CustomLink> page. Every effort is
-        taken to ensure these costs match the prices charged by the original
-        service provider (e.g. OpenAI/Mapbox), and as a result these overage
-        prices may be subject to change at any time. You can view the current
-        active pricing for a service at any time by visiting this page. Upon the
-        issuance of each invoice, a <strong>platform fee</strong> will be
-        calculated based on the total amount of unpaid overage charges accrued,
-        and appended to your bill. The platform fee you pay varies depending on
-        your account tier:
-        <br />
+        <DescriptionTypography>
+          Charges for external services/API usage beyond the allowances included
+          in a plan are billed in line with the rates shown on the{" "}
+          <CustomLink href="/pricing">pricing</CustomLink> page. Every effort is
+          taken to ensure these costs match the prices charged by the original
+          service provider (e.g. OpenAI/Mapbox), and as a result these overage
+          prices may be subject to change at any time. You can view the current
+          active pricing for a service at any time by visiting this page. Upon
+          the issuance of each invoice, a <strong>platform fee</strong> will be
+          calculated based on the total amount of unpaid overage charges
+          accrued, and appended to your bill. The platform fee you pay varies
+          depending on your account tier:
+        </DescriptionTypography>
         <List sx={{ marginLeft: 3, listStyle: "disc" }}>
           <li>
             <strong>Free</strong> - 30%
@@ -42,15 +60,17 @@ const FAQ_QUESTIONS = [
             <strong>Pro</strong> - 20%
           </li>
         </List>
-        If you have any additional questions about overage charges, please{" "}
-        <CustomLink href="/contact">contact us</CustomLink>.
+        <DescriptionTypography>
+          If you have any additional questions about overage charges, please{" "}
+          <CustomLink href="/contact">contact us</CustomLink>
+        </DescriptionTypography>
       </>
     ),
   },
   {
     title: "How do I upgrade from Hobby to Pro?",
     description: (
-      <>
+      <DescriptionTypography>
         While logged in to the <i>Hobby</i> account you wish to upgrade, you can
         upgrade at any time by navigating to your{" "}
         <CustomLink href="/settings/billing">Account Billing</CustomLink> page
@@ -58,50 +78,50 @@ const FAQ_QUESTIONS = [
         <br />
         <br /> If you experience any difficulty with this, please{" "}
         <CustomLink href="/contact">contact us</CustomLink>.
-      </>
+      </DescriptionTypography>
     ),
   },
   {
     title: "How can I downgrade from Pro to Hobby?",
     description: (
-      <>
+      <DescriptionTypography>
         While logged in to the <i>Pro</i> account you wish to downgrade,
         navigate to your <i>Account Billing</i> page and clicking the link next
         to the text that reads “Trying to cancel or downgrade?”
         <br /> <br /> If you experience any difficulty with this, please{" "}
         <CustomLink href="/contact">contact us</CustomLink>.
-      </>
+      </DescriptionTypography>
     ),
   },
   {
     title: "What is the process for canceling a paid subscription?",
     description: (
-      <>
+      <DescriptionTypography>
         You can end a paid subscription at any time by navigating to your
         <i>Account Billing</i> page while logged in, and clicking the link next
         to the text that reads “Trying to cancel or downgrade?”
         <br />
         <br /> If you experience any difficulty with this, please{" "}
         <CustomLink href="/contact">contact us</CustomLink>.
-      </>
+      </DescriptionTypography>
     ),
   },
   {
     title:
       "A service provider’s pricing appears different to the cost shown on this page - what should I do?",
     description: (
-      <>
+      <DescriptionTypography>
         This is an error, and is most likely the result of a change in the price
         charged by the original service provider. Please{" "}
         <CustomLink href="/contact">contact us</CustomLink>, and we’ll send a
         special something your way as a token of our thanks!
-      </>
+      </DescriptionTypography>
     ),
   },
   {
     title: "Can I change the payment method associated with my account?",
     description: (
-      <>
+      <DescriptionTypography>
         Yes! Provided you already have a payment method associated with your
         account you can navigate to your{" "}
         <CustomLink href="/settings/billing">Account Billing</CustomLink> page
@@ -109,30 +129,30 @@ const FAQ_QUESTIONS = [
         If you see a message that says “Upgrade to get more” instead, you can
         add a payment method by first upgrading your account to <i>Hobby</i> or{" "}
         <i>Pro</i>.
-      </>
+      </DescriptionTypography>
     ),
   },
   {
     title: "Can I change my tax information?",
     description: (
-      <>
+      <DescriptionTypography>
         Yes. This will soon be possible from the{" "}
         <CustomLink href="/settings/billing">Account Billing</CustomLink> page.
         In the meantime, please{" "}
         <CustomLink href="/contact">contact us</CustomLink>.
-      </>
+      </DescriptionTypography>
     ),
   },
   {
     title: "Can I get a tax receipt?",
     description: (
-      <>
+      <DescriptionTypography>
         Yes, please navigate to your{" "}
         <CustomLink href="/settings/billing">Account Billing</CustomLink> page
         and scroll down to the “Payment History” section. If you cannot see
         this, please <CustomLink href="/contact">contact us</CustomLink> for a
         manually-issued receipt.
-      </>
+      </DescriptionTypography>
     ),
   },
 ];
@@ -176,17 +196,7 @@ const Question: FunctionComponent<{
         </Box>
       </Typography>
 
-      <Collapse in={expanded}>
-        <Typography
-          variant="bpBodyCopy"
-          sx={{
-            lineHeight: 1.3,
-            maxWidth: "unset",
-          }}
-        >
-          {description}
-        </Typography>
-      </Collapse>
+      <Collapse in={expanded}>{description}</Collapse>
     </Box>
   );
 };
