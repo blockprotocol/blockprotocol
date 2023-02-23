@@ -8,6 +8,8 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
+  res.setHeader("Access-Control-Allow-Origin", "*"); // cors
+
   const shortname = (req.query.shortname as string).replace(/^@/, "");
 
   const blockMetadata = await getBlockByUserAndName({
