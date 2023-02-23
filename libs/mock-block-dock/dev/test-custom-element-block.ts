@@ -1,4 +1,4 @@
-import { extractBaseUri } from "@blockprotocol/graph";
+import { extractBaseUrl } from "@blockprotocol/graph";
 import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 import { getRoots } from "@blockprotocol/graph/stdlib";
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -9,7 +9,7 @@ import { propertyTypes } from "../src/data/property-types";
 export class TestCustomElementBlock extends BlockElementBase {
   private handleInput(event: Event) {
     this.updateSelfProperties({
-      [extractBaseUri(propertyTypes.name.$id)]: (
+      [extractBaseUrl(propertyTypes.name.$id)]: (
         event.target as HTMLInputElement
       ).value,
     })
@@ -28,20 +28,20 @@ export class TestCustomElementBlock extends BlockElementBase {
     if (this.graph.readonly) {
       return html`<h1>
           Hello,
-          ${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
+          ${blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)]}
         </h1>
         <p>
           The entityId of this block is
           ${blockEntity?.metadata.recordId.entityId}.
         </p>
         <p>
-          ${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
+          ${blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)]}
         </p>`;
     }
 
     return html`<h1>
         Hello,
-        ${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
+        ${blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)]}
       </h1>
       <p>
         The entityId of this block is
@@ -50,7 +50,7 @@ export class TestCustomElementBlock extends BlockElementBase {
       </p>
       <input
         @change=${this.handleInput}
-        value=${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
+        value=${blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)]}
       />`;
   }
 }

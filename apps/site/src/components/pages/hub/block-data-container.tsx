@@ -3,7 +3,7 @@ import {
   Entity,
   EntityTemporalVersioningMetadata,
 } from "@blockprotocol/graph/temporal";
-import { VersionedUri } from "@blockprotocol/type-system/slim";
+import { VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
   Box,
   FormControlLabel,
@@ -156,7 +156,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
     const result: { blockEntity: Entity; readonly: boolean } = {
       blockEntity: {
         metadata: {
-          entityTypeId: metadata.schema as VersionedUri,
+          entityTypeId: metadata.schema as VersionedUrl,
           recordId: {
             entityId: exampleEntityId,
             editionId: new Date(0).toISOString(),

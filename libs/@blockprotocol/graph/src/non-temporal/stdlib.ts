@@ -13,13 +13,13 @@ import {
   getDataTypeById as getDataTypeByIdGeneral,
   getDataTypeByVertexId as getDataTypeByVertexIdGeneral,
   getDataTypes as getDataTypesGeneral,
-  getDataTypesByBaseUri as getDataTypesByBaseUriGeneral,
+  getDataTypesByBaseUrl as getDataTypesByBaseUrlGeneral,
   getEntities as getEntitiesGeneral,
   getEntityRevision as getEntityRevisionGeneral,
   getEntityTypeById as getEntityTypeByIdGeneral,
   getEntityTypeByVertexId as getEntityTypeByVertexIdGeneral,
   getEntityTypes as getEntityTypesGeneral,
-  getEntityTypesByBaseUri as getEntityTypesByBaseUriGeneral,
+  getEntityTypesByBaseUrl as getEntityTypesByBaseUrlGeneral,
   getIncomingLinksForEntity as getIncomingLinksForEntityGeneral,
   getLeftEntityForLinkEntity as getLeftEntityForLinkEntityGeneral,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesGeneral,
@@ -27,7 +27,7 @@ import {
   getPropertyTypeById as getPropertyTypeByIdGeneral,
   getPropertyTypeByVertexId as getPropertyTypeByVertexIdGeneral,
   getPropertyTypes as getPropertyTypesGeneral,
-  getPropertyTypesByBaseUri as getPropertyTypesByBaseUriGeneral,
+  getPropertyTypesByBaseUrl as getPropertyTypesByBaseUrlGeneral,
   getPropertyTypesReferencedByEntityType as getPropertyTypesReferencedByEntityTypeGeneral,
   getRightEntityForLinkEntity as getRightEntityForLinkEntityGeneral,
   getRoots as getRootsGeneral,
@@ -133,7 +133,7 @@ export const getRightEntityForLinkEntity = (
 export const getDataTypeById = getDataTypeByIdGeneral;
 export const getDataTypeByVertexId = getDataTypeByVertexIdGeneral;
 export const getDataTypes = getDataTypesGeneral;
-export const getDataTypesByBaseUri = getDataTypesByBaseUriGeneral;
+export const getDataTypesByBaseUrl = getDataTypesByBaseUrlGeneral;
 export const getEntities = (subgraph: Subgraph) =>
   getEntitiesGeneral<false>(subgraph, true);
 export const getEntityRevision = (subgraph: Subgraph, entityId: EntityId) =>
@@ -145,7 +145,7 @@ export const getEntityRevision = (subgraph: Subgraph, entityId: EntityId) =>
 export const getEntityTypeById = getEntityTypeByIdGeneral;
 export const getEntityTypeByVertexId = getEntityTypeByVertexIdGeneral;
 export const getEntityTypes = getEntityTypesGeneral;
-export const getEntityTypesByBaseUri = getEntityTypesByBaseUriGeneral;
+export const getEntityTypesByBaseUrl = getEntityTypesByBaseUrlGeneral;
 // export const mapElementsIntoRevisions = <
 //   GraphElementType extends Vertex["inner"],
 // >(
@@ -154,7 +154,7 @@ export const getEntityTypesByBaseUri = getEntityTypesByBaseUriGeneral;
 export const getPropertyTypeById = getPropertyTypeByIdGeneral;
 export const getPropertyTypeByVertexId = getPropertyTypeByVertexIdGeneral;
 export const getPropertyTypes = getPropertyTypesGeneral;
-export const getPropertyTypesByBaseUri = getPropertyTypesByBaseUriGeneral;
+export const getPropertyTypesByBaseUrl = getPropertyTypesByBaseUrlGeneral;
 export const getRoots = <RootType extends SubgraphRootType>(
   subgraph: Subgraph<RootType>,
 ): RootType["element"][] => getRootsGeneral<false, RootType>(subgraph);

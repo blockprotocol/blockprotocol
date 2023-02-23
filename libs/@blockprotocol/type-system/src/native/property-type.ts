@@ -3,7 +3,7 @@ import {
   OneOf,
   PropertyType,
   PropertyValues,
-  VersionedUri,
+  VersionedUrl,
 } from "../../wasm/type-system";
 
 /**
@@ -24,12 +24,12 @@ export const isPropertyValuesArray = (
 export const getReferencedIdsFromPropertyType = (
   propertyType: PropertyType,
 ): {
-  constrainsValuesOnDataTypes: VersionedUri[];
-  constrainsPropertiesOnPropertyTypes: VersionedUri[];
+  constrainsValuesOnDataTypes: VersionedUrl[];
+  constrainsPropertiesOnPropertyTypes: VersionedUrl[];
 } => {
   const recurseOneOf = (oneOf: PropertyValues[]) => {
-    const constrainsValuesOnDataTypes: Set<VersionedUri> = new Set();
-    const constrainsPropertiesOnPropertyTypes: Set<VersionedUri> = new Set();
+    const constrainsValuesOnDataTypes: Set<VersionedUrl> = new Set();
+    const constrainsPropertiesOnPropertyTypes: Set<VersionedUrl> = new Set();
 
     for (const oneOfValue of oneOf) {
       if (isPropertyValuesArray(oneOfValue)) {

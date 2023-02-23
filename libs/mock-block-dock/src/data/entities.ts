@@ -1,4 +1,4 @@
-import { Entity, extractBaseUri } from "@blockprotocol/graph";
+import { Entity, extractBaseUrl } from "@blockprotocol/graph";
 import {
   Entity as EntityTemporal,
   EntityTemporalVersioningMetadata,
@@ -28,10 +28,10 @@ const createPerson = <Temporal extends boolean>(
         : {}),
     },
     properties: {
-      [extractBaseUri(propertyTypes.age.$id)]: Math.ceil(Math.random() * 100),
-      [extractBaseUri(propertyTypes.email.$id)]: `${name}@example.com`,
-      [extractBaseUri(propertyTypes.name.$id)]: name,
-      [extractBaseUri(propertyTypes.username.$id)]: name.toLowerCase(),
+      [extractBaseUrl(propertyTypes.age.$id)]: Math.ceil(Math.random() * 100),
+      [extractBaseUrl(propertyTypes.email.$id)]: `${name}@example.com`,
+      [extractBaseUrl(propertyTypes.name.$id)]: name,
+      [extractBaseUrl(propertyTypes.username.$id)]: name.toLowerCase(),
     },
   } as Temporal extends true ? EntityTemporal : Entity;
 };
@@ -55,10 +55,10 @@ const createCompany = <Temporal extends boolean>(
         : {}),
     },
     properties: {
-      [extractBaseUri(propertyTypes.numberOfEmployees.$id)]: Math.ceil(
+      [extractBaseUrl(propertyTypes.numberOfEmployees.$id)]: Math.ceil(
         Math.random() * 10_000,
       ),
-      [extractBaseUri(propertyTypes.name.$id)]: name,
+      [extractBaseUrl(propertyTypes.name.$id)]: name,
     },
   } as Temporal extends true ? EntityTemporal : Entity;
 };

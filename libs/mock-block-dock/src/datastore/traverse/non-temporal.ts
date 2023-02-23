@@ -239,7 +239,7 @@ export const traverseElement = ({
           };
         } else {
           neighborVertexId = {
-            baseId: neighborVertex.inner.metadata.recordId.baseUri,
+            baseId: neighborVertex.inner.metadata.recordId.baseUrl,
             revisionId:
               neighborVertex.inner.metadata.recordId.version.toString(),
           };

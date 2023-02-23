@@ -3,7 +3,7 @@ mod error;
 mod wasm;
 use std::{fmt, result::Result, str::FromStr, sync::LazyLock};
 
-pub use error::{ParseBaseUriError, ParseVersionedUriError};
+pub use error::{ParseBaseUrlError, ParseVersionedUrlError};
 use regex::Regex;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 #[cfg(target_arch = "wasm32")]
@@ -12,41 +12,41 @@ use url::Url;
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Clone, PartialEq, Eq, Ord, PartialOrd, Hash)]
-pub struct BaseUri(String);
+pub struct BaseUrl(String);
 
-impl fmt::Debug for BaseUri {
+impl fmt::Debug for BaseUrl {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt::Debug::fmt(&self.0, fmt)
     }
 }
 
-impl fmt::Display for BaseUri {
+impl fmt::Display for BaseUrl {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt::Display::fmt(&self.0, fmt)
     }
 }
 
-impl BaseUri {
-    /// Creates a new [`BaseUri`] from a given URI string
+impl BaseUrl {
+    /// Creates a new [`BaseUrl`] from a given URL string
     ///
     /// # Errors
-    /// - `ParseBaseUriError` if the given URI string is invalid
-    pub fn new(uri: String) -> Result<BaseUri, ParseBaseUriError> {
-        Self::validate_str(&uri)?;
+    /// - `ParseBaseUrlError` if the given URL string is invalid
+    pub fn new(url: String) -> Result<BaseUrl, ParseBaseUrlError> {
+        Self::validate_str(&url)?;
 
-        Ok(Self(uri))
+        Ok(Self(url))
     }
 
-    fn validate_str(uri: &str) -> Result<(), ParseBaseUriError> {
-        if !uri.ends_with('/') {
-            return Err(ParseBaseUriError::MissingTrailingSlash);
+    fn validate_str(url: &str) -> Result<(), ParseBaseUrlError> {
+        if !url.ends_with('/') {
+            return Err(ParseBaseUrlError::MissingTrailingSlash);
         }
         // TODO: Propagate more useful errors
-        if Url::parse(uri)
-            .map_err(|err| ParseBaseUriError::UrlParseError(err.to_string()))?
+        if Url::parse(url)
+            .map_err(|err| ParseBaseUrlError::UrlParseError(err.to_string()))?
             .cannot_be_a_base()
         {
-            Err(ParseBaseUriError::CannotBeABase)
+            Err(ParseBaseUrlError::CannotBeABase)
         } else {
             Ok(())
         }
@@ -54,7 +54,7 @@ impl BaseUri {
 
     #[must_use]
     pub fn to_url(&self) -> Url {
-        Url::parse(&self.0).expect("invalid Base URI")
+        Url::parse(&self.0).expect("invalid Base URL")
     }
 
     #[must_use]
@@ -63,7 +63,7 @@ impl BaseUri {
     }
 }
 
-impl Serialize for BaseUri {
+impl Serialize for BaseUrl {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -72,7 +72,7 @@ impl Serialize for BaseUri {
     }
 }
 
-impl<'de> Deserialize<'de> for BaseUri {
+impl<'de> Deserialize<'de> for BaseUrl {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -82,66 +82,66 @@ impl<'de> Deserialize<'de> for BaseUri {
 }
 
 // TODO: can we impl Tsify to turn this into a type: template string
-//  if we can then we should delete wasm::VersionedUriPatch
+//  if we can then we should delete wasm::VersionedUrlPatch
 #[derive(Debug, Clone, PartialEq, Eq, Ord, PartialOrd, Hash)]
-pub struct VersionedUri {
-    pub base_uri: BaseUri,
+pub struct VersionedUrl {
+    pub base_url: BaseUrl,
     pub version: u32,
 }
 
-impl VersionedUri {
+impl VersionedUrl {
     #[must_use]
     pub fn to_url(&self) -> Url {
-        let mut url = self.base_uri.to_url();
+        let mut url = self.base_url.to_url();
         url.path_segments_mut()
-            .expect("invalid Base URI, we should have caught an invalid base already")
+            .expect("invalid Base URL, we should have caught an invalid base already")
             .extend(["v", &self.version.to_string()]);
 
         url
     }
 }
 
-impl fmt::Display for VersionedUri {
+impl fmt::Display for VersionedUrl {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        write!(fmt, "{}v/{}", self.base_uri.as_str(), self.version)
+        write!(fmt, "{}v/{}", self.base_url.as_str(), self.version)
     }
 }
 
-impl FromStr for VersionedUri {
-    type Err = ParseVersionedUriError;
+impl FromStr for VersionedUrl {
+    type Err = ParseVersionedUrlError;
 
-    fn from_str(uri: &str) -> Result<Self, ParseVersionedUriError> {
+    fn from_str(url: &str) -> Result<Self, ParseVersionedUrlError> {
         static RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("regex failed to compile"));
         let captures = RE
-            .captures(uri)
-            .ok_or(ParseVersionedUriError::IncorrectFormatting)?;
-        let base_uri = captures
+            .captures(url)
+            .ok_or(ParseVersionedUrlError::IncorrectFormatting)?;
+        let base_url = captures
             .get(1)
-            .ok_or(ParseVersionedUriError::MissingBaseUri)?
+            .ok_or(ParseVersionedUrlError::MissingBaseUrl)?
             .as_str();
         let version = captures
             .get(2)
-            .ok_or(ParseVersionedUriError::MissingVersion)?
+            .ok_or(ParseVersionedUrlError::MissingVersion)?
             .as_str();
 
         if let Some(suffix) = captures.get(3) {
             // Regex returns an empty string for capturing groups that don't match anything
             if !suffix.as_str().is_empty() {
-                return Err(ParseVersionedUriError::AdditionalEndContent);
+                return Err(ParseVersionedUrlError::AdditionalEndContent);
             }
         }
 
         Ok(Self {
-            base_uri: BaseUri::new(base_uri.to_owned())
-                .map_err(ParseVersionedUriError::InvalidBaseUri)?,
+            base_url: BaseUrl::new(base_url.to_owned())
+                .map_err(ParseVersionedUrlError::InvalidBaseUrl)?,
             version: u32::from_str(version)
-                .map_err(|error| ParseVersionedUriError::InvalidVersion(error.to_string()))?,
+                .map_err(|error| ParseVersionedUrlError::InvalidVersion(error.to_string()))?,
         })
     }
 }
 
-impl Serialize for VersionedUri {
+impl Serialize for VersionedUrl {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -150,7 +150,7 @@ impl Serialize for VersionedUri {
     }
 }
 
-impl<'de> Deserialize<'de> for VersionedUri {
+impl<'de> Deserialize<'de> for VersionedUrl {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -165,12 +165,12 @@ impl<'de> Deserialize<'de> for VersionedUri {
 mod tests {
     use super::*;
 
-    // TODO: add some unit tests for base URI
+    // TODO: add some unit tests for base URL
 
     #[test]
-    fn versioned_uri() {
+    fn versioned_url() {
         let input_str = "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1";
-        let uri = VersionedUri::from_str(input_str).expect("parsing versioned URI failed");
-        assert_eq!(&uri.to_string(), input_str);
+        let url = VersionedUrl::from_str(input_str).expect("parsing versioned URL failed");
+        assert_eq!(&url.to_string(), input_str);
     }
 }
