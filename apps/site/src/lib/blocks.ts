@@ -10,8 +10,6 @@ import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 import sanitize from "sanitize-html";
 
-import { FRONTEND_URL } from "./config";
-
 const sanitizeUrl = (url: string) => {
   const results = sanitize(`<a href="${url}" />`, {
     allowedAttributes: {
@@ -51,19 +49,6 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   // metadata.schema rewritten to be an absolute URL
   schema?: string | null;
   verified?: boolean;
-};
-
-/**
- * This represents the block metadata created when blocks are built from source and served from the NextJS app
- */
-export type BlockMetadataOnDisk = ExpandedBlockMetadata & {
-  unstable_hubInfo: {
-    directory: string;
-    checksum: string;
-    commit: string;
-    name: string;
-    preparedAt: string;
-  };
 };
 
 // The contents of the JSON file users provide when adding a block via PR, stored in the Hub/ folder
@@ -205,31 +190,6 @@ export const expandBlockMetadata = ({
   };
 };
 
-/**
- * used to read block metadata from disk, for blocks published via JSON in hub/ and served from the public folder
- */
-export const readBlocksFromDisk = async (): Promise<
-  ExpandedBlockMetadata[]
-> => {
-  const blockMetadataFilePaths = await globby(
-    path.resolve(process.cwd(), `public/blocks/**/block-metadata.json`),
-  );
-
-  const result: ExpandedBlockMetadata[] = [];
-  for (const blockMetadataFilePath of blockMetadataFilePaths) {
-    const metadata: BlockMetadataOnDisk = await fs.readJson(
-      blockMetadataFilePath,
-      {
-        encoding: "utf8",
-      },
-    );
-
-    result.push(metadata);
-  }
-
-  return result;
-};
-
 // Blocks which are currently not compliant with the spec, and are thus misleading examples
 const blocksToHide = ["@hash/embed"];
 
@@ -254,19 +214,7 @@ export const retrieveBlockFileContent = async ({
 }> => {
   let schema = { title: "Unparseable schema" };
   try {
-    schema = metadataSchemaUrl.startsWith(FRONTEND_URL)
-      ? JSON.parse(
-          await fs.readFile(
-            path.resolve(
-              process.cwd(),
-              `public/blocks/${pathWithNamespace}/${metadataSchemaUrl.substring(
-                metadataSchemaUrl.lastIndexOf("/") + 1,
-              )}`,
-            ),
-            { encoding: "utf8" },
-          ),
-        )
-      : await (await fetch(metadataSchemaUrl)).json();
+    schema = await (await fetch(metadataSchemaUrl)).json();
   } catch (err) {
     // eslint-disable-next-line no-console -- intentional log to flag problem without tanking site
     console.error(
@@ -274,33 +222,16 @@ export const retrieveBlockFileContent = async ({
     );
   }
 
-  const source = metadataSourceUrl.startsWith(FRONTEND_URL)
-    ? await fs.readFile(
-        path.resolve(
-          process.cwd(),
-          `public/blocks/${pathWithNamespace}/${metadataSourceUrl.substring(
-            metadataSourceUrl.lastIndexOf("/") + 1,
-          )}`,
-        ),
-        { encoding: "utf8" },
-      )
-    : await fetch(metadataSourceUrl).then((response) => response.text());
+  const source = await fetch(metadataSourceUrl).then((response) =>
+    response.text(),
+  );
 
   let exampleGraph = null;
 
   if (metadataExampleGraphUrl) {
-    exampleGraph = metadataExampleGraphUrl.startsWith(FRONTEND_URL)
-      ? JSON.parse(
-          fs.readFileSync(
-            `${process.cwd()}/public/blocks/${pathWithNamespace}/${metadataExampleGraphUrl.substring(
-              metadataExampleGraphUrl.lastIndexOf("/") + 1,
-            )}`,
-            { encoding: "utf8" },
-          ),
-        )
-      : await fetch(metadataExampleGraphUrl).then((response) =>
-          response.json(),
-        );
+    exampleGraph = await fetch(metadataExampleGraphUrl).then((response) =>
+      response.json(),
+    );
   }
 
   return {
