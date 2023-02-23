@@ -664,9 +664,9 @@ The `kind` keyword will be used to identify the kind of the schema being describ
 - `dataType`
 - `linkType`
 
-The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URIs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link (for more information see the [Reference-Level explanation](#reference-level-explanation)).
+The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URLs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link (for more information see the [Reference-Level explanation](#reference-level-explanation)).
 
-The `requiredLinks` keyword will be used to specify which links are required to be present for a given Entity Type. It is a list of URIs.
+The `requiredLinks` keyword will be used to specify which links are required to be present for a given Entity Type. It is a list of URLs.
 
 In JSON Schema `title` and `description` are described as follows: "Both of these keywords can be used to decorate a user interface with information about the data produced by this user interface".
 We repurpose these with slightly different meanings:
@@ -675,7 +675,7 @@ The `description` keyword for Link Types adds semantic meaning to a link (which 
 
 The `title` keyword refers to the name of the Type it is describing.
 
-The `$ref` keyword when used to refer to Property Types, Data Types, and Link Types URIs will always need to be equal to the key of the object which it is defined under (and vice versa). If the `$ref` is within an array's `items` definition, the URI should equal the nearest JSON Schema property name which is a URI. This is so that the property, data, or link type can be identified from an instance conforming to it (which it could not if the key, i.e. the property name, were different from the `$ref`).
+The `$ref` keyword when used to refer to Property Types, Data Types, and Link Types URLs will always need to be equal to the key of the object which it is defined under (and vice versa). If the `$ref` is within an array's `items` definition, the URL should equal the nearest JSON Schema property name which is a URL. This is so that the property, data, or link type can be identified from an instance conforming to it (which it could not if the key, i.e. the property name, were different from the `$ref`).
 
 ## Using the Types in the Block Protocol
 
@@ -683,7 +683,7 @@ The `$ref` keyword when used to refer to Property Types, Data Types, and Link Ty
 
 ### Interfacing with properties on Entities
 
-As the `title` of a Property Type is not guaranteed to be globally unique, the representation of entities is likely going to need to change, especially with regards to changing the keys to be the Property Type URIs:
+As the `title` of a Property Type is not guaranteed to be globally unique, the representation of entities is likely going to need to change, especially with regards to changing the keys to be the Property Type URLs:
 
 **An example of an entity in the current system:**
 
@@ -719,11 +719,11 @@ This will have an impact on how developers:
 
 #### Receiving Links and Linked Entities
 
-Links will likely continue to be returned in a separate collection alongside entities when blocks receive data. The data within the `linkGroups` object might change to incorporate the new type information, likely with the `path` field being replaced with something that uses the link type's URI.
+Links will likely continue to be returned in a separate collection alongside entities when blocks receive data. The data within the `linkGroups` object might change to incorporate the new type information, likely with the `path` field being replaced with something that uses the link type's URL.
 
 #### Creating Links
 
-The Link Functions will be updated to handle Link Types, removing the `path` fields and instead use the URI of the Link Type.
+The Link Functions will be updated to handle Link Types, removing the `path` fields and instead use the URL of the Link Type.
 
 ### Block Schemas
 
@@ -1077,7 +1077,7 @@ A Property Type can also have an object made up of other properties as its value
   - that the list has a maximum amount of values
 - that a property is **required**
 
-The key of the property value is the Property Type URI, as shown in the following examples.
+The key of the property value is the Property Type URL, as shown in the following examples.
 
 **Example 1**
 
@@ -2132,7 +2132,7 @@ The `description` keyword for Link Types add semantic meaning to a link (which c
 
 The `title` keyword refers to the name of the Type it is describing.
 
-The `$ref` keyword when used to refer to Property Types, Data Types, and Link Types URIs will always need to be equal to the key of the object which it is defined under (and vice versa). If the `$ref` is within an array's `items` definition, the URI should equal the nearest JSON Schema property name which is a URI. This is so that the property, data, or link type can be identified from an instance conforming to it (which it could not if the key, i.e. the property name, were different from the `$ref`).
+The `$ref` keyword when used to refer to Property Types, Data Types, and Link Types URLs will always need to be equal to the key of the object which it is defined under (and vice versa). If the `$ref` is within an array's `items` definition, the URL should equal the nearest JSON Schema property name which is a URL. This is so that the property, data, or link type can be identified from an instance conforming to it (which it could not if the key, i.e. the property name, were different from the `$ref`).
 
 This _is_ valid
 
@@ -2178,7 +2178,7 @@ Messages in the Graph Module are currently specified under [this schema](https:/
 
 ### Interfacing with properties on Entities
 
-A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URIs. As seen in the examples in earlier sections, properties that use simple keys will now have to point at _Property Type URIs_.
+A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URLs. As seen in the examples in earlier sections, properties that use simple keys will now have to point at _Property Type URLs_.
 
 **An example of an [`Entity`](https://blockprotocol.org/types/modules/graph/entity) instance in the current system:**
 
@@ -2220,9 +2220,9 @@ This change canonicalizes property keys, such that they uniquely identify a Prop
 
 - how Block Schemas are defined
 - the reusability of properties and data types (and the increased need for type discovery to facilitate this)
-  - block authors can share and use types through URIs explicitly
+  - block authors can share and use types through URLs explicitly
 
-> 💡 Notice that `entityId`s are replaced by a Property Type URI that resides in the `/@blockprotocol` namespace. This is an implementation detail, and not something that is strictly dictated by the proposal.
+> 💡 Notice that `entityId`s are replaced by a Property Type URL that resides in the `/@blockprotocol` namespace. This is an implementation detail, and not something that is strictly dictated by the proposal.
 
 ### Interfacing with Linked Entities
 
@@ -2263,9 +2263,9 @@ Link groups and Linked entities in the Graph Module are currently supplied outsi
 }
 ```
 
-> 💡 In the proposed system example instance, the `path` key has been replaced with `linkType`. This is an implementation detail which is not dictated by the proposal. Alternatives could be `linkUri`, `link`, etc.
+> 💡 In the proposed system example instance, the `path` key has been replaced with `linkType`. This is an implementation detail which is not dictated by the proposal. Alternatives could be `linkUrl`, `link`, etc.
 
-Links (which are provided by the `links` field in the items of the `LinkGroups` array) will use Link Type URIs instead of a `path`.
+Links (which are provided by the `links` field in the items of the `LinkGroups` array) will use Link Type URLs instead of a `path`.
 The `LinkGroup` has a new key `ordered` which specifies whether or not the `links` array is ordered. More on this in the [Ordering of links](#ordering-of-links) section.
 
 As for the linked entities returned by `linkedEntities`, the imposed changes to Entities will apply here as well.
@@ -2298,7 +2298,7 @@ As for the linked entities returned by `linkedEntities`, the imposed changes to 
 
 #### Creating Links
 
-Link creation will not be using arbitrary `path`s, instead Link Types must be used through Link Type URIs.
+Link creation will not be using arbitrary `path`s, instead Link Types must be used through Link Type URLs.
 
 **An example of a [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json#L395) instance in the current system:**
 
@@ -2320,7 +2320,7 @@ Link creation will not be using arbitrary `path`s, instead Link Types must be us
 }
 ```
 
-Any link will use Link Type URIs instead of a `path`.
+Any link will use Link Type URLs instead of a `path`.
 
 ### Ordering of links
 
@@ -2445,12 +2445,12 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
 > 💡 As the syntax and validations of Block Schemas are closely related to Entity Types, they have the same `kind` for now. We would introduce a distinct `"blockSchema"` kind to make the distinction clear if there were a need for the two kinds of schemas to diverge.
 
 One clear difference in the new system is that properties are no longer named arbitrarily.
-Every Block Schema property must be a Property Type URI, which means semantic meaning is attached to every key.
+Every Block Schema property must be a Property Type URL, which means semantic meaning is attached to every key.
 
 This, as mentioned previously, allows for a greater level of confidence that data passed to blocks is correct and useable as there will be less guesswork for Embedding Applications.
 
 For any Embedding Application that loads a Block Schema defined with the proposed system, it will be clear what _exact_ Property Types and Links to look for when finding applicable Entity Types that satisfy the Block Schema.
-In the case of the Property Types not existing in the Embedding Application, the URIs, as they are canonical, can be used to fetch definitions.
+In the case of the Property Types not existing in the Embedding Application, the URLs, as they are canonical, can be used to fetch definitions.
 
 ### Structure-based Queries
 
@@ -2495,7 +2495,7 @@ The current system also supplies a way to "aggregate" Entity Types, which is a f
 
 - `aggregateDataTypes`
 
-The main changes imposed by the proposed system are that Entity Types must be defined as previously outlined - with canonical Property Type URIs and that new messages for managing Property Types and Link Types must be added.
+The main changes imposed by the proposed system are that Entity Types must be defined as previously outlined - with canonical Property Type URLs and that new messages for managing Property Types and Link Types must be added.
 
 In the proposed system, Entity Types can be created and updated with the same semantics but have to conform to the [Entity Type](#entity-types-1) schema instead of arbitrary JSON schemas.
 Property Types will be defined similarly to Entity Types in the proposed system, conforming to the [Property Type](#property-types-1) schemas instead.
@@ -2640,7 +2640,7 @@ For Property Types, having partial update semantics could lead to a lot of confu
 
 For Entity Types, Property Types, and Link Types, changing anything on the types could be a breaking change. We have not discussed this in this RFC yet, but there're a lot of considerations to be put into the semantics of updating/removing existing types. For the sake of simplicity, these example messages show how the Block Protocol in its current shape could be transformed to make use of this new Type System but in reality, the semantics of working with the types will need to be handled differently.
 
-> 💡 Currently, "schemas" can be defined from the [blockprotocol.org](https://blockprotocol.org/) website. With the proposed system's canonical URIs, types need to be globally identifiable and usable from Embedding Applications. Property Types and Entity Types in the examples are namespaces under the `@alice` user, but we've not specified how these types are defined. This is left out-of-scope for the purposes of this RFC.
+> 💡 Currently, "schemas" can be defined from the [blockprotocol.org](https://blockprotocol.org/) website. With the proposed system's canonical URLs, types need to be globally identifiable and usable from Embedding Applications. Property Types and Entity Types in the examples are namespaces under the `@alice` user, but we've not specified how these types are defined. This is left out-of-scope for the purposes of this RFC.
 
 # Drawbacks
 
@@ -2833,9 +2833,9 @@ As mentioned in a few sections, this design basically defines a way for communit
     - Yes we do, for now. We are treating the type titles as display names until we find a good reason not to.
 
 1.  Is there a way to specify in JSON schema that the key of a property is equal to the the thing it's a `$ref` to?
-    As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`?
+    As in can we specify a constraint that you have to have equal URLs in `"someUrl": { "$ref": "someUrl" }`?
     The reason why we want this, is such that our JSON Schemas can be validated through conventional means, without special-casing a custom check with the `$ref` and property name.
-1.  Should we further constrain allowed URIs (for example to force the end of the path to be `/property-type/foo`) and if so should we encode that in the JSON schema?
+1.  Should we further constrain allowed URLs (for example to force the end of the path to be `/property-type/foo`) and if so should we encode that in the JSON schema?
 1.  Do we want to allow types to define a separate plural name that can be used when they're set to `"type": "array"`?
 1.  How would we define our custom JSON Schema keywords in a JSON Schema Vocabulary? Could our meta schemas be defined as JSON Schema Vocabularies?
 
@@ -2861,7 +2861,7 @@ It should therefore be possible to allow for a decentralized system, while also 
 
 Having repositories should make it possible to build tooling around type discoverability, whether it be autocomplete in Schema Editors, or embedding applications being able to create and modify types within a repository.
 
-This is also made a lot easier as the proposed Type System has provisioned that `$id`s of types are unique URIs, which should make it easier to allow for a decentralized system for hosting them, while also enabling the creation of centralized ones for people who want to benefit from a closer-knit system.
+This is also made a lot easier as the proposed Type System has provisioned that `$id`s of types are unique URLs, which should make it easier to allow for a decentralized system for hosting them, while also enabling the creation of centralized ones for people who want to benefit from a closer-knit system.
 
 ## Supplementary tooling
 
