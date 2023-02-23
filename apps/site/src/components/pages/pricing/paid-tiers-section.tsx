@@ -630,16 +630,31 @@ export const PaidTiersSection: FunctionComponent<{
       <Grid
         container
         sx={{
-          borderRadius: 4,
-          boxShadow: "0px 4.23704px 8.1px rgb(61 78 133 / 6%)",
-          overflow: "hidden",
+          ...(lg
+            ? {
+                boxShadow: "0px 4.23704px 8.1px rgb(61 78 133 / 6%)",
+                overflow: "hidden",
+                borderRadius: 4,
+              }
+            : { gridGap: 32 }),
         }}
       >
         <Grid
           item
           lg={6}
           md={12}
-          sx={{ display: "flex", flexDirection: "column", width: 1 }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: 1,
+            ...(!lg
+              ? {
+                  boxShadow: "0px 4.23704px 8.1px rgb(61 78 133 / 6%)",
+                  overflow: "hidden",
+                  borderRadius: 4,
+                }
+              : {}),
+          }}
         >
           <Box
             sx={{
@@ -818,20 +833,14 @@ export const PaidTiersSection: FunctionComponent<{
           </Box>
 
           <Box
-            sx={{
+            sx={({ palette }) => ({
               padding: 4,
               borderStyle: "solid",
               borderWidth: 1,
-              borderColor: ({ palette }) => palette.gray[20],
-              borderRightWidth: {
-                xs: 1,
-                md: 0,
-              },
-              borderBottomLeftRadius: {
-                md: 0,
-                lg: 16,
-              },
-            }}
+              borderTopWidth: 0,
+              borderColor: palette.gray[20],
+              background: palette.white,
+            })}
           >
             <SubscriptionFeatureList
               heading={<Box mb={1.5}>As well as:</Box>}
@@ -894,7 +903,18 @@ export const PaidTiersSection: FunctionComponent<{
           item
           lg={6}
           md={12}
-          sx={{ display: "flex", flexDirection: "column", width: 1 }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: 1,
+            ...(!lg
+              ? {
+                  boxShadow: "0px 4.23704px 8.1px rgb(61 78 133 / 6%)",
+                  overflow: "hidden",
+                  borderRadius: 4,
+                }
+              : {}),
+          }}
         >
           <Box
             sx={{
@@ -1030,12 +1050,8 @@ export const PaidTiersSection: FunctionComponent<{
               backgroundColor: "#FBF7FF",
               borderStyle: "solid",
               borderWidth: 1,
+              borderTopWidth: 0,
               borderColor: palette.gray[20],
-              borderBottomRightRadius: 16,
-              borderBottomLeftRadius: {
-                md: 16,
-                lg: 0,
-              },
             })}
           >
             <SubscriptionFeatureList
