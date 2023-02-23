@@ -154,6 +154,11 @@ The section should return to the examples given in the previous section, and exp
 
 -->
 
+<!--
+This section is not yet complete.
+
+Incomplete text snippet
+
 The existing primitive data types are expressed as JSON-Schemas.
 
 ```json
@@ -174,6 +179,7 @@ The existing primitive data types are expressed as JSON-Schemas.
   "exclusiveMinimum": 0
 }
 ```
+-->
 
 # Drawbacks
 
