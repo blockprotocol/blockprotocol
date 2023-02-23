@@ -1,0 +1,94 @@
+# This is the source file of overview.png and was created using terrastruct and the d2
+# language
+
+pt: {
+  shape: class
+  label: Property Type
+
+  id: UUID
+  version: int
+  title: str
+}
+
+et: {
+  shape: class
+  label: Entity Type
+
+  id: UUID
+  version: int
+  title: str
+}
+
+lt: {
+  shape: class
+  label: Link Type
+
+  id: UUID
+  version: int
+  title: str
+}
+
+dt: {
+  shape: class
+  label: Data Type
+
+  id: UUID
+  version: int
+  title: str
+}
+
+ptt: One Of {
+  any: {
+    shape: hexagon
+    label: Any
+  }
+
+  record: Record
+  array: Array
+
+  record-entry: Entry {
+    shape: document
+  }
+
+  any -> record
+  any -> array
+
+  record -> record-entry: {
+    target-arrowhead.label: *
+  }
+
+  array -> any: Contains
+}
+
+ptt.any -> dt: Reference
+
+ptt.record-entry -> pt: Array of references
+ptt.record-entry -> pt: Reference
+
+pt -> ptt.any: Value {
+  style: {
+    stroke: "#F675A8"
+  }
+  target-arrowhead.label: 1..*
+}
+et -> ptt.record: Properties {
+  style: {
+    stroke: "#F675A8"
+  }
+  target-arrowhead.label: 1
+}
+
+ltt: Entity Type Link Entry {
+  shape: hexagon
+}
+
+et -> ltt: Link {
+  style.stroke: "#F675A8"
+  target-arrowhead.label: *
+}
+
+ltt -> et: Constrained To {
+  target-arrowhead.label: *
+}
+
+ltt -> lt: Type

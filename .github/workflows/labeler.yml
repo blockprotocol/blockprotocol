@@ -5,7 +5,11 @@ on:
 jobs:
   triage:
     runs-on: ubuntu-20.04
+
     steps:
-      - uses: actions/labeler@v3
+      - uses: kachkaev/labeler@305cfeb74cfa5c4878bf6418b4815a4106f2e345
+        ## @todo replace with actions/labeler@v4 (or newer) when this PR is merged:
+        ## https://github.com/actions/labeler/pull/316
         with:
+          dot: true
           repo-token: "${{ secrets.GITHUB_TOKEN }}"

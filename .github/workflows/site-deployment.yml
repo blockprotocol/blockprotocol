@@ -1,0 +1,62 @@
+name: Site deployment
+
+on:
+  deployment_status:
+  schedule:
+    - cron: "*/10 * * * *" ## Every 10 minutes
+    - cron: "0 4 * * *" ## Around 4am every night (UTC time)
+
+jobs:
+  warm_up_vercel:
+    ## Vercel uses AWS Lambda. When we call getStaticProps in fallback mode or getServerSideProps,
+    ## a cold Lambda function may take 5-15 seconds to execute. This pipeline warms up Lambda
+    ## containers for new deployments and keeps them up by fetching affected URLs every 10 minutes.
+    ## Context: https://github.com/orgs/vercel/discussions/496
+    name: Warm up Vercel
+    if: github.event.deployment_status.state == 'success' || github.event_name == 'schedule'
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Fetch URLs that use AWS Lambda
+        run: |
+          cat << EOF > curl-format.txt
+            %{url_effective}\n
+              Status code: %{response_code}\n
+              Time: %{time_total}\n
+            \n
+          EOF
+
+          for PATHNAME in "/@hash" "/@hash/blocks/divider/sandboxed-demo" "/api/me" "/types/DUMMY_ENTITY_ID"; do
+            npx retry-cli@0.6.0 -- curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
+          done
+        env:
+          BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
+          NODE_OPTIONS: --no-deprecation ## https://github.com/tirsen/retry-cli/issues/7
+
+  e2e_tests:
+    name: E2E tests
+    needs: [warm_up_vercel]
+    if: github.event.deployment_status.state == 'success' || github.event.schedule == '0 4 * * *'
+    runs-on: ubuntu-20.04
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/warm-up-repo
+        with:
+          playwright-deps: chrome
+
+      - run: yarn playwright install-deps chrome
+
+      - name: Run Playwright tests
+        run: yarn workspace @apps/site playwright test --project=e2e
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
+
+      - name: Upload artifact playwright-report
+        if: ${{ success() || failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: site-e2e-tests-playwright-report
+          path: apps/site/playwright-report

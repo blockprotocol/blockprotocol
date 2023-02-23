@@ -1,0 +1,373 @@
+# FAQs
+
+## General
+
+<Box>
+
+<FAQ question="What’s the point of the Block Protocol?">
+
+The Block Protocol provides a specification for the interaction between web blocks and applications using them: how data structures are typed and passed around, and what data operations are available to blocks.
+
+Its ultimate goal in doing so is to enable any blocks to be usable by any web application without any configuration, once both are compliant with the Protocol.
+
+More information on the motivation can be found in [the specification overview.](https://blockprotocol.org/docs/spec)
+
+</FAQ>
+
+<FAQ question="What’s the scope of the Block Protocol?">
+
+The Block Protocol’s focus is on defining the interface between web blocks and applications using them.
+
+It does not specify what happens to data once it crosses that boundary - it only seeks to standardise application-block interaction.
+
+</FAQ>
+
+<FAQ question="Why do we need a new protocol?">
+
+Existing web protocols do not define standardized interfaces between blocks and applications that might embed them.
+
+Efforts exist to do this for particular ecosystem (e.g. Microsoft Loop Components, and application-specific plugin frameworks) - but none which aim to improve the web as a whole. The Block Protocol is a generic contract which can be implemented by any web application.
+
+Various frontend libraries and technologies provide means of implementing encapsulated blocks (e.g. React, Web Components), but they do not standardize the interface between those blocks and the applications using them (e.g. the operations available to them).
+
+</FAQ>
+
+<FAQ question="What about non-web contexts? e.g. native applications">
+
+Our focus is on supporting the web first and foremost, as this is the context we expect the Block Protocol to be most useful in,
+but we believe it will be portable to other environments.
+
+Since version 0.2 of the Block Protocol, messages are passed between blocks and applications by dispatching and listening for events,
+which is a pattern which can be translated to many non-web contexts. While some implementation details will vary across contexts,
+the general principles of the Block Protocol in defining a contract between applications and embedded blocks are widely applicable.
+
+In the future we intend to support non-web contexts more directly.
+
+</FAQ>
+
+<FAQ question="Why would anybody build a Block Protocol block?">
+
+Blocks built for the Block Protocol work inside of multiple embedding applications, with promised support in the future of even more. Creating a Þ block enables a developer to code a block _once_ and then use that same block in a variety of places, without having to make any application-specific affordances to ensure their block functions correctly or looks good.
+
+Anybody with web development experience can build a block to add functionality to an application that implements the Block Protocol. That means if you're the user of a protocol-supporting application such as WordPress or HASH, [developing a Þ block](https://blockprotocol.org/docs/developing-blocks) will enable you to extend that app's capabilities, and take your work with you to other Þ environments should you wish.
+
+Blocks don't have to be open-sourced, but we strongly encourage publishing them to the [Þ Hub](https://blockprotocol.org/hub), sharing them with others. You may be motivated to do this by any of the factors that already result in thiriving open-source software ecosystems today: challenge, competition, fun, reputation, and the desire to contribute to and be part of a community.
+
+Open-sourcing blocks can also be borne of self-interest. Making your code public allows other interested users to contribute back to improving your block further, enhancing its utility and fixing any bugs that may be hiding within. Stephen Walli writes that open-sourcing code isn't always "contributing back out of altruism", but sometimes "engineering economics". It can be the right commercial call, hardening and improving the product (in this case block) that you yourself are relying upon.
+
+</FAQ>
+
+<FAQ question="Why might embedding applications choose to support the Block Protocol?">
+
+Implementing the Block Protocol means that an embedding application can easily add new functionality, increasing its value to users.
+
+Once they are Block Protocol-compliant, applications can easily search for blocks which can visualize or edit any type of data, and add them without any further configuration.
+
+</FAQ>
+
+<FAQ question="How does the Block Protocol relate to HASH’s simulation efforts?">
+
+The Block Protocol has been open-sourced by [HASH](https://hash.dev/), whose [mission](https://hash.ai/about/mission) is to **help everybody make the right decisions**. Part of how we'll make a dent in this problem is by clearly separating display, visualization and interaction logic from underlying data, while making it easier to bring data together in a form that can be understood by both humans and machines (e.g. other applications).
+
+HASH started life as a [simulation platform](https://hash.ai/simulations), offering insights from modeling the world to anyone with a browser. But this is just one way to get insight from data, and simulation models can be greatly enhanced when built atop the sort of timely, structured information that the Block Protocol makes accessible.
+
+The Block Protocol advances HASH’s mission by encouraging both data itself and the tools that edit and visualize data to be structured and portable. This makes it easier to work with more data in more places, and unlocks more functionality for more users, increasing the ability for people to understand and learn from the world.
+
+</FAQ>
+  
+<FAQ question="How is the Block Protocol licensed?">
+
+**The Block Protocol itself is completely open-source, and is dually available under both the _MIT License_ and _Apache 2.0_ License, at your option.** This means that you're free to use any of the base code however you like, in line with those licenses, for example by implementing support for the Block Protocol in your own application.
+
+Specific implementations of the Block Protocol in other applications may be kept private, or released under a license of the publisher's choosing (e.g. both the WordPress and Figma plugins use the _Elastic License_).
+
+</FAQ>
+
+</Box>
+
+## Block Implementation
+
+<Box>
+  
+<FAQ question="Where are blocks hosted and how are they discovered?">
+
+Blocks can be published for free [to the Þ Hub](https://blockprotocol.org/docs/developing-blocks#publishing). Publishing a block to the Þ Hub makes it discoverable to users browsing [blockprotocol.org](https://blockprotocol.org/hub), as well as embedding applications consuming the Þ API.
+
+Through the Þ API, embedders can access the metadata and source code of blocks, listing blocks within their own application and serving them to users.
+
+</FAQ>
+
+<FAQ question="Where do blocks store their data?">
+
+Entity data can be hosted in any application which implements the Block Protocol (e.g. [HASH](https://hash.ai/platform/hash)). _If you are developing an embedding application you would like listed here, please get in touch._
+
+</FAQ>
+
+<FAQ question="Can blocks themselves choose where to fetch data from?">
+
+Yes. Blocks can fetch their own data from external services. For example, a map block might fetch data from a mapping service.
+
+We believe the best blocks will communicate data back and forth with the embedding application, making use of the operations defined in the [Graph Service specification](https://blockprotocol.org/docs/spec/graph-service).
+
+For example: a mapping block might persist a user’s choices about map positioning or styling back to an embedding application, all without the application knowing anything about the block, or the block even being aware of which application it is being used within.
+
+The Block Protocol enables blocks to store and retrieve data in an application without awareness of how exactly the data is stored.
+
+</FAQ>
+
+<FAQ question="Can blocks hold local state?">
+
+Blocks can have their own local state - they might use this to allow users to explore data or draft changes, without saving anything.
+
+To save data beyond the session, blocks should make use of the [operations defined in the spec](https://blockprotocol.org/docs/spec/graph-service) to send updates to the embedding application.
+
+</FAQ>
+
+<FAQ question="What are the security considerations of blocks?">
+
+Similar to most programming language package managers, because anybody can publish executable code (in the form of a block), it's important you trust the block you're executing.
+
+Because those inserting blocks are often non-technical end users, this isn't always practical. As such, we recommend that embedders implement both sandboxing within their environments, and allow/deny lists.
+
+- **Sandboxing** will be covered in depth in our [guide for embedders](https://blockprotocol.org/docs/embedding-blocks).
+- **Allow/deny lists** can be used to resrict or control:
+  - which blocks users are able to discover and insert within your environment
+  - which blocks a user inserts are ultimately able to be run in either a sandboxed or unsandboxed fashion
+
+Today you might choose to allow/deny blocks on the basis of their authorship (published namespace), or based on their _verification status_.
+
+In the future we also plan to expose:
+
+- additional Þ _Hub_ metadata which may prove useful in the creating and maintaining whitelists;
+- permission grants for blocks and block types, that allow for users to control the level and types of access blocks have (e.g. the ability to access information created through the Graph Service outside of themselves) or access to other services.
+
+**Example - HASH:** [HASH](https://hash.dev/) allows first-party blocks (i.e. those developed _by HASH_ and listed under their own `@hash` namespace on the Þ _Hub_), alongside third-party blocks that have been verified, to be run in an **unsandboxed** fashion within their application, because they trust the origins and quality of those blocks. By unsandboxing blocks HASH can deliver them more efficiently to users, while providing a richer user experience. The blocks in HASH's namespace are amongst the most used within their application, providing default basic text editing functionality, and so the ability to unsandbox these and run them optimally is considered valuable. HASH allows all other blocks on the Þ _Hub_ to be discovered and inserted by its users, but delivers these in a sandbox.
+
+**Example - WordPress:** The _Block Protocol for WordPress_ plugin restricts the insertion of blocks to verified blocks only. This can be turned off by WordPress administrations from the plugin settings panel, but prevents non-technical authors and editors from accidentally relying on blocks which have not been subjected to review. In the future the plugin will support sandboxing and more variable permissions, in addition.
+
+</FAQ>
+  
+<FAQ question="How does block verification work?">
+
+Blocks submitted to the Þ Hub are immediately available for discovery and use. However, when blocks are published or updated, they're also added to a _review queue_.
+
+We periodically review all blocks in the queue, checking for basic indicators (and contraindicators) of a block's quality, security and integrity. While this check does not represent a fully comprehensive audit of a block, the process provides a baseline level of assurance regarding a block's fitness for purpose, and all reviewed blocks which pass this review process receive the 'verified' badge.
+
+</FAQ>
+
+<FAQ question="How will blocks match the visual style of embedding applications?">
+
+We believe blocks should provide neutral, minimal styling of their own, and leave it to embedding applications to provide additional styling - this might be in the form of an entire stylesheet for blocks to load, or style variables which can be selectively applied.
+
+There is [ongoing discussion on this topic](https://github.com/blockprotocol/blockprotocol/discussions/180) - we welcome your views.
+
+</FAQ>
+
+<FAQ question="How does text editing work in the Block Protocol?">
+
+Rich text editing is a core part of many modern block-based applications, but details often vary across applications:
+
+- how rich text is represented in existing applications varies depending on the particular approach used
+- applications often provide special functionality inside rich text fields, e.g. being able to `@mention` or search for things inline
+
+We do not believe it feasible or desirable to impose a single rich text editing experience across applications,
+and instead have introduced the [Hook Service](https://blockprotocol.org/docs/spec/hook-service) to allow embedding applications to
+inject their own rich text editing display and input, at blocks' request.
+
+</FAQ>
+
+<FAQ question="Are blocks composable?">
+
+Blocks composed of other blocks is an important feature which we believe the Block Protocol must support, and which we have begun exploring.
+
+A simple example is a `ListBlock` which is composed of a list of other blocks, and for which it has placeholders within it.
+
+Blocks which are made up of other blocks may be referred to as “compound blocks”. We will be publishing example compound blocks soon.
+
+</FAQ>
+  
+<FAQ question="How do Block Protocol blocks differ from Web Components?">
+
+Web Components can _describe_ the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it within an application.
+
+The goal of the Block Protocol is to allow new blocks to be added to applications _without_ any case-specific configuration or requirement that either the embedder or block know about each other's existence ahead of time.
+
+To do this, the Block Protocol standardizes how _data requests_ are made between a block and an embedding application.
+
+Web Components (or custom elements) are a popular way of implementing Block Protocol blocks.
+
+</FAQ>
+  
+<FAQ question="How does the Block Protocol relate to GraphQL?">
+
+GraphQL provides a [“syntax and system for describing [application] data requirements and interactions”](https://spec.graphql.org/October2021/#sec-Overview), whereas the Block Protocol is specifying a particular set of interactions: those between a block and any application embedding it.
+
+It would be possible to define the operations specified in the Block Protocol in GraphQL - e.g. `createEntity` - or to extend the GraphQL spec to include them.
+
+We do not yet believe it necessary to specify block-application requests in GraphQL syntax nor require that they be executed by the embedding application according to the GraphQL specification, although we are open to the idea. It may become more attractive as operations evolve to include more features already covered by GraphQL (e.g. subscriptions, selection sets).
+
+</FAQ>
+
+</Box>
+
+## Endpoints and APIs
+
+<Box>
+
+<FAQ question="Can blocks access external APIs?">
+
+Yes, blocks can make requests to external APIs. They can do this in one of two ways:
+
+- **directly:** all of the code require to access an API can be contained within a block. This is not recommended in circumstances where a service requires an API key in order to access it, as it will be impossible to keep this key secret if a block (and for a block to remain usable) once the block is published to the Þ Hub.
+- **through the Þ Hub:** in addition to blocks and types, endpoints (APIs) can also be made accessible via the Þ Hub. A limited set of endpoints will be available as of 28th February 2023, including ones providing access to _Mapbox_ and _OpenAI_.
+
+Facilitating external API access via the Þ Hub is a new addition to the protocol, and intructions for making additional endpoints available will be added in due course. In the meantime, we're able to manually add endpoints on behalf of block developers. If there's an endpoint you'd like to use within a new or existing block, please [message us on Discord](https://blockprotocol.org/discord).
+
+</FAQ>
+  
+<FAQ question="Can blocks access external APIs while authenticating as users?">
+  
+The ability for Þ blocks to access external services while (optionally) authenticated as an individual user is a capability which we intend to introduce in the coming months. This will enable blocks to be developed that allow for a much wider range of use-cases to be addressed.
+  
+**Example:** a block user has information synced to _Coda_ or _AirTable_ from multiple external locations. They want to display this data on their website, which uses WordPress. With the _Block Protocol for WordPress_ plugin, a user will in the future be able to use a _Coda_ or _AirTable_ block which allows them to select information contained within their external account, and insert this information onto their page or post in WordPress, which can then automatically keep itself in sync with the original source. This allows publishing from a wide variety of external sources.
+
+</FAQ>
+
+</Box>
+
+## Schemas, vocabularies and the semantic web
+
+<Box>
+
+<FAQ question="What is the semantic web?">
+
+The goal of the [Semantic Web](https://en.wikipedia.org/wiki/Semantic_Web) is to make internet data machine-readable.
+
+It involves making sure there is data on web pages which can be parsed by machines, in order to determine the entities described, and their links to other entities elsewhere on the web.
+
+</FAQ>
+
+<FAQ question="How does the Block Protocol advance the semantic web?">
+
+The Block Protocol requires that the data passed between blocks and applications is in the form of entities conforming to a defined structure: a schema.
+
+This structure can then be used to include data on web pages which describes the entities in a machine-readable way.
+
+While the Block Protocol doesn’t require this data to be exposed or made downloadable, we do encourage embedding applications to do this as much as possible.
+
+For example, where a page contains a block displaying a movie, machine-readable data would also be included describing the various properties of the movie (e.g. `releaseDate`), as well as linking to other pages which describe entities linked to it - e.g. its `director`.
+
+One way of representing entities in a machine-readable way is in [JSON-LD](https://json-ld.org/) which describes entities and their link to other entities). Here’s an example of such a representation, taken from the JSON-LD homepage:
+
+```json
+{
+  "@context": "https://json-ld.org/contexts/person.jsonld",
+  "@id": "http://dbpedia.org/resource/John_Lennon",
+  "name": "John Lennon",
+  "born": "1940-10-09",
+  "spouse": "http://dbpedia.org/resource/Cynthia_Lennon"
+}
+```
+
+The structure of entities in the Block Protocol are described by JSON schema, and we encourage these to be mapped to terms which can be used to construct a JSON-LD representation of the entity, which embedding applications can include in the page's markup.
+
+</FAQ>
+
+<FAQ question="Is the Block Protocol an ontology of the real world?">
+
+No, and _for the most part_ the Block Protocol itself does not define the structure of entities passed between blocks and applications. Instead it specifies _how_ entities should be defined, transmitted and updated.
+
+The Block Protocol specifies that [JSON Schema](https://json-schema.org/) should be used to describe the properties of an entity and expected types of property values - not what those properties should be.
+
+You can use existing [schema.org](https://schema.org) schemas, or can create new schemas through the [Block Protocol](https://blockprotocol.org/) website, once logged in. The schema creator on the Block Protocol website aims to make it easier for users to define the different types of data structures that their blocks will work with.
+
+We don’t prescribe canonical types for any _thing_, but do recommend that users link their schemas and properties to [schema.org](https://schema.org) types and properties where possible, to help in making the pages that use their schemas machine-readable. We have included a way of doing so in our schema editor. Mapping different schemas and their properties to one another is a process known as ‘crosswalking’.
+
+</FAQ>
+
+<FAQ question={<span>How does the Block Protocol relate to <i>schema.org</i>?</span>}>
+
+[schema.org](https://schema.org) defines a collection of schemas for use in making the data on web pages machine-readable.
+
+The Block Protocol does not define the structure of entities passed between blocks and applications - it only specifies how they are transmitted and updated.
+
+Implementers of the Block Protocol could use the structure of entities as defined by [schema.org](http://schema.org), if they wished (e.g. a block could be built to render or edit a [schema.org Event)](https://schema.org/Event).
+
+We recommend that users link their schemas and their properties to [schema.org](http://schema.org) types and properties where possible, and have included a way of doing so in our schema editor.
+
+<InfoCardWrapper>
+
+There are two different types of ‘crosswalking’ we intend to support in the Block Protocol:
+
+<InfoCard variant="warning" title="Crosswalking?">
+
+Mapping different schemas and their properties to one another is a process known as ‘crosswalking’.
+
+It helps machines more easily understand how new schemas fit in to existing knowledge graphs and ontologies.
+
+</InfoCard>
+
+1.  Crosswalking from JSON schema properties to [schema.org](http://schema.org) (and equivalent) properties, in order to make rendered pages machine-readable - as described above and supported in the schema editor. The purpose of this is to mark up web pages with structured data describing the entities within.
+
+1.  Crosswalking from JSON schema properties to other JSON schema properties, in order for applications to understand that seemingly incompatible schemas may in fact be compatible, and to translate between them. For example, if one Table schema has a 'rows' property, and another Table schema has a 'records' property, declaring that the two are equivalent allows applications to translate data conforming to the first Table schema for use in places where data conforming to the second Table schema is expected. This mitigates the impact of different approaches being taken to describe the same data.
+
+</InfoCardWrapper>
+</FAQ>
+
+<FAQ question="Why does the Block Protocol include a type/schema editor?">
+
+A semantic type system is central to our vision for the Block Protocol.
+
+We don’t believe that a single set of schemas provided by any one standards organization (even Schema.org) can ever perfectly fit all use cases, and as such the ability to create new schemas is important. When doing this, we want to make them as accessible to machines (and people) as possible.
+
+<InfoCardWrapper>
+
+The Block Protocol website includes a schema editor that provides a convenient way to define new entity types used by or with blocks and their embedding applications. These are then hosted persistently and made accessible via the same content delivery network that serves blocks from the [Block Protocol Hub](https://blockprotocol.org/hub), guaranteeing their availability and discoverability.
+
+<InfoCard variant="warning" title="Who can see my types/schemas?">
+
+All types created on the Block Protocol website are currently public. In the future we’ll support the creation of private types as well.
+
+</InfoCard>
+
+</InfoCardWrapper>
+</FAQ>
+
+<FAQ question={<span>Why aren’t the default <i>schema.org</i> definitions sufficient?</span>}>
+
+[schema.org](https://schema.org) provides a great base ontology for defining lots of types of ‘things’ out there in the world.
+
+1.  Many times, certain ‘properties’ or data won’t be relevant to your use case, resulting in bloated entity type definitions.
+1.  On other occasions you’ll want to store information differently than how it’s set out in the [Schema.org](http://schema.org) definition. For example, [schema.org/Person](http://schema.org/Person) defines a person as having a `givenName` and a `familyName` and yet in various cultures this isn’t guaranteed. HASH uses `preferredName` and `legalName` instead - in communications and billing contexts respectively. You can view the HASH ‘Person’ schema at [https://blockprotocol.org/@hash/types/Person](https://blockprotocol.org/@hash/types/Person) and see how it crosswalks with the canonical definition of a person provided by Schema.org. This is just one example of how custom schemas can be made to relate back to the core ontology provided by Schema.org.
+1.  The [Schema.org](https://schema.org) ontology is slow to change. This is by design, similar to how most standards organizations operate. And while it can move fast when clear universal impetus exists (evidenced by its excellent response to COVID) it ultimately represents a pseudo-centralized model of maintaining a schema registry. The Block Protocol provides the permissionless ability to build atop and extend [Schema.org](https://schema.org), unbounded by the processing constraints and imagination of any single working group or organization.
+1.  Not everything is included in the [Schema.org](https://schema.org) ontology. For example, although _animal shelters_ and _pet stores_ exist, _animals_ and _pets_ themselves are missing entirely. This arguably reflects the priorities of schema.org’s maintainers (notably corporates, and search engines at that).
+
+</FAQ>
+
+<FAQ question="Doesn't a decentralized schema registry result in problems?">
+
+Moving beyond a single set of constrained schemas that rarely change introduces a number of issues. However, we believe that all of these can be mitigated and that the benefits of an open ecosystem of well-described, discoverable, and end-user definable types greatly outweigh any potential drawbacks.
+
+1.  **Reusability of types:** the type system supports a high degree of composability, with data types and property types indvidually definable and addressable from within different entity types and contexts.
+1.  **Convergence on types:** the type editors developed by [HASH](https://hash.dev/) as part of their ontology manager include functionality to encourage users — where possible — to utilize and extend, or otherwise crosswalk, to existing types. These best-practice editors are open-source and are free to use within any other embedding application that builds upon the Block Protocol. We will be replacing the schema designer found within the [Hub](https://blockprotocol.org/hub) with these new type editors shortly.
+1.  **Machine-resolvable relationships between types:** we are planning to introduce an improved ability for types to declare themselves to be structurally or literally the same as other types, as well as _conceptually_ the same.
+
+</FAQ>
+
+<FAQ question="Why JSON Schema for describing entity structure?">
+
+JSON Schema has a rich [vocabulary for validating data](https://json-schema.org/draft/2020-12/json-schema-validation.html). We designed the Block Protocol with content management systems and collaborative workspaces in mind, and being able to define precise constraints for data is important for those applications.
+
+We expect to have to add custom keywords to cover relationships which JSON Schema does not have in its core vocabulary (e.g. that a property is `inverseOf` another), but believe it will be easiest to start with JSON Schema and add keywords, rather than start with another vocabulary and add the required validation to it.
+
+</FAQ>
+
+<FAQ question="How does the Block Protocol relate to JSON-LD?">
+
+We encourage applications to include JSON-LD describing entities on their public pages to make them machine-readable.
+
+In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](https://blockprotocol.org/docs/spec/graph-service). We have also taken a different approach to identifying entities, which may not have a public URI and may require a combination of fields to identify.
+
+</FAQ>
+
+</Box>

@@ -13,13 +13,9 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          cache: yarn
+      - uses: actions/checkout@v3
 
-      - run: yarn install
+      - uses: ./.github/actions/warm-up-repo
 
       - name: Sync Algolia Index
-        run: yarn workspace @blockprotocol/site exe scripts/sync-algolia-index.ts
+        run: yarn workspace @apps/site exe scripts/sync-algolia-index.ts
