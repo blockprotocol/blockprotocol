@@ -4,6 +4,8 @@ import { useGraphEmbedderModule as useGraphEmbedderModuleNonTemporal } from "@bl
 import { useGraphEmbedderModule as useGraphEmbedderModuleTemporal } from "@blockprotocol/graph/temporal/react";
 import { HookData, HookEmbedderMessageCallbacks } from "@blockprotocol/hook/.";
 import { useHookEmbedderModule } from "@blockprotocol/hook/react";
+import { EmbedderServiceMessageCallbacks } from "@blockprotocol/service";
+import { useServiceEmbedderModule } from "@blockprotocol/service/react";
 import {
   ComponentType,
   FunctionComponent,
@@ -11,6 +13,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -21,6 +24,7 @@ import { getDefaultTemporalAxes } from "./datastore/get-default-temporal-axes";
 import { getEntity } from "./datastore/hook-implementations/entity/get-entity";
 import { HookPortals } from "./hook-portals";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
+import { constructServiceModuleCallbacks } from "./service-module-callbacks";
 import { useDefaultState } from "./use-default-state";
 import {
   InitialData,
@@ -48,11 +52,13 @@ type BlockDefinition =
 type MockBlockDockProps<Temporal extends boolean> = {
   blockDefinition: BlockDefinition;
   blockEntityRecordId?: EntityRecordId;
+  blockProtocolApiKey?: string;
   temporal?: Temporal;
   debug?: boolean;
   hideDebugToggle?: boolean;
   initialData?: InitialData<Temporal>;
   readonly?: boolean;
+  serviceModuleCallbacks?: EmbedderServiceMessageCallbacks;
   blockInfo?: {
     blockType: {
       entryPoint: "react" | "html" | "custom-element" | string;
@@ -71,10 +77,12 @@ const MockBlockDockNonTemporal: FunctionComponent<
   blockDefinition,
   blockEntityRecordId: initialBlockEntityRecordId,
   blockInfo,
+  blockProtocolApiKey,
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
   readonly: initialReadonly = false,
+  serviceModuleCallbacks: serviceModuleCallbacksFromProps,
 }: Omit<MockBlockDockProps<false>, "temporal">) => {
   const {
     blockEntityRecordId,
@@ -134,6 +142,17 @@ const MockBlockDockNonTemporal: FunctionComponent<
     // linkedAggregations,
     callbacks: graphModuleCallbacks,
     readonly,
+  });
+
+  const serviceModuleCallbacks = useMemo(
+    () =>
+      serviceModuleCallbacksFromProps ??
+      constructServiceModuleCallbacks({ blockProtocolApiKey }),
+    [blockProtocolApiKey, serviceModuleCallbacksFromProps],
+  );
+
+  useServiceEmbedderModule(wrapperRef, {
+    callbacks: serviceModuleCallbacks,
   });
 
   const hookCallback = useCallback<HookEmbedderMessageCallbacks["hook"]>(
@@ -300,10 +319,12 @@ const MockBlockDockTemporal: FunctionComponent<
   blockDefinition,
   blockEntityRecordId: initialBlockEntityRecordId,
   blockInfo,
+  blockProtocolApiKey,
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
   readonly: initialReadonly = false,
+  serviceModuleCallbacks: serviceModuleCallbacksFromProps,
 }: Omit<MockBlockDockProps<true>, "temporal">) => {
   const {
     blockEntityRecordId,
@@ -364,6 +385,17 @@ const MockBlockDockTemporal: FunctionComponent<
     // linkedAggregations,
     callbacks: graphModuleCallbacks,
     readonly,
+  });
+
+  const serviceModuleCallbacks = useMemo(
+    () =>
+      serviceModuleCallbacksFromProps ??
+      constructServiceModuleCallbacks({ blockProtocolApiKey }),
+    [blockProtocolApiKey, serviceModuleCallbacksFromProps],
+  );
+
+  const { serviceModule } = useServiceEmbedderModule(wrapperRef, {
+    callbacks: serviceModuleCallbacks,
   });
 
   const hookCallback = useCallback<HookEmbedderMessageCallbacks["hook"]>(
@@ -532,12 +564,14 @@ const MockBlockDockTemporal: FunctionComponent<
  * @param props.blockDefinition the source for the block and any additional metadata required
  * @param [props.blockEntityRecordId] the `EntityRecordId` of the starting block entity
  * @param [props.blockInfo] metadata about the block
+ * @param [props.blockProtocolApiKey] the BlockProtocol API Key
  * @param [props.debug=false] display debugging information
  * @param [props.hideDebugToggle=false] hide the ability to toggle the debug UI
  * @param [props.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
  * @param [props.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
  * @param [props.initialData.initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [props.readonly=false] whether the block should display in readonly mode or not
+ * @param [props.serviceModuleCallbacks] overrides the default service module callbacks
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   Temporal extends boolean,
@@ -545,31 +579,37 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   blockDefinition,
   blockEntityRecordId: initialBlockEntityRecordId,
   blockInfo,
+  blockProtocolApiKey,
   temporal,
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
   readonly: initialReadonly = false,
+  serviceModuleCallbacks,
 }: MockBlockDockProps<Temporal>) => {
   return temporal ? (
     <MockBlockDockTemporal
       blockDefinition={blockDefinition}
       blockEntityRecordId={initialBlockEntityRecordId}
       blockInfo={blockInfo}
+      blockProtocolApiKey={blockProtocolApiKey}
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData as InitialData<true>}
       readonly={initialReadonly}
+      serviceModuleCallbacks={serviceModuleCallbacks}
     />
   ) : (
     <MockBlockDockNonTemporal
       blockDefinition={blockDefinition}
       blockEntityRecordId={initialBlockEntityRecordId}
       blockInfo={blockInfo}
+      blockProtocolApiKey={blockProtocolApiKey}
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData}
       readonly={initialReadonly}
+      serviceModuleCallbacks={serviceModuleCallbacks}
     />
   );
 };

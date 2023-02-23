@@ -1,0 +1,3593 @@
+{
+  "name": "service",
+  "version": "0.1",
+  "coreVersion": "0.1",
+  "messages": [
+    {
+      "messageName": "mapboxForwardGeocoding",
+      "description": "Forward geocoding request",
+      "source": "block",
+      "respondedToBy": "mapboxForwardGeocodingResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "description": "Mapbox Geocoding API",
+        "type": "object",
+        "properties": {
+          "searchText": {
+            "type": "string"
+          },
+          "optionsArg": {
+            "type": "object",
+            "properties": {
+              "signal": {
+                "description": "If specified, the connected {@link AbortController} can be used to\nabort the current network request(s).\n\nThis mechanism intentionally works in the same way as the\n[`fetch` API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API#aborting_a_fetch).\n\nReference:\nhttps://developer.mozilla.org/en-US/docs/Web/API/AbortSignal#examples",
+                "type": "object",
+                "properties": {
+                  "aborted": {
+                    "type": "boolean"
+                  },
+                  "onabort": {
+                    "type": "object"
+                  },
+                  "reason": {}
+                },
+                "required": ["aborted", "onabort", "reason"]
+              },
+              "autocomplete": {
+                "description": "When autocomplete is enabled, results will be included that start with the requested string, rather than just responses that match it exactly.\n\nDefaults to true.",
+                "type": "boolean"
+              },
+              "bbox": {
+                "description": "Limit results to only those contained within the supplied bounding box.",
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "minItems": 4,
+                    "maxItems": 4
+                  },
+                  {
+                    "type": "array",
+                    "items": [
+                      {
+                        "anyOf": [
+                          {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "minItems": 2,
+                            "maxItems": 2
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "lng": {
+                                "type": "number"
+                              },
+                              "lat": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["lat", "lng"]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "lon": {
+                                "type": "number"
+                              },
+                              "lat": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["lat", "lon"]
+                          }
+                        ]
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "minItems": 2,
+                            "maxItems": 2
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "lng": {
+                                "type": "number"
+                              },
+                              "lat": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["lat", "lng"]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "lon": {
+                                "type": "number"
+                              },
+                              "lat": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["lat", "lon"]
+                          }
+                        ]
+                      }
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "country": {
+                "description": "Limit results to one or more countries. Permitted values are [ISO 3166 alpha 2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country codes separated by commas.",
+                "type": "string"
+              },
+              "fuzzyMatch": {
+                "description": "Specify whether the Geocoding API should attempt approximate, as well as exact, matching when performing searches.\n\nDefaults to true.",
+                "type": "boolean"
+              },
+              "language": {
+                "description": "An [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) that controls the language of the text supplied in responses, and also affects result scoring.",
+                "type": "string"
+              },
+              "limit": {
+                "description": "The number of results to return, up to `10`.\n\nDefaults to 5.",
+                "type": "number"
+              },
+              "proximity": {
+                "description": "Bias the response to favor results that are closer to this location.\n\nProvided as two comma-separated coordinates in longitude,latitude order, or the string `ip` to bias based on reverse IP lookup.",
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "lng": {
+                        "type": "number"
+                      },
+                      "lat": {
+                        "type": "number"
+                      }
+                    },
+                    "required": ["lat", "lng"]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "lon": {
+                        "type": "number"
+                      },
+                      "lat": {
+                        "type": "number"
+                      }
+                    },
+                    "required": ["lat", "lon"]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "routing": {
+                "description": "Specify whether to request additional metadata about the recommended navigation destination corresponding to the feature (`true`) or not (`false`, default). Only applicable for address features.",
+                "type": "boolean"
+              },
+              "types": {
+                "description": "Filter results to include only a subset (one or more) of the available feature types. Multiple options can be comma-separated.",
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "size": {
+                        "type": "number"
+                      },
+                      "__@toStringTag@25": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["__@toStringTag@25", "size"]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "worldview": {
+                "description": "Available worldviews are: `cn`, `in`, `jp`, `us`. If a worldview is not set, `us` worldview boundaries will be returned.",
+                "type": "string"
+              },
+              "permanent": {
+                "description": "Permanent geocodes are used for use cases that require storing\nposition data. If 'true', the permanent endpoints will be used, which are\nbilled separately.\n\nIf you're interested in using {@link PermanentOptions#permanent}, contact\n[Mapbox sales](https://www.mapbox.com/contact/sales/).\n\nIt's important to speak with an Account Manager on the Sales team prior to making requests\nwith {@link PermanentOptions#permanent} set to `true`, as unsuccessful requests\nmade by an account that does not have access to the endpoint may be billable.",
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "required": ["searchText"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxForwardGeocodingResponse",
+      "description": "Response to a forward geocoding request",
+      "source": "embedder",
+      "respondedToBy": null,
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "`\"FeatureCollection\"`, a GeoJSON type from the [GeoJSON specification](https://tools.ietf.org/html/rfc7946).",
+            "type": "string",
+            "enum": ["FeatureCollection"]
+          },
+          "query": {
+            "description": "Forward geocodes: An array of space and punctuation-separated strings from the original query.\n\nReverse geocodes: An array containing the coordinates being queried.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "features": {
+            "description": "The returned feature objects.",
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "description": "A feature object which contains a geometry and associated properties.\nhttps://tools.ietf.org/html/rfc7946#section-3.2",
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Specifies the type of GeoJSON object.",
+                      "type": "string",
+                      "enum": ["Feature"]
+                    },
+                    "geometry": {
+                      "description": "The feature's geometry",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "description": "Specifies the type of GeoJSON object.",
+                          "type": "string",
+                          "enum": ["Point"]
+                        },
+                        "coordinates": {
+                          "description": "A Position is an array of coordinates.\nhttps://tools.ietf.org/html/rfc7946#section-3.1.1\nArray should contain between two and three elements.\nThe previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),\nbut the current specification only allows X, Y, and (optionally) Z to be defined.",
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          }
+                        },
+                        "bbox": {
+                          "description": "Bounding box of the coordinate range of the object's Geometries, Features, or Feature Collections.\nThe value of the bbox member is an array of length 2*n where n is the number of dimensions\nrepresented in the contained geometries, with all axes of the most southwesterly point\nfollowed by all axes of the more northeasterly point.\nThe axes order of a bbox follows the axes order of geometries.\nhttps://tools.ietf.org/html/rfc7946#section-5",
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                }
+                              ],
+                              "minItems": 4,
+                              "maxItems": 4
+                            },
+                            {
+                              "type": "array",
+                              "items": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                }
+                              ],
+                              "minItems": 6,
+                              "maxItems": 6
+                            }
+                          ]
+                        }
+                      },
+                      "required": ["coordinates", "type"]
+                    },
+                    "id": {
+                      "description": "A value that uniquely identifies this feature in a\nhttps://tools.ietf.org/html/rfc7946#section-3.2.",
+                      "type": ["string", "number"]
+                    },
+                    "properties": {
+                      "description": "Properties associated with this feature.",
+                      "type": "object",
+                      "properties": {
+                        "accuracy": {
+                          "description": "A point accuracy metric for the returned address feature. Can be one of `rooftop`, `parcel`, `point`, `interpolated`, `intersection`, `street`.",
+                          "type": "string"
+                        },
+                        "address": {
+                          "description": "The full street address for the returned `poi` feature.",
+                          "type": "string"
+                        },
+                        "category": {
+                          "description": "Comma-separated categories for the returned `poi` feature.",
+                          "type": "string"
+                        },
+                        "maki": {
+                          "description": "The name of a suggested [Maki](https://www.mapbox.com/maki-icons/) icon to visualize a `poi` feature based on its `category`.",
+                          "type": "string"
+                        },
+                        "wikidata": {
+                          "description": "The [Wikidata](https://wikidata.org/) identifier for the returned feature.",
+                          "type": "string"
+                        },
+                        "short_code": {
+                          "description": "The [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country and [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) region code for the returned feature.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "bbox": {
+                      "description": "Bounding box of the coordinate range of the object's Geometries, Features, or Feature Collections.\nThe value of the bbox member is an array of length 2*n where n is the number of dimensions\nrepresented in the contained geometries, with all axes of the most southwesterly point\nfollowed by all axes of the more northeasterly point.\nThe axes order of a bbox follows the axes order of geometries.\nhttps://tools.ietf.org/html/rfc7946#section-5",
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 4,
+                          "maxItems": 4
+                        },
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 6,
+                          "maxItems": 6
+                        }
+                      ]
+                    }
+                  },
+                  "required": ["geometry", "properties", "type"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "accuracy": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "A feature ID in the format `{type}.{id}` where `{type}` is the lowest hierarchy feature in the `place_type` field.",
+                      "type": "string"
+                    },
+                    "place_type": {
+                      "description": "An array of {@link DataTypes} describing the feature.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "relevance": {
+                      "description": "Indicates how well the returned feature matches the user's query on a scale from `0` to `1`, with `1` meaning the result fully matches the query text.",
+                      "type": "number"
+                    },
+                    "address": {
+                      "description": "The house number for the returned `address` feature.",
+                      "type": "string"
+                    },
+                    "text": {
+                      "description": "A string representing the feature in the requested language, if specified.",
+                      "type": "string"
+                    },
+                    "place_name": {
+                      "description": "A string representing the feature in the requested language, if specified, and its full result hierarchy.",
+                      "type": "string"
+                    },
+                    "matching_text": {
+                      "description": "A string analogous to the text field that more closely matches the query than results in the specified language.",
+                      "type": "string"
+                    },
+                    "matching_place_name": {
+                      "description": "A string analogous to the `place_name` field that more closely matches the query than results in the specified language.",
+                      "type": "string"
+                    },
+                    "language": {
+                      "description": "A string of the [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) of the query’s primary language.",
+                      "type": "string"
+                    },
+                    "bbox": {
+                      "description": "A bounding box for the feature. This may be significantly\nlarger than the geometry.",
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 4,
+                          "maxItems": 4
+                        },
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "anyOf": [
+                                {
+                                  "type": "array",
+                                  "items": [
+                                    {
+                                      "type": "number"
+                                    },
+                                    {
+                                      "type": "number"
+                                    }
+                                  ],
+                                  "minItems": 2,
+                                  "maxItems": 2
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lng": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lng"]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lon": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lon"]
+                                }
+                              ]
+                            },
+                            {
+                              "anyOf": [
+                                {
+                                  "type": "array",
+                                  "items": [
+                                    {
+                                      "type": "number"
+                                    },
+                                    {
+                                      "type": "number"
+                                    }
+                                  ],
+                                  "minItems": 2,
+                                  "maxItems": 2
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lng": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lng"]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lon": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lon"]
+                                }
+                              ]
+                            }
+                          ],
+                          "minItems": 2,
+                          "maxItems": 2
+                        }
+                      ]
+                    },
+                    "center": {
+                      "description": "The coordinates of the feature’s center in the form `[longitude,latitude]`.",
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 2,
+                          "maxItems": 2
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "lng": {
+                              "type": "number"
+                            },
+                            "lat": {
+                              "type": "number"
+                            }
+                          },
+                          "required": ["lat", "lng"]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "lon": {
+                              "type": "number"
+                            },
+                            "lat": {
+                              "type": "number"
+                            }
+                          },
+                          "required": ["lat", "lon"]
+                        }
+                      ]
+                    },
+                    "context": {
+                      "description": "An array representing the hierarchy of encompassing parent features. Each parent feature may include any of the above properties.",
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "accuracy": {
+                                "description": "A point accuracy metric for the returned address feature. Can be one of `rooftop`, `parcel`, `point`, `interpolated`, `intersection`, `street`.",
+                                "type": "string"
+                              },
+                              "address": {
+                                "description": "The full street address for the returned `poi` feature.",
+                                "type": "string"
+                              },
+                              "category": {
+                                "description": "Comma-separated categories for the returned `poi` feature.",
+                                "type": "string"
+                              },
+                              "maki": {
+                                "description": "The name of a suggested [Maki](https://www.mapbox.com/maki-icons/) icon to visualize a `poi` feature based on its `category`.",
+                                "type": "string"
+                              },
+                              "wikidata": {
+                                "description": "The [Wikidata](https://wikidata.org/) identifier for the returned feature.",
+                                "type": "string"
+                              },
+                              "short_code": {
+                                "description": "The [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country and [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) region code for the returned feature.",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "description": "A feature ID in the format `{type}.{id}`.",
+                                "type": "string"
+                              },
+                              "text": {
+                                "description": "A string representing the feature in the requested language, if specified.",
+                                "type": "string"
+                              }
+                            },
+                            "required": ["id", "text"]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "center",
+                    "context",
+                    "id",
+                    "place_name",
+                    "place_type",
+                    "relevance",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          },
+          "attribution": {
+            "description": "Attributes the results of the Mapbox Geocoding API to Mapbox.",
+            "type": "string"
+          }
+        },
+        "required": ["attribution", "features", "query", "type"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxReverseGeocoding",
+      "description": "Reverse geocoding request",
+      "source": "block",
+      "respondedToBy": "mapboxReverseGeocodingResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "lngLat": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "minItems": 2,
+                "maxItems": 2
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "lng": {
+                    "type": "number"
+                  },
+                  "lat": {
+                    "type": "number"
+                  }
+                },
+                "required": ["lat", "lng"]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "lon": {
+                    "type": "number"
+                  },
+                  "lat": {
+                    "type": "number"
+                  }
+                },
+                "required": ["lat", "lon"]
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "optionsArg": {
+            "type": "object",
+            "properties": {
+              "signal": {
+                "description": "If specified, the connected {@link AbortController} can be used to\nabort the current network request(s).\n\nThis mechanism intentionally works in the same way as the\n[`fetch` API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API#aborting_a_fetch).\n\nReference:\nhttps://developer.mozilla.org/en-US/docs/Web/API/AbortSignal#examples",
+                "type": "object",
+                "properties": {
+                  "aborted": {
+                    "type": "boolean"
+                  },
+                  "onabort": {
+                    "type": "object"
+                  },
+                  "reason": {}
+                },
+                "required": ["aborted", "onabort", "reason"]
+              },
+              "autocomplete": {
+                "description": "When autocomplete is enabled, results will be included that start with the requested string, rather than just responses that match it exactly.\n\nDefaults to true.",
+                "type": "boolean"
+              },
+              "bbox": {
+                "description": "Limit results to only those contained within the supplied bounding box.",
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "minItems": 4,
+                    "maxItems": 4
+                  },
+                  {
+                    "type": "array",
+                    "items": [
+                      {
+                        "anyOf": [
+                          {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "minItems": 2,
+                            "maxItems": 2
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "lng": {
+                                "type": "number"
+                              },
+                              "lat": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["lat", "lng"]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "lon": {
+                                "type": "number"
+                              },
+                              "lat": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["lat", "lon"]
+                          }
+                        ]
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ],
+                            "minItems": 2,
+                            "maxItems": 2
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "lng": {
+                                "type": "number"
+                              },
+                              "lat": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["lat", "lng"]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "lon": {
+                                "type": "number"
+                              },
+                              "lat": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["lat", "lon"]
+                          }
+                        ]
+                      }
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "country": {
+                "description": "Limit results to one or more countries. Permitted values are [ISO 3166 alpha 2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country codes separated by commas.",
+                "type": "string"
+              },
+              "fuzzyMatch": {
+                "description": "Specify whether the Geocoding API should attempt approximate, as well as exact, matching when performing searches.\n\nDefaults to true.",
+                "type": "boolean"
+              },
+              "language": {
+                "description": "An [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) that controls the language of the text supplied in responses, and also affects result scoring.",
+                "type": "string"
+              },
+              "limit": {
+                "description": "The number of results to return, up to `10`.\n\nDefaults to 5.",
+                "type": "number"
+              },
+              "proximity": {
+                "description": "Bias the response to favor results that are closer to this location.\n\nProvided as two comma-separated coordinates in longitude,latitude order, or the string `ip` to bias based on reverse IP lookup.",
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "lng": {
+                        "type": "number"
+                      },
+                      "lat": {
+                        "type": "number"
+                      }
+                    },
+                    "required": ["lat", "lng"]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "lon": {
+                        "type": "number"
+                      },
+                      "lat": {
+                        "type": "number"
+                      }
+                    },
+                    "required": ["lat", "lon"]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "routing": {
+                "description": "Specify whether to request additional metadata about the recommended navigation destination corresponding to the feature (`true`) or not (`false`, default). Only applicable for address features.",
+                "type": "boolean"
+              },
+              "types": {
+                "description": "Filter results to include only a subset (one or more) of the available feature types. Multiple options can be comma-separated.",
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "size": {
+                        "type": "number"
+                      },
+                      "__@toStringTag@25": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["__@toStringTag@25", "size"]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "worldview": {
+                "description": "Available worldviews are: `cn`, `in`, `jp`, `us`. If a worldview is not set, `us` worldview boundaries will be returned.",
+                "type": "string"
+              },
+              "permanent": {
+                "description": "Permanent geocodes are used for use cases that require storing\nposition data. If 'true', the permanent endpoints will be used, which are\nbilled separately.\n\nIf you're interested in using {@link PermanentOptions#permanent}, contact\n[Mapbox sales](https://www.mapbox.com/contact/sales/).\n\nIt's important to speak with an Account Manager on the Sales team prior to making requests\nwith {@link PermanentOptions#permanent} set to `true`, as unsuccessful requests\nmade by an account that does not have access to the endpoint may be billable.",
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "required": ["lngLat"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxReverseGeocodingResponse",
+      "description": "The response to a request geocoding request",
+      "source": "embedder",
+      "respondedToBy": null,
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "`\"FeatureCollection\"`, a GeoJSON type from the [GeoJSON specification](https://tools.ietf.org/html/rfc7946).",
+            "type": "string",
+            "enum": ["FeatureCollection"]
+          },
+          "query": {
+            "description": "Forward geocodes: An array of space and punctuation-separated strings from the original query.\n\nReverse geocodes: An array containing the coordinates being queried.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "features": {
+            "description": "The returned feature objects.",
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "description": "A feature object which contains a geometry and associated properties.\nhttps://tools.ietf.org/html/rfc7946#section-3.2",
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Specifies the type of GeoJSON object.",
+                      "type": "string",
+                      "enum": ["Feature"]
+                    },
+                    "geometry": {
+                      "description": "The feature's geometry",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "description": "Specifies the type of GeoJSON object.",
+                          "type": "string",
+                          "enum": ["Point"]
+                        },
+                        "coordinates": {
+                          "description": "A Position is an array of coordinates.\nhttps://tools.ietf.org/html/rfc7946#section-3.1.1\nArray should contain between two and three elements.\nThe previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),\nbut the current specification only allows X, Y, and (optionally) Z to be defined.",
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          }
+                        },
+                        "bbox": {
+                          "description": "Bounding box of the coordinate range of the object's Geometries, Features, or Feature Collections.\nThe value of the bbox member is an array of length 2*n where n is the number of dimensions\nrepresented in the contained geometries, with all axes of the most southwesterly point\nfollowed by all axes of the more northeasterly point.\nThe axes order of a bbox follows the axes order of geometries.\nhttps://tools.ietf.org/html/rfc7946#section-5",
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                }
+                              ],
+                              "minItems": 4,
+                              "maxItems": 4
+                            },
+                            {
+                              "type": "array",
+                              "items": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                }
+                              ],
+                              "minItems": 6,
+                              "maxItems": 6
+                            }
+                          ]
+                        }
+                      },
+                      "required": ["coordinates", "type"]
+                    },
+                    "id": {
+                      "description": "A value that uniquely identifies this feature in a\nhttps://tools.ietf.org/html/rfc7946#section-3.2.",
+                      "type": ["string", "number"]
+                    },
+                    "properties": {
+                      "description": "Properties associated with this feature.",
+                      "type": "object",
+                      "properties": {
+                        "accuracy": {
+                          "description": "A point accuracy metric for the returned address feature. Can be one of `rooftop`, `parcel`, `point`, `interpolated`, `intersection`, `street`.",
+                          "type": "string"
+                        },
+                        "address": {
+                          "description": "The full street address for the returned `poi` feature.",
+                          "type": "string"
+                        },
+                        "category": {
+                          "description": "Comma-separated categories for the returned `poi` feature.",
+                          "type": "string"
+                        },
+                        "maki": {
+                          "description": "The name of a suggested [Maki](https://www.mapbox.com/maki-icons/) icon to visualize a `poi` feature based on its `category`.",
+                          "type": "string"
+                        },
+                        "wikidata": {
+                          "description": "The [Wikidata](https://wikidata.org/) identifier for the returned feature.",
+                          "type": "string"
+                        },
+                        "short_code": {
+                          "description": "The [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country and [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) region code for the returned feature.",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "bbox": {
+                      "description": "Bounding box of the coordinate range of the object's Geometries, Features, or Feature Collections.\nThe value of the bbox member is an array of length 2*n where n is the number of dimensions\nrepresented in the contained geometries, with all axes of the most southwesterly point\nfollowed by all axes of the more northeasterly point.\nThe axes order of a bbox follows the axes order of geometries.\nhttps://tools.ietf.org/html/rfc7946#section-5",
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 4,
+                          "maxItems": 4
+                        },
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 6,
+                          "maxItems": 6
+                        }
+                      ]
+                    }
+                  },
+                  "required": ["geometry", "properties", "type"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "accuracy": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "A feature ID in the format `{type}.{id}` where `{type}` is the lowest hierarchy feature in the `place_type` field.",
+                      "type": "string"
+                    },
+                    "place_type": {
+                      "description": "An array of {@link DataTypes} describing the feature.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "relevance": {
+                      "description": "Indicates how well the returned feature matches the user's query on a scale from `0` to `1`, with `1` meaning the result fully matches the query text.",
+                      "type": "number"
+                    },
+                    "address": {
+                      "description": "The house number for the returned `address` feature.",
+                      "type": "string"
+                    },
+                    "text": {
+                      "description": "A string representing the feature in the requested language, if specified.",
+                      "type": "string"
+                    },
+                    "place_name": {
+                      "description": "A string representing the feature in the requested language, if specified, and its full result hierarchy.",
+                      "type": "string"
+                    },
+                    "matching_text": {
+                      "description": "A string analogous to the text field that more closely matches the query than results in the specified language.",
+                      "type": "string"
+                    },
+                    "matching_place_name": {
+                      "description": "A string analogous to the `place_name` field that more closely matches the query than results in the specified language.",
+                      "type": "string"
+                    },
+                    "language": {
+                      "description": "A string of the [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) of the query’s primary language.",
+                      "type": "string"
+                    },
+                    "bbox": {
+                      "description": "A bounding box for the feature. This may be significantly\nlarger than the geometry.",
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 4,
+                          "maxItems": 4
+                        },
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "anyOf": [
+                                {
+                                  "type": "array",
+                                  "items": [
+                                    {
+                                      "type": "number"
+                                    },
+                                    {
+                                      "type": "number"
+                                    }
+                                  ],
+                                  "minItems": 2,
+                                  "maxItems": 2
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lng": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lng"]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lon": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lon"]
+                                }
+                              ]
+                            },
+                            {
+                              "anyOf": [
+                                {
+                                  "type": "array",
+                                  "items": [
+                                    {
+                                      "type": "number"
+                                    },
+                                    {
+                                      "type": "number"
+                                    }
+                                  ],
+                                  "minItems": 2,
+                                  "maxItems": 2
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lng": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lng"]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lon": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lon"]
+                                }
+                              ]
+                            }
+                          ],
+                          "minItems": 2,
+                          "maxItems": 2
+                        }
+                      ]
+                    },
+                    "center": {
+                      "description": "The coordinates of the feature’s center in the form `[longitude,latitude]`.",
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 2,
+                          "maxItems": 2
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "lng": {
+                              "type": "number"
+                            },
+                            "lat": {
+                              "type": "number"
+                            }
+                          },
+                          "required": ["lat", "lng"]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "lon": {
+                              "type": "number"
+                            },
+                            "lat": {
+                              "type": "number"
+                            }
+                          },
+                          "required": ["lat", "lon"]
+                        }
+                      ]
+                    },
+                    "context": {
+                      "description": "An array representing the hierarchy of encompassing parent features. Each parent feature may include any of the above properties.",
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "accuracy": {
+                                "description": "A point accuracy metric for the returned address feature. Can be one of `rooftop`, `parcel`, `point`, `interpolated`, `intersection`, `street`.",
+                                "type": "string"
+                              },
+                              "address": {
+                                "description": "The full street address for the returned `poi` feature.",
+                                "type": "string"
+                              },
+                              "category": {
+                                "description": "Comma-separated categories for the returned `poi` feature.",
+                                "type": "string"
+                              },
+                              "maki": {
+                                "description": "The name of a suggested [Maki](https://www.mapbox.com/maki-icons/) icon to visualize a `poi` feature based on its `category`.",
+                                "type": "string"
+                              },
+                              "wikidata": {
+                                "description": "The [Wikidata](https://wikidata.org/) identifier for the returned feature.",
+                                "type": "string"
+                              },
+                              "short_code": {
+                                "description": "The [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country and [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) region code for the returned feature.",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "description": "A feature ID in the format `{type}.{id}`.",
+                                "type": "string"
+                              },
+                              "text": {
+                                "description": "A string representing the feature in the requested language, if specified.",
+                                "type": "string"
+                              }
+                            },
+                            "required": ["id", "text"]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "center",
+                    "context",
+                    "id",
+                    "place_name",
+                    "place_type",
+                    "relevance",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          },
+          "attribution": {
+            "description": "Attributes the results of the Mapbox Geocoding API to Mapbox.",
+            "type": "string"
+          }
+        },
+        "required": ["attribution", "features", "query", "type"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxRetrieveDirections",
+      "description": "Retrieve directions request",
+      "source": "block",
+      "respondedToBy": "mapboxRetrieveDirectionsResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "anyOf": [
+          {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "profile": {
+                    "type": "string",
+                    "enum": ["mapbox/walking"]
+                  },
+                  "walking_speed": {
+                    "type": "number"
+                  },
+                  "walkway_bias": {
+                    "type": "number"
+                  }
+                },
+                "required": ["profile"]
+              },
+              {
+                "description": "Mapbox Directions API",
+                "type": "object",
+                "properties": {
+                  "coordinates": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ],
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  },
+                  "alternatives": {
+                    "type": "boolean"
+                  },
+                  "annotations": {
+                    "enum": [
+                      "closure",
+                      "congestion",
+                      "congestion_numeric",
+                      "distance",
+                      "duration",
+                      "maxspeed",
+                      "speed",
+                      "state_of_charge"
+                    ],
+                    "type": "string"
+                  },
+                  "avoid_maneuver_radius": {
+                    "type": "number"
+                  },
+                  "bearings": {
+                    "type": "number"
+                  },
+                  "layers": {
+                    "type": "number"
+                  },
+                  "continue_straight": {
+                    "type": "boolean"
+                  },
+                  "exclude": {
+                    "type": "string"
+                  },
+                  "geometries": {
+                    "type": "string"
+                  },
+                  "include": {
+                    "enum": ["hot", "hov2", "hov3"],
+                    "type": "string"
+                  },
+                  "overview": {
+                    "type": "string"
+                  },
+                  "radiuses": {
+                    "type": ["string", "number"]
+                  },
+                  "approaches": {
+                    "type": "string"
+                  },
+                  "steps": {
+                    "type": "boolean"
+                  },
+                  "banner_instructions": {
+                    "type": "boolean"
+                  },
+                  "language": {
+                    "type": "string"
+                  },
+                  "roundabout_exits": {
+                    "type": "boolean"
+                  },
+                  "voice_instructions": {
+                    "type": "boolean"
+                  },
+                  "voice_units": {
+                    "type": "string"
+                  },
+                  "waypoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "waypoints_per_route": {
+                    "type": "boolean"
+                  },
+                  "waypoint_names": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "waypoint_targets": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "required": ["coordinates"]
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "profile": {
+                    "type": "string",
+                    "enum": ["mapbox/driving-traffic"]
+                  },
+                  "alley_bias": {
+                    "type": "number"
+                  },
+                  "arrive_by": {
+                    "type": "string"
+                  },
+                  "depart_at": {
+                    "type": "string"
+                  },
+                  "use_current_time": {
+                    "type": "boolean"
+                  },
+                  "max_height": {
+                    "type": "number"
+                  },
+                  "max_width": {
+                    "type": "number"
+                  },
+                  "max_weight": {
+                    "type": "number"
+                  }
+                },
+                "required": ["profile"]
+              },
+              {
+                "description": "Mapbox Directions API",
+                "type": "object",
+                "properties": {
+                  "coordinates": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ],
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  },
+                  "alternatives": {
+                    "type": "boolean"
+                  },
+                  "annotations": {
+                    "enum": [
+                      "closure",
+                      "congestion",
+                      "congestion_numeric",
+                      "distance",
+                      "duration",
+                      "maxspeed",
+                      "speed",
+                      "state_of_charge"
+                    ],
+                    "type": "string"
+                  },
+                  "avoid_maneuver_radius": {
+                    "type": "number"
+                  },
+                  "bearings": {
+                    "type": "number"
+                  },
+                  "layers": {
+                    "type": "number"
+                  },
+                  "continue_straight": {
+                    "type": "boolean"
+                  },
+                  "exclude": {
+                    "type": "string"
+                  },
+                  "geometries": {
+                    "type": "string"
+                  },
+                  "include": {
+                    "enum": ["hot", "hov2", "hov3"],
+                    "type": "string"
+                  },
+                  "overview": {
+                    "type": "string"
+                  },
+                  "radiuses": {
+                    "type": ["string", "number"]
+                  },
+                  "approaches": {
+                    "type": "string"
+                  },
+                  "steps": {
+                    "type": "boolean"
+                  },
+                  "banner_instructions": {
+                    "type": "boolean"
+                  },
+                  "language": {
+                    "type": "string"
+                  },
+                  "roundabout_exits": {
+                    "type": "boolean"
+                  },
+                  "voice_instructions": {
+                    "type": "boolean"
+                  },
+                  "voice_units": {
+                    "type": "string"
+                  },
+                  "waypoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "waypoints_per_route": {
+                    "type": "boolean"
+                  },
+                  "waypoint_names": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "waypoint_targets": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "required": ["coordinates"]
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "profile": {
+                    "type": "string",
+                    "enum": ["mapbox/driving"]
+                  },
+                  "depart_at": {
+                    "type": "string"
+                  },
+                  "use_current_time": {
+                    "type": "boolean"
+                  },
+                  "snapping_include_closures": {
+                    "type": "boolean"
+                  },
+                  "snapping_include_static_closures": {
+                    "type": "boolean"
+                  },
+                  "max_height": {
+                    "type": "number"
+                  },
+                  "max_width": {
+                    "type": "number"
+                  },
+                  "max_weight": {
+                    "type": "number"
+                  }
+                },
+                "required": ["profile"]
+              },
+              {
+                "description": "Mapbox Directions API",
+                "type": "object",
+                "properties": {
+                  "coordinates": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ],
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  },
+                  "alternatives": {
+                    "type": "boolean"
+                  },
+                  "annotations": {
+                    "enum": [
+                      "closure",
+                      "congestion",
+                      "congestion_numeric",
+                      "distance",
+                      "duration",
+                      "maxspeed",
+                      "speed",
+                      "state_of_charge"
+                    ],
+                    "type": "string"
+                  },
+                  "avoid_maneuver_radius": {
+                    "type": "number"
+                  },
+                  "bearings": {
+                    "type": "number"
+                  },
+                  "layers": {
+                    "type": "number"
+                  },
+                  "continue_straight": {
+                    "type": "boolean"
+                  },
+                  "exclude": {
+                    "type": "string"
+                  },
+                  "geometries": {
+                    "type": "string"
+                  },
+                  "include": {
+                    "enum": ["hot", "hov2", "hov3"],
+                    "type": "string"
+                  },
+                  "overview": {
+                    "type": "string"
+                  },
+                  "radiuses": {
+                    "type": ["string", "number"]
+                  },
+                  "approaches": {
+                    "type": "string"
+                  },
+                  "steps": {
+                    "type": "boolean"
+                  },
+                  "banner_instructions": {
+                    "type": "boolean"
+                  },
+                  "language": {
+                    "type": "string"
+                  },
+                  "roundabout_exits": {
+                    "type": "boolean"
+                  },
+                  "voice_instructions": {
+                    "type": "boolean"
+                  },
+                  "voice_units": {
+                    "type": "string"
+                  },
+                  "waypoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "waypoints_per_route": {
+                    "type": "boolean"
+                  },
+                  "waypoint_names": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "waypoint_targets": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "required": ["coordinates"]
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "profile": {
+                    "type": "string",
+                    "enum": ["mapbox/cycling"]
+                  }
+                },
+                "required": ["profile"]
+              },
+              {
+                "description": "Mapbox Directions API",
+                "type": "object",
+                "properties": {
+                  "coordinates": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ],
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  },
+                  "alternatives": {
+                    "type": "boolean"
+                  },
+                  "annotations": {
+                    "enum": [
+                      "closure",
+                      "congestion",
+                      "congestion_numeric",
+                      "distance",
+                      "duration",
+                      "maxspeed",
+                      "speed",
+                      "state_of_charge"
+                    ],
+                    "type": "string"
+                  },
+                  "avoid_maneuver_radius": {
+                    "type": "number"
+                  },
+                  "bearings": {
+                    "type": "number"
+                  },
+                  "layers": {
+                    "type": "number"
+                  },
+                  "continue_straight": {
+                    "type": "boolean"
+                  },
+                  "exclude": {
+                    "type": "string"
+                  },
+                  "geometries": {
+                    "type": "string"
+                  },
+                  "include": {
+                    "enum": ["hot", "hov2", "hov3"],
+                    "type": "string"
+                  },
+                  "overview": {
+                    "type": "string"
+                  },
+                  "radiuses": {
+                    "type": ["string", "number"]
+                  },
+                  "approaches": {
+                    "type": "string"
+                  },
+                  "steps": {
+                    "type": "boolean"
+                  },
+                  "banner_instructions": {
+                    "type": "boolean"
+                  },
+                  "language": {
+                    "type": "string"
+                  },
+                  "roundabout_exits": {
+                    "type": "boolean"
+                  },
+                  "voice_instructions": {
+                    "type": "boolean"
+                  },
+                  "voice_units": {
+                    "type": "string"
+                  },
+                  "waypoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "waypoints_per_route": {
+                    "type": "boolean"
+                  },
+                  "waypoint_names": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "waypoint_targets": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "required": ["coordinates"]
+              }
+            ]
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxRetrieveRetrieveDirectionsResponse",
+      "description": "The response to a retrieve directions request",
+      "source": "embedder",
+      "respondedToBy": null,
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "routes": {
+            "type": "array",
+            "items": {}
+          }
+        },
+        "required": ["code", "routes"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxRetrieveIsochrones",
+      "description": "Retrieve isochrones",
+      "source": "block",
+      "respondedToBy": "mapboxRetrieveIsochronesResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "description": "Mapbox Isochrone API",
+        "type": "object",
+        "properties": {
+          "profile": {
+            "enum": ["mapbox/cycling", "mapbox/driving", "mapbox/walking"],
+            "type": "string"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "contours_minutes": {
+            "type": "number"
+          },
+          "contours_meters": {
+            "type": "number"
+          },
+          "contours_colors": {
+            "type": "string"
+          },
+          "polygons": {
+            "type": "boolean"
+          },
+          "denoise": {
+            "type": "number"
+          },
+          "generalize": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "contours_meters",
+          "contours_minutes",
+          "coordinates",
+          "profile"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxRetrieveIsochronesResponse",
+      "description": "The response to a retrieve isochrones request",
+      "source": "embedder",
+      "respondedToBy": null,
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "features": {
+            "type": "array",
+            "items": {}
+          }
+        },
+        "required": ["features"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxSuggestAddress",
+      "description": "Suggest an address",
+      "source": "block",
+      "respondedToBy": "mapboxSuggestAddressResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "description": "Mapbox Autofill API",
+        "type": "object",
+        "properties": {
+          "searchText": {
+            "type": "string"
+          },
+          "optionsArg": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "sessionToken": {
+                    "description": "A customer-provided session token value, which groups a series of requests together for [billing purposes](https://docs.mapbox.com/api/search/search/#search-api-pricing).\n\nReference:\nhttps://docs.mapbox.com/api/search/search/#session-based-pricing",
+                    "type": "string"
+                  }
+                },
+                "required": ["sessionToken"]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "signal": {
+                    "description": "If specified, the connected {@link AbortController} can be used to\nabort the current network request(s).\n\nThis mechanism intentionally works in the same way as the\n[`fetch` API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API#aborting_a_fetch).\n\nReference:\nhttps://developer.mozilla.org/en-US/docs/Web/API/AbortSignal#examples",
+                    "type": "object",
+                    "properties": {
+                      "aborted": {
+                        "type": "boolean"
+                      },
+                      "onabort": {
+                        "type": "object"
+                      },
+                      "reason": {}
+                    },
+                    "required": ["aborted", "onabort", "reason"]
+                  },
+                  "language": {
+                    "description": "The [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) to be returned.\n\nIf not specified, `en` will be used.",
+                    "type": "string"
+                  },
+                  "country": {
+                    "description": "An [ISO 3166 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) to be returned.\n\nIf not specified, results will not be filtered by country.",
+                    "type": "string"
+                  },
+                  "bbox": {
+                    "description": "Limit results to only those contained within the supplied bounding box.",
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ],
+                        "minItems": 4,
+                        "maxItems": 4
+                      },
+                      {
+                        "type": "array",
+                        "items": [
+                          {
+                            "anyOf": [
+                              {
+                                "type": "array",
+                                "items": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "number"
+                                  }
+                                ],
+                                "minItems": 2,
+                                "maxItems": 2
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "lng": {
+                                    "type": "number"
+                                  },
+                                  "lat": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": ["lat", "lng"]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "lon": {
+                                    "type": "number"
+                                  },
+                                  "lat": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": ["lat", "lon"]
+                              }
+                            ]
+                          },
+                          {
+                            "anyOf": [
+                              {
+                                "type": "array",
+                                "items": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "number"
+                                  }
+                                ],
+                                "minItems": 2,
+                                "maxItems": 2
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "lng": {
+                                    "type": "number"
+                                  },
+                                  "lat": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": ["lat", "lng"]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "lon": {
+                                    "type": "number"
+                                  },
+                                  "lat": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": ["lat", "lon"]
+                              }
+                            ]
+                          }
+                        ],
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "limit": {
+                    "description": "The number of results to return, up to `10`.",
+                    "type": ["string", "number"]
+                  },
+                  "proximity": {
+                    "description": "Bias the response to favor results that are closer to this location.\n\nWhen both {@link AutofillOptions#proximity} and {@link AutofillOptions#origin} are specified, `origin` is interpreted as the\ntarget of a route, while `proximity` indicates the current user location.",
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ],
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "lng": {
+                            "type": "number"
+                          },
+                          "lat": {
+                            "type": "number"
+                          }
+                        },
+                        "required": ["lat", "lng"]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "lon": {
+                            "type": "number"
+                          },
+                          "lat": {
+                            "type": "number"
+                          }
+                        },
+                        "required": ["lat", "lon"]
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "required": ["optionsArg", "searchText"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxSuggestAddressResponse",
+      "description": "The response to a request to suggest an address",
+      "source": "embedder",
+      "respondedToBy": null,
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "attribution": {
+            "description": "The attribution data for results.",
+            "type": "string"
+          },
+          "suggestions": {
+            "description": "The returned suggestion objects.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "accuracy": {
+                  "description": "A point accuracy metric for the returned address feature. Can be one of `rooftop`, `parcel`, `point`, `interpolated`, `intersection`, `street`.",
+                  "type": "string"
+                },
+                "feature_name": {
+                  "description": "The name of the feature.",
+                  "type": "string"
+                },
+                "matching_name": {
+                  "description": "The feature name, as matched by the search algorithm.",
+                  "type": "string"
+                },
+                "description": {
+                  "description": "Additional details, such as city and state for addresses.",
+                  "type": "string"
+                },
+                "maki": {
+                  "description": "The name of the [Maki](https://labs.mapbox.com/maki-icons/) icon associated with the feature.",
+                  "type": "string"
+                },
+                "language": {
+                  "description": "The [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) of the feature.",
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "full_address": {
+                  "description": "The full address of the suggestion.",
+                  "type": "string"
+                },
+                "address_line1": {
+                  "description": "Address line 1 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                  "type": "string"
+                },
+                "address_line2": {
+                  "description": "Address line 2 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                  "type": "string"
+                },
+                "address_line3": {
+                  "description": "Address line 3 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                  "type": "string"
+                },
+                "address_level1": {
+                  "description": "Address level 1 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                  "type": "string"
+                },
+                "address_level2": {
+                  "description": "Address level 2 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                  "type": "string"
+                },
+                "address_level3": {
+                  "description": "Address level 3 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                  "type": "string"
+                },
+                "country": {
+                  "description": "Long form country name, for example: \"United States\"",
+                  "type": "string"
+                },
+                "country_code": {
+                  "description": "The short form country name, for example: \"us\". This follows the\n[ISO 3166 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) specification.",
+                  "type": "string"
+                },
+                "postcode": {
+                  "description": "Postal code.",
+                  "type": "string"
+                },
+                "metadata": {
+                  "description": "Address metadata fields of the feature.\n\nIncludes the short form country name, for example: \"us\". This follows the\n[ISO 3166 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) specification.",
+                  "type": "object",
+                  "properties": {
+                    "iso_3166_1": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["iso_3166_1"]
+                },
+                "place_name": {
+                  "description": "A string representing the feature in the requested language, if specified, and its full result hierarchy.",
+                  "type": "string"
+                },
+                "match_code": {
+                  "description": "An object describing the level of confidence that the given response feature matches the address intended by the request query.\nIncludes boolean flags denoting matches for each address sub-component.",
+                  "type": "object",
+                  "properties": {
+                    "confidence": {
+                      "description": "A measure of confidence that the returned feature suggestion matches the intended address, based on the search text provided."
+                    },
+                    "exact_match": {
+                      "description": "True if the confidence value is \"exact\".",
+                      "type": "boolean"
+                    },
+                    "house_number": {
+                      "description": "True if the house number component was matched.",
+                      "type": "boolean"
+                    },
+                    "street": {
+                      "description": "True if the street component was matched.",
+                      "type": "boolean"
+                    },
+                    "postcode": {
+                      "description": "True if the postcode was matched.",
+                      "type": "boolean"
+                    },
+                    "place": {
+                      "description": "True if the place component was matched.",
+                      "type": "boolean"
+                    },
+                    "region": {
+                      "description": "True if the region component was matched.",
+                      "type": "boolean"
+                    },
+                    "locality": {
+                      "description": "True if the locality component was matched.",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "confidence",
+                    "exact_match",
+                    "house_number",
+                    "place",
+                    "postcode",
+                    "street"
+                  ]
+                },
+                "action": {
+                  "description": "Action block of the suggestion result.\ncontains id to execute retrieve",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id"]
+                }
+              },
+              "required": [
+                "action",
+                "description",
+                "feature_name",
+                "language",
+                "match_code",
+                "matching_name",
+                "metadata"
+              ]
+            }
+          }
+        },
+        "required": ["suggestions"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxRetrieveAddress",
+      "description": "Retrieve an address",
+      "source": "block",
+      "respondedToBy": "mapboxRetrieveAddressResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "suggestion": {
+            "type": "object",
+            "properties": {
+              "accuracy": {
+                "description": "A point accuracy metric for the returned address feature. Can be one of `rooftop`, `parcel`, `point`, `interpolated`, `intersection`, `street`.",
+                "type": "string"
+              },
+              "feature_name": {
+                "description": "The name of the feature.",
+                "type": "string"
+              },
+              "matching_name": {
+                "description": "The feature name, as matched by the search algorithm.",
+                "type": "string"
+              },
+              "description": {
+                "description": "Additional details, such as city and state for addresses.",
+                "type": "string"
+              },
+              "maki": {
+                "description": "The name of the [Maki](https://labs.mapbox.com/maki-icons/) icon associated with the feature.",
+                "type": "string"
+              },
+              "language": {
+                "description": "The [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) of the feature.",
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "full_address": {
+                "description": "The full address of the suggestion.",
+                "type": "string"
+              },
+              "address_line1": {
+                "description": "Address line 1 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "address_line2": {
+                "description": "Address line 2 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "address_line3": {
+                "description": "Address line 3 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "address_level1": {
+                "description": "Address level 1 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "address_level2": {
+                "description": "Address level 2 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "address_level3": {
+                "description": "Address level 3 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "country": {
+                "description": "Long form country name, for example: \"United States\"",
+                "type": "string"
+              },
+              "country_code": {
+                "description": "The short form country name, for example: \"us\". This follows the\n[ISO 3166 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) specification.",
+                "type": "string"
+              },
+              "postcode": {
+                "description": "Postal code.",
+                "type": "string"
+              },
+              "metadata": {
+                "description": "Address metadata fields of the feature.\n\nIncludes the short form country name, for example: \"us\". This follows the\n[ISO 3166 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) specification.",
+                "type": "object",
+                "properties": {
+                  "iso_3166_1": {
+                    "type": "string"
+                  }
+                },
+                "required": ["iso_3166_1"]
+              },
+              "place_name": {
+                "description": "A string representing the feature in the requested language, if specified, and its full result hierarchy.",
+                "type": "string"
+              },
+              "match_code": {
+                "description": "An object describing the level of confidence that the given response feature matches the address intended by the request query.\nIncludes boolean flags denoting matches for each address sub-component.",
+                "type": "object",
+                "properties": {
+                  "confidence": {
+                    "description": "A measure of confidence that the returned feature suggestion matches the intended address, based on the search text provided."
+                  },
+                  "exact_match": {
+                    "description": "True if the confidence value is \"exact\".",
+                    "type": "boolean"
+                  },
+                  "house_number": {
+                    "description": "True if the house number component was matched.",
+                    "type": "boolean"
+                  },
+                  "street": {
+                    "description": "True if the street component was matched.",
+                    "type": "boolean"
+                  },
+                  "postcode": {
+                    "description": "True if the postcode was matched.",
+                    "type": "boolean"
+                  },
+                  "place": {
+                    "description": "True if the place component was matched.",
+                    "type": "boolean"
+                  },
+                  "region": {
+                    "description": "True if the region component was matched.",
+                    "type": "boolean"
+                  },
+                  "locality": {
+                    "description": "True if the locality component was matched.",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "confidence",
+                  "exact_match",
+                  "house_number",
+                  "place",
+                  "postcode",
+                  "street"
+                ]
+              },
+              "action": {
+                "description": "Action block of the suggestion result.\ncontains id to execute retrieve",
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "required": ["id"]
+              }
+            },
+            "required": [
+              "action",
+              "description",
+              "feature_name",
+              "language",
+              "match_code",
+              "matching_name",
+              "metadata"
+            ]
+          },
+          "optionsArg": {
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "sessionToken": {
+                    "description": "A customer-provided session token value, which groups a series of requests together for [billing purposes](https://docs.mapbox.com/api/search/search/#search-api-pricing).\n\nReference:\nhttps://docs.mapbox.com/api/search/search/#session-based-pricing",
+                    "type": "string"
+                  }
+                },
+                "required": ["sessionToken"]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "signal": {
+                    "description": "If specified, the connected {@link AbortController} can be used to\nabort the current network request(s).\n\nThis mechanism intentionally works in the same way as the\n[`fetch` API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API#aborting_a_fetch).\n\nReference:\nhttps://developer.mozilla.org/en-US/docs/Web/API/AbortSignal#examples",
+                    "type": "object",
+                    "properties": {
+                      "aborted": {
+                        "type": "boolean"
+                      },
+                      "onabort": {
+                        "type": "object"
+                      },
+                      "reason": {}
+                    },
+                    "required": ["aborted", "onabort", "reason"]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "required": ["optionsArg", "suggestion"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxRetrieveAddressResponse",
+      "description": "The response to a retrieve an address",
+      "source": "embedder",
+      "respondedToBy": null,
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["FeatureCollection"]
+          },
+          "attribution": {
+            "description": "The attribution data for results.",
+            "type": "string"
+          },
+          "features": {
+            "description": "The returned feature objects.",
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "description": "A feature object which contains a geometry and associated properties.\nhttps://tools.ietf.org/html/rfc7946#section-3.2",
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Specifies the type of GeoJSON object.",
+                      "type": "string",
+                      "enum": ["Feature"]
+                    },
+                    "geometry": {
+                      "description": "The feature's geometry",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "description": "Specifies the type of GeoJSON object.",
+                          "type": "string",
+                          "enum": ["Point"]
+                        },
+                        "coordinates": {
+                          "description": "A Position is an array of coordinates.\nhttps://tools.ietf.org/html/rfc7946#section-3.1.1\nArray should contain between two and three elements.\nThe previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),\nbut the current specification only allows X, Y, and (optionally) Z to be defined.",
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          }
+                        },
+                        "bbox": {
+                          "description": "Bounding box of the coordinate range of the object's Geometries, Features, or Feature Collections.\nThe value of the bbox member is an array of length 2*n where n is the number of dimensions\nrepresented in the contained geometries, with all axes of the most southwesterly point\nfollowed by all axes of the more northeasterly point.\nThe axes order of a bbox follows the axes order of geometries.\nhttps://tools.ietf.org/html/rfc7946#section-5",
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                }
+                              ],
+                              "minItems": 4,
+                              "maxItems": 4
+                            },
+                            {
+                              "type": "array",
+                              "items": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "number"
+                                }
+                              ],
+                              "minItems": 6,
+                              "maxItems": 6
+                            }
+                          ]
+                        }
+                      },
+                      "required": ["coordinates", "type"]
+                    },
+                    "id": {
+                      "description": "A value that uniquely identifies this feature in a\nhttps://tools.ietf.org/html/rfc7946#section-3.2.",
+                      "type": ["string", "number"]
+                    },
+                    "properties": {
+                      "description": "Properties associated with this feature.",
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "metadata": {
+                          "description": "Address metadata fields of the feature.\n\nIncludes the short form country name, for example: \"us\". This follows the\n[ISO 3166 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) specification.",
+                          "type": "object",
+                          "properties": {
+                            "iso_3166_1": {
+                              "type": "string"
+                            }
+                          },
+                          "required": ["iso_3166_1"]
+                        },
+                        "description": {
+                          "description": "Additional details, such as city and state for addresses.",
+                          "type": "string"
+                        },
+                        "language": {
+                          "description": "The [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) of the feature.",
+                          "type": "string"
+                        },
+                        "accuracy": {
+                          "description": "A point accuracy metric for the returned address feature. Can be one of `rooftop`, `parcel`, `point`, `interpolated`, `intersection`, `street`.",
+                          "type": "string"
+                        },
+                        "feature_name": {
+                          "description": "The name of the feature.",
+                          "type": "string"
+                        },
+                        "matching_name": {
+                          "description": "The feature name, as matched by the search algorithm.",
+                          "type": "string"
+                        },
+                        "maki": {
+                          "description": "The name of the [Maki](https://labs.mapbox.com/maki-icons/) icon associated with the feature.",
+                          "type": "string"
+                        },
+                        "full_address": {
+                          "description": "The full address of the suggestion.",
+                          "type": "string"
+                        },
+                        "address_line1": {
+                          "description": "Address line 1 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                          "type": "string"
+                        },
+                        "address_line2": {
+                          "description": "Address line 2 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                          "type": "string"
+                        },
+                        "address_line3": {
+                          "description": "Address line 3 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                          "type": "string"
+                        },
+                        "address_level1": {
+                          "description": "Address level 1 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                          "type": "string"
+                        },
+                        "address_level2": {
+                          "description": "Address level 2 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                          "type": "string"
+                        },
+                        "address_level3": {
+                          "description": "Address level 3 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                          "type": "string"
+                        },
+                        "country": {
+                          "description": "Long form country name, for example: \"United States\"",
+                          "type": "string"
+                        },
+                        "country_code": {
+                          "description": "The short form country name, for example: \"us\". This follows the\n[ISO 3166 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) specification.",
+                          "type": "string"
+                        },
+                        "postcode": {
+                          "description": "Postal code.",
+                          "type": "string"
+                        },
+                        "place_name": {
+                          "description": "A string representing the feature in the requested language, if specified, and its full result hierarchy.",
+                          "type": "string"
+                        },
+                        "match_code": {
+                          "description": "An object describing the level of confidence that the given response feature matches the address intended by the request query.\nIncludes boolean flags denoting matches for each address sub-component.",
+                          "type": "object",
+                          "properties": {
+                            "confidence": {
+                              "description": "A measure of confidence that the returned feature suggestion matches the intended address, based on the search text provided."
+                            },
+                            "exact_match": {
+                              "description": "True if the confidence value is \"exact\".",
+                              "type": "boolean"
+                            },
+                            "house_number": {
+                              "description": "True if the house number component was matched.",
+                              "type": "boolean"
+                            },
+                            "street": {
+                              "description": "True if the street component was matched.",
+                              "type": "boolean"
+                            },
+                            "postcode": {
+                              "description": "True if the postcode was matched.",
+                              "type": "boolean"
+                            },
+                            "place": {
+                              "description": "True if the place component was matched.",
+                              "type": "boolean"
+                            },
+                            "region": {
+                              "description": "True if the region component was matched.",
+                              "type": "boolean"
+                            },
+                            "locality": {
+                              "description": "True if the locality component was matched.",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "confidence",
+                            "exact_match",
+                            "house_number",
+                            "place",
+                            "postcode",
+                            "street"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "description",
+                        "feature_name",
+                        "language",
+                        "match_code",
+                        "matching_name",
+                        "metadata"
+                      ]
+                    },
+                    "bbox": {
+                      "description": "Bounding box of the coordinate range of the object's Geometries, Features, or Feature Collections.\nThe value of the bbox member is an array of length 2*n where n is the number of dimensions\nrepresented in the contained geometries, with all axes of the most southwesterly point\nfollowed by all axes of the more northeasterly point.\nThe axes order of a bbox follows the axes order of geometries.\nhttps://tools.ietf.org/html/rfc7946#section-5",
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 4,
+                          "maxItems": 4
+                        },
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 6,
+                          "maxItems": 6
+                        }
+                      ]
+                    }
+                  },
+                  "required": ["geometry", "properties", "type"]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "bbox": {
+                      "description": "A bounding box for the feature. This may be significantly\nlarger than the geometry.",
+                      "anyOf": [
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "minItems": 4,
+                          "maxItems": 4
+                        },
+                        {
+                          "type": "array",
+                          "items": [
+                            {
+                              "anyOf": [
+                                {
+                                  "type": "array",
+                                  "items": [
+                                    {
+                                      "type": "number"
+                                    },
+                                    {
+                                      "type": "number"
+                                    }
+                                  ],
+                                  "minItems": 2,
+                                  "maxItems": 2
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lng": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lng"]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lon": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lon"]
+                                }
+                              ]
+                            },
+                            {
+                              "anyOf": [
+                                {
+                                  "type": "array",
+                                  "items": [
+                                    {
+                                      "type": "number"
+                                    },
+                                    {
+                                      "type": "number"
+                                    }
+                                  ],
+                                  "minItems": 2,
+                                  "maxItems": 2
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lng": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lng"]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "lon": {
+                                      "type": "number"
+                                    },
+                                    "lat": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["lat", "lon"]
+                                }
+                              ]
+                            }
+                          ],
+                          "minItems": 2,
+                          "maxItems": 2
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "required": ["features", "type"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxCanRetrieveAddress",
+      "description": "Whether an address can be retrieved",
+      "source": "block",
+      "respondedToBy": "mapboxCanRetrieveAddressResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "suggestion": {
+            "type": "object",
+            "properties": {
+              "accuracy": {
+                "description": "A point accuracy metric for the returned address feature. Can be one of `rooftop`, `parcel`, `point`, `interpolated`, `intersection`, `street`.",
+                "type": "string"
+              },
+              "feature_name": {
+                "description": "The name of the feature.",
+                "type": "string"
+              },
+              "matching_name": {
+                "description": "The feature name, as matched by the search algorithm.",
+                "type": "string"
+              },
+              "description": {
+                "description": "Additional details, such as city and state for addresses.",
+                "type": "string"
+              },
+              "maki": {
+                "description": "The name of the [Maki](https://labs.mapbox.com/maki-icons/) icon associated with the feature.",
+                "type": "string"
+              },
+              "language": {
+                "description": "The [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) of the feature.",
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "full_address": {
+                "description": "The full address of the suggestion.",
+                "type": "string"
+              },
+              "address_line1": {
+                "description": "Address line 1 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "address_line2": {
+                "description": "Address line 2 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "address_line3": {
+                "description": "Address line 3 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "address_level1": {
+                "description": "Address level 1 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "address_level2": {
+                "description": "Address level 2 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "address_level3": {
+                "description": "Address level 3 from the [WHATWG Autocomplete Specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill)",
+                "type": "string"
+              },
+              "country": {
+                "description": "Long form country name, for example: \"United States\"",
+                "type": "string"
+              },
+              "country_code": {
+                "description": "The short form country name, for example: \"us\". This follows the\n[ISO 3166 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) specification.",
+                "type": "string"
+              },
+              "postcode": {
+                "description": "Postal code.",
+                "type": "string"
+              },
+              "metadata": {
+                "description": "Address metadata fields of the feature.\n\nIncludes the short form country name, for example: \"us\". This follows the\n[ISO 3166 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) specification.",
+                "type": "object",
+                "properties": {
+                  "iso_3166_1": {
+                    "type": "string"
+                  }
+                },
+                "required": ["iso_3166_1"]
+              },
+              "place_name": {
+                "description": "A string representing the feature in the requested language, if specified, and its full result hierarchy.",
+                "type": "string"
+              },
+              "match_code": {
+                "description": "An object describing the level of confidence that the given response feature matches the address intended by the request query.\nIncludes boolean flags denoting matches for each address sub-component.",
+                "type": "object",
+                "properties": {
+                  "confidence": {
+                    "description": "A measure of confidence that the returned feature suggestion matches the intended address, based on the search text provided."
+                  },
+                  "exact_match": {
+                    "description": "True if the confidence value is \"exact\".",
+                    "type": "boolean"
+                  },
+                  "house_number": {
+                    "description": "True if the house number component was matched.",
+                    "type": "boolean"
+                  },
+                  "street": {
+                    "description": "True if the street component was matched.",
+                    "type": "boolean"
+                  },
+                  "postcode": {
+                    "description": "True if the postcode was matched.",
+                    "type": "boolean"
+                  },
+                  "place": {
+                    "description": "True if the place component was matched.",
+                    "type": "boolean"
+                  },
+                  "region": {
+                    "description": "True if the region component was matched.",
+                    "type": "boolean"
+                  },
+                  "locality": {
+                    "description": "True if the locality component was matched.",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "confidence",
+                  "exact_match",
+                  "house_number",
+                  "place",
+                  "postcode",
+                  "street"
+                ]
+              },
+              "action": {
+                "description": "Action block of the suggestion result.\ncontains id to execute retrieve",
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "required": ["id"]
+              }
+            },
+            "required": [
+              "action",
+              "description",
+              "feature_name",
+              "language",
+              "match_code",
+              "matching_name",
+              "metadata"
+            ]
+          }
+        },
+        "required": ["suggestion"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxCanRetrieveAddressResponse",
+      "description": "The response to a can retrieve an address request",
+      "source": "embedder",
+      "respondedToBy": null,
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "canRetrieveAddress": {
+            "type": "boolean"
+          }
+        },
+        "required": ["canRetrieveAddress"],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxRetrieveStaticMap",
+      "description": "Retrieve a static map",
+      "source": "block",
+      "respondedToBy": "mapboxRetrieveStaticMapResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "description": "Mapbox Static Maps API",
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "style_id": {
+            "type": "string"
+          },
+          "overlay": {
+            "type": "string"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "zoom": {
+            "type": "number"
+          },
+          "bbox": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "minItems": 4,
+                "maxItems": 4
+              },
+              {
+                "type": "array",
+                "items": [
+                  {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ],
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "lng": {
+                            "type": "number"
+                          },
+                          "lat": {
+                            "type": "number"
+                          }
+                        },
+                        "required": ["lat", "lng"]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "lon": {
+                            "type": "number"
+                          },
+                          "lat": {
+                            "type": "number"
+                          }
+                        },
+                        "required": ["lat", "lon"]
+                      }
+                    ]
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ],
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "lng": {
+                            "type": "number"
+                          },
+                          "lat": {
+                            "type": "number"
+                          }
+                        },
+                        "required": ["lat", "lng"]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "lon": {
+                            "type": "number"
+                          },
+                          "lat": {
+                            "type": "number"
+                          }
+                        },
+                        "required": ["lat", "lon"]
+                      }
+                    ]
+                  }
+                ],
+                "minItems": 2,
+                "maxItems": 2
+              }
+            ]
+          },
+          "auto": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "bearing": {
+            "type": "number"
+          },
+          "pitch": {
+            "type": "number"
+          },
+          "@2x": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "boolean"
+          },
+          "logo": {
+            "type": "boolean"
+          },
+          "before_layer": {
+            "type": "string"
+          },
+          "addlayer": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "background",
+                  "circle",
+                  "fill",
+                  "fill-extrusion",
+                  "heatmap",
+                  "hillshade",
+                  "line",
+                  "raster",
+                  "sky",
+                  "symbol"
+                ],
+                "type": "string"
+              },
+              "fill": {
+                "type": "string"
+              },
+              "line": {
+                "type": "string"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "circle": {
+                "type": "string"
+              },
+              "heatmap": {
+                "type": "string"
+              },
+              "fill-extrusion": {
+                "type": "string"
+              },
+              "raster": {
+                "type": "string"
+              },
+              "hillshade": {
+                "type": "string"
+              },
+              "background": {
+                "type": "string"
+              },
+              "sky": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "type"]
+          },
+          "setfilter": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "layer_id": {
+            "type": "string"
+          },
+          "padding": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "auto",
+          "bbox",
+          "height",
+          "lat",
+          "lon",
+          "overlay",
+          "style_id",
+          "username",
+          "width",
+          "zoom"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    },
+    {
+      "messageName": "mapboxRetrieveStaticMapResponse",
+      "description": "The response to a retrieve static map request",
+      "source": "embedder",
+      "respondedToBy": null,
+      "sentOnInitialization": false,
+      "data": {
+        "type": "string",
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "errorCodes": []
+    }
+  ]
+}
