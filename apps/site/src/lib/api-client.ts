@@ -37,8 +37,8 @@ import {
   ApiEntityTypeCreateResponse,
 } from "../pages/api/types/entity-type/create.api";
 import {
-  ApiEntityTypeByUriGetQuery,
-  ApiEntityTypeByUriResponse,
+  ApiEntityTypeByUrlGetQuery,
+  ApiEntityTypeByUrlResponse,
 } from "../pages/api/types/entity-type/get.api";
 import {
   ApiEntityTypeUpdateRequest,
@@ -53,8 +53,8 @@ import {
   ApiPropertyTypeCreateResponse,
 } from "../pages/api/types/property-type/create.api";
 import {
-  ApiPropertyTypeByUriGetQuery,
-  ApiPropertyTypeByUriResponse,
+  ApiPropertyTypeByUrlGetQuery,
+  ApiPropertyTypeByUrlResponse,
 } from "../pages/api/types/property-type/get.api";
 import {
   ApiPropertyTypeUpdateRequest,
@@ -173,8 +173,8 @@ export const apiClient = {
     apiClient.get<ApiAggregateEntityTypesResponse>(
       `types/entity-type/aggregate?latestOnly=${latestOnly}`,
     ),
-  getEntityTypeByUrl: ({ baseUrl, versionedUrl }: ApiEntityTypeByUriGetQuery) =>
-    apiClient.get<ApiEntityTypeByUriResponse>(
+  getEntityTypeByUrl: ({ baseUrl, versionedUrl }: ApiEntityTypeByUrlGetQuery) =>
+    apiClient.get<ApiEntityTypeByUrlResponse>(
       `types/entity-type/get?${
         baseUrl ? `baseUrl=${baseUrl}` : `versionedUrl=${versionedUrl}`
       }`,
@@ -196,8 +196,8 @@ export const apiClient = {
   getPropertyTypeByUrl: ({
     baseUrl,
     versionedUrl,
-  }: ApiPropertyTypeByUriGetQuery) =>
-    apiClient.get<ApiPropertyTypeByUriResponse>(
+  }: ApiPropertyTypeByUrlGetQuery) =>
+    apiClient.get<ApiPropertyTypeByUrlResponse>(
       `types/property-type/get?${
         baseUrl ? `baseUrl=${baseUrl}` : `versionedUrl=${versionedUrl}`
       }`,

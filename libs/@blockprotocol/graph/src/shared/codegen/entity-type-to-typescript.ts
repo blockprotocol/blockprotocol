@@ -122,23 +122,23 @@ const generateTypeNameFromSchema = (
  * If depth > 0, follows 'links' from the schema to include types for link entities and their possible destinations
  * @param schema – the schema to generate types for
  * @param depth – the depth to which the graph of _entity type_ schemas linked from this schema will be resolved
- * @param resolvedUrisToType – a map of already-resolved schemas to skip type generation for
+ * @param resolvedUrlsToType – a map of already-resolved schemas to skip type generation for
  * @param temporal – whether or not the generated code should support temporal versioning
  */
 const _jsonSchemaToTypeScript = async (
   schema: EntityType,
   depth: number,
-  resolvedUrisToType: UriToType,
+  resolvedUrlsToType: UriToType,
   temporal: boolean,
 ): Promise<CompiledType> => {
-  if (resolvedUrisToType[schema.$id]) {
-    return resolvedUrisToType[schema.$id]!;
+  if (resolvedUrlsToType[schema.$id]) {
+    return resolvedUrlsToType[schema.$id]!;
   }
 
   // if the cache is empty, this is the schema the external caller provided. we need to know to add boilerplate up top
-  const rootSchema = Object.keys(resolvedUrisToType).length === 0;
+  const rootSchema = Object.keys(resolvedUrlsToType).length === 0;
 
-  const typeName = generateTypeNameFromSchema(schema, resolvedUrisToType);
+  const typeName = generateTypeNameFromSchema(schema, resolvedUrlsToType);
 
   if (!typeName) {
     throw new Error("Schema is missing a title");
@@ -200,7 +200,7 @@ const _jsonSchemaToTypeScript = async (
 
   // add the compiled type to our map of already-resolved types in case it's encountered again when following links
   // eslint-disable-next-line no-param-reassign -- this is intentionally mutated when this function is called
-  resolvedUrisToType[schema.$id] = compiledType;
+  resolvedUrlsToType[schema.$id] = compiledType;
 
   if (depth === 0) {
     return compiledType;
@@ -214,10 +214,10 @@ const _jsonSchemaToTypeScript = async (
   for (const [linkEntityTypeId, destinationSchema] of typedEntries(
     schema.links ?? {},
   )) {
-    const retrieveOrCompileSchemaFromUri = async (
+    const retrieveOrCompileSchemaFromUrl = async (
       url: VersionedUrl,
     ): Promise<CompiledType> => {
-      const cachedType = resolvedUrisToType[url];
+      const cachedType = resolvedUrlsToType[url];
       if (cachedType) {
         return {
           typeName: cachedType.typeName,
@@ -228,18 +228,18 @@ const _jsonSchemaToTypeScript = async (
       return _jsonSchemaToTypeScript(
         typeSchema,
         depth - 1,
-        resolvedUrisToType,
+        resolvedUrlsToType,
         temporal,
       );
     };
 
     // get the schema for the linkEntity and possible rightEntities for this link, from this entity
     const [linkEntityType, ...rightEntityTypes] = await Promise.all([
-      retrieveOrCompileSchemaFromUri(linkEntityTypeId),
+      retrieveOrCompileSchemaFromUrl(linkEntityTypeId),
       ...("oneOf" in destinationSchema.items
         ? destinationSchema.items.oneOf
         : []
-      ).map((option) => retrieveOrCompileSchemaFromUri(option.$ref)),
+      ).map((option) => retrieveOrCompileSchemaFromUrl(option.$ref)),
     ]);
 
     // generate the appropriate type, a narrower version of the type e.g. getOutgoingLinkAndTargetEntities returns

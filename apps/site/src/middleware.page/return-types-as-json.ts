@@ -9,8 +9,8 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { FRONTEND_URL } from "../lib/config";
-import { ApiEntityTypeByUriResponse } from "../pages/api/types/entity-type/get.api";
-import { ApiPropertyTypeByUriResponse } from "../pages/api/types/property-type/get.api";
+import { ApiEntityTypeByUrlResponse } from "../pages/api/types/entity-type/get.api";
+import { ApiPropertyTypeByUrlResponse } from "../pages/api/types/property-type/get.api";
 import { hardcodedTypes } from "./return-types-as-json/hardcoded-types";
 
 const generateErrorResponse = (
@@ -29,11 +29,11 @@ const generateJsonResponse = (object: DataType | EntityType | PropertyType) =>
     headers: { "content-type": "application/json" },
   });
 
-export const versionedTypeUriRegExp =
+export const versionedTypeUrlRegExp =
   /types\/(entity-type|data-type|property-type)\/.+\/v\/\d+$/;
 
 const validateVersionedUrl = (url: string): url is VersionedUrl =>
-  !!url.match(versionedTypeUriRegExp);
+  !!url.match(versionedTypeUrlRegExp);
 
 const getTypeByVersionedUrl = (
   versionedUrl: VersionedUrl,
@@ -44,16 +44,16 @@ const getTypeByVersionedUrl = (
   ).then(
     (resp) =>
       resp.json() as Promise<
-        ApiPropertyTypeByUriResponse | ApiEntityTypeByUriResponse
+        ApiPropertyTypeByUrlResponse | ApiEntityTypeByUrlResponse
       >,
   );
 
 export const returnTypeAsJson = async (request: NextRequest) => {
   const { url } = request;
 
-  const isUriValid = validateVersionedUrl(url);
+  const isUrlValid = validateVersionedUrl(url);
 
-  if (!isUriValid) {
+  if (!isUrlValid) {
     return generateErrorResponse(
       400,
       "Malformed URL - expected to be in format @[workspace]/types/(entity-type|data-type|property-type)/[slug]/v/[version]",
@@ -64,7 +64,7 @@ export const returnTypeAsJson = async (request: NextRequest) => {
 
   const productionUrl = url.replace(origin, "https://blockprotocol.org");
 
-  const kind = url.match(versionedTypeUriRegExp)?.[1];
+  const kind = url.match(versionedTypeUrlRegExp)?.[1];
 
   let type: DataType | PropertyType | EntityType =
     hardcodedTypes[productionUrl as keyof typeof hardcodedTypes];

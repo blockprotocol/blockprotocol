@@ -11,7 +11,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { apiClient } from "../../../../../lib/api-client";
-import { generateOntologyUri } from "../../../../shared/schema";
+import { generateOntologyUrl } from "../../../../shared/schema";
 
 type EntityTypeFormProps = {
   author: `@${string}`;
@@ -197,7 +197,7 @@ export const EntityTypeForm = ({
           return { data: updatedData.propertyType };
         },
         validateTitle: async ({ kind, title }) => {
-          const { versionedUrl } = generateOntologyUri({
+          const { versionedUrl } = generateOntologyUrl({
             author,
             kind: kind === "entity-type" ? "entityType" : "propertyType",
             title,

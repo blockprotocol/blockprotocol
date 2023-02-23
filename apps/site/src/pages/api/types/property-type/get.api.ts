@@ -5,19 +5,19 @@ import { createBaseHandler } from "../../../../lib/api/handler/base-handler";
 import { formatErrors } from "../../../../util/api";
 import { getPropertyType } from "./shared/db";
 
-export type ApiPropertyTypeByUriGetQuery = {
+export type ApiPropertyTypeByUrlGetQuery = {
   baseUrl?: BaseUrl;
   versionedUrl?: VersionedUrl;
 };
 
-export type ApiPropertyTypeByUriResponse = {
+export type ApiPropertyTypeByUrlResponse = {
   propertyType: PropertyTypeWithMetadata;
 };
 
-export default createBaseHandler<null, ApiPropertyTypeByUriResponse>().get(
+export default createBaseHandler<null, ApiPropertyTypeByUrlResponse>().get(
   async (req, res) => {
     const { db } = req;
-    const { baseUrl, versionedUrl } = req.query as ApiPropertyTypeByUriGetQuery;
+    const { baseUrl, versionedUrl } = req.query as ApiPropertyTypeByUrlGetQuery;
 
     const dbRecord = await getPropertyType(db, { baseUrl, versionedUrl });
 

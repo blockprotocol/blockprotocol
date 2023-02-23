@@ -1,6 +1,6 @@
 import { EntityType, EntityTypeWithMetadata } from "@blockprotocol/graph";
 
-import { generateOntologyUri } from "../../../../shared/schema";
+import { generateOntologyUrl } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";
 
 export const generateEntityTypeWithMetadata = (data: {
@@ -16,7 +16,7 @@ export const generateEntityTypeWithMetadata = (data: {
 
   const kind = "entityType";
 
-  const { baseUrl, versionedUrl } = generateOntologyUri({
+  const { baseUrl, versionedUrl } = generateOntologyUrl({
     author,
     kind,
     title: incompleteSchema.title,

@@ -1,7 +1,7 @@
 import { PropertyTypeWithMetadata } from "@blockprotocol/graph";
 import { PropertyType } from "@blockprotocol/type-system";
 
-import { generateOntologyUri } from "../../../../shared/schema";
+import { generateOntologyUrl } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";
 
 export const generatePropertyTypeWithMetadata = (data: {
@@ -17,7 +17,7 @@ export const generatePropertyTypeWithMetadata = (data: {
 
   const kind = "propertyType";
 
-  const { baseUrl, versionedUrl } = generateOntologyUri({
+  const { baseUrl, versionedUrl } = generateOntologyUrl({
     author,
     kind,
     title: incompleteSchema.title,

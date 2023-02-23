@@ -5,7 +5,7 @@ import { FRONTEND_URL } from "../../lib/config";
 
 type OntologyKind = "entityType" | "propertyType";
 
-export const generateOntologyUri = ({
+export const generateOntologyUrl = ({
   author,
   kind,
   title,

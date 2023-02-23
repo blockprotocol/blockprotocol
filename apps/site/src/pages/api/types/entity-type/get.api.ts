@@ -5,17 +5,17 @@ import { createBaseHandler } from "../../../../lib/api/handler/base-handler";
 import { formatErrors } from "../../../../util/api";
 import { getEntityType } from "./shared/db";
 
-export type ApiEntityTypeByUriGetQuery = {
+export type ApiEntityTypeByUrlGetQuery = {
   baseUrl?: BaseUrl;
   versionedUrl?: VersionedUrl;
 };
 
-export type ApiEntityTypeByUriResponse = { entityType: EntityTypeWithMetadata };
+export type ApiEntityTypeByUrlResponse = { entityType: EntityTypeWithMetadata };
 
-export default createBaseHandler<null, ApiEntityTypeByUriResponse>().get(
+export default createBaseHandler<null, ApiEntityTypeByUrlResponse>().get(
   async (req, res) => {
     const { db } = req;
-    const { baseUrl, versionedUrl } = req.query as ApiEntityTypeByUriGetQuery;
+    const { baseUrl, versionedUrl } = req.query as ApiEntityTypeByUrlGetQuery;
 
     const dbRecord = await getEntityType(db, { baseUrl, versionedUrl });
 

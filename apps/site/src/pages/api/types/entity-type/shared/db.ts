@@ -7,7 +7,7 @@ import {
 import { Db, ObjectId } from "mongodb";
 
 import { User } from "../../../../../lib/api/model/user.model";
-import { generateOntologyUri } from "../../../../shared/schema";
+import { generateOntologyUrl } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";
 import { generateEntityTypeWithMetadata } from "./schema";
 
@@ -106,7 +106,7 @@ export const createEntityType = async (
 ): Promise<DbEntityType> => {
   const { schema, user } = params;
 
-  const { versionedUrl } = generateOntologyUri({
+  const { versionedUrl } = generateOntologyUrl({
     author: `@${user.shortname!}`,
     kind: "entityType",
     title: schema.title,

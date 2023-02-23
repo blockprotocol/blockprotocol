@@ -91,11 +91,11 @@ const EntityTypePage: NextPage = () => {
 
   // Handle fetching of types on initial load (subsequent updates in form submission)
   useEffect(() => {
-    const pageUri = window.location.href;
+    const pageUrl = window.location.href;
 
     if (
       entityType?.metadata.recordId.baseUrl &&
-      pageUri.startsWith(entityType.metadata.recordId.baseUrl)
+      pageUrl.startsWith(entityType.metadata.recordId.baseUrl)
     ) {
       // We don't need to fetch again unless we've switched types completely
       return;
@@ -103,13 +103,13 @@ const EntityTypePage: NextPage = () => {
 
     const initialEntityTypeFetch = async () => {
       const [requestedEntityTypeVersion, latestEntityTypeVersion] =
-        await fetchEntityType(pageUri);
+        await fetchEntityType(pageUrl);
 
       if (!requestedEntityTypeVersion && latestEntityTypeVersion) {
         // eslint-disable-next-line no-console -- intentional debugging logging
         console.warn(
           `Requested version ${extractBaseUrl(
-            pageUri as VersionedUrl,
+            pageUrl as VersionedUrl,
           )} not found – redirecting to latest.`,
         );
         setEntityType({
@@ -144,7 +144,7 @@ const EntityTypePage: NextPage = () => {
   const latestVersionNumber = latestVersion.metadata.recordId.version;
 
   const isLatest = currentVersionNumber === latestVersionNumber;
-  const latestVersionUri = entityType.schema.$id.replace(
+  const latestVersionUrl = entityType.schema.$id.replace(
     /\d$/,
     latestVersionNumber.toString(),
   );
@@ -195,7 +195,7 @@ const EntityTypePage: NextPage = () => {
                 </Typography>
                 {!isLatest && (
                   <Link
-                    href={latestVersionUri}
+                    href={latestVersionUrl}
                     onClick={(event) => {
                       event.preventDefault();
                       setEntityType({
