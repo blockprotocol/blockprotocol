@@ -579,6 +579,7 @@ export const PaidTiersSection: FunctionComponent<{
           flexWrap: "wrap",
           justifyContent: "space-between",
           mb: 2.5,
+          rowGap: 1,
         }}
       >
         <Typography
