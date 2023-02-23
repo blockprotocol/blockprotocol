@@ -9,7 +9,7 @@ pub use error::ParsePropertyTypeError;
 
 use crate::{
     url::{BaseUrl, VersionedUrl},
-    Array, DataTypeReference, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
+    Array, DataTypeReference, Object, OneOf, ValidateUrl, ValidationError, ValueOrArray,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -102,7 +102,7 @@ impl From<&VersionedUrl> for &PropertyTypeReference {
     }
 }
 
-impl ValidateUri for PropertyTypeReference {
+impl ValidateUrl for PropertyTypeReference {
     fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
         if base_url == &self.uri().base_url {
             Ok(())

@@ -1,7 +1,7 @@
 pub(crate) mod error;
 pub(in crate::ontology) mod repr;
 
-use crate::{url::BaseUrl, ValidateUri, ValidationError};
+use crate::{url::BaseUrl, ValidateUrl, ValidationError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Array<T> {
@@ -42,7 +42,7 @@ pub enum ValueOrArray<T> {
     Array(Array<T>),
 }
 
-impl<T: ValidateUri> ValidateUri for ValueOrArray<T> {
+impl<T: ValidateUrl> ValidateUrl for ValueOrArray<T> {
     fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
         match self {
             Self::Value(value) => value.validate_uri(base_url),

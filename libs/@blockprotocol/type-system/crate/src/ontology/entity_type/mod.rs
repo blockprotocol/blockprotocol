@@ -10,7 +10,7 @@ pub use error::ParseEntityTypeError;
 
 use crate::{
     url::{BaseUrl, VersionedUrl},
-    AllOf, Links, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, ValidateUri,
+    AllOf, Links, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, ValidateUrl,
     ValidationError, ValueOrArray,
 };
 
@@ -145,7 +145,7 @@ impl From<&VersionedUrl> for &EntityTypeReference {
     }
 }
 
-impl ValidateUri for EntityTypeReference {
+impl ValidateUrl for EntityTypeReference {
     fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
         if base_url == &self.uri().base_url {
             Ok(())

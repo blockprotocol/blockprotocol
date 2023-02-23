@@ -9,7 +9,7 @@ pub use error::ParseDataTypeError;
 
 use crate::{
     url::{BaseUrl, VersionedUrl},
-    ValidateUri, ValidationError,
+    ValidateUrl, ValidationError,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -100,7 +100,7 @@ impl From<&VersionedUrl> for &DataTypeReference {
     }
 }
 
-impl ValidateUri for DataTypeReference {
+impl ValidateUrl for DataTypeReference {
     fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
         if base_url == &self.url().base_url {
             Ok(())

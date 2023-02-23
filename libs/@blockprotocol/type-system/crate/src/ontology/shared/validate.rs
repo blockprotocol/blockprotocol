@@ -71,7 +71,7 @@ impl Display for ValidationError {
 
 impl Error for ValidationError {}
 
-pub trait ValidateUri {
+pub trait ValidateUrl {
     /// TODO: DOC
     ///
     /// # Errors

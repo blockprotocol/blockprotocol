@@ -9,7 +9,7 @@ pub use error::ParseLinksError;
 
 use crate::{
     url::{BaseUrl, VersionedUrl},
-    Array, EntityTypeReference, OneOf, ValidateUri, ValidationError,
+    Array, EntityTypeReference, OneOf, ValidateUrl, ValidationError,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -63,7 +63,7 @@ impl<T> MaybeOrderedArray<T> {
     }
 }
 
-impl<T: ValidateUri> ValidateUri for MaybeOrderedArray<T> {
+impl<T: ValidateUrl> ValidateUrl for MaybeOrderedArray<T> {
     fn validate_uri(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
         self.array().items().validate_uri(base_url)
     }

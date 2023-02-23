@@ -3,7 +3,7 @@ pub(in crate::ontology) mod repr;
 
 use std::collections::HashMap;
 
-use crate::{url::BaseUrl, ValidateUri, ValidationError};
+use crate::{url::BaseUrl, ValidateUrl, ValidationError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Object<T, const MIN: usize = 0> {
@@ -11,7 +11,7 @@ pub struct Object<T, const MIN: usize = 0> {
     required: Vec<BaseUrl>,
 }
 
-impl<T: ValidateUri, const MIN: usize> Object<T, MIN> {
+impl<T: ValidateUrl, const MIN: usize> Object<T, MIN> {
     /// Creates a new `Object` without validating.
     #[must_use]
     pub fn new_unchecked(properties: HashMap<BaseUrl, T>, required: Vec<BaseUrl>) -> Self {
