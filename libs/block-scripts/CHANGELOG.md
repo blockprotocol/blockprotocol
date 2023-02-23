@@ -1,17 +1,5 @@
 # block-scripts
 
-## 0.1.0-canary-20230223145025
-
-### Minor Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`9cae688a`](https://github.com/blockprotocol/blockprotocol/commit/9cae688ac44d916fd92cc531f3aec67d7c056f49) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking API changes for 0.3 specification
-
-### Patch Changes
-
-- Updated dependencies [[`9cae688a`](https://github.com/blockprotocol/blockprotocol/commit/9cae688ac44d916fd92cc531f3aec67d7c056f49), [`9cae688a`](https://github.com/blockprotocol/blockprotocol/commit/9cae688ac44d916fd92cc531f3aec67d7c056f49), [`9cae688a`](https://github.com/blockprotocol/blockprotocol/commit/9cae688ac44d916fd92cc531f3aec67d7c056f49)]:
-  - @blockprotocol/type-system@0.1.0-canary-20230223145025
-  - @blockprotocol/graph@0.1.0-canary-20230223145025
-
 ## 0.0.19
 
 ### Patch Changes
