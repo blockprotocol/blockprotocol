@@ -1,5 +1,15 @@
 # @blockprotocol/type-system
 
+## 0.1.0-canary-20230223145025
+
+### Minor Changes
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`9cae688a`](https://github.com/blockprotocol/blockprotocol/commit/9cae688ac44d916fd92cc531f3aec67d7c056f49) Thanks [@CiaranMn](https://github.com/CiaranMn)! - rename block protocol 'services' to 'modules'
+
+### Patch Changes
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`9cae688a`](https://github.com/blockprotocol/blockprotocol/commit/9cae688ac44d916fd92cc531f3aec67d7c056f49) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add stdlib functions for interacting with subgraph. reorganize types
+
 ## 0.0.4
 
 ### Patch Changes

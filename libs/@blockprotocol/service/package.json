@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/service",
-  "version": "0.0.1-canary.2",
+  "version": "0.0.1-canary-20230223145025",
   "description": "Implementation of the Block Protocol service module specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
@@ -53,7 +53,7 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.14"
+    "@blockprotocol/core": "0.1.0-canary-20230223145025"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
