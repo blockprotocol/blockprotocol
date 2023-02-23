@@ -43,7 +43,7 @@ export const PageLayout: FunctionComponent<PageLayoutProps> = ({
           shouldDisplay({ pathname, asPath }) &&
           !(hideWhenSignedIn && signedIn),
       ),
-    [pathname, asPath],
+    [pathname, asPath, signedIn],
   );
 
   return (
