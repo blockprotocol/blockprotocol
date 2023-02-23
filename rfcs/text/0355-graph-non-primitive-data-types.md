@@ -101,6 +101,8 @@ Valid values include: `"a"`, `"b"`, `"c"`, `"1"`, `"2"`, `"3"`, and so forth.
 
 With the constraints defined above, we can define how non-primitive data types can expand their value spaces using composition.
 
+> 💭 Note that all ways of creating _new_ data types involve using and further modifying at least one other data type. A nice consequence of this is that all data types are indirectly (or directly) related to top-level primitive data types.
+
 ### Uniting value-spaces
 
 This kind of composition allows data types to be combined into "union" types which express an **or** relationship. Conceptually the value-spaces of the unioned data types are combined into a single value-space.
@@ -135,8 +137,6 @@ It is possible to apply these features of non-primitive data types in combinatio
 `Positive Integer List or Text` is a data type where the values are _either_ a list of instances of the `Number` data type **or** an instance of the `Text` data type
 
 Valid values include: `[]`, `[1, 2]`, `[1, 2, 3]`, `"Hello"`, and so forth.
-
-> 💭 Note that all ways of creating _new_ data types involve using and further modifying at least one other data type. A nice consequence of this is that all data types are indirectly (or directly) related to top-level primitive data types.
 
 # Reference-level explanation
 
