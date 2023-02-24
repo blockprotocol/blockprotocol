@@ -1,3 +1,4 @@
+// GeoJSON types are vendored in from @types/geojson as there were errors in the bundled version of this package when publishing
 /**
  * The value values for the "type" property of GeoJSON Objects.
  * https://tools.ietf.org/html/rfc7946#section-1.4
