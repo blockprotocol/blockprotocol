@@ -18,7 +18,7 @@ The graph module describes how **ontology types** and **entities** can be create
 
 **Entity type:** an ontology type that defines the structure of an entity, the type of link entities it may be connected to and the type of entities on the other end of those links. An entity type references other entity types and property types.
 
-**Link Entity type:** an entity type which has a special marker to say it constrains a link entity.
+**Link Entity type:** an entity type which has a special marker to say it defines the structure of a link entity.
 
 **Property type:** an ontology type that defines the structure of an individual property within an entity. A property type references other property types and data types.
 
@@ -200,7 +200,7 @@ When embedding applications pass entities to blocks, whether the **block entity*
   - MUST contain a field `properties` if the block has defined any `required` properties in its schema, and otherwise MAY be omitted. If present, it:
     - MUST be an object
     - MUST conform to the constraints described by the entity type of the entity
-  - if the entity is a link entity it MUST contain a field `linkData` (and MUST not otherwise), an object which:
+  - if the entity is a link entity it MUST (and if it is not, MUST NOT) contain a field `linkData`, an object which:
     - MUST contain a field `leftEntityId` identifying the left entity of the link, which MUST be a string
     - MUST contain a field `rightEntityId` identifying the right entity of the link, which MUST be a string
     - MAY contain a field `leftToRightOrder` used to order this link entity against other link entities of the same type with the same `leftEntityId`, which MUST be a non-negative integer
@@ -216,7 +216,7 @@ i.e. any entity MUST conform to the following schema:
 
 Blocks must pass an `entityId` when making requests in respect of any entity.
 
-Embedding applications should ensure this is stable and unique for any given entity.
+Embedding applications should ensure that the `entityId` is stable and unique for any given entity, across any versions of it that may exist.
 
 #### <Hidden>Entity Identification </Hidden>Specification
 
@@ -233,7 +233,6 @@ Embedding applications MUST provide `entityId` for each entity it supplies the b
 Many of the values returned by embedding applications for messages of the graph module include a **subgraph**.
 
 A subgraph is a data structure which contains elements of the graph, **vertices**, and **edges** which is a precomputed lookup set of the relationships between elements of the graph.
-Consumers can pass this object to the graph module package's standard library to benefit from implementations of common operations such as getting entities linked to a particular entity.
 
 ### <Hidden>Subgraph </Hidden>Structure
 
@@ -277,13 +276,13 @@ The `vertices` field of a **subgraph** is a JSON object where:
   - the keys are `revisionId`s - a unique identifier for an instance of a specific **entity** within a subgraph, and MUST be a string. This is a forward-facing field which currently doesn't serve a functional purpose and as such can be any string.
   - the values are `Vertex` objects
 
-> **Note**: The `revisionId` will be used to identify different revisions of the same element within a single subgraph, this could be multiple versions of the same ontology type, or multiple revisions of an entity in a datastore that supports versioning
+> **Note**: The `revisionId` will be used to identify different revisions of the same element within a single subgraph. This could be multiple versions of the same ontology type, or multiple revisions of an entity in an application that supports versioning.
 
 #### <Hidden>Subgraph Structure</Hidden> Roots
 
 The **roots** of a subgraph are distinguished elements which were the starting points for traversal of **edges** (up to depths defined by the **graph resolve depths**).
 
-The `roots` _field_ of the subgraph is an array of **Vertex IDs** which identify the roots, and are JSON objects which satisfies the following schema:
+The `roots` _field_ of the subgraph is an array of **Vertex IDs** which identify the roots, and are JSON objects which satisfy the following schema:
 
 ```json
 {
@@ -303,7 +302,7 @@ The `roots` _field_ of the subgraph is an array of **Vertex IDs** which identify
 The `baseId` field MUST correspond to the key of the `vertices` object which is the parent of the object that contains the vertex of the root.
 The `revisionId` field MUST correspond to the key of the object of `vertices[baseId]` which contains the vertex of the root.
 
-That is to say, `subgraph.vertices[baseId][revisionId]` MUST be the vertex of the root.
+That is to say, `subgraph.vertices[baseId][revisionId]` MUST be the vertex of the root in question.
 
 #### <Hidden>Subgraph Structure</Hidden> Edges
 
