@@ -180,9 +180,9 @@ Embedding applications MAY choose to display their own UI to allow users to set 
 
 ## Entity definition
 
-### Structure
+### <Hidden>Entity </Hidden>Structure
 
-#### <Hidden>Structure </Hidden>Summary
+#### <Hidden>Entity Structure </Hidden>Summary
 
 An entity is a combination of **metadata** and **properties**.
 
@@ -190,7 +190,7 @@ The **metadata** is a minimum collection of fields that are fixed and specified 
 
 The **properties** is a JSON object which satisfies the constraints of the entity’s **entity type**.
 
-#### <Hidden>Structure </Hidden>Specification
+#### <Hidden>Entity Structure </Hidden>Specification
 
 ##### Entities
 
@@ -211,21 +211,21 @@ When embedding applications pass entities to blocks, whether the **block entity*
     - MUST contain a field `leftEntityId` identifying the left entity of the link, which MUST be a string
     - MUST contain a field `rightEntityId` identifying the right entity of the link, which MUST be a string
     - MAY contain a field `leftToRightOrder` used to order this link entity against other link entities of the same type with the same `leftEntityId`, which MUST be a non-negative integer
-     - MAY contain a field `rightToLeftOrder` used to order this link entity against other link entities of the same type with the same `rightEntityId`, which MUST be a non-negative integer
+    - MAY contain a field `rightToLeftOrder` used to order this link entity against other link entities of the same type with the same `rightEntityId`, which MUST be a non-negative integer
 
 i.e. any entity MUST conform to the following schema:
 
-<EntityMetaSchema/>
+<EntityMetaSchema />
 
-### Identification
+### <Hidden>Entity </Hidden>Identification
 
-#### <Hidden>Identification </Hidden>Summary
+#### <Hidden>Entity Identification </Hidden>Summary
 
 Blocks must pass an `entityId` when making requests in respect of any entity.
 
 Embedding applications should ensure this is stable and unique for any given entity.
 
-#### <Hidden>Identification </Hidden>Specification
+#### <Hidden>Entity Identification </Hidden>Specification
 
 Blocks MUST provide `entityId` when identifying a particular entity for the purpose of **messages** under the graph module.
 
@@ -235,7 +235,224 @@ Embedding applications MUST provide `entityId` for each entity it supplies the b
 
 ## Subgraph Definition
 
+#### <Hidden>Subgraph </Hidden>Summary
 
+Many of the values returned by embedding applications for messages of the graph module include a **subgraph**.
+
+A subgraph is a data structure which contains elements of the graph, **vertices**, and **edges** which is a precomputed lookup set of the relationships between elements of the graph.
+Consumers can pass this object to the graph module package's standard library to benefit from implementations of common operations such as getting entities linked to a particular entity.
+
+#### <Hidden>Subgraph </Hidden>Structure
+
+A **subgraph** is a JSON object with the following fields, each described in detail below:
+
+- `roots`
+- `vertices`
+- `edges`
+- `depths`
+
+##### <Hidden>Subgraph Structure</Hidden> Vertices
+
+###### <Hidden>Subgraph Structure Vertices</Hidden> Vertex
+
+A `Vertex` is a JSON object which satisfies the following schema:
+
+```json5
+{
+  "type": "object",
+  "properties": {
+    "kind": {
+      "oneOf": [
+        "entity"
+      ]
+    },
+    "inner": {
+      "$comment": "the entity",
+      "type": "object"
+    }
+  },
+  "required": [
+    "kind",
+    "inner"
+  ]
+}
+```
+
+> **Note**: The `kind` field is used to allow for future expansion of the subgraph format to include other kinds of vertices, such as ontology types.
+
+
+###### <Hidden>Subgraph Structure Vertices</Hidden> The `Vertices` object
+
+The `vertices` field of a **subgraph** is a JSON object where:
+- the keys are `entityId`s
+- the values are a JSON object where:
+  - the keys are `revisionId`s - a unique identifier for an instance of a specific **entity** within a subgraph, and MUST be a string. This is a forward-facing field which currently doesn't serve a functional purpose and as such can be any string.
+  - the values are `Vertex` objects
+
+> **Note**: The `revisionId` will be used to identify different revisions of the same element within a single subgraph, this could be multiple versions of the same ontology type, or multiple revisions of an entity in a datastore that supports versioning
+
+##### <Hidden>Subgraph Structure</Hidden> Roots
+
+The **roots** of a subgraph are distinguished elements which were the starting points for traversal of **edges** (up to depths defined by the **graph resolve depths**).
+
+The `roots` _field_ of the subgraph is an array of **Vertex IDs** which identify the roots, and are JSON objects which satisfies the following schema:
+
+```json5
+{
+  "type": "object",
+  "properties": {
+    "baseId": {
+      "type": "string"
+    },
+    "revisionId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "baseId",
+    "revisionId"
+  ]
+}
+```
+
+The `baseId` field MUST correspond to the key of the `vertices` object which is the parent of the object that contains the vertex of the root.
+The `revisionId` field MUST correspond to the key of the object of `vertices[baseId]` which contains the vertex of the root.
+
+That is to say, `subgraph.vertices[baseId][revisionId]` MUST be the vertex of the root.
+
+##### <Hidden>Subgraph Structure</Hidden> Edges
+
+###### <Hidden>Subgraph Structure Vertices</Hidden> 'Outward' Edge
+
+An **outward edge** is a partial definition of an edge between two vertices, which defines the edge-variant and one of the endpoints of the edge.
+When used in the context of the `Edges` object, it fully qualifies the definition of a `leftEndpoint - edge -> rightEndpoint`
+
+It's made up of a trio of information:
+- `reversed`
+- `kind` the kind of edge, which is one of:
+  - `HAS_LEFT_ENTITY`
+  - `HAS_RIGHT_ENTITY`
+- `rightEndpoint` the `entityId` of the right endpoint of the edge
+
+The fields lead to the following permutations:
+
+**Entity has outgoing link** (the entity on the left endpoint has an outgoing link entity)
+```json
+{
+    "reversed": true,
+    "kind": "HAS_LEFT_ENTITY",
+    "rightEndpoint": "Some Entity Id"
+}
+```
+
+**Entity has incoming link** (the entity on the left endpoint has an incoming link entity)
+```json
+{
+    "reversed": true,
+    "kind": "HAS_RIGHT_ENTITY",
+    "rightEndpoint": "Some Entity Id"
+}
+```
+
+**Link Entity has left entity** (the link entity on the left endpoint has a left entity)
+```json
+{
+    "reversed": false,
+    "kind": "HAS_LEFT_ENTITY",
+    "rightEndpoint": "Some Entity Id"
+}
+```
+
+**Link Entity has right entity** (the link entity on the left endpoint has a right entity)
+```json
+{
+    "reversed": false,
+    "kind": "HAS_RIGHT_ENTITY",
+    "rightEndpoint": "Some Entity Id"
+}
+```
+
+Specifically an `OutwardEdge` is a JSON object which satisfies the following schema:
+
+```json5
+{
+  "type": "object",
+  "properties": {
+    "kind": {
+      "oneOf": [
+        "HAS_LEFT_ENTITY",
+        "HAS_RIGHT_ENTITY"
+      ]
+    },
+    "reversed": {
+      "type": "boolean"
+    },
+    "rightEndpoint": {
+      "$comment": "The entity ID of the right endpoint of this edge",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "reversed",
+    "rightEndpoint"
+  ]
+}
+```
+
+###### <Hidden>Subgraph Structure Vertices</Hidden> The `Edges` object
+
+The `edges` field of a **subgraph** is a JSON object where:
+- the keys are `entityId`s
+- the values are a JSON object where:
+  - the keys identify the point at which the edge was created, and MUST be strings - This is a forward-facing field which currently doesn't serve a functional purpose and as such can be any string.
+  - the values are an array of `OutwardEdge` objects of the edges that have an endpoint at the entity associated with the `entityId`.
+
+##### <Hidden>Subgraph Structure</Hidden> Resolve Depths
+
+A **subgraph** is constructed by exploring the datastore along **edges** from a set of **elements**.
+This traversal is limited by a set of **resolve depths** which constrain the depth of the query.
+
+The `resolveDepths` field of the subgraph is a JSON object which:
+- MUST contain key `hasLeftEntity`
+- MUST contain key `hasRightEntity`
+- the values of `hasLeftEntity` and `hasRightEntity` MUST be a JSON object which:
+  - MUST contain the key `incoming` and the value MUST be an integer between 0 and 255, which defines the number of incoming edges to explore of that edge kind
+  - MUST contain the key `outgoing` and the value MUST be an integer between 0 and 255, which defines the number of outgoing edges to explore of that edge kind
+
+While traversing, the depths are decremented according to the following pseudo-code:
+
+```js
+export const traverseElement = ({
+  datastore,
+  element,
+  currentTraversalDepths,
+}) => {
+  // handle element
+
+  for (const [edgeKind, depthsPerDirection] of currentTraversalDepths) {
+    for (const [direction, depth] of depthsPerDirection) {
+      if (depth < 1) {
+        continue;
+      }
+
+      for (const neighborVertex of getNeighbors(element, edgeKind, direction)) {
+        traverseElement({
+          datastore,
+          neighborVertex,
+          currentTraversalDepths: {
+            ...currentTraversalDepths,
+            [edgeKind]: {
+              ...currentTraversalDepths[edgeKind],
+              [direction]: depth - 1
+            }
+          }
+        });
+      }
+    }
+  }
+};
+```
 
 ## Messages
 
