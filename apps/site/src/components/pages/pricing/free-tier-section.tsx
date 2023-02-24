@@ -4,8 +4,10 @@ import {
   faBoxOpen,
   faCheck,
   faCode,
+  faFire,
   faInfinity,
   faUser,
+  faWandMagicSparkles,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Paper, Stack, Typography } from "@mui/material";
@@ -249,6 +251,15 @@ export const FreeTierSection: FunctionComponent<{
                   </>
                 ),
               },
+              {
+                icon: faWandMagicSparkles,
+                text: (
+                  <>
+                    <strong>Free credits</strong> for use of OpenAI GPT-3,
+                    Mapbox and more
+                  </>
+                ),
+              },
             ]}
             signedIn={signedIn}
           />
@@ -315,6 +326,16 @@ export const FreeTierSection: FunctionComponent<{
                 text: (
                   <>
                     <strong>Unlimited pageviews</strong> served to your users
+                  </>
+                ),
+              },
+              {
+                icon: faFire,
+                text: (
+                  <>
+                    <strong>Extend your app</strong> with powerful blocks and
+                    third-party services, with no marginal configuration
+                    overheads
                   </>
                 ),
               },
