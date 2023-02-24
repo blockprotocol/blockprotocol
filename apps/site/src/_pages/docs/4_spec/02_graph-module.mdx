@@ -193,8 +193,8 @@ When embedding applications pass entities to blocks, whether the **block entity*
 
   - MUST contain a field `metadata`, an object which:
   - MUST contain a field `recordId`, an object which:
-    - MUST contain a field `entityId` identifying the entity, which MUST be a string.
-    - MUST contain a field `editionId` which identifies the specific _edition_ of the entity, which MUST be a string, and MUST be unique for each edition of an entity for datastores that have versioning for their data.
+    - MUST contain a field `entityId` uniquely identifying the entity in the application, which MUST be a string.
+    - MUST contain a field `editionId` which identifies the specific _edition_ of the entity, which MUST be a string, and MUST be unique for each edition of an entity for applications that have versioning for their data.
   - MUST contain an `entityTypeId` identifying the entity type the entity belongs to, which MUST be a string.
 
   - MUST contain a field `properties` if the block has defined any `required` properties in its schema, and otherwise MAY be omitted. If present, it:
