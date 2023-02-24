@@ -20,7 +20,7 @@ const settingsPanels = [
     panel: <BillingSettingsPanel />,
   },
   {
-    title: "Api Keys",
+    title: "API Keys",
     /**
      * @todo: rename this to `api-keys` when the billing page can be deleted.
      */
