@@ -30,7 +30,7 @@
           "properties"
         ]
       },
-      "errorCodes": ["NOT_IMPLEMENTED"]
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "createEntityResponse",
@@ -41,7 +41,7 @@
       "data": {
         "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_IMPLEMENTED"]
+      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "updateEntity",
@@ -78,7 +78,7 @@
           "properties"
         ]
       },
-      "errorCodes": ["NOT_IMPLEMENTED"]
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "updateEntityResponse",
@@ -89,7 +89,7 @@
       "data": {
         "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED"]
+      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "deleteEntity",
@@ -101,7 +101,7 @@
         "description": "The entityId of the entity to delete",
         "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
       },
-      "errorCodes": ["NOT_IMPLEMENTED"]
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "deleteEntityResponse",
@@ -114,7 +114,7 @@
         "type": "boolean",
         "const": true
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED"]
+      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "getEntity",
@@ -135,7 +135,7 @@
         },
         "required": ["entityId"]
       },
-      "errorCodes": ["NOT_IMPLEMENTED"]
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "getEntityResponse",
@@ -146,7 +146,7 @@
       "data": {
         "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/subgraph"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED"]
+      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "aggregateEntities",
@@ -169,7 +169,7 @@
           "operation"
         ]
       },
-      "errorCodes": ["NOT_IMPLEMENTED"]
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "aggregateEntitiesResponse",
@@ -193,7 +193,7 @@
           "operation"
         ]
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_IMPLEMENTED"]
+      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "uploadFile",
@@ -241,7 +241,7 @@
           }
         ]
       },
-      "errorCodes": ["NOT_IMPLEMENTED"]
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "uploadFileResponse",
@@ -252,7 +252,7 @@
       "data": {
         "$ref": "https://blockprotocol.org/@blockprotocol/types/entity-type/file/v/1"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED"]
+      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     }
   ]
 }
