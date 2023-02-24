@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths",
+  "title": "Partial Graph Resolve Depths",
+  "description": "The depths a subgraph query should be resolved to. This is a partial selection of the full depths object.",
+  "type": "object",
+  "properties": {
+    "hasLeftEntity": {
+      "$ref": "#/$defs/EdgeResolveDepths"
+    },
+    "hasRightEntity": {
+      "$ref": "#/$defs/EdgeResolveDepths"
+    },
+    "constrainsLinkDestinationsOn": {
+      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
+    },
+    "constrainsLinksOn": {
+      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
+    },
+    "constrainsPropertiesOn": {
+      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
+    },
+    "constrainsValuesOn": {
+      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
+    },
+    "inheritsFrom": {
+      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
+    },
+    "isOfType": {
+      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "EdgeResolveDepths": {
+      "description": "A selection of incoming, and outgoing, depths to resolve associated with a specific edge kind.",
+      "type": "object",
+      "properties": {
+        "incoming": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        "outgoing": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        }
+      },
+      "required": ["incoming", "outgoing"],
+      "additionalProperties": false
+    },
+    "OutgoingEdgeResolveDepth": {
+      "description": "The depths to resolve in an outgoing direction, associated with a specific edge kind.",
+      "type": "object",
+      "properties": {
+        "outgoing": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        }
+      },
+      "required": ["outgoing"],
+      "additionalProperties": false
+    }
+  }
+}

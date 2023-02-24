@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity",
+  "title": "Entity",
+  "type": "object",
+  "properties": {
+    "properties": {
+      "type": "object",
+      "$comment": "This should be constrained by the associated entity type"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "object",
+          "properties": {
+            "entityId": {
+              "type": "string"
+            },
+            "editionId": {
+              "type": "string"
+            }
+          },
+          "required": ["entityId", "editionId"]
+        },
+        "entityTypeId": {
+          "$comment": "The versioned URL of the entity's entity type (the $id of the entity type's schema)",
+          "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
+        }
+      },
+      "required": ["recordId", "entityTypeId"]
+    },
+    "linkData": {
+      "type": "object",
+      "properties": {
+        "leftEntityId": {
+          "type": "string"
+        },
+        "rightEntityId": {
+          "type": "string"
+        },
+        "leftToRightOrder": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rightToLeftOrder": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": ["leftEntityId", "rightEntityId"]
+    }
+  },
+  "required": ["metadata"]
+}
