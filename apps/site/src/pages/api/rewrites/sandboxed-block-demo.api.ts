@@ -60,6 +60,10 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   for (const [packageName, packageVersion] of Object.entries(externals)) {
+    if (packageName === "react" || packageName === "react-dom") {
+      // we already handled loading React in the HTML
+      continue;
+    }
     externalUrlLookup[packageName] = `https://esm.sh/${hotfixPackageName(
       packageName,
     )}@${packageVersion}?target=es2021`;
