@@ -66,10 +66,6 @@ export abstract class BlockElementBase<
    * i.e. the 'block entity'
    */
   protected getBlockEntity(): RootEntity {
-    if (!this.graph || !this.graph.blockEntitySubgraph) {
-      throw new Error("graph.blockEntitySubgraph was not passed to block.");
-    }
-
     const blockEntity = getRoots(this.graph.blockEntitySubgraph)[0];
     if (!blockEntity) {
       throw new Error(

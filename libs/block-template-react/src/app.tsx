@@ -54,10 +54,6 @@ export const App: BlockComponent<RootEntity> = ({
   const blockRootRef = useRef<HTMLDivElement>(null);
   const { graphModule } = useGraphBlockModule(blockRootRef);
 
-  if (!blockEntitySubgraph) {
-    throw new Error("No blockEntitySubgraph provided");
-  }
-
   const { rootEntity: blockEntity } = useEntitySubgraph<
     RootEntity,
     RootEntityLinkedEntities
