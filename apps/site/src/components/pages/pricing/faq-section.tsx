@@ -31,6 +31,19 @@ const DescriptionTypography: FunctionComponent<TypographyProps> = ({
 
 const FAQ_QUESTIONS = [
   {
+    title: "Can free users access premium external services?",
+    description: (
+      <DescriptionTypography>
+        Free users as well as paying users can benefit from blocks that utilize
+        external services. All free users receive a limited number of credits
+        for use each month, providing free access to ordinarily paid services
+        including OpenAI DALL-E, GPT-3, and Mapbox for free. These allowances
+        are more restrictive than those on the Hobby and Pro plans, but can
+        allow for limited testing and use of services in blocks.
+      </DescriptionTypography>
+    ),
+  },
+  {
     title: "How does overage charging work?",
     description: (
       <>
