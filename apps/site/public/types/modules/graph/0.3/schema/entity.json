@@ -15,7 +15,7 @@
           "type": "object",
           "properties": {
             "entityId": {
-              "type": "string"
+              "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
             },
             "editionId": {
               "type": "string"
@@ -34,10 +34,10 @@
       "type": "object",
       "properties": {
         "leftEntityId": {
-          "type": "string"
+          "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
         },
         "rightEntityId": {
-          "type": "string"
+          "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
         },
         "leftToRightOrder": {
           "type": "integer",
