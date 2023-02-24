@@ -22,7 +22,7 @@
       "outputs": []
     },
     "lint:tsc": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["codegen", "^build"],
       "outputs": []
     },
     "test": {
