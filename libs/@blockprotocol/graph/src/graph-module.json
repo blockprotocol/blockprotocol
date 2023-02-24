@@ -21,7 +21,7 @@
             "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type-object"
           },
           "linkData": {
-            "description": "Links to create along with the entity",
+            "description": "Link data if the entity is a link entity",
             "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-data"
           }
         },
