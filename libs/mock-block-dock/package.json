@@ -40,7 +40,7 @@
     "@blockprotocol/core": "0.0.14",
     "@blockprotocol/graph": "0.0.20",
     "@blockprotocol/hook": "0.0.10",
-    "@blockprotocol/service": "0.0.1-canary.9",
+    "@blockprotocol/service": "0.0.2",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@lit-labs/react": "^1.0.4",
