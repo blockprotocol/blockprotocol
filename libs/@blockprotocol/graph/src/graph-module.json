@@ -159,7 +159,19 @@
       "sentOnInitialization": false,
       "data": {
         "description": "The aggregation operation to apply",
-        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/aggregation-operation"
+        "type": "object",
+        "properties": {
+          "operation": {
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/aggregation-operation"
+          },
+          "graphResolveDepths": {
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths"
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "additionalProperties": false
       },
       "errorCodes": []
     },
@@ -170,7 +182,21 @@
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
-        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/subgraph"
+        "description": "The aggregation operation to apply",
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/subgraph"
+          },
+          "operation": {
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/aggregation-operation"
+          }
+        },
+        "required": [
+          "results",
+          "operation"
+        ],
+        "additionalProperties": false
       },
       "errorCodes": ["FORBIDDEN", "INVALID_INPUT"]
     },

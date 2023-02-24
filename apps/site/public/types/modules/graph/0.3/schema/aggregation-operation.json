@@ -4,99 +4,87 @@
   "title": "Aggregation Operation",
   "type": "object",
   "properties": {
-    "operation": {
+    "multiFilter": {
       "type": "object",
       "properties": {
-        "multiFilter": {
-          "type": "object",
-          "properties": {
-            "filters": {
-              "type": "array",
-              "items": {
-                "anyOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "field": {
-                        "$ref": "#/$defs/Field"
-                      },
-                      "operator": {
-                        "$ref": "#/$defs/FilterOperatorRequiringValue"
-                      },
-                      "value": {
-                      }
-                    },
-                    "required": [
-                      "field",
-                      "operator",
-                      "value"
-                    ],
-                    "additionalProperties": false
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "field": {
-                        "$ref": "#/$defs/Field"
-                      },
-                      "operator": {
-                        "$ref": "#/$defs/FilterOperatorWithoutValue"
-                      }
-                    },
-                    "required": [
-                      "field",
-                      "operator"
-                    ],
-                    "additionalProperties": false
-                  }
-                ]
-              }
-            },
-            "operator": {
-              "$ref": "#/$defs/MultiFilterOperatorType"
-            }
-          },
-          "required": [
-            "filters",
-            "operator"
-          ],
-          "additionalProperties": false
-        },
-        "multiSort": {
+        "filters": {
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "field": {
-                "$ref": "#/$defs/Field"
-              },
-              "desc": {
-                "oneOf": [
-                  {
-                    "type": "boolean"
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "$ref": "#/$defs/Field"
                   },
-                  {
-                    "type": "null"
+                  "operator": {
+                    "$ref": "#/$defs/FilterOperatorRequiringValue"
+                  },
+                  "value": {
                   }
-                ]
+                },
+                "required": [
+                  "field",
+                  "operator",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "$ref": "#/$defs/Field"
+                  },
+                  "operator": {
+                    "$ref": "#/$defs/FilterOperatorWithoutValue"
+                  }
+                },
+                "required": [
+                  "field",
+                  "operator"
+                ],
+                "additionalProperties": false
               }
-            },
-            "required": [
-              "field"
-            ],
-            "additionalProperties": false
+            ]
           }
+        },
+        "operator": {
+          "$ref": "#/$defs/MultiFilterOperatorType"
         }
       },
+      "required": [
+        "filters",
+        "operator"
+      ],
       "additionalProperties": false
     },
-    "graphResolveDepths": {
-      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths"
+    "multiSort": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "$ref": "#/$defs/Field"
+          },
+          "desc": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "field"
+        ],
+        "additionalProperties": false
+      }
     }
   },
-  "required": [
-    "operation"
-  ],
   "additionalProperties": false,
   "$defs": {
     "Field": {
