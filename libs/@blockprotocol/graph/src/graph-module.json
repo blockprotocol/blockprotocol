@@ -208,107 +208,43 @@
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
+        "title": "File Entity",
         "type": "object",
         "properties": {
-          "entityId": {
-            "description": "The entityId of the entity storing metadata about the file."
+          "properties": {
+            "type": "object",
+            "properties": {
+              "https://blockprotocol.org/@blockprotocol/types/property-type/description/": {
+                "type": "string"
+              },
+              "https://blockprotocol.org/@blockprotocol/types/property-type/filename/": {
+                "type": "string"
+              },
+              "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/": {
+                "type": "string"
+              },
+              "https://blockprotocol.org/@blockprotocol/types/property-type/url/": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "required": [
+              "https://blockprotocol.org/@blockprotocol/types/property-type/filename/",
+              "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/",
+              "https://blockprotocol.org/@blockprotocol/types/property-type/url/"
+            ],
+            "additionalProperties": false
           },
-          "url": {
-            "description": "The URL the file is now being served from.",
-            "type": "string"
-          },
-          "mediaType": {
-            "description": "The type of media file this is",
-            "type": "string",
-            "enum": ["image", "video"]
+          "metadata": {
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-metadata"
           }
         },
-        "required": ["entityId", "mediaType", "url"]
+        "required": [
+          "properties",
+          "metadata"
+        ]
       },
       "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "blockEntity",
-      "description": "The entity associated with the block",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": true,
-      "data": {
-        "$ref": "https://blockprotocol.org/types/modules/graph/entity"
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "blockGraph",
-      "description": "A graph of entities with the block entity at the root, resolved to the specified depth.",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": true,
-      "data": {
-        "type": "object",
-        "properties": {
-          "linkedEntities": {
-            "description": "The entities linked from the block entity, and potentially entities linked from them, and so on, depending on depth.",
-            "type": "array",
-            "items": {
-              "$ref": "https://blockprotocol.org/types/modules/graph/entity"
-            }
-          },
-          "linkGroups": {
-            "description": "The links attached to the block or the entities provided in linkedEntities, grouped by entity and path.",
-            "type": "array",
-            "items": {
-              "$ref": "https://blockprotocol.org/types/modules/graph/link-group"
-            }
-          },
-          "depth": {
-            "description": "The number of links that will be followed from the block when resolving the graph.",
-            "type": "integer",
-            "inclusiveMinimum": 0
-          }
-        },
-        "required": ["linkedEntities", "linkGroups", "depth"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "entityTypes",
-      "description": "The entity types for any entities provided to the block as part of other messages.",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": true,
-      "data": {
-        "type": "array",
-        "items": {
-          "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
-        }
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "linkedAggregations",
-      "description": "Aggregations which are linked to from the block entity.",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": true,
-      "data": {
-        "type": "array",
-        "items": {
-          "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation-definition"
-        }
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "readonly",
-      "description": "Indicates if the block should display in 'readonly' mode, i.e. without editing controls.",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": true,
-      "data": {
-        "type": "boolean"
-      },
-      "errorCodes": []
     }
   ]
 }
