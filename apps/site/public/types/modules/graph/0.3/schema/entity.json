@@ -6,7 +6,10 @@
   "properties": {
     "properties": {
       "type": "object",
-      "$comment": "This should be constrained by the associated entity type"
+      "$comment": "This should be constrained by the associated entity type",
+      "propertyNames": {
+        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
+      }
     },
     "metadata": {
       "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-metadata"
