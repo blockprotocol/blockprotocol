@@ -40,8 +40,12 @@ const handler: NextApiHandler = async (req, res) => {
 
   const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
 
-  const reactVersion =
-    blockMetadata.externals?.react ?? packageJson.dependencies.react;
+  // @todo restore this when esm.sh treats version ranges correctly
+  //    it currently pulls non-latest versions of packages if a range is supplied
+  // const reactVersion =
+  //   blockMetadata.externals?.react ?? packageJson.dependencies.react;
+
+  const reactVersion = packageJson.dependencies.react;
 
   const externalUrlLookup: Record<string, string> = {};
 
@@ -56,6 +60,10 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   for (const [packageName, packageVersion] of Object.entries(externals)) {
+    if (packageName === "react" || packageName === "react-dom") {
+      // we already handled loading React in the HTML
+      continue;
+    }
     externalUrlLookup[packageName] = `https://esm.sh/${hotfixPackageName(
       packageName,
     )}@${packageVersion}?target=es2021`;
