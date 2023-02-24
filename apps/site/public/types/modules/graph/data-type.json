@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://blockprotocol.org/types/modules/graph/data-type",
+  "title": "Data Type",
+  "description": "Specifies the structure of a Data Type",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "https://blockprotocol.org/types/modules/graph/data-type"
+    },
+    "kind": {
+      "const": "dataType"
+    },
+    "$id": {
+      "$ref": "https://blockprotocol.org/types/modules/graph/versioned-url"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "$schema",
+    "kind",
+    "$id",
+    "title",
+    "type"
+  ],
+  "oneOf": [
+    {
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1"
+    },
+    {
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1"
+    },
+    {
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1"
+    },
+    {
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/null/v/1"
+    },
+    {
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1"
+    },
+    {
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1"
+    }
+  ]
+}

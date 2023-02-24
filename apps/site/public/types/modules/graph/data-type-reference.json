@@ -1,0 +1,16 @@
+{
+  "$id": "https://blockprotocol.org/types/modules/graph/data-type-reference",
+  "title": "Data Type Reference",
+  "description": "A reference to a data type.",
+  "type": "object",
+  "properties": {
+    "$ref": {
+      "$comment": "The versioned URL of a data type (the $id of the data type's schema)",
+      "$ref": "https://blockprotocol.org/types/modules/graph/versioned-url"
+    }
+  },
+  "required": [
+    "$ref"
+  ],
+  "additionalProperties": false
+}
