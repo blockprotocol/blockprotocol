@@ -40,14 +40,7 @@
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
-        "type": "object",
-        "properties": {
-          "entity": {
-            "description": "The newly created entity",
-            "$ref": "https://blockprotocol.org/types/modules/graph/entity"
-          }
-        },
-        "required": ["entity"]
+        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity"
       },
       "errorCodes": ["FORBIDDEN", "INVALID_INPUT"]
     },
