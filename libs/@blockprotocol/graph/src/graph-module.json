@@ -155,7 +155,7 @@
       "respondedToBy": "aggregateEntitiesResponse",
       "sentOnInitialization": false,
       "data": {
-        "description": "The aggregation operation to apply",
+        "description": "The results of an entity aggregation, and the operation that was used to produce it.",
         "type": "object",
         "properties": {
           "operation": {
