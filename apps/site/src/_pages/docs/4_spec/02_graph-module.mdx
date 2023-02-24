@@ -139,7 +139,7 @@ When represented in JSON schema, a property type satisfies the following meta-sc
 
 ### <Hidden>The Type System </Hidden>Entity Types
 
-An **entity type** is the definition of the structure of an **entity**'s **properties**, and its outgoing **link entities** and their endpoint entities.
+An **entity type** is the definition of (1) the structure of an **entity**'s **properties**, and (2) its outgoing **link entities** and their endpoint entities.
 When represented in JSON schema, an entity type satisfies the following meta-schema:
 
 <EntityTypeMetaSchema />
@@ -150,11 +150,11 @@ When represented in JSON schema, an entity type satisfies the following meta-sch
 
 #### <Hidden>Block package </Hidden>Summary
 
-Blocks using the graph module provide an **entity type** which describes the shape of their **block entity**. Embedding applications should use this to constrain the properties they send to blocks when they are instantiated.
+Blocks using the graph module provide an **entity type** which describes the shape of their **block entity**. Embedding applications should use this to constrain the entity they send to blocks when they are instantiated, and the entities which are linked to it as part of the block subgraph.
 
 The versioned URL of the entity type's schema must be referenced in the block's `block-metadata.json` under a `schema` key.
 
-Blocks may also add `default` and `examples` keys to `block-metadata.json` to define default and example properties conforming to their schema. If more complex example data is required that involves specifying _other_ entities and link entities between them, which the block will make use of, a block package may also include an `example-graph.json`.
+Blocks may also add an `examples` key to `block-metadata.json` to define example properties conforming to their schema. If more complex example data is required that involves specifying _other_ entities and link entities between them, which the block will make use of, a block package may also include an `example-graph.json`.
 
 #### <Hidden>Block package </Hidden>Specification
 
@@ -163,16 +163,13 @@ Blocks may also add `default` and `examples` keys to `block-metadata.json` to de
 A block using the graph module MAY expand `block-metadata.json` to specify:
 
 - `schema`: the versioned URL of the **entity type** associated with the block entity. As per the specification, the schema hosted at the remote address should not be subject to change and versions of entity types should be treated as immutable, permanently available, records.
-- `default`: an **entity**, conforming to the block’s entity type, representing the default data that applications should provide when creating a block, unless &#40;a&#41; the block can handle being provided no data when first instantiated or &#40;b&#41; `variants` is provided &#40;see below&#41;
 - `examples`: an array of objects conforming to the block's entity type which provide examples of the data that can be passed to it
 - `variants`: an array of objects, each with a `name` and `properties`, and optionally `description`, `icon`, and `examples`. These objects represents different variants of the block that the user can create, where `properties` sets the starting properties. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ "https://blockprotocol.org/@alice/types/property-type/level/": 1 }` and `{ "https://blockprotocol.org/@alice/types/property-type/level/": 2 }` as `properties`, respectively
   If more complex example data is required, a block’s package may also include a file at the root named `example-graph.json`, which MUST be a JSON object, and MUST contain an `entities` key where each element is a JSON representation of an entity which MUST conform to the structure specified in [entity definition](#structure-specification).
 
 ##### Embedding applications
 
-Embedding applications MUST use the constraints set in the associated entity type, to constrain the data it sends to the block in the **block entity subgraph**, assuming the embedding application implements the `blockEntitySubgraph` message.
-
-Embedding applications MAY choose to display their own UI to allow users to set any values on the block entity described in `configProperties`, and could allow users to set values for them for all blocks of a type (rather than on a per-block instance basis)
+An embedding application MUST use the constraints set in the associated entity type to constrain the data it sends to the block in the **block entity subgraph**.
 
 ## Entity definition
 
@@ -470,7 +467,7 @@ Note that there is no reason why embedding applications cannot make requests, no
 
 The **values** are all sent from the embedding application to the block on initialization, and re-sent subsequently if they change. They are:
 
-- `blockEntitySubgraph`: the subgraph rooted at the block entity, resolved to a depth determined by the embedding application
+- `blockEntitySubgraph`: the subgraph rooted at the block entity, resolved to a depth determined by the embedding application and reported in the `depths` field of the subgraph
 - `readonly`: whether or not the block should display in ‘readonly’ mode, disabling or hiding any editing controls it offers.
 
 The **requests** may be made by the block once it has been initialized, and represent operations which create, read, update or delete entities. They are named according to the pattern `[action][Resource]`, e.g. `createEntity`.
