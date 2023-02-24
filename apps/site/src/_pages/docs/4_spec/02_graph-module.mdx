@@ -55,12 +55,12 @@ When represented as JSON schema, the 6 primitive data types are:
 
 ```json5
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/data-type",
-  "kind": "dataType",
-  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
-  "title": "Text",
-  "description": "An ordered sequence of characters",
-  "type": "string"
+  $schema: "https://blockprotocol.org/types/modules/graph/data-type",
+  kind: "dataType",
+  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+  title: "Text",
+  description: "An ordered sequence of characters",
+  type: "string",
 }
 ```
 
@@ -68,12 +68,12 @@ When represented as JSON schema, the 6 primitive data types are:
 
 ```json5
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/data-type",
-  "kind": "dataType",
-  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
-  "title": "Number",
-  "description": "An arithmetical value (in the Real number system)",
-  "type": "number"
+  $schema: "https://blockprotocol.org/types/modules/graph/data-type",
+  kind: "dataType",
+  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
+  title: "Number",
+  description: "An arithmetical value (in the Real number system)",
+  type: "number",
 }
 ```
 
@@ -81,12 +81,12 @@ When represented as JSON schema, the 6 primitive data types are:
 
 ```json5
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/data-type",
-  "kind": "dataType",
-  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1",
-  "title": "Boolean",
-  "description": "A True or False value",
-  "type": "boolean"
+  $schema: "https://blockprotocol.org/types/modules/graph/data-type",
+  kind: "dataType",
+  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1",
+  title: "Boolean",
+  description: "A True or False value",
+  type: "boolean",
 }
 ```
 
@@ -94,12 +94,12 @@ When represented as JSON schema, the 6 primitive data types are:
 
 ```json5
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/data-type",
-  "kind": "dataType",
-  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/null/v/1",
-  "title": "Null",
-  "description": "A placeholder value representing 'nothing'",
-  "type": "null"
+  $schema: "https://blockprotocol.org/types/modules/graph/data-type",
+  kind: "dataType",
+  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/null/v/1",
+  title: "Null",
+  description: "A placeholder value representing 'nothing'",
+  type: "null",
 }
 ```
 
@@ -107,12 +107,12 @@ When represented as JSON schema, the 6 primitive data types are:
 
 ```json5
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/data-type",
-  "kind": "dataType",
-  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1",
-  "title": "Object",
-  "description": "A plain JSON object with no pre-defined structure",
-  "type": "object"
+  $schema: "https://blockprotocol.org/types/modules/graph/data-type",
+  kind: "dataType",
+  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1",
+  title: "Object",
+  description: "A plain JSON object with no pre-defined structure",
+  type: "object",
 }
 ```
 
@@ -120,13 +120,13 @@ When represented as JSON schema, the 6 primitive data types are:
 
 ```json5
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/data-type",
-  "kind": "dataType",
-  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1",
-  "title": "Empty List",
-  "description": "An Empty List",
-  "type": "array",
-  "const": []
+  $schema: "https://blockprotocol.org/types/modules/graph/data-type",
+  kind: "dataType",
+  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1",
+  title: "Empty List",
+  description: "An Empty List",
+  type: "array",
+  const: [],
 }
 ```
 
@@ -164,11 +164,11 @@ A block using the graph module MAY expand `block-metadata.json` to specify:
 
 - `schema`: the versioned URL of the **entity type** associated with the block entity. As per the specification, the schema hosted at the remote address should not be subject to change and versions of entity types should be treated as immutable, permanently available, records.
 
-[//]  # (- `default`: an **entity**, conforming to the block’s schema, representing the default data that applications should provide when creating a block, unless &#40;a&#41; the block can handle being provided no data when first instantiated or &#40;b&#41; `variants` is provided &#40;see below&#41;)
+[//] # (- `default`: an **entity**, conforming to the block’s schema, representing the default data that applications should provide when creating a block, unless &#40;a&#41; the block can handle being provided no data when first instantiated or &#40;b&#41; `variants` is provided &#40;see below&#41;)
 
-[//]  # (- `examples`: an array of objects conforming to the block's schema which provide examples of the data that can be passed to it)
+[//] # (- `examples`: an array of objects conforming to the block's schema which provide examples of the data that can be passed to it)
 
-[//]  # (- `variants`: an array of objects, each with a `name` and `properties`, and optionally `description`, `icon`, and `examples`. These objects represents different variants of the block that the user can create, where `properties` sets the starting properties. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as `properties`, respectively)
+[//] # (- `variants`: an array of objects, each with a `name` and `properties`, and optionally `description`, `icon`, and `examples`. These objects represents different variants of the block that the user can create, where `properties` sets the starting properties. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as `properties`, respectively)
 
 If more complex example data is required, a block’s package may also include a file at the root named `example-graph.json`, which MUST be a JSON object, and MUST contain an `entities` key where each element is a JSON representation of an entity which MUST conform to the structure specified in [entity definition](#structure-specification).
 
@@ -188,9 +188,7 @@ An entity is a combination of **metadata** and **properties**.
 
 The **metadata** is a minimum collection of fields that are fixed and specified in this document, although embedding applications MAY choose to add their own.
 
-The **properties** is a JSON object which satisfies the constraints of the entity’s **entity type**. This object is nested under a `properties` key on the entity data object.
-
-[//]  # (**Linked aggregations** represent a link from a block to a particular aggregation of entities, e.g. the top 10 entities of type Person, sorted by a particular property.)
+The **properties** is a JSON object which satisfies the constraints of the entity’s **entity type**.
 
 #### <Hidden>Structure </Hidden>Specification
 
@@ -198,172 +196,26 @@ The **properties** is a JSON object which satisfies the constraints of the entit
 
 When embedding applications pass entities to blocks, whether the **block entity** or any other:
 
-- entities MUST be represented by an object, which contains the following:
--
-- MUST contain an `entityId` identifying the entity, which MUST be a string.
-- MAY contain an `entityTypeId` identifying the entity type the entity belongs to, which MUST be a string (if defined).
-- MUST contain a `properties` field if the block has defined any `required` properties in its schema, and otherwise MAY be omitted. If present, it:
-- MUST be an object
-- MUST conform to the constraints described in the entity’s schema, if any
+- entities MUST be represented by an object, which:
+
+  - MUST contain a field `metadata`, an object which:
+  - MUST contain a field `recordId`, an object which:
+    - MUST contain a field `entityId` identifying the entity, which MUST be a string.
+    - MUST contain a field `editionId` which identifies the specific _edition_ of the entity, which MUST be a string, and MUST be unique for each edition of an entity for datastores that have versioning for their data.
+  - MUST contain an `entityTypeId` identifying the entity type the entity belongs to, which MUST be a string.
+
+  - MUST contain a field `properties` if the block has defined any `required` properties in its schema, and otherwise MAY be omitted. If present, it:
+    - MUST be an object
+    - MUST conform to the constraints described by the entity type of the entity
+  - if the entity is a link entity it MUST contain a field `linkData` (and MUST not otherwise), an object which:
+    - MUST contain a field `leftEntityId` identifying the left entity of the link, which MUST be a string
+    - MUST contain a field `rightEntityId` identifying the right entity of the link, which MUST be a string
+    - MAY contain a field `leftToRightOrder` used to order this link entity against other link entities of the same type with the same `leftEntityId`, which MUST be a non-negative integer
+     - MAY contain a field `rightToLeftOrder` used to order this link entity against other link entities of the same type with the same `rightEntityId`, which MUST be a non-negative integer
 
 i.e. any entity MUST conform to the following schema:
 
-```json
-{
-  "$id": "https://blockprotocol.org/types/modules/graph/entity",
-  "title": "Entity",
-  "type": "object",
-  "properties": {
-    "entityId": {
-      "type": "string"
-    },
-    "entityTypeId": {
-      "type": "string"
-    },
-    "properties": {
-      "$ref": "https://example.com/path-to-the-entity-schema"
-    }
-  },
-  "required": ["entityId"]
-}
-```
-
-##### Entity types
-
-Embedding applications SHOULD also provide – via the `entityTypes` message – an **entity type** for each entity they provide the block, including the block entity. Where provided, an **entity type**:
-
-- MUST be represented by an object, which:
-- MUST contain an `entityTypeId` identifying the type, which MUST be a string
-- MUST contain a `schema`, a JSON Schema object defining the constraints on the data in the entity’s `properties` field, which
-- MUST be of `type: "object"`
-- SHOULD use our JSON Schema extensions where appropriate
-- MAY otherwise contain any valid JSON Schema
-
-i.e. entity types MUST conform to the following JSON schema:
-
-```json
-{
-  "$id": "https://blockprotocol.org/types/modules/graph/entity-type",
-  "title": "EntityType",
-  "type": "object",
-  "properties": {
-    "entityTypeId": {
-      "type": "string"
-    },
-    "schema": {
-      "$ref": "https://json-schema.org/draft/2020-12/schema"
-    }
-  },
-  "required": ["entityTypeId", "schema"]
-}
-```
-
-Blocks SHOULD use any schemas provided in the `entityTypes` message to understand the constraints on user input for each entity (e.g. what type(s) of data are valid for each property).
-
-##### Links
-
-Entities MAY be connected by a **link**, which:
-
-- MUST contain:
-- `sourceEntityId`: the `entityId` of the source entity, which MUST be a string
-- `destinationEntityId`: the id of a single entity the link is made to, which MUST be a string
-- `path`: the path to the field on the source entity this link is conceptually made on, expressed as a **[JSON path](https://goessner.net/articles/JsonPath/)**, which MUST be a string
-- MAY contain
-- `index`: the position of this link in a list (for where ordering of links is important), which MUST be an integer (if defined), where 0 is the first entry in the list
-
-i.e. links MUST conform to the following schema:
-
-```json
-{
-  "$id": "https://blockprotocol.org/types/modules/graph/link",
-  "title": "Link",
-  "type": "object",
-  "properties": {
-    "sourceEntityId": {
-      "type": "string"
-    },
-    "destinationEntityId": {
-      "type": "string"
-    },
-    "path": {
-      "type": "string"
-    },
-    "index": {
-      "type": "integer",
-      "inclusiveMinimum": 0
-    }
-  },
-  "required": ["sourceEntityId", "destinationEntityId", "path"]
-}
-```
-
-Where the block entity has links from it to other entities:
-
-- Embedding applications MUST implement a `blockGraph` message which represents the graph with the block entity at the root, the `data` for which MUST be an object, which:
-- MUST contain a `linkGroups` key, which contains a list of objects which group the links in the resolved graph (i.e. the edges) by entity and path. Each object:
-- MUST contain `links`, an array of links
-- MUST contain the `sourceEntityId`, identical across all entries in `links`
-- MUST contain the `path`, identical across all entries in `path`
-- MUST contain a `linkedEntities` key, which contains a list of the entities in the resolved graph (i.e. the nodes)
-- MUST contain a `depth` key, which indicates the depth to which the graph around the block entity has been resolved.
-- Embedding applications MUST at least provide the links from the block entity. This represents a depth of `0`. They MAY also include the entities linked from the block entity and _their_ links which is a depth of `1`, and so on.
-- See [blockGraph](#block-graph)
-
-`linkGroups` should conform to the following schema:
-
-```json
-{
-  "$id": "https://blockprotocol.org/types/modules/graph/link-group",
-  "title": "LinkGroup",
-  "type": "object",
-  "properties": {
-    "links": {
-      "type": "array",
-      "items": {
-        "$ref": "https://blockprotocol.org/types/modules/graph/link"
-      }
-    },
-    "sourceEntityId": {
-      "type": "string"
-    },
-    "path": {
-      "type": "string"
-    }
-  },
-  "required": ["sourceEntityId", "destinationEntityId", "path"]
-}
-```
-
-##### Linked aggregations
-
-Blocks may also wish to link an entity to a particular aggregation of entities. To do so, blocks SHOULD create a **LinkedAggregationDefinition**, which:
-
-- MUST contain:
-- `sourceEntityId`: the `entityId` of the source entity
-- `operation`: an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object
-- `path`: the path to the field on the source entity this link is conceptually made on, expressed as a **[JSON path](https://goessner.net/articles/JsonPath/)**, which MUST be a string
-
-i.e. a linked aggregation definition must conform to the following schema:
-
-```json
-{
-  "$id": "https://blockprotocol.org/types/modules/graph/linked-aggregation-definition",
-  "title": "LinkedAggregationDefinition",
-  "type": "object",
-  "properties": {
-    "sourceEntityId": {
-      "type": "string"
-    },
-    "path": {
-      "type": "string"
-    },
-    "operation": {
-      "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
-    }
-  },
-  "required": ["sourceEntityId", "operation", "path"]
-}
-```
+<EntityMetaSchema/>
 
 ### Identification
 
@@ -381,33 +233,9 @@ Embedding applications MUST provide `entityId` for each entity it supplies the b
 
 `entityId` SHOULD be a stable, unique reference to the entity, so that blocks may use it for comparing the identity of entities – i.e. so that blocks can assume that entities with the same `entityId` are the same entity, and that the same entity referenced in different places will have the same `entityId` wherever it appears.
 
-### JSON Schema extensions
+## Subgraph Definition
 
-#### <Hidden>JSON Schema extensions </Hidden>Summary
 
-We define additional keywords for use as part of a JSON Schema definition.
-
-We will publish a JSON schema vocabulary and meta-schema which allows for validating these custom keywords.
-
-We also intend to introduce a richer vocabulary for defining entities and links between them in JSON Schema, using composable property types and data types. Please see the RFC.
-
-#### <Hidden>JSON Schema extensions </Hidden>Specification
-
-As well as the core and validation [JSON Schema](https://json-schema.org) vocabularies:, the following keywords MAY be used at the **root** of the schema definition:
-
-- `labelProperty`: a single `string`, which MUST be present as a key on the schema's `properties`, i.e. it must name a property available on the entity. Where an entity’s schema is provided as part of the `entityTypes` message, and it contains a `labelProperty` pointing to a defined property on the entity, blocks MUST use the value for that property as a display name for the entity where appropriate.
-
-```json
-{
-  "$id": "https://example.com/Person",
-  "type": "object",
-  "properties": {
-    "name": { "type": "string" },
-    "age": { "type": "number" }
-  },
-  "labelProperty": "name"
-}
-```
 
 ## Messages
 
@@ -436,18 +264,10 @@ Note that there is no reason why embedding applications cannot make requests, no
 
 The **values** are all sent from the embedding application to the block on initialization, and re-sent subsequently if they change. They are:
 
-- `blockEntity`: the block entity, conforming to the constraints defined in the block schema
-- `entityTypes`: the entity type definitions for any entities provided to the block in other messages
-- <span id="block-graph">`blockGraph`</span>: the entity graph with the block at
-  its root, which contains: - `linkedEntities`: the entities linked from the
-  block entity, and from those entities, and so on, resolved to a depth
-  determined by the embedding application - `linkGroups`: the links from the
-  block entity and the links from any entities in `linkedEntities`, grouped by
-  source entity and link path
-- `linkedAggregations`: field containing the definitions and results of aggregations linked from the block’s entity - these are special objects which contain an aggregation definition (e.g. in plain English, "top 10 Cars sorted by age, descending") and its results at the time of provision
+- `blockEntitySubgraph`: the subgraph rooted at the block entity, resolved to a depth determined by the embedding application
 - `readonly`: whether or not the block should display in ‘readonly’ mode, disabling or hiding any editing controls it offers.
 
-The **requests** may be made by the block once it has been initialized, and represent operations which create, read, update or delete entities, entity types, and create links. They are named according to the pattern `[action][Resource]`, e.g. `createEntity`.
+The **requests** may be made by the block once it has been initialized, and represent operations which create, read, update or delete entities. They are named according to the pattern `[action][Resource]`, e.g. `createEntity`.
 
 As well as the formal module JSON specification, the messages can be sent and received via the `@blockprotocol/graph` [package](https://www.npmjs.com/package/@blockprotocol/graph).
 
