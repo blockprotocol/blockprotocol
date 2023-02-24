@@ -175,111 +175,6 @@
       "errorCodes": ["FORBIDDEN", "INVALID_INPUT"]
     },
     {
-      "messageName": "updateLinkedAggregation",
-      "description": "Request to update a linked aggregation, expecting the updated linked aggregation in response.",
-      "source": "block",
-      "respondedToBy": "updateLinkedAggregationResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "aggregationId": {
-            "description": "The aggregationId of the linked aggregation to update",
-            "type": "string"
-          },
-          "operation": {
-            "description": "The new aggregation operation",
-            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
-          }
-        },
-        "required": ["aggregationId", "operation"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "updateLinkedAggregationResponse",
-      "description": "The response to a request to update a linked aggregation",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "linkedAggregation": {
-            "description": "The updated linked aggregation definition",
-            "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation-definition"
-          }
-        },
-        "required": ["linkedAggregation"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "deleteLinkedAggregation",
-      "description": "Request to delete a linked aggregation, expecting a boolean in response.",
-      "source": "block",
-      "respondedToBy": "deleteLinkedAggregationResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "aggregationId": {
-            "description": "The aggregationId of the linked aggregation to delete",
-            "type": "string"
-          }
-        },
-        "required": ["aggregationId"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "deleteLinkedAggregationResponse",
-      "description": "The response to a request to delete a linked aggregation",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "boolean"
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "getLinkedAggregation",
-      "description": "Request to retrieve a linked aggregation, expecting the linked aggregation in response.",
-      "source": "block",
-      "respondedToBy": "getLinkedAggregationResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "aggregationId": {
-            "description": "The aggregationId of the linkedAggregation to retrieve",
-            "type": "string"
-          }
-        },
-        "required": ["aggregationId"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "getLinkedAggregationResponse",
-      "description": "The response to a request to get a linkedAggregation",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "linkedAggregation": {
-            "description": "The retrieved linked aggregation",
-            "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation"
-          }
-        },
-        "required": ["linkedAggregation"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
       "messageName": "uploadFile",
       "description": "Request to upload a file and create an entity to store metadata about it.",
       "source": "block",
@@ -288,20 +183,21 @@
       "data": {
         "type": "object",
         "properties": {
-          "file": {
-            "description": "The file blob, if being uploaded directly. Either 'url' or 'file' is required."
-          },
-          "url": {
-            "description": "The URL to take the file from, if not being uploaded directly. Either 'url' or 'file' is required.",
+          "description": {
             "type": "string"
           },
-          "mediaType": {
-            "description": "The type of media file this is",
+          "name": {
+            "type": "string"
+          },
+          "url": {
             "type": "string",
-            "enum": ["image", "video"]
+            "format": "uri"
           }
         },
-        "required": ["mediaType"]
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
       },
       "errorCodes": []
     },
