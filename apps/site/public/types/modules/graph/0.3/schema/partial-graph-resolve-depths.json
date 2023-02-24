@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths",
   "title": "Partial Graph Resolve Depths",
   "description": "The depths a subgraph query should be resolved to. This is a partial selection of the full depths object.",
