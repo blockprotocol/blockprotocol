@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 
-import entityMetaSchema from "../../../../../../public/types/modules/graph/entity.json";
+import entityMetaSchema from "../../../../../../public/types/modules/graph/0.3/schema/entity.json";
 import { mdxComponents } from "../../../mdx-components";
 
 export const EntityMetaSchema: FunctionComponent = () => {

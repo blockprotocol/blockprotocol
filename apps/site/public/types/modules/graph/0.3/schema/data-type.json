@@ -1,19 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://blockprotocol.org/types/modules/graph/data-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
   "title": "Data Type",
   "description": "Specifies the structure of a Data Type",
   "type": "object",
   "properties": {
     "schema": {
       "type": "string",
-      "const": "https://blockprotocol.org/types/modules/graph/data-type"
+      "const": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type"
     },
     "kind": {
       "const": "dataType"
     },
     "$id": {
-      "$ref": "https://blockprotocol.org/types/modules/graph/versioned-url"
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
     },
     "title": {
       "type": "string"

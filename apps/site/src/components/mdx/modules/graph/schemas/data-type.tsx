@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 
-import dataTypeMetaSchema from "../../../../../../public/types/modules/graph/data-type.json";
+import dataTypeMetaSchema from "../../../../../../public/types/modules/graph/0.3/schema/data-type.json";
 import { mdxComponents } from "../../../mdx-components";
 
 export const DataTypeMetaSchema: FunctionComponent = () => {
