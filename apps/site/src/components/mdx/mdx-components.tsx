@@ -26,6 +26,7 @@ import { InfoCard } from "./info-card/info-card";
 import { InfoCardWrapper } from "./info-card/info-card-wrapper";
 import { GraphModuleMessageList } from "./modules/graph/graph-module-message-list";
 import { DataTypeMetaSchema } from "./modules/graph/schemas/data-type";
+import { EntityMetaSchema } from "./modules/graph/schemas/entity";
 import { EntityTypeMetaSchema } from "./modules/graph/schemas/entity-type";
 import { PropertyTypeMetaSchema } from "./modules/graph/schemas/property-type";
 import { HookModuleMessageList } from "./modules/hook/hook-module-message-list";
@@ -104,6 +105,7 @@ export const mdxComponents: Record<
   DataTypeMetaSchema,
   PropertyTypeMetaSchema,
   EntityTypeMetaSchema,
+  EntityMetaSchema,
   SubTitle: (({ children }: { children?: ReactNode }) => (
     <Box
       maxWidth={750}

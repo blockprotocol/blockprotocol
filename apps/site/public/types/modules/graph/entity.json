@@ -3,15 +3,62 @@
   "title": "Entity",
   "type": "object",
   "properties": {
-    "entityId": {
-      "type": "string"
-    },
-    "entityTypeId": {
-      "type": "string"
-    },
     "properties": {
-      "type": "object"
+      "$ref": "https://example.com/path-to-the-entity-schema"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "object",
+          "properties": {
+            "entityId": {
+              "type": "string"
+            },
+            "editionId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "entityId",
+            "editionId"
+          ]
+        },
+        "entityTypeId": {
+          "$comment": "The versioned URL of the entity's entity type (the $id of the entity type's schema)",
+          "$ref": "https://blockprotocol.org/types/modules/graph/versioned-url"
+        }
+      },
+      "required": [
+        "recordId",
+        "entityTypeId"
+      ]
+    },
+    "linkData": {
+      "type": "object",
+      "properties": {
+        "leftEntityId": {
+          "type": "string"
+        },
+        "rightEntityId": {
+          "type": "string"
+        },
+        "leftToRightOrder": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rightToLeftOrder": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "leftEntityId",
+        "rightEntityId"
+      ]
     }
   },
-  "required": ["entityId"]
+  "required": [
+    "metadata"
+  ]
 }
