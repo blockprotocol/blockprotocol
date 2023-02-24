@@ -1,6 +1,6 @@
 import {
-  ExternalApiMethod200Response,
-  ExternalApiMethodRequest,
+  ExternalServiceMethod200Response,
+  ExternalServiceMethodRequest,
 } from "@local/internal-api-client";
 
 import { createApiKeyRequiredHandler } from "../../lib/api/handler/api-key-required-handler";
@@ -9,8 +9,8 @@ import { internalApi } from "../../lib/internal-api-client";
 import { formatErrors, mustGetEnvVar } from "../../util/api";
 
 export default createApiKeyRequiredHandler<
-  ExternalApiMethodRequest,
-  ExternalApiMethod200Response
+  ExternalServiceMethodRequest,
+  ExternalServiceMethod200Response
 >()
   .use((_, res, next) => {
     if (isBillingFeatureFlagEnabled) {
@@ -32,7 +32,7 @@ export default createApiKeyRequiredHandler<
 
     const { id: bpUserId } = req.user;
 
-    const { data } = await internalApi.externalApiMethod(req.body, {
+    const { data } = await internalApi.externalServiceMethod(req.body, {
       headers: {
         "internal-api-key": internalApiKey,
         "bp-user-id": bpUserId,
