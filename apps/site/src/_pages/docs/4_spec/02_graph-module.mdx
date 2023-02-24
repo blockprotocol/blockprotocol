@@ -53,80 +53,80 @@ When represented as JSON schema, the 6 primitive data types are:
 
 #### Text
 
-```json5
+```json
 {
-  $schema: "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
-  kind: "dataType",
-  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
-  title: "Text",
-  description: "An ordered sequence of characters",
-  type: "string",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+  "title": "Text",
+  "description": "An ordered sequence of characters",
+  "type": "string"
 }
 ```
 
 #### Number
 
-```json5
+```json
 {
-  $schema: "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
-  kind: "dataType",
-  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
-  title: "Number",
-  description: "An arithmetical value (in the Real number system)",
-  type: "number",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
+  "title": "Number",
+  "description": "An arithmetical value (in the Real number system)",
+  "type": "number"
 }
 ```
 
 #### Boolean
 
-```json5
+```json
 {
-  $schema: "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
-  kind: "dataType",
-  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1",
-  title: "Boolean",
-  description: "A True or False value",
-  type: "boolean",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1",
+  "title": "Boolean",
+  "description": "A True or False value",
+  "type": "boolean"
 }
 ```
 
 #### Null
 
-```json5
+```json
 {
-  $schema: "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
-  kind: "dataType",
-  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/null/v/1",
-  title: "Null",
-  description: "A placeholder value representing 'nothing'",
-  type: "null",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/null/v/1",
+  "title": "Null",
+  "description": "A placeholder value representing 'nothing'",
+  "type": "null"
 }
 ```
 
 #### Object
 
-```json5
+```json
 {
-  $schema: "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
-  kind: "dataType",
-  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1",
-  title: "Object",
-  description: "A plain JSON object with no pre-defined structure",
-  type: "object",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1",
+  "title": "Object",
+  "description": "A plain JSON object with no pre-defined structure",
+  "type": "object"
 }
 ```
 
 #### Empty List
 
-```json5
+```json
 {
-  $schema: "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
-  kind: "dataType",
-  $id: "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1",
-  title: "Empty List",
-  description: "An Empty List",
-  type: "array",
-  const: [],
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1",
+  "title": "Empty List",
+  "description": "An Empty List",
+  "type": "array",
+  "const": []
 }
 ```
 
@@ -257,33 +257,28 @@ A **subgraph** is a JSON object with the following fields, each described in det
 
 A `Vertex` is a JSON object which satisfies the following schema:
 
-```json5
+```json
 {
   "type": "object",
   "properties": {
     "kind": {
-      "oneOf": [
-        "entity"
-      ]
+      "oneOf": ["entity"]
     },
     "inner": {
       "$comment": "the entity",
       "type": "object"
     }
   },
-  "required": [
-    "kind",
-    "inner"
-  ]
+  "required": ["kind", "inner"]
 }
 ```
 
 > **Note**: The `kind` field is used to allow for future expansion of the subgraph format to include other kinds of vertices, such as ontology types.
 
-
 ###### <Hidden>Subgraph Structure Vertices</Hidden> The `Vertices` object
 
 The `vertices` field of a **subgraph** is a JSON object where:
+
 - the keys are `entityId`s
 - the values are a JSON object where:
   - the keys are `revisionId`s - a unique identifier for an instance of a specific **entity** within a subgraph, and MUST be a string. This is a forward-facing field which currently doesn't serve a functional purpose and as such can be any string.
@@ -297,7 +292,7 @@ The **roots** of a subgraph are distinguished elements which were the starting p
 
 The `roots` _field_ of the subgraph is an array of **Vertex IDs** which identify the roots, and are JSON objects which satisfies the following schema:
 
-```json5
+```json
 {
   "type": "object",
   "properties": {
@@ -308,10 +303,7 @@ The `roots` _field_ of the subgraph is an array of **Vertex IDs** which identify
       "type": "string"
     }
   },
-  "required": [
-    "baseId",
-    "revisionId"
-  ]
+  "required": ["baseId", "revisionId"]
 }
 ```
 
@@ -328,6 +320,7 @@ An **outward edge** is a partial definition of an edge between two vertices, whi
 When used in the context of the `Edges` object, it fully qualifies the definition of a `leftEndpoint - edge -> rightEndpoint`
 
 It's made up of a trio of information:
+
 - `reversed`
 - `kind` the kind of edge, which is one of:
   - `HAS_LEFT_ENTITY`
@@ -337,52 +330,53 @@ It's made up of a trio of information:
 The fields lead to the following permutations:
 
 **Entity has outgoing link** (the entity on the left endpoint has an outgoing link entity)
+
 ```json
 {
-    "reversed": true,
-    "kind": "HAS_LEFT_ENTITY",
-    "rightEndpoint": "Some Entity Id"
+  "reversed": true,
+  "kind": "HAS_LEFT_ENTITY",
+  "rightEndpoint": "Some Entity Id"
 }
 ```
 
 **Entity has incoming link** (the entity on the left endpoint has an incoming link entity)
+
 ```json
 {
-    "reversed": true,
-    "kind": "HAS_RIGHT_ENTITY",
-    "rightEndpoint": "Some Entity Id"
+  "reversed": true,
+  "kind": "HAS_RIGHT_ENTITY",
+  "rightEndpoint": "Some Entity Id"
 }
 ```
 
 **Link Entity has left entity** (the link entity on the left endpoint has a left entity)
+
 ```json
 {
-    "reversed": false,
-    "kind": "HAS_LEFT_ENTITY",
-    "rightEndpoint": "Some Entity Id"
+  "reversed": false,
+  "kind": "HAS_LEFT_ENTITY",
+  "rightEndpoint": "Some Entity Id"
 }
 ```
 
 **Link Entity has right entity** (the link entity on the left endpoint has a right entity)
+
 ```json
 {
-    "reversed": false,
-    "kind": "HAS_RIGHT_ENTITY",
-    "rightEndpoint": "Some Entity Id"
+  "reversed": false,
+  "kind": "HAS_RIGHT_ENTITY",
+  "rightEndpoint": "Some Entity Id"
 }
 ```
 
 Specifically an `OutwardEdge` is a JSON object which satisfies the following schema:
 
-```json5
+```json
 {
   "type": "object",
   "properties": {
     "kind": {
-      "oneOf": [
-        "HAS_LEFT_ENTITY",
-        "HAS_RIGHT_ENTITY"
-      ]
+      "oneOf": ["HAS_LEFT_ENTITY", "HAS_RIGHT_ENTITY"]
     },
     "reversed": {
       "type": "boolean"
@@ -392,17 +386,14 @@ Specifically an `OutwardEdge` is a JSON object which satisfies the following sch
       "type": "string"
     }
   },
-  "required": [
-    "kind",
-    "reversed",
-    "rightEndpoint"
-  ]
+  "required": ["kind", "reversed", "rightEndpoint"]
 }
 ```
 
 ###### <Hidden>Subgraph Structure Vertices</Hidden> The `Edges` object
 
 The `edges` field of a **subgraph** is a JSON object where:
+
 - the keys are `entityId`s
 - the values are a JSON object where:
   - the keys identify the point at which the edge was created, and MUST be strings - This is a forward-facing field which currently doesn't serve a functional purpose and as such can be any string.
@@ -414,6 +405,7 @@ A **subgraph** is constructed by exploring the datastore along **edges** from a 
 This traversal is limited by a set of **resolve depths** which constrain the depth of the query.
 
 The `resolveDepths` field of the subgraph is a JSON object which:
+
 - MUST contain key `hasLeftEntity`
 - MUST contain key `hasRightEntity`
 - the values of `hasLeftEntity` and `hasRightEntity` MUST be a JSON object which:
@@ -444,9 +436,9 @@ export const traverseElement = ({
             ...currentTraversalDepths,
             [edgeKind]: {
               ...currentTraversalDepths[edgeKind],
-              [direction]: depth - 1
-            }
-          }
+              [direction]: depth - 1,
+            },
+          },
         });
       }
     }

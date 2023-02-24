@@ -47,10 +47,7 @@
           "maximum": 255
         }
       },
-      "required": [
-        "incoming",
-        "outgoing"
-      ],
+      "required": ["incoming", "outgoing"],
       "additionalProperties": false
     },
     "OutgoingEdgeResolveDepth": {
@@ -63,9 +60,7 @@
           "maximum": 255
         }
       },
-      "required": [
-        "outgoing"
-      ],
+      "required": ["outgoing"],
       "additionalProperties": false
     }
   }

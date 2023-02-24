@@ -28,13 +28,7 @@
       }
     }
   },
-  "required": [
-    "$schema",
-    "kind",
-    "$id",
-    "title",
-    "oneOf"
-  ],
+  "required": ["$schema", "kind", "$id", "title", "oneOf"],
   "additionalProperties": false,
   "$defs": {
     "propertyValues": {
@@ -61,11 +55,7 @@
               "const": false
             }
           },
-          "required": [
-            "type",
-            "properties",
-            "additionalProperties"
-          ],
+          "required": ["type", "properties", "additionalProperties"],
           "additionalProperties": false
         },
         {
@@ -86,9 +76,7 @@
                   "minItems": 1
                 }
               },
-              "required": [
-                "oneOf"
-              ],
+              "required": ["oneOf"],
               "additionalProperties": false
             },
             "minItems": {
@@ -100,10 +88,7 @@
               "minimum": 0
             }
           },
-          "required": [
-            "type",
-            "items"
-          ],
+          "required": ["type", "items"],
           "additionalProperties": false
         }
       ]

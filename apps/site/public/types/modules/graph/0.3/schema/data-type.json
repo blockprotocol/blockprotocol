@@ -25,13 +25,7 @@
       "type": "string"
     }
   },
-  "required": [
-    "$schema",
-    "kind",
-    "$id",
-    "title",
-    "type"
-  ],
+  "required": ["$schema", "kind", "$id", "title", "type"],
   "oneOf": [
     {
       "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1"

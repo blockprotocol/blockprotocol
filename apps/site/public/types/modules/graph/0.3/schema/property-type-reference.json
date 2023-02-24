@@ -10,8 +10,6 @@
       "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
     }
   },
-  "required": [
-    "$ref"
-  ],
+  "required": ["$ref"],
   "additionalProperties": false
 }

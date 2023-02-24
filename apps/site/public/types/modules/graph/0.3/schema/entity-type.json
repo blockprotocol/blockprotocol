@@ -35,9 +35,7 @@
             "const": "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1"
           }
         },
-        "required": [
-          "$ref"
-        ],
+        "required": ["$ref"],
         "additionalProperties": false
       },
       "maxItems": 1
@@ -87,11 +85,7 @@
               "minimum": 0
             }
           },
-          "required": [
-            "type",
-            "ordered",
-            "items"
-          ],
+          "required": ["type", "ordered", "items"],
           "additionalProperties": false
         }
       }

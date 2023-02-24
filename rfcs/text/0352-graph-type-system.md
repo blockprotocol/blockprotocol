@@ -1818,9 +1818,7 @@ Assuming that:
   "links": {
     "https://blockprotocol.org/@alice/link-type/written-by": {}
   },
-  "requiredLinks": [
-    "https://blockprotocol.org/@alice/link-type/written-by"
-  ]
+  "requiredLinks": ["https://blockprotocol.org/@alice/link-type/written-by"]
 }
 ```
 
@@ -1983,9 +1981,7 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/@alice/property-type/name": "Favorite Songs"
     },
     "links": {
-      "https://blockprotocol.org/@alice/link-type/contains": [
-        312, 314, 313
-      ] // referring to the song entity IDs, ordering is intentional and stable
+      "https://blockprotocol.org/@alice/link-type/contains": [312, 314, 313] // referring to the song entity IDs, ordering is intentional and stable
     }
   }
 ]
@@ -2058,9 +2054,7 @@ This would accept Entity instances with the following shape
     },
     "links": {
       "https://blockprotocol.org/@alice/link-type/written-by": 319, // referring to the User entity ID
-      "https://blockprotocol.org/@alice/link-type/contains": [
-        317, 316, 318
-      ] // referring to IDs above, ordering is intentional and stable
+      "https://blockprotocol.org/@alice/link-type/contains": [317, 316, 318] // referring to IDs above, ordering is intentional and stable
     }
   }
 ]
