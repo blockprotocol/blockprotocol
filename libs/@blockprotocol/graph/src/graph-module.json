@@ -28,8 +28,7 @@
         "required": [
           "entityTypeId",
           "properties"
-        ],
-        "additionalProperties": false
+        ]
       },
       "errorCodes": []
     },
@@ -70,15 +69,14 @@
             }
           },
           {
-            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-link-data"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders"
           }
         ],
         "required": [
           "entityId",
           "entityTypeId",
           "properties"
-        ],
-        "additionalProperties": false
+        ]
       },
       "errorCodes": []
     },
@@ -135,8 +133,7 @@
             "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths"
           }
         },
-        "required": ["entityId"],
-        "additionalProperties": false
+        "required": ["entityId"]
       },
       "errorCodes": []
     },
@@ -170,8 +167,7 @@
         },
         "required": [
           "operation"
-        ],
-        "additionalProperties": false
+        ]
       },
       "errorCodes": []
     },
@@ -195,8 +191,7 @@
         "required": [
           "results",
           "operation"
-        ],
-        "additionalProperties": false
+        ]
       },
       "errorCodes": ["FORBIDDEN", "INVALID_INPUT"]
     },
@@ -222,8 +217,7 @@
         },
         "required": [
           "url"
-        ],
-        "additionalProperties": false
+        ]
       },
       "errorCodes": []
     },
@@ -234,41 +228,7 @@
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
-        "title": "File Entity",
-        "type": "object",
-        "properties": {
-          "properties": {
-            "type": "object",
-            "properties": {
-              "https://blockprotocol.org/@blockprotocol/types/property-type/description/": {
-                "type": "string"
-              },
-              "https://blockprotocol.org/@blockprotocol/types/property-type/filename/": {
-                "type": "string"
-              },
-              "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/": {
-                "type": "string"
-              },
-              "https://blockprotocol.org/@blockprotocol/types/property-type/url/": {
-                "type": "string",
-                "format": "uri"
-              }
-            },
-            "required": [
-              "https://blockprotocol.org/@blockprotocol/types/property-type/filename/",
-              "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/",
-              "https://blockprotocol.org/@blockprotocol/types/property-type/url/"
-            ],
-            "additionalProperties": false
-          },
-          "metadata": {
-            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-metadata"
-          }
-        },
-        "required": [
-          "properties",
-          "metadata"
-        ]
+        "$ref": "https://blockprotocol.org/@blockprotocol/types/entity-type/file/v/1"
       },
       "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
     }

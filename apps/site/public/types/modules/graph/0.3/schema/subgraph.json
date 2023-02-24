@@ -25,6 +25,5 @@
     "vertices",
     "edges",
     "depths"
-  ],
-  "additionalProperties": false
+  ]
 }

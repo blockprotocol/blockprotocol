@@ -28,8 +28,7 @@
                   "field",
                   "operator",
                   "value"
-                ],
-                "additionalProperties": false
+                ]
               },
               {
                 "type": "object",
@@ -44,8 +43,7 @@
                 "required": [
                   "field",
                   "operator"
-                ],
-                "additionalProperties": false
+                ]
               }
             ]
           }
@@ -57,8 +55,7 @@
       "required": [
         "filters",
         "operator"
-      ],
-      "additionalProperties": false
+      ]
     },
     "multiSort": {
       "type": "array",
@@ -81,12 +78,10 @@
         },
         "required": [
           "field"
-        ],
-        "additionalProperties": false
+        ]
       }
     }
   },
-  "additionalProperties": false,
   "$defs": {
     "Field": {
       "description": "the path to a JSON field, expressed as a list of path components where strings are object fields and numbers are array indices",
