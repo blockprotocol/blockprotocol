@@ -1,5 +1,5 @@
 {
-  "$id": "https://blockprotocol.org/types/core/0.2/schema/module-meta",
+  "$id": "https://blockprotocol.org/types/core/0.3/schema/module-meta",
   "type": "object",
   "properties": {
     "description": {
