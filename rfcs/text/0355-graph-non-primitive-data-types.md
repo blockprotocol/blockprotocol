@@ -37,7 +37,7 @@ The rationale for introducing **non-primitive** data type is therefore to allow 
 
 [guide-level-explanation]: #guide-level-explanation
 
-Non-primitive data types are data types that further constrain an existing data type (which can be either non-primitive or primitive). In other words, non-primitive data types further restrict the _value space_ of an existing data type.
+Non-primitive data types are data types that further constrain or extend an existing data type (which can be either non-primitive or primitive). In other words, non-primitive data types further reduce or expand the _value space_ of existing data types.
 
 JSON Schema allows for various constraints to be defined on schemas, and they can be combined in a variety of ways. When multiple constraints are defined in a JSON Schema, validators will try to apply each one even if they define unsatisfiable types. The Block Protocol type system will allow for the definition of non-primitive data types by combining these constraints in a similar way.
 
@@ -45,9 +45,9 @@ To provide a way for these constraints to be composable and re-usable, the Block
 
 A second kind of composability of data types will also be possible by allowing data types to be defined as choices between data types. Conceptually this is similar to JSON Schema's `oneOf` keyword where a schema can take on the shape of _one of_ a list of schemas. This composability, instead of constraining the value-space, will allow data types to expand their value-space.
 
-Lastly, we will allow for data types to compose through the use of lists. This means that a data type can be of `{ type: "array" }` and use the `items` keyword to define its value-space(s).
+Lastly, we will allow for data types to compose through the use of lists. This means that data types can be of `{ type: "array" }` and use the `items` keyword to define their value-space(s).
 
-In the next sections we will explore what kind of constraints we will allow and how the mentioned three kinds of composition could look like.
+In the next sections we will explore what kind of constraints we will allow and what the three kinds of composition could look like.
 
 ## Constraints
 
@@ -188,6 +188,14 @@ The existing primitive data types are expressed as JSON-Schemas.
 [drawbacks]: #drawbacks
 
 <!-- Why should we _not_ do this? -->
+
+Adding constraints and composition to data types will increase their complexity a fair amount. The addition of user-created, non-primitive data types implies that:
+
+- Non-primitive data types can capture some semantic meaning that primitive data types do not have/provide a way to describe.
+- Constraints require embedding applications to understand the value-spaces provided by the primitive data types and require that data type validations are implemented in the embedding application.
+- Composition of data types adds an extra layer of indirection when validating entities as data types have to be expanded before applying validation rules.
+- Some validations may be computationally expensive to perform, such as regular expression matching on text.
+- Composed constraints could create non-satisfiable data types, such as a `Natural Number` data type with a `maximum` constraint set to `0` and a `minimum` constraint set to `1`.
 
 # Rationale and alternatives
 
