@@ -118,7 +118,7 @@
     },
     {
       "messageName": "getEntity",
-      "description": "Request to retrieve an entity, expecting the entity in response.",
+      "description": "Request to retrieve a subgraph rooted at a specific entity",
       "source": "block",
       "respondedToBy": "getEntityResponse",
       "sentOnInitialization": false,
