@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/subgraph",
+  "title": "Subgraph",
+  "type": "object",
+  "properties": {
+    "roots": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "vertices": {
+      "type": "object"
+    },
+    "edges": {
+      "type": "object"
+    },
+    "depths": {
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/graph-resolve-depths"
+    }
+  },
+  "required": [
+    "roots",
+    "vertices",
+    "edges",
+    "depths"
+  ],
+  "additionalProperties": false
+}
