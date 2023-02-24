@@ -157,14 +157,8 @@ The four components of a `Subgraph` are:
 - `depths`: which `edges` were followed from the `roots` when resolving the query, and how far
 - `edges`: connections between things in the graph. For example, a 'link entity' connects it and two other entities via `hasRightEntity`
   and `hasLeftEntity` edges (conceptually, the link entity is in the middle with an entity on its left and on its right)
-- `vertices`: each thing (`vertex`, or `node`) which was encountered when starting from the roots and following the specified `edges
-to the specified`depths`.
-
-A `Subgraph` may also be rooted at _types_, and it may also contain types in its _vertices_, as well as have _edges_
-which are type-related connections between vertices – but when writing a block you will mostly be working with entities.
-Requesting types can be important for validating input when the type of data is not known ahead of time (e.g. for a generic table block).
-If you know that your block accepts or generates a specific data structure, you already know its type – but by defining its type,
-you are helping applications and end-users of your block choose what data can be sent to it.
+- `vertices`: each element of the graph which was encountered when starting from the roots and following the specified `edges`
+to the specified `depths`.
 
 Again, you **probably don't need to worry about this when getting started** – but if you start to work with complex data networks
 made up of many entities with different relationships, the `Subgraph` and knowing how to query it becomes a powerful tool.
@@ -265,11 +259,11 @@ whether they are connected to the block entity at all, and far away they are (wh
 
 There are messages for exploring the data available in the embedding application:
 
-- `aggregateEntities` allows you to request a list of available entities.
+- `aggregateEntities` allows you to build a query to filter the entities in the data store.
 
-You can browse the available entities rder to display them, or create links between them.
+You can browse the available entities in order to display them, or create links between them.
 
-If you want to retrieve more detailed information on a specific entity, you can call `getEntity`.
+If you know of a specific entity that you want to retrieve more detailed information on, you can call `getEntity`.
 
 ### Going further with the graph module
 
