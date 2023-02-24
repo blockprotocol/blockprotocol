@@ -100,14 +100,8 @@
       "respondedToBy": "deleteEntityResponse",
       "sentOnInitialization": false,
       "data": {
-        "type": "object",
-        "properties": {
-          "entityId": {
-            "description": "The entityId of the entity to delete",
-            "type": "string"
-          }
-        },
-        "required": ["entityId"]
+        "description": "The entityId of the entity to delete",
+        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
       },
       "errorCodes": []
     },
