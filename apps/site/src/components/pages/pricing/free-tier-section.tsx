@@ -204,6 +204,15 @@ export const FreeTierSection: FunctionComponent<{
             type="users"
             descriptionItems={[
               {
+                icon: faWandMagicSparkles,
+                text: (
+                  <>
+                    <strong>Free credits</strong> for use of OpenAI GPT-3,
+                    Mapbox and more
+                  </>
+                ),
+              },
+              {
                 icon: faCubes,
                 text: (
                   <>
@@ -248,15 +257,6 @@ export const FreeTierSection: FunctionComponent<{
                   <>
                     <strong>Access APIs</strong> without having to sign up for
                     them individually
-                  </>
-                ),
-              },
-              {
-                icon: faWandMagicSparkles,
-                text: (
-                  <>
-                    <strong>Free credits</strong> for use of OpenAI GPT-3,
-                    Mapbox and more
                   </>
                 ),
               },
