@@ -1,5 +1,5 @@
 {
-  "$id": "https://blockprotocol.org/types/modules/graph/partial-graph-resolve-depths",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/partial-graph-resolve-depths",
   "title": "Partial Graph Resolve Depths",
   "description": "The depths a subgraph query should be resolved to. This is a partial selection of the full depths object.",
   "type": "object",
