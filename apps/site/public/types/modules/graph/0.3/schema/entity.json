@@ -5,7 +5,8 @@
   "type": "object",
   "properties": {
     "properties": {
-      "$ref": "https://example.com/path-to-the-entity-schema"
+      "type": "object",
+      "$comment": "This should be constrained by the associated entity type"
     },
     "metadata": {
       "type": "object",
