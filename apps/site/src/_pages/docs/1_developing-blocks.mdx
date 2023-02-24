@@ -184,7 +184,7 @@ const { data, errors } = await graphModule.updateEntity({
     entityId: blockEntity.metadata.recordId.entityId,
     entityTypeId: blockEntity.metadata.entityTypeId,
     properties: {
-      "https://blockprotocol.org/types/property-type/name/": "Bob",
+      "https://blockprotocol.org/@blockprotocol/types/property-type/name/": "Bob",
     },
   },
 });
@@ -200,14 +200,14 @@ If you’re using the `custom-element` template, you have a helper method to ach
 
 ```js
 this.updateSelfProperties({
-  "https://blockprotocol.org/types/property-type/name/": "Bob",
+  "https://blockprotocol.org/@blockprotocol/types/property-type/name/": "Bob",
 });
 ```
 
 Because properties are identified by URLs, you may wish to alias them in your code if used in multiple places. For example:
 
 ```js
-const nameKey = "https://blockprotocol.org/types/property-type/name/";
+const nameKey = "https://blockprotocol.org/@blockprotocol/types/property-type/name/";
 
 if (blockEntity.properties[nameKey] !== "Bob") {
   await graphModule.updateEntity({
@@ -240,7 +240,7 @@ For example, to link an entity to the block entity:
 // link the 'blockEntity' to some 'otherEntity' you have a reference to (e.g. if you have newly created it)
 graphModule.createEntity({
   data: {
-    entityTypeId: "https://blockprotocol.org/types/entity-type/friend/v/1",
+    entityTypeId: "https://blockprotocol.org/@blockprotocol/types/entity-type/friend/v/1",
     linkData: {
       leftEntity: blockEntity.metadata.recordId.entityId,
       destinationEntityId: otherEntity.metadata.recordId.entityId,
