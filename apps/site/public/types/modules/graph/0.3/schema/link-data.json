@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-data",
+  "title": "Link Data",
+  "type": "object",
+  "allOf": [
+    {
+      "properties": {
+        "leftEntityId": {
+          "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
+        },
+        "rightEntityId": {
+          "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
+        }
+      }
+    },
+    {
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-link-data"
+    }
+  ],
+  "required": [
+    "leftEntityId",
+    "rightEntityId"
+  ],
+  "additionalProperties": false
+}

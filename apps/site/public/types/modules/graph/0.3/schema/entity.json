@@ -31,24 +31,7 @@
       "required": ["recordId", "entityTypeId"]
     },
     "linkData": {
-      "type": "object",
-      "properties": {
-        "leftEntityId": {
-          "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
-        },
-        "rightEntityId": {
-          "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
-        },
-        "leftToRightOrder": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "rightToLeftOrder": {
-          "type": "integer",
-          "minimum": 0
-        }
-      },
-      "required": ["leftEntityId", "rightEntityId"]
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-data"
     }
   },
   "required": ["metadata"]
