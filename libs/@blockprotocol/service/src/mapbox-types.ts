@@ -442,8 +442,8 @@ export declare type LngLatBoundsLike =
  * ```
  */
 
-export declare type AutofillFeatureSuggestion = GeoJSON.Feature<
-  GeoJSON.Point,
+export declare type AutofillFeatureSuggestion = Feature<
+  Point,
   Omit<AutofillSuggestion, "original_search_text" | "action">
 > & {
   /**
@@ -692,8 +692,8 @@ export declare type GeocodeFeatureContext =
  * @typedef GeocodeFeature
  * @see [Geocoding response object](https://docs.mapbox.com/api/search/geocoding/#geocoding-response-object)
  */
-export declare type GeocodeFeature = GeoJSON.Feature<
-  GeoJSON.Point,
+export declare type GeocodeFeature = Feature<
+  Point,
   GeocodeFeatureProperties
 > & {
   accuracy?: string;
