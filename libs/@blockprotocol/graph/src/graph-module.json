@@ -14,21 +14,22 @@
         "properties": {
           "entityTypeId": {
             "description": "The entityTypeId of the type of the entity to create",
-            "type": "string"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
           },
           "properties": {
             "description": "The properties of the entity to create",
-            "type": "object"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type-object"
           },
-          "links": {
+          "linkData": {
             "description": "Links to create along with the entity",
-            "type": "array",
-            "items": {
-              "$ref": "https://blockprotocol.org/types/modules/graph/link"
-            }
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-data"
           }
         },
-        "required": ["entityTypeId", "properties"]
+        "required": [
+          "entityTypeId",
+          "properties"
+        ],
+        "additionalProperties": false
       },
       "errorCodes": []
     },
