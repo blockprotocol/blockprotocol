@@ -129,10 +129,14 @@
         "properties": {
           "entityId": {
             "description": "The entityId of the entity to retrieve",
-            "type": "string"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
+          },
+          "graphResolveDepths": {
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths"
           }
         },
-        "required": ["entityId"]
+        "required": ["entityId"],
+        "additionalProperties": false
       },
       "errorCodes": []
     },
