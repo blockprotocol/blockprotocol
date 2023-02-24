@@ -69,7 +69,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
         setOpenaiCompleteTextResponse(response.data);
       }
     },
-    [mapboxSuggestSearchText, serviceModule],
+    [openaiCompleteTextPrompt, serviceModule],
   );
 
   const handleMapboxSuggestSubmit = useCallback(

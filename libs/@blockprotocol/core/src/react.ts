@@ -16,7 +16,10 @@ export const useModuleConstructor = <T extends ModuleHandler>({
   ref,
 }: {
   Handler: ModuleConstructor<T>;
-  constructorArgs?: { callbacks?: Record<string, GenericMessageCallback> };
+  constructorArgs?: Omit<
+    ConstructorParameters<ModuleConstructor<T>>[0],
+    "element"
+  >;
   ref: RefObject<HTMLElement>;
 }) => {
   const previousRef = useRef<HTMLElement | null>(null);

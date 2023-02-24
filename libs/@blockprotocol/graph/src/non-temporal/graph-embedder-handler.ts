@@ -18,7 +18,7 @@ export class GraphEmbedderHandler
   extends ModuleHandler
   implements GraphEmbedderMessages
 {
-  private _blockEntitySubgraph?: Subgraph<EntityRootType>;
+  private _blockEntitySubgraph: Subgraph<EntityRootType>;
   // private _linkedAggregations?: LinkedAggregations;
   private _readonly?: boolean;
 
@@ -29,7 +29,7 @@ export class GraphEmbedderHandler
     // linkedAggregations,
     readonly,
   }: {
-    blockEntitySubgraph?: Subgraph<EntityRootType>;
+    blockEntitySubgraph: Subgraph<EntityRootType>;
     callbacks?: Partial<GraphEmbedderMessageCallbacks>;
     element?: HTMLElement | null;
     // linkedAggregations?: LinkedAggregations;
@@ -96,6 +96,9 @@ export class GraphEmbedderHandler
   }
 
   blockEntitySubgraph({ data }: { data?: Subgraph<EntityRootType> }) {
+    if (!data) {
+      throw new Error("'data' must be provided with blockEntitySubgraph");
+    }
     this._blockEntitySubgraph = data;
     this.sendMessage({
       message: {
