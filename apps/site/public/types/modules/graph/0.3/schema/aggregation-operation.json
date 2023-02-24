@@ -88,6 +88,7 @@
   "additionalProperties": false,
   "$defs": {
     "Field": {
+      "description": "the path to a JSON field, expressed as a list of path components where strings are object fields and numbers are array indices",
       "type": "array",
       "items": {
         "anyOf": [
