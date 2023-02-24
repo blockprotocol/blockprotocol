@@ -10,27 +10,8 @@
     },
     "hasRightEntity": {
       "$ref": "#/$defs/EdgeResolveDepths"
-    },
-    "constrainsLinkDestinationsOn": {
-      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
-    },
-    "constrainsLinksOn": {
-      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
-    },
-    "constrainsPropertiesOn": {
-      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
-    },
-    "constrainsValuesOn": {
-      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
-    },
-    "inheritsFrom": {
-      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
-    },
-    "isOfType": {
-      "$ref": "#/$defs/OutgoingEdgeResolveDepth"
     }
   },
-  "additionalProperties": false,
   "$defs": {
     "EdgeResolveDepths": {
       "description": "A selection of incoming, and outgoing, depths to resolve associated with a specific edge kind.",
@@ -47,21 +28,10 @@
           "maximum": 255
         }
       },
-      "required": ["incoming", "outgoing"],
-      "additionalProperties": false
-    },
-    "OutgoingEdgeResolveDepth": {
-      "description": "The depths to resolve in an outgoing direction, associated with a specific edge kind.",
-      "type": "object",
-      "properties": {
-        "outgoing": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 255
-        }
-      },
-      "required": ["outgoing"],
-      "additionalProperties": false
+      "required": [
+        "incoming",
+        "outgoing"
+      ]
     }
   }
 }

@@ -1,87 +1,110 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/aggregation-operation",
-  "title": "AggregationOperation",
+  "title": "Aggregation Operation",
   "type": "object",
   "properties": {
-    "entityTypeId": {
-      "type": "string"
-    },
-    "pageNumber": {
-      "type": "number"
-    },
-    "itemsPerPage": {
-      "type": "number"
-    },
     "multiFilter": {
+      "type": "object",
       "properties": {
         "filters": {
+          "type": "array",
           "items": {
-            "anyOf": [
+            "oneOf": [
               {
+                "type": "object",
                 "properties": {
                   "field": {
-                    "type": "string"
+                    "$ref": "#/$defs/Field"
                   },
                   "operator": {
                     "$ref": "#/$defs/FilterOperatorRequiringValue"
                   },
                   "value": {
-                    "type": "string"
+                    "$comment": "any JSON value allowed"
                   }
                 },
-                "type": "object"
+                "required": [
+                  "field",
+                  "operator",
+                  "value"
+                ]
               },
               {
+                "type": "object",
                 "properties": {
                   "field": {
-                    "type": "string"
+                    "$ref": "#/$defs/Field"
                   },
                   "operator": {
                     "$ref": "#/$defs/FilterOperatorWithoutValue"
                   }
                 },
-                "type": "object"
+                "required": [
+                  "field",
+                  "operator"
+                ]
               }
             ]
-          },
-          "type": "array"
+          }
         },
         "operator": {
           "$ref": "#/$defs/MultiFilterOperatorType"
         }
       },
-      "type": "object"
+      "required": [
+        "filters",
+        "operator"
+      ]
     },
     "multiSort": {
+      "type": "array",
       "items": {
+        "type": "object",
         "properties": {
-          "desc": {
-            "type": "boolean"
-          },
           "field": {
-            "type": "string"
+            "$ref": "#/$defs/Field"
+          },
+          "desc": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
-        "type": "object"
-      },
-      "type": "array"
-    },
-    "pageCount": {
-      "type": "number"
-    },
-    "totalCount": {
-      "type": "number"
+        "required": [
+          "field"
+        ]
+      }
     }
   },
   "$defs": {
+    "Field": {
+      "description": "the path to a JSON field, expressed as a list of path components where strings are object fields and numbers are array indices",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          }
+        ]
+      }
+    },
     "FilterOperatorRequiringValue": {
       "enum": [
         "CONTAINS_SEGMENT",
         "DOES_NOT_CONTAIN_SEGMENT",
-        "ENDS_WITH",
         "EQUALS",
         "DOES_NOT_EQUAL",
-        "STARTS_WITH"
+        "STARTS_WITH",
+        "ENDS_WITH"
       ],
       "type": "string"
     },

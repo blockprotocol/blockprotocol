@@ -6,12 +6,6 @@
   "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths",
   "required": [
     "hasLeftEntity",
-    "hasRightEntity",
-    "constrainsLinkDestinationsOn",
-    "constrainsLinksOn",
-    "constrainsPropertiesOn",
-    "constrainsValuesOn",
-    "inheritsFrom",
-    "isOfType"
+    "hasRightEntity"
   ]
 }

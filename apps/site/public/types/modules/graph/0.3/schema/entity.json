@@ -6,49 +6,16 @@
   "properties": {
     "properties": {
       "type": "object",
-      "$comment": "This should be constrained by the associated entity type"
+      "$comment": "This should be constrained by the associated entity type",
+      "propertyNames": {
+        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
+      }
     },
     "metadata": {
-      "type": "object",
-      "properties": {
-        "recordId": {
-          "type": "object",
-          "properties": {
-            "entityId": {
-              "type": "string"
-            },
-            "editionId": {
-              "type": "string"
-            }
-          },
-          "required": ["entityId", "editionId"]
-        },
-        "entityTypeId": {
-          "$comment": "The versioned URL of the entity's entity type (the $id of the entity type's schema)",
-          "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
-        }
-      },
-      "required": ["recordId", "entityTypeId"]
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-metadata"
     },
     "linkData": {
-      "type": "object",
-      "properties": {
-        "leftEntityId": {
-          "type": "string"
-        },
-        "rightEntityId": {
-          "type": "string"
-        },
-        "leftToRightOrder": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "rightToLeftOrder": {
-          "type": "integer",
-          "minimum": 0
-        }
-      },
-      "required": ["leftEntityId", "rightEntityId"]
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-data"
     }
   },
   "required": ["metadata"]
