@@ -235,14 +235,14 @@ Embedding applications MUST provide `entityId` for each entity it supplies the b
 
 ## Subgraph Definition
 
-#### <Hidden>Subgraph </Hidden>Summary
+### <Hidden>Subgraph </Hidden>Summary
 
 Many of the values returned by embedding applications for messages of the graph module include a **subgraph**.
 
 A subgraph is a data structure which contains elements of the graph, **vertices**, and **edges** which is a precomputed lookup set of the relationships between elements of the graph.
 Consumers can pass this object to the graph module package's standard library to benefit from implementations of common operations such as getting entities linked to a particular entity.
 
-#### <Hidden>Subgraph </Hidden>Structure
+### <Hidden>Subgraph </Hidden>Structure
 
 A **subgraph** is a JSON object with the following fields, each described in detail below:
 
@@ -251,9 +251,9 @@ A **subgraph** is a JSON object with the following fields, each described in det
 - `edges`
 - `depths`
 
-##### <Hidden>Subgraph Structure</Hidden> Vertices
+#### <Hidden>Subgraph Structure</Hidden> Vertices
 
-###### <Hidden>Subgraph Structure Vertices</Hidden> Vertex
+##### <Hidden>Subgraph Structure Vertices</Hidden> Vertex
 
 A `Vertex` is a JSON object which satisfies the following schema:
 
@@ -275,7 +275,7 @@ A `Vertex` is a JSON object which satisfies the following schema:
 
 > **Note**: The `kind` field is used to allow for future expansion of the subgraph format to include other kinds of vertices, such as ontology types.
 
-###### <Hidden>Subgraph Structure Vertices</Hidden> The `Vertices` object
+##### <Hidden>Subgraph Structure Vertices</Hidden> The `Vertices` object
 
 The `vertices` field of a **subgraph** is a JSON object where:
 
@@ -286,7 +286,7 @@ The `vertices` field of a **subgraph** is a JSON object where:
 
 > **Note**: The `revisionId` will be used to identify different revisions of the same element within a single subgraph, this could be multiple versions of the same ontology type, or multiple revisions of an entity in a datastore that supports versioning
 
-##### <Hidden>Subgraph Structure</Hidden> Roots
+#### <Hidden>Subgraph Structure</Hidden> Roots
 
 The **roots** of a subgraph are distinguished elements which were the starting points for traversal of **edges** (up to depths defined by the **graph resolve depths**).
 
@@ -312,9 +312,9 @@ The `revisionId` field MUST correspond to the key of the object of `vertices[bas
 
 That is to say, `subgraph.vertices[baseId][revisionId]` MUST be the vertex of the root.
 
-##### <Hidden>Subgraph Structure</Hidden> Edges
+#### <Hidden>Subgraph Structure</Hidden> Edges
 
-###### <Hidden>Subgraph Structure Vertices</Hidden> 'Outward' Edge
+##### <Hidden>Subgraph Structure Vertices</Hidden> 'Outward' Edge
 
 An **outward edge** is a partial definition of an edge between two vertices, which defines the edge-variant and one of the endpoints of the edge.
 When used in the context of the `Edges` object, it fully qualifies the definition of a `leftEndpoint - edge -> rightEndpoint`
@@ -390,7 +390,7 @@ Specifically an `OutwardEdge` is a JSON object which satisfies the following sch
 }
 ```
 
-###### <Hidden>Subgraph Structure Vertices</Hidden> The `Edges` object
+##### <Hidden>Subgraph Structure Vertices</Hidden> The `Edges` object
 
 The `edges` field of a **subgraph** is a JSON object where:
 
@@ -399,7 +399,7 @@ The `edges` field of a **subgraph** is a JSON object where:
   - the keys identify the point at which the edge was created, and MUST be strings - This is a forward-facing field which currently doesn't serve a functional purpose and as such can be any string.
   - the values are an array of `OutwardEdge` objects of the edges that have an endpoint at the entity associated with the `entityId`.
 
-##### <Hidden>Subgraph Structure</Hidden> Resolve Depths
+#### <Hidden>Subgraph Structure</Hidden> Resolve Depths
 
 A **subgraph** is constructed by exploring the datastore along **edges** from a set of **elements**.
 This traversal is limited by a set of **resolve depths** which constrain the depth of the query.
