@@ -59,7 +59,7 @@
                 "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
               },
               "entityTypeId": {
-                "description": "The entityTypeId of the type of the entity to update",
+                "description": "The entityTypeId of the updated entity",
                 "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
               },
               "properties": {
