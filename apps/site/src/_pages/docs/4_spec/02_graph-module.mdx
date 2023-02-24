@@ -163,11 +163,8 @@ Blocks may also add `default` and `examples` keys to `block-metadata.json` to de
 A block using the graph module MAY expand `block-metadata.json` to specify:
 
 - `schema`: the versioned URL of the **entity type** associated with the block entity. As per the specification, the schema hosted at the remote address should not be subject to change and versions of entity types should be treated as immutable, permanently available, records.
-
 - `default`: an **entity**, conforming to the block’s entity type, representing the default data that applications should provide when creating a block, unless &#40;a&#41; the block can handle being provided no data when first instantiated or &#40;b&#41; `variants` is provided &#40;see below&#41;
-
 - `examples`: an array of objects conforming to the block's entity type which provide examples of the data that can be passed to it
-
 - `variants`: an array of objects, each with a `name` and `properties`, and optionally `description`, `icon`, and `examples`. These objects represents different variants of the block that the user can create, where `properties` sets the starting properties. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as `properties`, respectively
   If more complex example data is required, a block’s package may also include a file at the root named `example-graph.json`, which MUST be a JSON object, and MUST contain an `entities` key where each element is a JSON representation of an entity which MUST conform to the structure specified in [entity definition](#structure-specification).
 
