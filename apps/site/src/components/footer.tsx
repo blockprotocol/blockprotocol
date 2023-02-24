@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
+import { isBillingFeatureFlagEnabled } from "../lib/config";
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { ArrowUpRightIcon } from "./icons/arrow-up-right-icon";
 import { DiscordIcon } from "./icons/discord-icon";
@@ -39,12 +40,14 @@ const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
       name: "Specification",
       href: "/docs/spec",
     },
-    // Uncomment when we have the pricing page
-    // Don't forget to uncomment in tests aswell
-    // {
-    //   name: "Pricing",
-    //   href: "/pricing",
-    // },
+    ...(isBillingFeatureFlagEnabled
+      ? [
+          {
+            name: "Pricing",
+            href: "/pricing",
+          },
+        ]
+      : []),
     {
       name: "Contact Us",
       href: "/contact",
@@ -64,7 +67,7 @@ const DISCOVER_NAVIGATION_LINKS: NavigationSection = {
       href: "/hub",
     },
     {
-      name: "API endpoints",
+      name: "API services",
       href: "/hub",
     },
   ],
@@ -86,7 +89,7 @@ const PUBLISH_NAVIGATION_LINKS: NavigationSection = {
     //   arrow: true,
     // },
     // {
-    //   name: "an endpoint",
+    //   name: "a service",
     //   href: "/",
     //   arrow: true,
     // },
@@ -304,9 +307,8 @@ export const Footer: FunctionComponent<FooterProps> = ({
               {Socials}
             </Grid>
           )}
-          {/* Uncomment when we have the pages to link this to
-          Don't forget to uncomment in tests aswell */}
-          {/* <Grid item xs={12}>
+
+          <Grid item xs={12}>
             {[
               { title: "Terms", href: "/legal/terms" },
               { title: "Privacy", href: "/legal/privacy" },
@@ -330,7 +332,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
                 {title}
               </Link>
             ))}
-          </Grid> */}
+          </Grid>
         </Grid>
       </Container>
     </Box>

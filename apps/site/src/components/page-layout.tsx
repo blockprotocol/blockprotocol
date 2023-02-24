@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, ReactNode, useMemo, useState } from "react";
 
+import { useUser } from "../context/user-context";
 import { ComingSoonBanner } from "./coming-soon-banner";
 import { Footer } from "./footer";
 import { BANNERS, FooterBanner } from "./footer-banner";
@@ -23,6 +24,7 @@ export const PageLayout: FunctionComponent<PageLayoutProps> = ({
   children,
 }) => {
   const { pathname, asPath } = useRouter();
+  const { user } = useUser();
 
   const [displayLoginModal, setDisplayLoginModal] = useState(false);
 
@@ -32,10 +34,16 @@ export const PageLayout: FunctionComponent<PageLayoutProps> = ({
     !pathWithoutParams.startsWith("/wordpress") &&
     !pathWithoutParams.startsWith("/signup");
 
+  const signedIn = user === "loading" || user?.id;
+
   const banner = useMemo(
     () =>
-      BANNERS.find(({ shouldDisplay }) => shouldDisplay({ pathname, asPath })),
-    [pathname, asPath],
+      BANNERS.find(
+        ({ shouldDisplay, hideWhenSignedIn }) =>
+          shouldDisplay({ pathname, asPath }) &&
+          !(hideWhenSignedIn && signedIn),
+      ),
+    [pathname, asPath, signedIn],
   );
 
   return (
