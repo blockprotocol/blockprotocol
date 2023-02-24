@@ -21,15 +21,17 @@ The set of **primitive** data types (`Text`, `Number`, `Boolean`, `Null`, `Objec
 
 However, in many situations it will be useful to further constrain the value-space of a data type using further **constraints**. These value-space constraints will help users model their domain more precisely, and allow for additional validation to be performed.
 
-The value-space can be thought of as the set of all possible values that a data type can take. Constraints define rules that this value-space must be reduced by. For example, the value-space of the `Number` data type is the set of all possible numbers, but the value-space of a non-primitive data type `Positive Integer` is the set of all possible non-deciaml numbers greater than 0.
+The value-space can be thought of as the set of all possible values that a data type can take. Constraints define rules that this value-space must be reduced by. For example, the value-space of the `Number` data type is the set of all possible numbers, but the value-space of a non-primitive data type `Positive Integer` is the set of all possible non-decimal numbers greater than 0.
 
-**Example 1:** defining an `age` property type
+For example, a user wants to model a person's `age` as a property type within the type system. Currently, they would have to use the `Number` primitive data type. However, this is too permissive, as the value-space of the `Number` primitive data type includes negative numbers and decimal numbers. Instead, the user can define or discover the `Positive Integer` non-primitive data type to capture allowed values of a person's age more accurately.
 
-A user wants to model a person's `age` within the type system. Currently, they would have to use the `Number` primitive data type. However, this is too permissive, as the value-space of the `Number` primitive data type includes negative numbers and decimal numbers. Instead, the user can define or discover the `Positive Integer` non-primitive data type to capture allowed values of a person's age more accurately.
+In theory these constraints could be defined in the property type, but this would inhibit these data type constraints from being reusable. Since re-usability is a core design consideration behind the type system of the block protocol, it is important to allow for the definition of non-primitive data types.
 
-In theory these constraints could be defined in the property type, but this would inhibit these data type constraints from being re-usable. Since re-usability is a core design consideration behind the type system of the block protocol, it is important to allow for the definition of non-primitive data types.
+Ideally, data types and their constraints should be **composable**, so that a non-primitive data type can be defined as a combination of other data types. This will allow for expressing more complex data types, and enable the reuse of constraints across data types. Data types composition will allow users to _reduce_ and _expand_ value-spaces.
 
-The rationale for introducing **non-primitive** data type is therefore to allow for the type system to further constrain the value-space of its data types, in a re-usable manner.
+For example, a user wants to model `color` as a property type within the type system. They want to represent a triple of numbers from 0 - 255. This is not possible in the current type system, but with composable non-primitive data types with constraints, it would be possible to define a `RGB Color` data type that consists of a list of three `Positive Integer` data types that are constrained to be between 0 and 255. `color` could make use of `RGB Color` to obtain the semantics the user seeks.
+
+The rationale for introducing **non-primitive** data type is therefore to allow for the type system to further constrain the value-space of its data types, in a reusable manner and allow for flexibility of defining more complex data types.
 
 # Guide-level explanation
 
