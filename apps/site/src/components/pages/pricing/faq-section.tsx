@@ -21,7 +21,7 @@ const DescriptionTypography: FunctionComponent<TypographyProps> = ({
     {...props}
     variant="bpBodyCopy"
     sx={{
-      lineHeight: 1.3,
+      lineHeight: 1.7,
       maxWidth: "unset",
     }}
   >
