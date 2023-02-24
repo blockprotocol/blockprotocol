@@ -63,7 +63,7 @@
                 "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
               },
               "properties": {
-                "description": "The properties of the entity to update",
+                "description": "The new properties object to assign to the entity",
                 "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type-object"
               }
             }
