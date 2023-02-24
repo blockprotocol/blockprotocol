@@ -10,7 +10,7 @@
         "filters": {
           "type": "array",
           "items": {
-            "anyOf": [
+            "oneOf": [
               {
                 "type": "object",
                 "properties": {
@@ -21,6 +21,7 @@
                     "$ref": "#/$defs/FilterOperatorRequiringValue"
                   },
                   "value": {
+                    "$comment": "any JSON value allowed"
                   }
                 },
                 "required": [
@@ -91,7 +92,7 @@
       "description": "the path to a JSON field, expressed as a list of path components where strings are object fields and numbers are array indices",
       "type": "array",
       "items": {
-        "anyOf": [
+        "oneOf": [
           {
             "type": "string"
           },
