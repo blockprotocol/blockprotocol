@@ -202,21 +202,43 @@
       "respondedToBy": "uploadFileResponse",
       "sentOnInitialization": false,
       "data": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string"
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "$comment": "The URL to take the file from, if not being uploaded directly."
+              }
+            },
+            "required": [
+              "url"
+            ]
           },
-          "name": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
+          {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "file": {
+                "$comment": "the file blob, if being uploaded directly."
+              }
+            },
+            "required": [
+              "file"
+            ]
           }
-        },
-        "required": [
-          "url"
         ]
       },
       "errorCodes": ["NOT_IMPLEMENTED"]
