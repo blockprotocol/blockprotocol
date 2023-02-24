@@ -21,11 +21,14 @@ import { FontAwesomeIcon } from "../icons";
 import { Link } from "../link";
 import { Snippet } from "../snippet";
 import { FAQ } from "./faq";
-import { GraphModuleMessageList } from "./modules/graph/graph-module-message-list";
-import { HookModuleMessageList } from "./modules/hook/hook-module-message-list";
 import { GitHubInfoCard } from "./info-card/github-info-card";
 import { InfoCard } from "./info-card/info-card";
 import { InfoCardWrapper } from "./info-card/info-card-wrapper";
+import { GraphModuleMessageList } from "./modules/graph/graph-module-message-list";
+import { DataTypeMetaSchema } from "./modules/graph/schemas/data-type";
+import { EntityTypeMetaSchema } from "./modules/graph/schemas/entity-type";
+import { PropertyTypeMetaSchema } from "./modules/graph/schemas/property-type";
+import { HookModuleMessageList } from "./modules/hook/hook-module-message-list";
 import { usePageHeading } from "./shared/use-page-heading";
 import { stringifyChildren } from "./shared/util";
 
@@ -98,6 +101,9 @@ export const mdxComponents: Record<
   FAQ,
   GraphModuleMessageList,
   HookModuleMessageList,
+  DataTypeMetaSchema,
+  PropertyTypeMetaSchema,
+  EntityTypeMetaSchema,
   SubTitle: (({ children }: { children?: ReactNode }) => (
     <Box
       maxWidth={750}
