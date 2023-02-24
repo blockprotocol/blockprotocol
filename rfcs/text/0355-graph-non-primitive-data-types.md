@@ -233,7 +233,7 @@ Note that while precedent set by other technologies is some motivation, it does 
 
 Most of the contents in this RFC are directly defined in the JSON Schema specification. The data type constraints are analogous to those defined for the [JSON Schema types](https://json-schema.org/understanding-json-schema/reference/type.html). and composition is analogous to the [JSON Schema `allOf` keyword](https://json-schema.org/understanding-json-schema/reference/combining.html#allof).
 
-That being said, we've adapted the validations to match our primitive data types - and omitted some of the constraints such as `format` for the `string`. Composition is also a bit different in that we don't allow all the JSON Schema composition keywords, but only `allOf`.
+That being said, we've adapted the validations to match our primitive data types - and omitted some of the constraints such as `format` for the `string`. Composition is also a bit different in that we don't allow all the JSON Schema composition keywords, but only `allOf`. This is to reduce the scope of implementation and to avoid introducing more new concepts than required.
 
 In the semantic web domain, [SHACL](https://www.w3.org/TR/shacl/) is a popular way to define constraints on RDF graphs. SHACL is a W3C recommendation and is used in many semantic web applications. SHACL is a bit different from JSON Schema in that it is a language for defining constraints on RDF graphs and not blobs of JSON. Furthermore, SHACL is used to enhance semantic interoperability between RDF ontologies.
 
