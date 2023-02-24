@@ -144,6 +144,8 @@ Valid values include: `[]`, `[1, 2]`, `[1, 2, 3]`, `"Hello"`, and so forth.
 
 [reference-level-explanation]: #reference-level-explanation
 
+> To be written.
+
 <!--
 
 This is the technical portion of the RFC. Explain the design in sufficient detail that:
