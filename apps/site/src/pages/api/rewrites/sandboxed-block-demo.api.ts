@@ -40,8 +40,8 @@ const handler: NextApiHandler = async (req, res) => {
 
   const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
 
-  // // @todo restore this when esm.sh treats version ranges correctly
-  // //   it current pulls non-latest versions of packages if a range is supplied
+  // @todo restore this when esm.sh treats version ranges correctly
+  //    it currently pulls non-latest versions of packages if a range is supplied
   // const reactVersion =
   //   blockMetadata.externals?.react ?? packageJson.dependencies.react;
 
