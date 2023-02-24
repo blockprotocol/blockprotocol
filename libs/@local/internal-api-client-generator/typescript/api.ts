@@ -213,6 +213,19 @@ export interface GetSubscriptionTierPrices200Response {
 /**
  *
  * @export
+ * @interface GetTaxId200Response
+ */
+export interface GetTaxId200Response {
+  /**
+   *
+   * @type {StripeTaxId}
+   * @memberof GetTaxId200Response
+   */
+  taxId?: StripeTaxId;
+}
+/**
+ *
+ * @export
  * @interface GetUpcomingInvoice200Response
  */
 export interface GetUpcomingInvoice200Response {
@@ -921,6 +934,45 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Get the tax ID of a user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTaxId: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/tax-id`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary Retrieve an upcoming invoice based on a new subscription tier
      * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
      * @param {*} [options] Override http request option.
@@ -1407,6 +1459,30 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Get the tax ID of a user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getTaxId(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetTaxId200Response>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getTaxId(
+        options,
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
      * @summary Retrieve an upcoming invoice based on a new subscription tier
      * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
      * @param {*} [options] Override http request option.
@@ -1669,6 +1745,17 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary Get the tax ID of a user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTaxId(options?: any): AxiosPromise<GetTaxId200Response> {
+      return localVarFp
+        .getTaxId(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Retrieve an upcoming invoice based on a new subscription tier
      * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
      * @param {*} [options] Override http request option.
@@ -1853,6 +1940,15 @@ export interface DefaultApiInterface {
   getSubscriptionTierPrices(
     options?: AxiosRequestConfig,
   ): AxiosPromise<GetSubscriptionTierPrices200Response>;
+
+  /**
+   *
+   * @summary Get the tax ID of a user
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getTaxId(options?: AxiosRequestConfig): AxiosPromise<GetTaxId200Response>;
 
   /**
    *
@@ -2042,6 +2138,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   public getSubscriptionTierPrices(options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .getSubscriptionTierPrices(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Get the tax ID of a user
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getTaxId(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .getTaxId(options)
       .then((request) => request(this.axios, this.basePath));
   }
 
