@@ -2,7 +2,7 @@
 
 This document (version 0.3) defines a **graph module** according to the terms set out in the [core specification](https://blockprotocol.org/docs/spec/core).
 
-The graph module describes how **ontology types** and **entities** can be created, queried, updated, and linked together – including the **block entity**, represented by the **properties** sent to the block.
+The graph module describes how **ontology types** and **entities** can be created, queried, updated, and linked together – including the **block entity** (the entity associated directly with the block).
 
 ## Glossary
 
@@ -10,13 +10,13 @@ The graph module describes how **ontology types** and **entities** can be create
 
 **Link Entity:** a kind of entity which represents a connection or relation between its left and right entity, constrained by a link entity type.
 
-**Left Entity:** the entity which is on the "left" of a specific link entity, in most situations this can be thought of as the "source" of the link.
+**Left Entity:** the entity which is on the "left" of a specific link entity – in most situations this can be thought of as the "source" of the link.
 
-**Right Entity:** the entity which is on the "right" of a specific link entity, in most situations this can be thought of as the "target" of the link.
+**Right Entity:** the entity which is on the "right" of a specific link entity – in most situations this can be thought of as the "target" of the link.
 
-**Ontology Type:** an element of the Block Protocol Type System, represented as a self-contained schema accessible via a URI. Ontology types are composed together to describe the shape of entities within the graph.
+**Ontology Type:** an element of the Block Protocol Type System, represented as a self-contained schema accessible via a URL. Ontology types are composed together to describe the shape of entities within the graph and the potential links between them.
 
-**Entity type:** an ontology type that defines the structure of an entity and its link entities. An entity type references other entity types and property types.
+**Entity type:** an ontology type that defines the structure of an entity, the type of link entities it may be connected to and the type of entities on the other end of those links. An entity type references other entity types and property types.
 
 **Link Entity type:** an entity type which has a special marker to say it constrains a link entity.
 
@@ -28,7 +28,7 @@ The graph module describes how **ontology types** and **entities** can be create
 
 **Edge:** a directed connection between two graph elements which describes their relationship. Possible edges include those that describe references between types, or the relationship between the left and right entities of link entities.
 
-**Subgraph:** a specific subset of a graph, usually returned as a result of a query. Can contain a set of roots which are distinguished elements of the subgraph, and usually correspond to the direct results of the query as the subgraph may contain other elements of the graph that were connected to the root elements through various edges.
+**Subgraph:** a specific subset of a graph, usually returned as a result of a query. Can contain a set of roots which are distinguished elements of the subgraph, and usually correspond to the direct results of the query – the subgraph may contain other elements of the graph that were connected to the root elements through various edges.
 
 **Block entity**: an entity associated with the specific instance of the block, conforming to block's specified entity type.
 
@@ -37,14 +37,14 @@ The graph module describes how **ontology types** and **entities** can be create
 ## The Type System
 
 The data model of the graph module is defined through its **Type System**.
-The type system describes how a graph of **entities** is structured, through a composition of the 3 classes of **ontology types**, **data types**, **property types**, and **entity types**.
+The type system describes how a graph of **entities** is structured, through a composition of the 3 classes of **ontology types**: **data types**, **property types**, and **entity types**.
 
 When composed, these types are capable of describing any JSON object.
 
 ### <Hidden>The Type System </Hidden>Data Types
 
 A **data type** describes a space of possible valid _values_.
-These cover all possible primitive values that can be represented within JSON, as well as `Object` and `Null` which are included for completeness of the system ([see the RFC for rationale](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0352-graph-type-system.md#including-an-empty-list-data-type)).
+These cover all possible primitive values that can be represented within JSON, as well as `Object`s and `Empty List`s which are included for completeness of the system ([see the RFC for rationale](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0352-graph-type-system.md#including-an-empty-list-data-type)).
 
 At present, there are 6 primitive data types.
 New ones cannot be created, although that is a planned extension in the near-future, whereby new ones will be defined by combining the primitive data types and constraints such as max lengths, minimum values, etc. ([see the associated in-development RFC](https://github.com/blockprotocol/blockprotocol/pull/355)).
