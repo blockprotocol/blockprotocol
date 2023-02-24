@@ -214,7 +214,7 @@ export const FreeTierSection: FunctionComponent<{
                 icon: faBoxOpen,
                 text: (
                   <>
-                    <strong>Multi-app support:</strong>{" "}
+                    <strong>Multi-app:</strong>{" "}
                     <CustomLink href="/docs/using-blocks#wordpress">
                       WordPress
                     </CustomLink>
