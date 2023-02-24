@@ -1,87 +1,125 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/aggregation-operation",
-  "title": "AggregationOperation",
+  "title": "Aggregation Operation",
   "type": "object",
   "properties": {
-    "entityTypeId": {
-      "type": "string"
-    },
-    "pageNumber": {
-      "type": "number"
-    },
-    "itemsPerPage": {
-      "type": "number"
-    },
-    "multiFilter": {
+    "operation": {
+      "type": "object",
       "properties": {
-        "filters": {
-          "items": {
-            "anyOf": [
-              {
-                "properties": {
-                  "field": {
-                    "type": "string"
+        "multiFilter": {
+          "type": "object",
+          "properties": {
+            "filters": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "$ref": "#/$defs/Field"
+                      },
+                      "operator": {
+                        "$ref": "#/$defs/FilterOperatorRequiringValue"
+                      },
+                      "value": {
+                      }
+                    },
+                    "required": [
+                      "field",
+                      "operator",
+                      "value"
+                    ],
+                    "additionalProperties": false
                   },
-                  "operator": {
-                    "$ref": "#/$defs/FilterOperatorRequiringValue"
-                  },
-                  "value": {
-                    "type": "string"
+                  {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "$ref": "#/$defs/Field"
+                      },
+                      "operator": {
+                        "$ref": "#/$defs/FilterOperatorWithoutValue"
+                      }
+                    },
+                    "required": [
+                      "field",
+                      "operator"
+                    ],
+                    "additionalProperties": false
                   }
-                },
-                "type": "object"
-              },
-              {
-                "properties": {
-                  "field": {
-                    "type": "string"
-                  },
-                  "operator": {
-                    "$ref": "#/$defs/FilterOperatorWithoutValue"
-                  }
-                },
-                "type": "object"
+                ]
               }
-            ]
+            },
+            "operator": {
+              "$ref": "#/$defs/MultiFilterOperatorType"
+            }
           },
-          "type": "array"
+          "required": [
+            "filters",
+            "operator"
+          ],
+          "additionalProperties": false
         },
-        "operator": {
-          "$ref": "#/$defs/MultiFilterOperatorType"
+        "multiSort": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "$ref": "#/$defs/Field"
+              },
+              "desc": {
+                "oneOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "field"
+            ],
+            "additionalProperties": false
+          }
         }
       },
-      "type": "object"
+      "additionalProperties": false
     },
-    "multiSort": {
-      "items": {
-        "properties": {
-          "desc": {
-            "type": "boolean"
-          },
-          "field": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "type": "array"
-    },
-    "pageCount": {
-      "type": "number"
-    },
-    "totalCount": {
-      "type": "number"
+    "graphResolveDepths": {
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths"
     }
   },
+  "required": [
+    "operation"
+  ],
+  "additionalProperties": false,
   "$defs": {
+    "Field": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          }
+        ]
+      }
+    },
     "FilterOperatorRequiringValue": {
       "enum": [
         "CONTAINS_SEGMENT",
         "DOES_NOT_CONTAIN_SEGMENT",
-        "ENDS_WITH",
         "EQUALS",
         "DOES_NOT_EQUAL",
-        "STARTS_WITH"
+        "STARTS_WITH",
+        "ENDS_WITH"
       ],
       "type": "string"
     },
