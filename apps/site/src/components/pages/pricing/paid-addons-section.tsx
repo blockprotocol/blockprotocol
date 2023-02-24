@@ -609,7 +609,15 @@ export const PaidAddonsSection: FunctionComponent = () => {
                 </strong>
               </Typography>
 
-              <List sx={{ marginLeft: 3, listStyle: "disc" }}>
+              <List
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1.5,
+                  marginLeft: 3,
+                  listStyle: "disc",
+                }}
+              >
                 <Typography
                   variant="bpBodyCopy"
                   sx={{ lineHeight: 1.4 }}
