@@ -158,14 +158,8 @@
       "respondedToBy": "aggregateEntitiesResponse",
       "sentOnInitialization": false,
       "data": {
-        "type": "object",
-        "properties": {
-          "operation": {
-            "description": "The aggregation operation to apply",
-            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
-          }
-        },
-        "required": ["operation"]
+        "description": "The aggregation operation to apply",
+        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/aggregation-operation"
       },
       "errorCodes": []
     },
