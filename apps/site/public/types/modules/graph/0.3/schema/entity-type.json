@@ -89,10 +89,6 @@
           "additionalProperties": false
         }
       }
-    },
-    "additionalProperties": {
-      "type": "boolean",
-      "const": false
     }
   },
   "additionalProperties": false,
@@ -102,7 +98,6 @@
     "$id",
     "title",
     "properties",
-    "additionalProperties"
   ],
   "$defs": {
     "oneOfEntityTypeReference": {

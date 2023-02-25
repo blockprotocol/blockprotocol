@@ -36,7 +36,6 @@ const propertyTypes: PropertyType[] = [
         required: [
           "https://blockprotocol.org/@blockprotocol/types/property-type/email/",
         ],
-        additionalProperties: false,
       },
     ],
   },
@@ -95,7 +94,6 @@ const propertyTypes: PropertyType[] = [
               },
             },
         },
-        additionalProperties: false,
       },
     ],
   },
@@ -250,7 +248,6 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
                 $ref: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
               },
           },
-          additionalProperties: false,
         },
       ],
     },
@@ -302,37 +299,6 @@ const brokenTypes: [any, ParsePropertyTypeError][] = [
         reason: "ValidationError",
         inner: {
           type: "EmptyOneOf",
-        },
-      },
-    },
-  ],
-  [
-    {
-      kind: "propertyType",
-      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/true-additional-properties/v/1",
-      title: "Broken",
-      oneOf: [
-        {
-          type: "object",
-          properties: {
-            "https://blockprotocol.org/@blockprotocol/types/property-type/broken/":
-              {
-                $ref: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
-              },
-          },
-          additionalProperties: true,
-        },
-      ],
-    },
-    {
-      reason: "InvalidOneOf",
-      inner: {
-        reason: "PropertyValuesError",
-        inner: {
-          reason: "InvalidPropertyTypeObject",
-          inner: {
-            reason: "InvalidAdditionalPropertiesValue",
-          },
         },
       },
     },
