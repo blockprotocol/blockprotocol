@@ -109,7 +109,7 @@ const UserPage: NextPage<UserPageProps> = ({
     } else {
       hasMounted.current = true;
     }
-  });
+  }, [user.shortname]);
 
   // Protect against unlikely client-side navigation to a non-existing profile tab
   if (!matchingTab) {
