@@ -9,4 +9,4 @@
 "mock-block-dock": minor
 ---
 
-rename block protocol 'services' to 'modules'
+rename Block Protocol 'Services' to 'Modules'
