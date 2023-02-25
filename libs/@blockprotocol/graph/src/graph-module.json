@@ -25,10 +25,7 @@
             "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-data"
           }
         },
-        "required": [
-          "entityTypeId",
-          "properties"
-        ]
+        "required": ["entityTypeId", "properties"]
       },
       "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
@@ -41,7 +38,12 @@
       "data": {
         "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     },
     {
       "messageName": "updateEntity",
@@ -72,11 +74,7 @@
             "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders"
           }
         ],
-        "required": [
-          "entityId",
-          "entityTypeId",
-          "properties"
-        ]
+        "required": ["entityId", "entityTypeId", "properties"]
       },
       "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
@@ -89,7 +87,13 @@
       "data": {
         "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_FOUND",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     },
     {
       "messageName": "deleteEntity",
@@ -114,7 +118,13 @@
         "type": "boolean",
         "const": true
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_FOUND",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     },
     {
       "messageName": "getEntity",
@@ -146,7 +156,13 @@
       "data": {
         "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/subgraph"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_FOUND",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     },
     {
       "messageName": "aggregateEntities",
@@ -165,9 +181,7 @@
             "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths"
           }
         },
-        "required": [
-          "operation"
-        ]
+        "required": ["operation"]
       },
       "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
@@ -188,12 +202,14 @@
             "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/aggregation-operation"
           }
         },
-        "required": [
-          "results",
-          "operation"
-        ]
+        "required": ["results", "operation"]
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     },
     {
       "messageName": "uploadFile",
@@ -218,9 +234,7 @@
                 "$comment": "The URL to take the file from, if not being uploaded directly."
               }
             },
-            "required": [
-              "url"
-            ]
+            "required": ["url"]
           },
           {
             "type": "object",
@@ -235,9 +249,7 @@
                 "$comment": "the file blob, if being uploaded directly."
               }
             },
-            "required": [
-              "file"
-            ]
+            "required": ["file"]
           }
         ]
       },
@@ -252,7 +264,13 @@
       "data": {
         "$ref": "https://blockprotocol.org/@blockprotocol/types/entity-type/file/v/1"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_FOUND",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     }
   ]
 }

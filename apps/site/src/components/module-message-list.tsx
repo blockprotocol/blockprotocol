@@ -54,7 +54,7 @@ const ModuleMessageData: FunctionComponent<{
             </tr>
           </thead>
           <tbody>
-            {Object.entries(data.properties as Record<string, JsonObject>).map(
+            {Object.entries(data.properties ?? {}).map(
               ([propertyName, propertySchema]) => (
                 <tr key={propertyName}>
                   <td>
