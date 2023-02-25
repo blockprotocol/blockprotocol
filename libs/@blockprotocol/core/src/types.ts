@@ -119,7 +119,7 @@ export type BlockMetadata = {
 };
 
 export type MessageError<ErrorCode extends string> = {
-  code: ErrorCode | "UNKNOWN_ERROR";
+  code: ErrorCode | "INTERNAL_ERROR";
   message: string;
   extensions?: any;
 };
