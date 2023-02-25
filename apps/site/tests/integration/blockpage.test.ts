@@ -85,9 +85,10 @@ test("Block page should contain key elements", async ({
     ).toBeVisible({
       timeout: 30000, // @todo Remove after re-engineering block sandbox
     });
-    await expect(
-      page.frameLocator("iframe[title='block']").locator("input"),
-    ).toHaveValue(blockExample.caption!);
+    // @todo 'caption' here must be replaced with the new property URI when the production one available
+    // await expect(
+    //   page.frameLocator("iframe[title='block']").locator("input"),
+    // ).toHaveValue(blockExample.caption!);
   }
 
   // check if readme was displayed
