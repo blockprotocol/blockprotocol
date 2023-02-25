@@ -28,10 +28,7 @@
           "maximum": 255
         }
       },
-      "required": [
-        "incoming",
-        "outgoing"
-      ]
+      "required": ["incoming", "outgoing"]
     }
   }
 }

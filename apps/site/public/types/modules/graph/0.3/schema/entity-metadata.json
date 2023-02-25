@@ -14,18 +14,12 @@
           "type": "string"
         }
       },
-      "required": [
-        "entityId",
-        "editionId"
-      ]
+      "required": ["entityId", "editionId"]
     },
     "entityTypeId": {
       "$comment": "The versioned URL of the entity's entity type (the $id of the entity type's schema)",
       "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
     }
   },
-  "required": [
-    "recordId",
-    "entityTypeId"
-  ]
+  "required": ["recordId", "entityTypeId"]
 }

@@ -19,6 +19,7 @@ declare module "@local/internal-api-client" {
   interface StripeSubscription extends Stripe.Subscription {}
   interface StripePrice extends Stripe.Price {}
   interface StripePaymentMethod extends Stripe.PaymentMethod {}
+  interface StripeTaxId extends Stripe.TaxId {}
 }
 
 export const getDateFromStripeDate = (stripeDate: number): Date => {
