@@ -21,7 +21,8 @@ const DataType: FunctionComponent<{ propertySchema: JsonObject }> = ({
 
   return typeof $ref === "string" ? (
     <MdxA href={$ref} target="_blank">
-      {$ref.match(/[^/]+(?=\/$|$)/)?.[0]}
+      {/* Take the last part of the path which isn't versioning information */}
+      {$ref.split("/").slice(...($ref.match(/\/v\/\d$/) ? [-3, -2] : [-1]))}
       {isArray ? "[]" : ""}
     </MdxA>
   ) : (
