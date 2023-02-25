@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import NextError from "next/error";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { TABS } from "../../components/pages/user/tabs";
 import {
@@ -91,7 +91,6 @@ const UserPage: NextPage<UserPageProps> = ({
   entityTypes: prerenderedEntityTypes,
 }) => {
   const router = useRouter();
-  const hasMounted = useRef(false);
 
   const matchingTab = findTab(router.query["profile-tabs"]);
 
@@ -102,13 +101,11 @@ const UserPage: NextPage<UserPageProps> = ({
   });
 
   useEffect(() => {
-    if (hasMounted.current) {
-      void fetchUserProfileData(user.shortname!).then((userProfileData) => {
-        updateUserProfileData(userProfileData);
-      });
-    } else {
-      hasMounted.current = true;
-    }
+    // Re-fetch data every time we come to this page in the client in case types/blocks have been changed
+    // This may mean visual changes on a server render if the Vercel static page build is out of date
+    void fetchUserProfileData(user.shortname!).then((userProfileData) => {
+      updateUserProfileData(userProfileData);
+    });
   }, [user.shortname]);
 
   // Protect against unlikely client-side navigation to a non-existing profile tab
