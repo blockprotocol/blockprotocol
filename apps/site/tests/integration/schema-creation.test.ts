@@ -57,7 +57,7 @@ test("user should be able to create an entity type", async ({ page }) => {
     )
     .click();
 
-  await schemaModal.locator("input").fill(newSchemaName);
+  await inputs[0]!.fill(newSchemaName);
 
   await expect(schemaModal.locator('button:has-text("Create")')).toBeEnabled();
 

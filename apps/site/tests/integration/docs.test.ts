@@ -139,20 +139,15 @@ test("Docs page should contain key elements and interactions should work", async
 
   await page.goto("/docs/spec");
 
-  const footerCTALocator = page.locator("data-test-id=footerCTA");
-  await expect(footerCTALocator).toBeVisible();
+  await expect(page.locator('text="Add blocks to your app"')).toHaveAttribute(
+    "href",
+    "/docs/using-blocks",
+  );
 
-  await expect(
-    footerCTALocator.locator('text="Documentation"'),
-  ).toHaveAttribute("href", "/docs");
-
-  await expect(
-    footerCTALocator.locator('text="Open-source blocks"'),
-  ).toHaveAttribute("href", "/hub");
-
-  await expect(
-    footerCTALocator.locator('text="Read the quickstart guide"'),
-  ).toHaveAttribute("href", "/docs/developing-blocks");
+  await expect(page.locator('text="Build your own blocks"')).toHaveAttribute(
+    "href",
+    "/docs/developing-blocks",
+  );
 });
 
 test("invalid docs page should redirect to 404", async ({ page }) => {
