@@ -24,7 +24,6 @@ export const generateEntityTypeWithMetadata = (data: {
   });
 
   const entityType: Required<EntityType> = {
-    additionalProperties: false,
     allOf: incompleteSchema.allOf ?? [],
     description: incompleteSchema.description ?? "",
     examples: incompleteSchema.examples ?? [],
