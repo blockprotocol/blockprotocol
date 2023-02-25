@@ -154,7 +154,81 @@ const DevApp: FunctionComponent = () => {
         debug
         key={testBlockType} // completely reset the state when block type has changed
         initialData={{
-          initialEntities: Object.values(blockEntityMap),
+          initialEntities: [
+            ...Object.values(blockEntityMap),
+            {
+              metadata: {
+                recordId: {
+                  entityId: "alice",
+                  editionId: new Date(0).toISOString(),
+                },
+                entityTypeId: entityTypes.testType.$id,
+              },
+              properties: {
+                [extractBaseUrl(propertyTypes.name.$id)]: "Alice",
+                "http://example.com/bar/": 1,
+                "http://example.com/baz/": {
+                  "http://example.com/qux/": true,
+                  "http://example.com/quux/": [0, 1],
+                  "http://example.com/corge/": null,
+                },
+              },
+            },
+            {
+              metadata: {
+                recordId: {
+                  entityId: "bob",
+                  editionId: new Date(0).toISOString(),
+                },
+                entityTypeId: entityTypes.testType.$id,
+              },
+              properties: {
+                [extractBaseUrl(propertyTypes.name.$id)]: "Bob",
+                "http://example.com/bar/": 2,
+                "http://example.com/baz/": {
+                  "http://example.com/qux/": true,
+                  "http://example.com/quux/": [2, 3],
+                  "http://example.com/corge/": null,
+                },
+              },
+            },
+            {
+              metadata: {
+                recordId: {
+                  entityId: "charlie",
+                  editionId: new Date(0).toISOString(),
+                },
+                entityTypeId: entityTypes.testType.$id,
+              },
+              properties: {
+                [extractBaseUrl(propertyTypes.name.$id)]: "Charlie",
+                "http://example.com/bar/": 3,
+                "http://example.com/baz/": {
+                  "http://example.com/qux/": false,
+                  "http://example.com/quux/": [4, 5],
+                  "http://example.com/corge/": null,
+                },
+              },
+            },
+            {
+              metadata: {
+                recordId: {
+                  entityId: "dania",
+                  editionId: new Date(0).toISOString(),
+                },
+                entityTypeId: entityTypes.testType.$id,
+              },
+              properties: {
+                [extractBaseUrl(propertyTypes.name.$id)]: "Dania",
+                "http://example.com/bar/": 4,
+                "http://example.com/baz/": {
+                  "http://example.com/qux/": "Qux",
+                  "http://example.com/quux/": [6, 7],
+                  "http://example.com/corge/": null,
+                },
+              },
+            },
+          ],
         }}
         temporal={false}
       />
