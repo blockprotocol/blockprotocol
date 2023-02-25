@@ -4,17 +4,17 @@ import { query as queryValidator } from "express-validator";
 import { createBaseHandler } from "../../../../lib/api/handler/base-handler";
 import { getPropertyTypes } from "./shared/db";
 
-export type ApiAggregatePropertyTypesQuery = {
+export type ApiQueryPropertyTypesQuery = {
   latestOnly?: boolean;
 };
 
-export type ApiAggregatePropertyTypesResponse = {
+export type ApiQueryPropertyTypesResponse = {
   propertyTypes: PropertyTypeWithMetadata[];
 };
 
 export default createBaseHandler<
-  ApiAggregatePropertyTypesQuery,
-  ApiAggregatePropertyTypesResponse
+  ApiQueryPropertyTypesQuery,
+  ApiQueryPropertyTypesResponse
 >()
   .use(queryValidator("latestOnly").isBoolean())
   .get(async (req, res) => {

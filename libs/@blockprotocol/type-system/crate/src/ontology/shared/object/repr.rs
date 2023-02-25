@@ -26,8 +26,6 @@ pub struct Object<T> {
     #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "BaseUrl[]"))]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     required: Vec<String>,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "false"))]
-    additional_properties: bool,
 }
 
 impl<const MIN: usize> TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeReference>>>
@@ -58,10 +56,6 @@ impl<const MIN: usize> TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeRefer
             })
             .collect::<Result<Vec<_>, Self::Error>>()?;
 
-        if object_repr.additional_properties {
-            return Err(ParsePropertyTypeObjectError::InvalidAdditionalPropertiesValue);
-        }
-
         Self::new(properties, required).map_err(ParsePropertyTypeObjectError::ValidationError)
     }
 }
@@ -85,7 +79,6 @@ where
             r#type: ObjectTypeTag::Object,
             properties,
             required,
-            additional_properties: false,
         }
     }
 }
@@ -119,7 +112,6 @@ mod tests {
                     r#type: ObjectTypeTag::Object,
                     properties: HashMap::new(),
                     required: vec![],
-                    additional_properties: false,
                 }),
             );
         }
@@ -143,7 +135,6 @@ mod tests {
                         PropertyTypeReference::new(url.to_string()),
                     )]),
                     required: vec![],
-                    additional_properties: false,
                 }),
             );
         }
@@ -176,7 +167,6 @@ mod tests {
                         ),
                     ]),
                     required: vec![],
-                    additional_properties: false,
                 }),
             );
         }
@@ -206,7 +196,6 @@ mod tests {
                         PropertyTypeReference::new(url.to_string()),
                     )]),
                     required: vec![],
-                    additional_properties: false,
                 }),
             );
         }
@@ -239,7 +228,6 @@ mod tests {
                         ),
                     ]),
                     required: vec![],
-                    additional_properties: false,
                 }),
             );
         }
@@ -276,7 +264,6 @@ mod tests {
                     ),
                 ]),
                 required: vec![url_a.base_url.to_string()],
-                additional_properties: false,
             }),
         );
     }

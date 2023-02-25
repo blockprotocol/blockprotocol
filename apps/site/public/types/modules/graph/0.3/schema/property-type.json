@@ -49,14 +49,9 @@
             "properties": {
               "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type-object"
             },
-            "minimumProperties": 1,
-            "additionalProperties": {
-              "type": "boolean",
-              "const": false
-            }
+            "minimumProperties": 1
           },
-          "required": ["type", "properties", "additionalProperties"],
-          "additionalProperties": false
+          "required": ["type", "properties"]
         },
         {
           "title": "propertyArrayValue",
