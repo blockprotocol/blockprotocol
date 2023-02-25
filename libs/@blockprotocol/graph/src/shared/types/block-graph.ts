@@ -1,30 +1,30 @@
 import { MessageCallback, MessageReturn } from "@blockprotocol/core";
 
 import {
-  AggregateEntitiesData,
-  AggregateEntitiesResult,
   CreateEntityData,
   DeleteEntityData,
   Entity,
   GetEntityData,
+  QueryEntitiesData,
+  QueryEntitiesResult,
   UpdateEntityData,
 } from "./entity.js";
 import { UploadFileData, UploadFileReturn } from "./file.js";
 import {
-  AggregatePropertyTypesData,
-  AggregatePropertyTypesResult,
   CreateEntityTypeData,
   CreatePropertyTypeData,
   EntityTypeWithMetadata,
   GetPropertyTypeData,
   PropertyTypeWithMetadata,
+  QueryPropertyTypesData,
+  QueryPropertyTypesResult,
   UpdateEntityTypeData,
   UpdatePropertyTypeData,
 } from "./ontology.js";
 import {
-  AggregateEntityTypesData,
-  AggregateEntityTypesResult,
   GetEntityTypeData,
+  QueryEntityTypesData,
+  QueryEntityTypesResult,
 } from "./ontology/entity-type.js";
 import {
   EntityRootType,
@@ -114,11 +114,11 @@ export type GraphEmbedderMessageCallbacks<Temporal extends boolean> = {
     MessageReturn<Subgraph<Temporal, EntityRootType<Temporal>>>,
     ReadOrModifyResourceError
   >;
-  aggregateEntities: MessageCallback<
-    AggregateEntitiesData<boolean>,
+  queryEntities: MessageCallback<
+    QueryEntitiesData<boolean>,
     null,
     MessageReturn<
-      AggregateEntitiesResult<
+      QueryEntitiesResult<
         Temporal,
         Subgraph<Temporal, EntityRootType<Temporal>>
       >
@@ -143,11 +143,11 @@ export type GraphEmbedderMessageCallbacks<Temporal extends boolean> = {
     MessageReturn<Subgraph<Temporal, EntityTypeRootType>>,
     ReadOrModifyResourceError
   >;
-  aggregateEntityTypes: MessageCallback<
-    AggregateEntityTypesData,
+  queryEntityTypes: MessageCallback<
+    QueryEntityTypesData,
     null,
     MessageReturn<
-      AggregateEntityTypesResult<Subgraph<Temporal, EntityTypeRootType>>
+      QueryEntityTypesResult<Subgraph<Temporal, EntityTypeRootType>>
     >,
     ReadOrModifyResourceError
   >;
@@ -169,35 +169,35 @@ export type GraphEmbedderMessageCallbacks<Temporal extends boolean> = {
     MessageReturn<Subgraph<Temporal, PropertyTypeRootType>>,
     ReadOrModifyResourceError
   >;
-  aggregatePropertyTypes: MessageCallback<
-    AggregatePropertyTypesData,
+  queryPropertyTypes: MessageCallback<
+    QueryPropertyTypesData,
     null,
-    MessageReturn<AggregatePropertyTypesResult>,
+    MessageReturn<QueryPropertyTypesResult>,
     ReadOrModifyResourceError
   >;
-  /** @todo - Reimplement linked aggregations */
-  // createLinkedAggregation: MessageCallback<
-  //   CreateLinkedAggregationData,
+  /** @todo - Reimplement linked queries */
+  // createLinkedQuery: MessageCallback<
+  //   CreateLinkedQueryData,
   //   null,
-  //   MessageReturn<LinkedAggregationDefinition>,
+  //   MessageReturn<LinkedQueryDefinition>,
   //   CreateResourceError
   // >;
-  // updateLinkedAggregation: MessageCallback<
-  //   UpdateLinkedAggregationData,
+  // updateLinkedQuery: MessageCallback<
+  //   UpdateLinkedQueryData,
   //   null,
-  //   MessageReturn<LinkedAggregationDefinition>,
+  //   MessageReturn<LinkedQueryDefinition>,
   //   ReadOrModifyResourceError
   // >;
-  // deleteLinkedAggregation: MessageCallback<
-  //   DeleteLinkedAggregationData,
+  // deleteLinkedQuery: MessageCallback<
+  //   DeleteLinkedQueryData,
   //   null,
   //   MessageReturn<true>,
   //   ReadOrModifyResourceError
   // >;
-  // getLinkedAggregation: MessageCallback<
-  //   GetLinkedAggregationData,
+  // getLinkedQuery: MessageCallback<
+  //   GetLinkedQueryData,
   //   null,
-  //   MessageReturn<LinkedAggregationDefinition>,
+  //   MessageReturn<LinkedQueryDefinition>,
   //   ReadOrModifyResourceError
   // >;
   uploadFile: MessageCallback<

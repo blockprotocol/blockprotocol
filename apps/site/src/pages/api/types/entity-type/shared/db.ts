@@ -9,6 +9,7 @@ import { Db, ObjectId } from "mongodb";
 import { User } from "../../../../../lib/api/model/user.model";
 import { generateOntologyUrl } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";
+import { removeAdditionalProperties } from "../../shared/temp-patch";
 import { generateEntityTypeWithMetadata } from "./schema";
 
 export const COLLECTION_NAME = "bp-entity-types";
@@ -141,6 +142,9 @@ export const createEntityType = async (
 
   const now = new Date();
 
+  /* @todo - remove this when the type-editor uses a newer version of the type-system */
+  removeAdditionalProperties(entityTypeWithMetadata);
+
   const insertionData = {
     entityTypeWithMetadata,
     createdAt: now,
@@ -202,6 +206,9 @@ export const updateEntityType = async (
       }`,
     );
   }
+
+  /* @todo - remove this when the type-editor uses a newer version of the type-system */
+  removeAdditionalProperties(entityTypeWithMetadata);
 
   const now = new Date();
 

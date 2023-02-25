@@ -4,17 +4,17 @@ import { query as queryValidator } from "express-validator";
 import { createBaseHandler } from "../../../../lib/api/handler/base-handler";
 import { getEntityTypes } from "./shared/db";
 
-export type ApiAggregateEntityTypesQuery = {
+export type ApiQueryEntityTypesQuery = {
   latestOnly?: boolean;
 };
 
-export type ApiAggregateEntityTypesResponse = {
+export type ApiQueryEntityTypesResponse = {
   entityTypes: EntityTypeWithMetadata[];
 };
 
 export default createBaseHandler<
-  ApiAggregateEntityTypesQuery,
-  ApiAggregateEntityTypesResponse
+  ApiQueryEntityTypesQuery,
+  ApiQueryEntityTypesResponse
 >()
   .use(queryValidator("latestOnly").isBoolean())
   .get(async (req, res) => {

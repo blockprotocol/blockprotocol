@@ -58,7 +58,8 @@ const EntityTypePage: NextPage = () => {
   const setEntityType = useCallback(
     (stateToSet: EntityTypeState) => {
       setEntityTypeState(stateToSet);
-      reset(getFormDataFromSchema(stateToSet.entityType.schema));
+      /* @todo remove these casts when @hashintel/type-editor uses a new version of @blockprotocol/type-system */
+      reset(getFormDataFromSchema(stateToSet.entityType.schema as any));
       void router.push(stateToSet.entityType.schema.$id);
     },
     [reset, router, setEntityTypeState],

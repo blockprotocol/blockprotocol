@@ -27,7 +27,6 @@ const entityTypes: EntityType[] = [
       "https://blockprotocol.org/@alice/types/property-type/postcode/",
       "https://blockprotocol.org/@alice/types/property-type/city/",
     ],
-    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -50,7 +49,6 @@ const entityTypes: EntityType[] = [
           "YourBlock",
       },
     ],
-    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -86,7 +84,6 @@ const entityTypes: EntityType[] = [
       },
     },
     examples: [],
-    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -119,7 +116,6 @@ const entityTypes: EntityType[] = [
         ordered: false,
       },
     },
-    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -131,7 +127,6 @@ const entityTypes: EntityType[] = [
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
       },
     },
-    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -144,7 +139,6 @@ const entityTypes: EntityType[] = [
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
       },
     },
-    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -180,7 +174,6 @@ const entityTypes: EntityType[] = [
         ordered: true,
       },
     },
-    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -210,7 +203,6 @@ const entityTypes: EntityType[] = [
         ordered: false,
       },
     },
-    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -235,7 +227,6 @@ const entityTypes: EntityType[] = [
         ordered: true,
       },
     },
-    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -247,7 +238,6 @@ const entityTypes: EntityType[] = [
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
       },
     },
-    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -260,7 +250,6 @@ const entityTypes: EntityType[] = [
       },
     ],
     properties: {},
-    additionalProperties: false,
   },
 ];
 
@@ -280,7 +269,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
             $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
           },
       },
-      additionalProperties: false,
     },
     {
       reason: "InvalidVersionedUrl",
@@ -302,7 +290,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
             $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
           },
       },
-      additionalProperties: false,
     },
     {
       reason: "InvalidVersionedUrl",
@@ -328,7 +315,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
             $ref: "im a broken ref haha /v/1",
           },
       },
-      additionalProperties: false,
     },
     {
       reason: "InvalidPropertyTypeObject",
@@ -357,7 +343,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
             $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
           },
       },
-      additionalProperties: false,
     },
     {
       reason: "InvalidPropertyTypeObject",
@@ -395,7 +380,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
           ordered: false,
         },
       },
-      additionalProperties: false,
     },
     {
       reason: "InvalidPropertyTypeObject",
@@ -433,7 +417,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
           ordered: false,
         },
       },
-      additionalProperties: false,
     },
     {
       reason: "InvalidPropertyTypeObject",
@@ -458,7 +441,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
         },
       ],
       properties: {},
-      additionalProperties: false,
     },
     {
       reason: "InvalidAllOf",
@@ -487,23 +469,6 @@ const brokenTypes: [any, ParseEntityTypeError][] = [
     {
       reason: "InvalidJson",
       inner: "missing field `kind` at line 1 column 13",
-    },
-  ],
-  [
-    {
-      kind: "entityType",
-      $id: "https://blockprotocol.org/@alice/types/entity-type/foo/v/1",
-      type: "object",
-      title: "Foo",
-      allOf: [],
-      properties: {},
-      additionalProperties: true,
-    },
-    {
-      reason: "InvalidPropertyTypeObject",
-      inner: {
-        reason: "InvalidAdditionalPropertiesValue",
-      },
     },
   ],
 ];

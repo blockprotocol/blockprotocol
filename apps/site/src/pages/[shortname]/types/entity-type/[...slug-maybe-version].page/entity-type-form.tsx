@@ -239,12 +239,14 @@ export const EntityTypeForm = ({
   if (!entityTypeOptions || !propertyTypeOptions) {
     return <>Loading...</>;
   }
+
+  /* @todo remove these casts when @hashintel/type-editor uses a new version of @blockprotocol/type-system */
   return (
     <EntityTypeEditor
-      entityType={entityType.schema}
-      entityTypeOptions={entityTypeOptions}
+      entityType={entityType as any}
+      entityTypeOptions={entityTypeOptions as any}
       ontologyFunctions={ontologyFunctions}
-      propertyTypeOptions={propertyTypeOptions}
+      propertyTypeOptions={propertyTypeOptions as any}
       readonly={readonly}
     />
   );

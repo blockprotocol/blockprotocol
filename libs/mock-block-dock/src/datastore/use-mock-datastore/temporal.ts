@@ -1,6 +1,6 @@
 import {
-  AggregateEntitiesData as AggregateEntitiesDataTemporal,
   GetEntityData as GetEntityDataTemporal,
+  QueryEntitiesData as QueryEntitiesDataTemporal,
 } from "@blockprotocol/graph/dist/cjs/temporal/main";
 import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
 import {
@@ -21,8 +21,8 @@ import { useDefaultState } from "../../use-default-state";
 import { mustBeDefined } from "../../util";
 import { getDefaultEntityVersionInterval } from "../get-default-entity-version-interval";
 import { getDefaultTemporalAxes } from "../get-default-temporal-axes";
-import { aggregateEntities as aggregateEntitiesImpl } from "../hook-implementations/entity/aggregate-entities";
 import { getEntity as getEntityImpl } from "../hook-implementations/entity/get-entity";
+import { queryEntities as queryEntitiesImpl } from "../hook-implementations/entity/query-entities";
 import { MockData } from "../mock-data";
 import { useMockDataToSubgraph } from "../use-mock-data-to-subgraph";
 
@@ -37,7 +37,7 @@ export type MockDatastore = {
       | "getPropertyType"
       | "createPropertyType"
       | "updatePropertyType"
-      | "aggregatePropertyTypes"
+      | "queryPropertyTypes"
     >
   >;
 };
@@ -60,11 +60,11 @@ export const useMockDatastore = (
   const mockDataSubgraph = useMockDataToSubgraph(initialData);
   const [graph, setGraph] = useDefaultState(mockDataSubgraph);
 
-  // const [linkedAggregations, setLinkedAggregations] = useDefaultState<
-  //   MockDataStore["linkedAggregationDefinitions"]
-  // >(initialData.linkedAggregationDefinitions);
+  // const [linkedQueries, setLinkedQueries] = useDefaultState<
+  //   MockDataStore["linkedQueryDefinitions"]
+  // >(initialData.linkedQueryDefinitions);
 
-  const aggregateEntities: GraphEmbedderMessageCallbacks["aggregateEntities"] =
+  const queryEntities: GraphEmbedderMessageCallbacks["queryEntities"] =
     useCallback(
       async ({ data }) => {
         if (!data) {
@@ -72,17 +72,15 @@ export const useMockDatastore = (
             errors: [
               {
                 code: "INVALID_INPUT",
-                message: "aggregateEntities requires 'data' input",
+                message: "queryEntities requires 'data' input",
               },
             ],
           };
         }
 
-        if (
-          (data as AggregateEntitiesDataTemporal).temporalAxes === undefined
-        ) {
+        if ((data as QueryEntitiesDataTemporal).temporalAxes === undefined) {
           return {
-            data: aggregateEntitiesImpl<true>(
+            data: queryEntitiesImpl<true>(
               {
                 ...data,
                 temporalAxes: getDefaultTemporalAxes(),
@@ -93,8 +91,8 @@ export const useMockDatastore = (
         }
 
         return {
-          data: aggregateEntitiesImpl<true>(
-            data as AggregateEntitiesDataTemporal,
+          data: queryEntitiesImpl<true>(
+            data as QueryEntitiesDataTemporal,
             graph,
           ),
         };
@@ -390,13 +388,13 @@ export const useMockDatastore = (
       [setGraph, readonly],
     );
 
-  const aggregateEntityTypes: GraphEmbedderMessageCallbacks["aggregateEntityTypes"] =
+  const queryEntityTypes: GraphEmbedderMessageCallbacks["queryEntityTypes"] =
     useCallback(async ({ data: _ }) => {
       return {
         errors: [
           {
             code: "NOT_IMPLEMENTED",
-            message: `aggregateEntityTypes is not currently supported`,
+            message: `queryEntityTypes is not currently supported`,
           },
         ],
       };
@@ -428,8 +426,8 @@ export const useMockDatastore = (
       }
     }, []);
 
-  /** @todo - Reimplement linkedAggregations */
-  // const createLinkedAggregation: GraphEmbedderMessageCallbacks["createLinkedAggregation"] =
+  /** @todo - Reimplement linkedQueries */
+  // const createLinkedQuery: GraphEmbedderMessageCallbacks["createLinkedQuery"] =
   //   useCallback(
   //     async ({ data }) => {
   //       if (readonly) {
@@ -441,25 +439,25 @@ export const useMockDatastore = (
   //           errors: [
   //             {
   //               code: "INVALID_INPUT",
-  //               message: "createLinkedAggregation requires 'data' input",
+  //               message: "createLinkedQuery requires 'data' input",
   //             },
   //           ],
   //         };
   //       }
-  //       const newLinkedAggregation = {
-  //         aggregationId: uuid(),
+  //       const newLinkedQuery = {
+  //         linkedQueryId: uuid(),
   //         ...data,
   //       };
-  //       setLinkedAggregations((currentLinkedAggregations) => [
-  //         ...currentLinkedAggregations,
-  //         newLinkedAggregation,
+  //       setLinkedQueries((currentLinkedQueries) => [
+  //         ...currentLinkedQueries,
+  //         newLinkedQuery,
   //       ]);
-  //       return { data: newLinkedAggregation };
+  //       return { data: newLinkedQuery };
   //     },
-  //     [setLinkedAggregations, readonly],
+  //     [setLinkedQueries, readonly],
   //   );
   //
-  // const getLinkedAggregation: GraphEmbedderMessageCallbacks["getLinkedAggregation"] =
+  // const getLinkedQuery: GraphEmbedderMessageCallbacks["getLinkedQuery"] =
   //   useCallback(
   //     async ({ data }) => {
   //       if (!data) {
@@ -467,36 +465,36 @@ export const useMockDatastore = (
   //           errors: [
   //             {
   //               code: "INVALID_INPUT",
-  //               message: "getLinkedAggregation requires 'data' input",
+  //               message: "getLinkedQuery requires 'data' input",
   //             },
   //           ],
   //         };
   //       }
-  //       const foundLinkedAggregation = linkedAggregations.find(
-  //         (linkedAggregation) =>
-  //           linkedAggregation.aggregationId === data.aggregationId,
+  //       const foundLinkedQuery = linkedQueries.find(
+  //         (linkedQuery) =>
+  //           linkedQuery.linkedQueryId === data.linkedQueryId,
   //       );
-  //       if (!foundLinkedAggregation) {
+  //       if (!foundLinkedQuery) {
   //         return {
   //           errors: [
   //             {
   //               code: "NOT_FOUND",
-  //               message: `Could not find linkedAggregation with aggregationId '${data.aggregationId}'`,
+  //               message: `Could not find linkedQuery with linkedQueryId '${data.linkedQueryId}'`,
   //             },
   //           ],
   //         };
   //       }
   //       return {
   //         data: {
-  //           ...foundLinkedAggregation,
-  //           ...filterAndSortEntitiesOrTypes(entities, foundLinkedAggregation),
+  //           ...foundLinkedQuery,
+  //           ...filterAndSortEntitiesOrTypes(entities, foundLinkedQuery),
   //         },
   //       };
   //     },
-  //     [entities, linkedAggregations],
+  //     [entities, linkedQueries],
   //   );
   //
-  // const updateLinkedAggregation: GraphEmbedderMessageCallbacks["updateLinkedAggregation"] =
+  // const updateLinkedQuery: GraphEmbedderMessageCallbacks["updateLinkedQuery"] =
   //   useCallback(
   //     async ({ data }) => {
   //       if (readonly) {
@@ -508,46 +506,46 @@ export const useMockDatastore = (
   //           errors: [
   //             {
   //               code: "INVALID_INPUT",
-  //               message: "updateLinkedAggregation requires 'data' input",
+  //               message: "updateLinkedQuery requires 'data' input",
   //             },
   //           ],
   //         };
   //       }
   //       return new Promise((resolve) => {
-  //         setLinkedAggregations((currentLinkedAggregations) => {
+  //         setLinkedQueries((currentLinkedQueries) => {
   //           if (
-  //             !currentLinkedAggregations.find(
-  //               ({ aggregationId }) => aggregationId === data.aggregationId,
+  //             !currentLinkedQueries.find(
+  //               ({ linkedQueryId }) => linkedQueryId === data.linkedQueryId,
   //             )
   //           ) {
   //             resolve({
   //               errors: [
   //                 {
   //                   code: "NOT_FOUND",
-  //                   message: `Could not find linked aggregation with aggregationId '${data.aggregationId}'`,
+  //                   message: `Could not find linked query with linkedQueryId '${data.linkedQueryId}'`,
   //                 },
   //               ],
   //             });
-  //             return currentLinkedAggregations;
+  //             return currentLinkedQueries;
   //           }
-  //           return currentLinkedAggregations.map((linkedAggregation) => {
-  //             if (linkedAggregation.aggregationId === data.aggregationId) {
-  //               const newLinkedAggregation = {
-  //                 ...linkedAggregation,
+  //           return currentLinkedQueries.map((linkedQuery) => {
+  //             if (linkedQuery.linkedQueryId === data.linkedQueryId) {
+  //               const newLinkedQuery = {
+  //                 ...linkedQuery,
   //                 operation: data.operation,
   //               };
-  //               resolve({ data: newLinkedAggregation });
-  //               return newLinkedAggregation;
+  //               resolve({ data: newLinkedQuery });
+  //               return newLinkedQuery;
   //             }
-  //             return linkedAggregation;
+  //             return linkedQuery;
   //           });
   //         });
   //       });
   //     },
-  //     [setLinkedAggregations, readonly],
+  //     [setLinkedQueries, readonly],
   //   );
   //
-  // const deleteLinkedAggregation: GraphEmbedderMessageCallbacks["deleteLinkedAggregation"] =
+  // const deleteLinkedQuery: GraphEmbedderMessageCallbacks["deleteLinkedQuery"] =
   //   useCallback(
   //     async ({ data }) => {
   //       if (readonly) {
@@ -559,30 +557,30 @@ export const useMockDatastore = (
   //           errors: [
   //             {
   //               code: "INVALID_INPUT",
-  //               message: "deleteLinkedAggregation requires 'data' input",
+  //               message: "deleteLinkedQuery requires 'data' input",
   //             },
   //           ],
   //         };
   //       }
   //       return new Promise((resolve) => {
-  //         setLinkedAggregations((currentLinkedAggregations) => {
+  //         setLinkedQueries((currentLinkedQueries) => {
   //           if (
-  //             !currentLinkedAggregations.find(
-  //               ({ aggregationId }) => aggregationId === data.aggregationId,
+  //             !currentLinkedQueries.find(
+  //               ({ linkedQueryId }) => linkedQueryId === data.linkedQueryId,
   //             )
   //           ) {
   //             resolve({
   //               errors: [
   //                 {
   //                   code: "NOT_FOUND",
-  //                   message: `Could not find link with aggregationId '${data.aggregationId}'`,
+  //                   message: `Could not find link with linkedQueryId '${data.linkedQueryId}'`,
   //                 },
   //               ],
   //             });
-  //             return currentLinkedAggregations;
+  //             return currentLinkedQueries;
   //           }
-  //           return currentLinkedAggregations.filter((link) => {
-  //             if (link.aggregationId === data.aggregationId) {
+  //           return currentLinkedQueries.filter((link) => {
+  //             if (link.linkedQueryId === data.linkedQueryId) {
   //               resolve({ data: true });
   //               return false;
   //             }
@@ -591,7 +589,7 @@ export const useMockDatastore = (
   //         });
   //       });
   //     },
-  //     [setLinkedAggregations, readonly],
+  //     [setLinkedQueries, readonly],
   //   );
 
   const uploadFile: GraphEmbedderMessageCallbacks["uploadFile"] = useCallback(
@@ -697,19 +695,19 @@ export const useMockDatastore = (
   return {
     graph,
     graphModuleCallbacks: {
-      aggregateEntities,
+      queryEntities,
       getEntity,
       createEntity,
       deleteEntity,
       updateEntity,
-      aggregateEntityTypes,
+      queryEntityTypes,
       getEntityType,
-      // getLinkedAggregation,
-      // createLinkedAggregation,
-      // deleteLinkedAggregation,
-      // updateLinkedAggregation,
+      // getLinkedQuery,
+      // createLinkedQuery,
+      // deleteLinkedQuery,
+      // updateLinkedQuery,
       uploadFile,
     },
-    // linkedAggregationDefinitions: linkedAggregations,
+    // linkedQueryDefinitions: linkedQueries,
   };
 };

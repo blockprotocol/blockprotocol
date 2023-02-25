@@ -1,24 +1,24 @@
 import { JsonObject, JsonValue } from "@blockprotocol/core";
 import {
-  AggregateEntitiesData,
-  AggregateEntitiesResult,
-  AggregateEntityTypesData,
-  AggregateEntityTypesResult,
   Entity,
   EntityRootType,
   EntityTypeRootType,
   EntityTypeWithMetadata,
   MultiFilter,
   MultiSort,
+  QueryEntitiesData,
+  QueryEntitiesResult,
+  QueryEntityTypesData,
+  QueryEntityTypesResult,
   Subgraph,
 } from "@blockprotocol/graph";
 import {
-  AggregateEntitiesData as AggregateEntitiesDataTemporal,
-  AggregateEntitiesResult as AggregateEntitiesResultTemporal,
-  AggregateEntityTypesResult as AggregateEntityTypesResultTemporal,
   Entity as EntityTemporal,
   EntityRootType as EntityRootTypeTemporal,
   EntityTypeRootType as EntityTypeRootTypeTemporal,
+  QueryEntitiesData as QueryEntitiesDataTemporal,
+  QueryEntitiesResult as QueryEntitiesResultTemporal,
+  QueryEntityTypesResult as QueryEntityTypesResultTemporal,
   QueryTemporalAxes,
   Subgraph as SubgraphTemporal,
 } from "@blockprotocol/graph/temporal";
@@ -442,29 +442,29 @@ export type FilterResult<
 > = {
   results: T[];
   operation:
-    | AggregateEntitiesResult<Subgraph<EntityRootType>>["operation"]
-    | AggregateEntityTypesResult<Subgraph<EntityTypeRootType>>["operation"]
-    | AggregateEntitiesResultTemporal<
+    | QueryEntitiesResult<Subgraph<EntityRootType>>["operation"]
+    | QueryEntityTypesResult<Subgraph<EntityTypeRootType>>["operation"]
+    | QueryEntitiesResultTemporal<
         SubgraphTemporal<EntityRootTypeTemporal>
       >["operation"]
-    | AggregateEntityTypesResultTemporal<
+    | QueryEntityTypesResultTemporal<
         SubgraphTemporal<EntityTypeRootTypeTemporal>
       >["operation"];
 };
 
 export function filterAndSortEntitiesOrTypes(
   elements: Entity[],
-  payload: AggregateEntitiesData,
+  payload: QueryEntitiesData,
 ): FilterResult<Entity>;
 export function filterAndSortEntitiesOrTypes(
   elements: EntityTemporal[],
-  payload: Omit<AggregateEntitiesDataTemporal, "temporalAxes"> & {
+  payload: Omit<QueryEntitiesDataTemporal, "temporalAxes"> & {
     temporalAxes: QueryTemporalAxes;
   },
 ): FilterResult<EntityTemporal>;
 export function filterAndSortEntitiesOrTypes(
   elements: EntityTypeWithMetadata[],
-  payload: AggregateEntityTypesData,
+  payload: QueryEntityTypesData,
 ): FilterResult<EntityTypeWithMetadata>;
 export function filterAndSortEntitiesOrTypes<
   Elements extends
@@ -473,11 +473,11 @@ export function filterAndSortEntitiesOrTypes<
 >(
   elements: Elements,
   payload:
-    | AggregateEntitiesData
-    | (Omit<AggregateEntitiesDataTemporal, "temporalAxes"> & {
+    | QueryEntitiesData
+    | (Omit<QueryEntitiesDataTemporal, "temporalAxes"> & {
         temporalAxes: QueryTemporalAxes;
       })
-    | AggregateEntityTypesData,
+    | QueryEntityTypesData,
 ): FilterResult {
   const { operation } = payload;
 

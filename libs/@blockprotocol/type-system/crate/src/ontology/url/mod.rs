@@ -115,12 +115,13 @@ impl FromStr for VersionedUrl {
     type Err = ParseVersionedUrlError;
 
     fn from_str(url: &str) -> Result<Self, ParseVersionedUrlError> {
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("regex failed to compile"));
+
         if url.len() > 2048 {
             return Err(ParseVersionedUrlError::TooLong);
         }
 
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("regex failed to compile"));
         let captures = RE
             .captures(url)
             .ok_or(ParseVersionedUrlError::IncorrectFormatting)?;
