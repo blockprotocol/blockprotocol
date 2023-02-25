@@ -15,7 +15,6 @@ const worksFor: EntityType = {
   ],
   properties: {},
   required: [],
-  additionalProperties: false,
 };
 const founderOf: EntityType = {
   kind: "entityType",
@@ -30,7 +29,6 @@ const founderOf: EntityType = {
   ],
   properties: {},
   required: [],
-  additionalProperties: false,
 };
 const company: EntityType = {
   kind: "entityType",
@@ -51,7 +49,6 @@ const company: EntityType = {
     extractBaseUrl(propertyTypes.name.$id),
   ],
   links: {},
-  additionalProperties: false,
 };
 const person: EntityType = {
   kind: "entityType",
@@ -95,7 +92,6 @@ const person: EntityType = {
       ordered: false,
     },
   },
-  additionalProperties: false,
 };
 const testType: EntityType = {
   kind: "entityType",
@@ -110,7 +106,6 @@ const testType: EntityType = {
   },
   required: [extractBaseUrl(propertyTypes.name.$id)],
   links: {},
-  additionalProperties: false,
 };
 
 export const entityTypes = {

@@ -83,14 +83,10 @@
           "additionalProperties": false
         }
       }
-    },
-    "additionalProperties": {
-      "type": "boolean",
-      "const": false
     }
   },
   "additionalProperties": false,
-  "required": ["kind", "$id", "title", "properties", "additionalProperties"],
+  "required": ["kind", "$id", "title", "properties"],
   "$defs": {
     "propertyTypeObject": {
       "type": "object",

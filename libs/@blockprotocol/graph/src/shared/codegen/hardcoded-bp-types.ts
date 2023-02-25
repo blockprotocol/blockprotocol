@@ -8,7 +8,6 @@ export const hardcodedBpTypes = {
       leftEntityId: { type: "string" },
       rightEntityId: { type: "string" },
     },
-    additionalProperties: false,
   },
   "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1": {
     kind: "dataType",

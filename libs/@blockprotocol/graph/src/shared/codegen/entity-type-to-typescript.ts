@@ -162,7 +162,7 @@ const _jsonSchemaToTypeScript = async (
       title: propertyTypeName,
     },
     {
-      additionalProperties: false, // @todo add additionalProperties: false to entity type JSON schemas
+      additionalProperties: false,
       bannerComment: rootSchema ? bannerComment(schema.$id, depth) : "",
     },
   );
