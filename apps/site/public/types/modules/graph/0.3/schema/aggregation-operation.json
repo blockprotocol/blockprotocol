@@ -24,11 +24,7 @@
                     "$comment": "any JSON value allowed"
                   }
                 },
-                "required": [
-                  "field",
-                  "operator",
-                  "value"
-                ]
+                "required": ["field", "operator", "value"]
               },
               {
                 "type": "object",
@@ -40,10 +36,7 @@
                     "$ref": "#/$defs/FilterOperatorWithoutValue"
                   }
                 },
-                "required": [
-                  "field",
-                  "operator"
-                ]
+                "required": ["field", "operator"]
               }
             ]
           }
@@ -52,10 +45,7 @@
           "$ref": "#/$defs/MultiFilterOperatorType"
         }
       },
-      "required": [
-        "filters",
-        "operator"
-      ]
+      "required": ["filters", "operator"]
     },
     "multiSort": {
       "type": "array",
@@ -76,9 +66,7 @@
             ]
           }
         },
-        "required": [
-          "field"
-        ]
+        "required": ["field"]
       }
     }
   },

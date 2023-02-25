@@ -18,8 +18,5 @@
       "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders"
     }
   ],
-  "required": [
-    "leftEntityId",
-    "rightEntityId"
-  ]
+  "required": ["leftEntityId", "rightEntityId"]
 }
