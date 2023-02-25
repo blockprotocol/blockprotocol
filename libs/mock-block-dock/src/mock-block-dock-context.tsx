@@ -1,9 +1,17 @@
 import { Message } from "@blockprotocol/core";
 import {
-  EmbedderGraphMessageCallbacks,
-  Entity,
-  EntityType,
+  EntityRecordId as EntityRecordIdNonTemporal,
+  EntityRootType as EntityRootTypeNonTemporal,
+  GraphEmbedderMessageCallbacks as GraphEmbedderMessageCallbacksNonTemporal,
+  Subgraph as SubgraphNonTemporal,
 } from "@blockprotocol/graph";
+import { isTemporalSubgraph } from "@blockprotocol/graph/internal";
+import {
+  EntityRecordId as EntityRecordIdTemporal,
+  EntityRootType as EntityRootTypeTemporal,
+  GraphEmbedderMessageCallbacks as GraphEmbedderMessageCallbacksTemporal,
+  Subgraph as SubgraphTemporal,
+} from "@blockprotocol/graph/temporal";
 import {
   createContext,
   Dispatch,
@@ -15,11 +23,10 @@ import {
   useState,
 } from "react";
 
-import { MockData } from "./use-mock-block-props/use-mock-datastore";
-
-type MockBlockDockInfo = {
-  blockEntity: Entity;
-  blockSchema?: Partial<EntityType>;
+export type MockBlockDockInfo<Temporal extends boolean> = {
+  blockEntitySubgraph: Temporal extends true
+    ? SubgraphTemporal<EntityRootTypeTemporal>
+    : SubgraphNonTemporal<EntityRootTypeNonTemporal>;
   blockInfo: {
     blockType: {
       entryPoint?: "react" | "html" | "custom-element" | string;
@@ -30,24 +37,39 @@ type MockBlockDockInfo = {
     name?: string;
     protocol?: string;
   };
-  datastore: MockData;
+  graph: Temporal extends true ? SubgraphTemporal : SubgraphNonTemporal;
   debugMode: boolean;
   logs: Message[];
   readonly: boolean;
   setDebugMode: Dispatch<SetStateAction<boolean>>;
-  setEntityIdOfEntityForBlock: Dispatch<SetStateAction<string>>;
+  setEntityRecordIdOfEntityForBlock: Dispatch<
+    SetStateAction<
+      Temporal extends true ? EntityRecordIdTemporal : EntityRecordIdNonTemporal
+    >
+  >;
   setLogs: Dispatch<SetStateAction<Message[]>>;
   setReadonly: Dispatch<SetStateAction<boolean>>;
-  updateEntity: EmbedderGraphMessageCallbacks["updateEntity"];
+  updateEntity: Temporal extends true
+    ? GraphEmbedderMessageCallbacksTemporal["updateEntity"]
+    : GraphEmbedderMessageCallbacksNonTemporal["updateEntity"];
 };
 
-const MockBlockDockContext = createContext<MockBlockDockInfo | null>(null);
+const MockBlockDockTemporalContext =
+  createContext<MockBlockDockInfo<true> | null>(null);
+const MockBlockDockNonTemporalContext =
+  createContext<MockBlockDockInfo<false> | null>(null);
 
-type Props = Omit<MockBlockDockInfo, "logs" | "setLogs"> & {
+type Props<Temporal extends boolean> = Omit<
+  MockBlockDockInfo<Temporal>,
+  "logs" | "setLogs"
+> & {
   children: ReactNode;
 };
 
-export const MockBlockDockProvider = ({ children, ...props }: Props) => {
+export const MockBlockDockProvider = <Temporal extends boolean>({
+  children,
+  ...props
+}: Props<Temporal>) => {
   const [logs, setLogs] = useState<Message[]>([]);
 
   useEffect(() => {
@@ -73,15 +95,33 @@ export const MockBlockDockProvider = ({ children, ...props }: Props) => {
     };
   }, [props, logs]);
 
-  return (
-    <MockBlockDockContext.Provider value={values}>
+  return isTemporalSubgraph(props.graph) ? (
+    <MockBlockDockTemporalContext.Provider
+      value={values as MockBlockDockInfo<true>}
+    >
       {children}
-    </MockBlockDockContext.Provider>
+    </MockBlockDockTemporalContext.Provider>
+  ) : (
+    <MockBlockDockNonTemporalContext.Provider
+      value={values as MockBlockDockInfo<false>}
+    >
+      {children}
+    </MockBlockDockNonTemporalContext.Provider>
   );
 };
 
-export const useMockBlockDockContext = () => {
-  const contextValue = useContext(MockBlockDockContext);
+export const useMockBlockDockTemporalContext = () => {
+  const contextValue = useContext(MockBlockDockTemporalContext);
+
+  if (!contextValue) {
+    throw new Error("no MockBlockDockContext value has been provided");
+  }
+
+  return contextValue;
+};
+
+export const useMockBlockDockNonTemporalContext = () => {
+  const contextValue = useContext(MockBlockDockNonTemporalContext);
 
   if (!contextValue) {
     throw new Error("no MockBlockDockContext value has been provided");

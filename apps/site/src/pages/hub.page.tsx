@@ -4,10 +4,8 @@ import { NextSeo } from "next-seo";
 
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
 import { getAllBlocks } from "../lib/api/blocks/get";
-import {
-  excludeHiddenBlocks,
-  ExpandedBlockMetadata as BlockMetadata,
-} from "../lib/blocks";
+import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
+import { excludeHiddenBlocks } from "../lib/excluded-blocks";
 
 interface PageProps {
   catalog: BlockMetadata[];

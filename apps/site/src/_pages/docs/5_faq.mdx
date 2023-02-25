@@ -105,9 +105,9 @@ Entity data can be hosted in any application which implements the Block Protocol
 
 <FAQ question="Can blocks themselves choose where to fetch data from?">
 
-Yes. Blocks can fetch their own data from external services. For example, a map block might fetch data from a mapping service.
+Yes. Blocks can fetch their own data from external modules. For example, a map block might fetch data from a mapping module.
 
-We believe the best blocks will communicate data back and forth with the embedding application, making use of the operations defined in the [Graph Service specification](https://blockprotocol.org/docs/spec/graph-service).
+We believe the best blocks will communicate data back and forth with the embedding application, making use of the operations defined in the [Graph Module specification](https://blockprotocol.org/docs/spec/graph-module).
 
 For example: a mapping block might persist a user’s choices about map positioning or styling back to an embedding application, all without the application knowing anything about the block, or the block even being aware of which application it is being used within.
 
@@ -119,7 +119,7 @@ The Block Protocol enables blocks to store and retrieve data in an application w
 
 Blocks can have their own local state - they might use this to allow users to explore data or draft changes, without saving anything.
 
-To save data beyond the session, blocks should make use of the [operations defined in the spec](https://blockprotocol.org/docs/spec/graph-service) to send updates to the embedding application.
+To save data beyond the session, blocks should make use of the [operations defined in the spec](https://blockprotocol.org/docs/spec/graph-module) to send updates to the embedding application.
 
 </FAQ>
 
@@ -129,7 +129,7 @@ Similar to most programming language package managers, because anybody can publi
 
 Because those inserting blocks are often non-technical end users, this isn't always practical. As such, we recommend that embedders implement both sandboxing within their environments, and allow/deny lists.
 
-- **Sandboxing** will be covered in depth in our [guide for embedders](https://blockprotocol.org/docs/embedding-blocks).
+- **Sandboxing** will be covered in depth in our [guide for embedders](https://blockprotocol.org/docs/using-blocks).
 - **Allow/deny lists** can be used to resrict or control:
   - which blocks users are able to discover and insert within your environment
   - which blocks a user inserts are ultimately able to be run in either a sandboxed or unsandboxed fashion
@@ -149,7 +149,12 @@ In the future we also plan to expose:
   
 <FAQ question="How does block verification work?">
 
-Blocks submitted to the Þ Hub are immediately available for discovery and use. However, when blocks are published or updated, they're also added to a _review queue_.
+Blocks submitted to the Þ Hub are immediately available for discovery and use.
+
+However, when blocks are published or updated, they are also potentially eligible to be added to a _review queue_.
+
+Blocks must include a 'repository' and 'commit' field in their metadata to be eligible for review.
+These must correspond to the source code the block was built from.
 
 We periodically review all blocks in the queue, checking for basic indicators (and contraindicators) of a block's quality, security and integrity. While this check does not represent a fully comprehensive audit of a block, the process provides a baseline level of assurance regarding a block's fitness for purpose, and all reviewed blocks which pass this review process receive the 'verified' badge.
 
@@ -171,7 +176,7 @@ Rich text editing is a core part of many modern block-based applications, but de
 - applications often provide special functionality inside rich text fields, e.g. being able to `@mention` or search for things inline
 
 We do not believe it feasible or desirable to impose a single rich text editing experience across applications,
-and instead have introduced the [Hook Service](https://blockprotocol.org/docs/spec/hook-service) to allow embedding applications to
+and instead have introduced the [Hook Module](https://blockprotocol.org/docs/spec/hook-module) to allow embedding applications to
 inject their own rich text editing display and input, at blocks' request.
 
 </FAQ>
@@ -366,7 +371,7 @@ We expect to have to add custom keywords to cover relationships which JSON Schem
 
 We encourage applications to include JSON-LD describing entities on their public pages to make them machine-readable.
 
-In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](https://blockprotocol.org/docs/spec/graph-service). We have also taken a different approach to identifying entities, which may not have a public URI and may require a combination of fields to identify.
+In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](https://blockprotocol.org/docs/spec/graph-module). We have also taken a different approach to identifying entities, which may not have a public URL and may require a combination of fields to identify.
 
 </FAQ>
 

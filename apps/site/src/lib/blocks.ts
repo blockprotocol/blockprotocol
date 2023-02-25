@@ -48,8 +48,6 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   pathWithNamespace: string;
   // the repository URL as a string (including commit and folder info where appropriate)
   repository?: string;
-  // metadata.schema rewritten to be an absolute URL
-  schema?: string | null;
   verified?: boolean;
 };
 
@@ -189,7 +187,7 @@ export const expandBlockMetadata = ({
     pathWithNamespace,
     protocol: metadata.protocol ?? "0.1", // assume lowest if not specified - this is a required field so should be present
     repository: repositoryUrl,
-    schema: generateBlockFileUrl(metadata.schema, blockDistributionFolderUrl)!,
+    schema: metadata.schema,
     source: generateBlockFileUrl(metadata.source, blockDistributionFolderUrl)!,
     variants: metadata.variants?.length
       ? metadata.variants?.map((variant) => ({
@@ -230,18 +228,6 @@ export const readBlocksFromDisk = async (): Promise<
   return result;
 };
 
-// Blocks which are currently not compliant with the spec, and are thus misleading examples
-const blocksToHide = ["@hash/embed"];
-
-/** Helps consistently hide certain blocks from the Hub and user profile pages */
-export const excludeHiddenBlocks = (
-  blocks: ExpandedBlockMetadata[],
-): ExpandedBlockMetadata[] => {
-  return blocks.filter(
-    ({ pathWithNamespace }) => !blocksToHide.includes(pathWithNamespace),
-  );
-};
-
 export const retrieveBlockFileContent = async ({
   pathWithNamespace,
   schema: metadataSchemaUrl,
@@ -266,7 +252,11 @@ export const retrieveBlockFileContent = async ({
             { encoding: "utf8" },
           ),
         )
-      : await (await fetch(metadataSchemaUrl)).json();
+      : await (
+          await fetch(metadataSchemaUrl, {
+            headers: { accept: "application/json" },
+          })
+        ).json();
   } catch (err) {
     // eslint-disable-next-line no-console -- intentional log to flag problem without tanking site
     console.error(

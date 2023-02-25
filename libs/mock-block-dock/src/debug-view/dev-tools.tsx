@@ -80,7 +80,7 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
   );
 });
 
-export const DevTools = () => {
+export const DevTools = ({ temporal }: { temporal: boolean }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useLocalStorageState(
     "debug-tab-index",
     { defaultValue: 0 },
@@ -124,16 +124,16 @@ export const DevTools = () => {
           </Header>
           <Box flex={1} overflow="scroll">
             <TabPanel value={selectedTabIndex} index={0}>
-              <PropertiesView />
+              <PropertiesView temporal={temporal} />
             </TabPanel>
             <TabPanel value={selectedTabIndex} index={1}>
-              <DataStoreView />
+              <DataStoreView temporal={temporal} />
             </TabPanel>
             <TabPanel value={selectedTabIndex} index={2}>
-              <LogsView />
+              <LogsView temporal={temporal} />
             </TabPanel>
             <TabPanel value={selectedTabIndex} index={3}>
-              <BlockInfoView />
+              <BlockInfoView temporal={temporal} />
             </TabPanel>
           </Box>
         </Paper>

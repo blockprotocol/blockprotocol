@@ -13,7 +13,7 @@ export default createApiKeyRequiredHandler<
   ExternalServiceMethodRequest,
   ExternalServiceMethod200Response
 >()
-  .use((_, res, next) => {
+  .use(async (req, res, next) => {
     if (isBillingFeatureFlagEnabled) {
       next();
     } else {

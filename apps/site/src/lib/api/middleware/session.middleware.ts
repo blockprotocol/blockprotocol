@@ -6,7 +6,7 @@ import nextSession from "next-session";
 import { promisifyStore } from "next-session/lib/compat";
 
 import { mustGetEnvVar } from "../../../util/api";
-import { FRONTEND_DOMAIN, isUsingHttps } from "../../config";
+import { isProduction, isUsingHttps } from "../../config";
 import { SESSION_COOKIE_NAME } from "./constants";
 
 // cookie maximum age (365 days)
@@ -24,9 +24,11 @@ const sessionStore = MongoStore.create({
 const getSession = nextSession({
   store: promisifyStore(sessionStore),
   cookie: {
-    domain: FRONTEND_DOMAIN.startsWith("localhost")
-      ? "localhost"
-      : FRONTEND_DOMAIN,
+    domain: isProduction
+      ? "blockprotocol.org"
+      : process.env.VERCEL
+      ? ".stage.hash.ai"
+      : "localhost",
     maxAge: COOKIE_MAX_AGE_SEC,
     httpOnly: true,
     sameSite: "lax",
