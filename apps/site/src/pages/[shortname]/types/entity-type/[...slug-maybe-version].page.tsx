@@ -200,12 +200,14 @@ const EntityTypePage: NextPage = () => {
                     title="This is a 'link' entity type. It is used to link other entities together."
                     placement="top"
                   >
-                    <LinkIcon
-                      sx={({ palette }) => ({
-                        stroke: palette.gray[50],
-                        mr: 0.5,
-                      })}
-                    />
+                    <Box>
+                      <LinkIcon
+                        sx={({ palette }) => ({
+                          stroke: palette.gray[50],
+                          mr: 0.5,
+                        })}
+                      />
+                    </Box>
                   </Tooltip>
                 )}
                 <Typography variant="bpHeading3" component="h1">
