@@ -40,8 +40,8 @@ const deleteIsrFilesCreatedAfterNextBuild = async () => {
 };
 
 export const resetSite = async () => {
-  // await execa("yarn", ["exe", "scripts/seed-db.js"]);
-  // await deleteIsrFilesCreatedAfterNextBuild();
+  await execa("yarn", ["exe", "scripts/seed-db.js"]);
+  await deleteIsrFilesCreatedAfterNextBuild();
 };
 
 export const getBlocksData = async (): Promise<ExpandedBlockMetadata[]> => {
