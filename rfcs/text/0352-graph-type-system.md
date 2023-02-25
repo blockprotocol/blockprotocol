@@ -758,7 +758,7 @@ A **Data Type** is a JSON schema that satisfies the following JSON meta-schema:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/data-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
   "description": "Specifies the structure of a Data Type",
   "type": "object",
   "properties": {
@@ -783,7 +783,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/text",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text",
     "title": "Text",
     "description": "An ordered sequence of characters",
     "type": "string"
@@ -795,7 +795,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/number",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/number",
     "title": "Number",
     "description": "An arithmetical value (in the Real number system)",
     "type": "number"
@@ -807,7 +807,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/boolean",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/boolean",
     "title": "Boolean",
     "description": "A True or False value",
     "type": "boolean"
@@ -819,7 +819,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/null",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/null",
     "title": "Null",
     "description": "A placeholder value representing 'nothing'",
     "type": "null"
@@ -831,7 +831,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/object",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/object",
     "title": "Object",
     "description": "A plain JSON object with no pre-defined structure",
     "type": "object"
@@ -843,7 +843,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/empty-list",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list",
     "title": "Empty List",
     "description": "An Empty List",
     "type": "array",
@@ -861,7 +861,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
 
 ```json
 {
-  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/property-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
   "description": "Specifies the structure of a Property Type",
   "type": "object",
   "properties": {
@@ -1025,10 +1025,10 @@ The `Favorite Quote` Property Type could define its value as being an instance o
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/favorite-quote",
+  "$id": "https://blockprotocol.org/@alice/property-type/favorite-quote",
   "title": "Favorite Quote",
   "oneOf": [
-    { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" }
+    { "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text" }
   ]
 }
 ```
@@ -1040,11 +1040,11 @@ The `Age` Property Type could define its value as being an instance of the `Numb
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/age",
+  "$id": "https://blockprotocol.org/@alice/property-type/age",
   "title": "Age",
   "oneOf": [
     {
-      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/Number"
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/Number"
     }
   ]
 }
@@ -1057,12 +1057,12 @@ The `User ID` Property Type could define its value as being _either_ an instance
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/user-id",
+  "$id": "https://blockprotocol.org/@alice/property-type/user-id",
   "title": "User ID",
   "oneOf": [
-    { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" },
+    { "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text" },
     {
-      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
     }
   ]
 }
@@ -1086,21 +1086,21 @@ The `Contact Information` Property Type could define its value as being an objec
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/contact-information",
+  "$id": "https://blockprotocol.org/@alice/property-type/contact-information",
   "title": "Contact Information",
   "oneOf": [
     {
       "type": "object",
       "properties": {
-        "https://blockprotocol.org/types/@blockprotocol/property-type/email": {
-          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/email"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/email": {
+          "$ref": "https://blockprotocol.org/@blockprotocol/types/property-type/email"
         },
-        "https://blockprotocol.org/types/@blockprotocol/property-type/phone-number": {
-          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/phone-number"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/phone-number": {
+          "$ref": "https://blockprotocol.org/@blockprotocol/types/property-type/phone-number"
         }
       },
       "required": [
-        "https://blockprotocol.org/types/@blockprotocol/property-type/email"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/email"
       ]
     }
   ]
@@ -1114,22 +1114,22 @@ The `Interests` Property Type could define its value as being an object which ha
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/interests",
+  "$id": "https://blockprotocol.org/@alice/property-type/interests",
   "title": "Interests",
   "oneOf": [
     {
       "type": "object",
       "properties": {
-        "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-film": {
-          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-film"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/favorite-film": {
+          "$ref": "https://blockprotocol.org/@blockprotocol/types/property-type/favorite-film"
         },
-        "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song": {
-          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/favorite-song": {
+          "$ref": "https://blockprotocol.org/@blockprotocol/types/property-type/favorite-song"
         },
-        "https://blockprotocol.org/types/@blockprotocol/property-type/hobby": {
+        "https://blockprotocol.org/@blockprotocol/types/property-type/hobby": {
           "type": "array",
           "items": {
-            "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/hobby"
+            "$ref": "https://blockprotocol.org/@blockprotocol/types/property-type/hobby"
           }
         }
       }
@@ -1157,7 +1157,7 @@ For example if it is a strong requirement to model a grid of numbers, it can be 
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/numbers",
+  "$id": "https://blockprotocol.org/@alice/property-type/numbers",
   "title": "Numbers",
   "oneOf": [
     {
@@ -1165,7 +1165,7 @@ For example if it is a strong requirement to model a grid of numbers, it can be 
       "items": {
         "oneOf": [
           {
-            "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+            "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
           }
         ]
       }
@@ -1191,12 +1191,12 @@ The `User ID` Property Type could define its value as being _either_ an instance
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/user-id",
+  "$id": "https://blockprotocol.org/@alice/property-type/user-id",
   "title": "User ID",
   "oneOf": [
-    { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" },
+    { "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text" },
     {
-      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
     }
   ]
 }
@@ -1206,7 +1206,7 @@ Sample data when used in (simplified view of) an Entity
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/user-id": 42088130893
+  "https://blockprotocol.org/@alice/property-type/user-id": 42088130893
 }
 ```
 
@@ -1214,7 +1214,7 @@ or
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/user-id": "c09b1839-8084-4a2d-9713-5d074c9c6ce2"
+  "https://blockprotocol.org/@alice/property-type/user-id": "c09b1839-8084-4a2d-9713-5d074c9c6ce2"
 }
 ```
 
@@ -1225,18 +1225,18 @@ The `Contrived Property` Property Type could define its value as being _either_ 
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/contrived-property",
+  "$id": "https://blockprotocol.org/@alice/property-type/contrived-property",
   "title": "Contrived Property",
   "oneOf": [
     {
-      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
     },
     {
       "type": "array",
       "items": {
         "oneOf": [
           {
-            "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+            "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
           }
         ]
       },
@@ -1252,7 +1252,7 @@ Assuming that `Foo` accepts an instance of the `Text` Data Type
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/contrived-property": 32
+  "https://blockprotocol.org/@alice/property-type/contrived-property": 32
 }
 ```
 
@@ -1260,8 +1260,8 @@ or
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/contrived-property": {
-    "https://blockprotocol.org/types/@alice/property-type/foo": "something here"
+  "https://blockprotocol.org/@alice/property-type/contrived-property": {
+    "https://blockprotocol.org/@alice/property-type/foo": "something here"
   },
   ...
 }
@@ -1273,7 +1273,7 @@ A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/link-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-type",
   "description": "Specifies the structure of a Link Type",
   "properties": {
     "kind": {
@@ -1302,7 +1302,7 @@ A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
 ```json
 {
   "kind": "linkType",
-  "$id": "https://blockprotocol.org/types/@alice/link-type/owns",
+  "$id": "https://blockprotocol.org/@alice/link-type/owns",
   "title": "Owns",
   "description": "Have (something) as one's own; possess"
 }
@@ -1313,7 +1313,7 @@ A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
 ```json
 {
   "kind": "linkType",
-  "$id": "https://blockprotocol.org/types/@alice/link-type/submitted-by",
+  "$id": "https://blockprotocol.org/@alice/link-type/submitted-by",
   "title": "Submitted By",
   "description": "Suggested, proposed, or presented by"
 }
@@ -1325,7 +1325,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
 
 ```json
 {
-  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/entity-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "description": "Specifies the structure of an Entity Type",
   "type": "object",
   "properties": {
@@ -1497,21 +1497,21 @@ Assuming that:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
+  "$id": "https://blockprotocol.org/@alice/entity-type/book",
   "type": "object",
   "title": "Book",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     },
-    "https://blockprotocol.org/types/@alice/property-type/published-on": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on"
+    "https://blockprotocol.org/@alice/property-type/published-on": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/published-on"
     },
-    "https://blockprotocol.org/types/@alice/property-type/blurb": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb"
+    "https://blockprotocol.org/@alice/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/blurb"
     }
   },
-  "required": ["https://blockprotocol.org/types/@alice/property-type/name"]
+  "required": ["https://blockprotocol.org/@alice/property-type/name"]
 }
 ```
 
@@ -1519,9 +1519,9 @@ This would accept Entity instances with the following shape
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
-  "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
-  "https://blockprotocol.org/types/@alice/property-type/blurb": ...
+  "https://blockprotocol.org/@alice/property-type/name": "The Time Machine",
+  "https://blockprotocol.org/@alice/property-type/published-on": "1895-05",
+  "https://blockprotocol.org/@alice/property-type/blurb": ...
 }
 ```
 
@@ -1542,29 +1542,29 @@ Assuming that:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/car",
+  "$id": "https://blockprotocol.org/@alice/entity-type/car",
   "type": "object",
   "title": "Car",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/make": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/make"
+    "https://blockprotocol.org/@alice/property-type/make": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/make"
     },
-    "https://blockprotocol.org/types/@alice/property-type/model": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/model"
+    "https://blockprotocol.org/@alice/property-type/model": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/model"
     },
-    "https://blockprotocol.org/types/@alice/property-type/spec": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/spec"
+    "https://blockprotocol.org/@alice/property-type/spec": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/spec"
     },
-    "https://blockprotocol.org/types/@alice/property-type/year": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/year"
+    "https://blockprotocol.org/@alice/property-type/year": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/year"
     },
-    "https://blockprotocol.org/types/@alice/property-type/brake-horsepower": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/brake-horsepower"
+    "https://blockprotocol.org/@alice/property-type/brake-horsepower": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/brake-horsepower"
     },
-    "https://blockprotocol.org/types/@alice/property-type/extra-trim": {
+    "https://blockprotocol.org/@alice/property-type/extra-trim": {
       "type": "array",
       "items": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/extra-trim"
+        "$ref": "https://blockprotocol.org/@alice/property-type/extra-trim"
       }
     }
   }
@@ -1575,11 +1575,11 @@ This would accept Entity instances with the following shape
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/make": "Mercedes-Benz",
-  "https://blockprotocol.org/types/@alice/property-type/model": "300 SL",
-  "https://blockprotocol.org/types/@alice/property-type/year": "1957",
-  "https://blockprotocol.org/types/@alice/property-type/brake-horsepower": 222,
-  "https://blockprotocol.org/types/@alice/property-type/extra-trim": [
+  "https://blockprotocol.org/@alice/property-type/make": "Mercedes-Benz",
+  "https://blockprotocol.org/@alice/property-type/model": "300 SL",
+  "https://blockprotocol.org/@alice/property-type/year": "1957",
+  "https://blockprotocol.org/@alice/property-type/brake-horsepower": 222,
+  "https://blockprotocol.org/@alice/property-type/extra-trim": [
     "Leather Seats",
     "Cream and Red"
   ]
@@ -1597,21 +1597,21 @@ Assuming that:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/product",
+  "$id": "https://blockprotocol.org/@alice/entity-type/product",
   "type": "object",
   "title": "Product",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/tag": {
+    "https://blockprotocol.org/@alice/property-type/tag": {
       "type": "array",
       "items": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/tag"
+        "$ref": "https://blockprotocol.org/@alice/property-type/tag"
       },
       "minItems": 1,
       "maxItems": 5
     },
     ...
   },
-  "required": ["https://blockprotocol.org/types/@alice/property-type/tag"]
+  "required": ["https://blockprotocol.org/@alice/property-type/tag"]
 }
 ```
 
@@ -1619,7 +1619,7 @@ This would accept Entity instances with the following shape
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/tag": [
+  "https://blockprotocol.org/@alice/property-type/tag": [
     "Clothing",
     "Summer",
     "Leisurewear"
@@ -1647,22 +1647,22 @@ Assuming that:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
+  "$id": "https://blockprotocol.org/@alice/entity-type/book",
   "type": "object",
   "title": "Book",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     },
-    "https://blockprotocol.org/types/@alice/property-type/published-on": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on"
+    "https://blockprotocol.org/@alice/property-type/published-on": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/published-on"
     },
-    "https://blockprotocol.org/types/@alice/property-type/blurb": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb"
+    "https://blockprotocol.org/@alice/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/blurb"
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/written-by": {}
+    "https://blockprotocol.org/@alice/link-type/written-by": {}
   }
 }
 ```
@@ -1675,7 +1675,7 @@ This would accept Entity instances with the following shape
   {
     "entityId": 111,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Herbert George Wells",
+      "https://blockprotocol.org/@alice/property-type/name": "Herbert George Wells",
       ...
     }
   },
@@ -1683,12 +1683,12 @@ This would accept Entity instances with the following shape
   {
     "entityId": 112,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
-      "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
-      "https://blockprotocol.org/types/@alice/property-type/blurb": "brulb"
+      "https://blockprotocol.org/@alice/property-type/name": "The Time Machine",
+      "https://blockprotocol.org/@alice/property-type/published-on": "1895-05",
+      "https://blockprotocol.org/@alice/property-type/blurb": "brulb"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/written-by": 111 // referring to the Person entity ID
+      "https://blockprotocol.org/@alice/link-type/written-by": 111 // referring to the Person entity ID
     }
   }
 ]
@@ -1701,24 +1701,24 @@ The `UK Address` Entity Type could contain Property Types `address-line-1`, `pos
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/uk-address",
+  "$id": "https://blockprotocol.org/@alice/entity-type/uk-address",
   "type": "object",
   "title": "UK Address",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/address-line-1": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/address-line-1"
+    "https://blockprotocol.org/@alice/property-type/address-line-1": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/address-line-1"
     },
-    "https://blockprotocol.org/types/@alice/property-type/postcode": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/postcode"
+    "https://blockprotocol.org/@alice/property-type/postcode": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/postcode"
     },
-    "https://blockprotocol.org/types/@alice/property-type/city": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/city"
+    "https://blockprotocol.org/@alice/property-type/city": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/city"
     }
   },
   "required": [
-    "https://blockprotocol.org/types/@alice/property-type/address-line-1",
-    "https://blockprotocol.org/types/@alice/property-type/postcode",
-    "https://blockprotocol.org/types/@alice/property-type/city"
+    "https://blockprotocol.org/@alice/property-type/address-line-1",
+    "https://blockprotocol.org/@alice/property-type/postcode",
+    "https://blockprotocol.org/@alice/property-type/city"
   ]
 }
 ```
@@ -1728,12 +1728,12 @@ The `Organization` Entity Type could contain the Property Type `Name`
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/organization",
+  "$id": "https://blockprotocol.org/@alice/entity-type/organization",
   "type": "object",
   "title": "Organization",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     }
   }
 }
@@ -1744,13 +1744,13 @@ The `Building` Entity Type could contain a `Located At` link, and a `Tenant` lin
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/building",
+  "$id": "https://blockprotocol.org/@alice/entity-type/building",
   "type": "object",
   "title": "Bulding",
   "properties": {},
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/located-at": {},
-    "https://blockprotocol.org/types/@alice/link-type/tenant": {}
+    "https://blockprotocol.org/@alice/link-type/located-at": {},
+    "https://blockprotocol.org/@alice/link-type/tenant": {}
   }
 }
 ```
@@ -1763,24 +1763,24 @@ This would accept Entity instances with the following shape
   {
     "entityId": 113,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/address-line-1": "Buckingham Palace",
-      "https://blockprotocol.org/types/@alice/property-type/postcode": "SW1A 1AA",
-      "https://blockprotocol.org/types/@alice/property-type/city": "London"
+      "https://blockprotocol.org/@alice/property-type/address-line-1": "Buckingham Palace",
+      "https://blockprotocol.org/@alice/property-type/postcode": "SW1A 1AA",
+      "https://blockprotocol.org/@alice/property-type/city": "London"
     }
   },
   // Organization entity
   {
     "entityId": 114,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
+      "https://blockprotocol.org/@alice/property-type/name": "HASH, Ltd."
     }
   }
   // Building entity
   {
     "entityId": 115,
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/located-at": 113, // referring to the UK Address entity ID
-      "https://blockprotocol.org/types/@alice/link-type/tenant": 114 // referring to the Organization entity ID
+      "https://blockprotocol.org/@alice/link-type/located-at": 113, // referring to the UK Address entity ID
+      "https://blockprotocol.org/@alice/link-type/tenant": 114 // referring to the Organization entity ID
     }
   }
 ]
@@ -1801,26 +1801,24 @@ Assuming that:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
+  "$id": "https://blockprotocol.org/@alice/entity-type/book",
   "type": "object",
   "title": "Book",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     },
-    "https://blockprotocol.org/types/@alice/property-type/published-on": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on"
+    "https://blockprotocol.org/@alice/property-type/published-on": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/published-on"
     },
-    "https://blockprotocol.org/types/@alice/property-type/blurb": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb"
+    "https://blockprotocol.org/@alice/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/blurb"
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/written-by": {}
+    "https://blockprotocol.org/@alice/link-type/written-by": {}
   },
-  "requiredLinks": [
-    "https://blockprotocol.org/types/@alice/link-type/written-by"
-  ]
+  "requiredLinks": ["https://blockprotocol.org/@alice/link-type/written-by"]
 }
 ```
 
@@ -1832,7 +1830,7 @@ This would accept Entity instances with the following shape
   {
     "entityId": 111,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Herbert George Wells",
+      "https://blockprotocol.org/@alice/property-type/name": "Herbert George Wells",
       ...
     }
   },
@@ -1840,12 +1838,12 @@ This would accept Entity instances with the following shape
   {
     "entityId": 112,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
-      "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
-      "https://blockprotocol.org/types/@alice/property-type/blurb": ...
+      "https://blockprotocol.org/@alice/property-type/name": "The Time Machine",
+      "https://blockprotocol.org/@alice/property-type/published-on": "1895-05",
+      "https://blockprotocol.org/@alice/property-type/blurb": ...
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/written-by": 111 // referring to the Person entity ID
+      "https://blockprotocol.org/@alice/link-type/written-by": 111 // referring to the Person entity ID
     }
   }
 ]
@@ -1863,16 +1861,16 @@ The `Person` Entity Type could contain some Property Types, and multiple `Friend
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/person",
+  "$id": "https://blockprotocol.org/@alice/entity-type/person",
   "type": "object",
   "title": "Person",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/friend-of": {
+    "https://blockprotocol.org/@alice/link-type/friend-of": {
       "type": "array",
       "ordered": false
     }
@@ -1888,22 +1886,22 @@ This would accept Entity instances with the following shape
   {
     "entityId": 211,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Alice"
+      "https://blockprotocol.org/@alice/property-type/name": "Alice"
     }
   },
   {
     "entityId": 212,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Bob"
+      "https://blockprotocol.org/@alice/property-type/name": "Bob"
     }
   },
   {
     "entityId": 213,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Charlie"
+      "https://blockprotocol.org/@alice/property-type/name": "Charlie"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/friend-of": [211, 212] // referring to the Person entity IDs, where the array ordering is unstable
+      "https://blockprotocol.org/@alice/link-type/friend-of": [211, 212] // referring to the Person entity IDs, where the array ordering is unstable
     }
   }
 ]
@@ -1920,16 +1918,16 @@ The `Playlist` Entity Type could contain some Property Types, and an _ordered_ l
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/playlist",
+  "$id": "https://blockprotocol.org/@alice/entity-type/playlist",
   "type": "object",
   "title": "Playlist",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/contains": {
+    "https://blockprotocol.org/@alice/link-type/contains": {
       "type": "array",
       "ordered": true
     }
@@ -1942,12 +1940,12 @@ The `Song` Entity Type could contain some Property Types.
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/Song",
+  "$id": "https://blockprotocol.org/@alice/entity-type/Song",
   "type": "object",
   "title": "Song",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     }
   }
 }
@@ -1961,31 +1959,29 @@ This would accept Entity instances with the following shape
   {
     "entityId": 312,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Rocket Man"
+      "https://blockprotocol.org/@alice/property-type/name": "Rocket Man"
     }
   },
   {
     "entityId": 313,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Du Hast"
+      "https://blockprotocol.org/@alice/property-type/name": "Du Hast"
     }
   },
   {
     "entityId": 314,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Valley of the Shadows"
+      "https://blockprotocol.org/@alice/property-type/name": "Valley of the Shadows"
     }
   },
   // Playlist
   {
     "entityId": 315,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Favorite Songs"
+      "https://blockprotocol.org/@alice/property-type/name": "Favorite Songs"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/contains": [
-        312, 314, 313
-      ] // referring to the song entity IDs, ordering is intentional and stable
+      "https://blockprotocol.org/@alice/link-type/contains": [312, 314, 313] // referring to the song entity IDs, ordering is intentional and stable
     }
   }
 ]
@@ -1998,17 +1994,17 @@ The `Page` Entity Type could contain some Property Types, a `Written By` link, a
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/page",
+  "$id": "https://blockprotocol.org/@alice/entity-type/page",
   "type": "object",
   "title": "Page",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/text": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/text"
+    "https://blockprotocol.org/@alice/property-type/text": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/text"
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/written-by": {},
-    "https://blockprotocol.org/types/@alice/link-type/contains": {
+    "https://blockprotocol.org/@alice/link-type/written-by": {},
+    "https://blockprotocol.org/@alice/link-type/contains": {
       "type": "array",
       "ordered": true
     }
@@ -2026,41 +2022,39 @@ This would accept Entity instances with the following shape
   {
     "entityId": 316,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas."
+      "https://blockprotocol.org/@alice/property-type/text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas."
     }
   },
   // Heading Entity
   {
     "entityId": 317,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Duo Reges: constructio interrete."
+      "https://blockprotocol.org/@alice/property-type/name": "Duo Reges: constructio interrete."
     }
   },
   // Divider Entity
   {
     "entityId": 318,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/width": "full"
+      "https://blockprotocol.org/@alice/property-type/width": "full"
     }
   },
   // User Entity
   {
     "entityId": 319,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Alice"
+      "https://blockprotocol.org/@alice/property-type/name": "Alice"
     }
   },
   // Page Entity
   {
     "entityId": 320,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Lorum Ipsum"
+      "https://blockprotocol.org/@alice/property-type/name": "Lorum Ipsum"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/written-by": 319, // referring to the User entity ID
-      "https://blockprotocol.org/types/@alice/link-type/contains": [
-        317, 316, 318
-      ] // referring to IDs above, ordering is intentional and stable
+      "https://blockprotocol.org/@alice/link-type/written-by": 319, // referring to the User entity ID
+      "https://blockprotocol.org/@alice/link-type/contains": [317, 316, 318] // referring to IDs above, ordering is intentional and stable
     }
   }
 ]
@@ -2180,7 +2174,7 @@ Messages in the Graph Module are currently specified under [this schema](https:/
 
 A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URLs. As seen in the examples in earlier sections, properties that use simple keys will now have to point at _Property Type URLs_.
 
-**An example of an [`Entity`](https://blockprotocol.org/types/modules/graph/entity) instance in the current system:**
+**An example of an [`Entity`](https://blockprotocol.org/types/modules/graph/0.2/schema/entity) instance in the current system:**
 
 ```json
 {
@@ -2200,10 +2194,10 @@ A key change for allowing the proposed type system to work is moving away from a
 {
   "entityId": 111,
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": "Arthur Philip Dent",
-    "https://blockprotocol.org/types/@alice/property-type/age": 30,
-    "https://blockprotocol.org/types/@alice/property-type/planet-of-origin": "Earth",
-    "https://blockprotocol.org/types/@alice/property-type/occupation": "Intergalactic Traveler"
+    "https://blockprotocol.org/@alice/property-type/name": "Arthur Philip Dent",
+    "https://blockprotocol.org/@alice/property-type/age": 30,
+    "https://blockprotocol.org/@alice/property-type/planet-of-origin": "Earth",
+    "https://blockprotocol.org/@alice/property-type/occupation": "Intergalactic Traveler"
   }
 }
 ```
@@ -2230,7 +2224,7 @@ This change canonicalizes property keys, such that they uniquely identify a Prop
 
 Link groups and Linked entities in the Graph Module are currently supplied outside the entity as separate objects. This behavior will stay the same, but the objects received will be of a different shape.
 
-**An example of a [`LinkGroup`](https://blockprotocol.org/types/modules/graph/link-group) instance in the current system:**
+**An example of a [`LinkGroup`](https://blockprotocol.org/types/modules/graph/0.2/schema/link-group) instance in the current system:**
 
 ```json
 {
@@ -2251,13 +2245,13 @@ Link groups and Linked entities in the Graph Module are currently supplied outsi
 ```json
 {
   "sourceEntityId": "user1",
-  "linkType": "https://blockprotocol.org/types/@alice/link-type/company",
+  "linkType": "https://blockprotocol.org/@alice/link-type/company",
   "ordered": false,
   "links": [
     {
       "sourceEntityId": "user1",
       "destinationEntityId": "company1",
-      "linkType": "https://blockprotocol.org/types/@alice/link-type/company"
+      "linkType": "https://blockprotocol.org/@alice/link-type/company"
     }
   ]
 }
@@ -2270,7 +2264,7 @@ The `LinkGroup` has a new key `ordered` which specifies whether or not the `link
 
 As for the linked entities returned by `linkedEntities`, the imposed changes to Entities will apply here as well.
 
-**An example of [`linkedEntities`](https://blockprotocol.org/types/modules/graph/entity) instance in the current system:**
+**An example of [`linkedEntities`](https://blockprotocol.org/types/modules/graph/0.2/schema/entity) instance in the current system:**
 
 ```json
 [
@@ -2290,7 +2284,7 @@ As for the linked entities returned by `linkedEntities`, the imposed changes to 
   {
     "entityId": 222,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
+      "https://blockprotocol.org/@alice/property-type/name": "HASH, Ltd."
     }
   }
 ]
@@ -2316,7 +2310,7 @@ Link creation will not be using arbitrary `path`s, instead Link Types must be us
 {
   "sourceEntityId": 111,
   "destinationEntityId": 222,
-  "link": "https://blockprotocol.org/types/@alice/link-type/company"
+  "link": "https://blockprotocol.org/@alice/link-type/company"
 }
 ```
 
@@ -2346,7 +2340,7 @@ Links can be ordered in the current system, and the behavior will stay mostly th
   "sourceEntityId": 333,
   "destinationEntityId": 444,
   "index": 4,
-  "link": "https://blockprotocol.org/types/@alice/link-type/stops-at"
+  "link": "https://blockprotocol.org/@alice/link-type/stops-at"
 }
 ```
 
@@ -2361,7 +2355,7 @@ The indices of ordered links are transparent to the users, and implicitly given 
 {
   // A list of ordered links
   "sourceEntityId": 111,
-  "link": "https://blockprotocol.org/types/@alice/link-type/stops-at",
+  "link": "https://blockprotocol.org/@alice/link-type/stops-at",
   // Elements of this links array are ordered'
   "ordered": true,
   "links": [
@@ -2369,13 +2363,13 @@ The indices of ordered links are transparent to the users, and implicitly given 
       // First link
       "sourceEntityId": 111,
       "destinationEntityId": 222,
-      "link": "https://blockprotocol.org/types/@alice/link-type/stops-at"
+      "link": "https://blockprotocol.org/@alice/link-type/stops-at"
     },
     {
       // Second link
       "sourceEntityId": 111,
       "destinationEntityId": 333,
-      "link": "https://blockprotocol.org/types/@alice/link-type/stops-at"
+      "link": "https://blockprotocol.org/@alice/link-type/stops-at"
     }
   ]
 }
@@ -2422,22 +2416,22 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
   "kind": "entityType",
   "title": "Person Card",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     },
-    "https://blockprotocol.org/types/@alice/property-type/email": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/email"
+    "https://blockprotocol.org/@alice/property-type/email": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/email"
     },
-    "https://blockprotocol.org/types/@alice/property-type/website-url": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/website-url"
+    "https://blockprotocol.org/@alice/property-type/website-url": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/website-url"
     },
-    "https://blockprotocol.org/types/@alice/property-type/avatar-image": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/avatar-image"
+    "https://blockprotocol.org/@alice/property-type/avatar-image": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/avatar-image"
     }
   },
   "links": {
     // Employer
-    "https://blockprotocol.org/types/@alice/link-type/company": {}
+    "https://blockprotocol.org/@alice/link-type/company": {}
   }
 }
 ```
@@ -2521,7 +2515,7 @@ Link Types do not contain further structural data, which make them semantically 
 ```json
 {
   // updateEntityType message
-  "entityTypeId": "https://blockprotocol.org/types/@alice/entity-type/person",
+  "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
   "schema": {
     "properties": {
       "birthDate": { "type": "string", "format": "date" }
@@ -2540,14 +2534,14 @@ Link Types do not contain further structural data, which make them semantically 
     "kind": "entityType",
     "title": "Person",
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+      "https://blockprotocol.org/@alice/property-type/name": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/name"
       },
-      "https://blockprotocol.org/types/@alice/property-type/email": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/email"
+      "https://blockprotocol.org/@alice/property-type/email": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/email"
       },
-      "https://blockprotocol.org/types/@alice/property-type/phone-number": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/phone-number"
+      "https://blockprotocol.org/@alice/property-type/phone-number": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/phone-number"
       }
     }
   }
@@ -2557,12 +2551,12 @@ Link Types do not contain further structural data, which make them semantically 
 ```json
 {
   // updateEntityType message
-  "entityTypeId": "https://blockprotocol.org/types/@alice/entity-type/person",
+  "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
   "schema": {
     // The properties here are partially applied to the original Entity Type.
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/birth-date": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/birth-date"
+      "https://blockprotocol.org/@alice/property-type/birth-date": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/birth-date"
       }
     }
   }
@@ -2585,7 +2579,7 @@ Property Types do not exist.
     "title": "User ID",
     "oneOf": [
       {
-        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text"
+        "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text"
       }
     ]
   }
@@ -2595,14 +2589,14 @@ Property Types do not exist.
 ```json
 {
   // updatePropertyType message
-  "propertyTypeId": "https://blockprotocol.org/types/@alice/property-type/user-id",
+  "propertyTypeId": "https://blockprotocol.org/@alice/property-type/user-id",
   "schema": {
     "oneOf": [
       {
-        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text"
+        "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text"
       },
       {
-        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+        "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
       }
     ]
   }
@@ -2629,7 +2623,7 @@ Link Types do not exist.
 ```json
 {
   // updateLinkType message
-  "linkTypeId": "https://blockprotocol.org/types/@alice/link-type/friend-of",
+  "linkTypeId": "https://blockprotocol.org/@alice/link-type/friend-of",
   "keywords": ["knows"]
 }
 ```

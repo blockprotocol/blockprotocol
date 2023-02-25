@@ -8,7 +8,6 @@ import {
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { FRONTEND_URL } from "../lib/config";
 import { ApiEntityTypeByUrlResponse } from "../pages/api/types/entity-type/get.api";
 import { ApiPropertyTypeByUrlResponse } from "../pages/api/types/property-type/get.api";
 import { hardcodedTypes } from "./return-types-as-json/hardcoded-types";
@@ -38,15 +37,17 @@ const validateVersionedUrl = (url: string): url is VersionedUrl =>
 const getTypeByVersionedUrl = (
   versionedUrl: VersionedUrl,
   kind: "entity-type" | "property-type",
-) =>
-  fetch(
-    `${FRONTEND_URL}/api/types/${kind}/get?versionedUrl=${versionedUrl}`,
+) => {
+  const origin = new URL(versionedUrl).origin;
+  return fetch(
+    `${origin}/api/types/${kind}/get?versionedUrl=${versionedUrl}`,
   ).then(
     (resp) =>
       resp.json() as Promise<
         ApiPropertyTypeByUrlResponse | ApiEntityTypeByUrlResponse
       >,
   );
+};
 
 export const returnTypeAsJson = async (request: NextRequest) => {
   const { url } = request;

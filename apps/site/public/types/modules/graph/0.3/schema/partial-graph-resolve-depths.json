@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths",
+  "title": "Partial Graph Resolve Depths",
+  "description": "The depths a subgraph query should be resolved to. This is a partial selection of the full depths object.",
+  "type": "object",
+  "properties": {
+    "hasLeftEntity": {
+      "$ref": "#/$defs/EdgeResolveDepths"
+    },
+    "hasRightEntity": {
+      "$ref": "#/$defs/EdgeResolveDepths"
+    }
+  },
+  "$defs": {
+    "EdgeResolveDepths": {
+      "description": "A selection of incoming, and outgoing, depths to resolve associated with a specific edge kind.",
+      "type": "object",
+      "properties": {
+        "incoming": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        "outgoing": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        }
+      },
+      "required": [
+        "incoming",
+        "outgoing"
+      ]
+    }
+  }
+}

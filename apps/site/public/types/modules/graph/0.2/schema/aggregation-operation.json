@@ -1,5 +1,5 @@
 {
-  "$id": "https://blockprotocol.org/types/modules/graph/aggregation-operation",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.2/schema/aggregation-operation",
   "title": "AggregationOperation",
   "type": "object",
   "properties": {
@@ -76,17 +76,17 @@
   "$defs": {
     "FilterOperatorRequiringValue": {
       "enum": [
-        "CONTAINS_SEGMENT",
-        "DOES_NOT_CONTAIN_SEGMENT",
+        "CONTAINS",
+        "DOES_NOT_CONTAIN",
         "ENDS_WITH",
-        "EQUALS",
-        "DOES_NOT_EQUAL",
+        "IS",
+        "IS_NOT",
         "STARTS_WITH"
       ],
       "type": "string"
     },
     "FilterOperatorWithoutValue": {
-      "enum": ["IS_DEFINED", "IS_NOT_DEFINED"],
+      "enum": ["IS_EMPTY", "IS_NOT_EMPTY"],
       "type": "string"
     },
     "MultiFilterOperatorType": {

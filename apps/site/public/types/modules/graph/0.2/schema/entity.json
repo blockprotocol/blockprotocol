@@ -1,5 +1,5 @@
 {
-  "$id": "https://blockprotocol.org/types/modules/graph/entity",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.2/schema/entity",
   "title": "Entity",
   "type": "object",
   "properties": {
