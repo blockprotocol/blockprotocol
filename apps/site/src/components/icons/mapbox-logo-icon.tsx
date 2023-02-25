@@ -1,7 +1,9 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
 import { FunctionComponent } from "react";
 
-export const MapboxLogoIcon: FunctionComponent<SvgIconProps> = (props) => {
+export const MapboxLogoIcon: FunctionComponent<
+  { fill?: string } & SvgIconProps
+> = ({ fill, ...props }) => {
   return (
     <SvgIcon
       {...props}
@@ -13,7 +15,7 @@ export const MapboxLogoIcon: FunctionComponent<SvgIconProps> = (props) => {
     >
       <path
         d="M10 0C4.47694 0 0 4.47694 0 10C0 15.5231 4.47694 20 10 20C15.5231 20 20 15.5231 20 10C20 4.47694 15.5231 0 10 0ZM14.7469 12.4522C11.3273 15.8718 5.21935 14.7807 5.21935 14.7807C5.21935 14.7807 4.11699 8.68391 7.54781 5.25309C9.44882 3.35208 12.5984 3.43082 14.5894 5.41057C16.5804 7.39033 16.6479 10.5512 14.7469 12.4522Z"
-        fill="url(#paint0_linear_4752_31469)"
+        fill={fill ?? "url(#paint0_linear_4752_31469)"}
       />
       <path
         d="M10 0C4.47694 0 0 4.47694 0 10C0 15.5231 4.47694 20 10 20C15.5231 20 20 15.5231 20 10C20 4.47694 15.5231 0 10 0ZM14.7469 12.4522C11.3273 15.8718 5.21935 14.7807 5.21935 14.7807C5.21935 14.7807 4.11699 8.68391 7.54781 5.25309C9.44882 3.35208 12.5984 3.43082 14.5894 5.41057C16.5804 7.39033 16.6479 10.5512 14.7469 12.4522Z"
@@ -22,7 +24,7 @@ export const MapboxLogoIcon: FunctionComponent<SvgIconProps> = (props) => {
       />
       <path
         d="M11.1474 5.86052L10.1687 7.87402L8.15523 8.85264L10.1687 9.83127L11.1474 11.8448L12.126 9.83127L14.1395 8.85264L12.126 7.87402L11.1474 5.86052Z"
-        fill="url(#paint1_linear_4752_31469)"
+        fill={fill ?? "url(#paint1_linear_4752_31469)"}
       />
       <path
         d="M11.1474 5.86052L10.1687 7.87402L8.15523 8.85264L10.1687 9.83127L11.1474 11.8448L12.126 9.83127L14.1395 8.85264L12.126 7.87402L11.1474 5.86052Z"

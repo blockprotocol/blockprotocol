@@ -154,7 +154,7 @@ export interface ExternalServiceMethodRequest {
    * @type {string}
    * @memberof ExternalServiceMethodRequest
    */
-  methodName: string;
+  methodName: ExternalServiceMethodRequestMethodNameEnum;
   /**
    *
    * @type {{ [key: string]: any; }}
@@ -164,12 +164,27 @@ export interface ExternalServiceMethodRequest {
 }
 
 export const ExternalServiceMethodRequestProviderNameEnum = {
-  OpenAi: "openAI",
+  Openai: "openai",
   Mapbox: "mapbox",
 } as const;
 
 export type ExternalServiceMethodRequestProviderNameEnum =
   (typeof ExternalServiceMethodRequestProviderNameEnum)[keyof typeof ExternalServiceMethodRequestProviderNameEnum];
+export const ExternalServiceMethodRequestMethodNameEnum = {
+  ForwardGeocoding: "forwardGeocoding",
+  ReverseGeocoding: "reverseGeocoding",
+  RetrieveDirections: "retrieveDirections",
+  RetrieveIsochrones: "retrieveIsochrones",
+  SuggestAddress: "suggestAddress",
+  RetrieveAddress: "retrieveAddress",
+  CanRetrieveAddress: "canRetrieveAddress",
+  RetrieveStaticMap: "retrieveStaticMap",
+  CreateImage: "createImage",
+  CompleteText: "completeText",
+} as const;
+
+export type ExternalServiceMethodRequestMethodNameEnum =
+  (typeof ExternalServiceMethodRequestMethodNameEnum)[keyof typeof ExternalServiceMethodRequestMethodNameEnum];
 
 /**
  *

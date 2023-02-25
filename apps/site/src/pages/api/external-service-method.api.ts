@@ -2,6 +2,7 @@ import {
   ExternalServiceMethod200Response,
   ExternalServiceMethodRequest,
 } from "@local/internal-api-client";
+import { AxiosError } from "axios";
 
 import { createApiKeyRequiredHandler } from "../../lib/api/handler/api-key-required-handler";
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
@@ -32,12 +33,20 @@ export default createApiKeyRequiredHandler<
 
     const { id: bpUserId } = req.user;
 
-    const { data } = await internalApi.externalServiceMethod(req.body, {
-      headers: {
-        "internal-api-key": internalApiKey,
-        "bp-user-id": bpUserId,
-      },
-    });
+    try {
+      const { data } = await internalApi.externalServiceMethod(req.body, {
+        headers: {
+          "internal-api-key": internalApiKey,
+          "bp-user-id": bpUserId,
+        },
+      });
 
-    res.status(200).json(data);
+      res.status(200).json(data);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+
+      const { status, data } = axiosError.response ?? {};
+
+      res.status(status ?? 500).json((data as any) ?? {});
+    }
   });

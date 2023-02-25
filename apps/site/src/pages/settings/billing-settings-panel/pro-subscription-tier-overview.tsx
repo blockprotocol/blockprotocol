@@ -217,11 +217,11 @@ export const ProSubscriptionTierOverview: FunctionComponent<{
           component="p"
           variant="bpMicroCopy"
           gutterBottom
-          sx={{ textTransform: "uppercase" }}
+          sx={{ textTransform: "uppercase", mb: 1.75 }}
         >
           <strong>Api Access</strong>
         </Typography>
-        <Box marginBottom={3}>
+        <Box display="flex" flexDirection="column" gap={2.25} marginBottom={3}>
           {[
             ...proSubscriptionFeatures["api-access"],
             ...proSubscriptionFeatures["api-access-related"],
@@ -234,11 +234,11 @@ export const ProSubscriptionTierOverview: FunctionComponent<{
           component="p"
           variant="bpMicroCopy"
           gutterBottom
-          sx={{ textTransform: "uppercase" }}
+          sx={{ textTransform: "uppercase", mb: 1.75 }}
         >
           <strong>Flair</strong>
         </Typography>
-        <Box marginBottom={3}>
+        <Box display="flex" flexDirection="column" gap={2.25} marginBottom={3}>
           {proSubscriptionFeatures.flair.map((feature, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <SubscriptionFeatureListItem key={index} feature={feature} />
@@ -248,14 +248,18 @@ export const ProSubscriptionTierOverview: FunctionComponent<{
           component="p"
           variant="bpMicroCopy"
           gutterBottom
-          sx={{ textTransform: "uppercase" }}
+          sx={{ textTransform: "uppercase", mb: 1.75 }}
         >
           <strong>Advanced Controls</strong>
         </Typography>
-        {proSubscriptionFeatures["advanced-controls"].map((feature, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <SubscriptionFeatureListItem key={index} feature={feature} />
-        ))}
+        <Box display="flex" flexDirection="column" gap={2.25}>
+          {proSubscriptionFeatures["advanced-controls"].map(
+            (feature, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <SubscriptionFeatureListItem key={index} feature={feature} />
+            ),
+          )}
+        </Box>
       </Box>
     </>
   );
