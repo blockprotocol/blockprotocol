@@ -2,7 +2,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   Container,
-  // Stack,
+  Stack,
   Typography,
   useMediaQuery,
   useTheme,
@@ -10,10 +10,11 @@ import {
 import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
+import { isBillingFeatureFlagEnabled } from "../../../lib/config";
 import { BlocksSlider } from "../../blocks-slider";
 import { BlockProtocolIcon } from "../../icons";
-// import { MapboxIcon } from "../../icons/mapbox-icon";
-// import { OpenAiIcon } from "../../icons/open-ai-icon";
+import { MapboxIcon } from "../../icons/mapbox-icon";
+import { OpenAiIcon } from "../../icons/open-ai-icon";
 import { Link } from "../../link";
 import { LinkButton } from "../../link-button";
 
@@ -24,7 +25,10 @@ const BrowseBlocksSection = ({ isMobile = false }) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        alignItems: { xs: "center" },
+        alignItems: {
+          xs: "center",
+          ...(isBillingFeatureFlagEnabled ? { lg: "flex-end" } : {}),
+        },
       }}
     >
       <Box mb={1.5}>
@@ -98,11 +102,19 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
       <Container
         sx={{
           display: "flex",
-          flexDirection: "column",
           justifyContent: "space-between",
-          gap: { xs: 2.5, lg: 4 },
-          mb: { xs: 2.5, lg: 4 },
           maxWidth: { xs: "95%", md: "85%", lg: 1100 },
+          ...(isBillingFeatureFlagEnabled
+            ? {
+                flexDirection: { xs: "column", lg: "row" },
+                gap: { xs: 2.5, lg: 10 },
+                mb: { xs: 2.5, lg: 10 },
+              }
+            : {
+                flexDirection: "column",
+                gap: { xs: 2.5, lg: 4 },
+                mb: { xs: 2.5, lg: 4 },
+              }),
         }}
       >
         <Box
@@ -110,7 +122,10 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: {
+              xs: "center",
+              ...(isBillingFeatureFlagEnabled ? { lg: "flex-start" } : {}),
+            },
           }}
         >
           <Typography
@@ -124,6 +139,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
               letterSpacing: "-0.02em",
               lineHeight: 1,
               whiteSpace: "nowrap",
+              ...(isBillingFeatureFlagEnabled ? { mb: 2.25 } : {}),
             }}
           >
             Blocks on the
@@ -138,30 +154,32 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
             <strong>Hub</strong>
           </Typography>
 
-          {/* <Stack */}
-          {/*  sx={{ */}
-          {/*    flexDirection: "row", */}
-          {/*    gap: 2.25, */}
-          {/*    alignItems: "center", */}
-          {/*    flexWrap: "wrap", */}
-          {/*    justifyContent: { xs: "center", lg: "flex-start" }, */}
-          {/*  }} */}
-          {/* > */}
-          {/*  <OpenAiIcon sx={{ width: 105 }} />  */}
-          {/*  <MapboxIcon sx={{ width: 115 }} /> */}
-          {/*  <Box component="img" src="/assets/logos/mono/hash.svg" /> */}
+          {isBillingFeatureFlagEnabled ? (
+            <Stack
+              sx={{
+                flexDirection: "row",
+                gap: 2.25,
+                alignItems: "center",
+                flexWrap: "wrap",
+                justifyContent: { xs: "center", lg: "flex-start" },
+              }}
+            >
+              <OpenAiIcon sx={{ width: 105 }} />
+              <MapboxIcon sx={{ width: 115 }} />
+              <Box component="img" src="/assets/logos/mono/hash.svg" />
 
-          {/*  <Typography */}
-          {/*    variant="bpSmallCaps" */}
-          {/*    sx={{ */}
-          {/*      fontWeight: 500, */}
-          {/*      color: ({palette}) => palette.bpGray[50], */}
-          {/*      whiteSpace: "nowrap", */}
-          {/*    }} */}
-          {/*  > */}
-          {/*    And more */}
-          {/*  </Typography> */}
-          {/* </Stack> */}
+              <Typography
+                variant="bpSmallCaps"
+                sx={{
+                  fontWeight: 500,
+                  color: ({ palette }) => palette.bpGray[50],
+                  whiteSpace: "nowrap",
+                }}
+              >
+                And more
+              </Typography>
+            </Stack>
+          ) : null}
         </Box>
 
         {isSmallScreen ? null : <BrowseBlocksSection />}

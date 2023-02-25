@@ -22,7 +22,7 @@ type EntityTypeFormProps = {
 export const EntityTypeForm = ({
   author,
   entityType,
-  readonly: _readonly,
+  readonly,
 }: EntityTypeFormProps) => {
   const [entityTypeOptions, setEntityTypeOptions] = useState<Record<
     VersionedUrl,
@@ -162,7 +162,7 @@ export const EntityTypeForm = ({
 
           setEntityTypeOptions((prev) => ({
             ...prev,
-            [updatedData.entityType.schema.$id]: updatedData.entityType,
+            [updatedData.entityType.schema.$id]: updatedData.entityType.schema,
           }));
 
           return { data: updatedData.entityType };
@@ -189,9 +189,10 @@ export const EntityTypeForm = ({
             };
           }
 
-          setEntityTypeOptions((prev) => ({
+          setPropertyTypeOptions((prev) => ({
             ...prev,
-            [updatedData.propertyType.schema.$id]: updatedData.propertyType,
+            [updatedData.propertyType.schema.$id]:
+              updatedData.propertyType.schema,
           }));
 
           return { data: updatedData.propertyType };
@@ -244,6 +245,7 @@ export const EntityTypeForm = ({
       entityTypeOptions={entityTypeOptions}
       ontologyFunctions={ontologyFunctions}
       propertyTypeOptions={propertyTypeOptions}
+      readonly={readonly}
     />
   );
 };

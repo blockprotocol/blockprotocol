@@ -45,13 +45,13 @@ export const useGraphBlockModule = (
  */
 export const useGraphEmbedderModule = (
   ref: RefObject<HTMLElement>,
-  constructorArgs?: Omit<
+  constructorArgs: Omit<
     ConstructorParameters<typeof GraphEmbedderHandler>[0],
     "element"
   >,
 ): { graphModule: GraphEmbedderHandler } => ({
   graphModule: useModuleConstructor({
-    Handler: GraphEmbedderHandler,
+    Handler: GraphEmbedderHandler as { new (): GraphEmbedderHandler },
     ref,
     constructorArgs,
   }),

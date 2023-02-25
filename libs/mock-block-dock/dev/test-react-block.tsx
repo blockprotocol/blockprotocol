@@ -5,7 +5,10 @@ import {
 } from "@blockprotocol/graph/react";
 import { getRoots } from "@blockprotocol/graph/stdlib";
 import { useHook, useHookBlockModule } from "@blockprotocol/hook/react";
-import { AutofillSuggestionResponse } from "@blockprotocol/service";
+import {
+  MapboxSuggestAddressResponseData,
+  OpenAICompleteTextResponseData,
+} from "@blockprotocol/service";
 import { useServiceBlockModule } from "@blockprotocol/service/react";
 import { FormEvent, useCallback, useMemo, useRef, useState } from "react";
 
@@ -26,10 +29,16 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
 
   const { hookModule } = useHookBlockModule(blockRef);
 
+  const [openaiCompleteTextPrompt, setOpenaiCompleteTextPrompt] =
+    useState<string>("");
+  const [openaiCompleteTextResponse, setOpenaiCompleteTextResponse] = useState<
+    OpenAICompleteTextResponseData | undefined | null
+  >(null);
+
   const [mapboxSuggestSearchText, setMapboxSuggestSearchText] =
     useState<string>("");
   const [mapboxSuggestResponse, setMapboxSuggestResponse] = useState<
-    AutofillSuggestionResponse | undefined | null
+    MapboxSuggestAddressResponseData | undefined | null
   >(null);
 
   useHook(
@@ -43,6 +52,24 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
         "Fallback called – dock is not correctly handling text hook.",
       );
     },
+  );
+
+  const handleOpenaiCompleteTextSubmit = useCallback(
+    async (event: FormEvent) => {
+      event.preventDefault();
+
+      const response = await serviceModule.openaiCompleteText({
+        data: {
+          prompt: openaiCompleteTextPrompt,
+          model: "text-davinci-003",
+        },
+      });
+
+      if (response.data) {
+        setOpenaiCompleteTextResponse(response.data);
+      }
+    },
+    [openaiCompleteTextPrompt, serviceModule],
   );
 
   const handleMapboxSuggestSubmit = useCallback(
@@ -137,6 +164,25 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
       />
       <h2>Hook-handled description editing</h2>
       <div ref={hookRef} />
+      <form onSubmit={handleOpenaiCompleteTextSubmit}>
+        <label>
+          OpenAI Complete Text API request
+          <br />
+          <input
+            type="text"
+            value={openaiCompleteTextPrompt}
+            onChange={({ target }) => setOpenaiCompleteTextPrompt(target.value)}
+          />
+        </label>
+        <button type="submit" disabled={!openaiCompleteTextPrompt}>
+          Suggest
+        </button>
+      </form>
+      {openaiCompleteTextResponse === undefined ? (
+        <p>Loading...</p>
+      ) : openaiCompleteTextResponse ? (
+        <p>{openaiCompleteTextResponse.choices[0]!.text}</p>
+      ) : null}
       <form onSubmit={handleMapboxSuggestSubmit}>
         <label>
           Mapbox Suggest API request
@@ -147,7 +193,9 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
             onChange={({ target }) => setMapboxSuggestSearchText(target.value)}
           />
         </label>
-        <button type="submit">Suggest</button>
+        <button type="submit" disabled={!mapboxSuggestSearchText}>
+          Suggest
+        </button>
       </form>
       {mapboxSuggestResponse === undefined ? (
         <p>Loading...</p>

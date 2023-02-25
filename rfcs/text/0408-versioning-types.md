@@ -31,18 +31,18 @@ The _version number_ of a type is an incrementing positive integer that increase
 
 ## Type URLs
 
-The _base URL_ of a type is a _unique_ identifier for the type irrespective of its version.
+The _base URL_ of a type is a _unique_ identifier for the type irrespective of its version, _ending with a trailing slash_.
 
-The _versioned URL_ of a type is made up of:
+The _versioned URL_ of a type is a URL string (with max-length of 2048) of the form:
 
 ```json
-"${base_url}/v/${version_number}"
+"${base_url}v/${version_number}"
 ```
 
 We opt not to constrain the format of the `base_url` to enable flexibility in non-public use-cases or in domains with constraints that we cannot predict. Despite this, we _suggest_ that the base URLs should have a consistent format for all types hosted on your domain, and should generally be humanly readable in a way that describes your type. For example, one could choose:
 
 ```jsonc
-"http://example.com/${namespace}/${type_class}/${type_name}" // where type_class is "data-type", "property-type", "entity-type", or "link-type"
+"http://example.com/${namespace}/${type_class}/${type_name}/" // where type_class is "data-type", "property-type", "entity-type", or "link-type"
 ```
 
 as the identifier (assuming that the domain decides that type names are unique across a namespace).
@@ -75,7 +75,7 @@ Other systems often allow for "canonical" URLs which can extend a versioned URL 
 
 and some other canonical URLs. This scheme is relatively consistent with other systems such as Git.
 
-> \*\*We recommend that schema hosts support `${base_url}/v/latest`, redirecting to (or directly serving) the most recent published version of a type.
+> \*\*We recommend that schema hosts support `${base_url}v/latest`, redirecting to (or directly serving) the most recent published version of a type.
 
 Outside of that recommendation we opt to not provision for other canonical URLs at this time.
 
@@ -94,17 +94,17 @@ Example Type schema:
   "type": "object",
   "title": "Book",
   "properties": {
-    "https://example.com/@alice/property-type/name": {
+    "https://example.com/@alice/property-type/name/": {
       "$ref": "https://example.com/@alice/property-type/name/v/13"
     },
-    "https://example.com/@alice/property-type/published-on": {
+    "https://example.com/@alice/property-type/published-on/": {
       "$ref": "https://example.com/@alice/property-type/published-on/v/23"
     },
-    "https://example.com/@alice/property-type/blurb": {
+    "https://example.com/@alice/property-type/blurb/": {
       "$ref": "https://example.com/@alice/property-type/blurb/v/4"
     }
   },
-  "required": ["https://example.com/@alice/property-type/name"]
+  "required": ["https://example.com/@alice/property-type/name/"]
 }
 ```
 
@@ -112,9 +112,9 @@ Example `properties` object conforming to the above schema:
 
 ```json
 {
-  "https://example.com/@alice/property-type/name": "The Time Machine",
-  "https://example.com/@alice/property-type/published-on": "1895-05",
-  "https://example.com/@alice/property-type/blurb": ...
+  "https://example.com/@alice/property-type/name/": "The Time Machine",
+  "https://example.com/@alice/property-type/published-on/": "1895-05",
+  "https://example.com/@alice/property-type/blurb/": ...
 }
 ```
 
@@ -346,6 +346,12 @@ This allows us to compare the versions depending on the circumstance outlined ab
 - Similarly, uses of `$ref` need to use versioned URLs so they can reference a specific iteration of the schema
 - Properties inside objects use _base_ URLs because otherwise _any_ version of an entity type would always be incompatible with another version of an entity type, as the keys in the underlying possible entities wouldn't match
 - The items in `links` are _versioned_ URLs because they do _not_ affect the underlying data structure of an entity. Furthermore the format of `links`, and the associated constraints, don't actually use `$ref` at the moment, so using a _base_ URL would link the entity type to some undetermined version of the link type. This could cause problems if a new version of a link type majorly changes the semantic meaning.
+
+### Trailing slashes on Base URLs
+
+Various implementations of URL resolution have different behaviors when resolving a URL with a trailing slash vs without one.
+Often "join"ing a URL that doesn't end in a trailing slash, and another path component, will _replace_ the last path component of the URL.
+Due to this, we opt to require that all Base URL's end in a trailing slash, and joining a Base URL with the `v/${version}` path component will always result in the intended state.
 
 # Prior art
 

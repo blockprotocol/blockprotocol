@@ -40,10 +40,6 @@ import { Box } from "@mui/material";
 import { GraphChart, GraphSeriesOption } from "echarts/charts";
 import * as echarts from "echarts/core";
 import { SVGRenderer } from "echarts/renderers";
-import {
-  GraphEdgeItemOption,
-  GraphNodeItemOption,
-} from "echarts/types/src/chart/graph/GraphSeries";
 import { useEffect, useRef, useState } from "react";
 
 import {
@@ -158,7 +154,11 @@ const createDefaultEChartOptions = (params?: {
 // Register the required components
 echarts.use([GraphChart, SVGRenderer]);
 
-type EChartNode = GraphNodeItemOption & { id: string };
+// echarts doesn't export GraphNodeItemOption directly, and a deep import messes up types
+type EChartNode = Exclude<
+  NonNullable<GraphSeriesOption["nodes"]>[0],
+  string | number | Date | any[]
+> & { id: string };
 
 const mapEntityToEChartNode = (
   entity: EntityNonTemporal | EntityTemporal,
@@ -170,7 +170,8 @@ const mapEntityToEChartNode = (
   label: { show: false },
 });
 
-type EChartEdge = GraphEdgeItemOption & {
+// echarts doesn't export GraphEdgeItemOption directly, and a deep import messes up types
+type EChartEdge = NonNullable<GraphSeriesOption["edges"]>[0] & {
   target: string;
 };
 

@@ -38,6 +38,24 @@ export const constructServiceModuleCallbacks = (params: {
   const { blockProtocolApiKey } = params;
 
   return {
+    /** OpenAI */
+
+    openaiCreateImage: async ({ data: payload }) =>
+      callExternalApiMethod({
+        providerName: "openai",
+        methodName: "createImage",
+        payload,
+        blockProtocolApiKey,
+      }),
+
+    openaiCompleteText: async ({ data: payload }) =>
+      callExternalApiMethod({
+        providerName: "openai",
+        methodName: "completeText",
+        payload,
+        blockProtocolApiKey,
+      }),
+
     /** Mapbox Geocoding API */
 
     mapboxForwardGeocoding: async ({ data: payload }) =>
