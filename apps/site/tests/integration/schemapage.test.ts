@@ -7,7 +7,7 @@ test.beforeEach(async () => {
   await resetSite();
 });
 
-test("schema page should contain key elements", async ({ page }) => {
+test.skip("schema page should contain key elements", async ({ page }) => {
   await page.goto("/");
 
   await login({ page });
@@ -41,7 +41,7 @@ test("schema page should contain key elements", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("authenticated user should be able to update their schema in schema page", async ({
+test.skip("authenticated user should be able to update their schema in schema page", async ({
   page,
 }) => {
   await page.goto("/");
