@@ -55,40 +55,43 @@ const ModuleMessageData: FunctionComponent<{
             </tr>
           </thead>
           <tbody>
-            {Object.entries(
-              data.properties ?? ({} as Record<string, JsonObject>),
-            ).map(([propertyName, propertySchema]) => (
-              <tr key={propertyName}>
-                <td>
-                  <Typography variant="bpSmallCopy">
-                    <MdxCode>{propertyName}</MdxCode>
-                  </Typography>
-                </td>
-                <td>
-                  <Typography variant="bpMicroCopy">
-                    <DataType propertySchema={propertySchema} />
-                  </Typography>
-                </td>
-                <td style={{ maxWidth: "110px" }}>
-                  {((data.required as string[]) ?? []).includes(
-                    propertyName,
-                  ) ? (
-                    <Typography variant="bpMicroCopy" sx={{ fontWeight: 700 }}>
-                      yes
+            {Object.entries(data.properties ?? {}).map(
+              ([propertyName, propertySchema]) => (
+                <tr key={propertyName}>
+                  <td>
+                    <Typography variant="bpSmallCopy">
+                      <MdxCode>{propertyName}</MdxCode>
                     </Typography>
-                  ) : (
-                    <Typography variant="bpMicroCopy">no</Typography>
-                  )}
-                </td>
-                <td>
-                  <Typography variant="bpMicroCopy">
-                    {typeof propertySchema.description === "string"
-                      ? propertySchema.description
-                      : ""}
-                  </Typography>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td>
+                    <Typography variant="bpMicroCopy">
+                      <DataType propertySchema={propertySchema} />
+                    </Typography>
+                  </td>
+                  <td style={{ maxWidth: "110px" }}>
+                    {((data.required as string[]) ?? []).includes(
+                      propertyName,
+                    ) ? (
+                      <Typography
+                        variant="bpMicroCopy"
+                        sx={{ fontWeight: 700 }}
+                      >
+                        yes
+                      </Typography>
+                    ) : (
+                      <Typography variant="bpMicroCopy">no</Typography>
+                    )}
+                  </td>
+                  <td>
+                    <Typography variant="bpMicroCopy">
+                      {typeof propertySchema.description === "string"
+                        ? propertySchema.description
+                        : ""}
+                    </Typography>
+                  </td>
+                </tr>
+              ),
+            )}
           </tbody>
         </MdxTable>
       </>
