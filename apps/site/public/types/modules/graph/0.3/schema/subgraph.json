@@ -21,10 +21,5 @@
       "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/graph-resolve-depths"
     }
   },
-  "required": [
-    "roots",
-    "vertices",
-    "edges",
-    "depths"
-  ]
+  "required": ["roots", "vertices", "edges", "depths"]
 }
