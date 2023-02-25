@@ -17,9 +17,11 @@ test("schema page should contain key elements", async ({ page }) => {
     page,
   });
 
-  await page.goto(`/@alice/types/${entityType.title}`);
+  await page.goto(`/@alice/types/${entityType.schema.title}`);
 
-  await expect(page.locator(`text=${entityType.title} Schema`)).toBeVisible();
+  await expect(
+    page.locator(`text=${entityType.schema.title} Entity Type`),
+  ).toBeVisible();
 
   await expect(page.locator("text=@alice >")).toBeVisible();
 
@@ -28,43 +30,16 @@ test("schema page should contain key elements", async ({ page }) => {
     "/@alice",
   );
 
-  await expect(
-    page.locator(
-      "text=You can use this editor to build basic schemas, representing types of entities.",
-    ),
-  ).toBeVisible();
+  await expect(page.locator(`text=${entityType.schema.$id}`)).toBeVisible();
 
-  await expect(
-    page.locator(
-      "text=You can use these entity types as the expected value for a property in another ",
-    ),
-  ).toBeVisible();
-
-  await expect(page.locator(`text=${entityType.$id}`)).toBeVisible();
-
-  await expect(page.locator(`text=${entityType.$id}`)).toHaveAttribute(
+  await expect(page.locator(`text=${entityType.schema.$id}`)).toHaveAttribute(
     "href",
-    entityType.$id,
+    entityType.schema.$id,
   );
 
-  await expect(page.locator(`a:has-text('this link')`)).toHaveAttribute(
-    "href",
-    `${entityType.$id}?json`,
-  );
+  await expect(page.locator(`text=Properties`)).toBeVisible();
 
-  const schemaPropertiesTable = page.locator(
-    "[data-testid='schema-properties-table']",
-  );
-
-  await expect(schemaPropertiesTable).toBeVisible();
-
-  await expect(
-    schemaPropertiesTable.locator('[placeholder="newProperty"]'),
-  ).toBeVisible();
-
-  await expect(
-    schemaPropertiesTable.locator("text=Create Property"),
-  ).toBeVisible();
+  await expect(page.locator(`text=Links`)).toBeVisible();
 });
 
 test("authenticated user should be able to update their schema in schema page", async ({
@@ -79,7 +54,7 @@ test("authenticated user should be able to update their schema in schema page", 
     page,
   });
 
-  await page.goto(`/@alice/types/${entityType.title}`);
+  await page.goto(entityType.schema.$id);
 
   const schemaPropertiesTable = page.locator(
     "[data-testid='schema-properties-table']",

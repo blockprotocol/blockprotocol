@@ -28,7 +28,7 @@ test("Docs page should contain key elements and interactions should work", async
   for (const [name, href] of [
     ["Introduction", "/docs"],
     ["Developing Blocks", "/docs/developing-blocks"],
-    ["Embedding Blocks", "/docs/embedding-blocks"],
+    ["Using Blocks", "/docs/using-blocks"],
     ["Specification", "/docs/spec"],
     ["FAQs", "/docs/faq"],
   ] as const) {
@@ -142,15 +142,13 @@ test("Docs page should contain key elements and interactions should work", async
   const footerCTALocator = page.locator("data-test-id=footerCTA");
   await expect(footerCTALocator).toBeVisible();
 
-  await expect(footerCTALocator.locator('text="Learn more"')).toHaveAttribute(
-    "href",
-    "/docs/embedding-blocks",
-  );
+  await expect(
+    footerCTALocator.locator('text="Documentation"'),
+  ).toHaveAttribute("href", "/docs");
 
-  await expect(footerCTALocator.locator('text="Hub"')).toHaveAttribute(
-    "href",
-    "/hub",
-  );
+  await expect(
+    footerCTALocator.locator('text="Open-source blocks"'),
+  ).toHaveAttribute("href", "/hub");
 
   await expect(
     footerCTALocator.locator('text="Read the quickstart guide"'),

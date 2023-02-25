@@ -1,9 +1,11 @@
+import slugify from "slugify";
+
 import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
 import { createSchema } from "../shared/schemas.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
 
-test("user should be able to create schema", async ({ page }) => {
+test("user should be able to create an entity type", async ({ page }) => {
   await resetSite();
 
   await page.goto("/");
@@ -15,7 +17,7 @@ test("user should be able to create schema", async ({ page }) => {
   const existingSchemaName = "Testing";
   const newSchemaName = "Testing2";
 
-  await createSchema({
+  const existingSchemaWithMetadata = await createSchema({
     title: existingSchemaName,
     page,
   });
@@ -26,28 +28,24 @@ test("user should be able to create schema", async ({ page }) => {
 
   await expect(schemaModal).toBeVisible();
 
-  await expect(schemaModal.locator("text=Create New Schema")).toBeVisible();
+  await expect(
+    schemaModal.locator("text=Create New Entity Type"),
+  ).toBeVisible();
   await expect(
     schemaModal.locator(
-      "text=Schemas are used to define the structure of entities - in other words, define a ‘type’ of entity",
+      "text=Types are used to define the structure of entities and their relationships to other entities.",
     ),
   ).toBeVisible();
 
   await expect(schemaModal.locator("input")).toBeFocused();
 
-  await schemaModal.locator("input").fill("Testing+schema");
+  const inputs = await schemaModal.locator("input").all();
 
-  await schemaModal.locator('button:has-text("Create")').click();
+  await expect(inputs.length).toBe(2);
 
-  await expect(
-    schemaModal.locator(
-      "text=Invalid schema: Schema 'title' must start with an uppercase letter, and contain ",
-    ),
-  ).toBeVisible();
+  await inputs[0]!.fill(existingSchemaName);
 
-  await expect(schemaModal.locator('button:has-text("Create")')).toBeDisabled();
-
-  await schemaModal.locator("input").fill(existingSchemaName);
+  await inputs[1]!.fill("Test description");
 
   await expect(schemaModal.locator('button:has-text("Create")')).toBeEnabled();
 
@@ -55,7 +53,7 @@ test("user should be able to create schema", async ({ page }) => {
 
   await page
     .locator(
-      `text=Invalid schema: User already has a schema with title ${existingSchemaName}`,
+      `text=Invalid schema: User already has a schema with id ${existingSchemaWithMetadata.schema.$id}`,
     )
     .click();
 
@@ -65,9 +63,14 @@ test("user should be able to create schema", async ({ page }) => {
 
   await schemaModal.locator('button:has-text("Create")').click();
 
-  await expect(page).toHaveURL(`/@alice/types/${newSchemaName}`);
+  await expect(page).toHaveURL(
+    `/@alice/types/entity-type/${slugify(newSchemaName, {
+      lower: true,
+      strict: true,
+    })}/v/1`,
+  );
 
-  await expect(page.locator(`text=${newSchemaName} Schema`)).toBeVisible();
+  await expect(page.locator(`text=${newSchemaName} Entity Type`)).toBeVisible();
 
   await expect(page.locator("text=@alice >")).toBeVisible();
 });
