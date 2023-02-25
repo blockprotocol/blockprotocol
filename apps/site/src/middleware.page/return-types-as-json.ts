@@ -59,5 +59,6 @@ export const returnTypeAsJson = async (request: NextRequest) => {
     );
   }
 
-  return generateJsonResponse(type);
+  // @todo remove this cast when new type hosting available
+  return generateJsonResponse(type as DataType | EntityType | PropertyType);
 };
