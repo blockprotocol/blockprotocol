@@ -304,6 +304,14 @@ To publish a block on the Hub take the following steps.
 You can update your published block at any time by running
 `npm run build && npx blockprotocol@canary publish` or `yarn build && npx blockprotocol@canary publish`
 
+### Have your block verified
+
+In order to have your block enter the queue to be reviewed for verification status, please ensure the `repository`
+field in your `package.json` points to a public repository containing your code, and add a `commit` field to the
+`blockprotocol` object within `package.json` that specifies the commit hash the version you are publishing was built from.
+
+Read more about verification in [the FAQ](https://blockprotocol.org/docs/faq#how-does-block-verification-work).
+
 ### Changing the Hub preview
 
 - Take a screenshot of your block in action and replace `public/block-preview.png`

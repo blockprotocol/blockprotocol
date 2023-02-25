@@ -21,7 +21,8 @@ const DataType: FunctionComponent<{ propertySchema: JsonObject }> = ({
 
   return typeof $ref === "string" ? (
     <MdxA href={$ref} target="_blank">
-      {$ref.match(/[^/]+(?=\/$|$)/)?.[0]}
+      {/* Take the last part of the path which isn't versioning information */}
+      {$ref.split("/").slice(...($ref.match(/\/v\/\d$/) ? [-3, -2] : [-1]))}
       {isArray ? "[]" : ""}
     </MdxA>
   ) : (
@@ -54,43 +55,40 @@ const ModuleMessageData: FunctionComponent<{
             </tr>
           </thead>
           <tbody>
-            {Object.entries(data.properties ?? {}).map(
-              ([propertyName, propertySchema]) => (
-                <tr key={propertyName}>
-                  <td>
-                    <Typography variant="bpSmallCopy">
-                      <MdxCode>{propertyName}</MdxCode>
+            {Object.entries(
+              data.properties ?? {},
+            ).map(([propertyName, propertySchema]) => (
+              <tr key={propertyName}>
+                <td>
+                  <Typography variant="bpSmallCopy">
+                    <MdxCode>{propertyName}</MdxCode>
+                  </Typography>
+                </td>
+                <td>
+                  <Typography variant="bpMicroCopy">
+                    <DataType propertySchema={propertySchema} />
+                  </Typography>
+                </td>
+                <td style={{ maxWidth: "110px" }}>
+                  {((data.required as string[]) ?? []).includes(
+                    propertyName,
+                  ) ? (
+                    <Typography variant="bpMicroCopy" sx={{ fontWeight: 700 }}>
+                      yes
                     </Typography>
-                  </td>
-                  <td>
-                    <Typography variant="bpMicroCopy">
-                      <DataType propertySchema={propertySchema} />
-                    </Typography>
-                  </td>
-                  <td style={{ maxWidth: "110px" }}>
-                    {((data.required as string[]) ?? []).includes(
-                      propertyName,
-                    ) ? (
-                      <Typography
-                        variant="bpMicroCopy"
-                        sx={{ fontWeight: 700 }}
-                      >
-                        yes
-                      </Typography>
-                    ) : (
-                      <Typography variant="bpMicroCopy">no</Typography>
-                    )}
-                  </td>
-                  <td>
-                    <Typography variant="bpMicroCopy">
-                      {typeof propertySchema.description === "string"
-                        ? propertySchema.description
-                        : ""}
-                    </Typography>
-                  </td>
-                </tr>
-              ),
-            )}
+                  ) : (
+                    <Typography variant="bpMicroCopy">no</Typography>
+                  )}
+                </td>
+                <td>
+                  <Typography variant="bpMicroCopy">
+                    {typeof propertySchema.description === "string"
+                      ? propertySchema.description
+                      : ""}
+                  </Typography>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </MdxTable>
       </>
