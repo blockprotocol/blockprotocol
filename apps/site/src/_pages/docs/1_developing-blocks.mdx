@@ -292,8 +292,10 @@ const { data: entitySubgraph } = getEntityResponse;
 
 Here `graphResolveDepths` specifies two edge kinds,
 
-- `hasLeftEntity` - the edge that appears between a link entity and its left entity
-- `hasRightEntity` - the edge that appears between a link entity and its right entity
+- `hasLeftEntity` - the edge that appears between a link entity and its left entity (which can be thought of as the 'source' of the link)
+- `hasRightEntity` - the edge that appears between a link entity and its right entity (which can be thought of as the 'destination' of the link)
+
+The process of exploring a graph is known as 'traversal'. This involves visiting a vertex (an element in the graph – in our case, an entity), and then following edges from it (connections to other vertices) based on the parameters of the query. The parameters specify which kinds of edges to follow, and how many times they should be followed for any given journey through the graph. Each vertex visited might have multiple edges that can be followed from it, which means that each query actually involves many different journeys through the graph, which we refer to as 'branches' of the traversal.
 
 For each edge kind, we specify the `incoming` and `outgoing` depths to resolve, where:
 
