@@ -2,4 +2,4 @@
 "@blockprotocol/type-system": patch
 ---
 
-add stdlib functions for interacting with subgraph. reorganize types
+update schema representations of ontology types to remove redundant fields, and add further validation
