@@ -162,7 +162,7 @@ export const EntityTypeForm = ({
 
           setEntityTypeOptions((prev) => ({
             ...prev,
-            [updatedData.entityType.schema.$id]: updatedData.entityType,
+            [updatedData.entityType.schema.$id]: updatedData.entityType.schema,
           }));
 
           return { data: updatedData.entityType };
@@ -189,9 +189,10 @@ export const EntityTypeForm = ({
             };
           }
 
-          setEntityTypeOptions((prev) => ({
+          setPropertyTypeOptions((prev) => ({
             ...prev,
-            [updatedData.propertyType.schema.$id]: updatedData.propertyType,
+            [updatedData.propertyType.schema.$id]:
+              updatedData.propertyType.schema,
           }));
 
           return { data: updatedData.propertyType };

@@ -7,7 +7,7 @@ import {
   getSchemaFromFormData,
   useEntityTypeForm,
 } from "@hashintel/type-editor";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack, Tooltip, Typography } from "@mui/material";
 import { NextPage } from "next";
 import NextError from "next/error";
 import { useRouter } from "next/router";
@@ -15,6 +15,7 @@ import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useState } from "react";
 import { tw } from "twind";
 
+import { LinkIcon } from "../../../../components/icons";
 import { Link } from "../../../../components/link";
 import { useUser } from "../../../../context/user-context";
 import { apiClient } from "../../../../lib/api-client";
@@ -31,6 +32,9 @@ type EntityTypePageQueryParams = {
   shortname?: string;
   title?: string;
 };
+
+const linkEntityTypeId =
+  "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1";
 
 const EntityTypePage: NextPage = () => {
   const router = useRouter();
@@ -160,6 +164,10 @@ const EntityTypePage: NextPage = () => {
 
   const title = entityType.schema.title;
 
+  const isLinkEntityType = !!entityType.schema.allOf?.some(
+    (parent) => parent.$ref === linkEntityTypeId,
+  );
+
   return (
     <>
       <NextSeo title={`Block Protocol – ${shortname}/${title} Schema`} />
@@ -187,6 +195,21 @@ const EntityTypePage: NextPage = () => {
                 {" >"}
               </Link>
               <Stack flexDirection="row" alignItems="center">
+                {isLinkEntityType && (
+                  <Tooltip
+                    title="This is a 'link' entity type. It is used to link other entities together."
+                    placement="top"
+                  >
+                    <Box>
+                      <LinkIcon
+                        sx={({ palette }) => ({
+                          stroke: palette.gray[50],
+                          mr: 0.5,
+                        })}
+                      />
+                    </Box>
+                  </Tooltip>
+                )}
                 <Typography variant="bpHeading3" component="h1">
                   <strong>{title}</strong> {"  "}Entity Type
                 </Typography>
