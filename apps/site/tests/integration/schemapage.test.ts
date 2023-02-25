@@ -12,14 +12,18 @@ test("schema page should contain key elements", async ({ page }) => {
 
   await login({ page });
 
+  const newEntityTypeTitle = "TestSchema";
+
   const entityType = await createSchema({
-    title: "TestSchema",
+    title: newEntityTypeTitle,
     page,
   });
 
   await page.goto(entityType.schema.$id);
 
-  await expect(page.locator(`text=${entityType.schema.title}`)).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "TestSchema Entity Type" }),
+  ).toBeVisible();
 
   await expect(page.locator("text=@alice >")).toBeVisible();
 
@@ -28,16 +32,13 @@ test("schema page should contain key elements", async ({ page }) => {
     "/@alice",
   );
 
-  await expect(page.locator(`text=${entityType.schema.$id}`)).toBeVisible();
+  await expect(
+    page.locator(`text=Properties of ${newEntityTypeTitle}`),
+  ).toBeVisible();
 
-  await expect(page.locator(`text=${entityType.schema.$id}`)).toHaveAttribute(
-    "href",
-    entityType.schema.$id,
-  );
-
-  await expect(page.locator(`text=Properties`)).toBeVisible();
-
-  await expect(page.locator(`text=Links`)).toBeVisible();
+  await expect(
+    page.locator(`text=Links defined on ${newEntityTypeTitle}`),
+  ).toBeVisible();
 });
 
 test("authenticated user should be able to update their schema in schema page", async ({
@@ -57,7 +58,7 @@ test("authenticated user should be able to update their schema in schema page", 
   await expect(page.locator("text=Add a property")).toBeVisible();
 
   await expect(
-    page.locator(`input[placeholder='Search for a property type'`),
+    page.locator(`input[placeholder='Search for a property type']`),
   ).not.toBeVisible();
 
   await page.locator("text=Add a property").click();
@@ -69,7 +70,7 @@ test("authenticated user should be able to update their schema in schema page", 
   const propertyName = "value1";
 
   await page
-    .locator(`input[placeholder='Search for a property type'`)
+    .locator(`input[placeholder='Search for a property type']`)
     .fill(propertyName);
 
   const createButtonText = `Create ${propertyName}`;

@@ -53,7 +53,7 @@ test("user should be able to create an entity type", async ({ page }) => {
 
   await page
     .locator(
-      `text=Invalid schema: User already has a schema with id ${existingSchemaWithMetadata.schema.$id}`,
+      `text=Invalid schema: User already has an entity type with id ${existingSchemaWithMetadata.schema.$id}`,
     )
     .click();
 
@@ -70,7 +70,9 @@ test("user should be able to create an entity type", async ({ page }) => {
     })}/v/1`,
   );
 
-  await expect(page.locator(`text=${newSchemaName} Entity Type`)).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: `${newSchemaName} Entity Type` }),
+  ).toBeVisible();
 
   await expect(page.locator("text=@alice >")).toBeVisible();
 });
