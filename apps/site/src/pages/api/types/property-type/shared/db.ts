@@ -12,6 +12,7 @@ import { Db, ObjectId } from "mongodb";
 import { User } from "../../../../../lib/api/model/user.model";
 import { generateOntologyUrl } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";
+import { removeAdditionalProperties } from "../../shared/temp-patch";
 import { generatePropertyTypeWithMetadata } from "./schema";
 
 export const COLLECTION_NAME = "bp-property-types";
@@ -140,6 +141,9 @@ export const createPropertyType = async (
     );
   }
 
+  /* @todo - remove this when the type-editor uses a newer version of the type-system */
+  removeAdditionalProperties(propertyTypeWithMetadata);
+
   const now = new Date();
 
   const insertionData = {
@@ -205,6 +209,9 @@ export const updatePropertyType = async (
       }`,
     );
   }
+
+  /* @todo - remove this when the type-editor uses a newer version of the type-system */
+  removeAdditionalProperties(propertyTypeWithMetadata);
 
   const now = new Date();
 
