@@ -127,8 +127,8 @@ const nextConfig = {
         destination: "/api/rewrites/sandboxed-block-demo",
       },
       {
-        source: "/types/modules/:modulename/:typename",
-        destination: "/types/modules/:modulename/:typename.json",
+        source: "/types/modules/:modulename/:typename*",
+        destination: "/types/modules/:modulename/:typename*.json",
       },
       {
         source: "/types/core/:typename",

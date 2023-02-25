@@ -65,40 +65,38 @@ export const TabPanelContentsWithOverview: FunctionComponent<
       rowSpacing={{ xs: 2, sm: 4 }}
       container
     >
-      {blocks
-        .slice(0, 4)
-        .map(
-          (
-            {
-              displayName,
-              description,
-              icon,
-              lastUpdated,
-              version,
-              name,
-              image,
-              blockSitePath,
-            },
-            index,
-          ) => (
-            <Grid key={name} item xs={12} md={6}>
-              <OverviewCard
-                url={blockSitePath}
-                description={description!}
-                icon={icon}
-                image={image}
-                lastUpdated={lastUpdated}
-                title={displayName!}
-                type="block"
-                version={version}
-                // we only show images for the first 2 blocks
-                // on desktop
-                hideImage={index > 1 || isMobile}
-              />
-            </Grid>
-          ),
-        )}
-      {entityTypes.slice(0, 4).map(({ schema }) => (
+      {blocks.map(
+        (
+          {
+            displayName,
+            description,
+            icon,
+            lastUpdated,
+            version,
+            name,
+            image,
+            blockSitePath,
+          },
+          index,
+        ) => (
+          <Grid key={name} item xs={12} md={6}>
+            <OverviewCard
+              url={blockSitePath}
+              description={description!}
+              icon={icon}
+              image={image}
+              lastUpdated={lastUpdated}
+              title={displayName!}
+              type="block"
+              version={version}
+              // we only show images for the first 2 blocks
+              // on desktop
+              hideImage={index > 1 || isMobile}
+            />
+          </Grid>
+        ),
+      )}
+      {entityTypes.map(({ schema }) => (
         <Grid key={schema.$id} item xs={12} md={6}>
           <OverviewCard
             url={schema.$id}
