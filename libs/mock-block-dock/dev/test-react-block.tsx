@@ -1,5 +1,4 @@
-import { JsonValue } from "@blockprotocol/core";
-import { extractBaseUrl, MultiFilter } from "@blockprotocol/graph";
+import { extractBaseUrl } from "@blockprotocol/graph";
 import {
   type BlockComponent,
   useGraphBlockModule,
@@ -116,86 +115,6 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
       </div>
     );
   }
-
-  const isAliceFilter = (): MultiFilter["filters"][number] => ({
-    field: ["metadata", "recordId", "entityId"],
-    operator: "EQUALS",
-    value: "alice",
-  });
-
-  const isBobFilter = (): MultiFilter["filters"][number] => ({
-    field: ["metadata", "recordId", "entityId"],
-    operator: "EQUALS",
-    value: "bob",
-  });
-
-  const quuxContainsSegmentFilter = (
-    value: JsonValue,
-  ): MultiFilter["filters"][number] => ({
-    field: [
-      "properties",
-      "http://example.com/baz/",
-      "http://example.com/quux/",
-    ],
-    operator: "CONTAINS_SEGMENT",
-    value,
-  });
-
-  const quxIsFilter = (value: JsonValue): MultiFilter["filters"][number] => ({
-    field: ["properties", "http://example.com/baz/", "http://example.com/qux/"],
-    operator: "EQUALS",
-    value,
-  });
-
-  (async () => {
-    console.log({
-      isAliceOrBob: getRoots(
-        (
-          await graphModule.queryEntities({
-            data: {
-              operation: {
-                multiFilter: {
-                  filters: [isAliceFilter(), isBobFilter()],
-                  operator: "OR",
-                },
-              },
-            },
-          })
-        ).data!.results,
-      ),
-      quuxContainsZeroOr4: getRoots(
-        (
-          await graphModule.queryEntities({
-            data: {
-              operation: {
-                multiFilter: {
-                  filters: [
-                    quuxContainsSegmentFilter([0]),
-                    quuxContainsSegmentFilter([4]),
-                  ],
-                  operator: "OR",
-                },
-              },
-            },
-          })
-        ).data!.results,
-      ),
-      quxIsTrueAndQuuxContains2: getRoots(
-        (
-          await graphModule.queryEntities({
-            data: {
-              operation: {
-                multiFilter: {
-                  filters: [quxIsFilter(true), quuxContainsSegmentFilter([2])],
-                  operator: "AND",
-                },
-              },
-            },
-          })
-        ).data!.results,
-      ),
-    });
-  })();
 
   return (
     <div ref={blockRef}>
