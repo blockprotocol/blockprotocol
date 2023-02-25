@@ -59,7 +59,7 @@ const DevApp = () => {
       // initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it)
       // initialEntityTypes={[]} <- customise the entity types in the datastore
       // initialLinks={[]} <- customise the links in the datastore
-      // initialLinkedAggregations={[]} <- customise the linkedAggregations in the datastore
+      // initialLinkedQueries={[]} <- customise the linkedQueries in the datastore
       // readonly <- uncomment this to start your block in readonly mode. You can also toggle it in the UI
     />
   );

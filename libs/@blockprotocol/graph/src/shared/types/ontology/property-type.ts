@@ -8,7 +8,7 @@ export type PropertyTypeWithMetadata = {
   metadata: OntologyElementMetadata;
 };
 
-export type AggregatePropertyTypesData = {
+export type QueryPropertyTypesData = {
   graphResolveDepths?: Partial<
     Pick<
       Subgraph<true>["depths"],
@@ -17,7 +17,7 @@ export type AggregatePropertyTypesData = {
   >;
 };
 
-export type AggregatePropertyTypesResult = {
+export type QueryPropertyTypesResult = {
   results: Subgraph<true, PropertyTypeRootType>;
 };
 

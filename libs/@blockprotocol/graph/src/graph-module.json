@@ -165,17 +165,17 @@
       ]
     },
     {
-      "messageName": "aggregateEntities",
-      "description": "Request to retrieve an aggregation of entities.",
+      "messageName": "queryEntities",
+      "description": "Request to query entities.",
       "source": "block",
-      "respondedToBy": "aggregateEntitiesResponse",
+      "respondedToBy": "queryEntitiesResponse",
       "sentOnInitialization": false,
       "data": {
-        "description": "The results of an entity aggregation, and the operation that was used to produce it.",
+        "description": "The results of a query over entities, and the operation that was used to produce it.",
         "type": "object",
         "properties": {
           "operation": {
-            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/aggregation-operation"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/query-operation"
           },
           "graphResolveDepths": {
             "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths"
@@ -186,20 +186,20 @@
       "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
-      "messageName": "aggregateEntitiesResponse",
-      "description": "The response to a request to retrieve an aggregation of entities",
+      "messageName": "queryEntitiesResponse",
+      "description": "The response to a request to query over entities",
       "source": "embedder",
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
-        "description": "The aggregation operation to apply",
+        "description": "The query operation to apply",
         "type": "object",
         "properties": {
           "results": {
             "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/subgraph"
           },
           "operation": {
-            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/aggregation-operation"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/query-operation"
           }
         },
         "required": ["results", "operation"]

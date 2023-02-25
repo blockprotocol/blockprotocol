@@ -87,7 +87,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   const {
     blockEntityRecordId,
     mockDatastore,
-    // linkedAggregations,
+    // linkedQueries,
     readonly,
     setEntityRecordIdOfEntityForBlock,
     setReadonly,
@@ -131,7 +131,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
     graph: {
       blockEntitySubgraph,
       readonly,
-      // linkedAggregations,
+      // linkedQueries,
     },
   };
 
@@ -139,7 +139,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
 
   const { graphModule } = useGraphEmbedderModuleNonTemporal(wrapperRef, {
     blockEntitySubgraph,
-    // linkedAggregations,
+    // linkedQueries,
     callbacks: graphModuleCallbacks,
     readonly,
   });
@@ -238,8 +238,8 @@ const MockBlockDockNonTemporal: FunctionComponent<
   });
   // useSendGraphValue<false>({
   //   graphModule,
-  //   value: linkedAggregations,
-  //   valueName: "linkedAggregations",
+  //   value: linkedQueries,
+  //   valueName: "linkedQueries",
   // });
   useSendGraphValue<false>({
     graphModule,
@@ -329,7 +329,7 @@ const MockBlockDockTemporal: FunctionComponent<
   const {
     blockEntityRecordId,
     mockDatastore,
-    // linkedAggregations,
+    // linkedQueries,
     readonly,
     setEntityRecordIdOfEntityForBlock,
     setReadonly,
@@ -374,7 +374,7 @@ const MockBlockDockTemporal: FunctionComponent<
     graph: {
       blockEntitySubgraph,
       readonly,
-      // linkedAggregations,
+      // linkedQueries,
     },
   };
 
@@ -382,7 +382,7 @@ const MockBlockDockTemporal: FunctionComponent<
 
   const { graphModule } = useGraphEmbedderModuleTemporal(wrapperRef, {
     blockEntitySubgraph,
-    // linkedAggregations,
+    // linkedQueries,
     callbacks: graphModuleCallbacks,
     readonly,
   });
@@ -481,8 +481,8 @@ const MockBlockDockTemporal: FunctionComponent<
   });
   // useSendGraphValue<true>({
   //   graphModule,
-  //   value: linkedAggregations,
-  //   valueName: "linkedAggregations",
+  //   value: linkedQueries,
+  //   valueName: "linkedQueries",
   // });
   useSendGraphValue<true>({
     graphModule,
@@ -569,7 +569,7 @@ const MockBlockDockTemporal: FunctionComponent<
  * @param [props.hideDebugToggle=false] hide the ability to toggle the debug UI
  * @param [props.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
  * @param [props.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
- * @param [props.initialData.initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param [props.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [props.readonly=false] whether the block should display in readonly mode or not
  * @param [props.serviceModuleCallbacks] overrides the default service module callbacks
  */

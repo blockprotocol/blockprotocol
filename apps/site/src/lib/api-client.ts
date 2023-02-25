@@ -29,10 +29,6 @@ import {
   SubscribeEmailResponse,
 } from "../pages/api/subscribe-email.api";
 import {
-  ApiAggregateEntityTypesQuery,
-  ApiAggregateEntityTypesResponse,
-} from "../pages/api/types/entity-type/aggregate.api";
-import {
   ApiEntityTypeCreateRequest,
   ApiEntityTypeCreateResponse,
 } from "../pages/api/types/entity-type/create.api";
@@ -41,13 +37,13 @@ import {
   ApiEntityTypeByUrlResponse,
 } from "../pages/api/types/entity-type/get.api";
 import {
+  ApiQueryEntityTypesQuery,
+  ApiQueryEntityTypesResponse,
+} from "../pages/api/types/entity-type/query.api";
+import {
   ApiEntityTypeUpdateRequest,
   ApiEntityTypeUpdateResponse,
 } from "../pages/api/types/entity-type/update.api";
-import {
-  ApiAggregatePropertyTypesQuery,
-  ApiAggregatePropertyTypesResponse,
-} from "../pages/api/types/property-type/aggregate.api";
 import {
   ApiPropertyTypeCreateRequest,
   ApiPropertyTypeCreateResponse,
@@ -56,6 +52,10 @@ import {
   ApiPropertyTypeByUrlGetQuery,
   ApiPropertyTypeByUrlResponse,
 } from "../pages/api/types/property-type/get.api";
+import {
+  ApiQueryPropertyTypesQuery,
+  ApiQueryPropertyTypesResponse,
+} from "../pages/api/types/property-type/query.api";
 import {
   ApiPropertyTypeUpdateRequest,
   ApiPropertyTypeUpdateResponse,
@@ -169,9 +169,9 @@ export const apiClient = {
     apiClient.get<ApiTypesByUserResponse>(
       `users/${shortname}/types/entity-type`,
     ),
-  getEntityTypes: ({ latestOnly }: ApiAggregateEntityTypesQuery) =>
-    apiClient.get<ApiAggregateEntityTypesResponse>(
-      `types/entity-type/aggregate?latestOnly=${latestOnly}`,
+  getEntityTypes: ({ latestOnly }: ApiQueryEntityTypesQuery) =>
+    apiClient.get<ApiQueryEntityTypesResponse>(
+      `types/entity-type/query?latestOnly=${latestOnly}`,
     ),
   getEntityTypeByUrl: ({ baseUrl, versionedUrl }: ApiEntityTypeByUrlGetQuery) =>
     apiClient.get<ApiEntityTypeByUrlResponse>(
@@ -189,9 +189,9 @@ export const apiClient = {
       `types/entity-type/update`,
       requestData,
     ),
-  getPropertyTypes: ({ latestOnly }: ApiAggregatePropertyTypesQuery) =>
-    apiClient.get<ApiAggregatePropertyTypesResponse>(
-      `types/property-type/aggregate?latestOnly=${latestOnly}`,
+  getPropertyTypes: ({ latestOnly }: ApiQueryPropertyTypesQuery) =>
+    apiClient.get<ApiQueryPropertyTypesResponse>(
+      `types/property-type/query?latestOnly=${latestOnly}`,
     ),
   getPropertyTypeByUrl: ({
     baseUrl,

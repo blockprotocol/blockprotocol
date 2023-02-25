@@ -92,7 +92,7 @@ const handler: NextApiHandler = async (req, res) => {
     initialEntities: exampleGraph?.entities ?? [],
     initialEntityTypes: exampleGraph?.entityTypes,
     initialLinks: exampleGraph?.links,
-    initialLinkedAggregations: exampleGraph?.linkedAggregations,
+    initialLinkedQueries: exampleGraph?.linkedQueries,
     initialTemporalAxes: temporalAxes,
   };
 
