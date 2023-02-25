@@ -259,11 +259,142 @@ whether they are connected to the block entity at all, and far away they are (wh
 
 There are messages for exploring the data available in the embedding application:
 
-- `queryEntities` allows you submit a query which filters the entities in the data store.
+#### Retrieving the subgraph rooted at a specific entity
 
-You can browse the available entities in order to display them, or create links between them.
+If you know of a specific entity that you want to retrieve more detailed information on, you can call `getEntity` with its `entityId`.
+When doing this, you can provide how much of the graph you want to explore around the entity, by providing `graphResolveDepths`.
 
-If you know of a specific entity that you want to retrieve more detailed information on, you can call `getEntity`.
+For example, to retrieve the subgraph rooted at the entity, with its links and their destinations:
+
+```js
+const getEntityResponse = await graphModule.getEntity({
+  data: {
+    entityId: someEntityId,
+    graphResolveDepths: {
+      hasLeftEntity: {
+        incoming: 1,
+        outgoing: 0,
+      },
+      hasRightEntity: {
+        incoming: 0,
+        outgoing: 1,
+      },
+    },
+  },
+});
+
+if (getEntityResponse.errors) {
+  // handle errors
+}
+
+const { data: entitySubgraph } = getEntityResponse;
+```
+
+Here `graphResolveDepths` specifies two edge kinds,
+
+- `hasLeftEntity` - the edge that appears between a link entity and its left entity (which can be thought of as the 'source' of the link)
+- `hasRightEntity` - the edge that appears between a link entity and its right entity (which can be thought of as the 'destination' of the link)
+
+The process of exploring a graph is known as 'traversal'. This involves visiting a vertex (an element in the graph – in our case, an entity), and then following edges from it (connections to other vertices) based on the parameters of the query. The parameters specify which kinds of edges to follow, and how many times they should be followed for any given journey through the graph. Each vertex visited might have multiple edges that can be followed from it, which means that each query actually involves many different journeys through the graph, which we refer to as 'branches' of the traversal.
+
+For each edge kind, we specify the `incoming` and `outgoing` depths to resolve, where:
+
+- for `hasLeftEntity`
+  - `outgoing` means there is an outgoing edge _from_ the left entity _to_ the link entity, and defines the number of times to explore the left entity of link entities in a given branch of traversal.
+  - `incoming` means there is an incoming edge _from_ the link entity _to_ the left entity, which can be thought of as an "outgoing link entity" to the entity being traversed. The depth defines the number of times to explore outgoing link entities of entities in a given branch of traversal.
+- for `hasRightEntity`
+  - `outgoing` means there is an outgoing edge _from_ the right entity _to_ the link entity, and defines the number of times to explore the right entity of link entities in a given branch of traversal.
+  - `incoming` means there is an incoming edge _from_ the link entity _to_ the right entity, which can be thought of as an "incoming link entity" to the entity being traversed. The depth defines the number of times to explore incoming link entities of entities in a given branch of traversal.
+
+Therefore, the parameters in the example mean:
+
+- `(hasLeftEntity, incoming, 1)` - explore outgoing link entities to a depth of 1
+- `(hasLeftEntity, outgoing, 0)` - do not explore the left entity of link entities
+- `(hasRightEntity, incoming, 0)` - do not explore incoming link entities
+- `(hasRightEntity, outgoing, 1)` - explore the right entity of link entities to a depth of 1
+
+#### Filtering the data store
+
+However, it's also possible to query across all entities in the datastore.
+The `queryEntities` message allows you submit a query with a filter.
+You can use this to browse the available entities in order to display them, or create links between them.
+
+##### Example: Filtering entities by property value
+
+To retrieve the subgraph rooted at all entities with a property `https://blockprotocol.org/types/@blockprotocol/property-type/name/` with a value of `"Alice"` or `"Bob"`:
+
+```js
+const nameIsFilter = (value) => ({
+  field: [
+    "properties",
+    "https://blockprotocol.org/types/@blockprotocol/property-type/name/",
+  ],
+  operator: "EQUALS",
+  value,
+});
+
+const queryEntitiesResponse = await graphModule.queryEntities({
+  data: {
+    operation: {
+      multiFilter: {
+        filters: [nameIsFilter("Alice"), nameIsFilter("Bob")],
+        operator: "OR",
+      },
+    },
+  },
+});
+
+if (queryEntitiesResponse.errors) {
+  // handle errors
+}
+
+const { data: subgraph } = queryEntitiesResponse;
+
+const entities = getRoots(subgraph);
+```
+
+Here we use the `getRoots` method from `@blockprotocol/graph/stdlib` to retrieve the entities at the roots of the subgraph.
+
+##### Example: Filtering entities by entity type
+
+To retrieve the subgraph rooted at all entities with an entity type with base URL `https://blockprotocol.org/types/@blockprotocol/entity-type/person/`:
+
+```js
+const entityTypeBaseUrlEqualsFilter = (value) => ({
+  field: ["metadata", "entityTypeId"],
+  operator: "EQUALS",
+  value,
+});
+
+const queryEntitiesResponse = await graphModule.queryEntities({
+  data: {
+    operation: {
+      multiFilter: {
+        filters: [
+          entityTypeBaseUrlEqualsFilter(
+            "https://blockprotocol.org/types/@blockprotocol/entity-type/person/",
+          ),
+        ],
+        operator: "AND",
+      },
+    },
+  },
+});
+
+if (queryEntitiesResponse.errors) {
+  // handle errors
+}
+
+const { data: subgraph } = queryEntitiesResponse;
+
+const entities = getRoots(subgraph);
+```
+
+##### Customizing the query
+
+Note, that we could have provided a `graphResolveDepths` parameter similar to the `getEntity` query example above, but have opted to not do so here which will default to a depth of 0 for all edge kinds, so the `Subgraph` will only return the roots.
+
+More information on building filters can be found within the documentation of the [`queryEntities` message in the specification](https://blockprotocol.org/docs/spec/graph-module#message:queryEntities).
 
 ### Going further with the graph module
 
