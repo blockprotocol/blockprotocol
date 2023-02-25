@@ -79,5 +79,7 @@ test("authenticated user should be able to update their schema in schema page", 
 
   await page.locator(`text=${createButtonText}`).click();
 
-  await expect(page.locator("text=Select acceptable values")).toBeVisible();
+  await expect(
+    page.locator("input[placeholder='Select acceptable values']"),
+  ).toBeVisible();
 });

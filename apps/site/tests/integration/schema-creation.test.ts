@@ -22,7 +22,7 @@ test("user should be able to create an entity type", async ({ page }) => {
     page,
   });
 
-  await page.locator("button", { hasText: "Create a Type" }).click();
+  await page.locator("button", { hasText: "Create New Entity Type" }).click();
 
   const schemaModal = page.locator("[data-testid='create-schema-modal']");
 
