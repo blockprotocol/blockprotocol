@@ -1,16 +1,16 @@
 import {
-  AggregateEntitiesData as AggregateEntitiesDataNonTemporal,
-  AggregateEntitiesResult as AggregateEntitiesResultNonTemporal,
   EntityRootType as EntityRootTypeNonTemporal,
   GraphResolveDepths,
+  QueryEntitiesData as QueryEntitiesDataNonTemporal,
+  QueryEntitiesResult as QueryEntitiesResultNonTemporal,
   Subgraph as SubgraphNonTemporal,
 } from "@blockprotocol/graph";
 import { isTemporalSubgraph } from "@blockprotocol/graph/internal";
 import { getEntities as getEntitiesNonTemporal } from "@blockprotocol/graph/stdlib";
 import {
-  AggregateEntitiesData as AggregateEntitiesDataTemporal,
-  AggregateEntitiesResult as AggregateEntitiesResultTemporal,
   EntityRootType as EntityRootTypeTemporal,
+  QueryEntitiesData as QueryEntitiesDataTemporal,
+  QueryEntitiesResult as QueryEntitiesResultTemporal,
   Subgraph as SubgraphTemporal,
 } from "@blockprotocol/graph/temporal";
 import { getEntities as getEntitiesTemporal } from "@blockprotocol/graph/temporal/stdlib";
@@ -36,28 +36,28 @@ const defaultGraphResolveDepths: GraphResolveDepths = {
   isOfType: { outgoing: 0 },
 };
 
-type AggregateEntitiesReturn<Temporal extends boolean> = Temporal extends true
-  ? AggregateEntitiesResultTemporal<SubgraphTemporal<EntityRootTypeTemporal>>
-  : AggregateEntitiesResultNonTemporal<
+type QueryEntitiesReturn<Temporal extends boolean> = Temporal extends true
+  ? QueryEntitiesResultTemporal<SubgraphTemporal<EntityRootTypeTemporal>>
+  : QueryEntitiesResultNonTemporal<
       SubgraphNonTemporal<EntityRootTypeNonTemporal>
     >;
 
-export const aggregateEntities = <Temporal extends boolean>(
+export const queryEntities = <Temporal extends boolean>(
   data: Temporal extends true
-    ? AggregateEntitiesDataTemporal
-    : AggregateEntitiesDataNonTemporal,
+    ? QueryEntitiesDataTemporal
+    : QueryEntitiesDataNonTemporal,
   graph: Temporal extends true ? SubgraphTemporal : SubgraphNonTemporal,
-): AggregateEntitiesReturn<Temporal> => {
+): QueryEntitiesReturn<Temporal> => {
   if (
     // this cast should be safe because we're only checking if temporalAxes is defined
-    (data as AggregateEntitiesDataTemporal).temporalAxes !== undefined &&
+    (data as QueryEntitiesDataTemporal).temporalAxes !== undefined &&
     isTemporalSubgraph(graph)
   ) {
     const {
       operation,
       graphResolveDepths = {},
       temporalAxes,
-    } = data as AggregateEntitiesDataTemporal;
+    } = data as QueryEntitiesDataTemporal;
 
     const fullyDefinedGraphResolveDepths = {
       ...defaultGraphResolveDepths,
@@ -112,14 +112,14 @@ export const aggregateEntities = <Temporal extends boolean>(
     return {
       results: finalizeSubgraphTemporal(traversalSubgraph),
       operation: appliedOperation,
-    } as AggregateEntitiesReturn<Temporal>;
+    } as QueryEntitiesReturn<Temporal>;
   } else if (
     // similarly, this cast should be safe because we're only checking if temporalAxes is undefined
-    (data as AggregateEntitiesDataTemporal).temporalAxes === undefined &&
+    (data as QueryEntitiesDataTemporal).temporalAxes === undefined &&
     !isTemporalSubgraph(graph)
   ) {
     const { operation, graphResolveDepths = {} } =
-      data as AggregateEntitiesDataNonTemporal;
+      data as QueryEntitiesDataNonTemporal;
 
     const fullyDefinedGraphResolveDepths = {
       ...defaultGraphResolveDepths,
@@ -161,11 +161,11 @@ export const aggregateEntities = <Temporal extends boolean>(
     return {
       results: traversalSubgraph,
       operation: appliedOperation,
-    } as AggregateEntitiesReturn<Temporal>;
+    } as QueryEntitiesReturn<Temporal>;
   } else {
     throw new InconsistentTemporalVersioningSupportError({
       getEntityData:
-        (data as AggregateEntitiesDataTemporal).temporalAxes !== undefined,
+        (data as QueryEntitiesDataTemporal).temporalAxes !== undefined,
       datastoreGraph: isTemporalSubgraph(graph),
     });
   }

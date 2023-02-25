@@ -24,7 +24,7 @@ export type InitialData<Temporal extends boolean> = Temporal extends true
   ? {
       initialTemporalAxes: QueryTemporalAxes;
       initialEntities: EntityTemporal[];
-      // initialLinkedAggregations: LinkedAggregationDefinition[];
+      // initialLinkedQueries: LinkedQueryDefinition[];
     }
   : {
       initialEntities: EntityNonTemporal[];
@@ -64,7 +64,7 @@ export type MockBlockHookResult<Temporal extends boolean> = {
  * @param [args.initialData] - The initial data to include in the data store, with default mock data being provided if this is omitted
  * @param [args.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
  * @param [args.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
- * @param [args.initialData.initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param [args.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
  */
 export const useMockBlockPropsNonTemporal = (
   args: MockBlockHookArgs<false>,
@@ -85,8 +85,8 @@ export const useMockBlockPropsNonTemporal = (
     const nextMockData = args.initialData
       ? {
           entities: [...args.initialData.initialEntities],
-          // linkedAggregationDefinitions:
-          //   initialLinkedAggregations
+          // linkedQueryDefinitions:
+          //   initialLinkedQueries
         }
       : initialMockData<false>(undefined);
 
@@ -121,7 +121,7 @@ export const useMockBlockPropsNonTemporal = (
   }, [
     args,
     setEntityRecordIdOfEntityForBlock,
-    // initialLinkedAggregations,
+    // initialLinkedQueries,
   ]);
 
   const mockDatastore = useMockDatastoreNonTemporal(mockData, readonly);
@@ -129,7 +129,7 @@ export const useMockBlockPropsNonTemporal = (
   return {
     blockEntityRecordId: entityRecordIdOfEntityForBlock,
     mockDatastore,
-    // linkedAggregations,
+    // linkedQueries,
     readonly,
     setEntityRecordIdOfEntityForBlock,
     setReadonly,
@@ -146,7 +146,7 @@ export const useMockBlockPropsNonTemporal = (
  * @param [args.initialData] - The initial data to include in the data store, with default mock data being provided if this is omitted
  * @param [args.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
  * @param [args.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
- * @param [args.initialData.initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param [args.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
  */
 export const useMockBlockPropsTemporal = (
   args: MockBlockHookArgs<true>,
@@ -167,8 +167,8 @@ export const useMockBlockPropsTemporal = (
     const nextMockData = args.initialData
       ? {
           entities: [...args.initialData.initialEntities],
-          // linkedAggregationDefinitions:
-          //   initialLinkedAggregations
+          // linkedQueryDefinitions:
+          //   initialLinkedQueries
           subgraphTemporalAxes: {
             initial: args.initialData.initialTemporalAxes,
             resolved: args.initialData.initialTemporalAxes,
@@ -207,7 +207,7 @@ export const useMockBlockPropsTemporal = (
   }, [
     args,
     setEntityRecordIdOfEntityForBlock,
-    // initialLinkedAggregations,
+    // initialLinkedQueries,
   ]);
 
   const mockDatastore = useMockDatastoreTemporal(mockData, readonly);
@@ -215,7 +215,7 @@ export const useMockBlockPropsTemporal = (
   return {
     blockEntityRecordId: entityRecordIdOfEntityForBlock,
     mockDatastore,
-    // linkedAggregations,
+    // linkedQueries,
     readonly,
     setEntityRecordIdOfEntityForBlock,
     setReadonly,
