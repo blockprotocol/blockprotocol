@@ -37,9 +37,9 @@ test("user should be able to create an entity type", async ({ page }) => {
     ),
   ).toBeVisible();
 
-  await expect(schemaModal.locator("input")).toBeFocused();
-
   const inputs = await schemaModal.locator("input").all();
+
+  await expect(inputs[0]!).toBeFocused();
 
   await expect(inputs.length).toBe(2);
 

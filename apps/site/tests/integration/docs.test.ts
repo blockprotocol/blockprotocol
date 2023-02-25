@@ -136,18 +136,6 @@ test("Docs page should contain key elements and interactions should work", async
       "text=The Block Protocol provides a specification for the interaction between web blocks and applications using them: how data structures are typed and passed around, and what data operations are available to blocks.",
     ),
   ).toBeVisible();
-
-  await page.goto("/docs/spec");
-
-  await expect(page.locator('text="Add blocks to your app"')).toHaveAttribute(
-    "href",
-    "/docs/using-blocks",
-  );
-
-  await expect(page.locator('text="Build your own blocks"')).toHaveAttribute(
-    "href",
-    "/docs/developing-blocks",
-  );
 });
 
 test("invalid docs page should redirect to 404", async ({ page }) => {

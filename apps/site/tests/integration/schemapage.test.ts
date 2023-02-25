@@ -17,7 +17,7 @@ test("schema page should contain key elements", async ({ page }) => {
     page,
   });
 
-  await page.goto(`/@alice/types/${entityType.schema.title}`);
+  await page.goto(entityType.schema.$id);
 
   await expect(page.locator(`text=${entityType.schema.title}`)).toBeVisible();
 
@@ -63,7 +63,7 @@ test("authenticated user should be able to update their schema in schema page", 
   await page.locator("text=Add a property").click();
 
   await expect(
-    page.locator(`input[placeholder='Search for a property type'`),
+    page.locator(`input[placeholder='Search for a property type']`),
   ).toBeVisible();
 
   const propertyName = "value1";
