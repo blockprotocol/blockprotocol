@@ -278,9 +278,9 @@ const getEntityResponse = await graphModule.getEntity({
       hasRightEntity: {
         incoming: 0,
         outgoing: 1,
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 if (getEntityResponse.errors) {
@@ -291,10 +291,12 @@ const { data: entitySubgraph } = getEntityResponse;
 ```
 
 Here `graphResolveDepths` specifies two edge kinds,
+
 - `hasLeftEntity` - the edge that appears between a link entity and its left entity
 - `hasRightEntity` - the edge that appears between a link entity and its right entity
 
 For each edge kind, we specify the `incoming` and `outgoing` depths to resolve, where:
+
 - for `hasLeftEntity`
   - `outgoing` means there is an outgoing edge _from_ the left entity _to_ the link entity, and defines the number of times to explore the left entity of link entities in a given branch of traversal.
   - `incoming` means there is an incoming edge _from_ the link entity _to_ the left entity, which can be thought of as an "outgoing link entity" to the entity being traversed. The depth defines the number of times to explore outgoing link entities of entities in a given branch of traversal.
@@ -303,6 +305,7 @@ For each edge kind, we specify the `incoming` and `outgoing` depths to resolve, 
   - `incoming` means there is an incoming edge _from_ the link entity _to_ the right entity, which can be thought of as an "incoming link entity" to the entity being traversed. The depth defines the number of times to explore incoming link entities of entities in a given branch of traversal.
 
 Therefore, the parameters in the example mean:
+
 - `(hasLeftEntity, incoming, 1)` - explore outgoing link entities to a depth of 1
 - `(hasLeftEntity, outgoing, 0)` - do not explore the left entity of link entities
 - `(hasRightEntity, incoming, 0)` - do not explore incoming link entities
