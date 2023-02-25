@@ -317,11 +317,16 @@ However, it's also possible to query across all entities in the datastore.
 The `queryEntities` message allows you submit a query with a filter.
 You can use this to browse the available entities in order to display them, or create links between them.
 
-For example, to retrieve the subgraph rooted at all entities with a property `https://blockprotocol.org/types/@blockprotocol/name/` with a value of `"Alice"` or `"Bob"`:
+##### Example: Filtering entities by property value
+
+To retrieve the subgraph rooted at all entities with a property `https://blockprotocol.org/types/@blockprotocol/property-type/name/` with a value of `"Alice"` or `"Bob"`:
 
 ```js
 const nameIsFilter = (value) => ({
-  field: ["properties", "https://blockprotocol.org/types/@blockprotocol/name/"],
+  field: [
+    "properties",
+    "https://blockprotocol.org/types/@blockprotocol/property-type/name/",
+  ],
   operator: "EQUALS",
   value,
 });
@@ -347,6 +352,43 @@ const entities = getRoots(subgraph);
 ```
 
 Here we use the `getRoots` method from `@blockprotocol/graph/stdlib` to retrieve the entities at the roots of the subgraph.
+
+##### Example: Filtering entities by entity type
+
+To retrieve the subgraph rooted at all entities with an entity type with base URL `https://blockprotocol.org/types/@blockprotocol/entity-type/person/`:
+
+```js
+const entityTypeBaseUrlEqualsFilter = (value) => ({
+  field: ["metadata", "entityTypeId"],
+  operator: "EQUALS",
+  value,
+});
+
+const queryEntitiesResponse = await graphModule.queryEntities({
+  data: {
+    operation: {
+      multiFilter: {
+        filters: [
+          entityTypeBaseUrlEqualsFilter(
+            "https://blockprotocol.org/types/@blockprotocol/entity-type/person/",
+          ),
+        ],
+        operator: "AND",
+      },
+    },
+  },
+});
+
+if (queryEntitiesResponse.errors) {
+  // handle errors
+}
+
+const { data: subgraph } = queryEntitiesResponse;
+
+const entities = getRoots(subgraph);
+```
+
+##### Customizing the query
 
 Note, that we could have provided a `graphResolveDepths` parameter similar to the `getEntity` query example above, but have opted to not do so here which will default to a depth of 0 for all edge kinds, so the `Subgraph` will only return the roots.
 
