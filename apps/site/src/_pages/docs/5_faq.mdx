@@ -149,7 +149,12 @@ In the future we also plan to expose:
   
 <FAQ question="How does block verification work?">
 
-Blocks submitted to the Þ Hub are immediately available for discovery and use. However, when blocks are published or updated, they're also added to a _review queue_.
+Blocks submitted to the Þ Hub are immediately available for discovery and use.
+
+However, when blocks are published or updated, they are also potentially eligible to be added to a _review queue_.
+
+Blocks must include a 'repository' and 'commit' field in their metadata to be eligible for review.
+These must correspond to the source code the block was built from.
 
 We periodically review all blocks in the queue, checking for basic indicators (and contraindicators) of a block's quality, security and integrity. While this check does not represent a fully comprehensive audit of a block, the process provides a baseline level of assurance regarding a block's fitness for purpose, and all reviewed blocks which pass this review process receive the 'verified' badge.
 
