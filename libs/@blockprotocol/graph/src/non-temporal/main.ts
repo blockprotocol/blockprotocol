@@ -219,7 +219,7 @@ export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
    * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list
    */
   graph: {
-    blockEntitySubgraph?: Subgraph<{
+    blockEntitySubgraph: Subgraph<{
       vertexId: EntityVertexId;
       element: RootEntity;
     }>;

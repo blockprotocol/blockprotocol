@@ -18,7 +18,7 @@ export const fetchEntityType = async (requestedUrl: string) => {
   const requestedVersionPromise = apiClient
     .getEntityTypeByUrl(
       isVersionedUrl
-        ? { versionedUrl: requestedUrl }
+        ? { versionedUrl: requestedUrl as VersionedUrl }
         : {
             baseUrl,
           },
