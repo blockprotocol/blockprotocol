@@ -75,7 +75,7 @@ test("authenticated user should be able to update their schema in schema page", 
 
   const createButtonText = `Create ${propertyName}`;
 
-  await expect(page.locator(`text='${createButtonText}'`)).toBeVisible();
+  await expect(page.locator(`text=${createButtonText}`)).toBeVisible();
 
   await page.locator(`text=${createButtonText}`).click();
 
