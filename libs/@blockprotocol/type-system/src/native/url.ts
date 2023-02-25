@@ -125,6 +125,10 @@ export const validateVersionedUrl = (
  * @throws if the versioned URL is invalid.
  */
 export const extractBaseUrl = (url: VersionedUrl): BaseUrl => {
+  if (url.length > 2048) {
+    throw new Error(`URL too long: ${url}`);
+  }
+
   const groups = versionedUrlRegExp.exec(url);
 
   if (groups === null) {
@@ -147,6 +151,10 @@ export const extractBaseUrl = (url: VersionedUrl): BaseUrl => {
  * @throws if the versioned URL is invalid.
  */
 export const extractVersion = (url: VersionedUrl): number => {
+  if (url.length > 2048) {
+    throw new Error(`URL too long: ${url}`);
+  }
+
   const groups = versionedUrlRegExp.exec(url);
 
   if (groups === null) {
