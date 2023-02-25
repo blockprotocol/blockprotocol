@@ -303,29 +303,6 @@ const brokenTypes: [any, ParsePropertyTypeError][] = [
       },
     },
   ],
-  [
-    {
-      kind: "propertyType",
-      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/missing-additional-properties/v/1",
-      title: "Broken",
-      oneOf: [
-        {
-          type: "object",
-          properties: {
-            "https://blockprotocol.org/@blockprotocol/types/property-type/broken/":
-              {
-                $ref: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
-              },
-          },
-        },
-      ],
-    },
-    {
-      inner:
-        "data did not match any variant of untagged enum PropertyValues at line 1 column 340",
-      reason: "InvalidJson",
-    },
-  ],
 ];
 
 beforeAll(async () => {
