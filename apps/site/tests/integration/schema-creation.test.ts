@@ -5,7 +5,7 @@ import { login } from "../shared/nav.js";
 import { createSchema } from "../shared/schemas.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
 
-test.skip("user should be able to create an entity type", async ({ page }) => {
+test("user should be able to create an entity type", async ({ page }) => {
   await resetSite();
 
   await page.goto("/");
@@ -22,15 +22,13 @@ test.skip("user should be able to create an entity type", async ({ page }) => {
     page,
   });
 
-  await page.locator("button", { hasText: "Create New Entity Type" }).click();
+  await page.locator("button", { hasText: "Create an Entity Type" }).click();
 
   const schemaModal = page.locator("[data-testid='create-schema-modal']");
 
   await expect(schemaModal).toBeVisible();
 
-  await expect(
-    schemaModal.locator("text=Create New Entity Type"),
-  ).toBeVisible();
+  await expect(schemaModal.locator("text=Create an Entity Type")).toBeVisible();
   await expect(
     schemaModal.locator(
       "text=Types are used to define the structure of entities and their relationships to other entities.",
