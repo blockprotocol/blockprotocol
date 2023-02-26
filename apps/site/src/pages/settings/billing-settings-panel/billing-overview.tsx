@@ -42,6 +42,11 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       : "free";
   }, [user]);
 
+  const hasStripeSubscriptionId = useMemo(
+    () => user && typeof user !== "string" && !!user.stripeSubscriptionId,
+    [user],
+  );
+
   const currentSubscriptionTierIsPaid = isPaidSubscriptionTier(
     currentSubscriptionTier,
   );
@@ -204,10 +209,12 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
           />
         )}
       </Box>
+      {hasStripeSubscriptionId && (
+        <Box marginBottom={6}>
+          <UsageLimitSection />
+        </Box>
+      )}
       {currentSubscriptionTierIsPaid && <TaxIdSection />}
-      <Box marginBottom={6}>
-        <UsageLimitSection />
-      </Box>
       <Typography
         variant="bpHeading2"
         sx={{ fontSize: 28, fontWeight: 400, marginBottom: 3 }}
