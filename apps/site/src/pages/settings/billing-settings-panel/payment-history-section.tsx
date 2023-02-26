@@ -74,7 +74,9 @@ const TableCell = styled(MuiTableCell)(({ theme }) =>
   }),
 );
 
-export const PaymentHistorySection: FunctionComponent = () => {
+export const PaymentHistorySection: FunctionComponent<{
+  userHasStripeSubscription: boolean;
+}> = ({ userHasStripeSubscription }) => {
   const [upcomingInvoice, setUpcomingInvoice] =
     useState<Stripe.UpcomingInvoice>();
   const [invoices, setInvoices] = useState<Stripe.Invoice[]>();
@@ -96,9 +98,11 @@ export const PaymentHistorySection: FunctionComponent = () => {
   }, [setUpcomingInvoice]);
 
   useEffect(() => {
-    void fetchInvoices();
-    void fetchUpcomingInvoice();
-  }, [fetchInvoices, fetchUpcomingInvoice]);
+    if (userHasStripeSubscription) {
+      void fetchInvoices();
+      void fetchUpcomingInvoice();
+    }
+  }, [fetchInvoices, fetchUpcomingInvoice, userHasStripeSubscription]);
 
   const allInvoices = useMemo<(Stripe.Invoice | Stripe.UpcomingInvoice)[]>(
     () =>
@@ -123,144 +127,160 @@ export const PaymentHistorySection: FunctionComponent = () => {
           marginBottom: 2,
         }}
       >
-        Upcoming and historical bills you’ve incurred on this account
+        {!userHasStripeSubscription || allInvoices.length === 0
+          ? "No upcoming or previous payments could be found"
+          : "Upcoming and historical bills you’ve incurred on this account"}
       </Typography>
-      <Table
-        sx={{
-          minWidth: 650,
-          borderColor: tableBorderColor,
-          borderWidth: 1,
-          borderStyle: "solid",
-          marginBottom: 2,
-        }}
-      >
-        <TableHead
-          sx={{
-            borderBottomWidth: 1,
-            borderBottomColor: tableBorderColor,
-            borderBottomStyle: "solid",
-          }}
-        >
-          <TableRow>
-            <TableCell>Status</TableCell>
-            <TableCell>Invoice Date</TableCell>
-            <TableCell>Invoice ID</TableCell>
-            <TableCell>Invoice Total</TableCell>
-            <TableCell sx={{ width: 175 }}>Download As</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {allInvoices.map((invoice) => {
-            const isUpcomingInvoice = !("id" in invoice);
-
-            const invoiceStatus = isUpcomingInvoice
-              ? "pending"
-              : invoice.status ?? "unknown";
-
-            const invoiceId = isUpcomingInvoice ? "-" : `#${invoice.number}`;
-
-            const capitalizedInvoiceStatus = `${invoiceStatus[0]?.toUpperCase()}${invoiceStatus.slice(
-              1,
-            )}`;
-
-            const invoiceDateStripeDate = isUpcomingInvoice
-              ? invoice.next_payment_attempt
-              : invoice.created;
-
-            const invoiceDate = getDateFromStripeDate(
-              invoiceDateStripeDate ?? 0,
-            );
-
-            const formattedInvoiceDate = dateToHumanReadable(
-              invoiceDate,
-              "-",
-              true,
-            );
-
-            const invoicePrice = priceToHumanReadable({
-              amountInCents: invoice.amount_due,
-              currency: invoice.currency,
-            });
-
-            const availableOnFormattedDate = new Intl.DateTimeFormat("en-US", {
-              month: "short",
-              day: "numeric",
-            }).format(invoiceDate);
-
-            return (
-              <TableRow key={invoiceId}>
-                <TableCell sx={{ position: "relative" }}>
-                  {invoice.status ? (
-                    <Chip color={invoice.status === "paid" ? "purple" : "gray"}>
-                      {capitalizedInvoiceStatus}
-                    </Chip>
-                  ) : null}
-                </TableCell>
-                <TableCell>{formattedInvoiceDate}</TableCell>
-                <TableCell>{invoiceId}</TableCell>
-                <TableCell>
-                  {invoicePrice}
-                  {isUpcomingInvoice ? (
-                    <Box
-                      component="span"
-                      sx={{ color: ({ palette }) => palette.gray[50] }}
-                    >
-                      {" "}
-                      to date
-                    </Box>
-                  ) : undefined}
-                </TableCell>
-                <TableCell sx={{ display: "flex", justifyContent: "center" }}>
-                  {invoice.invoice_pdf ? (
-                    <LinkButton
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={invoice.invoice_pdf}
-                      squared
-                      variant="secondary"
-                      size="small"
-                      sx={{ fontSize: 13 }}
-                    >
-                      PDF
-                    </LinkButton>
-                  ) : (
-                    <Chip color="gray">
-                      {isUpcomingInvoice
-                        ? `Available ${availableOnFormattedDate}`
-                        : "Unavailable"}
-                    </Chip>
-                  )}
-                </TableCell>
+      {allInvoices.length > 0 ? (
+        <>
+          <Table
+            sx={{
+              minWidth: 650,
+              borderColor: tableBorderColor,
+              borderWidth: 1,
+              borderStyle: "solid",
+              marginBottom: 2,
+            }}
+          >
+            <TableHead
+              sx={{
+                borderBottomWidth: 1,
+                borderBottomColor: tableBorderColor,
+                borderBottomStyle: "solid",
+              }}
+            >
+              <TableRow>
+                <TableCell>Status</TableCell>
+                <TableCell>Invoice Date</TableCell>
+                <TableCell>Invoice ID</TableCell>
+                <TableCell>Invoice Total</TableCell>
+                <TableCell sx={{ width: 175 }}>Download As</TableCell>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-      <Box display="flex" justifyContent="space-between">
-        <Typography
-          component="p"
-          variant="bpSmallCopy"
-          sx={{
-            color: ({ palette }) => palette.gray[90],
-            opacity: 0.66,
-            marginBottom: 2,
-          }}
-        >
-          Questions about your bill, or can’t pay by card?{" "}
-          <Link href="/contact">Contact us</Link>
-        </Typography>
-        <Typography
-          component="p"
-          variant="bpSmallCopy"
-          sx={{
-            color: ({ palette }) => palette.gray[90],
-            opacity: 0.66,
-            marginBottom: 2,
-          }}
-        >
-          Trying to cancel or downgrade? <Link href="/contact">Contact us</Link>
-        </Typography>
-      </Box>
+            </TableHead>
+            <TableBody>
+              {allInvoices.map((invoice) => {
+                const isUpcomingInvoice = !("id" in invoice);
+
+                const invoiceStatus = isUpcomingInvoice
+                  ? "pending"
+                  : invoice.status ?? "unknown";
+
+                const invoiceId = isUpcomingInvoice
+                  ? "-"
+                  : `#${invoice.number}`;
+
+                const capitalizedInvoiceStatus = `${invoiceStatus[0]?.toUpperCase()}${invoiceStatus.slice(
+                  1,
+                )}`;
+
+                const invoiceDateStripeDate = isUpcomingInvoice
+                  ? invoice.next_payment_attempt
+                  : invoice.created;
+
+                const invoiceDate = getDateFromStripeDate(
+                  invoiceDateStripeDate ?? 0,
+                );
+
+                const formattedInvoiceDate = dateToHumanReadable(
+                  invoiceDate,
+                  "-",
+                  true,
+                );
+
+                const invoicePrice = priceToHumanReadable({
+                  amountInCents: invoice.amount_due,
+                  currency: invoice.currency,
+                });
+
+                const availableOnFormattedDate = new Intl.DateTimeFormat(
+                  "en-US",
+                  {
+                    month: "short",
+                    day: "numeric",
+                  },
+                ).format(invoiceDate);
+
+                return (
+                  <TableRow key={invoiceId}>
+                    <TableCell sx={{ position: "relative" }}>
+                      {invoice.status ? (
+                        <Chip
+                          color={invoice.status === "paid" ? "purple" : "gray"}
+                        >
+                          {capitalizedInvoiceStatus}
+                        </Chip>
+                      ) : null}
+                    </TableCell>
+                    <TableCell>{formattedInvoiceDate}</TableCell>
+                    <TableCell>{invoiceId}</TableCell>
+                    <TableCell>
+                      {invoicePrice}
+                      {isUpcomingInvoice ? (
+                        <Box
+                          component="span"
+                          sx={{ color: ({ palette }) => palette.gray[50] }}
+                        >
+                          {" "}
+                          to date
+                        </Box>
+                      ) : undefined}
+                    </TableCell>
+                    <TableCell
+                      sx={{ display: "flex", justifyContent: "center" }}
+                    >
+                      {invoice.invoice_pdf ? (
+                        <LinkButton
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={invoice.invoice_pdf}
+                          squared
+                          variant="secondary"
+                          size="small"
+                          sx={{ fontSize: 13 }}
+                        >
+                          PDF
+                        </LinkButton>
+                      ) : (
+                        <Chip color="gray">
+                          {isUpcomingInvoice
+                            ? `Available ${availableOnFormattedDate}`
+                            : "Unavailable"}
+                        </Chip>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+          <Box display="flex" justifyContent="space-between">
+            <Typography
+              component="p"
+              variant="bpSmallCopy"
+              sx={{
+                color: ({ palette }) => palette.gray[90],
+                opacity: 0.66,
+                marginBottom: 2,
+              }}
+            >
+              Questions about your bill, or can’t pay by card?{" "}
+              <Link href="/contact">Contact us</Link>
+            </Typography>
+            <Typography
+              component="p"
+              variant="bpSmallCopy"
+              sx={{
+                color: ({ palette }) => palette.gray[90],
+                opacity: 0.66,
+                marginBottom: 2,
+              }}
+            >
+              Trying to cancel or downgrade?{" "}
+              <Link href="/contact">Contact us</Link>
+            </Typography>
+          </Box>
+        </>
+      ) : null}
     </>
   );
 };

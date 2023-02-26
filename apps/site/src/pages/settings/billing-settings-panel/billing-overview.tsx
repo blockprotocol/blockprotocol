@@ -42,7 +42,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       : "free";
   }, [user]);
 
-  const hasStripeSubscriptionId = useMemo(
+  const userHasStripeSubscription = useMemo(
     () => user && typeof user !== "string" && !!user.stripeSubscriptionId,
     [user],
   );
@@ -217,7 +217,9 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
         Usage Limits
       </Typography>
       {/* @todo: implement "usage limits" input @see https://app.asana.com/0/0/1203781148500077/f */}
-      {hasStripeSubscriptionId && <PaymentHistorySection />}
+      <PaymentHistorySection
+        userHasStripeSubscription={userHasStripeSubscription ?? false}
+      />
     </>
   );
 };
