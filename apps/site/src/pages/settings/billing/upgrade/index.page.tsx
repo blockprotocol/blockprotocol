@@ -324,7 +324,10 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                       borderRadius: 4,
                       borderBottomRightRadius: 0,
                       borderBottomLeftRadius: 0,
-                      padding: spacing(4, 6),
+                      padding: {
+                        xs: 2,
+                        md: spacing(4, 6),
+                      },
                     })}
                   >
                     <Box display="flex" alignItems="center">
@@ -381,7 +384,10 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                   <Box
                     sx={({ palette, spacing }) => ({
                       backgroundColor: palette.purple[10],
-                      padding: spacing(4, 6),
+                      padding: {
+                        xs: 2,
+                        md: spacing(4, 6),
+                      },
                       paddingBottom: 2,
                       borderColor: palette.gray[20],
                       borderWidth: 1,
@@ -418,7 +424,10 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                   <Box
                     sx={({ palette, spacing }) => ({
                       backgroundColor: palette.purple[10],
-                      padding: spacing(4, 6),
+                      padding: {
+                        xs: 2,
+                        md: spacing(4, 6),
+                      },
                       borderColor: palette.gray[20],
                       borderWidth: 1,
                       borderStyle: "solid",
@@ -488,7 +497,10 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                   </Box>
                   <Box
                     sx={({ palette, spacing }) => ({
-                      padding: spacing(4, 6),
+                      padding: {
+                        xs: 2,
+                        md: spacing(4, 6),
+                      },
                       borderColor: palette.gray[20],
                       borderWidth: 1,
                       borderStyle: "solid",
@@ -511,7 +523,12 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                       display="flex"
                       flexDirection="column"
                       component="ul"
-                      marginBottom={4}
+                      sx={{
+                        marginBottom: {
+                          xs: 0,
+                          md: 4,
+                        },
+                      }}
                       gap={1.5}
                     >
                       {(upgradedSubscriptionTier === "hobby"
