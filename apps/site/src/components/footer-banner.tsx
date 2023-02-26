@@ -228,7 +228,7 @@ export const BANNERS: Banner[] = [
                 </Typography>
               </Box>
             }
-            buttonHref="/docs/embedding-blocks"
+            buttonHref="/docs/using-blocks"
             buttonText="Learn more"
             buttonEndIcon={<ArrowRightIcon />}
           />

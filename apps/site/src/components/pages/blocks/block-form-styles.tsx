@@ -9,7 +9,7 @@ export const BlockListContainer = styled(BlockFormContainer, {
 })<{
   hasBlocks?: boolean;
 }>(
-  ({ theme, hasBlocks }) =>
+  ({ hasBlocks, theme }) =>
     hasBlocks &&
     theme.unstable_sx({
       py: 1,

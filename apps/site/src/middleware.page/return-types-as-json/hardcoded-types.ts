@@ -7,7 +7,6 @@ export const hardcodedTypes = {
     type: "object",
     title: "Link",
     properties: {},
-    additionalProperties: false,
   },
   // @todo replace below data types with types in db when data type hosting available
   "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1": {
