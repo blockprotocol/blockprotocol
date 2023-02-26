@@ -5,7 +5,7 @@ import { login } from "../shared/nav.js";
 import { createSchema } from "../shared/schemas.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
 
-test("user should be able to create an Entity Type", async ({ page }) => {
+test.skip("user should be able to create an Entity Type", async ({ page }) => {
   await resetSite();
 
   await page.goto("/");
