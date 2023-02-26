@@ -28,7 +28,7 @@ export const CreateEntityTypeButton: FunctionComponent<{
       onClick={onClick}
       startIcon={<TableTreeIcon />}
     >
-      Create an entity type
+      Create an Entity Type
     </Button>
   );
 };

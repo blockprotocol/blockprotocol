@@ -62,7 +62,7 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
           }}
         >
           <Button squared size="small" onClick={() => setSchemaModalOpen(true)}>
-            Create New Entity Type
+            Create an Entity Type
           </Button>
         </Box>
       )}

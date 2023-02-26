@@ -45,7 +45,7 @@ test("key elements should be present when user views their account page", async 
     "/docs/developing-blocks",
   );
 
-  await expect(page.locator("text=Create an entity type")).toBeVisible();
+  await expect(page.locator("text=Create an Entity Type")).toBeVisible();
 
   // Blocks tab tests
   await page.locator("[data-testid='profile-page-blocks-tab']").click();
@@ -76,7 +76,7 @@ test("key elements should be present when user views their account page", async 
     page.locator("text=Start building to see your creations show up here."),
   ).toBeVisible();
 
-  await expect(page.locator("text=Create an entity type schema")).toBeVisible();
+  await expect(page.locator("text=Create an Entity Type")).toBeVisible();
 });
 
 const codeBlockMetadata = (await getBlocksData()).find(
