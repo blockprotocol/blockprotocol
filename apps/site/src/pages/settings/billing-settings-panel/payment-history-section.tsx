@@ -24,18 +24,10 @@ import {
   getDateFromStripeDate,
   internalApi,
 } from "../../../lib/internal-api-client";
-import { priceToHumanReadable } from "../../shared/subscription-utils";
-
-const formatInvoiceDate = (date: Date) => {
-  const year = date.getFullYear();
-  const monthInteger = date.getMonth() + 1;
-  const month = monthInteger > 10 ? monthInteger : `0${monthInteger}`;
-
-  const dayInteger = date.getDate();
-  const day = dayInteger > 10 ? dayInteger : `0${dayInteger}`;
-
-  return `${year}-${month}-${day}`;
-};
+import {
+  dateToHumanReadable,
+  priceToHumanReadable,
+} from "../../shared/subscription-utils";
 
 const tableBorderColor = "#F1F3F6";
 
@@ -179,7 +171,11 @@ export const PaymentHistorySection: FunctionComponent = () => {
               invoiceDateStripeDate ?? 0,
             );
 
-            const formattedInvoiceDate = formatInvoiceDate(invoiceDate);
+            const formattedInvoiceDate = dateToHumanReadable(
+              invoiceDate,
+              "-",
+              true,
+            );
 
             const invoicePrice = priceToHumanReadable({
               amountInCents: invoice.amount_due,
