@@ -41,7 +41,6 @@ import { internalApi } from "../../../../lib/internal-api-client";
 import {
   cardBrandToHumanReadable,
   createStripeOptions,
-  dateToHumanReadable,
   isPaidSubscriptionTier,
   PaidSubscriptionTier,
   priceToHumanReadable,
@@ -310,7 +309,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
             elevation={4}
             sx={{
               borderRadius: "8px",
-              padding: 6,
+              padding: { xs: 2, md: 6 },
             }}
           >
             <Box>
@@ -628,51 +627,45 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                         </Typography>
                       </Box>
                     </Box>
-                    <Box
-                      display="flex"
-                      justifyContent="space-between"
-                      marginBottom={2}
-                    >
-                      <Box>
-                        <Typography variant="bpSmallCopy" component="p">
-                          <strong>New monthly total</strong>
-                        </Typography>
-                        <Typography
-                          variant="bpSmallCopy"
-                          component="p"
-                          sx={{ color: ({ palette }) => palette.gray["60"] }}
-                        >
-                          {isUpgradingExistingPaidSubscription ? (
-                            <>Base price you’ll pay going forward</>
-                          ) : (
-                            <>
-                              {upgradedSubscriptionTier
-                                ? subscriptionTierToHumanReadable(
-                                    upgradedSubscriptionTier,
-                                  )
-                                : ""}{" "}
-                              plan starting on {dateToHumanReadable(new Date())}
-                            </>
-                          )}
-                        </Typography>
-                      </Box>
-                      <Typography gutterBottom>
-                        {upgradedSubscriptionTier && subscriptionTierPrices
-                          ? priceToHumanReadable({
-                              amountInCents:
-                                subscriptionTierPrices[upgradedSubscriptionTier]
-                                  .unit_amount!,
-                              currency:
-                                subscriptionTierPrices[upgradedSubscriptionTier]
-                                  .currency,
-                              decimalPlaces: 0,
-                            })
-                          : ""}{" "}
-                        /month
-                      </Typography>
-                    </Box>
+
                     {isUpgradingExistingPaidSubscription ? (
                       <>
+                        <Box
+                          display="flex"
+                          justifyContent="space-between"
+                          marginBottom={2}
+                        >
+                          <Box>
+                            <Typography variant="bpSmallCopy" component="p">
+                              <strong>New monthly total</strong>
+                            </Typography>
+                            <Typography
+                              variant="bpSmallCopy"
+                              component="p"
+                              sx={{
+                                color: ({ palette }) => palette.gray["60"],
+                              }}
+                            >
+                              Base price you’ll pay going forward
+                            </Typography>
+                          </Box>
+                          <Typography gutterBottom>
+                            {upgradedSubscriptionTier && subscriptionTierPrices
+                              ? priceToHumanReadable({
+                                  amountInCents:
+                                    subscriptionTierPrices[
+                                      upgradedSubscriptionTier
+                                    ].unit_amount!,
+                                  currency:
+                                    subscriptionTierPrices[
+                                      upgradedSubscriptionTier
+                                    ].currency,
+                                  decimalPlaces: 0,
+                                })
+                              : ""}{" "}
+                            /month
+                          </Typography>
+                        </Box>
                         <Box
                           display="flex"
                           justifyContent="space-between"
@@ -795,6 +788,8 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                           options={stripeElementsOptions}
                         >
                           <CreateSubscriptionCheckoutForm
+                            upgradedSubscriptionTier={upgradedSubscriptionTier}
+                            subscriptionTierPrices={subscriptionTierPrices}
                             onCompleted={handleUpgradedSubscription}
                             clientSecret={clientSecret}
                           />
