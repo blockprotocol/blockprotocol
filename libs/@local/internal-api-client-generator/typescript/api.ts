@@ -842,7 +842,7 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Get all invoices
+     * @summary Get all open or paid invoices
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1447,7 +1447,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Get all invoices
+     * @summary Get all open or paid invoices
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1790,7 +1790,7 @@ export const DefaultApiFactory = function (
     },
     /**
      *
-     * @summary Get all invoices
+     * @summary Get all open or paid invoices
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2003,7 +2003,7 @@ export interface DefaultApiInterface {
 
   /**
    *
-   * @summary Get all invoices
+   * @summary Get all open or paid invoices
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
@@ -2208,7 +2208,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
   /**
    *
-   * @summary Get all invoices
+   * @summary Get all open or paid invoices
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
