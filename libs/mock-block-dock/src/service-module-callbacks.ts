@@ -2,7 +2,9 @@ import { EmbedderServiceMessageCallbacks } from "@blockprotocol/service";
 import axios from "axios";
 
 const bpSiteHost = `${
-  process.env.BLOCK_PROTOCOL_SITE_HOST ?? "https://blockprotocol.org"
+  typeof process.env !== "undefined" && process.env.BLOCK_PROTOCOL_SITE_HOST
+    ? process.env.BLOCK_PROTOCOL_SITE_HOST
+    : "https://blockprotocol.org"
 }/api`;
 
 const externalApiHttpClient = axios.create({
