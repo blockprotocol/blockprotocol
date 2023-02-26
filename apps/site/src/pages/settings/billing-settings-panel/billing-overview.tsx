@@ -13,6 +13,7 @@ import {
 } from "../../shared/subscription-utils";
 import { useBillingPageContext } from "./billing-page-context";
 import { FreeOrHobbySubscriptionTierOverview } from "./free-or-hobby-subscription-tier-overview";
+import { PaymentHistorySection } from "./payment-history-section";
 import { PaymentMethod } from "./payment-method";
 import { paymentMethodsPanelPageAsPath } from "./payment-methods";
 import { ProSubscriptionTierOverview } from "./pro-subscription-tier-overview";
@@ -40,6 +41,11 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       ? user.stripeSubscriptionTier ?? "free"
       : "free";
   }, [user]);
+
+  const hasStripeSubscriptionId = useMemo(
+    () => user && typeof user !== "string" && !!user.stripeSubscriptionId,
+    [user],
+  );
 
   const currentSubscriptionTierIsPaid = isPaidSubscriptionTier(
     currentSubscriptionTier,
@@ -211,13 +217,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
         Usage Limits
       </Typography>
       {/* @todo: implement "usage limits" input @see https://app.asana.com/0/0/1203781148500077/f */}
-      <Typography
-        variant="bpHeading2"
-        sx={{ fontSize: 28, fontWeight: 400, marginBottom: 3 }}
-      >
-        Payment History
-      </Typography>
-      {/* @todo: implement "payment history" section of billing panel @see https://app.asana.com/0/1203543021352041/1203781148500078/f */}
+      {hasStripeSubscriptionId && <PaymentHistorySection />}
     </>
   );
 };

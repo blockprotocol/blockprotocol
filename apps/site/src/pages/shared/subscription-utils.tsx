@@ -36,14 +36,14 @@ export const priceToHumanReadable = ({
     : `${amount} ${currency}`;
 };
 
-export const dateToHumanReadable = (date: Date) => {
+export const dateToHumanReadable = (date: Date, deliminator: string = "/") => {
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
 
-  return `${day < 10 ? "0" : ""}${day}/${
+  return `${day < 10 ? "0" : ""}${day}${deliminator}${
     month < 10 ? "0" : ""
-  }${month}/${year}`;
+  }${month}${deliminator}${year}`;
 };
 
 const cardBrands = {
