@@ -1,23 +1,25 @@
 import { EmbedderServiceMessageCallbacks } from "@blockprotocol/service";
 import axios from "axios";
 
-const bpSiteHost = `${
-  typeof process.env !== "undefined" && process.env.BLOCK_PROTOCOL_SITE_HOST
-    ? process.env.BLOCK_PROTOCOL_SITE_HOST
-    : "https://blockprotocol.org"
-}/api`;
-
-const externalApiHttpClient = axios.create({
-  baseURL: bpSiteHost,
-});
+const externalApiHttpClient = axios.create();
 
 const callExternalApiMethod = async (params: {
   blockProtocolApiKey?: string;
+  blockProtocolSiteHost?: string;
   providerName: string;
   methodName: string;
   payload: any;
 }): Promise<{ data: any }> => {
-  const { providerName, methodName, payload, blockProtocolApiKey } = params;
+  const {
+    providerName,
+    methodName,
+    payload,
+    blockProtocolApiKey,
+    blockProtocolSiteHost,
+  } = params;
+
+  const bpSiteHost = blockProtocolSiteHost ?? "https://blockprotocol.org";
+  const baseUrl = `${bpSiteHost}/api`;
 
   if (!blockProtocolApiKey) {
     throw new Error(
@@ -28,7 +30,10 @@ const callExternalApiMethod = async (params: {
   const { data } = await externalApiHttpClient.post(
     "/external-service-method",
     { providerName, methodName, payload },
-    { headers: { "x-api-key": blockProtocolApiKey } },
+    {
+      headers: { "x-api-key": blockProtocolApiKey },
+      baseURL: baseUrl,
+    },
   );
 
   return { data: data.externalServiceMethodResponse };
@@ -36,8 +41,9 @@ const callExternalApiMethod = async (params: {
 
 export const constructServiceModuleCallbacks = (params: {
   blockProtocolApiKey?: string;
+  blockProtocolSiteHost?: string;
 }): EmbedderServiceMessageCallbacks => {
-  const { blockProtocolApiKey } = params;
+  const { blockProtocolApiKey, blockProtocolSiteHost } = params;
 
   return {
     /** OpenAI */
@@ -48,6 +54,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "createImage",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     openaiCompleteText: async ({ data: payload }) =>
@@ -56,6 +63,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "completeText",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     /** Mapbox Geocoding API */
@@ -66,6 +74,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "forwardGeocoding",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     mapboxReverseGeocoding: async ({ data: payload }) =>
@@ -74,6 +83,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "reverseGeocoding",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     /** Mapbox Directions API */
@@ -84,6 +94,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "retrieveDirections",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     /** Mapbox Isochrone API */
@@ -94,6 +105,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "retrieveIsochrones",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     /** Mapbox Autofill API */
@@ -104,6 +116,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "suggestAddress",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     mapboxRetrieveAddress: async ({ data: payload }) =>
@@ -112,6 +125,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "retrieveAddress",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     mapboxCanRetrieveAddress: async ({ data: payload }) =>
@@ -120,6 +134,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "canRetrieveAddress",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     /** Mapbox Static Map API */
@@ -130,6 +145,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "retrieveStaticMap",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
   };
 };
