@@ -53,7 +53,7 @@ test("user should be able to create an Entity Type", async ({ page }) => {
 
   await page
     .locator(
-      `text=Invalid schema: User already has an entity type with id ${existingSchemaWithMetadata.schema.$id}`,
+      `text=Invalid entity type: User already has an entity type with id ${existingSchemaWithMetadata.schema.$id}`,
     )
     .click();
 
