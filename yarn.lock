@@ -2086,6 +2086,13 @@
     lit "^2.4.1"
     node-fetch "^3.3.0"
 
+"@blockprotocol/service@0.0.1-canary.9":
+  version "0.0.1-canary.9"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/service/-/service-0.0.1-canary.9.tgz#69f1d0c8aafae753873747285a25a4bced658864"
+  integrity sha512-DpnR4iPaxKuyPI/Jovzm4UMawOqEdBkd6RTYHIG6FRoY8cr9u87bZmyxFe1FOclgAUDN3npQN7lhDM7SuGSpYg==
+  dependencies:
+    "@blockprotocol/core" "0.0.14"
+
 "@blockprotocol/type-system@0.1.0-canary-20230225164454":
   version "0.1.0-canary-20230225164454"
   resolved "https://registry.yarnpkg.com/@blockprotocol/type-system/-/type-system-0.1.0-canary-20230225164454.tgz#97486ce936b4ac275c400fb9735d4c090bc8f5f7"
