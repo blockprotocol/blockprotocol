@@ -1,6 +1,7 @@
 import { Middleware } from "next-connect";
 
 import { formatErrors } from "../../../util/api";
+import { parseClientIp } from "../../../util/usage";
 import { BaseApiRequest, BaseApiResponse } from "../handler/base-handler";
 import { ApiKey } from "../model/api-key.model";
 import { User } from "../model/user.model";
@@ -23,6 +24,7 @@ export const hasValidApiKeyMiddleware: Middleware<
 
     const resolvedApiKey = await ApiKey.validateAndGet(db, {
       apiKeyString: apiKey,
+      usedAtOrigin: req.headers.origin ?? parseClientIp(req) ?? undefined,
     });
 
     const user = await User.getById(db, {

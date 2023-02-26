@@ -1,21 +1,15 @@
+import { EntityType } from "@blockprotocol/graph";
 import { Box } from "@mui/material";
 
-import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { JsonView } from "./json-view";
 
-export const BlockSchemaView = () => {
-  const { blockSchema } = useMockBlockDockContext();
-
-  if (!blockSchema) {
-    return null;
-  }
-
+export const BlockSchemaView = ({ entityType }: { entityType: EntityType }) => {
   return (
     <Box maxWidth={800}>
       <JsonView
-        collapseKeys={Object.keys(blockSchema)}
+        collapseKeys={Object.keys(entityType)}
         rootName="blockSchema"
-        src={blockSchema}
+        src={entityType}
       />
     </Box>
   );

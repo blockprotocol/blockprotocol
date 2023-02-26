@@ -1,5 +1,5 @@
 import { CoreHandler } from "./core-handler";
-import { ServiceHandler } from "./service-handler";
+import { ModuleHandler } from "./module-handler";
 
 // ---------------------------- UTILITIES ----------------------------- //
 
@@ -40,6 +40,8 @@ export type BlockMetadataRepository =
     }
   | string;
 
+type VersionedUrl = `${string}v/${number}`;
+
 export type BlockMetadata = {
   /**
    * The name of the author of the block
@@ -50,9 +52,9 @@ export type BlockMetadata = {
    */
   blockType: BlockType;
   /**
-   * The default data used as the block's properties on first load - must comply with its schema
+   * The commit hash of the source this block was built from. If specified, 'repository' must also be specified.
    */
-  default?: JsonObject | null;
+  commit?: string;
   /**
    * A short description of the block, to help users understand its capabilities
    */
@@ -66,7 +68,7 @@ export type BlockMetadata = {
    */
   displayName?: string | null;
   /**
-   * A list of examples used to showcase a block's capabilities
+   * A list of examples property objects which comply with the block's schema, for demonstration purposes
    */
   examples?: JsonObject[] | null;
   /**
@@ -90,17 +92,18 @@ export type BlockMetadata = {
    */
   name: string;
   /**
-   * The applicable block protocol version.
+   * The applicable block protocol version, e.g. 0.3
    */
   protocol: string;
   /**
    * Specify the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development.
+   * @see also 'commit'.
    */
   repository?: BlockMetadataRepository | null;
   /**
-   * The path or URL to the block's schema (e.g. block-schema.json)
+   * The versioned URL to the block's schema
    */
-  schema: string;
+  schema: VersionedUrl;
   /**
    * The path or URL to the entrypoint source file (e.g. index.html, index.js).
    */
@@ -116,7 +119,7 @@ export type BlockMetadata = {
 };
 
 export type MessageError<ErrorCode extends string> = {
-  code: ErrorCode;
+  code: ErrorCode | "INTERNAL_ERROR";
   message: string;
   extensions?: any;
 };
@@ -145,23 +148,40 @@ export interface Message extends MessageContents {
   requestId: string;
   // the name of the message expected to respond to this message, if any
   respondedToBy?: string;
-  // the name of the service this message is sent under
-  service: string;
+  // the name of the module this message is sent under
+  module: string;
   // the source of the message
   source: "block" | "embedder";
   // when the message was sent
   timestamp: string;
 }
 
+export type MessageReturn<T extends any> = {
+  data: T;
+};
+
 export type MessageCallback<
   InputData,
   InputErrorCode extends string | null,
-  ReturnData extends any | null = null,
+  ReturnData extends MessageReturn<any> | null = null,
   ReturnErrorCode extends ReturnData extends null ? null : string | null = null,
 > = {
   (messageData: MessageData<InputData, InputErrorCode>): ReturnData extends null
     ? void
-    : Promise<MessageData<ReturnData, ReturnErrorCode>>;
+    : /*
+    The `MessageReturn` type and this ternary is really strange. It seems that TypeScript breaks otherwise when you
+    pass in a type which has a conditional top-level component e.g.
+    `type Foo<T extends boolean> = T extends true ? "1" : "2"`
+
+    Wrapping the type so that there's something solid on the first level (as we do with `MessageReturn`) seems to fix
+    that. This only appears at the type level anyway as we unwrap it in the resultant type.
+     */
+      Promise<
+        MessageData<
+          (ReturnData extends null ? never : ReturnData)["data"],
+          ReturnErrorCode
+        >
+      >;
 };
 
 export type GenericMessageCallback =
@@ -170,12 +190,12 @@ export type GenericMessageCallback =
   | MessageCallback<any, null, any>
   | MessageCallback<any, null, any, string>;
 
-export type MessageCallbacksByService = {
-  [serviceName: string]: Map<string, GenericMessageCallback> | undefined;
+export type MessageCallbacksByModule = {
+  [moduleName: string]: Map<string, GenericMessageCallback> | undefined;
 };
 
 export type EmbedderInitMessage = {
-  [serviceName: string]: {
+  [moduleName: string]: {
     [messageName: string]: any;
   };
 };
@@ -184,7 +204,7 @@ export type SendMessageArgs = {
   partialMessage: MessageContents;
   requestId?: string;
   respondedToBy?: string;
-  sender: CoreHandler | ServiceHandler;
+  sender: CoreHandler | ModuleHandler;
 };
 
 type PromiseConstructorFnArgs = Parameters<
@@ -203,21 +223,21 @@ export type ResponseSettlersByRequestIdMap = Map<
   }
 >;
 
-export type ServiceMessageDefinition = {
+export type ModuleMessageDefinition = {
   messageName: string;
   description: string;
   source: "embedder" | "block";
-  data: Record<string, unknown>;
+  data: JsonObject;
   sentOnInitialization?: boolean;
   errorCodes?: string[];
   respondedToBy?: string | null;
 };
 
-export type ServiceDefinition = {
+export type ModuleDefinition = {
   name: string;
   version: string;
   coreVersion: string;
-  messages: ServiceMessageDefinition[];
+  messages: ModuleMessageDefinition[];
 };
 
 export type HtmlBlockDefinition = {

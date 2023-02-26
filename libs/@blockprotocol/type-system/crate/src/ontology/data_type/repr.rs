@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 use crate::{
-    uri::{ParseVersionedUriError, VersionedUri},
+    url::{ParseVersionedUrlError, VersionedUrl},
     ParseDataTypeError,
 };
 
@@ -22,7 +22,7 @@ enum DataTypeTag {
 pub struct DataType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'dataType'"))]
     kind: DataTypeTag,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$id")]
     id: String,
     title: String,
@@ -44,8 +44,8 @@ impl TryFrom<DataType> for super::DataType {
     type Error = ParseDataTypeError;
 
     fn try_from(data_type_repr: DataType) -> Result<Self, Self::Error> {
-        let id = VersionedUri::from_str(&data_type_repr.id)
-            .map_err(ParseDataTypeError::InvalidVersionedUri)?;
+        let id = VersionedUrl::from_str(&data_type_repr.id)
+            .map_err(ParseDataTypeError::InvalidVersionedUrl)?;
 
         Ok(Self::new(
             id,
@@ -74,24 +74,24 @@ impl From<super::DataType> for DataType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DataTypeReference {
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
-    uri: String,
+    url: String,
 }
 
 impl TryFrom<DataTypeReference> for super::DataTypeReference {
-    type Error = ParseVersionedUriError;
+    type Error = ParseVersionedUrlError;
 
     fn try_from(data_type_ref_repr: DataTypeReference) -> Result<Self, Self::Error> {
-        let uri = VersionedUri::from_str(&data_type_ref_repr.uri)?;
-        Ok(Self::new(uri))
+        let url = VersionedUrl::from_str(&data_type_ref_repr.url)?;
+        Ok(Self::new(url))
     }
 }
 
 impl From<super::DataTypeReference> for DataTypeReference {
     fn from(data_type_ref: super::DataTypeReference) -> Self {
         Self {
-            uri: data_type_ref.uri.to_string(),
+            url: data_type_ref.url.to_string(),
         }
     }
 }

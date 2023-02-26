@@ -62,6 +62,9 @@ module.exports = (workspaceDirPath) => {
     "!*.ts",
     "!*.tsx",
 
+    // Ignore auto-generated files
+    "*.gen.ts",
+
     // Add patterns extracted from .gitignore
     ...sharedPatternsFromGitignore,
   ];

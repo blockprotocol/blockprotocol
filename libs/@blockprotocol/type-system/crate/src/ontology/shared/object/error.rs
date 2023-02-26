@@ -4,7 +4,7 @@ use thiserror::Error;
 use tsify::Tsify;
 
 use crate::{
-    uri::{ParseBaseUriError, ParseVersionedUriError},
+    url::{ParseBaseUrlError, ParseVersionedUrlError},
     ParsePropertyTypeReferenceArrayError, ValidationError,
 };
 
@@ -13,13 +13,13 @@ use crate::{
 #[serde(tag = "reason", content = "inner")]
 pub enum ParsePropertyTypeObjectError {
     #[error("invalid property type reference: `{0}`")]
-    InvalidPropertyTypeReference(ParseVersionedUriError),
+    InvalidPropertyTypeReference(ParseVersionedUrlError),
     #[error("invalid array definition: `{0}`")]
     InvalidArray(ParsePropertyTypeReferenceArrayError),
     #[error("invalid property key: `{0}`")]
-    InvalidPropertyKey(ParseBaseUriError),
+    InvalidPropertyKey(ParseBaseUrlError),
     #[error("invalid key inside required: `{0}`")]
-    InvalidRequiredKey(ParseBaseUriError),
+    InvalidRequiredKey(ParseBaseUrlError),
     #[error("failed validation: `{0}`")]
     ValidationError(ValidationError),
     #[error("error in JSON: `{0}`")]

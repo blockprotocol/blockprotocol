@@ -1,10 +1,6 @@
 import path from "node:path";
 
-import {
-  DeleteObjectsCommand,
-  ListObjectsV2Command,
-  PutObjectCommand,
-} from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { BlockMetadata } from "@blockprotocol/core";
 import fs from "fs-extra";
 import { globby } from "globby";
@@ -167,41 +163,6 @@ const uploadBlockFilesToS3 = (
 };
 
 /**
- * Wipes the contents of a block's distribution folder in R2
- * @param blockFolder the path to the folder, in the format [namespace]/[block-name]
- */
-const wipeS3BlockFolder = async (blockFolder: string) => {
-  if (!/.+\/.+/.test(blockFolder)) {
-    throw new Error(
-      `Expected block folder matching pattern [namespace]/[block-name], received '${blockFolder}'`,
-    );
-  }
-  const folderContents = await getS3Client().send(
-    new ListObjectsV2Command({
-      Bucket: getS3Bucket(),
-      Prefix: blockFolder,
-    }),
-  );
-
-  if (!folderContents.Contents || folderContents.Contents.length === 0) {
-    return;
-  }
-
-  const objectsToDelete = folderContents.Contents.map(({ Key }) => ({
-    Key,
-  })).filter((identifier): identifier is { Key: string } => !!identifier.Key);
-
-  await getS3Client().send(
-    new DeleteObjectsCommand({
-      Bucket: getS3Bucket(),
-      Delete: {
-        Objects: objectsToDelete,
-      },
-    }),
-  );
-};
-
-/**
  * 1. Validates block files
  * 2. Expands the provided metadata
  * 3. Uploads files to the 'blocks' bucket in Cloudflare's R2 storage
@@ -266,12 +227,6 @@ export const validateExpandAndUploadBlockFiles = async ({
     path.resolve(localFolderPath, metadataJsonPath),
     JSON.stringify(expandedMetadata, undefined, 2),
   );
-
-  /**
-   * Wipe the folder before uploading new files - we will stop doing this when we store each version in its own folder
-   * @see https://app.asana.com/0/0/1202539910143057/f (internal)
-   */
-  await wipeS3BlockFolder(remoteStoragePrefix);
 
   await Promise.all(uploadBlockFilesToS3(localFolderPath, remoteStoragePrefix));
 
