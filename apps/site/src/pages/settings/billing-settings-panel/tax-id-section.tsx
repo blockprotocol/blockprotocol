@@ -142,7 +142,7 @@ export const TaxIdSection: FunctionComponent = () => {
             setTimeout(() => taxIdInputRef.current?.focus(), 150);
           }}
           getOptionLabel={({ shortCode, country }) =>
-            `${shortCode.split("_").join(" ").toUpperCase()} - ${country}`
+            `${shortCode?.split("_").join(" ").toUpperCase()} - ${country}`
           }
           renderInput={(params) => (
             <TextField
