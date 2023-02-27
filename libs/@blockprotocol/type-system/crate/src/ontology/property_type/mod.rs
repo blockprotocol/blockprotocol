@@ -1,8 +1,3 @@
-mod error;
-pub(in crate::ontology) mod repr;
-#[cfg(target_arch = "wasm32")]
-mod wasm;
-
 use std::collections::HashSet;
 
 pub use error::ParsePropertyTypeError;
@@ -11,6 +6,11 @@ use crate::{
     url::{BaseUrl, VersionedUrl},
     Array, DataTypeReference, Object, OneOf, ValidateUrl, ValidationError, ValueOrArray,
 };
+
+mod error;
+pub(in crate::ontology) mod repr;
+#[cfg(target_arch = "wasm32")]
+mod wasm;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PropertyType {
@@ -314,10 +314,32 @@ mod tests {
     }
 
     #[test]
+    fn invalid_metaschema() {
+        let invalid_schema_url = "https://blockprotocol.org/types/modules/graph/0.3/schema/foo";
+        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+            &json!(
+                {
+                  "$schema": invalid_schema_url,
+                  "kind": "propertyType",
+                  "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
+                  "title": "Age",
+                  "oneOf": [
+                    {
+                      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1"
+                    }
+                  ]
+                }
+            ),
+            ParsePropertyTypeError::InvalidMetaSchema(invalid_schema_url.to_owned()),
+        );
+    }
+
+    #[test]
     fn invalid_id() {
         ensure_failed_validation::<repr::PropertyType, PropertyType>(
             &json!(
                 {
+                  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
                   "kind": "propertyType",
                   "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1.2",
                   "title": "Age",
@@ -339,6 +361,7 @@ mod tests {
         ensure_failed_validation::<repr::PropertyType, PropertyType>(
             &json!(
                 {
+                  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
                   "kind": "propertyType",
                   "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
                   "title": "Age",
@@ -356,6 +379,7 @@ mod tests {
         ensure_failed_validation::<repr::PropertyType, PropertyType>(
             &json!(
                 {
+                  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
                   "kind": "propertyType",
                   "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
                   "title": "Age",

@@ -6,9 +6,9 @@
     "entityTypeId": {
       "type": "string"
     },
-    "schema": {
+    "$schema": {
       "$ref": "https://json-schema.org/draft/2020-12/schema"
     }
   },
-  "required": ["entityTypeId", "schema"]
+  "required": ["entityTypeId", "$schema"]
 }
