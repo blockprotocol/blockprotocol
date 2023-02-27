@@ -1,7 +1,11 @@
+/*
+ @todo - We should be able to import from the `@blockprotocol/graph` package here but we're running into strange errors
+   with named exports, CommonJS, and ESM modules from the dependency on `/core`
+ */
 import {
   DATA_TYPE_META_SCHEMA,
   ENTITY_TYPE_META_SCHEMA,
-} from "@blockprotocol/graph";
+} from "@blockprotocol/type-system/slim";
 
 /* istanbul ignore file */
 export const hardcodedTypes = {
