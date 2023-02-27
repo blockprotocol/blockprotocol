@@ -82,7 +82,6 @@ wasm-pack.log
 
 ## Workspace-specific
 apps/site/playwright-report
-apps/site/public/blocks
 apps/site/public/schemas
 apps/site/site-map.json
 apps/site/test-results
