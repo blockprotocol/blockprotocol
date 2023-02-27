@@ -24,6 +24,10 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
+    "@blocks/aio-demo#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/entity-types/**/*.gen.ts"]
+    },
     "@blockprotocol/type-system#build": {
       "dependsOn": [],
       "outputs": ["dist/**", "wasm/**"]

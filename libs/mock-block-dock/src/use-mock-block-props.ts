@@ -88,8 +88,8 @@ export const useMockBlockPropsNonTemporal = (
     }
 
     return {
-      entities: [
-        ...(args.initialData?.initialEntities ?? []),
+      /* @todo - make the inclusion of this data configurable to users of MBD */
+      entities: [...(args.initialData?.initialEntities ?? [])] ?? [
         ...defaultMockData.entities,
       ],
     };
@@ -152,9 +152,9 @@ export const useMockBlockPropsTemporal = (
     }
 
     return {
-      entities: [
-        ...(args.initialData?.initialEntities ?? []),
-        ...defaultTemporalMockData.entities,
+      /* @todo - make the inclusion of this data configurable to users of MBD */
+      entities: [...(args.initialData?.initialEntities ?? [])] ?? [
+        ...defaultMockData.entities,
       ],
       subgraphTemporalAxes: args.initialData?.initialTemporalAxes
         ? {

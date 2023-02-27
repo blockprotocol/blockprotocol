@@ -9,7 +9,8 @@
       "libs/@blockprotocol/*",
       "libs/@local/*",
       "libs/@local/internal-api-client-generator/typescript",
-      "libs/[!wordpress]*"
+      "libs/[!wordpress]*",
+      "blocks/*"
     ],
     "nohoist": [
       "**/@types/css-font-loading-module",
