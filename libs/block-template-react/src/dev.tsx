@@ -1,10 +1,26 @@
+import { VersionedUrl } from "@blockprotocol/graph";
 import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
-import packageJSON from "../package.json";
+import packageJson from "../package.json";
 import Component from "./index";
+import { RootEntity } from "./types.gen";
 
 const node = document.getElementById("app");
+
+const testEntity: RootEntity = {
+  metadata: {
+    recordId: {
+      entityId: "test-entity",
+      editionId: new Date().toISOString(),
+    },
+    entityTypeId: packageJson.blockprotocol.schema as VersionedUrl,
+  },
+  properties: {
+    "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/":
+      "World",
+  },
+} as const;
 
 /**
  * This is an embedding application for local development and debugging.
@@ -21,18 +37,17 @@ const DevApp = () => {
   return (
     <MockBlockDock
       blockDefinition={{ ReactComponent: Component }}
-      blockEntity={{
-        // This is the 'blockEntity' which your block will receive as part of the properties sent to it
-        entityId: "my-entity-1",
-        properties: { name: "World" },
-      }}
-      blockInfo={packageJSON.blockprotocol}
+      blockEntityRecordId={testEntity.metadata.recordId}
+      blockInfo={packageJson.blockprotocol}
       debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
+      initialData={{
+        initialEntities: [testEntity],
+      }}
       // hideDebugToggle <- uncomment this to disable the debug UI entirely
       // initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it)
       // initialEntityTypes={[]} <- customise the entity types in the datastore
       // initialLinks={[]} <- customise the links in the datastore
-      // initialLinkedAggregations={[]} <- customise the linkedAggregations in the datastore
+      // initialLinkedQueries={[]} <- customise the linkedQueries in the datastore
       // readonly <- uncomment this to start your block in readonly mode. You can also toggle it in the UI
     />
   );

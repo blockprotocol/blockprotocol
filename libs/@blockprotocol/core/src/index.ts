@@ -6,7 +6,7 @@ export {
   renderHtmlBlock,
   teardownBlockProtocol,
 } from "./html";
-export { ServiceHandler } from "./service-handler";
+export { ModuleHandler } from "./module-handler";
 export type {
   BlockMetadata,
   BlockMetadataRepository,
@@ -19,7 +19,8 @@ export type {
   MessageCallback,
   MessageData,
   MessageError,
-  ServiceDefinition,
-  ServiceMessageDefinition,
+  MessageReturn,
+  ModuleDefinition,
+  ModuleMessageDefinition,
   UnknownRecord,
 } from "./types";

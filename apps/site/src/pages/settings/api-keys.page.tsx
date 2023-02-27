@@ -50,6 +50,7 @@ const ApiKeys: AuthWallPageContent = () => {
       activeApiKeys.map((key) => [
         key.displayName,
         key.publicId,
+        key.lastUsedOrigin ? key.lastUsedOrigin : "Unknown",
         key.lastUsedAt ? (
           <DateTimeCell key="lastUsed" timestamp={key.lastUsedAt} />
         ) : (
@@ -119,7 +120,7 @@ const ApiKeys: AuthWallPageContent = () => {
                 Keep them private to prevent other people from accessing your
                 account. <br />
                 <Link
-                  href="/docs/embedding-blocks#discovering-blocks"
+                  href="/docs/using-blocks#discovering-blocks"
                   data-test-id="apiKeyLink"
                 >
                   Learn More
@@ -128,7 +129,13 @@ const ApiKeys: AuthWallPageContent = () => {
             </Box>
             {!!tableRows.length && (
               <Table
-                header={["Name", "Public ID", "Last Used", "Created"]}
+                header={[
+                  "Name",
+                  "Public ID",
+                  "Last Used Origin",
+                  "Last Used",
+                  "Created",
+                ]}
                 rows={tableRows}
               />
             )}

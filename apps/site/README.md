@@ -33,7 +33,7 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     MONGODB_DB_NAME=local
     
     S3_API_ENDPOINT=http://localhost:9000
-    S3_BASE_URL=http://localhost:9001/dev-bucket
+    S3_BASE_URL=http://localhost:9000/dev-bucket
     S3_BUCKET=dev-bucket
     S3_ACCESS_KEY_ID=dev-access-key
     S3_SECRET_ACCESS_KEY=dev-secret-key
@@ -81,6 +81,13 @@ During local development, an S3-compatible service (`minio`) is automatically st
 
 Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
 When running in development environments, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
+
+### Data reporting
+
+The BP site allows publishing data to a collector platform. Currently the payloads are very simple and server-side only. To configure the targets for data collection, the following environment variables are required:
+
+- `DATA_URL`: The URL of the collector platform
+- `DATA_WRITE_KEY`: The write key for the collector platform, used in the username of HTTP basic auth header
 
 ### AWS configuration
 

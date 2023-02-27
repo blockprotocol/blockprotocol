@@ -89,6 +89,19 @@ export interface CreateSubscriptionRequest {
 /**
  *
  * @export
+ * @interface DeleteTaxId200Response
+ */
+export interface DeleteTaxId200Response {
+  /**
+   *
+   * @type {StripeTaxId}
+   * @memberof DeleteTaxId200Response
+   */
+  deletedTaxId?: StripeTaxId;
+}
+/**
+ *
+ * @export
  * @interface ErrorInfo
  */
 export interface ErrorInfo {
@@ -110,6 +123,81 @@ export interface ErrorInfo {
    * @memberof ErrorInfo
    */
   metadata: { [key: string]: any };
+}
+/**
+ *
+ * @export
+ * @interface ExternalServiceMethod200Response
+ */
+export interface ExternalServiceMethod200Response {
+  /**
+   *
+   * @type {any}
+   * @memberof ExternalServiceMethod200Response
+   */
+  externalServiceMethodResponse: any;
+}
+/**
+ *
+ * @export
+ * @interface ExternalServiceMethodRequest
+ */
+export interface ExternalServiceMethodRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof ExternalServiceMethodRequest
+   */
+  providerName: ExternalServiceMethodRequestProviderNameEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof ExternalServiceMethodRequest
+   */
+  methodName: ExternalServiceMethodRequestMethodNameEnum;
+  /**
+   *
+   * @type {{ [key: string]: any; }}
+   * @memberof ExternalServiceMethodRequest
+   */
+  payload: { [key: string]: any };
+}
+
+export const ExternalServiceMethodRequestProviderNameEnum = {
+  Openai: "openai",
+  Mapbox: "mapbox",
+} as const;
+
+export type ExternalServiceMethodRequestProviderNameEnum =
+  (typeof ExternalServiceMethodRequestProviderNameEnum)[keyof typeof ExternalServiceMethodRequestProviderNameEnum];
+export const ExternalServiceMethodRequestMethodNameEnum = {
+  ForwardGeocoding: "forwardGeocoding",
+  ReverseGeocoding: "reverseGeocoding",
+  RetrieveDirections: "retrieveDirections",
+  RetrieveIsochrones: "retrieveIsochrones",
+  SuggestAddress: "suggestAddress",
+  RetrieveAddress: "retrieveAddress",
+  CanRetrieveAddress: "canRetrieveAddress",
+  RetrieveStaticMap: "retrieveStaticMap",
+  CreateImage: "createImage",
+  CompleteText: "completeText",
+} as const;
+
+export type ExternalServiceMethodRequestMethodNameEnum =
+  (typeof ExternalServiceMethodRequestMethodNameEnum)[keyof typeof ExternalServiceMethodRequestMethodNameEnum];
+
+/**
+ *
+ * @export
+ * @interface GetInvoices200Response
+ */
+export interface GetInvoices200Response {
+  /**
+   *
+   * @type {Array<StripeInvoice>}
+   * @memberof GetInvoices200Response
+   */
+  invoices: Array<StripeInvoice>;
 }
 /**
  *
@@ -153,15 +241,28 @@ export interface GetSubscriptionTierPrices200Response {
 /**
  *
  * @export
+ * @interface GetTaxId200Response
+ */
+export interface GetTaxId200Response {
+  /**
+   *
+   * @type {StripeTaxId}
+   * @memberof GetTaxId200Response
+   */
+  taxId?: StripeTaxId;
+}
+/**
+ *
+ * @export
  * @interface GetUpcomingInvoice200Response
  */
 export interface GetUpcomingInvoice200Response {
   /**
    *
-   * @type {StripeInvoice}
+   * @type {StripeUpcomingInvoice}
    * @memberof GetUpcomingInvoice200Response
    */
-  upcomingInvoice?: StripeInvoice;
+  upcomingInvoice: StripeUpcomingInvoice;
 }
 /**
  *
@@ -193,6 +294,38 @@ export interface ResourceInfo {
    * @memberof ResourceInfo
    */
   description: string;
+}
+/**
+ *
+ * @export
+ * @interface SetTaxId200Response
+ */
+export interface SetTaxId200Response {
+  /**
+   *
+   * @type {StripeTaxId}
+   * @memberof SetTaxId200Response
+   */
+  taxId: StripeTaxId;
+}
+/**
+ *
+ * @export
+ * @interface SetTaxIdRequest
+ */
+export interface SetTaxIdRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof SetTaxIdRequest
+   */
+  stripeTaxIdTypeShortCode: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SetTaxIdRequest
+   */
+  taxIdValue: string;
 }
 /**
  *
@@ -259,18 +392,7 @@ export type StatusContentsInner = ErrorInfo | ResourceInfo;
  * @interface StripeInvoice
  */
 export interface StripeInvoice {
-  /**
-   *
-   * @type {string}
-   * @memberof StripeInvoice
-   */
-  currency: string;
-  /**
-   *
-   * @type {number}
-   * @memberof StripeInvoice
-   */
-  amount_due: number;
+  [key: string]: any;
 }
 /**
  *
@@ -294,6 +416,22 @@ export interface StripePrice {
  * @interface StripeSubscription
  */
 export interface StripeSubscription {
+  [key: string]: any;
+}
+/**
+ *
+ * @export
+ * @interface StripeTaxId
+ */
+export interface StripeTaxId {
+  [key: string]: any;
+}
+/**
+ *
+ * @export
+ * @interface StripeUpcomingInvoice
+ */
+export interface StripeUpcomingInvoice {
   [key: string]: any;
 }
 /**
@@ -560,6 +698,45 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Delete the tax ID associated with the user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteTaxId: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/tax-id`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "DELETE",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary Detach an existing payment method from a BP user
      * @param {string} paymentMethodId The payment method ID
      * @param {*} [options] Override http request option.
@@ -594,6 +771,99 @@ export const DefaultApiAxiosParamCreator = function (
       if (paymentMethodId !== undefined) {
         localVarQueryParameter["paymentMethodId"] = paymentMethodId;
       }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Call an external service method
+     * @param {ExternalServiceMethodRequest} externalServiceMethodRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    externalServiceMethod: async (
+      externalServiceMethodRequest: ExternalServiceMethodRequest,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'externalServiceMethodRequest' is not null or undefined
+      assertParamExists(
+        "externalServiceMethod",
+        "externalServiceMethodRequest",
+        externalServiceMethodRequest,
+      );
+      const localVarPath = `/external-service-method`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "POST",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        externalServiceMethodRequest,
+        localVarRequestOptions,
+        configuration,
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Get all open or paid invoices
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getInvoices: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/invoices`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
@@ -728,21 +998,54 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Retrieve an upcoming invoice based on a new subscription tier
-     * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+     * @summary Get the tax ID of a user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTaxId: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/tax-id`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Retrieve an upcoming invoice
+     * @param {SubscriptionTier} [newSubscriptionTier] Calculate the upcoming invoice based on a new subscription tier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getUpcomingInvoice: async (
-      newSubscriptionTier: SubscriptionTier,
+      newSubscriptionTier?: SubscriptionTier,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
-      // verify required parameter 'newSubscriptionTier' is not null or undefined
-      assertParamExists(
-        "getUpcomingInvoice",
-        "newSubscriptionTier",
-        newSubscriptionTier,
-      );
       const localVarPath = `/upcoming-invoice`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -771,6 +1074,56 @@ export const DefaultApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Set the tax ID of a user
+     * @param {SetTaxIdRequest} setTaxIdRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    setTaxId: async (
+      setTaxIdRequest: SetTaxIdRequest,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'setTaxIdRequest' is not null or undefined
+      assertParamExists("setTaxId", "setTaxIdRequest", setTaxIdRequest);
+      const localVarPath = `/tax-id`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "PUT",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        setTaxIdRequest,
+        localVarRequestOptions,
+        configuration,
+      );
 
       return {
         url: toPathString(localVarUrlObj),
@@ -1014,6 +1367,30 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Delete the tax ID associated with the user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteTaxId(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<DeleteTaxId200Response>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTaxId(
+        options,
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
      * @summary Detach an existing payment method from a BP user
      * @param {string} paymentMethodId The payment method ID
      * @param {*} [options] Override http request option.
@@ -1033,6 +1410,58 @@ export const DefaultApiFp = function (configuration?: Configuration) {
           paymentMethodId,
           options,
         );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
+     * @summary Call an external service method
+     * @param {ExternalServiceMethodRequest} externalServiceMethodRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async externalServiceMethod(
+      externalServiceMethodRequest: ExternalServiceMethodRequest,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<ExternalServiceMethod200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.externalServiceMethod(
+          externalServiceMethodRequest,
+          options,
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
+     * @summary Get all open or paid invoices
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getInvoices(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetInvoices200Response>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getInvoices(
+        options,
+      );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -1112,13 +1541,37 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Retrieve an upcoming invoice based on a new subscription tier
-     * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+     * @summary Get the tax ID of a user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getTaxId(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetTaxId200Response>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getTaxId(
+        options,
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
+     * @summary Retrieve an upcoming invoice
+     * @param {SubscriptionTier} [newSubscriptionTier] Calculate the upcoming invoice based on a new subscription tier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getUpcomingInvoice(
-      newSubscriptionTier: SubscriptionTier,
+      newSubscriptionTier?: SubscriptionTier,
       options?: AxiosRequestConfig,
     ): Promise<
       (
@@ -1131,6 +1584,33 @@ export const DefaultApiFp = function (configuration?: Configuration) {
           newSubscriptionTier,
           options,
         );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
+     * @summary Set the tax ID of a user
+     * @param {SetTaxIdRequest} setTaxIdRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async setTaxId(
+      setTaxIdRequest: SetTaxIdRequest,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<SetTaxId200Response>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.setTaxId(
+        setTaxIdRequest,
+        options,
+      );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -1269,6 +1749,17 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary Delete the tax ID associated with the user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteTaxId(options?: any): AxiosPromise<DeleteTaxId200Response> {
+      return localVarFp
+        .deleteTaxId(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Detach an existing payment method from a BP user
      * @param {string} paymentMethodId The payment method ID
      * @param {*} [options] Override http request option.
@@ -1280,6 +1771,32 @@ export const DefaultApiFactory = function (
     ): AxiosPromise<UpdatePaymentMethod200Response> {
       return localVarFp
         .detachPaymentMethod(paymentMethodId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Call an external service method
+     * @param {ExternalServiceMethodRequest} externalServiceMethodRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    externalServiceMethod(
+      externalServiceMethodRequest: ExternalServiceMethodRequest,
+      options?: any,
+    ): AxiosPromise<ExternalServiceMethod200Response> {
+      return localVarFp
+        .externalServiceMethod(externalServiceMethodRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Get all open or paid invoices
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getInvoices(options?: any): AxiosPromise<GetInvoices200Response> {
+      return localVarFp
+        .getInvoices(options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -1321,17 +1838,43 @@ export const DefaultApiFactory = function (
     },
     /**
      *
-     * @summary Retrieve an upcoming invoice based on a new subscription tier
-     * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+     * @summary Get the tax ID of a user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTaxId(options?: any): AxiosPromise<GetTaxId200Response> {
+      return localVarFp
+        .getTaxId(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Retrieve an upcoming invoice
+     * @param {SubscriptionTier} [newSubscriptionTier] Calculate the upcoming invoice based on a new subscription tier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getUpcomingInvoice(
-      newSubscriptionTier: SubscriptionTier,
+      newSubscriptionTier?: SubscriptionTier,
       options?: any,
     ): AxiosPromise<GetUpcomingInvoice200Response> {
       return localVarFp
         .getUpcomingInvoice(newSubscriptionTier, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Set the tax ID of a user
+     * @param {SetTaxIdRequest} setTaxIdRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    setTaxId(
+      setTaxIdRequest: SetTaxIdRequest,
+      options?: any,
+    ): AxiosPromise<SetTaxId200Response> {
+      return localVarFp
+        .setTaxId(setTaxIdRequest, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -1423,6 +1966,17 @@ export interface DefaultApiInterface {
 
   /**
    *
+   * @summary Delete the tax ID associated with the user
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  deleteTaxId(
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<DeleteTaxId200Response>;
+
+  /**
+   *
    * @summary Detach an existing payment method from a BP user
    * @param {string} paymentMethodId The payment method ID
    * @param {*} [options] Override http request option.
@@ -1433,6 +1987,30 @@ export interface DefaultApiInterface {
     paymentMethodId: string,
     options?: AxiosRequestConfig,
   ): AxiosPromise<UpdatePaymentMethod200Response>;
+
+  /**
+   *
+   * @summary Call an external service method
+   * @param {ExternalServiceMethodRequest} externalServiceMethodRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  externalServiceMethod(
+    externalServiceMethodRequest: ExternalServiceMethodRequest,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<ExternalServiceMethod200Response>;
+
+  /**
+   *
+   * @summary Get all open or paid invoices
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getInvoices(
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<GetInvoices200Response>;
 
   /**
    *
@@ -1469,16 +2047,38 @@ export interface DefaultApiInterface {
 
   /**
    *
-   * @summary Retrieve an upcoming invoice based on a new subscription tier
-   * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+   * @summary Get the tax ID of a user
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getTaxId(options?: AxiosRequestConfig): AxiosPromise<GetTaxId200Response>;
+
+  /**
+   *
+   * @summary Retrieve an upcoming invoice
+   * @param {SubscriptionTier} [newSubscriptionTier] Calculate the upcoming invoice based on a new subscription tier
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
   getUpcomingInvoice(
-    newSubscriptionTier: SubscriptionTier,
+    newSubscriptionTier?: SubscriptionTier,
     options?: AxiosRequestConfig,
   ): AxiosPromise<GetUpcomingInvoice200Response>;
+
+  /**
+   *
+   * @summary Set the tax ID of a user
+   * @param {SetTaxIdRequest} setTaxIdRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  setTaxId(
+    setTaxIdRequest: SetTaxIdRequest,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<SetTaxId200Response>;
 
   /**
    *
@@ -1561,6 +2161,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
   /**
    *
+   * @summary Delete the tax ID associated with the user
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public deleteTaxId(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .deleteTaxId(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
    * @summary Detach an existing payment method from a BP user
    * @param {string} paymentMethodId The payment method ID
    * @param {*} [options] Override http request option.
@@ -1573,6 +2186,36 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   ) {
     return DefaultApiFp(this.configuration)
       .detachPaymentMethod(paymentMethodId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Call an external service method
+   * @param {ExternalServiceMethodRequest} externalServiceMethodRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public externalServiceMethod(
+    externalServiceMethodRequest: ExternalServiceMethodRequest,
+    options?: AxiosRequestConfig,
+  ) {
+    return DefaultApiFp(this.configuration)
+      .externalServiceMethod(externalServiceMethodRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Get all open or paid invoices
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getInvoices(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .getInvoices(options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -1617,18 +2260,48 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
   /**
    *
-   * @summary Retrieve an upcoming invoice based on a new subscription tier
-   * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+   * @summary Get the tax ID of a user
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getTaxId(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .getTaxId(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Retrieve an upcoming invoice
+   * @param {SubscriptionTier} [newSubscriptionTier] Calculate the upcoming invoice based on a new subscription tier
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
   public getUpcomingInvoice(
-    newSubscriptionTier: SubscriptionTier,
+    newSubscriptionTier?: SubscriptionTier,
     options?: AxiosRequestConfig,
   ) {
     return DefaultApiFp(this.configuration)
       .getUpcomingInvoice(newSubscriptionTier, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Set the tax ID of a user
+   * @param {SetTaxIdRequest} setTaxIdRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public setTaxId(
+    setTaxIdRequest: SetTaxIdRequest,
+    options?: AxiosRequestConfig,
+  ) {
+    return DefaultApiFp(this.configuration)
+      .setTaxId(setTaxIdRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

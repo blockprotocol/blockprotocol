@@ -88,6 +88,18 @@ export const customColors = {
     70: "#4D5C6C",
     80: "#37434F",
   },
+  pink: {
+    10: "#FFFAFC",
+    20: "#FEEDF3",
+    30: "#FED1E3",
+    40: "#FDB1D1",
+    50: "#FB91C1",
+    60: "#F15FA4",
+    70: "#E84694",
+    80: "#DA3285",
+    90: "#A81761",
+    100: "#850F4C",
+  },
   black: "#0E1114",
   white: "#FFFFFF",
 } as const;

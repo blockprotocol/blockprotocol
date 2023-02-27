@@ -72,3 +72,4 @@ libs/@blockprotocol/type-system/.rollup.cache
 libs/@blockprotocol/type-system/wasm
 libs/block-template-html/dev/src
 libs/mock-block-dock/src/version.ts
+

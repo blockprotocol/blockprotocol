@@ -1,5 +1,5 @@
 {
-  "description": "Define the properties the block expects to be passed.\nThey will be provided using the blockEntity callback of the graph service.",
+  "description": "Define the properties the block expects to be passed.\nThey will be provided using the blockEntity callback of the graph module.",
   "type": "object",
   "properties": {
     "name": {

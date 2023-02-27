@@ -36,13 +36,6 @@ const nextConfig = {
          * @see ./src/middleware.page.ts for middleware which serves the JSON
          */
         source: "/:shortname/types/:path*",
-        has: [
-          {
-            type: "header",
-            key: "accept",
-            value: "(.*application/json.*)",
-          },
-        ],
         headers: [
           {
             key: "access-control-allow-origin",
@@ -101,8 +94,23 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/docs/spec/graph-service-specification",
-        destination: "/docs/spec/graph-service",
+        source: "/docs/spec/graph-module-specification",
+        destination: "/docs/spec/graph-module",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/graph-service",
+        destination: "/docs/spec/graph-module",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/hook-service",
+        destination: "/docs/spec/hook-module",
+        permanent: true,
+      },
+      {
+        source: "/docs/embedding-blocks",
+        destination: "/docs/using-blocks",
         permanent: true,
       },
     ];
@@ -111,12 +119,16 @@ const nextConfig = {
   rewrites: () => {
     return [
       {
+        source: "/blocks/:shortname/:blockslug/block-metadata.json",
+        destination: "/api/rewrites/block-metadata",
+      },
+      {
         source: "/:shortname/blocks/:blockslug/sandboxed-demo",
         destination: "/api/rewrites/sandboxed-block-demo",
       },
       {
-        source: "/types/services/:servicename/:typename",
-        destination: "/types/services/:servicename/:typename.json",
+        source: "/types/modules/:modulename/:typename*",
+        destination: "/types/modules/:modulename/:typename*.json",
       },
       {
         source: "/types/core/:typename",

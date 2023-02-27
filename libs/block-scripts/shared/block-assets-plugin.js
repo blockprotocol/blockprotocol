@@ -4,7 +4,6 @@ import fs from "fs-extra";
 
 import { getPort } from "./config.js";
 import { generateDistBlockMetadata } from "./generate-dist-block-metadata.js";
-import { generateDistBlockSchema } from "./generate-dist-block-schema.js";
 import { generateDistExampleGraph } from "./generate-dist-example-graph.js";
 import { generateDistReadme } from "./generate-dist-readme.js";
 import { blockDistDirPath } from "./paths.js";
@@ -40,7 +39,6 @@ export class BlockAssetsPlugin {
 
       await Promise.all([
         generateDistBlockMetadata(metadataExtra),
-        generateDistBlockSchema(),
         generateDistReadme(),
         generateDistExampleGraph(),
       ]);

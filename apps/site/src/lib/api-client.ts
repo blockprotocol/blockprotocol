@@ -29,17 +29,40 @@ import {
   SubscribeEmailResponse,
 } from "../pages/api/subscribe-email.api";
 import {
-  ApiTypeUpdateRequest,
-  ApiTypeUpdateResponse,
-} from "../pages/api/types/[id]/update.api";
+  ApiEntityTypeCreateRequest,
+  ApiEntityTypeCreateResponse,
+} from "../pages/api/types/entity-type/create.api";
 import {
-  ApiTypeCreateRequest,
-  ApiTypeCreateResponse,
-} from "../pages/api/types/create.api";
+  ApiEntityTypeByUrlGetQuery,
+  ApiEntityTypeByUrlResponse,
+} from "../pages/api/types/entity-type/get.api";
+import {
+  ApiQueryEntityTypesQuery,
+  ApiQueryEntityTypesResponse,
+} from "../pages/api/types/entity-type/query.api";
+import {
+  ApiEntityTypeUpdateRequest,
+  ApiEntityTypeUpdateResponse,
+} from "../pages/api/types/entity-type/update.api";
+import {
+  ApiPropertyTypeCreateRequest,
+  ApiPropertyTypeCreateResponse,
+} from "../pages/api/types/property-type/create.api";
+import {
+  ApiPropertyTypeByUrlGetQuery,
+  ApiPropertyTypeByUrlResponse,
+} from "../pages/api/types/property-type/get.api";
+import {
+  ApiQueryPropertyTypesQuery,
+  ApiQueryPropertyTypesResponse,
+} from "../pages/api/types/property-type/query.api";
+import {
+  ApiPropertyTypeUpdateRequest,
+  ApiPropertyTypeUpdateResponse,
+} from "../pages/api/types/property-type/update.api";
 import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
 import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
-import { ApiTypeByUserAndTitleResponse } from "../pages/api/users/[shortname]/types/[title].api";
-import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/index.api";
+import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/entity-type/index.api";
 import {
   ApiVerifyEmailRequestBody,
   ApiVerifyEmailResponse,
@@ -143,25 +166,50 @@ export const apiClient = {
   getUserBlocks: ({ shortname }: { shortname: string }) =>
     apiClient.get<ApiBlocksByUserResponse>(`users/${shortname}/blocks`),
   getUserEntityTypes: ({ shortname }: { shortname: string }) =>
-    apiClient.get<ApiTypesByUserResponse>(`users/${shortname}/types`),
-  getEntityTypeByUserAndTitle: ({
-    title,
-    shortname,
-  }: {
-    title: string;
-    shortname: string;
-  }) =>
-    apiClient.get<ApiTypeByUserAndTitleResponse>(
-      `users/${shortname}/types/${title}`,
+    apiClient.get<ApiTypesByUserResponse>(
+      `users/${shortname}/types/entity-type`,
     ),
-  createEntityType: (requestData: ApiTypeCreateRequest) =>
-    apiClient.post<ApiTypeCreateRequest, ApiTypeCreateResponse>(
-      "types/create",
+  getEntityTypes: ({ latestOnly }: ApiQueryEntityTypesQuery) =>
+    apiClient.get<ApiQueryEntityTypesResponse>(
+      `types/entity-type/query?latestOnly=${latestOnly}`,
+    ),
+  getEntityTypeByUrl: ({ baseUrl, versionedUrl }: ApiEntityTypeByUrlGetQuery) =>
+    apiClient.get<ApiEntityTypeByUrlResponse>(
+      `types/entity-type/get?${
+        baseUrl ? `baseUrl=${baseUrl}` : `versionedUrl=${versionedUrl}`
+      }`,
+    ),
+  createEntityType: (requestData: ApiEntityTypeCreateRequest) =>
+    apiClient.post<ApiEntityTypeCreateRequest, ApiEntityTypeCreateResponse>(
+      "types/entity-type/create",
       requestData,
     ),
-  updateEntityType: (requestData: ApiTypeUpdateRequest, entityTypeId: string) =>
-    apiClient.put<ApiTypeUpdateRequest, ApiTypeUpdateResponse>(
-      `types/${entityTypeId}/update`,
+  updateEntityType: (requestData: ApiEntityTypeUpdateRequest) =>
+    apiClient.put<ApiEntityTypeUpdateRequest, ApiEntityTypeUpdateResponse>(
+      `types/entity-type/update`,
+      requestData,
+    ),
+  getPropertyTypes: ({ latestOnly }: ApiQueryPropertyTypesQuery) =>
+    apiClient.get<ApiQueryPropertyTypesResponse>(
+      `types/property-type/query?latestOnly=${latestOnly}`,
+    ),
+  getPropertyTypeByUrl: ({
+    baseUrl,
+    versionedUrl,
+  }: ApiPropertyTypeByUrlGetQuery) =>
+    apiClient.get<ApiPropertyTypeByUrlResponse>(
+      `types/property-type/get?${
+        baseUrl ? `baseUrl=${baseUrl}` : `versionedUrl=${versionedUrl}`
+      }`,
+    ),
+  createPropertyType: (requestData: ApiPropertyTypeCreateRequest) =>
+    apiClient.post<ApiPropertyTypeCreateRequest, ApiPropertyTypeCreateResponse>(
+      "types/property-type/create",
+      requestData,
+    ),
+  updatePropertyType: (requestData: ApiPropertyTypeUpdateRequest) =>
+    apiClient.put<ApiPropertyTypeUpdateRequest, ApiPropertyTypeUpdateResponse>(
+      `types/property-type/update`,
       requestData,
     ),
   signup: (requestData: ApiSignupRequestBody) =>

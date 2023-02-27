@@ -1,11 +1,14 @@
 import { Box } from "@mui/material";
 
-import { useMockBlockDockContext } from "../../mock-block-dock-context";
-import { DatastoreGraphVisualisation } from "./datastore-graph-visualisation";
+import {
+  useMockBlockDockNonTemporalContext,
+  useMockBlockDockTemporalContext,
+} from "../../mock-block-dock-context";
+import { DatastoreGraphVisualization } from "./datastore-graph-visualization";
 import { JsonView } from "./json-view";
 
-export const DataStoreView = () => {
-  const { datastore } = useMockBlockDockContext();
+const DataStoreViewNonTemporal = () => {
+  const { graph } = useMockBlockDockNonTemporalContext();
   return (
     <Box
       sx={{
@@ -18,21 +21,44 @@ export const DataStoreView = () => {
       }}
     >
       <JsonView
-        collapseKeys={[
-          "entities",
-          "entityTypes",
-          "links",
-          "linkedAggregations",
-        ]}
+        collapseKeys={["vertices", "edges"]}
         rootName="datastore"
         src={{
-          entities: datastore.entities,
-          entityTypes: datastore.entityTypes,
-          links: datastore.links,
-          linkedAggregations: datastore.linkedAggregationDefinitions,
+          vertices: graph.vertices,
+          edges: graph.edges,
         }}
       />
-      <DatastoreGraphVisualisation />
+      <DatastoreGraphVisualization temporal={false} />
     </Box>
   );
+};
+
+const DataStoreViewTemporal = () => {
+  const { graph } = useMockBlockDockTemporalContext();
+  return (
+    <Box
+      sx={{
+        minHeight: "100%",
+        display: "flex",
+        flexDirection: {
+          xs: "column-reverse",
+          lg: "row",
+        },
+      }}
+    >
+      <JsonView
+        collapseKeys={["vertices", "edges"]}
+        rootName="datastore"
+        src={{
+          vertices: graph.vertices,
+          edges: graph.edges,
+        }}
+      />
+      <DatastoreGraphVisualization temporal />
+    </Box>
+  );
+};
+
+export const DataStoreView = ({ temporal }: { temporal: boolean }) => {
+  return temporal ? <DataStoreViewTemporal /> : <DataStoreViewNonTemporal />;
 };

@@ -1,5 +1,9 @@
 import { BlockVariant } from "@blockprotocol/core";
-import { Entity } from "@blockprotocol/graph";
+import {
+  Entity,
+  EntityTemporalVersioningMetadata,
+} from "@blockprotocol/graph/temporal";
+import { VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
   Box,
   FormControlLabel,
@@ -11,7 +15,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Validator } from "jsonschema";
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
@@ -34,11 +37,9 @@ type BlockDataContainerProps = {
   exampleGraph: BlockExampleGraph | null;
 };
 
-const validator = new Validator();
-
-/** Blocks that aren't compliant with BP V0.2  */
+/** Blocks that aren't compliant with BP V0.3  */
 const checkIfBlockIsSupported = ({ protocol }: BlockMetadata) =>
-  protocol === "0.2";
+  protocol === "0.3";
 
 export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   metadata,
@@ -136,30 +137,59 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   }, [blockVariantsTab, metadata?.examples, metadata?.variants, text]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
-  const [props, errors] = useMemo<[Entity<any> | undefined, string[]]>(() => {
-    const result = {
-      entityId: exampleEntityId,
-      properties: {},
+  const [props, errors] = useMemo<
+    [{ blockEntity: Entity; readonly: boolean } | undefined, string[]]
+  >(() => {
+    const intervalForAllTime =
+      (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {
+        return {
+          start: {
+            kind: "inclusive",
+            limit: new Date(0).toISOString(),
+          },
+          end: {
+            kind: "unbounded",
+          },
+        } as const;
+      };
+
+    const result: { blockEntity: Entity; readonly: boolean } = {
+      blockEntity: {
+        metadata: {
+          entityTypeId: metadata.schema as VersionedUrl,
+          recordId: {
+            entityId: exampleEntityId,
+            editionId: new Date(0).toISOString(),
+          },
+          temporalVersioning: {
+            transactionTime: intervalForAllTime(),
+            decisionTime: intervalForAllTime(),
+          },
+        },
+        properties: {},
+      },
       readonly,
     };
 
     try {
-      Object.assign(result.properties, JSON.parse(text));
+      Object.assign(result.blockEntity.properties, JSON.parse(text));
     } catch (err) {
       return [result, [(err as Error).message]];
     }
 
-    const errorsToEat = ["uploadFile", "getEmbedBlock"];
+    // const errorsToEat = ["uploadFile", "getEmbedBlock"];
 
-    const errorMessages = validator
-      .validate(result.properties, schema ?? {})
-      .errors.map((err) => `ValidationError: ${err.stack}`)
-      .filter(
-        (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),
-      );
+    const errorMessages: string[] = [];
+    // @todo-0.3 validating this requires fetching the entire schema for the block
+    // const errorMessages = validator
+    //   .validate(result.properties, schema ?? {})
+    //   .errors.map((err) => `ValidationError: ${err.stack}`)
+    //   .filter(
+    //     (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),
+    //   );
 
     return [result, errorMessages];
-  }, [exampleEntityId, text, schema, readonly]);
+  }, [exampleEntityId, metadata.schema, text, readonly]);
 
   return (
     <>

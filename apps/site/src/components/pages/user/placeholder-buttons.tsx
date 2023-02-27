@@ -18,7 +18,7 @@ export const BuildBlockButton: FunctionComponent = () => {
   );
 };
 
-export const CreateSchemaButton: FunctionComponent<{
+export const CreateEntityTypeButton: FunctionComponent<{
   onClick: () => void;
 }> = ({ onClick }) => {
   return (
@@ -28,7 +28,7 @@ export const CreateSchemaButton: FunctionComponent<{
       onClick={onClick}
       startIcon={<TableTreeIcon />}
     >
-      Create a schema
+      Create an Entity Type
     </Button>
   );
 };

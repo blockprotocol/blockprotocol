@@ -25,6 +25,7 @@
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
     "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/cleanup-before-publishing.ts",
+    "schema": "block-scripts codegen",
     "serve": "block-scripts serve"
   },
   "prettier": {
@@ -41,8 +42,8 @@
     "eslint": "8.33.0",
     "mock-block-dock": "0.0.40",
     "prettier": "2.8.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -64,6 +65,7 @@
     "icon": "public/omega.svg",
     "image": "public/block-preview.png",
     "name": "block-template-react",
-    "protocol": "0.2"
+    "protocol": "0.3",
+    "schema": "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/entity-type/thing/v/2"
   }
 }
