@@ -141,7 +141,7 @@ export const UsageLimitSection: FunctionComponent = () => {
   }, [debouncedUsageLimit, usageLimit, actionState]);
 
   return (
-    <>
+    <Box marginBottom={6}>
       <Typography
         variant="bpHeading2"
         sx={{ fontSize: 28, fontWeight: 400, marginBottom: 1 }}
@@ -188,6 +188,6 @@ export const UsageLimitSection: FunctionComponent = () => {
         onChange={handleLimitChange}
         placeholder="Leave blank, or enter an amount - e.g. 10.00"
       />
-    </>
+    </Box>
   );
 };

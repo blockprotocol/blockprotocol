@@ -10,7 +10,7 @@ import { Placeholder } from "./placeholder";
 import {
   BrowseHubButton,
   BuildBlockButton,
-  CreateSchemaButton,
+  CreateEntityTypeButton,
 } from "./placeholder-buttons";
 import { useUserStatus } from "./use-user-status";
 
@@ -41,7 +41,9 @@ export const TabPanelContentsWithOverview: FunctionComponent<
           actions={
             <>
               <BuildBlockButton />
-              <CreateSchemaButton onClick={() => setSchemaModalOpen(true)} />
+              <CreateEntityTypeButton
+                onClick={() => setSchemaModalOpen(true)}
+              />
             </>
           }
         />

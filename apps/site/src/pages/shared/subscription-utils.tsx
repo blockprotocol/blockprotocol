@@ -38,14 +38,22 @@ export const priceToHumanReadable = ({
     : amount.toString();
 };
 
-export const dateToHumanReadable = (date: Date) => {
+export const dateToHumanReadable = (
+  date: Date,
+  deliminator: string = "/",
+  reverse: boolean = false,
+) => {
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
 
-  return `${day < 10 ? "0" : ""}${day}/${
-    month < 10 ? "0" : ""
-  }${month}/${year}`;
+  const dateArray = [
+    `${day < 10 ? "0" : ""}${day}`,
+    `${month < 10 ? "0" : ""}${month}`,
+    year,
+  ];
+
+  return (reverse ? dateArray.reverse() : dateArray).join(deliminator);
 };
 
 const cardBrands = {

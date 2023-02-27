@@ -1,6 +1,6 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Box, Card, Grid, Typography } from "@mui/material";
-import { FunctionComponent, useMemo } from "react";
+import { FunctionComponent, useEffect, useMemo } from "react";
 
 import { FontAwesomeIcon } from "../../../components/icons";
 import { MapboxIcon } from "../../../components/icons/mapbox-icon";
@@ -13,6 +13,7 @@ import {
 } from "../../shared/subscription-utils";
 import { useBillingPageContext } from "./billing-page-context";
 import { FreeOrHobbySubscriptionTierOverview } from "./free-or-hobby-subscription-tier-overview";
+import { PaymentHistorySection } from "./payment-history-section";
 import { PaymentMethod } from "./payment-method";
 import { paymentMethodsPanelPageAsPath } from "./payment-methods";
 import { ProSubscriptionTierOverview } from "./pro-subscription-tier-overview";
@@ -22,9 +23,27 @@ import { UsageLimitSection } from "./usage-limit-section";
 export const billingOverviewPanelPageAsPath = "/settings/billing";
 
 export const BillingOverviewPanelPage: FunctionComponent = () => {
-  const { user } = useUser();
+  const { user, refetch } = useUser();
   const { paymentMethods, subscription, subscriptionTierPrices } =
     useBillingPageContext();
+
+  useEffect(() => {
+    /**
+     * If the `user` has a subscription status but not a subscription
+     * ID, the `stripeSubscriptionStatus` was manually populated by
+     * another page due to a race-condition with the stripe webhook.
+     *
+     * Therefore we should refetch the `user` in one second to obtain
+     * the correct user record.
+     */
+    if (
+      typeof user === "object" &&
+      user.stripeSubscriptionStatus &&
+      !user.stripeSubscriptionId
+    ) {
+      setTimeout(() => refetch(), 1000);
+    }
+  }, [user, refetch]);
 
   const defaultSubscriptionPaymentMethod = useMemo(() => {
     return paymentMethods?.find(
@@ -42,7 +61,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       : "free";
   }, [user]);
 
-  const hasStripeSubscriptionId = useMemo(
+  const userHasStripeSubscription = useMemo(
     () => user && typeof user !== "string" && !!user.stripeSubscriptionId,
     [user],
   );
@@ -209,19 +228,11 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
           />
         )}
       </Box>
-      {hasStripeSubscriptionId && (
-        <Box marginBottom={6}>
-          <UsageLimitSection />
-        </Box>
-      )}
+      {userHasStripeSubscription && <UsageLimitSection />}
       {currentSubscriptionTierIsPaid && <TaxIdSection />}
-      <Typography
-        variant="bpHeading2"
-        sx={{ fontSize: 28, fontWeight: 400, marginBottom: 3 }}
-      >
-        Payment History
-      </Typography>
-      {/* @todo: implement "payment history" section of billing panel @see https://app.asana.com/0/1203543021352041/1203781148500078/f */}
+      <PaymentHistorySection
+        userHasStripeSubscription={userHasStripeSubscription ?? false}
+      />
     </>
   );
 };
