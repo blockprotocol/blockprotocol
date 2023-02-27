@@ -9,7 +9,7 @@ import tar from "tar";
 import tmp from "tmp-promise";
 
 import { ExpandedBlockMetadata } from "../../blocks";
-import { getDbBlock, insertDbBlock, updateDbBlock } from "./db";
+import { getDbBlock, upsertBlockToDb } from "./db";
 import { validateExpandAndUploadBlockFiles } from "./s3";
 
 /**
@@ -147,9 +147,7 @@ export const publishBlockFromNpm = async (
     pathWithNamespace,
   });
 
-  await (createdAt
-    ? updateDbBlock(expandedMetadata)
-    : insertDbBlock(expandedMetadata));
+  await upsertBlockToDb(expandedMetadata);
 
   return expandedMetadata;
 };

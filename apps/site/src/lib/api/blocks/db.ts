@@ -1,3 +1,6 @@
+import groupBy from "lodash/groupBy";
+import semverRCompare from "semver/functions/rcompare";
+
 import { ExpandedBlockMetadata } from "../../blocks";
 import { connectToDatabase } from "../mongodb";
 import { blockDownloadsCollectionName, blocksDbCollectionName } from "./shared";
@@ -28,7 +31,12 @@ const weeklyDownloadCountAggregationStage = [
   { $project: { weeklyDownloads: 0, ...defaultProjection } },
 ];
 
-export const getDbBlocks = async (filter: { shortname?: string }) => {
+const pickLatestVersion = (
+  blocks: ExpandedBlockMetadata[],
+): ExpandedBlockMetadata | null =>
+  [...blocks].sort((a, b) => semverRCompare(a.version, b.version))[0] ?? null;
+
+export const getDbBlocksVersions = async (filter: { shortname?: string }) => {
   const { db } = await connectToDatabase();
 
   return db
@@ -42,7 +50,20 @@ export const getDbBlocks = async (filter: { shortname?: string }) => {
     .toArray();
 };
 
-export const getDbBlock = async (
+export const getDbBlocks = async (filter: {
+  shortname?: string;
+}): Promise<ExpandedBlockMetadata[]> => {
+  const groupedBlocks = Object.values(
+    groupBy(
+      await getDbBlocksVersions(filter),
+      ({ author, name }) => `${author}/${name}`,
+    ),
+  );
+
+  return groupedBlocks.map((blocks) => pickLatestVersion(blocks)!);
+};
+
+export const getDbBlockVersions = async (
   filter:
     | {
         author: string;
@@ -52,39 +73,33 @@ export const getDbBlock = async (
 ) => {
   const { db } = await connectToDatabase();
 
-  const results = await db
-    .collection(blocksDbCollectionName)
-    .aggregate<ExpandedBlockMetadata>([
-      { $match: filter },
-      ...weeklyDownloadCountAggregationStage,
-    ])
-    .toArray();
-
-  return results[0] ?? null;
+  return (
+    (await db
+      .collection(blocksDbCollectionName)
+      .aggregate<ExpandedBlockMetadata>([
+        { $match: filter },
+        ...weeklyDownloadCountAggregationStage,
+      ])
+      .toArray()) ?? null
+  );
 };
 
-export const insertDbBlock = async (block: ExpandedBlockMetadata) => {
+/** Returns the latest available block version (highest semver value) */
+export const getDbBlock = async (
+  filter:
+    | {
+        author: string;
+        name: string;
+      }
+    | { npmPackageName: string },
+) => pickLatestVersion(await getDbBlockVersions(filter));
+
+export const upsertBlockToDb = async (block: ExpandedBlockMetadata) => {
   const { db } = await connectToDatabase();
 
-  await db
+  const { author, name, version } = block;
+
+  return await db
     .collection<ExpandedBlockMetadata>(blocksDbCollectionName)
-    .insertOne(block);
-
-  return block;
-};
-
-export const updateDbBlock = async (block: ExpandedBlockMetadata) => {
-  const { db } = await connectToDatabase();
-
-  const { author, name } = block;
-
-  const { value: updatedBlock } = await db
-    .collection<ExpandedBlockMetadata>(blocksDbCollectionName)
-    .findOneAndUpdate(
-      { author, name },
-      { $set: block },
-      { returnDocument: "after", projection: defaultProjection },
-    );
-
-  return updatedBlock;
+    .replaceOne({ author, name, version }, block, { upsert: true });
 };

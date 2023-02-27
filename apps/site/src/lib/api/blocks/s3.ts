@@ -186,13 +186,9 @@ export const validateExpandAndUploadBlockFiles = async ({
   const { metadataJson, metadataJsonPath, includesExampleGraph } =
     await validateBlockFiles(localFolderPath);
 
-  /**
-   * In future we will store each version in its own folder, and add the version to the folder path
-   * @see https://app.asana.com/0/0/1202539910143057/f (internal)
-   */
   const remoteStoragePrefix = resolveS3ResourceKey(
-    "blocks",
-    stripLeadingAt(pathWithNamespace),
+    "block-contents",
+    `${stripLeadingAt(pathWithNamespace)}/${metadataJson.version}`,
   );
 
   const sourceInformation = {

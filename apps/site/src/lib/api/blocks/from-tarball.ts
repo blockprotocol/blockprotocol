@@ -6,7 +6,7 @@ import tar from "tar";
 import tmp from "tmp-promise";
 
 import { ExpandedBlockMetadata } from "../../blocks";
-import { insertDbBlock, updateDbBlock } from "./db";
+import { upsertBlockToDb } from "./db";
 import {
   uploadOriginalTarballToS3,
   validateExpandAndUploadBlockFiles,
@@ -96,9 +96,8 @@ export const publishBlockFromTarball = async (
       tarballFilePath,
     });
 
-    await (createdAt
-      ? updateDbBlock(expandedMetadata)
-      : insertDbBlock(expandedMetadata));
+    await upsertBlockToDb(expandedMetadata);
+
     return expandedMetadata;
   } finally {
     await cleanupDistFolder();
