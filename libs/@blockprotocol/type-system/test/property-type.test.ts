@@ -7,6 +7,8 @@ import {
 
 const propertyTypes: PropertyType[] = [
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/age/v/1",
     title: "Age",
@@ -17,6 +19,8 @@ const propertyTypes: PropertyType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/contact-information/v/1",
     title: "Contact Information",
@@ -40,6 +44,8 @@ const propertyTypes: PropertyType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/contrived-property/v/1",
     title: "Contrived Property",
@@ -61,6 +67,8 @@ const propertyTypes: PropertyType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/favorite-quote/v/1",
     title: "Favorite Quote",
@@ -71,6 +79,8 @@ const propertyTypes: PropertyType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/interests/v/1",
     title: "Interests",
@@ -98,6 +108,8 @@ const propertyTypes: PropertyType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
     title: "Name",
@@ -108,6 +120,8 @@ const propertyTypes: PropertyType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/numbers/v/1",
     title: "Numbers",
@@ -125,6 +139,8 @@ const propertyTypes: PropertyType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/text/v/1",
     title: "Text",
@@ -135,6 +151,8 @@ const propertyTypes: PropertyType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/user-id/v/1",
     title: "User ID",
@@ -145,6 +163,8 @@ const propertyTypes: PropertyType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/user-id/v/2",
     title: "User ID",
@@ -165,6 +185,8 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
   [
     "non-integer version",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
       kind: "propertyType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1.4",
       title: "Broken",
@@ -184,6 +206,8 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
   [
     "invalid base URL",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
       kind: "propertyType",
       $id: "https://  /broken/v/1",
       title: "Broken",
@@ -207,6 +231,8 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
   [
     "invalid ref",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
       kind: "propertyType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       title: "Broken",
@@ -236,6 +262,8 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
   [
     "invalid property type object",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
       kind: "propertyType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       title: "Broken",
@@ -276,18 +304,20 @@ const brokenTypes: [any, ParsePropertyTypeError][] = [
     {},
     {
       reason: "InvalidJson",
-      inner: "missing field `kind` at line 1 column 2",
+      inner: "missing field `$schema` at line 1 column 2",
     },
   ],
   [
     { foo: "bar" },
     {
       reason: "InvalidJson",
-      inner: "missing field `kind` at line 1 column 13",
+      inner: "missing field `$schema` at line 1 column 13",
     },
   ],
   [
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
       kind: "propertyType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/empty-one-of/v/1",
       title: "Broken",
@@ -301,6 +331,23 @@ const brokenTypes: [any, ParsePropertyTypeError][] = [
           type: "EmptyOneOf",
         },
       },
+    },
+  ],
+  [
+    {
+      $schema: "https://blockprotocol.org/types/modules/graph/0.3/schema/foo",
+      kind: "propertyType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/invalid-meta-schema/v/1",
+      title: "Broken",
+      oneOf: [
+        {
+          $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+        },
+      ],
+    },
+    {
+      reason: "InvalidMetaSchema",
+      inner: "https://blockprotocol.org/types/modules/graph/0.3/schema/foo",
     },
   ],
 ];

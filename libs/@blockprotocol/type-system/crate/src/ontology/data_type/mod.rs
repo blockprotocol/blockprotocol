@@ -1,8 +1,3 @@
-mod error;
-pub(in crate::ontology) mod repr;
-#[cfg(target_arch = "wasm32")]
-mod wasm;
-
 use std::collections::HashMap;
 
 pub use error::ParseDataTypeError;
@@ -11,6 +6,11 @@ use crate::{
     url::{BaseUrl, VersionedUrl},
     ValidateUrl, ValidationError,
 };
+
+mod error;
+pub(in crate::ontology) mod repr;
+#[cfg(target_arch = "wasm32")]
+mod wasm;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DataType {
@@ -175,10 +175,30 @@ mod tests {
     }
 
     #[test]
+    fn invalid_schema() {
+        let invalid_schema_url = "https://blockprotocol.org/types/modules/graph/0.3/schema/foo";
+
+        ensure_failed_validation::<repr::DataType, DataType>(
+            &json!(
+                {
+                  "$schema": invalid_schema_url,
+                  "kind": "dataType",
+                  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+                  "title": "Text",
+                  "description": "An ordered sequence of characters",
+                  "type": "string"
+                }
+            ),
+            ParseDataTypeError::InvalidMetaSchema(invalid_schema_url.to_owned()),
+        );
+    }
+
+    #[test]
     fn invalid_id() {
         ensure_failed_validation::<repr::DataType, DataType>(
             &json!(
                 {
+                  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
                   "kind": "dataType",
                   "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1.5",
                   "title": "Text",

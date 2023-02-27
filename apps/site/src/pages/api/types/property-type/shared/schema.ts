@@ -1,5 +1,9 @@
-import { PropertyTypeWithMetadata } from "@blockprotocol/graph";
-import { PropertyType } from "@blockprotocol/type-system";
+/*
+ @todo - We should be able to import from the `@blockprotocol/graph` package here but we're running into strange errors
+   with named exports, CommonJS, and ESM modules from the dependency on `/core`
+ */
+import { PropertyType, PropertyTypeWithMetadata } from "@blockprotocol/graph";
+import { PROPERTY_TYPE_META_SCHEMA } from "@blockprotocol/type-system/slim";
 
 import { generateOntologyUrl } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";
@@ -25,11 +29,12 @@ export const generatePropertyTypeWithMetadata = (data: {
   });
 
   const propertyType: Required<PropertyType> = {
+    $schema: PROPERTY_TYPE_META_SCHEMA,
     $id: versionedUrl,
-    description: incompleteSchema.description ?? "",
-    oneOf: incompleteSchema.oneOf ?? [],
     kind,
     title: incompleteSchema.title,
+    description: incompleteSchema.description ?? "",
+    oneOf: incompleteSchema.oneOf ?? [],
   };
 
   return {

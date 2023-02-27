@@ -5,7 +5,7 @@
   "description": "Specifies the structure of a Data Type",
   "type": "object",
   "properties": {
-    "schema": {
+    "$schema": {
       "type": "string",
       "const": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type"
     },

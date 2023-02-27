@@ -9,6 +9,8 @@ use crate::{
     ParseDataTypeError,
 };
 
+const META_SCHEMA_ID: &str = "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type";
+
 /// Will serialize as a constant value `"dataType"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -20,6 +22,12 @@ enum DataTypeTag {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DataType {
+    #[cfg_attr(
+        target_arch = "wasm32",
+        tsify(type = "'https://blockprotocol.org/types/modules/graph/0.3/schema/data-type'")
+    )]
+    #[serde(rename = "$schema")]
+    schema: String,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'dataType'"))]
     kind: DataTypeTag,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
@@ -47,6 +55,10 @@ impl TryFrom<DataType> for super::DataType {
         let id = VersionedUrl::from_str(&data_type_repr.id)
             .map_err(ParseDataTypeError::InvalidVersionedUrl)?;
 
+        if data_type_repr.schema != META_SCHEMA_ID {
+            return Err(ParseDataTypeError::InvalidMetaSchema(data_type_repr.schema));
+        }
+
         Ok(Self::new(
             id,
             data_type_repr.title,
@@ -60,6 +72,7 @@ impl TryFrom<DataType> for super::DataType {
 impl From<super::DataType> for DataType {
     fn from(data_type: super::DataType) -> Self {
         Self {
+            schema: META_SCHEMA_ID.to_owned(),
             kind: DataTypeTag::DataType,
             id: data_type.id.to_string(),
             title: data_type.title,
