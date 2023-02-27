@@ -39,6 +39,7 @@ export type SerializedUser = {
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
   stripeSubscriptionTier?: "hobby" | "pro";
   canMakeApiServiceCalls?: boolean;
+  usageLimitCents?: number;
 };
 
 export type UserProperties = {
@@ -52,6 +53,7 @@ export type UserProperties = {
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
   stripeSubscriptionTier?: "hobby" | "pro";
   canMakeApiServiceCalls?: boolean;
+  usageLimitCents?: number;
 };
 
 export type UserAvatarProperties = {
@@ -83,6 +85,7 @@ export class User {
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
   stripeSubscriptionTier?: "hobby" | "pro";
   canMakeApiServiceCalls?: boolean;
+  usageLimitCents?: number;
 
   static COLLECTION_NAME = "bp-users";
 
@@ -111,6 +114,7 @@ export class User {
     this.stripeSubscriptionStatus = args.stripeSubscriptionStatus;
     this.stripeSubscriptionTier = args.stripeSubscriptionTier;
     this.canMakeApiServiceCalls = args.canMakeApiServiceCalls;
+    this.usageLimitCents = args.usageLimitCents;
   }
 
   private static isShortnameReserved(shortname: string): boolean {
@@ -483,6 +487,7 @@ export class User {
       stripeSubscriptionStatus: this.stripeSubscriptionStatus,
       stripeSubscriptionTier: this.stripeSubscriptionTier,
       canMakeApiServiceCalls: this.canMakeApiServiceCalls,
+      usageLimitCents: this.usageLimitCents,
     };
   }
 }
