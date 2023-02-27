@@ -51,11 +51,13 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     yarn dev:db
     ```
 
-1.  **On first run**, or if you want to reset app data, seed the database in a separate terminal using:
+1.  **On first run**, or if you want to reset app data, seed the database and the static object storage in a separate terminal using:
 
     ```sh
     yarn dev:seed-db
     ```
+
+    This command initializes a couple of demo users and blocks. Selected blocks are mirrored from [blockprotocol.org/hub](https://blockprotocol.org/hub).
 
 1.  Run the Next.js app in a separate terminal using:
 
