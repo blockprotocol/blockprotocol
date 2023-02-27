@@ -151,8 +151,8 @@ Concrete examples of how JSON Schema breaks with these validation constraints ar
 
 ## Defining extended entity types
 
-Extended types will be defined with conventional JSON Schema syntax: the `allOf` keyword. An entity type can extend another entity type by adding a versioned URI reference to the root-level `allOf` array.
-A [versioned URI](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0408-versioning-types.md#type-uris) is used so that subtypes aren't automatically updated (and potentially invalidated) when the supertype is updated.
+Extended types will be defined with conventional JSON Schema syntax: the `allOf` keyword. An entity type can extend another entity type by adding a versioned URL reference to the root-level `allOf` array.
+A [versioned URL](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0408-versioning-types.md#type-uris) is used so that subtypes aren't automatically updated (and potentially invalidated) when the supertype is updated.
 
 As extended types can extend other extended types we must also make sure that there are no cycles within the type hierarchy, as it makes types difficult to resolve/reason about and could lead to unpredictable behavior.
 
@@ -546,7 +546,7 @@ Subtypes in the system can be used in place of the supertypes that they extend, 
 
 The Block Protocol meta schemas don't need to change to support type duplication as we're copying types and giving them a new identifier.
 
-When duplicating a type, the new type will have an entirely different URI and potentially a new `title`. The new type can be modified without any restrictions.
+When duplicating a type, the new type will have an entirely different URL and potentially a new `title`. The new type can be modified without any restrictions.
 
 As outlined in the [Guide-level explanation](#duplication-strategy), there may be different locations where type duplication can take effect. To maximize reusability, embedding applications should maximize supertype reuse and only duplicate parts of type hierarchies that are necessary to resolve property changes.
 
@@ -679,7 +679,7 @@ As the intermediate expanded entity type does not declare any supertypes, we are
 
 > 💭 Because of how verisoning is specified in the [versioning RFC](./0408-versioning-types.md), entity types cannot create proper dependency cyles. The dependency cycles explained below are not about the literal type hierarchy, but rather about indirection and obfuscation of types and potential incompatabiliites that can be introduced. Cycles across type versions can still result in valid types because the types are immutable and that we are dealing with composition.
 
-An extension cycle happens when a part of an inheritance tree revisits a base URI it has already seen. As a contrived example, an entity type `Country` could be the supertype of `Region`, which in turn could be a supertype of the same `Country` entity type.
+An extension cycle happens when a part of an inheritance tree revisits a base URL it has already seen. As a contrived example, an entity type `Country` could be the supertype of `Region`, which in turn could be a supertype of the same `Country` entity type.
 
 First entity type version of `Country` without supertype:
 
@@ -750,12 +750,12 @@ In this specific contrived example, creating a new entity type based on `Region`
 
 As described in the [Guide-level explanation](#multiple-supertypes), when extending multiple entity types, they must be able to coexist in a "compatible manner", which means that the entity types' `properties` and `links` comply with the following:
 
-- For each property (base URI on the top level of `properties`) that exists in multiple entity types:
+- For each property (base URL on the top level of `properties`) that exists in multiple entity types:
 
-  - all entity types refer to the same versioned URI of the property type **or** compatible versions of the property type (through the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) definition of 'compatible')
+  - all entity types refer to the same versioned URL of the property type **or** compatible versions of the property type (through the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) definition of 'compatible')
   - none of the entity types define the property type as an array **or** all define the property type as an array with compatible cardinality constraints.
 
-- For each link (versioned URI on the top level of `links`) that exists in multiple entity types:
+- For each link (versioned URL on the top level of `links`) that exists in multiple entity types:
 
   - none of the entity types define the link as an array **or** all define the link as an array with compatible cardinality constraints (and same `order` value).
 
@@ -925,7 +925,7 @@ Here, referencing `https://example.com/schema` in a `$ref` will result in a _clo
 
 (Thanks Jason Desrosiers for the suggestions!)
 
-Using the above setup would mean that we need to specify `#open` at the end of type URIs when URIs appear in `allOf`. We would also need to serve type schemas with one of the above structures, such that they conform with JSON Schema. Although this does add some ceremony around extending types, we would end up with a type extension system that would conform to JSON Schema without implicitness or redefining keyword semantics.
+Using the above setup would mean that we need to specify `#open` at the end of type URLs when URLs appear in `allOf`. We would also need to serve type schemas with one of the above structures, such that they conform with JSON Schema. Although this does add some ceremony around extending types, we would end up with a type extension system that would conform to JSON Schema without implicitness or redefining keyword semantics.
 
 # Prior art
 
