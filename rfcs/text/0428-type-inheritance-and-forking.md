@@ -231,8 +231,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
         "properties": {
           "$ref": {
             "$comment": "Valid reference to an existing Entity Type version",
-            "type": "string",
-            "format": "uri"
+            "$ref": "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
           },
           "additionalProperties": false
         }
