@@ -4,7 +4,7 @@ import { css, html } from "lit";
 import { RootEntity } from "./types.gen";
 
 const nameKey: keyof RootEntity["properties"] =
-  "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/";
+  "https://blockprotocol.org/@blockprotocol/types/property-type/name/";
 
 /**
  * This is the entry point for your block – the class that embedding applications will use to register your element.
