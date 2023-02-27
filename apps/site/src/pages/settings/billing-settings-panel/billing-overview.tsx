@@ -18,6 +18,7 @@ import { PaymentMethod } from "./payment-method";
 import { paymentMethodsPanelPageAsPath } from "./payment-methods";
 import { ProSubscriptionTierOverview } from "./pro-subscription-tier-overview";
 import { TaxIdSection } from "./tax-id-section";
+import { UsageLimitSection } from "./usage-limit-section";
 
 export const billingOverviewPanelPageAsPath = "/settings/billing";
 
@@ -227,14 +228,8 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
           />
         )}
       </Box>
+      {userHasStripeSubscription && <UsageLimitSection />}
       {currentSubscriptionTierIsPaid && <TaxIdSection />}
-      <Typography
-        variant="bpHeading2"
-        sx={{ fontSize: 28, fontWeight: 400, marginBottom: 3 }}
-      >
-        Usage Limits
-      </Typography>
-      {/* @todo: implement "usage limits" input @see https://app.asana.com/0/0/1203781148500077/f */}
       <PaymentHistorySection
         userHasStripeSubscription={userHasStripeSubscription ?? false}
       />
