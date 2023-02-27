@@ -5,8 +5,6 @@ import {
   BlockMetadataRepository,
   JsonObject,
 } from "@blockprotocol/core";
-import fs from "fs-extra";
-import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 import sanitize from "sanitize-html";
 
