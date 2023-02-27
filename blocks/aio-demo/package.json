@@ -33,7 +33,10 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.2.2"
+    "@blockprotocol/graph": "0.2.2",
+    "@blockprotocol/type-system": "0.1.1",
+    "chalk": "5.2.0",
+    "fs-extra": "^10.1.0"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
@@ -70,6 +73,16 @@
         "block-entity.ts": [
           {
             "blockEntityType": true
+          }
+        ],
+        "company.ts": [
+          {
+            "sourceTypeId": "https://blockprotocol.org/@examples/types/entity-type/person/v/1"
+          }
+        ],
+        "person.ts": [
+          {
+            "sourceTypeId": "https://blockprotocol.org/@examples/types/entity-type/person/v/1"
           }
         ]
       }
