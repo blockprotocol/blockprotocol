@@ -786,7 +786,7 @@ To illustrate what this means, given we have a subtype `C` that extends supertyp
 
 ## Block Protocol implications
 
-As mentioned [here](#addressing-previous-considerations), we want to make use of complete schemas for updates instead of partial schemas. In practice for the Block Protocol this makes it so the following update request using a partial schema:
+As [mentioned above](#addressing-previous-considerations), we want to make use of complete schemas for updates instead of partial schemas. In practice for the Block Protocol, this makes it so the following update request using a partial schema:
 
 ```json
 {
