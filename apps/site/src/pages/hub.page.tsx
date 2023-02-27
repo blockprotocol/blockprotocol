@@ -1,6 +1,14 @@
 import { extractVersion } from "@blockprotocol/type-system";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { Box, Chip, Container, Grid, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Container,
+  Grid,
+  Stack,
+  svgIconClasses,
+  Typography,
+} from "@mui/material";
 import { GetServerSideProps, NextPage } from "next";
 import { NextSeo } from "next-seo";
 
@@ -11,9 +19,7 @@ import { HubItemDescription, HubList } from "../components/pages/hub/hub";
 import { getRouteHubBrowseType } from "../components/pages/hub/hub-utils";
 import { getAllBlocks, getFeaturedBlocks } from "../lib/api/blocks/get";
 import { apiClient } from "../lib/api-client";
-import {
-  ExpandedBlockMetadata as BlockMetadata,
-} from "../lib/blocks";
+import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 import { excludeHiddenBlocks } from "../lib/excluded-blocks";
 import { COPY_FONT_FAMILY } from "../theme/typography";
 
@@ -178,41 +184,70 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
             applications that work instantly without setup
           </Box>
         </Typography>
-        <Stack
-          direction="row"
-          justifyContent="center"
+        <Link
+          href="/docs"
           alignItems="center"
-          spacing={1.25}
+          fontWeight={500}
+          className="docs-link"
         >
-          <Chip
-            sx={(theme) => ({
-              fontSize: 12,
-              color: theme.palette.purple[70],
-              backgroundColor: theme.palette.purple[20],
-              height: 26,
-            })}
-            label={
-              <>
-                <BlockProtocolIcon sx={{ fontSize: 12, mr: 0.5 }} />
-                <Box
-                  component="span"
-                  sx={{
-                    verticalAlign: "middle",
-                    fontFamily: COPY_FONT_FAMILY,
-                    fontWeight: 700,
-                  }}
-                >
-                  {" "}
-                  NEW TO THE BP?
-                </Box>
-              </>
-            }
-          />
-          <Link href="/docs" display="flex" alignItems="center" fontWeight={500}>
-            Discover how blocks and types work{" "}
-            <FontAwesomeIcon icon={faChevronRight} sx={{ ml: 0.75 }} />
-          </Link>
-        </Stack>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={1.25}
+          >
+            <Chip
+              sx={(theme) => ({
+                fontSize: 12,
+                color: theme.palette.purple[70],
+                backgroundColor: theme.palette.purple[20],
+                height: 26,
+                cursor: "pointer",
+                transition: theme.transitions.create([
+                  "color",
+                  "backgroundColor",
+                ]),
+                ".docs-link:hover &": {
+                  color: theme.palette.purple[50],
+                  backgroundColor: theme.palette.purple[100],
+                },
+              })}
+              label={
+                <>
+                  <BlockProtocolIcon sx={{ fontSize: 12, mr: 0.5 }} />
+                  <Box
+                    component="span"
+                    sx={{
+                      verticalAlign: "middle",
+                      fontFamily: COPY_FONT_FAMILY,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {" "}
+                    NEW TO THE BP?
+                  </Box>
+                </>
+              }
+            />
+            <Box
+              display="flex"
+              alignItems="center"
+              sx={(theme) => ({
+                [`&, .${svgIconClasses.root}`]: {
+                  transition: theme.transitions.create("color"),
+                },
+                ".docs-link:hover &": {
+                  [`&, .${svgIconClasses.root}`]: {
+                    color: theme.palette.purple[500],
+                  },
+                },
+              })}
+            >
+              Discover how blocks and types work
+              <FontAwesomeIcon icon={faChevronRight} sx={{ ml: 0.75 }} />
+            </Box>
+          </Stack>
+        </Link>
       </Container>
 
       <Box
