@@ -82,6 +82,10 @@ The most detailed version of this would be for blocks to be able to:
 
 Entity types in the Graph module are currently unable to inherit from other entity types. We'd like to add support for this in a way that doesn't break existing entity types and allows for reusability across embedding applications and end Block Protocol users. To allow for situations where a user wants to customize an entity type in a way that is non-compatible with inheritance, we want a mechanism to "fork" or "copy" an existing entity type. For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/428).
 
+#### Non-primitive data types
+
+We define six primitive data types in the Graph type system. These data types define value spaces for the inner properties of entities, and are not customizable on their own. We want to be able to define constraints, validations and composition for new, non-primitive data types so that users can model their domain more accurately. You can read more about this in [this RFC](https://github.com/blockprotocol/blockprotocol/pull/355).
+
 #### Pagination
 
 We intend to move to a cursor-based method for paginating results of querying entities, likely based on the [Connections](https://relay.dev/graphql/connections.htm) specification.
