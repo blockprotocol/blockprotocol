@@ -1,6 +1,8 @@
 import {
   EntityRecordId,
   GraphElementVertexId,
+  isEntityRecordId,
+  isOntologyTypeRecordId,
   OntologyTypeRecordId,
   Subgraph,
 } from "../../types.js";
@@ -20,7 +22,17 @@ export const getVertexIdForRecordId = (
 ): GraphElementVertexId => {
   for (const [baseId, revisionObject] of typedEntries(subgraph.vertices)) {
     for (const [revisionId, vertex] of typedEntries(revisionObject)) {
-      if (vertex.inner.metadata.recordId === recordId) {
+      const { recordId: vertexRecordId } = vertex.inner.metadata;
+      if (
+        (isOntologyTypeRecordId(recordId) &&
+          isOntologyTypeRecordId(vertexRecordId) &&
+          recordId.baseUrl === vertexRecordId.baseUrl &&
+          recordId.version === vertexRecordId.version) ||
+        (isEntityRecordId(recordId) &&
+          isEntityRecordId(vertexRecordId) &&
+          recordId.entityId === vertexRecordId.entityId &&
+          recordId.editionId === vertexRecordId.editionId)
+      ) {
         return {
           baseId,
           revisionId,
