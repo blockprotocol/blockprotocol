@@ -879,7 +879,7 @@ The above change applies to these Block Protocol operations (`updateEntityType` 
 
 which must all make use of complete schemas in place of partial ones. These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1).
 
-The `aggregateEntities` operation may need to change its behavior slightly. When calling `aggregateEntities` for a specific entity type, entities that are returned might be of that entity type or subtypes of it when allowing extended types. This is because the entities of the subtype can be coerced to the requested entity type.
+The `queryEntities` operation may need to change its behavior slightly. When calling `queryEntities` for a specific entity type, entities that are returned might be of that entity type or subtypes of it when allowing extended types. This is because the entities of the subtype can be coerced to the requested entity type.
 
 # Drawbacks
 
