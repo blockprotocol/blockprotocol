@@ -1,5 +1,20 @@
 # block-template-react
 
+## 0.2.0-canary-20230227111813
+
+### Minor Changes
+
+- [#985](https://github.com/blockprotocol/blockprotocol/pull/985) [`16871042`](https://github.com/blockprotocol/blockprotocol/commit/168710424e95d3f5f24d15527814a8067ad1e68b) Thanks [@CiaranMn](https://github.com/CiaranMn)! - rename Block Protocol 'Services' to 'Modules'
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`f03de705`](https://github.com/blockprotocol/blockprotocol/commit/f03de705383463f41f72612b7fe38df5589855b3) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking changes for updated Graph Module specification and type system
+
+### Patch Changes
+
+- Updated dependencies [[`16871042`](https://github.com/blockprotocol/blockprotocol/commit/168710424e95d3f5f24d15527814a8067ad1e68b), [`f03de705`](https://github.com/blockprotocol/blockprotocol/commit/f03de705383463f41f72612b7fe38df5589855b3)]:
+  - @blockprotocol/graph@0.1.0-canary-20230227111813
+  - mock-block-dock@0.1.0-canary-20230227111813
+  - block-scripts@0.1.0-canary-20230227111813
+
 ## 0.1.23
 
 ### Patch Changes

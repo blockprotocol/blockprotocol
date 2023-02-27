@@ -1,5 +1,11 @@
 # blockprotocol
 
+## 0.2.1-canary-20230227111813
+
+### Patch Changes
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`f03de705`](https://github.com/blockprotocol/blockprotocol/commit/f03de705383463f41f72612b7fe38df5589855b3) Thanks [@CiaranMn](https://github.com/CiaranMn)! - bump `node-fetch` version
+
 ## 0.2.0
 
 ### Minor Changes
