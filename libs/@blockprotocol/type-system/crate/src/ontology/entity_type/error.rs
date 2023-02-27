@@ -12,6 +12,8 @@ use crate::{
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseEntityTypeError {
+    #[error("invalid `$schema` property, expected `\"https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type\"` but received: `{0}`")]
+    InvalidMetaSchema(String),
     #[error("invalid property type object: `{0}`")]
     InvalidPropertyTypeObject(ParsePropertyTypeObjectError),
     #[error("invalid all of field: `{0}`")]

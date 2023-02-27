@@ -9,6 +9,8 @@ use crate::url::ParseVersionedUrlError;
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseDataTypeError {
+    #[error("invalid `$schema` property, expected `\"https://blockprotocol.org/types/modules/graph/0.3/schema/data-type\"` but received: `{0}`")]
+    InvalidMetaSchema(String),
     #[error("invalid versioned URL: `{0}`")]
     InvalidVersionedUrl(ParseVersionedUrlError),
     #[error("error in JSON: `{0}`")]
