@@ -186,7 +186,9 @@ const run = async (providedOptions) => {
     process.exit();
   }
 
-  const blockUrl = `${blockProtocolSiteHost}${block.blockSitePath}`;
+  const blockUrl = `${blockProtocolSiteHost.replace(/\/$/, "")}${
+    block.blockSitePath
+  }`;
 
   console.log(
     chalk.bgGreen(`Successfully published '${chalk.underline(blockName)}'!`),
