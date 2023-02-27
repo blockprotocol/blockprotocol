@@ -112,6 +112,7 @@ const script = async () => {
 
   await import("./create-db-indexes");
   await import("./reset-s3-bucket");
+  await import("./mirror-blocks-from-production-deployment");
 };
 
 await script();
