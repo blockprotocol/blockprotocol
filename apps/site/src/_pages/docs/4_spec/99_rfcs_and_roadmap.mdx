@@ -84,7 +84,7 @@ Entity types in the Graph module are currently unable to inherit from other enti
 
 #### Non-primitive data types
 
-We define six primitive data types in the Graph type system. These data types define value spaces for the inner properties of entities, and are not customizable on their own. We want to be able to define constraints, validations and composition for new, non-primitive data types so that users can model their domain more accurately. You can read more about this in [this RFC](https://github.com/blockprotocol/blockprotocol/pull/355).
+We define six primitive data types in the Graph type system. These data types define value spaces for the inner properties of entities, and currently are limited to basic primitives such as "text" or "number". Building robust data models will require the ability to define constraints and define validation mechanisms (think maximum/minimum lengths on properties, or applying regular expressions to define the pattern of a string). We are thinking about implementing this through allowing the creation of non-primitive data types, built off the composition and extension of other data types coupled with a suite of supported constraints. You can read more about this in [this RFC](https://github.com/blockprotocol/blockprotocol/pull/355).
 
 #### Pagination
 
