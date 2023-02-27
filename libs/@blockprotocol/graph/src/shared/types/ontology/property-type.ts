@@ -25,7 +25,7 @@ export type GetPropertyTypeData = {
   propertyTypeId: VersionedUrl;
 };
 
-type SystemDefinedPropertyTypeProperties = "schema" | "$id" | "kind";
+type SystemDefinedPropertyTypeProperties = "$schema" | "$id" | "kind";
 
 export type CreatePropertyTypeData = {
   propertyType: Omit<PropertyType, SystemDefinedPropertyTypeProperties>;
