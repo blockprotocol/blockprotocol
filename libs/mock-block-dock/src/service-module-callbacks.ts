@@ -3,14 +3,19 @@ import axios, { AxiosError } from "axios";
 
 const externalApiHttpClient = axios.create();
 
+type ServiceFunction =
+  EmbedderServiceMessageCallbacks[keyof EmbedderServiceMessageCallbacks];
+
 const callExternalApiMethod = async (params: {
   blockProtocolApiKey?: string;
   blockProtocolSiteHost?: string;
   providerName: string;
   methodName: string;
-  payload: any;
-  // @todo better typings
-}): Promise<{ data?: any; errors?: any }> => {
+  payload: Parameters<ServiceFunction>[0]["data"];
+}): Promise<{
+  data?: any;
+  errors?: Awaited<ReturnType<ServiceFunction>>["errors"];
+}> => {
   const {
     providerName,
     methodName,
