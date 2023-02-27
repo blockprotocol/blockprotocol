@@ -859,7 +859,6 @@ The above change applies to these Block Protocol operations (`updateEntityType` 
 
 - `updateEntityType`
 - `updatePropertyType`
-- `updateLinkType`
 
 which must all make use of complete schemas in place of partial ones. These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1).
 
