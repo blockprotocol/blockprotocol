@@ -17,10 +17,6 @@ export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
     tabTitle: "Dashboard",
     tabHref: "/dashboard",
   },
-  {
-    tabTitle: "Blocks",
-    tabHref: "/blocks",
-  },
   isBillingFeatureFlagEnabled
     ? {
         tabTitle: "Settings",
