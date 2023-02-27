@@ -219,7 +219,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
 
 ```json
 {
-  "$id": "https://blockprotocol.org/type-system/0.3/schema/meta/entity-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "type": "object",
   ...,
   "properties": {
@@ -249,6 +249,7 @@ Given a _supertype_ `Person`:
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
@@ -272,6 +273,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -322,6 +324,7 @@ Given a _supertype_ `Person`:
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
   "type": "object",
@@ -345,6 +348,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/2",
   "type": "object",
@@ -399,6 +403,7 @@ Given a _supertype_ `Person`:
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/3",
   "type": "object",
@@ -419,6 +424,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/3",
   "type": "object",
@@ -490,6 +496,7 @@ Concretely, this means that for a free-standing type that doesn't extend any oth
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
   "type": "object",
@@ -513,6 +520,7 @@ would implicitly have `{ "unevaluatedProperties": false }` set. In the case of t
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/2",
   "type": "object",
@@ -555,6 +563,7 @@ Given a _supertype_ `Person`:
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
@@ -578,6 +587,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -598,6 +608,7 @@ a user, Bob, wishes to use Alice's `Employee` entity type but must change the `o
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@bob/entity-type/employee/v/1",
   "type": "object",
@@ -622,6 +633,7 @@ The original, conceptually expanded `Employee` entity type:
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -649,6 +661,7 @@ This expanded entity is equivalent to the original `Employee` entity type, but w
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@bob/entity-type/employee/v/1",
   "type": "object",
@@ -684,6 +697,7 @@ First entity type version of `Country` without supertype:
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/country/v/1",
   "type": "object",
@@ -701,6 +715,7 @@ Entity type `Region` with `Country` as a supertype
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/region/v/1",
   "type": "object",
@@ -721,6 +736,7 @@ The second, cyclic version of the `Country` entity type
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "kind": "entityType",
   // Because of versioning, we cannot change this version to /v/1 and create a "proper" cycle.
   "$id": "https://blockprotocol.org/@alice/entity-type/country/v/2",
@@ -809,6 +825,7 @@ must instead use a complete schema
   // New, complete updateEntityType message
   "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
   "schema": {
+    "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
     "type": "object",
     "kind": "entityType",
@@ -836,6 +853,7 @@ given that the original schema was created as follows
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
   "kind": "entityType",
@@ -887,6 +905,7 @@ A proposed way to deal with conditional `unevaluatedProperties` is to use custom
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "$id": "https://example.com/schema",
 
   // ... schema contents  ...
@@ -907,6 +926,7 @@ Here, referencing `https://example.com/schema` in a `$ref` will result in an _op
 
 ```json
 {
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "$id": "https://example.com/schema",
   "$ref": "#open",
   "unevaluatedProperties": false,
