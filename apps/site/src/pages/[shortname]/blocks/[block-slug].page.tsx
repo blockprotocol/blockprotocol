@@ -27,12 +27,12 @@ import {
 import { VerifiedBadge } from "../../../components/verified-badge";
 import { getAllBlocks } from "../../../lib/api/blocks/get";
 import {
-  excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   retrieveBlockFileContent,
   retrieveBlockReadme,
 } from "../../../lib/blocks";
 import { isFork, isProduction } from "../../../lib/config";
+import { excludeHiddenBlocks } from "../../../lib/excluded-blocks";
 
 // Exclude <FooBar />, but keep <h1 />, <ul />, etc.
 const markdownComponents = Object.fromEntries(

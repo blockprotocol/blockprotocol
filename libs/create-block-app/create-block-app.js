@@ -58,7 +58,11 @@ const usage = commandLineUsage(helpSections);
 
   const slugifiedBlockName = slugify(blockName, { lower: true, strict: true });
 
-  if (!availableTemplates.includes(template)) {
+  if (
+    !availableTemplates.find(
+      (option) => template === option || template.startsWith(`${option}@`),
+    )
+  ) {
     console.error(
       `Requested template '${template}' is invalid. Please choose one of ${availableTemplates.join(
         ", ",

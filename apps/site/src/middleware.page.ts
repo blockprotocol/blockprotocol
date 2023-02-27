@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import { SESSION_COOKIE_NAME } from "./lib/api/middleware/constants";
 import {
   returnTypeAsJson,
-  versionedTypeUriRegExp,
+  versionedTypeUrlRegExp,
 } from "./middleware.page/return-types-as-json";
 
 const productionFrontendHost = process.env.NEXT_PUBLIC_FRONTEND_URL
@@ -50,13 +50,10 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // check if we have a request for a type as JSON
-  const openingTypePage = Boolean(url.pathname.match(versionedTypeUriRegExp));
-  const jsonRequested = request.headers
-    .get("accept")
-    ?.includes("application/json");
-
-  if (openingTypePage && jsonRequested) {
+  // if this is a /types/* page, serve JSON unless asked for HTML
+  const openingTypePage = Boolean(url.pathname.match(versionedTypeUrlRegExp));
+  const htmlRequested = request.headers.get("accept")?.includes("text/html");
+  if (openingTypePage && !htmlRequested) {
     return returnTypeAsJson(request);
   }
 }

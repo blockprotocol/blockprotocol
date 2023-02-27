@@ -337,7 +337,11 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           })}
         >
           <SubscriptionFeatureList
-            heading={<strong>Includes the following each month:</strong>}
+            heading={
+              <Box mb={1.5}>
+                <strong>Includes the following each month:</strong>
+              </Box>
+            }
             headingSx={({ palette }) => ({ color: palette.purple[80] })}
             features={paidSubscriptionFeatures.hobby.coreFeatures}
           />
@@ -389,7 +393,11 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           }}
         >
           <SubscriptionFeatureList
-            heading={<strong>As well as:</strong>}
+            heading={
+              <Box mb={1.5}>
+                <strong>As well as:</strong>
+              </Box>
+            }
             features={paidSubscriptionFeatures.hobby.additionalFeatures}
           />
           <Box
@@ -518,7 +526,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         >
           <SubscriptionFeatureList
             heading={
-              <>
+              <Box sx={{ mb: 3 }}>
                 <ArrowLeftIcon sx={{ fontSize: 18, marginRight: 2 }} />
                 <strong>
                   Includes everything in{" "}
@@ -530,9 +538,10 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
                   </Box>
                   , plus...
                 </strong>
-              </>
+              </Box>
             }
             features={paidSubscriptionFeatures.pro.coreFeatures}
+            gap={2.25}
           />
         </Box>
         <Box
@@ -550,7 +559,11 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           }}
         >
           <SubscriptionFeatureList
-            heading={<strong>Plus you receive:</strong>}
+            heading={
+              <Box mb={1.5}>
+                <strong>Plus you receive:</strong>
+              </Box>
+            }
             features={paidSubscriptionFeatures.pro.additionalFeatures}
           />
           <Box

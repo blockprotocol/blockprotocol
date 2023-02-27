@@ -36,7 +36,7 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(
     page.locator("text=Learn more about embedding Þ blocks"),
-  ).toHaveAttribute("href", "/docs/embedding-blocks");
+  ).toHaveAttribute("href", "/docs/using-blocks");
 
   // Composable interfaces section
   await expect(page.locator("[data-testid='WordPress-button']")).toBeVisible();
@@ -113,10 +113,10 @@ test("Home page should contain key elements", async ({ page }) => {
   // Block slider
   await expect(page.locator('[data-testid="block-slider"]')).toBeVisible();
 
-  // New blocks can get added, hence the usage of greater than instead of equal too
+  // More blocks can be mirrored, hence the usage of greater than instead of equal too
   expect(
     await page.locator('[data-testid="block-slider"] >> .slick-slide').count(),
-  ).toBeGreaterThan(5);
+  ).toBeGreaterThan(4);
 
   // Sign up section
   const finalCTA = page.locator('[data-testid="final-cta"]');
