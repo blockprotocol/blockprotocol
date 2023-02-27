@@ -187,7 +187,7 @@ name◄─────Being───┐
 
 From the perspective of the user duplicating a type, the `Person` and `Employee` entity types were squashed together or "expanded" for duplication to have the desired effect. The `Being` supertype relation is still kept when changing a property on the `MyEmployee` duplicated type. But in this process, the `MyEmployee` entity type loses the ability to trivially be treated as a `Person`, as there is no subtyping relation with `Person` on the new `MyEmployee` duplicated type.
 
-The duplicatio nhappened on the expanded type resulting in combining/expanding `Person` and `Employee`, but it would also have been possible expand the entire type, getting rid of `Being`. This would have resulted in the following type hierarchy:
+The duplication happened on the expanded type resulting in combining/expanding `Person` and `Employee`, but it would also have been possible to expand the entire type, getting rid of `Being`. This would have resulted in the following type hierarchy:
 
 ```txt
       name◄────┐
