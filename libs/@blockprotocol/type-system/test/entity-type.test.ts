@@ -7,6 +7,8 @@ import {
 
 const entityTypes: EntityType[] = [
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1",
     type: "object",
@@ -29,6 +31,8 @@ const entityTypes: EntityType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
     title: "Block",
@@ -51,6 +55,8 @@ const entityTypes: EntityType[] = [
     ],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/book/v/1",
     title: "Book",
@@ -86,6 +92,8 @@ const entityTypes: EntityType[] = [
     examples: [],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/building/v/1",
     type: "object",
@@ -118,6 +126,8 @@ const entityTypes: EntityType[] = [
     },
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/organization/v/1",
     type: "object",
@@ -129,6 +139,8 @@ const entityTypes: EntityType[] = [
     },
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/organization/v/1",
     type: "object",
@@ -141,6 +153,8 @@ const entityTypes: EntityType[] = [
     },
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/page/v/2",
     type: "object",
@@ -176,6 +190,8 @@ const entityTypes: EntityType[] = [
     },
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
     type: "object",
@@ -205,6 +221,8 @@ const entityTypes: EntityType[] = [
     },
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/playlist/v/1",
     type: "object",
@@ -229,6 +247,8 @@ const entityTypes: EntityType[] = [
     },
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/song/v/1",
     type: "object",
@@ -240,6 +260,8 @@ const entityTypes: EntityType[] = [
     },
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/knows/v/1",
     type: "object",
@@ -259,6 +281,8 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
   [
     "non-integer version ID",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
       kind: "entityType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1.2",
       type: "object",
@@ -280,6 +304,8 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
   [
     "invalid base URL",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
       kind: "entityType",
       $id: "https://  /broken/v/1",
       type: "object",
@@ -305,6 +331,8 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
   [
     "invalid ref",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
       kind: "entityType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
@@ -333,6 +361,8 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
   [
     "invalid property type object",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
       kind: "entityType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
@@ -357,6 +387,8 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
   [
     "invalid link url",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
       kind: "entityType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
@@ -394,6 +426,8 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
   [
     "invalid link inner ref",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
       kind: "entityType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
@@ -431,6 +465,8 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
   [
     "Broken ref in inheritance",
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
       kind: "entityType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
@@ -461,14 +497,28 @@ const brokenTypes: [any, ParseEntityTypeError][] = [
     {},
     {
       reason: "InvalidJson",
-      inner: "missing field `kind` at line 1 column 2",
+      inner: "missing field `$schema` at line 1 column 2",
     },
   ],
   [
     { foo: "bar" },
     {
       reason: "InvalidJson",
-      inner: "missing field `kind` at line 1 column 13",
+      inner: "missing field `$schema` at line 1 column 13",
+    },
+  ],
+  [
+    {
+      $schema: "https://blockprotocol.org/types/modules/graph/0.3/schema/foo",
+      kind: "entityType",
+      $id: "https://blockprotocol.org/@alice/types/entity-type/invalid-meta-schema/v/1",
+      type: "object",
+      title: "Invalid Meta-Schema",
+      properties: {},
+    },
+    {
+      reason: "InvalidMetaSchema",
+      inner: "https://blockprotocol.org/types/modules/graph/0.3/schema/foo",
     },
   ],
 ];

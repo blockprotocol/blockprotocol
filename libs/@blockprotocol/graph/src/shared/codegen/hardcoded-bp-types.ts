@@ -1,5 +1,11 @@
+import {
+  DATA_TYPE_META_SCHEMA,
+  ENTITY_TYPE_META_SCHEMA,
+} from "@blockprotocol/type-system/slim";
+
 export const hardcodedBpTypes = {
   "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1": {
+    $schema: ENTITY_TYPE_META_SCHEMA,
     kind: "entityType",
     $id: "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1",
     type: "object",
@@ -10,6 +16,7 @@ export const hardcodedBpTypes = {
     },
   },
   "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1": {
+    $schema: DATA_TYPE_META_SCHEMA,
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
     title: "Text",
@@ -17,6 +24,7 @@ export const hardcodedBpTypes = {
     type: "string",
   },
   "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1": {
+    $schema: DATA_TYPE_META_SCHEMA,
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
     title: "Number",
@@ -24,6 +32,7 @@ export const hardcodedBpTypes = {
     type: "number",
   },
   "https://blockprotocol.org/@blockprotocol/types/data-type/null/v/1": {
+    $schema: DATA_TYPE_META_SCHEMA,
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/null/v/1",
     title: "Null",
@@ -31,6 +40,7 @@ export const hardcodedBpTypes = {
     type: "null",
   },
   "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1": {
+    $schema: DATA_TYPE_META_SCHEMA,
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1",
     title: "Empty List",
@@ -39,6 +49,7 @@ export const hardcodedBpTypes = {
     const: [],
   },
   "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1": {
+    $schema: DATA_TYPE_META_SCHEMA,
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1",
     title: "Boolean",
@@ -46,6 +57,7 @@ export const hardcodedBpTypes = {
     type: "boolean",
   },
   "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1": {
+    $schema: DATA_TYPE_META_SCHEMA,
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1",
     title: "Object",

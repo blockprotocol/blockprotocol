@@ -1,6 +1,7 @@
-import { PropertyType } from "@blockprotocol/graph";
+import { PROPERTY_TYPE_META_SCHEMA, PropertyType } from "@blockprotocol/graph";
 
 const numberOfEmployees: PropertyType = {
+  $schema: PROPERTY_TYPE_META_SCHEMA,
   kind: "propertyType",
   $id: "http://example.com/types/property-type/number-of-employees/v/1",
   title: "Number of Employees",
@@ -11,6 +12,7 @@ const numberOfEmployees: PropertyType = {
   ],
 };
 const name: PropertyType = {
+  $schema: PROPERTY_TYPE_META_SCHEMA,
   kind: "propertyType",
   $id: "http://example.com/types/property-type/name/v/1",
   title: "Name",
@@ -21,6 +23,7 @@ const name: PropertyType = {
   ],
 };
 const age: PropertyType = {
+  $schema: PROPERTY_TYPE_META_SCHEMA,
   kind: "propertyType",
   $id: "http://example.com/types/property-type/age/v/1",
   title: "Age",
@@ -31,6 +34,7 @@ const age: PropertyType = {
   ],
 };
 const email: PropertyType = {
+  $schema: PROPERTY_TYPE_META_SCHEMA,
   kind: "propertyType",
   $id: "http://example.com/types/property-type/email/v/1",
   title: "E-Mail",
@@ -41,6 +45,7 @@ const email: PropertyType = {
   ],
 };
 const username: PropertyType = {
+  $schema: PROPERTY_TYPE_META_SCHEMA,
   kind: "propertyType",
   $id: "http://example.com/types/property-type/username/v/1",
   title: "Username",
@@ -51,6 +56,7 @@ const username: PropertyType = {
   ],
 };
 const description: PropertyType = {
+  $schema: PROPERTY_TYPE_META_SCHEMA,
   kind: "propertyType",
   $id: "http://example.com/types/property-type/description/v/1",
   title: "An explanation of this thing",

@@ -1,8 +1,13 @@
-import { EntityType, extractBaseUrl } from "@blockprotocol/graph";
+import {
+  ENTITY_TYPE_META_SCHEMA,
+  EntityType,
+  extractBaseUrl,
+} from "@blockprotocol/graph";
 
 import { propertyTypes } from "./property-types";
 
 const worksFor: EntityType = {
+  $schema: ENTITY_TYPE_META_SCHEMA,
   kind: "entityType",
   $id: "https://example.com/types/entity-type/works-for/v/1",
   type: "object",
@@ -17,6 +22,7 @@ const worksFor: EntityType = {
   required: [],
 };
 const founderOf: EntityType = {
+  $schema: ENTITY_TYPE_META_SCHEMA,
   kind: "entityType",
   $id: "https://example.com/types/entity-type/founder-of/v/1",
   type: "object",
@@ -31,6 +37,7 @@ const founderOf: EntityType = {
   required: [],
 };
 const company: EntityType = {
+  $schema: ENTITY_TYPE_META_SCHEMA,
   kind: "entityType",
   $id: "https://example.com/types/entity-type/company/v/1",
   type: "object",
@@ -51,6 +58,7 @@ const company: EntityType = {
   links: {},
 };
 const person: EntityType = {
+  $schema: ENTITY_TYPE_META_SCHEMA,
   kind: "entityType",
   $id: "https://example.com/types/entity-type/person/v/1",
   type: "object",
@@ -94,6 +102,7 @@ const person: EntityType = {
   },
 };
 const testType: EntityType = {
+  $schema: ENTITY_TYPE_META_SCHEMA,
   kind: "entityType",
   $id: "https://example.com/types/entity-type/test-type/v/1",
   type: "object",
