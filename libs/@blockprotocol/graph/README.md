@@ -1,34 +1,61 @@
-## Block Protocol – Graph service
+## Block Protocol – Graph module
 
-This package implements the Block Protocol Graph service for blocks and embedding applications.
+This package implements the Block Protocol Graph module for blocks and embedding applications.
 
-If you are a block author, we have several templates available to get you started:
+## Getting started
+
+If you are a block author, we have several block templates available which use this package
 
 `npx create-block-app@latest --help`
 
-If you want to roll your own, to get started:
+The best way to get started is to [read the docs](https://blockprotocol.org/docs).
+
+## stdlib
+
+The package exports a **standard library of helper functions** for interacting with a `Subgraph`, available from `"@blockprotocol/graph/stdlib"`. For example
+
+```typescript
+import { getOutgoingLinkAndTargetEntities } from "@blockprotocol/graph/stdlib";
+
+// find the outgoing links and target entities for a given entity
+const linkAndTargetEntities = getOutgoingLinkAndTargetEntities(
+  subgraph,
+  "entity-123",
+);
+
+for (const { linkEntity, rightEntity } of linkAndTargetEntities) {
+  // do something with each link and the entity it points to
+}
+```
+
+For a full list of available functions see `src/stdlib.ts`
+
+## Initializing a graph module handler
+
+If you want to roll your own block template or embedding application,
+you can use this package to construct a handler for graph module messages.
 
 1.  `yarn add @blockprotocol/graph` or `npm install @blockprotocol/graph`
-1.  Follow the instructions to use the graph service as a [block](#blocks) or an [embedding application](#embedding-applications)
+1.  Follow the instructions to use the graph module as a [block](#blocks) or an [embedding application](#embedding-applications)
 
-## Blocks
+### Blocks
 
 To create a `GraphBlockHandler`, pass the constructor an element in your block, along with any callbacks you wish to register to handle incoming messages.
 
-### React example
+#### React
 
-For React, we provide a `useGraphBlockService` hook, which accepts a `ref` to an element, and optionally any `callbacks` you wish to provide on initialization.
+For React, we provide a `useGraphBlockModule` hook, which accepts a `ref` to an element, and optionally any `callbacks` you wish to provide on initialization.
 
 See `npx create-block-app@latest my-block --template react` for an example.
 
-### Custom elements
+#### Custom elements
 
 For custom elements, this package exports a `BlockElementBase` class
-which uses the [Lit](https://lit.dev/) framework, and sets `graphService` on the instance.
+which uses the [Lit](https://lit.dev/) framework, and sets `graphModule` on the instance for sending graph-related messages to the embedding application.
 
 See `npx create-block-app@latest my-block --template custom-element` for an example.
 
-## Embedding applications
+### Embedding applications
 
 You should construct one `GraphEmbedderHandler` per block.
 
@@ -38,19 +65,21 @@ To create a `GraphEmbedderHandler`, pass the constructor:
 
 1.  An `element` wrapping your block
 1.  `callbacks` to respond to messages from the block
-1.  The starting values for any of the following messages you implement:
+1.  The starting values for the following messages:
 
-- `blockEntity`
-- `blockGraph`
-- `linkedAggregations`
+- `blockEntitySubgraph`: the graph rooted at the block entity
+- `readonly`: whether or not the block should be in 'readonly' mode
 
 These starting values should also be passed in a `graph` property object, if the block can be passed or assigned properties.
+
+See the [here](https://blockprotocol.org/docs/spec/graph-module#message-definitions) or check the TypeScript types for message signatures.
 
 ```typescript
 import { GraphEmbedderHandler } from "@blockprotocol/graph";
 
-const graphService = new GraphEmbedderHandler({
-  blockEntity: { entityId: "123", properties: { name: "Bob" } },
+const graphModule = new GraphEmbedderHandler({
+  blockEntitySubgraph: { ... }, // subgraph containing vertices, edges, and 'roots' which should be a reference to the block entity
+  readonly: false,
   callbacks: {
     updateEntity: ({ data }) => updateEntityInYourDatastore(data),
   },
@@ -58,26 +87,26 @@ const graphService = new GraphEmbedderHandler({
 });
 ```
 
-### React
+#### React
 
-For React embedding applications, we provide a `useGraphEmbedderService` hook, which accepts a `ref` to an element, and optionally any additional constructor arguments you wish to pass.
+For React embedding applications, we provide a `useGraphEmbedderModule` hook, which accepts a `ref` to an element, and optionally any additional constructor arguments you wish to pass.
 
 ```tsx
-import { useGraphEmbedderService } from "@blockprotocol/graph";
+import { useGraphEmbedderModule } from "@blockprotocol/graph";
 import { useRef } from "react";
 
 export const App = () => {
   const wrappingRef = useRef<HTMLDivElement>(null);
 
-  const blockEntity = { entityId: "123", properties: { name: "Bob" } };
+  const blockEntitySubgraph = { ... }; // subgraph containing vertices, edges, and 'roots' which should be a reference to the block entity
 
-  const { graphService } = useGraphEmbedderService(blockRef, {
-    blockEntity,
+  const { graphModule } = useGraphEmbedderModule(blockRef, {
+    blockEntitySubgraph,
   });
 
   return (
     <div ref={wrappingRef}>
-      <Block graph={{ blockEntity }} />
+      <Block graph={{ blockEntitySubgraph }} />
     </div>
   );
 };

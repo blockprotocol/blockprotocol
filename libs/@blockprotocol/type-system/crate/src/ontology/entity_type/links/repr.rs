@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
-    repr, uri::VersionedUri, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
+    repr, url::VersionedUrl, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
     ParseLinksError, ParseOneOfError,
 };
 
@@ -17,14 +17,11 @@ pub struct Links {
         target_arch = "wasm32",
         tsify(
             optional,
-            type = "Record<VersionedUri, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>"
+            type = "Record<VersionedUrl, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>"
         )
     )]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     links: HashMap<String, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>,
-    #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "VersionedUri[]"))]
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    required_links: Vec<String>,
 }
 
 impl TryFrom<Links> for super::Links {
@@ -34,42 +31,27 @@ impl TryFrom<Links> for super::Links {
         let links = links_repr
             .links
             .into_iter()
-            .map(|(uri, val)| {
+            .map(|(url, val)| {
                 Ok((
-                    VersionedUri::from_str(&uri).map_err(ParseLinksError::InvalidLinkKey)?,
+                    VersionedUrl::from_str(&url).map_err(ParseLinksError::InvalidLinkKey)?,
                     val.try_into().map_err(ParseLinksError::InvalidArray)?,
                 ))
             })
             .collect::<Result<HashMap<_, _>, Self::Error>>()?;
 
-        let required_links = links_repr
-            .required_links
-            .into_iter()
-            .map(|uri| VersionedUri::from_str(&uri).map_err(ParseLinksError::InvalidRequiredKey))
-            .collect::<Result<Vec<_>, Self::Error>>()?;
-
-        Self::new(links, required_links).map_err(ParseLinksError::ValidationError)
+        Ok(Self::new(links))
     }
 }
 
 impl From<super::Links> for Links {
     fn from(object: super::Links) -> Self {
         let links = object
-            .links
+            .0
             .into_iter()
-            .map(|(uri, val)| (uri.to_string(), val.into()))
+            .map(|(url, val)| (url.to_string(), val.into()))
             .collect();
 
-        let required_links = object
-            .required_links
-            .into_iter()
-            .map(|uri| uri.to_string())
-            .collect();
-
-        Self {
-            links,
-            required_links,
-        }
+        Self { links }
     }
 }
 

@@ -1,18 +1,17 @@
+import { EntityTypeWithMetadata } from "@blockprotocol/graph/.";
 import { Box } from "@mui/material";
 import { FunctionComponent, useState } from "react";
 
-import { EntityType } from "../../../lib/api/model/entity-type.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
-import { formatUpdatedAt } from "../../../util/html-utils";
 import { Button } from "../../button";
 import { CreateSchemaModal } from "../../modal/create-schema-modal";
 import { ListViewCard } from "./list-view-card";
 import { Placeholder } from "./placeholder";
-import { BrowseHubButton, CreateSchemaButton } from "./placeholder-buttons";
+import { BrowseHubButton, CreateEntityTypeButton } from "./placeholder-buttons";
 import { useUserStatus } from "./use-user-status";
 
 export interface TabPanelContentsWithSchemasProps {
-  entityTypes: EntityType[];
+  entityTypes: EntityTypeWithMetadata[];
   user: SerializedUser;
 }
 
@@ -36,18 +35,18 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
     return userStatus === "current" ? (
       <>
         <Placeholder
-          header="You haven’t created any schemas yet"
+          header="You haven’t created any types yet"
           tip="Start building to see your creations show up here."
           actions={
-            <CreateSchemaButton onClick={() => setSchemaModalOpen(true)} />
+            <CreateEntityTypeButton onClick={() => setSchemaModalOpen(true)} />
           }
         />
         {createSchemaModal}
       </>
     ) : (
       <Placeholder
-        header={`@${user.shortname} hasn’t published any schemas yet`}
-        tip="You can browse existing schemas on the Hub."
+        header={`@${user.shortname} hasn’t published any types yet`}
+        tip="You can browse existing types on the Hub."
         actions={<BrowseHubButton />}
       />
     );
@@ -63,16 +62,16 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
           }}
         >
           <Button squared size="small" onClick={() => setSchemaModalOpen(true)}>
-            Create New Schema
+            Create an Entity Type
           </Button>
         </Box>
       )}
-      {entityTypes.map(({ entityTypeId, schema, updatedAt }) => (
+      {entityTypes.map(({ metadata, schema }) => (
         <ListViewCard
-          key={entityTypeId}
+          key={schema.$id}
           title={schema.title}
           description={schema.description as string}
-          extraContent={formatUpdatedAt(updatedAt as unknown as string)}
+          extraContent={`Version ${metadata.recordId.version}`}
           url={schema.$id}
         />
       ))}

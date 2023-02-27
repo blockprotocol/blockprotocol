@@ -8,6 +8,7 @@ import {
   ExpandedBlockMetadata,
   retrieveBlockFileContent,
 } from "../../../lib/blocks";
+import { parseClientIp, sendReport } from "../../../util/usage";
 
 export type ApiBlockSearchQuery = {
   author?: string;
@@ -113,6 +114,23 @@ export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
     }
 
     // @todo paginate response
+
+    const clientIp = parseClientIp(req);
+
+    const userId = req.user.id;
+
+    await sendReport({
+      event: "block_search",
+      userId,
+      properties: {
+        origin: req.headers.origin ?? null,
+        bpUserId: userId,
+        ip: clientIp,
+        userAgent: req.headers["user-agent"] ?? null,
+        query: req.query ? JSON.stringify(req.query) : null,
+        resultCount: data.length,
+      },
+    });
 
     res.status(200).json({
       results: data,

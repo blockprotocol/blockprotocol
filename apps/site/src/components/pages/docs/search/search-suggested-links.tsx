@@ -24,7 +24,7 @@ const SUGGESTED_LINKS: SuggestedLink[] = [
   },
   {
     label: "Embed blocks within your site or app",
-    href: "/docs/embedding-blocks",
+    href: "/docs/using-blocks",
   },
   {
     label: "Frequently asked questions",

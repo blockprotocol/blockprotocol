@@ -2,8 +2,6 @@ import { execa } from "execa";
 import fs from "fs-extra";
 import { globby } from "globby";
 
-import type { ExpandedBlockMetadata } from "../../src/lib/blocks.js";
-
 const getFileTimestamp = async (filePath: string) => {
   const stat = await fs.stat(filePath);
   return stat.mtimeMs;
@@ -42,8 +40,4 @@ const deleteIsrFilesCreatedAfterNextBuild = async () => {
 export const resetSite = async () => {
   await execa("yarn", ["exe", "scripts/seed-db.js"]);
   await deleteIsrFilesCreatedAfterNextBuild();
-};
-
-export const getBlocksData = async (): Promise<ExpandedBlockMetadata[]> => {
-  return await fs.readJson("./blocks-data.json");
 };

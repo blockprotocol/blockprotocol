@@ -36,11 +36,11 @@ test("dashboard page should contain key elements", async ({ page }) => {
         : "/@alice/blocks",
     ],
     ["Build a block", "/docs/developing-blocks"],
-    ["Create a Type", null],
+    ["Create a Type", "/@alice/all-types"],
     ["Create and manage API keys", "/settings/api-keys"],
     ["View your public profile", "/@alice"],
     ["Manage blocks", "/@alice/blocks"],
-    ["Manage types", "/@alice/schemas"],
+    ["Manage types", "/@alice/all-types"],
     ["Browse blocks for inspiration", "/hub"],
   ] as const) {
     const card = page.locator(`[data-testid="dashboard-card"]`).filter({

@@ -1,61 +1,127 @@
-import { EntityType } from "@blockprotocol/graph";
+import {
+  ENTITY_TYPE_META_SCHEMA,
+  EntityType,
+  extractBaseUrl,
+} from "@blockprotocol/graph";
 
-export const entityTypes: EntityType[] = [
-  {
-    entityTypeId: "Company",
-    schema: {
-      $id: "https://example.com/types/Company",
-      title: "Company",
+import { propertyTypes } from "./property-types";
 
-      type: "object",
-      $schema: "https://json-schema.org/draft/2019-09/schema",
-      description: "A company or organisation.",
-      properties: {
-        employees: {
-          type: "number",
-          description: "The number of employees in the company.",
-        },
-        name: {
-          type: "string",
-          description: "A display name for the company.",
-        },
-      },
-      labelProperty: "name",
-      required: ["name", "employees"],
+const worksFor: EntityType = {
+  $schema: ENTITY_TYPE_META_SCHEMA,
+  kind: "entityType",
+  $id: "https://example.com/types/entity-type/works-for/v/1",
+  type: "object",
+  title: "Works For",
+  description: "Has employment at this entity.",
+  allOf: [
+    {
+      $ref: "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1",
+    },
+  ],
+  properties: {},
+  required: [],
+};
+const founderOf: EntityType = {
+  $schema: ENTITY_TYPE_META_SCHEMA,
+  kind: "entityType",
+  $id: "https://example.com/types/entity-type/founder-of/v/1",
+  type: "object",
+  title: "Founder of",
+  description: "Established this entity.",
+  allOf: [
+    {
+      $ref: "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1",
+    },
+  ],
+  properties: {},
+  required: [],
+};
+const company: EntityType = {
+  $schema: ENTITY_TYPE_META_SCHEMA,
+  kind: "entityType",
+  $id: "https://example.com/types/entity-type/company/v/1",
+  type: "object",
+  title: "Company",
+  description: "A company or organization.",
+  properties: {
+    [extractBaseUrl(propertyTypes.numberOfEmployees.$id)]: {
+      $ref: propertyTypes.numberOfEmployees.$id,
+    },
+    [extractBaseUrl(propertyTypes.name.$id)]: {
+      $ref: propertyTypes.name.$id,
     },
   },
-  {
-    entityTypeId: "Person",
-    schema: {
-      $id: "https://example.com/types/Person",
-      title: "Person",
-
-      type: "object",
-      $schema: "https://json-schema.org/draft/2019-09/schema",
-      description: "A human person.",
-      properties: {
-        age: {
-          type: "number",
-          description: "The age of the person, in years.",
-        },
-        email: {
-          type: "string",
-          description: "An email address.",
-          format: "email",
-        },
-        name: {
-          type: "string",
-          description: "The person's name.",
-        },
-        username: {
-          description: "The person's username in this application",
-          type: "string",
-          minLength: 4,
-          maxLength: 24,
-        },
-      },
-      labelProperty: "name",
-      required: ["age", "email", "name", "username"],
+  required: [
+    extractBaseUrl(propertyTypes.numberOfEmployees.$id),
+    extractBaseUrl(propertyTypes.name.$id),
+  ],
+  links: {},
+};
+const person: EntityType = {
+  $schema: ENTITY_TYPE_META_SCHEMA,
+  kind: "entityType",
+  $id: "https://example.com/types/entity-type/person/v/1",
+  type: "object",
+  title: "Person",
+  description: "A human person.",
+  properties: {
+    [extractBaseUrl(propertyTypes.age.$id)]: {
+      $ref: propertyTypes.age.$id,
+    },
+    [extractBaseUrl(propertyTypes.email.$id)]: {
+      $ref: propertyTypes.email.$id,
+    },
+    [extractBaseUrl(propertyTypes.name.$id)]: {
+      $ref: propertyTypes.name.$id,
+    },
+    [extractBaseUrl(propertyTypes.username.$id)]: {
+      $ref: propertyTypes.username.$id,
     },
   },
-];
+  required: [
+    extractBaseUrl(propertyTypes.age.$id),
+    extractBaseUrl(propertyTypes.email.$id),
+    extractBaseUrl(propertyTypes.name.$id),
+    extractBaseUrl(propertyTypes.username.$id),
+  ],
+  links: {
+    [worksFor.$id]: {
+      type: "array",
+      items: {
+        oneOf: [{ $ref: company.$id }],
+      },
+      ordered: false,
+    },
+    [founderOf.$id]: {
+      type: "array",
+      items: {
+        oneOf: [{ $ref: company.$id }],
+      },
+      ordered: false,
+    },
+  },
+};
+const testType: EntityType = {
+  $schema: ENTITY_TYPE_META_SCHEMA,
+  kind: "entityType",
+  $id: "https://example.com/types/entity-type/test-type/v/1",
+  type: "object",
+  title: "Test Type",
+  description: "A Type for Testing",
+  properties: {
+    [extractBaseUrl(propertyTypes.name.$id)]: {
+      $ref: propertyTypes.name.$id,
+    },
+  },
+  required: [extractBaseUrl(propertyTypes.name.$id)],
+  links: {},
+};
+
+export const entityTypes = {
+  company,
+  person,
+  worksFor,
+  founderOf,
+  testType,
+};
+// satisfies Record<string, EntityType> };

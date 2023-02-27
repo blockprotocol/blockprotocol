@@ -1,6 +1,6 @@
 # Block Protocol Type System
 
-An in-development package that provides Typescript typings and implementations for the Block Protocol Type-System. See the [RFC](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0352-graph-type-system.md) for more details
+An in-development package that provides TypeScript typings and implementations for the Block Protocol Type-System. See the [RFC](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0352-graph-type-system.md) for more details
 
 ## Development
 

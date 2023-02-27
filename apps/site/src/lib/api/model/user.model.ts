@@ -1,3 +1,4 @@
+import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import dedent from "dedent";
 import merge from "lodash/merge";
 import { Db, DBRef, ObjectId, WithId } from "mongodb";
@@ -5,6 +6,7 @@ import { NextApiResponse } from "next";
 import type { Stripe } from "stripe";
 
 import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-login-code.api";
+import { getEntityTypes } from "../../../pages/api/types/entity-type/shared/db";
 import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api";
 import {
@@ -17,7 +19,6 @@ import { getAllBlocksByUser } from "../blocks/get";
 import { sendDummyEmail } from "../dummy-emails";
 import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
 import { ApiKey } from "./api-key.model";
-import { EntityType } from "./entity-type.model";
 import {
   VerificationCode,
   VerificationCodeDocument,
@@ -38,6 +39,7 @@ export type SerializedUser = {
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
   stripeSubscriptionTier?: "hobby" | "pro";
   canMakeApiServiceCalls?: boolean;
+  usageLimitCents?: number;
 };
 
 export type UserProperties = {
@@ -51,6 +53,7 @@ export type UserProperties = {
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
   stripeSubscriptionTier?: "hobby" | "pro";
   canMakeApiServiceCalls?: boolean;
+  usageLimitCents?: number;
 };
 
 export type UserAvatarProperties = {
@@ -82,6 +85,7 @@ export class User {
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
   stripeSubscriptionTier?: "hobby" | "pro";
   canMakeApiServiceCalls?: boolean;
+  usageLimitCents?: number;
 
   static COLLECTION_NAME = "bp-users";
 
@@ -110,6 +114,7 @@ export class User {
     this.stripeSubscriptionStatus = args.stripeSubscriptionStatus;
     this.stripeSubscriptionTier = args.stripeSubscriptionTier;
     this.canMakeApiServiceCalls = args.canMakeApiServiceCalls;
+    this.usageLimitCents = args.usageLimitCents;
   }
 
   private static isShortnameReserved(shortname: string): boolean {
@@ -251,7 +256,7 @@ export class User {
   static async getEntityTypesByShortname(
     db: Db,
     params: { shortname: string },
-  ): Promise<EntityType[] | null> {
+  ): Promise<EntityTypeWithMetadata[] | null> {
     const user = await User.getByShortname(db, params);
 
     return user ? user.entityTypes(db) : null;
@@ -453,7 +458,9 @@ export class User {
   }
 
   async entityTypes(db: Db) {
-    return await EntityType.getAllByUser(db, { user: this });
+    return (await getEntityTypes(db, { latestOnly: true, user: this })).map(
+      (dbRecord) => dbRecord.entityTypeWithMetadata,
+    );
   }
 
   blocks() {
@@ -480,6 +487,7 @@ export class User {
       stripeSubscriptionStatus: this.stripeSubscriptionStatus,
       stripeSubscriptionTier: this.stripeSubscriptionTier,
       canMakeApiServiceCalls: this.canMakeApiServiceCalls,
+      usageLimitCents: this.usageLimitCents,
     };
   }
 }

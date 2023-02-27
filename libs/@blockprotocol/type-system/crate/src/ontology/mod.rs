@@ -8,9 +8,7 @@
 mod data_type;
 mod entity_type;
 mod property_type;
-// TODO: reconsider calling these URIs in the spec, it seems to be a redundant term nowadays and
-//  we should probably just go with URL
-pub mod uri;
+pub mod url;
 
 mod shared;
 
@@ -33,7 +31,7 @@ pub use shared::{
     },
     object::{error::ParsePropertyTypeObjectError, Object},
     one_of::{error::ParseOneOfError, OneOf},
-    validate::{ValidateUri, ValidationError},
+    validate::{ValidateUrl, ValidationError},
 };
 
 // Re-export the repr contents so they're nicely grouped and so that they're easier to import in

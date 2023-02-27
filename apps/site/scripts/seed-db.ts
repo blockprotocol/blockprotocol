@@ -2,10 +2,11 @@ import chalk from "chalk";
 
 import { blocksDbCollectionName } from "../src/lib/api/blocks/shared";
 import { ApiKey } from "../src/lib/api/model/api-key.model";
-import { EntityType } from "../src/lib/api/model/entity-type.model";
 import { User, UserProperties } from "../src/lib/api/model/user.model";
 import { VerificationCode } from "../src/lib/api/model/verification-code.model";
 import { connectToDatabase } from "../src/lib/api/mongodb";
+import { COLLECTION_NAME as ENTITY_TYPE_COLLECTION_NAME } from "../src/pages/api/types/entity-type/shared/db";
+import { COLLECTION_NAME as PROPERTY_TYPE_COLLECTION_NAME } from "../src/pages/api/types/property-type/shared/db";
 
 const script = async () => {
   console.log(chalk.bold("Seeding DB..."));
@@ -43,13 +44,23 @@ const script = async () => {
 
   if (
     existingCollections.find(
-      ({ collectionName }) => collectionName === EntityType.COLLECTION_NAME,
+      ({ collectionName }) => collectionName === ENTITY_TYPE_COLLECTION_NAME,
     )
   ) {
-    await db.dropCollection(EntityType.COLLECTION_NAME);
+    await db.dropCollection(ENTITY_TYPE_COLLECTION_NAME);
   }
 
-  await db.createCollection(EntityType.COLLECTION_NAME);
+  await db.createCollection(ENTITY_TYPE_COLLECTION_NAME);
+
+  if (
+    existingCollections.find(
+      ({ collectionName }) => collectionName === PROPERTY_TYPE_COLLECTION_NAME,
+    )
+  ) {
+    await db.dropCollection(PROPERTY_TYPE_COLLECTION_NAME);
+  }
+
+  await db.createCollection(PROPERTY_TYPE_COLLECTION_NAME);
 
   if (
     existingCollections.find(
@@ -101,6 +112,7 @@ const script = async () => {
 
   await import("./create-db-indexes");
   await import("./reset-s3-bucket");
+  await import("./mirror-blocks-from-production-deployment");
 };
 
 await script();

@@ -6,10 +6,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { FunctionComponent, ReactNode } from "react";
 
+export type TableHeader = ReactNode[];
 export type TableRows = ReactNode[][];
 
 type TableProps = {
-  header: string[];
+  header: TableHeader;
   rows: TableRows;
 };
 
@@ -19,18 +20,22 @@ export const Table: FunctionComponent<TableProps> = ({ header, rows }) => {
       <MuiTable sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            {header.map((title) => (
-              <TableCell
-                key={title}
-                sx={{
-                  color: ({ palette }) => palette.bpGray[70],
-                  fontWeight: 500,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {title}
-              </TableCell>
-            ))}
+            {header.map((cell) =>
+              typeof cell === "string" ? (
+                <TableCell
+                  key={cell}
+                  sx={{
+                    color: ({ palette }) => palette.bpGray[70],
+                    fontWeight: 500,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {cell}
+                </TableCell>
+              ) : (
+                cell
+              ),
+            )}
           </TableRow>
         </TableHead>
         <TableBody>

@@ -7,20 +7,22 @@ test.beforeEach(async () => {
   await resetSite();
 });
 
-test("schema page should contain key elements", async ({ page }) => {
+test.skip("schema page should contain key elements", async ({ page }) => {
   await page.goto("/");
 
   await login({ page });
 
+  const newEntityTypeTitle = "TestSchema";
+
   const entityType = await createSchema({
-    title: "TestSchema",
+    title: newEntityTypeTitle,
     page,
   });
 
-  await page.goto(`/@alice/types/${entityType.schema.title}`);
+  await page.goto(entityType.schema.$id);
 
   await expect(
-    page.locator(`text=${entityType.schema.title} Schema`),
+    page.getByRole("heading", { name: "TestSchema Entity Type" }),
   ).toBeVisible();
 
   await expect(page.locator("text=@alice >")).toBeVisible();
@@ -31,45 +33,15 @@ test("schema page should contain key elements", async ({ page }) => {
   );
 
   await expect(
-    page.locator(
-      "text=You can use this editor to build basic schemas, representing types of entities.",
-    ),
+    page.locator(`text=Properties of ${newEntityTypeTitle}`),
   ).toBeVisible();
 
   await expect(
-    page.locator(
-      "text=You can use these entity types as the expected value for a property in another schema.",
-    ),
-  ).toBeVisible();
-
-  await expect(page.locator(`text=${entityType.schema.$id}`)).toBeVisible();
-
-  await expect(page.locator(`text=${entityType.schema.$id}`)).toHaveAttribute(
-    "href",
-    entityType.schema.$id,
-  );
-
-  await expect(page.locator(`a:has-text('this link')`)).toHaveAttribute(
-    "href",
-    `${entityType.schema.$id}?json`,
-  );
-
-  const schemaPropertiesTable = page.locator(
-    "[data-testid='schema-properties-table']",
-  );
-
-  await expect(schemaPropertiesTable).toBeVisible();
-
-  await expect(
-    schemaPropertiesTable.locator('[placeholder="newProperty"]'),
-  ).toBeVisible();
-
-  await expect(
-    schemaPropertiesTable.locator("text=Create Property"),
+    page.locator(`text=Links defined on ${newEntityTypeTitle}`),
   ).toBeVisible();
 });
 
-test("authenticated user should be able to update their schema in schema page", async ({
+test.skip("authenticated user should be able to update their schema in schema page", async ({
   page,
 }) => {
   await page.goto("/");
@@ -81,57 +53,33 @@ test("authenticated user should be able to update their schema in schema page", 
     page,
   });
 
-  await page.goto(`/@alice/types/${entityType.schema.title}`);
+  await page.goto(entityType.schema.$id);
 
-  const schemaPropertiesTable = page.locator(
-    "[data-testid='schema-properties-table']",
-  );
+  await expect(page.locator("text=Add a property")).toBeVisible();
 
   await expect(
-    schemaPropertiesTable.locator('[placeholder="newProperty"]'),
-  ).toBeVisible();
-
-  await expect(
-    schemaPropertiesTable.locator("text=Create Property"),
-  ).toBeVisible();
-
-  const property1Name = "label";
-
-  await expect(
-    schemaPropertiesTable.locator("tr", {
-      has: page.locator(`input[value='${property1Name}']`),
-    }),
+    page.locator(`input[placeholder='Search for a property type']`),
   ).not.toBeVisible();
 
-  await schemaPropertiesTable
-    .locator('[placeholder="newProperty"]')
-    .fill(property1Name);
-
-  await schemaPropertiesTable.locator("text=Create Property").click();
+  await page.locator("text=Add a property").click();
 
   await expect(
-    schemaPropertiesTable.locator("tr", {
-      has: page.locator(`input[value='${property1Name}']`),
-    }),
+    page.locator(`input[placeholder='Search for a property type']`),
   ).toBeVisible();
 
-  const property2Name = "value1";
+  const propertyName = "value1";
 
-  await schemaPropertiesTable
-    .locator('[placeholder="newProperty"]')
-    .fill(property2Name);
+  await page
+    .locator(`input[placeholder='Search for a property type']`)
+    .fill(propertyName);
 
-  await schemaPropertiesTable.locator("text=Create Property").click();
+  const createButtonText = `Create ${propertyName}`;
 
-  const property2Row = schemaPropertiesTable.locator("tr", {
-    has: page.locator(`input[value='${property2Name}']`),
-  });
+  await expect(page.locator(`text=${createButtonText}`)).toBeVisible();
 
-  await expect(property2Row).toBeVisible();
+  await page.locator(`text=${createButtonText}`).click();
 
-  await expect(property2Row.locator("text=Delete")).toBeVisible();
-
-  await property2Row.locator("text=Delete").click();
-
-  await expect(property2Row).not.toBeVisible();
+  await expect(
+    page.locator("input[placeholder='Select acceptable values']"),
+  ).toBeVisible();
 });

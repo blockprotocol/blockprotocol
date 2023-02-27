@@ -69,7 +69,7 @@ The expected structure of a given entity's `properties` is described by its **en
 
 For example, the structure of the **Microsoft** entity might be described by the `Company` entity type.
 
-The formal specification for defining entities can be found [here](https://blockprotocol.org/docs/spec/graph-service#entity-definition).
+The formal specification for defining entities can be found [here](https://blockprotocol.org/docs/spec/graph-module#entity-definition).
 
 We are going to be working with entities of type `Person` and `Project`.
 
@@ -222,11 +222,11 @@ Now we are displaying info about the person, we can move on to showing the proje
 
 To do so, we need to understand the concept of linking entities together to form a graph.
 
-The Block Protocol's graph service defines a system containing **entities** connected by **links**.
+The Block Protocol's graph module defines a system containing **entities** connected by **links**.
 
 A network of entities connected by links is known as a **graph** (if you know the terms, you can think of entities as **nodes** or **vertices**, and links as **edges** – don't worry about these if you don't).
 
-The graph service allows applications and blocks to exchange data about the network of entities and links within an application, and make requests to create or edit them.
+The graph module allows applications and blocks to exchange data about the network of entities and links within an application, and make requests to create or edit them.
 
 We already discussed the structure of entities, so let's look at links now.
 
@@ -318,7 +318,7 @@ const DevApp = () => {
 
 Now that we have some entities linked to the `blockEntity`, we can read those entities and the links from `blockGraph`.
 
-To do, first we add `blockGraph` to the data that we are taking from the `graph` service object.
+To do, first we add `blockGraph` to the data that we are taking from the `graph` module object.
 
 We can also go ahead and get references to `linkedEntities` and `linkGroups` from `blockGraph`:
 
@@ -415,7 +415,7 @@ Here's the complete `app.tsx` after taking the previous steps
 ```tsx
 import {
   BlockComponent,
-  useGraphBlockService,
+  useGraphBlockModule,
 } from "@blockprotocol/graph/react";
 import { useRef } from "react";
 
@@ -444,7 +444,7 @@ export const App: BlockComponent<BlockEntityProperties> = ({
   },
 }) => {
   const blockRootRef = useRef<HTMLDivElement>(null);
-  const { graphService } = useGraphBlockService(blockRootRef);
+  const { graphModule } = useGraphBlockModule(blockRootRef);
 
   // Extract linked entities and links from blockGraph;
   const { linkedEntities, linkGroups } = blockGraph ?? {};
@@ -493,7 +493,7 @@ Here's how.
 
 ### Using the Block Protocol API
 
-Your block has a `graphService` variable in it. This is a reference to a handler for block-application communication.
+Your block has a `graphModule` variable in it. This is a reference to a handler for block-application communication.
 
 The handler has a number of methods available on it which correspond to messages your block can send to the application.
 
@@ -501,11 +501,11 @@ Messages are used by the block to make requests for the creation, editing, or de
 
 It is up to the embedding application which requests are permitted. Our mock application permits everything.
 
-We are going to be using one such message: `updateEntity`. A full list is available [here](https://blockprotocol.org/docs/spec/graph-service#message-definitions).
+We are going to be using one such message: `updateEntity`. A full list is available [here](https://blockprotocol.org/docs/spec/graph-module#message-definitions).
 
-To send a message to the embedding application, we call the relevant method on `graphService`, passing the expected `data`.
+To send a message to the embedding application, we call the relevant method on `graphModule`, passing the expected `data`.
 
-Here, we use the `updateEntity` method ([docs](https://blockprotocol.org/docs/spec/graph-service#message:updateEntity)).
+Here, we use the `updateEntity` method ([docs](https://blockprotocol.org/docs/spec/graph-module#message:updateEntity)).
 This is a request to the application to update an entity. It expects two fields:
 
 1.  the `entityId` of the entity to update
@@ -521,7 +521,7 @@ This sends a request to the application. If successful, the entity will be updat
 ```tsx
 <input
   onChange={(event) =>
-    graphService?.updateEntity({
+    graphModule?.updateEntity({
       data: {
         entityId, // this is `blockEntity.entityId` – we extracted it earlier
         properties: { ...properties, description: event.target.value },
@@ -543,7 +543,7 @@ and be careful not to send the `blockEntity`'s by mistake:
       <h3>{project.properties.name}</h3>
       <input
         onChange={(event) =>
-          graphService?.updateEntity({
+          graphModule?.updateEntity({
             data: {
               entityId: project.entityId,
               properties: {
@@ -590,7 +590,7 @@ For example, we might show text inside of a text input for our description if `r
   ) : (
     <input
       onChange={(event) =>
-        graphService?.updateEntity({
+        graphModule?.updateEntity({
           data: {
             entityId, // this is `blockEntity.entityId` – we extracted it earlier
             properties: { ...properties, description: event.target.value },
@@ -634,7 +634,7 @@ const [draftDescription, setDraftDescription] = useState(description);
   <input
     onChange={(event) => setDraftDescription(event.target.value)}
     onBlur={() =>
-      graphService?.updateEntity({
+      graphModule?.updateEntity({
         data: {
           entityId, // this is `blockEntity.entityId` – we extracted it earlier
           properties: { ...properties, description: draftDescription },

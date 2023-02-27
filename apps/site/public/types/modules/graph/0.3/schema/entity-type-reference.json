@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type-reference",
+  "title": "Entity Type Reference",
+  "description": "A reference to a entity type.",
+  "type": "object",
+  "properties": {
+    "$ref": {
+      "$comment": "The versioned URL of a entity type (the $id of the entity type's schema)",
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
+    }
+  },
+  "required": ["$ref"],
+  "additionalProperties": false
+}
