@@ -1,13 +1,22 @@
 {
-  "name": "aio-demo",
+  "name": "@blocks/aio-demo",
   "version": "0.0.0",
-  "description": "aio-demo block",
+  "description": "This is an all-in-one demo block for the Block Protocol.",
   "keywords": [
     "blockprotocol",
     "blocks"
   ],
+  "homepage": "https://blockprotocol.org",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "libs/mock-block-dock"
+  },
   "license": "MIT",
-  "author": "Alfred Mountfield",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
   "scripts": {
     "build": "block-scripts build",
     "codegen": "block-scripts codegen && yarn format",
@@ -28,13 +37,15 @@
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
+    "@local/tsconfig": "0.0.0-private",
     "@types/react-dom": "^18.0.9",
     "block-scripts": "0.2.3",
     "eslint": "8.33.0",
     "mock-block-dock": "0.1.4",
     "prettier": "2.8.2",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "typescript": "4.9.4"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -47,10 +58,10 @@
     "blockType": {
       "entryPoint": "react"
     },
-    "displayName": "Template",
+    "displayName": "All-In-One Demo Block",
     "icon": "public/omega.svg",
     "image": "public/block-preview.png",
-    "name": "block-template-react",
+    "name": "aio-demo",
     "protocol": "0.3",
     "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
     "codegen": {

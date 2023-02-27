@@ -1,14 +1,7 @@
 {
+  "extends": "@local/tsconfig/dom+jsx.json",
   "compilerOptions": {
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "noEmit": true,
-    "noUncheckedIndexedAccess": true,
-    "resolveJsonModule": true,
-    "strict": true
+    "outDir": "dist"
   },
   "include": ["src"]
 }
