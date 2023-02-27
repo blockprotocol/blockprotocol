@@ -78,12 +78,9 @@ The most detailed version of this would be for blocks to be able to:
 
 ### Graph
 
-#### Entity types
+#### Entity type inheritance and forking
 
-We’re intending to move away from entities having to fully describe the constraints of each of their properties.
-Instead, type definitions are going to become shareable and reusable in a new type system which establishes
-a hierarchy of types to address a number of shortcomings in our current system.
-For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/352).
+Entity types in the Graph module are currently unable to inherit from other entity types. We'd like to add support for this in a way that doesn't break existing entity types and allows for reusability across embedding applications and end Block Protocol users. To allow for situations where a user wants to customize an entity type in a way that is non-compatible with inheritance, we want a mechanism to "fork" or "copy" an existing entity type. For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/428).
 
 #### Pagination
 
