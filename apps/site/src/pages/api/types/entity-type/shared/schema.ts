@@ -1,8 +1,9 @@
-import {
-  ENTITY_TYPE_META_SCHEMA,
-  EntityType,
-  EntityTypeWithMetadata,
-} from "@blockprotocol/graph";
+/*
+ @todo - We should be able to import from the `@blockprotocol/graph` package here but we're running into strange errors
+   with named exports, CommonJS, and ESM modules from the dependency on `/core`
+ */
+import { EntityType, EntityTypeWithMetadata } from "@blockprotocol/graph";
+import { ENTITY_TYPE_META_SCHEMA } from "@blockprotocol/type-system/slim";
 
 import { generateOntologyUrl } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";
