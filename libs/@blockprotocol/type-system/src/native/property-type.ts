@@ -6,6 +6,9 @@ import {
   VersionedUrl,
 } from "../../wasm/type-system";
 
+export const PROPERTY_TYPE_META_SCHEMA: PropertyType["$schema"] =
+  "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type";
+
 /**
  * Type guard to determine if a given {@link PropertyValues} is an array definition.
  *
