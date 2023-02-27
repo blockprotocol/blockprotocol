@@ -208,7 +208,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
               </>
             }
           />
-          <Link href="/docs" display="flex" alignItems="center">
+          <Link href="/docs" display="flex" alignItems="center" fontWeight={500}>
             Discover how blocks and types work{" "}
             <FontAwesomeIcon icon={faChevronRight} sx={{ ml: 0.75 }} />
           </Link>

@@ -60,6 +60,7 @@ const HubItem = ({
           variant="bpSmallCopy"
           color={(theme) => theme.palette.gray[80]}
           fontSize={15}
+          fontWeight={400}
         >
           {description}
         </Typography>
@@ -185,7 +186,7 @@ const HubHeading = ({ children }: { children: ReactNode }) => (
 );
 
 const HubSubHeading = ({ children }: { children: ReactNode }) => (
-  <Typography mt={2} color={(theme) => theme.palette.gray[80]}>
+  <Typography mt={2} color={(theme) => theme.palette.gray[80]} fontSize={21}>
     {children}
   </Typography>
 );
