@@ -241,6 +241,8 @@ export type MapboxRetrieveStaticMapData = {
  */
 export type MapboxRetrieveStaticMapResponseData = string;
 
+export type ServiceMessageError = "FORBIDDEN";
+
 export type EmbedderServiceMessageCallbacks = {
   /** OpenAI */
 
@@ -248,14 +250,14 @@ export type EmbedderServiceMessageCallbacks = {
     OpenAICreateImageData,
     null,
     { data: OpenAICreateImageResponseData },
-    null
+    ServiceMessageError
   >;
 
   openaiCompleteText: MessageCallback<
     OpenAICompleteTextData,
     null,
     { data: OpenAICompleteTextResponseData },
-    null
+    ServiceMessageError
   >;
 
   /** Mapbox Geocoding API */
@@ -264,14 +266,14 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxForwardGeocodingData,
     null,
     { data: MapboxForwardGeocodingResponseData },
-    null
+    ServiceMessageError
   >;
 
   mapboxReverseGeocoding: MessageCallback<
     MapboxReverseGeocodingData,
     null,
     { data: MapboxReverseGeocodingResponseData },
-    null
+    ServiceMessageError
   >;
 
   /** Mapbox Directions API */
@@ -280,7 +282,7 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxRetrieveDirectionsData,
     null,
     { data: MapboxRetrieveDirectionsResponseData },
-    null
+    ServiceMessageError
   >;
 
   /** Mapbox Isochrone API */
@@ -289,7 +291,7 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxRetrieveIsochronesData,
     null,
     { data: MapboxRetrieveIsochronesResponseData },
-    null
+    ServiceMessageError
   >;
 
   /** Mapbox Autofill API */
@@ -298,21 +300,21 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxSuggestAddressData,
     null,
     { data: MapboxSuggestAddressResponseData },
-    null
+    ServiceMessageError
   >;
 
   mapboxRetrieveAddress: MessageCallback<
     MapboxRetrieveAddressData,
     null,
     { data: MapboxRetrieveAddressResponseData },
-    null
+    ServiceMessageError
   >;
 
   mapboxCanRetrieveAddress: MessageCallback<
     MapboxCanRetrieveAddressData,
     null,
     { data: MapboxCanRetrieveAddressResponseData },
-    null
+    ServiceMessageError
   >;
 
   /** Mapbox Static Map API */
@@ -321,7 +323,7 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxRetrieveStaticMapData,
     null,
     { data: MapboxRetrieveStaticMapResponseData },
-    null
+    ServiceMessageError
   >;
 };
 
