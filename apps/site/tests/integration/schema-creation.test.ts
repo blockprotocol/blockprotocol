@@ -5,7 +5,7 @@ import { login } from "../shared/nav.js";
 import { createSchema } from "../shared/schemas.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
 
-test.skip("user should be able to create an entity type", async ({ page }) => {
+test("user should be able to create an Entity Type", async ({ page }) => {
   await resetSite();
 
   await page.goto("/");
@@ -22,7 +22,7 @@ test.skip("user should be able to create an entity type", async ({ page }) => {
     page,
   });
 
-  await page.locator("button", { hasText: "Create New Entity Type" }).click();
+  await page.locator("button", { hasText: "Create an Entity Type" }).click();
 
   const schemaModal = page.locator("[data-testid='create-schema-modal']");
 
@@ -51,11 +51,11 @@ test.skip("user should be able to create an entity type", async ({ page }) => {
 
   await schemaModal.locator('button:has-text("Create")').click();
 
-  await page
-    .locator(
-      `text=Invalid schema: User already has an entity type with id ${existingSchemaWithMetadata.schema.$id}`,
-    )
-    .click();
+  await expect(
+    page.locator("[data-testid='create-schema-modal']", {
+      hasText: `User already has an entity type with id ${existingSchemaWithMetadata.schema.$id}`,
+    }),
+  ).toBeVisible();
 
   await inputs[0]!.fill(newSchemaName);
 
