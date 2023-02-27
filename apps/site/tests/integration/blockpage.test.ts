@@ -28,10 +28,10 @@ test("Block page should contain key elements", async ({
 
   const stringifiedJson = JSON.stringify(
     {
-      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/caption/":
-        "A JavaScript code example.",
       "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/language/":
         "javascript",
+      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/caption/":
+        "A JavaScript code example.",
       "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/content/":
         "function debounce(func, timeout = 300){\n  let timer;\n  return (...args) => {\n    clearTimeout(timer);\n    timer = setTimeout(() => { func.apply(this, args); }, timeout);\n  };\n}",
     },
@@ -118,7 +118,7 @@ test("should show an error message if an unsupported block is rendered", async (
   page,
   isMobile,
 }) => {
-  await page.goto("/@hash/blocks/embed");
+  await page.goto("/@hash/blocks/paragraph");
 
   if (isMobile) {
     await page.locator("text=Block Data").click();
@@ -130,17 +130,7 @@ test("should show an error message if an unsupported block is rendered", async (
   ).toHaveValue(
     JSON.stringify(
       {
-        name: "Embed",
-        description: "Embed Content",
-        icon: "http://localhost:3000/blocks/@hash/embed/public/embed.svg",
-        examples: [
-          {
-            initialHtml:
-              '<iframe src="https://core.hash.ai/embed.html?project=%40hash%2Fcity-infection-model&ref=6.4.2" width="300" height="171" frameborder="0" scrolling="auto"></iframe>',
-            initialWidth: 600,
-            initialHeight: 340,
-          },
-        ],
+        text: "William Shakespeare was an English playwright, poet and actor, widely regarded as the greatest writer in the English language and the world's greatest dramatist. He is often called England's national poet and the \"Bard of Avon\".",
       },
       null,
       2,
