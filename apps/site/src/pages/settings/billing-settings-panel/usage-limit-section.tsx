@@ -173,7 +173,7 @@ export const UsageLimitSection: FunctionComponent = () => {
       <TextField
         id="usage-limit-input"
         sx={{
-          width: 375,
+          maxWidth: 375,
         }}
         fullWidth
         type="text"
