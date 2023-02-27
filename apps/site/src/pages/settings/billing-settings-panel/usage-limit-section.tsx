@@ -165,9 +165,7 @@ export const UsageLimitSection: FunctionComponent = () => {
         component="label"
         variant="bpSmallCopy"
         sx={{
-          color: ({ palette }) => palette.gray[90],
-          opacity: 0.66,
-          // marginBottom: 1,
+          color: ({ palette }) => palette.gray[70],
         }}
       >
         Spending cap
