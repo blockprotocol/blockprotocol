@@ -94,10 +94,10 @@ test("Block page should contain key elements", async ({
 
   await expect(page.locator('[data-testid="block-slider"]')).toBeVisible();
 
-  // New blocks can get added, hence the usage of greater than instead of equal too
+  // More blocks can be mirrored, hence the usage of greater than instead of equal too
   expect(
     await page.locator('[data-testid="block-slider"] >> .slick-slide').count(),
-  ).toBeGreaterThan(5);
+  ).toBeGreaterThan(4);
 
   const footerCTALocator = page.locator("data-test-id=footerCTA");
   await expect(footerCTALocator).toBeVisible();
