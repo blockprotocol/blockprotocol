@@ -248,14 +248,14 @@ export type EmbedderServiceMessageCallbacks = {
     OpenAICreateImageData,
     null,
     { data: OpenAICreateImageResponseData },
-    null
+    "FORBIDDEN"
   >;
 
   openaiCompleteText: MessageCallback<
     OpenAICompleteTextData,
     null,
     { data: OpenAICompleteTextResponseData },
-    null
+    "FORBIDDEN"
   >;
 
   /** Mapbox Geocoding API */
@@ -264,14 +264,14 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxForwardGeocodingData,
     null,
     { data: MapboxForwardGeocodingResponseData },
-    null
+    "FORBIDDEN"
   >;
 
   mapboxReverseGeocoding: MessageCallback<
     MapboxReverseGeocodingData,
     null,
     { data: MapboxReverseGeocodingResponseData },
-    null
+    "FORBIDDEN"
   >;
 
   /** Mapbox Directions API */
@@ -280,7 +280,7 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxRetrieveDirectionsData,
     null,
     { data: MapboxRetrieveDirectionsResponseData },
-    null
+    "FORBIDDEN"
   >;
 
   /** Mapbox Isochrone API */
@@ -289,7 +289,7 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxRetrieveIsochronesData,
     null,
     { data: MapboxRetrieveIsochronesResponseData },
-    null
+    "FORBIDDEN"
   >;
 
   /** Mapbox Autofill API */
@@ -298,21 +298,21 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxSuggestAddressData,
     null,
     { data: MapboxSuggestAddressResponseData },
-    null
+    "FORBIDDEN"
   >;
 
   mapboxRetrieveAddress: MessageCallback<
     MapboxRetrieveAddressData,
     null,
     { data: MapboxRetrieveAddressResponseData },
-    null
+    "FORBIDDEN"
   >;
 
   mapboxCanRetrieveAddress: MessageCallback<
     MapboxCanRetrieveAddressData,
     null,
     { data: MapboxCanRetrieveAddressResponseData },
-    null
+    "FORBIDDEN"
   >;
 
   /** Mapbox Static Map API */
@@ -321,7 +321,7 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxRetrieveStaticMapData,
     null,
     { data: MapboxRetrieveStaticMapResponseData },
-    null
+    "FORBIDDEN"
   >;
 };
 

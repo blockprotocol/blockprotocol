@@ -1,5 +1,5 @@
 import { EmbedderServiceMessageCallbacks } from "@blockprotocol/service";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const externalApiHttpClient = axios.create();
 
@@ -9,7 +9,8 @@ const callExternalApiMethod = async (params: {
   providerName: string;
   methodName: string;
   payload: any;
-}): Promise<{ data: any }> => {
+  // @todo better typings
+}): Promise<{ data?: any; errors?: any }> => {
   const {
     providerName,
     methodName,
@@ -23,20 +24,39 @@ const callExternalApiMethod = async (params: {
 
   if (!blockProtocolApiKey) {
     throw new Error(
-      `Visit ${bpSiteHost}/dashboard to generate a Block Protocol API key, which is required to make calls to the "${methodName}" method of the BP service module, and ensure it is passed to the \`MockBlockDock\` component as \`${blockProtocolApiKey}\`.`,
+      `Visit ${bpSiteHost}/dashboard to generate a Block Protocol API key, which is required to make calls to the "${methodName}" method of the BP service module, and ensure it is passed to the \`MockBlockDock\` component as blockProtocolApiKey.`,
     );
   }
 
-  const { data } = await externalApiHttpClient.post(
-    "/external-service-method",
-    { providerName, methodName, payload },
-    {
-      headers: { "x-api-key": blockProtocolApiKey },
-      baseURL: baseUrl,
-    },
-  );
+  try {
+    const { data } = await externalApiHttpClient.post(
+      "/external-service-method",
+      { providerName, methodName, payload },
+      {
+        headers: { "x-api-key": blockProtocolApiKey },
+        baseURL: baseUrl,
+      },
+    );
 
-  return { data: data.externalServiceMethodResponse };
+    return { data: data.externalServiceMethodResponse };
+  } catch (error) {
+    const axiosError = error as AxiosError;
+
+    const { status, data } = axiosError.response ?? {};
+
+    return {
+      errors: [
+        {
+          message:
+            data && typeof data === "object" && "errors" in data
+              ? (data.errors as any)?.[0]?.message
+              : "An unknown error occurred.",
+          code:
+            status === 401 || status === 403 ? "FORBIDDEN" : "INTERNAL_ERROR",
+        },
+      ],
+    };
+  }
 };
 
 export const constructServiceModuleCallbacks = (params: {
