@@ -197,7 +197,7 @@ The duplication happened on the expanded type resulting in combining/expanding `
 occupation◄────┘
 ```
 
-And like the previous example, the `MyEmployee` type would not be a subtype of `Person` anymore. It also wouldn't be a subtype of `Being` either - reusability of the types is lost in this case. Ideally type duplcation would be able to preserve as many supertype relations as possible.
+And like the previous example, the `MyEmployee` type would not be a subtype of `Person` anymore. It also wouldn't be a subtype of `Being` either - the reusability of the types is lost in this case. Ideally, type duplication would be able to preserve as many supertype relations as possible.
 
 ## Addressing previous considerations
 
