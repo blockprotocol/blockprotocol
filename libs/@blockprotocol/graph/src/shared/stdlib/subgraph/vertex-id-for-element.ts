@@ -2,7 +2,6 @@ import {
   EntityRecordId,
   GraphElementVertexId,
   isEntityRecordId,
-  isEntityVertexId,
   isOntologyTypeRecordId,
   OntologyTypeRecordId,
   Subgraph,
