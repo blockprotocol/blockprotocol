@@ -51,13 +51,13 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     yarn dev:db
     ```
 
-1.  **On first run**, or if you want to reset app data, seed the database in a separate terminal using:
+1.  **On first run**, or if you want to reset app data, seed the database and the static object storage in a separate terminal using:
 
     ```sh
     yarn dev:seed-db
     ```
 
-1.  **On first run**, or **if you need to rebuild a block or blocks**, follow the steps to [build Hub blocks](#building-hub-blocks)
+    This command initializes a couple of demo users and blocks. Selected blocks are mirrored from [blockprotocol.org/hub](https://blockprotocol.org/hub).
 
 1.  Run the Next.js app in a separate terminal using:
 
@@ -96,23 +96,6 @@ If you want to send verification codes to an email address, the following AWS en
 - `BP_AWS_REGION`: The region, eg. `us-east-1`
 - `BP_AWS_ACCESS_KEY_ID`: The AWS access key
 - `BP_AWS_SECRET_ACCESS_KEY`: The AWS secret access key
-
-### Building Hub blocks
-
-Before serving any blocks via the Hub, they need to be prepared (i.e. built in most cases).
-Blocks can be registered in the repo's `/hub` with a build-config.
-The build-script `yarn workspace @apps/site exe prepare-blocks.ts` prepares blocks.
-
-```sh
-# prepare all blocks
-yarn workspace @apps/site exe scripts/prepare-blocks.ts
-
-# prepare blocks matching a filter (in this example, any in the `hub/@hash` folder)
-BLOCK_FILTER="@hash/*" workspace @apps/site exe scripts/prepare-blocks.ts
-```
-
-Once the blocks are built, simply `yarn dev` and head over to
-`localhost:3000/hub`.
 
 ## Vercel Deployment
 
