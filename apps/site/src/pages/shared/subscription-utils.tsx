@@ -33,7 +33,9 @@ export const priceToHumanReadable = ({
 
   return currencySymbol
     ? `${currencySymbol}${amount}`
-    : `${amount} ${currency}`;
+    : currency
+    ? `${amount} ${currency}`
+    : amount.toString();
 };
 
 export const dateToHumanReadable = (
