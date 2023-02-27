@@ -1,4 +1,8 @@
-import { EntityType, EntityTypeWithMetadata } from "@blockprotocol/graph";
+import {
+  ENTITY_TYPE_META_SCHEMA,
+  EntityType,
+  EntityTypeWithMetadata,
+} from "@blockprotocol/graph";
 
 import { generateOntologyUrl } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";
@@ -24,16 +28,17 @@ export const generateEntityTypeWithMetadata = (data: {
   });
 
   const entityType: Required<EntityType> = {
+    $schema: ENTITY_TYPE_META_SCHEMA,
+    $id: versionedUrl,
+    kind,
+    title: incompleteSchema.title,
+    type: "object",
     allOf: incompleteSchema.allOf ?? [],
     description: incompleteSchema.description ?? "",
     examples: incompleteSchema.examples ?? [],
-    $id: versionedUrl,
-    kind,
     links: incompleteSchema.links ?? {},
     properties: incompleteSchema.properties ?? {},
     required: incompleteSchema.required ?? [],
-    title: incompleteSchema.title,
-    type: "object",
   } as const;
 
   return {

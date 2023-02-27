@@ -1,5 +1,8 @@
-import { PropertyTypeWithMetadata } from "@blockprotocol/graph";
-import { PropertyType } from "@blockprotocol/type-system";
+import {
+  PROPERTY_TYPE_META_SCHEMA,
+  PropertyType,
+  PropertyTypeWithMetadata,
+} from "@blockprotocol/graph";
 
 import { generateOntologyUrl } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";
@@ -25,11 +28,12 @@ export const generatePropertyTypeWithMetadata = (data: {
   });
 
   const propertyType: Required<PropertyType> = {
+    $schema: PROPERTY_TYPE_META_SCHEMA,
     $id: versionedUrl,
-    description: incompleteSchema.description ?? "",
-    oneOf: incompleteSchema.oneOf ?? [],
     kind,
     title: incompleteSchema.title,
+    description: incompleteSchema.description ?? "",
+    oneOf: incompleteSchema.oneOf ?? [],
   };
 
   return {
