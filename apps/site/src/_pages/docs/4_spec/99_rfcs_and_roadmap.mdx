@@ -78,7 +78,7 @@ The most detailed version of this would be for blocks to be able to:
 
 ### Graph
 
-#### Entity type inheritance and forking
+#### Entity type extension and duplication
 
 Currently, if a user wants to add additional information to an existing entity type, their only option is to make a brand new one and manually copy the structure. We'd like to add support for users to be able to "extend" types in a way that doesn't break existing entity types and allows for reusability across embedding applications and blocks. To allow for situations where a user wants to customize an entity type in a way that a non-compatible fashion, we want a mechanism to "duplicate" or "fork" an existing entity type. For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/428).
 
