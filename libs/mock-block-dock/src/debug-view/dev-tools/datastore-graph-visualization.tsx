@@ -14,7 +14,7 @@ import { isTemporalSubgraph } from "@blockprotocol/graph/internal";
 import {
   getEntityTypeById as getEntityTypeByIdNonTemporal,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesNonTemporal,
-  getPropertyTypesByBaseUri as getPropertyTypesByBaseUriNonTemporal,
+  getPropertyTypesByBaseUrl as getPropertyTypesByBaseUrlNonTemporal,
   getVertexIdForRecordId as getVertexIdForRecordIdNonTemporal,
 } from "@blockprotocol/graph/stdlib";
 import {
@@ -32,7 +32,7 @@ import {
 import {
   getEntityTypeById as getEntityTypeByIdTemporal,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesTemporal,
-  getPropertyTypesByBaseUri as getPropertyTypesByBaseUriTemporal,
+  getPropertyTypesByBaseUrl as getPropertyTypesByBaseUrlTemporal,
   getVertexIdForRecordId as getVertexIdForRecordIdTemporal,
   intervalOverlapsInterval,
 } from "@blockprotocol/graph/temporal/stdlib";
@@ -40,10 +40,6 @@ import { Box } from "@mui/material";
 import { GraphChart, GraphSeriesOption } from "echarts/charts";
 import * as echarts from "echarts/core";
 import { SVGRenderer } from "echarts/renderers";
-import {
-  GraphEdgeItemOption,
-  GraphNodeItemOption,
-} from "echarts/types/src/chart/graph/GraphSeries";
 import { useEffect, useRef, useState } from "react";
 
 import {
@@ -88,21 +84,21 @@ const parseLabelFromEntity = (
     "shortname",
   ];
 
-  const propertyTypes: { title?: string; propertyTypeBaseUri: string }[] =
-    Object.keys(entityToLabel.properties).map((propertyTypeBaseUri) => {
+  const propertyTypes: { title?: string; propertyTypeBaseUrl: string }[] =
+    Object.keys(entityToLabel.properties).map((propertyTypeBaseUrl) => {
       /** @todo - pick the latest version, or the version in the entity type, rather than first element? */
       const [propertyType] = isTemporalSubgraph(subgraph)
-        ? getPropertyTypesByBaseUriTemporal(subgraph, propertyTypeBaseUri)
-        : getPropertyTypesByBaseUriNonTemporal(subgraph, propertyTypeBaseUri);
+        ? getPropertyTypesByBaseUrlTemporal(subgraph, propertyTypeBaseUrl)
+        : getPropertyTypesByBaseUrlNonTemporal(subgraph, propertyTypeBaseUrl);
 
       return propertyType
         ? {
             title: propertyType.schema.title.toLowerCase(),
-            propertyTypeBaseUri,
+            propertyTypeBaseUrl,
           }
         : {
             title: undefined,
-            propertyTypeBaseUri,
+            propertyTypeBaseUrl,
           };
     });
 
@@ -111,7 +107,7 @@ const parseLabelFromEntity = (
 
     if (found) {
       return getFallbackIfNotString(
-        entityToLabel.properties[found.propertyTypeBaseUri],
+        entityToLabel.properties[found.propertyTypeBaseUrl],
       );
     }
   }
@@ -158,7 +154,11 @@ const createDefaultEChartOptions = (params?: {
 // Register the required components
 echarts.use([GraphChart, SVGRenderer]);
 
-type EChartNode = GraphNodeItemOption & { id: string };
+// echarts doesn't export GraphNodeItemOption directly, and a deep import messes up types
+type EChartNode = Exclude<
+  NonNullable<GraphSeriesOption["nodes"]>[0],
+  string | number | Date | any[]
+> & { id: string };
 
 const mapEntityToEChartNode = (
   entity: EntityNonTemporal | EntityTemporal,
@@ -170,7 +170,8 @@ const mapEntityToEChartNode = (
   label: { show: false },
 });
 
-type EChartEdge = GraphEdgeItemOption & {
+// echarts doesn't export GraphEdgeItemOption directly, and a deep import messes up types
+type EChartEdge = NonNullable<GraphSeriesOption["edges"]>[0] & {
   target: string;
 };
 

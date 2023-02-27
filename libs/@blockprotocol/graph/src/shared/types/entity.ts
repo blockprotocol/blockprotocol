@@ -2,7 +2,7 @@ import type {
   JsonObject as CoreJsonObject,
   JsonValue as CoreJsonValue,
 } from "@blockprotocol/core";
-import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
+import { BaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 
 import {
   EntityRootType,
@@ -44,12 +44,12 @@ export const isEntityRecordId = (
 };
 
 /**
- * Entity Properties are JSON objects with `BaseUri`s as keys, _except_ when there is a Data Type of primitive type
+ * Entity Properties are JSON objects with `BaseUrl`s as keys, _except_ when there is a Data Type of primitive type
  * `object` in which case the nested objects become plain `JsonObject`s
  */
 export type EntityPropertyValue = JsonValue | EntityPropertiesObject;
 export type EntityPropertiesObject = {
-  [_: BaseUri]: EntityPropertyValue;
+  [_: BaseUrl]: EntityPropertyValue;
 };
 
 type HalfClosedInterval = TimeInterval<
@@ -64,7 +64,7 @@ export type EntityTemporalVersioningMetadata = Record<
 
 export type EntityMetadata<Temporal extends boolean> = {
   recordId: EntityRecordId;
-  entityTypeId: VersionedUri;
+  entityTypeId: VersionedUrl;
 } & (Temporal extends true
   ? { temporalVersioning: EntityTemporalVersioningMetadata }
   : {});
@@ -79,7 +79,7 @@ export type LinkData = {
 export type Entity<
   Temporal extends boolean,
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = {
@@ -94,7 +94,7 @@ export type LinkEntityAndRightEntity<Temporal extends boolean> = {
 };
 
 export type CreateEntityData = {
-  entityTypeId: VersionedUri;
+  entityTypeId: VersionedUrl;
   properties: EntityPropertiesObject;
   linkData?: LinkData;
 };
@@ -108,7 +108,7 @@ export type GetEntityData<Temporal extends boolean> = {
 
 export type UpdateEntityData = {
   entityId: EntityId;
-  entityTypeId: VersionedUri;
+  entityTypeId: VersionedUrl;
   properties: EntityPropertiesObject;
 } & Pick<LinkData, "leftToRightOrder" | "rightToLeftOrder">;
 
@@ -151,24 +151,24 @@ export type Sort = {
 
 export type MultiSort = Sort[];
 
-export type AggregateOperationInput = {
+export type QueryOperationInput = {
   multiSort?: MultiSort | null;
   multiFilter?: MultiFilter | null;
 };
 
-export type AggregateEntitiesData<Temporal extends boolean> = {
-  operation: AggregateOperationInput;
+export type QueryEntitiesData<Temporal extends boolean> = {
+  operation: QueryOperationInput;
   graphResolveDepths?: Partial<GraphResolveDepths>;
 } & (Temporal extends true
   ? { temporalAxes: QueryTemporalAxesUnresolved }
   : {});
 
-export type AggregateEntitiesResult<
+export type QueryEntitiesResult<
   Temporal extends boolean,
   T extends Subgraph<Temporal, EntityRootType<Temporal>>,
 > = {
   results: T;
-  operation: AggregateOperationInput;
+  operation: QueryOperationInput;
 };
 
 /**
@@ -183,7 +183,7 @@ type BeforeTrailingLast<
   : PreviouslyExtractedSegment;
 
 /**
- * A properties object where the URI keys have been replaced by the last segment of the URI
+ * A properties object where the URL keys have been replaced by the last segment of the URL
  * To experiment with in block building – might be useful in patterns to make block building easier.
  * @todo remove this if we settle on a pattern that doesn't benefit from it
  */

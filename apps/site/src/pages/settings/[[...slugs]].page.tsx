@@ -10,6 +10,7 @@ import {
 } from "../../components/pages/auth-wall";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
+import { ApiKeysSettingsPanel } from "./api-keys-settings-panel";
 import { BillingSettingsPanel } from "./billing-settings-panel/billing-settings-panel";
 
 const settingsPanels = [
@@ -19,13 +20,12 @@ const settingsPanels = [
     panel: <BillingSettingsPanel />,
   },
   {
-    title: "Api Keys",
-    slug: "api-keys",
+    title: "API Keys",
     /**
-     * @todo: refactor `/settings/api-keys` page to be a settings panel
-     * @see https://app.asana.com/0/0/1203781148500080/f
+     * @todo: rename this to `api-keys` when the billing page can be deleted.
      */
-    panel: null,
+    slug: "api-keys-panel",
+    panel: <ApiKeysSettingsPanel />,
   },
 ] as const;
 
@@ -75,16 +75,19 @@ const Settings: AuthWallPageContent = () => {
         <Box display="flex">
           <Sidebar
             sx={{
+              height: "unset",
               minWidth: 125,
               maxWidth: sidebarMaxWidth,
               background: "transparent",
+              borderRightWidth: 0,
+              marginLeft: 0,
             }}
             pages={settingsPanels.map(({ title, slug }) => ({
               title,
               href: `/settings/${slug}`,
             }))}
           />
-          <Paper sx={{ flexGrow: 1, padding: 6 }}>
+          <Paper sx={{ flexGrow: 1, padding: 6, marginBottom: 6 }}>
             {currentSettingsPanel?.panel}
           </Paper>
         </Box>

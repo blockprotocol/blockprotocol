@@ -1,4 +1,4 @@
-import { EntityType, extractBaseUri } from "@blockprotocol/graph";
+import { EntityType, extractBaseUrl } from "@blockprotocol/graph";
 
 import { propertyTypes } from "./property-types";
 
@@ -15,7 +15,6 @@ const worksFor: EntityType = {
   ],
   properties: {},
   required: [],
-  additionalProperties: false,
 };
 const founderOf: EntityType = {
   kind: "entityType",
@@ -30,7 +29,6 @@ const founderOf: EntityType = {
   ],
   properties: {},
   required: [],
-  additionalProperties: false,
 };
 const company: EntityType = {
   kind: "entityType",
@@ -39,19 +37,18 @@ const company: EntityType = {
   title: "Company",
   description: "A company or organization.",
   properties: {
-    [extractBaseUri(propertyTypes.numberOfEmployees.$id)]: {
+    [extractBaseUrl(propertyTypes.numberOfEmployees.$id)]: {
       $ref: propertyTypes.numberOfEmployees.$id,
     },
-    [extractBaseUri(propertyTypes.name.$id)]: {
+    [extractBaseUrl(propertyTypes.name.$id)]: {
       $ref: propertyTypes.name.$id,
     },
   },
   required: [
-    extractBaseUri(propertyTypes.numberOfEmployees.$id),
-    extractBaseUri(propertyTypes.name.$id),
+    extractBaseUrl(propertyTypes.numberOfEmployees.$id),
+    extractBaseUrl(propertyTypes.name.$id),
   ],
   links: {},
-  additionalProperties: false,
 };
 const person: EntityType = {
   kind: "entityType",
@@ -60,24 +57,24 @@ const person: EntityType = {
   title: "Person",
   description: "A human person.",
   properties: {
-    [extractBaseUri(propertyTypes.age.$id)]: {
+    [extractBaseUrl(propertyTypes.age.$id)]: {
       $ref: propertyTypes.age.$id,
     },
-    [extractBaseUri(propertyTypes.email.$id)]: {
+    [extractBaseUrl(propertyTypes.email.$id)]: {
       $ref: propertyTypes.email.$id,
     },
-    [extractBaseUri(propertyTypes.name.$id)]: {
+    [extractBaseUrl(propertyTypes.name.$id)]: {
       $ref: propertyTypes.name.$id,
     },
-    [extractBaseUri(propertyTypes.username.$id)]: {
+    [extractBaseUrl(propertyTypes.username.$id)]: {
       $ref: propertyTypes.username.$id,
     },
   },
   required: [
-    extractBaseUri(propertyTypes.age.$id),
-    extractBaseUri(propertyTypes.email.$id),
-    extractBaseUri(propertyTypes.name.$id),
-    extractBaseUri(propertyTypes.username.$id),
+    extractBaseUrl(propertyTypes.age.$id),
+    extractBaseUrl(propertyTypes.email.$id),
+    extractBaseUrl(propertyTypes.name.$id),
+    extractBaseUrl(propertyTypes.username.$id),
   ],
   links: {
     [worksFor.$id]: {
@@ -95,7 +92,6 @@ const person: EntityType = {
       ordered: false,
     },
   },
-  additionalProperties: false,
 };
 const testType: EntityType = {
   kind: "entityType",
@@ -104,13 +100,12 @@ const testType: EntityType = {
   title: "Test Type",
   description: "A Type for Testing",
   properties: {
-    [extractBaseUri(propertyTypes.name.$id)]: {
+    [extractBaseUrl(propertyTypes.name.$id)]: {
       $ref: propertyTypes.name.$id,
     },
   },
-  required: [extractBaseUri(propertyTypes.name.$id)],
+  required: [extractBaseUrl(propertyTypes.name.$id)],
   links: {},
-  additionalProperties: false,
 };
 
 export const entityTypes = {

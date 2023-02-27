@@ -127,7 +127,7 @@ const {
   blockProperties,
   blockProtocolFunctions,
   entityTypes,
-  linkedAggregations,
+  linkedQueries,
   linkedEntities,
   linkGroups,
 } = useMockBlockProps({

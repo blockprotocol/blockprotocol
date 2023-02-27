@@ -11,6 +11,6 @@ export const mockData = <Temporal extends boolean>(
   return {
     ...(subgraphTemporalAxes ? { subgraphTemporalAxes } : {}),
     entities: createEntities(subgraphTemporalAxes?.resolved),
-    // linkedAggregationDefinitions,
+    // linkedQueryDefinitions,
   } as MockData<Temporal>;
 };

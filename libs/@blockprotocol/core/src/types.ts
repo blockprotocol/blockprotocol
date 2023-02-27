@@ -40,6 +40,8 @@ export type BlockMetadataRepository =
     }
   | string;
 
+type VersionedUrl = `${string}v/${number}`;
+
 export type BlockMetadata = {
   /**
    * The name of the author of the block
@@ -50,9 +52,9 @@ export type BlockMetadata = {
    */
   blockType: BlockType;
   /**
-   * The default data used as the block's properties on first load - must comply with its schema
+   * The commit hash of the source this block was built from. If specified, 'repository' must also be specified.
    */
-  default?: JsonObject | null;
+  commit?: string;
   /**
    * A short description of the block, to help users understand its capabilities
    */
@@ -66,7 +68,7 @@ export type BlockMetadata = {
    */
   displayName?: string | null;
   /**
-   * A list of examples used to showcase a block's capabilities
+   * A list of examples property objects which comply with the block's schema, for demonstration purposes
    */
   examples?: JsonObject[] | null;
   /**
@@ -90,17 +92,18 @@ export type BlockMetadata = {
    */
   name: string;
   /**
-   * The applicable block protocol version.
+   * The applicable block protocol version, e.g. 0.3
    */
   protocol: string;
   /**
    * Specify the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development.
+   * @see also 'commit'.
    */
   repository?: BlockMetadataRepository | null;
   /**
-   * The path or URL to the block's schema (e.g. block-schema.json)
+   * The versioned URL to the block's schema
    */
-  schema: string;
+  schema: VersionedUrl;
   /**
    * The path or URL to the entrypoint source file (e.g. index.html, index.js).
    */
@@ -116,7 +119,7 @@ export type BlockMetadata = {
 };
 
 export type MessageError<ErrorCode extends string> = {
-  code: ErrorCode;
+  code: ErrorCode | "INTERNAL_ERROR";
   message: string;
   extensions?: any;
 };

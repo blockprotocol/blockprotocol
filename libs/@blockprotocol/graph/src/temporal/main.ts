@@ -3,16 +3,9 @@
  * This defines the main types and type-guards used when working with the Graph module.
  */
 
-import { BaseUri } from "@blockprotocol/type-system/slim";
+import { BaseUrl } from "@blockprotocol/type-system/slim";
 
 import {
-  AggregateEntitiesData as AggregateEntitiesDataGeneral,
-  AggregateEntitiesResult as AggregateEntitiesResultGeneral,
-  AggregateEntityTypesData as AggregateEntityTypesDataGeneral,
-  AggregateEntityTypesResult as AggregateEntityTypesResultGeneral,
-  AggregateOperationInput as AggregateOperationInputGeneral,
-  AggregatePropertyTypesData as AggregatePropertyTypesDataGeneral,
-  AggregatePropertyTypesResult as AggregatePropertyTypesResultGeneral,
   BlockGraphMessageCallbacks as BlockGraphMessageCallbacksGeneral,
   BoundedTimeInterval as BoundedTimeIntervalGeneral,
   ConstrainsLinkDestinationsOnEdge as ConstrainsLinkDestinationsOnEdgeGeneral,
@@ -21,14 +14,12 @@ import {
   ConstrainsValuesOnEdge as ConstrainsValuesOnEdgeGeneral,
   CreateEntityData as CreateEntityDataGeneral,
   CreateEntityTypeData as CreateEntityTypeDataGeneral,
-  CreateLinkedAggregationData as CreateLinkedAggregationDataGeneral,
   CreatePropertyTypeData as CreatePropertyTypeDataGeneral,
   CreateResourceError as CreateResourceErrorGeneral,
   DataTypeRootType as DataTypeRootTypeGeneral,
   DataTypeVertex as DataTypeVertexGeneral,
   DataTypeWithMetadata as DataTypeWithMetadataGeneral,
   DeleteEntityData as DeleteEntityDataGeneral,
-  DeleteLinkedAggregationData as DeleteLinkedAggregationDataGeneral,
   EdgeResolveDepths as EdgeResolveDepthsGeneral,
   Edges as EdgesGeneral,
   Entity as EntityGeneral,
@@ -57,7 +48,6 @@ import {
   FilterOperatorWithoutValue as FilterOperatorWithoutValueGeneral,
   GetEntityData as GetEntityDataGeneral,
   GetEntityTypeData as GetEntityTypeDataGeneral,
-  GetLinkedAggregationData as GetLinkedAggregationDataGeneral,
   GetPropertyTypeData as GetPropertyTypeDataGeneral,
   GraphBlockMessages as GraphBlockMessagesGeneral,
   GraphElementForIdentifier as GraphElementForIdentifierGeneral,
@@ -116,8 +106,6 @@ import {
   LimitedTemporalBound as LimitedTemporalBoundGeneral,
   LinkData as LinkDataGeneral,
   LinkDestinationsConstrainedByEdge as LinkDestinationsConstrainedByEdgeGeneral,
-  LinkedAggregation as LinkedAggregationGeneral,
-  LinkedAggregationDefinition as LinkedAggregationDefinitionGeneral,
   LinkEntityAndRightEntity as LinkEntityAndRightEntityGeneral,
   LinksConstrainedByEdge as LinksConstrainedByEdgeGeneral,
   MultiFilter as MultiFilterGeneral,
@@ -141,6 +129,13 @@ import {
   PropertyTypeRootType as PropertyTypeRootTypeGeneral,
   PropertyTypeVertex as PropertyTypeVertexGeneral,
   PropertyTypeWithMetadata as PropertyTypeWithMetadataGeneral,
+  QueryEntitiesData as QueryEntitiesDataGeneral,
+  QueryEntitiesResult as QueryEntitiesResultGeneral,
+  QueryEntityTypesData as QueryEntityTypesDataGeneral,
+  QueryEntityTypesResult as QueryEntityTypesResultGeneral,
+  QueryOperationInput as QueryOperationInputGeneral,
+  QueryPropertyTypesData as QueryPropertyTypesDataGeneral,
+  QueryPropertyTypesResult as QueryPropertyTypesResultGeneral,
   QueryTemporalAxes as QueryTemporalAxesGeneral,
   QueryTemporalAxesUnresolved as QueryTemporalAxesUnresolvedGeneral,
   ReadOrModifyResourceError as ReadOrModifyResourceErrorGeneral,
@@ -158,7 +153,6 @@ import {
   Unbounded as UnboundedGeneral,
   UpdateEntityData as UpdateEntityDataGeneral,
   UpdateEntityTypeData as UpdateEntityTypeDataGeneral,
-  UpdateLinkedAggregationData as UpdateLinkedAggregationDataGeneral,
   UpdatePropertyTypeData as UpdatePropertyTypeDataGeneral,
   UploadFileData as UploadFileDataGeneral,
   UploadFileReturn as UploadFileReturnGeneral,
@@ -173,7 +167,7 @@ import {
 export {
   type AllOf,
   type Array,
-  type BaseUri,
+  type BaseUrl,
   type DataType,
   type DataTypeReference,
   type EntityType,
@@ -183,21 +177,21 @@ export {
   type MaybeOrderedArray,
   type Object,
   type OneOf,
-  type ParseBaseUriError,
-  type ParseVersionedUriError,
+  type ParseBaseUrlError,
+  type ParseVersionedUrlError,
   type PropertyType,
   type PropertyTypeReference,
   type PropertyValues,
   type Result,
   type ValueOrArray,
-  type VersionedUri,
-  extractBaseUri,
+  type VersionedUrl,
+  extractBaseUrl,
   extractVersion,
   getReferencedIdsFromEntityType,
   getReferencedIdsFromPropertyType,
   isPropertyValuesArray,
-  validateBaseUri,
-  validateVersionedUri,
+  validateBaseUrl,
+  validateVersionedUrl,
 } from "@blockprotocol/type-system/slim";
 
 // import {
@@ -220,7 +214,7 @@ export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
    * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list
    */
   graph: {
-    blockEntitySubgraph?: Subgraph<{
+    blockEntitySubgraph: Subgraph<{
       vertexId: EntityVertexId;
       element: RootEntity;
     }>;
@@ -253,7 +247,7 @@ export type EntityMetadata = EntityMetadataGeneral<true>;
 export type LinkData = LinkDataGeneral;
 export type Entity<
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = EntityGeneral<true, Properties>;
@@ -269,10 +263,10 @@ export type MultiFilterOperatorType = MultiFilterOperatorTypeGeneral;
 export type MultiFilter = MultiFilterGeneral;
 export type Sort = SortGeneral;
 export type MultiSort = MultiSortGeneral;
-export type AggregateOperationInput = AggregateOperationInputGeneral;
-export type AggregateEntitiesData = AggregateEntitiesDataGeneral<true>;
-export type AggregateEntitiesResult<T extends Subgraph<EntityRootType>> =
-  AggregateEntitiesResultGeneral<true, T>;
+export type QueryOperationInput = QueryOperationInputGeneral;
+export type QueryEntitiesData = QueryEntitiesDataGeneral<true>;
+export type QueryEntitiesResult<T extends Subgraph<EntityRootType>> =
+  QueryEntitiesResultGeneral<true, T>;
 export type SimpleProperties<Properties extends EntityPropertiesObject> =
   SimplePropertiesGeneral<Properties>;
 export type FileAtUrlData = FileAtUrlDataGeneral;
@@ -283,24 +277,18 @@ export const isFileData = isFileDataGeneral;
 export type FileEntityProperties = FileEntityPropertiesGeneral;
 export type FileEntity = FileEntityGeneral;
 export type UploadFileReturn = UploadFileReturnGeneral;
-export type LinkedAggregationDefinition = LinkedAggregationDefinitionGeneral;
-export type LinkedAggregation = LinkedAggregationGeneral<true>;
-export type GetLinkedAggregationData = GetLinkedAggregationDataGeneral;
-export type CreateLinkedAggregationData = CreateLinkedAggregationDataGeneral;
-export type UpdateLinkedAggregationData = UpdateLinkedAggregationDataGeneral;
-export type DeleteLinkedAggregationData = DeleteLinkedAggregationDataGeneral;
 export type DataTypeWithMetadata = DataTypeWithMetadataGeneral;
 export type EntityTypeWithMetadata = EntityTypeWithMetadataGeneral;
-export type AggregateEntityTypesData = AggregateEntityTypesDataGeneral;
-export type AggregateEntityTypesResult<T extends Subgraph<EntityTypeRootType>> =
-  AggregateEntityTypesResultGeneral<T>;
+export type QueryEntityTypesData = QueryEntityTypesDataGeneral;
+export type QueryEntityTypesResult<T extends Subgraph<EntityTypeRootType>> =
+  QueryEntityTypesResultGeneral<T>;
 export type GetEntityTypeData = GetEntityTypeDataGeneral;
 export type CreateEntityTypeData = CreateEntityTypeDataGeneral;
 export type UpdateEntityTypeData = UpdateEntityTypeDataGeneral;
 export type OntologyElementMetadata = OntologyElementMetadataGeneral;
 export type PropertyTypeWithMetadata = PropertyTypeWithMetadataGeneral;
-export type AggregatePropertyTypesData = AggregatePropertyTypesDataGeneral;
-export type AggregatePropertyTypesResult = AggregatePropertyTypesResultGeneral;
+export type QueryPropertyTypesData = QueryPropertyTypesDataGeneral;
+export type QueryPropertyTypesResult = QueryPropertyTypesResultGeneral;
 export type GetPropertyTypeData = GetPropertyTypeDataGeneral;
 export type CreatePropertyTypeData = CreatePropertyTypeDataGeneral;
 export type UpdatePropertyTypeData = UpdatePropertyTypeDataGeneral;
@@ -378,20 +366,20 @@ export type PropertyTypeVertex = PropertyTypeVertexGeneral;
 export type EntityTypeVertex = EntityTypeVertexGeneral;
 export type EntityVertex<
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = EntityVertexGeneral<true, Properties>;
 export type OntologyVertex = OntologyVertexGeneral;
 export type KnowledgeGraphVertex<
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = KnowledgeGraphVertexGeneral<true, Properties>;
 export type Vertex<
   Properties extends EntityPropertiesObject | null = Record<
-    BaseUri,
+    BaseUrl,
     EntityPropertyValue
   >,
 > = VertexGeneral<true, Properties>;
@@ -428,7 +416,10 @@ export type TimeIntervalUnresolved<
   StartBound extends TemporalBound | null,
   EndBound extends TemporalBound | null,
 > = TimeIntervalUnresolvedGeneral<StartBound, EndBound>;
-export type TimeInterval = TimeIntervalGeneral;
+export type TimeInterval<
+  StartBound extends TemporalBound = TemporalBound,
+  EndBound extends TemporalBound = TemporalBound,
+> = TimeIntervalGeneral<StartBound, EndBound>;
 export type BoundedTimeInterval = BoundedTimeIntervalGeneral;
 export type VariableTemporalAxisUnresolved<
   Axis extends TemporalAxis,

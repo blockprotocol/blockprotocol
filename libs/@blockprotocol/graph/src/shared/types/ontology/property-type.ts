@@ -1,4 +1,4 @@
-import { PropertyType, VersionedUri } from "@blockprotocol/type-system/slim";
+import { PropertyType, VersionedUrl } from "@blockprotocol/type-system/slim";
 
 import { PropertyTypeRootType, Subgraph } from "../subgraph.js";
 import { OntologyElementMetadata } from "./metadata.js";
@@ -8,7 +8,7 @@ export type PropertyTypeWithMetadata = {
   metadata: OntologyElementMetadata;
 };
 
-export type AggregatePropertyTypesData = {
+export type QueryPropertyTypesData = {
   graphResolveDepths?: Partial<
     Pick<
       Subgraph<true>["depths"],
@@ -17,12 +17,12 @@ export type AggregatePropertyTypesData = {
   >;
 };
 
-export type AggregatePropertyTypesResult = {
+export type QueryPropertyTypesResult = {
   results: Subgraph<true, PropertyTypeRootType>;
 };
 
 export type GetPropertyTypeData = {
-  propertyTypeId: VersionedUri;
+  propertyTypeId: VersionedUrl;
 };
 
 type SystemDefinedPropertyTypeProperties = "$id" | "kind";
@@ -32,6 +32,6 @@ export type CreatePropertyTypeData = {
 };
 
 export type UpdatePropertyTypeData = {
-  propertyTypeId: VersionedUri;
+  propertyTypeId: VersionedUrl;
   propertyType: Omit<PropertyType, SystemDefinedPropertyTypeProperties>;
 };

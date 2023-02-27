@@ -1,8 +1,8 @@
 import {
-  BaseUri,
-  extractBaseUri,
+  BaseUrl,
+  extractBaseUrl,
   extractVersion,
-  VersionedUri,
+  VersionedUrl,
 } from "@blockprotocol/type-system/slim";
 
 import { PropertyTypeWithMetadata } from "../../../types/ontology/property-type.js";
@@ -26,7 +26,7 @@ export const getPropertyTypes = (
 };
 
 /**
- * Gets a `PropertyTypeWithMetadata` by its `VersionedUri` from within the vertices of the subgraph. Returns `undefined`
+ * Gets a `PropertyTypeWithMetadata` by its `VersionedUrl` from within the vertices of the subgraph. Returns `undefined`
  * if the property type couldn't be found.
  *
  * @param subgraph
@@ -35,13 +35,13 @@ export const getPropertyTypes = (
  */
 export const getPropertyTypeById = (
   subgraph: Subgraph<boolean>,
-  propertyTypeId: VersionedUri,
+  propertyTypeId: VersionedUrl,
 ): PropertyTypeWithMetadata | undefined => {
-  const [baseUri, version] = [
-    extractBaseUri(propertyTypeId),
+  const [baseUrl, version] = [
+    extractBaseUrl(propertyTypeId),
     extractVersion(propertyTypeId),
   ];
-  const vertex = subgraph.vertices[baseUri]?.[version];
+  const vertex = subgraph.vertices[baseUrl]?.[version];
 
   if (!vertex) {
     return undefined;
@@ -80,16 +80,16 @@ export const getPropertyTypeByVertexId = (
 };
 
 /**
- * Returns all `PropertyTypeWithMetadata`s within the vertices of the subgraph that match a given `BaseUri`
+ * Returns all `PropertyTypeWithMetadata`s within the vertices of the subgraph that match a given `BaseUrl`
  *
  * @param subgraph
- * @param baseUri
+ * @param baseUrl
  */
-export const getPropertyTypesByBaseUri = (
+export const getPropertyTypesByBaseUrl = (
   subgraph: Subgraph<boolean>,
-  baseUri: BaseUri,
+  baseUrl: BaseUrl,
 ): PropertyTypeWithMetadata[] => {
-  const versionObject = subgraph.vertices[baseUri];
+  const versionObject = subgraph.vertices[baseUrl];
 
   if (!versionObject) {
     return [];

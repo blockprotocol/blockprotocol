@@ -1,8 +1,8 @@
 import { ModuleHandler } from "@blockprotocol/core";
 
 import {
-  AggregateEntitiesData as AggregateEntitiesDataGeneral,
   GetEntityData as GetEntityDataGeneral,
+  QueryEntitiesData as QueryEntitiesDataGeneral,
 } from "../shared/types/entity.js";
 /**
  * There's an issue when importing useGraphEmbedderModule from @blockprotocol/graph/react in hashintel/hash:
@@ -13,9 +13,6 @@ import {
  */
 // import graphModuleJson from "./graph-module.json" assert { type: "json" };
 import {
-  AggregateEntitiesResult,
-  AggregateEntityTypesData,
-  AggregateEntityTypesResult,
   BlockGraphMessageCallbacks,
   CreateEntityData,
   CreateResourceError,
@@ -26,6 +23,9 @@ import {
   EntityTypeRootType,
   GetEntityTypeData,
   GraphBlockMessages,
+  QueryEntitiesResult,
+  QueryEntityTypesData,
+  QueryEntityTypesResult,
   ReadOrModifyResourceError,
   Subgraph,
   UpdateEntityData,
@@ -48,7 +48,7 @@ export class GraphBlockHandler
       | "createPropertyType"
       | "updatePropertyType"
       | "getPropertyType"
-      | "aggregatePropertyTypes"
+      | "queryPropertyTypes"
     >
 {
   constructor({
@@ -162,20 +162,16 @@ export class GraphBlockHandler
     });
   }
 
-  aggregateEntities({
-    data,
-  }: {
-    data?: AggregateEntitiesDataGeneral<boolean>;
-  }) {
+  queryEntities({ data }: { data?: QueryEntitiesDataGeneral<boolean> }) {
     return this.sendMessage<
-      AggregateEntitiesResult<Subgraph<EntityRootType>>,
+      QueryEntitiesResult<Subgraph<EntityRootType>>,
       ReadOrModifyResourceError
     >({
       message: {
-        messageName: "aggregateEntities",
+        messageName: "queryEntities",
         data,
       },
-      respondedToBy: "aggregateEntitiesResponse",
+      respondedToBy: "queryEntitiesResponse",
     });
   }
 
@@ -224,58 +220,58 @@ export class GraphBlockHandler
     });
   }
 
-  aggregateEntityTypes({ data }: { data?: AggregateEntityTypesData }) {
+  queryEntityTypes({ data }: { data?: QueryEntityTypesData }) {
     return this.sendMessage<
-      AggregateEntityTypesResult<Subgraph<EntityTypeRootType>>,
+      QueryEntityTypesResult<Subgraph<EntityTypeRootType>>,
       ReadOrModifyResourceError
     >({
       message: {
-        messageName: "aggregateEntityTypes",
+        messageName: "queryEntityTypes",
         data,
       },
-      respondedToBy: "aggregateEntityTypesResponse",
+      respondedToBy: "queryEntityTypesResponse",
     });
   }
 
-  /** @todo - Reimplement linked aggregations */
-  // createLinkedAggregation({ data }: { data?: CreateLinkedAggregationData }) {
-  //   return this.sendMessage<LinkedAggregation, CreateResourceError>({
+  /** @todo - Reimplement linked queries */
+  // createLinkedQuery({ data }: { data?: CreateLinkedQueryData }) {
+  //   return this.sendMessage<LinkedQuery, CreateResourceError>({
   //     message: {
-  //       messageName: "createLinkedAggregation",
+  //       messageName: "createLinkedQuery",
   //       data,
   //     },
-  //     respondedToBy: "createLinkedAggregationResponse",
+  //     respondedToBy: "createLinkedQueryResponse",
   //   });
   // }
   //
-  // updateLinkedAggregation({ data }: { data?: UpdateLinkedAggregationData }) {
-  //   return this.sendMessage<LinkedAggregation, ReadOrModifyResourceError>({
+  // updateLinkedQuery({ data }: { data?: UpdateLinkedQueryData }) {
+  //   return this.sendMessage<LinkedQuery, ReadOrModifyResourceError>({
   //     message: {
-  //       messageName: "updateLinkedAggregation",
+  //       messageName: "updateLinkedQuery",
   //       data,
   //     },
-  //     respondedToBy: "updateLinkedAggregationResponse",
+  //     respondedToBy: "updateLinkedQueryResponse",
   //   });
   // }
   //
-  // deleteLinkedAggregation({ data }: { data?: DeleteLinkedAggregationData }) {
+  // deleteLinkedQuery({ data }: { data?: DeleteLinkedQueryData }) {
   //   // @todo fix this 'any'
   //   return this.sendMessage<any, ReadOrModifyResourceError>({
   //     message: {
-  //       messageName: "deleteLinkedAggregation",
+  //       messageName: "deleteLinkedQuery",
   //       data,
   //     },
-  //     respondedToBy: "deleteLinkedAggregationResponse",
+  //     respondedToBy: "deleteLinkedQueryResponse",
   //   });
   // }
   //
-  // getLinkedAggregation({ data }: { data?: GetLinkedAggregationData }) {
-  //   return this.sendMessage<LinkedAggregation, ReadOrModifyResourceError>({
+  // getLinkedQuery({ data }: { data?: GetLinkedQueryData }) {
+  //   return this.sendMessage<LinkedQuery, ReadOrModifyResourceError>({
   //     message: {
-  //       messageName: "getLinkedAggregation",
+  //       messageName: "getLinkedQuery",
   //       data,
   //     },
-  //     respondedToBy: "getLinkedAggregationResponse",
+  //     respondedToBy: "getLinkedQueryResponse",
   //   });
   // }
 

@@ -1,4 +1,4 @@
-import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
+import { BaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 
 import { Entity, EntityId, EntityRecordId } from "../entity.js";
 import {
@@ -26,7 +26,7 @@ import {
  */
 export type GraphElementIdentifiers<Temporal extends boolean> =
   | {
-      identifier: VersionedUri | OntologyTypeVertexId | OntologyTypeRecordId;
+      identifier: VersionedUrl | OntologyTypeVertexId | OntologyTypeRecordId;
       element:
         | DataTypeWithMetadata
         | PropertyTypeWithMetadata
@@ -34,7 +34,7 @@ export type GraphElementIdentifiers<Temporal extends boolean> =
       vertex: DataTypeVertex | PropertyTypeVertex | EntityTypeVertex;
     }
   | {
-      identifier: BaseUri;
+      identifier: BaseUrl;
       element:
         | DataTypeWithMetadata[]
         | PropertyTypeWithMetadata[]

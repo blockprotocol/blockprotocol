@@ -18,26 +18,26 @@ export class GraphEmbedderHandler
   extends ModuleHandler
   implements GraphEmbedderMessages
 {
-  private _blockEntitySubgraph?: Subgraph<EntityRootType>;
-  // private _linkedAggregations?: LinkedAggregations;
+  private _blockEntitySubgraph: Subgraph<EntityRootType>;
+  // private _linkedQueries?: LinkedQueries;
   private _readonly?: boolean;
 
   constructor({
     blockEntitySubgraph,
     callbacks,
     element,
-    // linkedAggregations,
+    // linkedQueries,
     readonly,
   }: {
-    blockEntitySubgraph?: Subgraph<EntityRootType>;
+    blockEntitySubgraph: Subgraph<EntityRootType>;
     callbacks?: Partial<GraphEmbedderMessageCallbacks>;
     element?: HTMLElement | null;
-    // linkedAggregations?: LinkedAggregations;
+    // linkedQueries?: LinkedQueries;
     readonly?: boolean;
   }) {
     super({ element, callbacks, moduleName: "graph", sourceType: "embedder" });
     this._blockEntitySubgraph = blockEntitySubgraph;
-    // this._linkedAggregations = linkedAggregations;
+    // this._linkedQueries = linkedQueries;
     this._readonly = readonly;
   }
 
@@ -90,12 +90,15 @@ export class GraphEmbedderHandler
   getInitPayload(this: GraphEmbedderHandler): Record<string, any> {
     return {
       blockEntitySubgraph: this._blockEntitySubgraph,
-      // linkedAggregations: this._linkedAggregations,
+      // linkedQueries: this._linkedQueries,
       readonly: this._readonly,
     };
   }
 
   blockEntitySubgraph({ data }: { data?: Subgraph<EntityRootType> }) {
+    if (!data) {
+      throw new Error("'data' must be provided with blockEntitySubgraph");
+    }
     this._blockEntitySubgraph = data;
     this.sendMessage({
       message: {
@@ -105,12 +108,12 @@ export class GraphEmbedderHandler
     });
   }
 
-  // linkedAggregations({ data }: { data?: LinkedAggregations }) {
-  //   this._linkedAggregations = data;
+  // linkedQueries({ data }: { data?: LinkedQueries }) {
+  //   this._linkedQueries = data;
   //   this.sendMessage({
   //     message: {
-  //       messageName: "linkedAggregations",
-  //       data: this._linkedAggregations,
+  //       messageName: "linkedQueries",
+  //       data: this._linkedQueries,
   //     },
   //   });
   // }

@@ -57,8 +57,12 @@ const handler: NextApiHandler = async (req, res) => {
 
   const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
 
-  const reactVersion =
-    blockMetadata.externals?.react ?? packageJson.dependencies.react;
+  // @todo restore this when esm.sh treats version ranges correctly
+  //    it currently pulls non-latest versions of packages if a range is supplied
+  // const reactVersion =
+  //   blockMetadata.externals?.react ?? packageJson.dependencies.react;
+
+  const reactVersion = packageJson.dependencies.react;
 
   const externalUrlLookup: Record<string, string> = {};
 
@@ -73,6 +77,10 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   for (const [packageName, packageVersion] of Object.entries(externals)) {
+    if (packageName === "react" || packageName === "react-dom") {
+      // we already handled loading React in the HTML
+      continue;
+    }
     externalUrlLookup[packageName] = `https://esm.sh/${hotfixPackageName(
       packageName,
     )}@${packageVersion}?target=es2021`;
@@ -84,7 +92,7 @@ const handler: NextApiHandler = async (req, res) => {
     initialEntities: exampleGraph?.entities ?? [],
     initialEntityTypes: exampleGraph?.entityTypes,
     initialLinks: exampleGraph?.links,
-    initialLinkedAggregations: exampleGraph?.linkedAggregations,
+    initialLinkedQueries: exampleGraph?.linkedQueries,
     initialTemporalAxes: temporalAxes,
   };
 
@@ -108,7 +116,7 @@ const handler: NextApiHandler = async (req, res) => {
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
       // @todo-0.3 revert this hardcoded version to ${mockBlockDockVersion}
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230220234726/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230225164454/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
 
       const requireLookup = {
         "react-dom": ReactDOM,

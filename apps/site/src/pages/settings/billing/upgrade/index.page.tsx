@@ -430,11 +430,20 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                       gutterBottom
                       component="p"
                       variant="bpSmallCopy"
-                      sx={({ palette }) => ({ color: palette.purple[80] })}
+                      sx={({ palette }) => ({
+                        color: palette.purple[80],
+                        mb: 1.5,
+                      })}
                     >
                       <strong>Includes the following each month:</strong>
                     </Typography>
-                    <Box component="ul" marginBottom={3}>
+                    <Box
+                      component="ul"
+                      display="flex"
+                      flexDirection="column"
+                      marginBottom={3}
+                      gap={1.5}
+                    >
                       {(upgradedSubscriptionTier === "hobby"
                         ? paidSubscriptionFeatures.hobby.coreFeatures
                         : proSubscriptionFeatures["api-access"]
@@ -495,10 +504,17 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                       gutterBottom
                       component="p"
                       variant="bpSmallCopy"
+                      mb={1.5}
                     >
                       <strong>As well as:</strong>
                     </Typography>
-                    <Box component="ul" marginBottom={4}>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      component="ul"
+                      marginBottom={4}
+                      gap={1.5}
+                    >
                       {(upgradedSubscriptionTier === "hobby"
                         ? paidSubscriptionFeatures.hobby.additionalFeatures
                         : [

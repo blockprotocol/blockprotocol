@@ -1,6 +1,6 @@
 import { EntityType, EntityTypeWithMetadata } from "@blockprotocol/graph";
 
-import { generateOntologyUri } from "../../../../shared/schema";
+import { generateOntologyUrl } from "../../../../shared/schema";
 import { SystemDefinedProperties } from "../../shared/constants";
 
 export const generateEntityTypeWithMetadata = (data: {
@@ -16,7 +16,7 @@ export const generateEntityTypeWithMetadata = (data: {
 
   const kind = "entityType";
 
-  const { baseUri, versionedUri } = generateOntologyUri({
+  const { baseUrl, versionedUrl } = generateOntologyUrl({
     author,
     kind,
     title: incompleteSchema.title,
@@ -24,11 +24,10 @@ export const generateEntityTypeWithMetadata = (data: {
   });
 
   const entityType: Required<EntityType> = {
-    additionalProperties: false,
     allOf: incompleteSchema.allOf ?? [],
     description: incompleteSchema.description ?? "",
     examples: incompleteSchema.examples ?? [],
-    $id: versionedUri,
+    $id: versionedUrl,
     kind,
     links: incompleteSchema.links ?? {},
     properties: incompleteSchema.properties ?? {},
@@ -40,7 +39,7 @@ export const generateEntityTypeWithMetadata = (data: {
   return {
     metadata: {
       recordId: {
-        baseUri,
+        baseUrl,
         version,
       },
     },

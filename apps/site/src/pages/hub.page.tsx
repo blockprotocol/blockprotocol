@@ -12,9 +12,9 @@ import { getRouteHubBrowseType } from "../components/pages/hub/hub-utils";
 import { getAllBlocks, getFeaturedBlocks } from "../lib/api/blocks/get";
 import { apiClient } from "../lib/api-client";
 import {
-  excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
 } from "../lib/blocks";
+import { excludeHiddenBlocks } from "../lib/excluded-blocks";
 import { COPY_FONT_FAMILY } from "../theme/typography";
 
 export const HUB_SERVICES_ENABLED = false;

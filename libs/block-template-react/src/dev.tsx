@@ -1,4 +1,4 @@
-import { VersionedUri } from "@blockprotocol/graph";
+import { VersionedUrl } from "@blockprotocol/graph";
 import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
@@ -14,7 +14,7 @@ const testEntity: RootEntity = {
       entityId: "test-entity",
       editionId: new Date().toISOString(),
     },
-    entityTypeId: packageJson.blockprotocol.schema as VersionedUri,
+    entityTypeId: packageJson.blockprotocol.schema as VersionedUrl,
   },
   properties: {
     "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/":
@@ -47,7 +47,7 @@ const DevApp = () => {
       // initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it)
       // initialEntityTypes={[]} <- customise the entity types in the datastore
       // initialLinks={[]} <- customise the links in the datastore
-      // initialLinkedAggregations={[]} <- customise the linkedAggregations in the datastore
+      // initialLinkedQueries={[]} <- customise the linkedQueries in the datastore
       // readonly <- uncomment this to start your block in readonly mode. You can also toggle it in the UI
     />
   );

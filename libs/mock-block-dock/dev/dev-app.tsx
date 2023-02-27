@@ -1,4 +1,4 @@
-import { extractBaseUri } from "@blockprotocol/graph";
+import { extractBaseUrl } from "@blockprotocol/graph";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { createRoot } from "react-dom/client";
 
@@ -21,8 +21,8 @@ const blockEntityMap = {
       entityTypeId: entityTypes.testType.$id,
     },
     properties: {
-      [extractBaseUri(propertyTypes.name.$id)]: "World",
-      [extractBaseUri(propertyTypes.description.$id)]: "This is a description",
+      [extractBaseUrl(propertyTypes.name.$id)]: "World",
+      [extractBaseUrl(propertyTypes.description.$id)]: "This is a description",
     },
   },
   "custom-element": {
@@ -33,7 +33,7 @@ const blockEntityMap = {
       },
       entityTypeId: entityTypes.testType.$id,
     },
-    properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
+    properties: { [extractBaseUrl(propertyTypes.name.$id)]: "World" },
   },
   "html-at-url": {
     metadata: {
@@ -43,7 +43,7 @@ const blockEntityMap = {
       },
       entityTypeId: entityTypes.testType.$id,
     },
-    properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
+    properties: { [extractBaseUrl(propertyTypes.name.$id)]: "World" },
   },
   "html-as-string": {
     metadata: {
@@ -53,7 +53,7 @@ const blockEntityMap = {
       },
       entityTypeId: entityTypes.testType.$id,
     },
-    properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
+    properties: { [extractBaseUrl(propertyTypes.name.$id)]: "World" },
   },
 } as const;
 // } as const satisfies Record<string, Entity<true>>;
@@ -150,6 +150,7 @@ const DevApp: FunctionComponent = () => {
           icon: "public/icon.svg",
           image: "public/image",
         }}
+        blockProtocolApiKey={process.env.BLOCK_PROTOCOL_API_KEY}
         debug
         key={testBlockType} // completely reset the state when block type has changed
         initialData={{

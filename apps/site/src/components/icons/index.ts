@@ -25,6 +25,7 @@ export * from "./globe-icon";
 export * from "./hash-icon";
 export * from "./hub-icon";
 export * from "./layer-plus-icon";
+export * from "./link-icon";
 export * from "./pull-request-icon";
 export * from "./road-icon";
 export * from "./rocket-icon";

@@ -1,23 +1,23 @@
 import { EntityTypeWithMetadata } from "@blockprotocol/graph";
-import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
+import { BaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 
 import { createBaseHandler } from "../../../../lib/api/handler/base-handler";
 import { formatErrors } from "../../../../util/api";
 import { getEntityType } from "./shared/db";
 
-export type ApiEntityTypeByUriGetQuery = {
-  baseUri?: BaseUri;
-  versionedUri?: VersionedUri;
+export type ApiEntityTypeByUrlGetQuery = {
+  baseUrl?: BaseUrl;
+  versionedUrl?: VersionedUrl;
 };
 
-export type ApiEntityTypeByUriResponse = { entityType: EntityTypeWithMetadata };
+export type ApiEntityTypeByUrlResponse = { entityType: EntityTypeWithMetadata };
 
-export default createBaseHandler<null, ApiEntityTypeByUriResponse>().get(
+export default createBaseHandler<null, ApiEntityTypeByUrlResponse>().get(
   async (req, res) => {
     const { db } = req;
-    const { baseUri, versionedUri } = req.query as ApiEntityTypeByUriGetQuery;
+    const { baseUrl, versionedUrl } = req.query as ApiEntityTypeByUrlGetQuery;
 
-    const dbRecord = await getEntityType(db, { baseUri, versionedUri });
+    const dbRecord = await getEntityType(db, { baseUrl, versionedUrl });
 
     if (!dbRecord) {
       return res.status(404).json(

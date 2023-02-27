@@ -21,6 +21,7 @@ type Banner = {
   shouldDisplay: (params: { pathname: string; asPath: string }) => boolean;
   contents: ReactNode;
   overlapsFooter?: boolean;
+  hideWhenSignedIn?: boolean;
 };
 
 type BannerCardProps = {
@@ -362,6 +363,21 @@ export const BANNERS: Banner[] = [
         fullWidth
       />
     ),
+  },
+  {
+    shouldDisplay: ({ pathname }) => pathname === "/pricing",
+    overlapsFooter: true,
+    contents: (
+      <BannerCard
+        sx={{
+          padding: "0 !important",
+        }}
+        contents={<FinalCTA />}
+        fullHeight
+        fullWidth
+      />
+    ),
+    hideWhenSignedIn: true,
   },
 ];
 

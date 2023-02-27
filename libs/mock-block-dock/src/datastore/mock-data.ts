@@ -6,7 +6,7 @@ import {
 
 export type MockData<Temporal> = {
   entities: Temporal extends true ? EntityTemporal[] : Entity[];
-  // linkedAggregationDefinitions: LinkedAggregationDefinition[];
+  // linkedQueryDefinitions: LinkedQueryDefinition[];
 } & (Temporal extends true
   ? {
       subgraphTemporalAxes: SubgraphTemporalAxes;

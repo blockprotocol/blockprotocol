@@ -29,33 +29,33 @@ import {
   SubscribeEmailResponse,
 } from "../pages/api/subscribe-email.api";
 import {
-  ApiAggregateEntityTypesQuery,
-  ApiAggregateEntityTypesResponse,
-} from "../pages/api/types/entity-type/aggregate.api";
-import {
   ApiEntityTypeCreateRequest,
   ApiEntityTypeCreateResponse,
 } from "../pages/api/types/entity-type/create.api";
 import {
-  ApiEntityTypeByUriGetQuery,
-  ApiEntityTypeByUriResponse,
+  ApiEntityTypeByUrlGetQuery,
+  ApiEntityTypeByUrlResponse,
 } from "../pages/api/types/entity-type/get.api";
+import {
+  ApiQueryEntityTypesQuery,
+  ApiQueryEntityTypesResponse,
+} from "../pages/api/types/entity-type/query.api";
 import {
   ApiEntityTypeUpdateRequest,
   ApiEntityTypeUpdateResponse,
 } from "../pages/api/types/entity-type/update.api";
 import {
-  ApiAggregatePropertyTypesQuery,
-  ApiAggregatePropertyTypesResponse,
-} from "../pages/api/types/property-type/aggregate.api";
-import {
   ApiPropertyTypeCreateRequest,
   ApiPropertyTypeCreateResponse,
 } from "../pages/api/types/property-type/create.api";
 import {
-  ApiPropertyTypeByUriGetQuery,
-  ApiPropertyTypeByUriResponse,
+  ApiPropertyTypeByUrlGetQuery,
+  ApiPropertyTypeByUrlResponse,
 } from "../pages/api/types/property-type/get.api";
+import {
+  ApiQueryPropertyTypesQuery,
+  ApiQueryPropertyTypesResponse,
+} from "../pages/api/types/property-type/query.api";
 import {
   ApiPropertyTypeUpdateRequest,
   ApiPropertyTypeUpdateResponse,
@@ -169,14 +169,14 @@ export const apiClient = {
     apiClient.get<ApiTypesByUserResponse>(
       `users/${shortname}/types/entity-type`,
     ),
-  getEntityTypes: ({ latestOnly }: ApiAggregateEntityTypesQuery) =>
-    apiClient.get<ApiAggregateEntityTypesResponse>(
-      `types/entity-type/aggregate?latestOnly=${latestOnly}`,
+  getEntityTypes: ({ latestOnly }: ApiQueryEntityTypesQuery) =>
+    apiClient.get<ApiQueryEntityTypesResponse>(
+      `types/entity-type/query?latestOnly=${latestOnly}`,
     ),
-  getEntityTypeByUri: ({ baseUri, versionedUri }: ApiEntityTypeByUriGetQuery) =>
-    apiClient.get<ApiEntityTypeByUriResponse>(
+  getEntityTypeByUrl: ({ baseUrl, versionedUrl }: ApiEntityTypeByUrlGetQuery) =>
+    apiClient.get<ApiEntityTypeByUrlResponse>(
       `types/entity-type/get?${
-        baseUri ? `baseUri=${baseUri}` : `versionedUri=${versionedUri}`
+        baseUrl ? `baseUrl=${baseUrl}` : `versionedUrl=${versionedUrl}`
       }`,
     ),
   createEntityType: (requestData: ApiEntityTypeCreateRequest) =>
@@ -189,17 +189,17 @@ export const apiClient = {
       `types/entity-type/update`,
       requestData,
     ),
-  getPropertyTypes: ({ latestOnly }: ApiAggregatePropertyTypesQuery) =>
-    apiClient.get<ApiAggregatePropertyTypesResponse>(
-      `types/property-type/aggregate?latestOnly=${latestOnly}`,
+  getPropertyTypes: ({ latestOnly }: ApiQueryPropertyTypesQuery) =>
+    apiClient.get<ApiQueryPropertyTypesResponse>(
+      `types/property-type/query?latestOnly=${latestOnly}`,
     ),
-  getPropertyTypeByUri: ({
-    baseUri,
-    versionedUri,
-  }: ApiPropertyTypeByUriGetQuery) =>
-    apiClient.get<ApiPropertyTypeByUriResponse>(
+  getPropertyTypeByUrl: ({
+    baseUrl,
+    versionedUrl,
+  }: ApiPropertyTypeByUrlGetQuery) =>
+    apiClient.get<ApiPropertyTypeByUrlResponse>(
       `types/property-type/get?${
-        baseUri ? `baseUri=${baseUri}` : `versionedUri=${versionedUri}`
+        baseUrl ? `baseUrl=${baseUrl}` : `versionedUrl=${versionedUrl}`
       }`,
     ),
   createPropertyType: (requestData: ApiPropertyTypeCreateRequest) =>

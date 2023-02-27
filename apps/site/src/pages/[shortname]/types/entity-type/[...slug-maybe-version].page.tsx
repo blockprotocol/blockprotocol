@@ -1,5 +1,5 @@
 import { EntityTypeWithMetadata } from "@blockprotocol/graph";
-import { extractBaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
+import { extractBaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
   EntityTypeEditorFormData,
   EntityTypeFormProvider,
@@ -7,7 +7,7 @@ import {
   getSchemaFromFormData,
   useEntityTypeForm,
 } from "@hashintel/type-editor";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack, Tooltip, Typography } from "@mui/material";
 import { NextPage } from "next";
 import NextError from "next/error";
 import { useRouter } from "next/router";
@@ -15,6 +15,7 @@ import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useState } from "react";
 import { tw } from "twind";
 
+import { LinkIcon } from "../../../../components/icons";
 import { Link } from "../../../../components/link";
 import { useUser } from "../../../../context/user-context";
 import { apiClient } from "../../../../lib/api-client";
@@ -31,6 +32,9 @@ type EntityTypePageQueryParams = {
   shortname?: string;
   title?: string;
 };
+
+const linkEntityTypeId =
+  "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1";
 
 const EntityTypePage: NextPage = () => {
   const router = useRouter();
@@ -50,7 +54,7 @@ const EntityTypePage: NextPage = () => {
   });
   const { handleSubmit: wrapHandleSubmit, reset } = formMethods;
 
-  // When loading or updating a type, set local and form state, and set the URI
+  // When loading or updating a type, set local and form state, and set the URL
   const setEntityType = useCallback(
     (stateToSet: EntityTypeState) => {
       setEntityTypeState(stateToSet);
@@ -65,15 +69,19 @@ const EntityTypePage: NextPage = () => {
       return;
     }
 
-    const schema = getSchemaFromFormData(data);
+    const newPartialSchema = getSchemaFromFormData(data);
+
+    const existingSchema = entityType.schema;
 
     const { data: responseData, error: responseError } =
       await apiClient.updateEntityType({
-        versionedUri: entityType.schema.$id,
+        versionedUrl: entityType.schema.$id,
         schema: {
-          ...schema,
-          properties: schema.properties ?? {},
-          title: schema.title ?? entityType.schema.title,
+          ...existingSchema,
+          links: newPartialSchema.links ?? existingSchema.links ?? {},
+          properties:
+            newPartialSchema.properties ?? existingSchema.properties ?? {},
+          required: newPartialSchema.required ?? existingSchema.required ?? [],
         },
       });
 
@@ -91,11 +99,11 @@ const EntityTypePage: NextPage = () => {
 
   // Handle fetching of types on initial load (subsequent updates in form submission)
   useEffect(() => {
-    const pageUri = window.location.href;
+    const pageUrl = window.location.href;
 
     if (
-      entityType?.metadata.recordId.baseUri &&
-      pageUri.startsWith(entityType.metadata.recordId.baseUri)
+      entityType?.metadata.recordId.baseUrl &&
+      pageUrl.startsWith(entityType.metadata.recordId.baseUrl)
     ) {
       // We don't need to fetch again unless we've switched types completely
       return;
@@ -103,13 +111,13 @@ const EntityTypePage: NextPage = () => {
 
     const initialEntityTypeFetch = async () => {
       const [requestedEntityTypeVersion, latestEntityTypeVersion] =
-        await fetchEntityType(pageUri);
+        await fetchEntityType(pageUrl);
 
       if (!requestedEntityTypeVersion && latestEntityTypeVersion) {
         // eslint-disable-next-line no-console -- intentional debugging logging
         console.warn(
-          `Requested version ${extractBaseUri(
-            pageUri as VersionedUri,
+          `Requested version ${extractBaseUrl(
+            pageUrl as VersionedUrl,
           )} not found – redirecting to latest.`,
         );
         setEntityType({
@@ -129,7 +137,7 @@ const EntityTypePage: NextPage = () => {
     };
 
     void initialEntityTypeFetch();
-  }, [entityType?.metadata.recordId.baseUri, router, setEntityType]);
+  }, [entityType?.metadata.recordId.baseUrl, router, setEntityType]);
 
   if (isLoading || !shortname) {
     // @todo proper loading state
@@ -144,7 +152,7 @@ const EntityTypePage: NextPage = () => {
   const latestVersionNumber = latestVersion.metadata.recordId.version;
 
   const isLatest = currentVersionNumber === latestVersionNumber;
-  const latestVersionUri = entityType.schema.$id.replace(
+  const latestVersionUrl = entityType.schema.$id.replace(
     /\d$/,
     latestVersionNumber.toString(),
   );
@@ -155,6 +163,10 @@ const EntityTypePage: NextPage = () => {
     user?.shortname === shortnameWithoutLeadingAt;
 
   const title = entityType.schema.title;
+
+  const isLinkEntityType = !!entityType.schema.allOf?.some(
+    (parent) => parent.$ref === linkEntityTypeId,
+  );
 
   return (
     <>
@@ -183,6 +195,21 @@ const EntityTypePage: NextPage = () => {
                 {" >"}
               </Link>
               <Stack flexDirection="row" alignItems="center">
+                {isLinkEntityType && (
+                  <Tooltip
+                    title="This is a 'link' entity type. It is used to link other entities together."
+                    placement="top"
+                  >
+                    <Box>
+                      <LinkIcon
+                        sx={({ palette }) => ({
+                          stroke: palette.gray[50],
+                          mr: 0.5,
+                        })}
+                      />
+                    </Box>
+                  </Tooltip>
+                )}
                 <Typography variant="bpHeading3" component="h1">
                   <strong>{title}</strong> {"  "}Entity Type
                 </Typography>
@@ -195,7 +222,7 @@ const EntityTypePage: NextPage = () => {
                 </Typography>
                 {!isLatest && (
                   <Link
-                    href={latestVersionUri}
+                    href={latestVersionUrl}
                     onClick={(event) => {
                       event.preventDefault();
                       setEntityType({

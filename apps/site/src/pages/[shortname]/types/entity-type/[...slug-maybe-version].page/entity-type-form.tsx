@@ -3,7 +3,7 @@ import {
   EntityTypeWithMetadata,
   PropertyType,
 } from "@blockprotocol/graph";
-import { VersionedUri } from "@blockprotocol/type-system/slim";
+import { VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
   EntityTypeEditor,
   EntityTypeEditorProps,
@@ -11,7 +11,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { apiClient } from "../../../../../lib/api-client";
-import { generateOntologyUri } from "../../../../shared/schema";
+import { generateOntologyUrl } from "../../../../shared/schema";
 
 type EntityTypeFormProps = {
   author: `@${string}`;
@@ -22,14 +22,14 @@ type EntityTypeFormProps = {
 export const EntityTypeForm = ({
   author,
   entityType,
-  readonly: _readonly,
+  readonly,
 }: EntityTypeFormProps) => {
   const [entityTypeOptions, setEntityTypeOptions] = useState<Record<
-    VersionedUri,
+    VersionedUrl,
     EntityType
   > | null>(null);
   const [propertyTypeOptions, setPropertyTypeOptions] = useState<Record<
-    VersionedUri,
+    VersionedUrl,
     PropertyType
   > | null>(null);
 
@@ -40,7 +40,7 @@ export const EntityTypeForm = ({
 
     if (responseData) {
       setEntityTypeOptions(
-        responseData.entityTypes.reduce<Record<VersionedUri, EntityType>>(
+        responseData.entityTypes.reduce<Record<VersionedUrl, EntityType>>(
           (acc, entityTypeOption) => {
             acc[entityTypeOption.schema.$id] = entityTypeOption.schema;
 
@@ -59,7 +59,7 @@ export const EntityTypeForm = ({
 
     if (responseData) {
       setPropertyTypeOptions(
-        responseData.propertyTypes.reduce<Record<VersionedUri, PropertyType>>(
+        responseData.propertyTypes.reduce<Record<VersionedUrl, PropertyType>>(
           (acc, propertyType) => {
             acc[propertyType.schema.$id] = propertyType.schema;
 
@@ -144,7 +144,7 @@ export const EntityTypeForm = ({
 
           const { data: updatedData, error } = await apiClient.updateEntityType(
             {
-              versionedUri: data.entityTypeId,
+              versionedUrl: data.entityTypeId,
               schema: data.entityType,
             },
           );
@@ -162,7 +162,7 @@ export const EntityTypeForm = ({
 
           setEntityTypeOptions((prev) => ({
             ...prev,
-            [updatedData.entityType.schema.$id]: updatedData.entityType,
+            [updatedData.entityType.schema.$id]: updatedData.entityType.schema,
           }));
 
           return { data: updatedData.entityType };
@@ -174,7 +174,7 @@ export const EntityTypeForm = ({
 
           const { data: updatedData, error } =
             await apiClient.updatePropertyType({
-              versionedUri: data.propertyTypeId,
+              versionedUrl: data.propertyTypeId,
               schema: data.propertyType,
             });
 
@@ -189,15 +189,16 @@ export const EntityTypeForm = ({
             };
           }
 
-          setEntityTypeOptions((prev) => ({
+          setPropertyTypeOptions((prev) => ({
             ...prev,
-            [updatedData.propertyType.schema.$id]: updatedData.propertyType,
+            [updatedData.propertyType.schema.$id]:
+              updatedData.propertyType.schema,
           }));
 
           return { data: updatedData.propertyType };
         },
         validateTitle: async ({ kind, title }) => {
-          const { versionedUri } = generateOntologyUri({
+          const { versionedUrl } = generateOntologyUrl({
             author,
             kind: kind === "entity-type" ? "entityType" : "propertyType",
             title,
@@ -206,11 +207,11 @@ export const EntityTypeForm = ({
 
           const fetchFunction =
             kind === "entity-type"
-              ? apiClient.getEntityTypeByUri
-              : apiClient.getPropertyTypeByUri;
+              ? apiClient.getEntityTypeByUrl
+              : apiClient.getPropertyTypeByUrl;
 
           const { data: existingType } = await fetchFunction({
-            versionedUri,
+            versionedUrl,
           });
 
           if (existingType) {
@@ -244,6 +245,7 @@ export const EntityTypeForm = ({
       entityTypeOptions={entityTypeOptions}
       ontologyFunctions={ontologyFunctions}
       propertyTypeOptions={propertyTypeOptions}
+      readonly={readonly}
     />
   );
 };
