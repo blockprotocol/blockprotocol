@@ -1,11 +1,12 @@
 /*
- @todo - We should be able to import from the `@blockprotocol/graph` package here but we're running into strange errors
-   with named exports, CommonJS, and ESM modules from the dependency on `/core`
+ @todo - We should be able to import these from the `@blockprotocol/graph` package here but we're running into strange errors
+   with "Dynamic Code Evaluation (e. g. 'eval', 'new Function', 'WebAssembly.compile') not allowed in Edge Runtime" only on
+   the integration tests CI job
  */
-import {
-  DATA_TYPE_META_SCHEMA,
-  ENTITY_TYPE_META_SCHEMA,
-} from "@blockprotocol/type-system/slim";
+const DATA_TYPE_META_SCHEMA =
+  "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type";
+const ENTITY_TYPE_META_SCHEMA =
+  "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type";
 
 /* istanbul ignore file */
 export const hardcodedTypes = {
