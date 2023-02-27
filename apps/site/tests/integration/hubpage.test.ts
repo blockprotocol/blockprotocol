@@ -43,12 +43,12 @@ test("Block Card should contain key elements", async ({ page }) => {
 
   await expect(codeBlockLocator.locator("img").first()).toHaveAttribute(
     "src",
-    /\/block-contents\/hash\/code\/public\/preview\.svg$/,
+    /\/block-contents\/hash\/code\/[\d.]+\/public\/preview\.svg$/,
   );
 
   await expect(codeBlockLocator.locator("img").nth(1)).toHaveAttribute(
     "src",
-    /\/block-contents\/hash\/code\/public\/code\.svg$/,
+    /\/block-contents\/hash\/code\/[\d.]+\/public\/code\.svg$/,
   );
 
   await expect(
