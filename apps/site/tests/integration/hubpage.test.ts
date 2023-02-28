@@ -3,9 +3,7 @@ import { expect, test } from "../shared/wrapped-playwright.js";
 test("Hub page should contain key elements", async ({ page }) => {
   await page.goto("/hub");
 
-  await expect(
-    page.locator("h4 text=Open-source components for"),
-  ).toBeVisible();
+  await expect(page.locator("text=Open-source components for")).toBeVisible();
 
   expect(
     await page.locator('[data-testid="block-card"]').count(),
