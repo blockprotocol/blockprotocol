@@ -1,5 +1,20 @@
 # block-template-custom-element
 
+## 0.2.0-canary-20230228220237
+
+### Minor Changes
+
+- [#1060](https://github.com/blockprotocol/blockprotocol/pull/1060) [`4bc6b615`](https://github.com/blockprotocol/blockprotocol/commit/4bc6b6150498534f20a7bea0d9ec36606debef3f) Thanks [@CiaranMn](https://github.com/CiaranMn)! - rename Block Protocol 'Services' to 'Modules'
+
+- [#1060](https://github.com/blockprotocol/blockprotocol/pull/1060) [`4bc6b615`](https://github.com/blockprotocol/blockprotocol/commit/4bc6b6150498534f20a7bea0d9ec36606debef3f) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking changes for updated Graph Module specification and type system
+
+### Patch Changes
+
+- Updated dependencies [[`4bc6b615`](https://github.com/blockprotocol/blockprotocol/commit/4bc6b6150498534f20a7bea0d9ec36606debef3f), [`4bc6b615`](https://github.com/blockprotocol/blockprotocol/commit/4bc6b6150498534f20a7bea0d9ec36606debef3f)]:
+  - @blockprotocol/graph@0.1.0-canary-20230228220237
+  - mock-block-dock@0.1.0-canary-20230228220237
+  - block-scripts@0.1.0-canary-20230228220237
+
 ## 0.1.23
 
 ### Patch Changes
