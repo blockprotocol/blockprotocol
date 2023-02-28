@@ -10,10 +10,6 @@ export const hardcodedBpTypes = {
     $id: "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1",
     type: "object",
     title: "Link",
-    properties: {
-      leftEntityId: { type: "string" },
-      rightEntityId: { type: "string" },
-    },
   },
   "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1": {
     $schema: DATA_TYPE_META_SCHEMA,
