@@ -48,6 +48,7 @@ import {
   isEntityTypeRootedSubgraph as isEntityTypeRootedSubgraphGeneral,
   isPropertyTypeRootedSubgraph as isPropertyTypeRootedSubgraphGeneral,
   mapElementsIntoRevisions as mapElementsIntoRevisionsGeneral,
+  parseLabelFromEntity as parseLabelFromEntityGeneral,
   sortIntervals as sortIntervalsGeneral,
   unionOfIntervals as unionOfIntervalsGeneral,
 } from "../shared/stdlib.js";
@@ -182,3 +183,7 @@ export const isPropertyTypeRootedSubgraph =
   isPropertyTypeRootedSubgraphGeneral<true>;
 export const getLatestInstantIntervalForSubgraph =
   getLatestInstantIntervalForSubgraphGeneral<true>;
+export const parseLabelFromEntity = (
+  entityToLabel: Entity,
+  subgraph: Subgraph,
+) => parseLabelFromEntityGeneral<true>(entityToLabel, subgraph);
