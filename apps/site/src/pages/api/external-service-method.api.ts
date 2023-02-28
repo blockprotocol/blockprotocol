@@ -41,6 +41,10 @@ export default createApiKeyRequiredHandler<
         headers: {
           "internal-api-key": internalApiKey,
           "bp-user-id": bpUserId,
+          // The internal API falls back to the Vercel provided geolocation
+          // when it's unable to resolve an IP address location.
+          // See https://vercel.com/docs/concepts/edge-network/headers#x-vercel-ip-country
+          "x-vercel-ip-country": req.headers["x-vercel-ip-country"],
         },
       });
       res.status(200).json(data);
