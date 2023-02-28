@@ -327,8 +327,8 @@ const _jsonSchemaToTypeScript = async (
 
   // Better type for the opaque JSON object type
   compiledSchema = compiledSchema.replaceAll(
-    "export interface Object {}",
-    "export type Object = JsonObject;",
+    "export interface ObjectDataValue {}",
+    "export type ObjectDataValue = JsonObject;",
   );
 
   const compiledType = { typeName, typeScriptString: compiledSchema };
