@@ -268,6 +268,8 @@ const _jsonSchemaToTypeScript = async (
   // here we import the types defined elsewhere which we rely on, e.g. Entity
   let compiledSchema = rootSchema ? generateImportStatements(temporal) : "";
 
+  // The "Link" entity type is the only allowed value in "allOf", and currently doesn't change the structure, so we delete
+  // it for simplicity
   if (
     schema.allOf &&
     schema.allOf.length > 0 &&
@@ -281,10 +283,8 @@ const _jsonSchemaToTypeScript = async (
     );
   }
 
-  if (schema.allOf !== undefined) {
-    // eslint-disable-next-line no-param-reassign -- must be deleted. an empty array -> garbage output, null/undefined -> crash
-    delete schema.allOf;
-  }
+  // eslint-disable-next-line no-param-reassign -- must be deleted. an empty array -> garbage output, null/undefined -> crash
+  delete schema.allOf;
 
   // Generate the type for FooProperties, representing the entity's 'own properties' (not links or linked entities)
   compiledSchema += await compileSchema({
