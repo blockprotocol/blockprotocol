@@ -9,21 +9,23 @@ import { Entity, JsonObject } from "@blockprotocol/graph";
 /**
  * The name of something
  */
-export type Name = Text;
+export type NamePropertyValue = TextDataValue;
 /**
  * An ordered sequence of characters
  */
-export type Text = string;
+export type TextDataValue = string;
 
 /**
  * A generic thing
  */
 export type ThingProperties = {
-  "https://blockprotocol.org/@blockprotocol/types/property-type/name/"?: Name;
-};
+  "https://blockprotocol.org/@blockprotocol/types/property-type/name/"?: NamePropertyValue;
+}
 
 export type Thing = Entity<ThingProperties>;
-export type ThingLinksByLinkTypeId = {};
+export type ThingLinksByLinkTypeId = {
+
+};
 
 export type ThingLinkAndRightEntities = NonNullable<
   ThingLinksByLinkTypeId[keyof ThingLinksByLinkTypeId]
