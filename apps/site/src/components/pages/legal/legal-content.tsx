@@ -21,8 +21,6 @@ type LegalPageProps = {
   subtitle?: ReactNode;
   content: MDXRemoteSerializeResult<Record<string, unknown>>;
   pages: SiteMapPage[];
-  flatPages?: SiteMapPage[];
-  appendices?: SiteMapPage[];
   currentPage?: SiteMapPage | undefined;
 };
 
@@ -47,14 +45,10 @@ export const LegalContent: FunctionComponent<LegalPageProps> = ({
   subtitle,
   content,
   pages,
-  flatPages = pages,
   currentPage,
-  appendices,
 }) => {
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.up("md"));
-
-  const allPages = [...flatPages, ...(appendices ?? [])];
 
   const parents = currentPage ? getParentPages(pages, currentPage) : null;
 

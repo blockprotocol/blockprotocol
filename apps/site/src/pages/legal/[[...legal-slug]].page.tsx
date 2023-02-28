@@ -96,7 +96,6 @@ const LegalPage: NextPage<LegalPageProps> = ({ serializedPage }) => {
     <LegalContent
       content={serializedPage}
       pages={subPages}
-      flatPages={flatSubPages}
       currentPage={currentPage}
     />
   );
