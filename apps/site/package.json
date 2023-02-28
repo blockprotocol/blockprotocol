@@ -92,7 +92,7 @@
     "react-html-parser": "^2.0.2",
     "react-slick": "^0.28.1",
     "react-transition-group": "^4.4.2",
-    "remark-gfm": "^3.0.1",
+    "remark-gfm": "3.0.1",
     "remark-mdx": "^2.1.5",
     "remark-mdx-disable-explicit-jsx": "^0.1.0",
     "remark-parse": "^10.0.1",
