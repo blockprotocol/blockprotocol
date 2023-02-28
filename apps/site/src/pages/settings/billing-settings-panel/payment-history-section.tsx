@@ -75,8 +75,8 @@ const TableCell = styled(MuiTableCell)(({ theme }) =>
 );
 
 export const PaymentHistorySection: FunctionComponent<{
-  userHasStripeSubscription: boolean;
-}> = ({ userHasStripeSubscription }) => {
+  stripeSubscriptionStatus?: Stripe.Subscription.Status;
+}> = ({ stripeSubscriptionStatus }) => {
   const [upcomingInvoice, setUpcomingInvoice] =
     useState<Stripe.UpcomingInvoice>();
   const [invoices, setInvoices] = useState<Stripe.Invoice[]>();
@@ -98,11 +98,15 @@ export const PaymentHistorySection: FunctionComponent<{
   }, [setUpcomingInvoice]);
 
   useEffect(() => {
-    if (userHasStripeSubscription) {
+    if (
+      stripeSubscriptionStatus &&
+      stripeSubscriptionStatus !== "incomplete" &&
+      stripeSubscriptionStatus !== "incomplete_expired"
+    ) {
       void fetchInvoices();
       void fetchUpcomingInvoice();
     }
-  }, [fetchInvoices, fetchUpcomingInvoice, userHasStripeSubscription]);
+  }, [fetchInvoices, fetchUpcomingInvoice, stripeSubscriptionStatus]);
 
   const allInvoices = useMemo<(Stripe.Invoice | Stripe.UpcomingInvoice)[]>(
     () =>
@@ -127,7 +131,7 @@ export const PaymentHistorySection: FunctionComponent<{
           marginBottom: 2,
         }}
       >
-        {!userHasStripeSubscription || allInvoices.length === 0
+        {allInvoices.length === 0
           ? "No upcoming or previous payments could be found"
           : "Upcoming and historical bills you’ve incurred on this account"}
       </Typography>

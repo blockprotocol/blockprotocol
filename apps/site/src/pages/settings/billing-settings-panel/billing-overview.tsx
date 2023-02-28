@@ -61,8 +61,11 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       : "free";
   }, [user]);
 
-  const userHasStripeSubscription = useMemo(
-    () => user && typeof user !== "string" && !!user.stripeSubscriptionId,
+  const stripeSubscriptionStatus = useMemo(
+    () =>
+      user && typeof user !== "string"
+        ? user.stripeSubscriptionStatus
+        : undefined,
     [user],
   );
 
@@ -228,10 +231,13 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
           />
         )}
       </Box>
-      {userHasStripeSubscription && <UsageLimitSection />}
+      {stripeSubscriptionStatus === "active" ||
+      stripeSubscriptionStatus === "past_due" ? (
+        <UsageLimitSection />
+      ) : null}
       {currentSubscriptionTierIsPaid && <TaxIdSection />}
       <PaymentHistorySection
-        userHasStripeSubscription={userHasStripeSubscription ?? false}
+        stripeSubscriptionStatus={stripeSubscriptionStatus}
       />
     </>
   );
