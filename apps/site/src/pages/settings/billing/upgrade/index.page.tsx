@@ -832,7 +832,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                         })}
                       >
                         The charge will appear on your card statement as either{" "}
-                        <code>BLOCKPROTOL</code> or{" "}
+                        <code>BLOCKPROTO</code> or{" "}
                         <code>BLOCKPROTOCOL.ORG</code> depending on your payment
                         provider.
                       </Typography>
