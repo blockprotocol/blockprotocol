@@ -31,6 +31,7 @@ import {
   OpenAICompleteTextResponseData,
   OpenAICreateImageData,
   OpenAICreateImageResponseData,
+  ServiceMessageError,
 } from "./types.js";
 
 /**
@@ -113,17 +114,22 @@ export class ServiceBlockHandler
   /** OpenAI */
 
   openaiCreateImage({ data }: { data?: OpenAICreateImageData }) {
-    return this.sendMessage<OpenAICreateImageResponseData, null>({
-      message: {
-        messageName: "openaiCreateImage",
-        data,
+    return this.sendMessage<OpenAICreateImageResponseData, ServiceMessageError>(
+      {
+        message: {
+          messageName: "openaiCreateImage",
+          data,
+        },
+        respondedToBy: "openaiCreateImageResponse",
       },
-      respondedToBy: "openaiCreateImageResponse",
-    });
+    );
   }
 
   openaiCompleteText({ data }: { data?: OpenAICompleteTextData }) {
-    return this.sendMessage<OpenAICompleteTextResponseData, null>({
+    return this.sendMessage<
+      OpenAICompleteTextResponseData,
+      ServiceMessageError
+    >({
       message: {
         messageName: "openaiCompleteText",
         data,
@@ -135,7 +141,10 @@ export class ServiceBlockHandler
   /** Mapbox Geocoding API */
 
   mapboxForwardGeocoding({ data }: { data?: MapboxForwardGeocodingData }) {
-    return this.sendMessage<MapboxForwardGeocodingResponseData, null>({
+    return this.sendMessage<
+      MapboxForwardGeocodingResponseData,
+      ServiceMessageError
+    >({
       message: {
         messageName: "mapboxForwardGeocoding",
         data,
@@ -145,7 +154,10 @@ export class ServiceBlockHandler
   }
 
   mapboxReverseGeocoding({ data }: { data?: MapboxReverseGeocodingData }) {
-    return this.sendMessage<MapboxReverseGeocodingResponseData, null>({
+    return this.sendMessage<
+      MapboxReverseGeocodingResponseData,
+      ServiceMessageError
+    >({
       message: {
         messageName: "mapboxReverseGeocoding",
         data,
@@ -157,7 +169,10 @@ export class ServiceBlockHandler
   /** Mapbox Directions API */
 
   mapboxRetrieveDirections({ data }: { data?: MapboxRetrieveDirectionsData }) {
-    return this.sendMessage<MapboxRetrieveDirectionsResponseData, null>({
+    return this.sendMessage<
+      MapboxRetrieveDirectionsResponseData,
+      ServiceMessageError
+    >({
       message: {
         messageName: "mapboxRetrieveDirections",
         data,
@@ -169,7 +184,10 @@ export class ServiceBlockHandler
   /** Mapbox Isochrone API */
 
   mapboxRetrieveIsochrones({ data }: { data?: MapboxRetrieveIsochronesData }) {
-    return this.sendMessage<MapboxRetrieveIsochronesResponseData, null>({
+    return this.sendMessage<
+      MapboxRetrieveIsochronesResponseData,
+      ServiceMessageError
+    >({
       message: {
         messageName: "mapboxRetrieveIsochrones",
         data,
@@ -181,7 +199,10 @@ export class ServiceBlockHandler
   /** Mapbox Autofill API */
 
   mapboxSuggestAddress({ data }: { data?: MapboxSuggestAddressData }) {
-    return this.sendMessage<MapboxSuggestAddressResponseData, null>({
+    return this.sendMessage<
+      MapboxSuggestAddressResponseData,
+      ServiceMessageError
+    >({
       message: {
         messageName: "mapboxSuggestAddress",
         data,
@@ -191,7 +212,10 @@ export class ServiceBlockHandler
   }
 
   mapboxRetrieveAddress({ data }: { data?: MapboxRetrieveAddressData }) {
-    return this.sendMessage<MapboxRetrieveAddressResponseData, null>({
+    return this.sendMessage<
+      MapboxRetrieveAddressResponseData,
+      ServiceMessageError
+    >({
       message: {
         messageName: "mapboxRetrieveAddress",
         data,
@@ -201,7 +225,10 @@ export class ServiceBlockHandler
   }
 
   mapboxCanRetrieveAddress({ data }: { data?: MapboxCanRetrieveAddressData }) {
-    return this.sendMessage<MapboxCanRetrieveAddressResponseData, null>({
+    return this.sendMessage<
+      MapboxCanRetrieveAddressResponseData,
+      ServiceMessageError
+    >({
       message: {
         messageName: "mapboxCanRetrieveAddress",
         data,
@@ -213,7 +240,10 @@ export class ServiceBlockHandler
   /** Mapbox Static Maps API */
 
   mapboxRetrieveStaticMap({ data }: { data?: MapboxRetrieveStaticMapData }) {
-    return this.sendMessage<MapboxRetrieveStaticMapResponseData, null>({
+    return this.sendMessage<
+      MapboxRetrieveStaticMapResponseData,
+      ServiceMessageError
+    >({
       message: {
         messageName: "mapboxRetrieveStaticMap",
         data,
