@@ -1,11 +1,5 @@
 # @blockprotocol/core
 
-## 0.1.0-canary-20230228184514
-
-### Minor Changes
-
-- [#1060](https://github.com/blockprotocol/blockprotocol/pull/1060) [`a5988362`](https://github.com/blockprotocol/blockprotocol/commit/a5988362dc5f3a1976e96b56a7a42bc73c5c48d3) Thanks [@CiaranMn](https://github.com/CiaranMn)! - rename Block Protocol 'Services' to 'Modules'
-
 ## 0.0.14
 
 ### Patch Changes
