@@ -18,7 +18,7 @@
     <div id="app"></div>
     <script type="module">
       import htm from "https://esm.sh/htm?dev&deps=react@18.2.0,react-dom@18.2.0";
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230223103409?dev&deps=react@18.2.0,react-dom@18.2.0";
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230228184514?dev&deps=react@18.2.0,react-dom@18.2.0";
       import { createElement } from "https://esm.sh/react@18.2.0?dev&deps=react@18.2.0,react-dom@18.2.0";
       import ReactDOM from "https://esm.sh/react-dom@18.2.0?dev&deps=react@18.2.0,react-dom@18.2.0";
 
@@ -29,7 +29,7 @@
         metadata: {
           recordId: {
             entityId: "my-entity-1",
-            editionId: new Date(0).toISOString()
+            editionId: new Date(0).toISOString(),
           },
           entityTypeId: "http://example.com/types/entity-type/example/v/1",
         },
@@ -43,21 +43,19 @@
       const DevApp = () => {
         return html`
           <${MockBlockDock}
-          blockDefinition=${{
-            html: {
-              url: new URL("./src/app.html", import.meta.url).toString(),
-            },
-          }}
-          initialData=${initialData}
-          blockEntityRecordId=${blockEntity.metadata.recordId}
-          debug
-          <!-- initialData allows you to customise the entities in the datastore -->
-          <!-- blockEntityRecordId identifies the block entity from the set of entities in initialData customise the entities in the datastore -->
-          <!-- remove 'debug' above to start with the debug UI minimised. You can also toggle it in the UI -->
-          <!-- hideDebugToggle <- add 'hideDebugToggle' to disable the debug UI entirely -->
-          <!-- readonly <- uncomment this to start your block in readonly mode. You can also toggle it in the UI -->
+            blockDefinition=${{
+              html: {
+                url: new URL("./src/app.html", import.meta.url).toString(),
+              },
+            }}
+            initialData=${initialData}
+            blockEntityRecordId=${blockEntity.metadata.recordId}
+            debug
           />
         `;
+        // remove 'debug' above to start with the debug UI minimised. You can also toggle it in the UI
+        // hideDebugToggle <- add 'hideDebugToggle' to disable the debug UI entirely
+        // readonly <- add this above to start your block in readonly mode. You can also toggle it in the UI
       };
 
       ReactDOM.render(html` <${DevApp} /> `, node);

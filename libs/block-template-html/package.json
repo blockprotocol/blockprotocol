@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "rimraf dist && cp -R src dist && cp block-metadata.json dist && cp block-schema.json dist && cp -R public dist",
-    "dev": "echo \"Serving at http://localhost:63212\" && http-server -p 63212 ./dev",
+    "dev": "yarn prepare && echo \"Serving at http://localhost:63212\" && http-server -p 63212 ./dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
@@ -34,7 +34,7 @@
   "dependencies": {},
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
-    "block-scripts": "0.0.19",
+    "block-scripts": "0.1.0-canary-20230228184514",
     "eslint": "8.33.0",
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",

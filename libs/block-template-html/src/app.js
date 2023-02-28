@@ -1,9 +1,9 @@
 /* global blockprotocol */
 import {
-  extractBaseUri,
+  extractBaseUrl,
   GraphBlockHandler,
-} from "https://esm.sh/@blockprotocol/graph@0.1.0-canary-20230223103409";
-import { getRoots } from "https://esm.sh/@blockprotocol/graph@0.1.0-canary-20230223103409/stdlib";
+} from "https://esm.sh/@blockprotocol/graph@0.1.0-canary-20230228184514";
+import { getRoots } from "https://esm.sh/@blockprotocol/graph@0.1.0-canary-20230228184514/stdlib";
 
 const propertyTypeIds = {
   name: "http://example.com/types/property-type/name/v/1",
@@ -37,10 +37,10 @@ const handler = new GraphBlockHandler({
       }
 
       title.innerText = `Hello, ${
-        entity.properties[extractBaseUri(propertyTypeIds.name)]
+        entity.properties[extractBaseUrl(propertyTypeIds.name)]
       }`;
       paragraph.innerText = `The entityId of this block is ${entity.metadata.recordId.entityId}. Use it to update its data when calling updateEntity`;
-      input.value = entity.properties[extractBaseUri(propertyTypeIds.name)];
+      input.value = entity.properties[extractBaseUrl(propertyTypeIds.name)];
       readonlyParagraph.innerText = input.value;
     },
     readonly: ({ data: readonly }) => {
@@ -78,7 +78,7 @@ input.addEventListener("change", (event) => {
           entityId: entity.metadata.recordId.entityId,
           entityTypeId: entity.metadata.entityTypeId,
           properties: {
-            [extractBaseUri(propertyTypeIds.name)]: event.target.value,
+            [extractBaseUrl(propertyTypeIds.name)]: event.target.value,
           },
         },
       })
