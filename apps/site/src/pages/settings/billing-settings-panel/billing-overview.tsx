@@ -61,11 +61,14 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       : "free";
   }, [user]);
 
-  const stripeSubscriptionStatus = useMemo(
+  const { stripeSubscriptionStatus, stripeSubscriptionId } = useMemo(
     () =>
       user && typeof user !== "string"
-        ? user.stripeSubscriptionStatus
-        : undefined,
+        ? {
+            stripeSubscriptionStatus: user.stripeSubscriptionStatus,
+            stripeSubscriptionId: user.stripeSubscriptionId,
+          }
+        : {},
     [user],
   );
 
@@ -234,6 +237,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       <UsageLimitSection />
       {currentSubscriptionTierIsPaid && <TaxIdSection />}
       <PaymentHistorySection
+        stripeSubscriptionId={stripeSubscriptionId}
         stripeSubscriptionStatus={stripeSubscriptionStatus}
       />
     </>

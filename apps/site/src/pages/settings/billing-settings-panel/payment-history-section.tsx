@@ -75,19 +75,20 @@ const TableCell = styled(MuiTableCell)(({ theme }) =>
 );
 
 export const PaymentHistorySection: FunctionComponent<{
+  stripeSubscriptionId?: string;
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
-}> = ({ stripeSubscriptionStatus }) => {
+}> = ({ stripeSubscriptionId, stripeSubscriptionStatus }) => {
   const [upcomingInvoice, setUpcomingInvoice] =
     useState<Stripe.UpcomingInvoice>();
-  const [invoices, setInvoices] = useState<Stripe.Invoice[]>();
+  const [pastInvoices, setPastInvoices] = useState<Stripe.Invoice[]>();
 
   const fetchInvoices = useCallback(async () => {
     const {
       data: { invoices: fetchedInvoices },
     } = await internalApi.getInvoices();
 
-    setInvoices(fetchedInvoices.sort((a, b) => a.created - b.created));
-  }, [setInvoices]);
+    setPastInvoices(fetchedInvoices.sort((a, b) => a.created - b.created));
+  }, [setPastInvoices]);
 
   const fetchUpcomingInvoice = useCallback(async () => {
     const {
@@ -98,20 +99,31 @@ export const PaymentHistorySection: FunctionComponent<{
   }, [setUpcomingInvoice]);
 
   useEffect(() => {
-    if (
-      stripeSubscriptionStatus &&
-      stripeSubscriptionStatus !== "incomplete" &&
-      stripeSubscriptionStatus !== "incomplete_expired"
-    ) {
-      void fetchInvoices();
-      void fetchUpcomingInvoice();
-    }
+    void fetchInvoices();
+    void fetchUpcomingInvoice();
   }, [fetchInvoices, fetchUpcomingInvoice, stripeSubscriptionStatus]);
 
   const allInvoices = useMemo<(Stripe.Invoice | Stripe.UpcomingInvoice)[]>(
     () =>
-      upcomingInvoice ? [upcomingInvoice, ...(invoices ?? [])] : invoices ?? [],
-    [upcomingInvoice, invoices],
+      stripeSubscriptionStatus &&
+      stripeSubscriptionStatus !== "incomplete" &&
+      stripeSubscriptionStatus !== "incomplete_expired"
+        ? upcomingInvoice
+          ? [upcomingInvoice, ...(pastInvoices ?? [])]
+          : pastInvoices ?? []
+        : stripeSubscriptionId
+        ? pastInvoices?.filter(({ subscription }) =>
+            subscription && typeof subscription === "object"
+              ? subscription.id !== stripeSubscriptionId
+              : subscription !== stripeSubscriptionId,
+          ) ?? []
+        : [],
+    [
+      stripeSubscriptionId,
+      stripeSubscriptionStatus,
+      upcomingInvoice,
+      pastInvoices,
+    ],
   );
 
   return (
