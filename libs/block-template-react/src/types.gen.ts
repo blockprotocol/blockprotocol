@@ -2,7 +2,7 @@ import { Entity, JsonObject } from "@blockprotocol/graph";
 
 /**
  * This file was automatically generated – do not edit it.
- * @see https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/entity-type/complicated/v/3 for the root JSON Schema these types were generated from
+ * @see https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/entity-type/complicated/v/4 for the root JSON Schema these types were generated from
  * Types for link entities and their destination were generated to a depth of 2 from the root
  */
 
@@ -36,6 +36,10 @@ export type PauseDurationPropertyValue = TextDataValue;
  * An arithmetical value (in the Real number system)
  */
 export type NumberDataValue = number;
+/**
+ * awd
+ */
+export type PrimitiveObjectPropertyPropertyValue = ObjectDataValue;
 
 /**
  * Some description
@@ -43,7 +47,12 @@ export type NumberDataValue = number;
 export type ComplicatedProperties = {
   "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/"?: NamePropertyValue;
   "https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/property-type/complicated/"?: ComplicatedPropertyValue;
+  "https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/property-type/primitive-object-property/"?: PrimitiveObjectPropertyPropertyValue;
 }
+/**
+ * An opaque, untyped JSON object
+ */
+export interface ObjectDataValue {}
 
 export type Complicated = Entity<ComplicatedProperties>;
 
