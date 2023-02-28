@@ -2,6 +2,7 @@
  * The extended standard library of functions for interacting with a {@link Subgraph}.
  */
 export { compareBounds } from "./stdlib/bound.js";
+export { parseLabelFromEntity } from "./stdlib/entity.js";
 export {
   intervalCompareWithInterval,
   intervalContainsInterval,

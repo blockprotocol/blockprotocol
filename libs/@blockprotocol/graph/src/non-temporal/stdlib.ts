@@ -36,6 +36,7 @@ import {
   isEntityRootedSubgraph as isEntityRootedSubgraphGeneral,
   isEntityTypeRootedSubgraph as isEntityTypeRootedSubgraphGeneral,
   isPropertyTypeRootedSubgraph as isPropertyTypeRootedSubgraphGeneral,
+  parseLabelFromEntity as parseLabelFromEntityGeneral,
 } from "../shared/stdlib.js";
 import {
   type DataTypeWithMetadata,
@@ -51,7 +52,6 @@ import {
   type Subgraph,
   type SubgraphRootType,
 } from "./main.js";
-
 // import {
 //   EntityRevisionId,
 //   TimeInterval,
@@ -170,3 +170,7 @@ export const isPropertyTypeRootedSubgraph =
   isPropertyTypeRootedSubgraphGeneral<false>;
 // export const getLatestInstantIntervalForSubgraph =
 //   getLatestInstantIntervalForSubgraphGeneral<false>;
+export const parseLabelFromEntity = (
+  entityToLabel: Entity,
+  subgraph: Subgraph,
+) => parseLabelFromEntityGeneral<false>(entityToLabel, subgraph);
