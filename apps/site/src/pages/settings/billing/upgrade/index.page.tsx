@@ -2,7 +2,6 @@ import {
   faArrowRight,
   faCaretRight,
   faCheck,
-  faRotate,
 } from "@fortawesome/free-solid-svg-icons";
 import { SubscriptionTierPrices } from "@local/internal-api-client";
 import {
@@ -10,7 +9,6 @@ import {
   Container,
   Grid,
   Paper,
-  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -23,7 +21,6 @@ import Stripe from "stripe";
 
 import { Button } from "../../../../components/button";
 import { FontAwesomeIcon } from "../../../../components/icons";
-import { CircleInfoRegularIcon } from "../../../../components/icons/circle-info-regular";
 import { CoinsIcon } from "../../../../components/icons/coins-icon";
 import { FlaskVialIcon } from "../../../../components/icons/flask-vial-icon";
 import { HandIcon } from "../../../../components/icons/hand-icon";
@@ -39,7 +36,6 @@ import { UserAvatar } from "../../../../components/user-avatar";
 import { useUser } from "../../../../context/user-context";
 import { internalApi } from "../../../../lib/internal-api-client";
 import {
-  cardBrandToHumanReadable,
   createStripeOptions,
   isPaidSubscriptionTier,
   PaidSubscriptionTier,
@@ -52,6 +48,7 @@ import { proSubscriptionFeatures } from "../../billing-settings-panel/pro-subscr
 import { SubscriptionFeatureListItem } from "../../billing-settings-panel/subscription-feature-list-item";
 import { ChangePaymentMethodModal } from "./change-payment-method-modal";
 import { CreateSubscriptionCheckoutForm } from "./create-subscription-form";
+import { UpgradeExistingPaidSubscriptionIntro } from "./upgrade-existing-paid-subscription-intro";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLIC_API_KEY ?? "",
@@ -142,6 +139,16 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
     setPaymentMethods(fetchedPaymentMethods);
   }, []);
 
+  const [taxRate, setTaxRate] = useState<number>();
+
+  const fetchTaxRate = useCallback(async () => {
+    const {
+      data: { taxRate: fetchedTaxRate },
+    } = await internalApi.getTaxRate();
+
+    setTaxRate(fetchedTaxRate);
+  }, []);
+
   const [changePaymentMethodModalOpen, setChangePaymentMethodModalOpen] =
     useState<boolean>(false);
 
@@ -192,11 +199,13 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
     if (isUpgradingExistingPaidSubscription) {
       void fetchPaymentMethods();
       void fetchSubscription();
+      void fetchTaxRate();
     }
   }, [
     isUpgradingExistingPaidSubscription,
     fetchPaymentMethods,
     fetchSubscription,
+    fetchTaxRate,
   ]);
 
   const theme = useTheme();
@@ -646,140 +655,18 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                     </Box>
 
                     {isUpgradingExistingPaidSubscription ? (
-                      <>
-                        <Box
-                          display="flex"
-                          justifyContent="space-between"
-                          marginBottom={2}
-                        >
-                          <Box>
-                            <Typography variant="bpSmallCopy" component="p">
-                              <strong>New monthly total</strong>
-                            </Typography>
-                            <Typography
-                              variant="bpSmallCopy"
-                              component="p"
-                              sx={{
-                                color: ({ palette }) => palette.gray["60"],
-                              }}
-                            >
-                              Base price you’ll pay going forward
-                            </Typography>
-                          </Box>
-                          <Typography gutterBottom>
-                            {upgradedSubscriptionTier && subscriptionTierPrices
-                              ? priceToHumanReadable({
-                                  amountInCents:
-                                    subscriptionTierPrices[
-                                      upgradedSubscriptionTier
-                                    ].unit_amount!,
-                                  currency:
-                                    subscriptionTierPrices[
-                                      upgradedSubscriptionTier
-                                    ].currency,
-                                  decimalPlaces: 0,
-                                })
-                              : ""}{" "}
-                            /month
-                          </Typography>
-                        </Box>
-                        <Box
-                          display="flex"
-                          justifyContent="space-between"
-                          marginBottom={2}
-                        >
-                          <Box>
-                            <Typography variant="bpSmallCopy" component="p">
-                              <strong>Due today</strong>
-                            </Typography>
-                            <Box display="flex" alignItems="center">
-                              <Typography
-                                variant="bpSmallCopy"
-                                component="p"
-                                sx={{
-                                  color: ({ palette }) => palette.gray["60"],
-                                }}
-                              >
-                                Difference in price between your old and new
-                                plan
-                                <Tooltip
-                                  placement="top"
-                                  title="You will be allotted a full Pro credit allowance for the remainder of this billing period"
-                                >
-                                  <Box
-                                    component="span"
-                                    sx={{ marginLeft: 1, cursor: "pointer" }}
-                                  >
-                                    <CircleInfoRegularIcon
-                                      sx={{
-                                        width: 16,
-                                        color: ({ palette }) =>
-                                          palette.gray[60],
-                                      }}
-                                    />
-                                  </Box>
-                                </Tooltip>
-                              </Typography>
-                            </Box>
-                          </Box>
-                          <Typography gutterBottom>
-                            {subscriptionTierPrices && upgradedSubscriptionTier
-                              ? priceToHumanReadable({
-                                  amountInCents:
-                                    subscriptionTierPrices[
-                                      upgradedSubscriptionTier
-                                    ].unit_amount! -
-                                    subscriptionTierPrices[
-                                      currentSubscriptionTier as "hobby"
-                                    ].unit_amount!,
-                                  currency:
-                                    subscriptionTierPrices[
-                                      upgradedSubscriptionTier
-                                    ].currency,
-                                })
-                              : ""}
-                          </Typography>
-                        </Box>
-                        <Box
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          marginBottom={4}
-                        >
-                          <Typography variant="bpSmallCopy" component="p">
-                            <strong>Payment method</strong>
-                          </Typography>
-                          <Box display="flex" alignItems="center">
-                            <Typography>
-                              {defaultPaymentMethod?.card?.brand
-                                ? cardBrandToHumanReadable(
-                                    defaultPaymentMethod.card.brand,
-                                  )
-                                : "Card"}{" "}
-                              ending{" "}
-                              <strong>
-                                *{defaultPaymentMethod?.card?.last4}
-                              </strong>
-                            </Typography>
-                            <Button
-                              variant="transparent"
-                              sx={{
-                                textTransform: "uppercase",
-                                color: ({ palette }) => palette.purple[80],
-                                fontSize: 12,
-                                fontWeight: 800,
-                                marginLeft: 2,
-                              }}
-                              onClick={() =>
-                                setChangePaymentMethodModalOpen(true)
-                              }
-                              startIcon={<FontAwesomeIcon icon={faRotate} />}
-                            >
-                              Change
-                            </Button>
-                          </Box>
-                        </Box>
-                      </>
+                      <UpgradeExistingPaidSubscriptionIntro
+                        currentSubscriptionTier={
+                          currentSubscriptionTier as "hobby"
+                        }
+                        upgradedSubscriptionTier={upgradedSubscriptionTier}
+                        subscriptionTierPrices={subscriptionTierPrices}
+                        taxRate={taxRate}
+                        defaultPaymentMethod={defaultPaymentMethod}
+                        onChangePaymentMethod={() =>
+                          setChangePaymentMethodModalOpen(true)
+                        }
+                      />
                     ) : null}
 
                     <Box marginBottom={4}>
