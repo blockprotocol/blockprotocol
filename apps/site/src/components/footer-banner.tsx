@@ -9,7 +9,6 @@ import {
 import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode } from "react";
 
-import backgroundCornerBlocks from "../../public/assets/background-corner-blocks.png";
 import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";
 import { ArrowRightIcon, BoltIcon } from "./icons";
 import { Link as LinkComponent, LinkProps } from "./link";
@@ -62,7 +61,9 @@ const BackgroundBlocks: FunctionComponent = () => {
     <Image
       objectFit="contain"
       objectPosition="right"
-      src={backgroundCornerBlocks}
+      src="https://static.blockprotocol.com/cdn-cgi/imagedelivery/EipKtqu98OotgfhvKf6Eew/68cb4318-cbc4-4171-3b1c-80eda9f45200/github"
+      width={567}
+      height={768}
     />
   );
 };
