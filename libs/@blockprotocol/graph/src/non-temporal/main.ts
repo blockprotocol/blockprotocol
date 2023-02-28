@@ -9,7 +9,6 @@
 import { BaseUrl } from "@blockprotocol/type-system/slim";
 
 import {
-  BlockGraphMessageCallbacks as BlockGraphMessageCallbacksGeneral,
   ConstrainsLinkDestinationsOnEdge as ConstrainsLinkDestinationsOnEdgeGeneral,
   ConstrainsLinksOnEdge as ConstrainsLinksOnEdgeGeneral,
   ConstrainsPropertiesOnEdge as ConstrainsPropertiesOnEdgeGeneral,
@@ -44,6 +43,7 @@ import {
   GetEntityData as GetEntityDataGeneral,
   GetEntityTypeData as GetEntityTypeDataGeneral,
   GetPropertyTypeData as GetPropertyTypeDataGeneral,
+  GraphBlockMessageCallbacks as GraphBlockMessageCallbacksGeneral,
   GraphBlockMessages as GraphBlockMessagesGeneral,
   GraphElementForIdentifier as GraphElementForIdentifierGeneral,
   GraphElementIdentifiers as GraphElementIdentifiersGeneral,
@@ -223,10 +223,10 @@ export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
     readonly?: boolean;
   };
 };
-export type BlockGraphMessageCallbacks =
-  BlockGraphMessageCallbacksGeneral<false>;
+export type GraphBlockMessageCallbacks =
+  GraphBlockMessageCallbacksGeneral<false>;
 export type GraphEmbedderMessages<
-  Key extends keyof BlockGraphMessageCallbacks = keyof BlockGraphMessageCallbacks,
+  Key extends keyof GraphBlockMessageCallbacks = keyof GraphBlockMessageCallbacks,
 > = GraphEmbedderMessagesGeneral<false, Key>;
 export type CreateResourceError = CreateResourceErrorGeneral;
 export type ReadOrModifyResourceError = ReadOrModifyResourceErrorGeneral;

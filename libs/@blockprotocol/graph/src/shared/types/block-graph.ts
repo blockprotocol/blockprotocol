@@ -56,7 +56,7 @@ export type BlockGraphProperties<
   };
 };
 
-export type BlockGraphMessageCallbacks<Temporal extends boolean> = {
+export type GraphBlockMessageCallbacks<Temporal extends boolean> = {
   blockEntitySubgraph: MessageCallback<
     Subgraph<Temporal, EntityRootType<Temporal>>,
     null
@@ -66,13 +66,13 @@ export type BlockGraphMessageCallbacks<Temporal extends boolean> = {
 
 export type GraphEmbedderMessages<
   Temporal extends boolean,
-  Key extends keyof BlockGraphMessageCallbacks<Temporal> = keyof BlockGraphMessageCallbacks<Temporal>,
+  Key extends keyof GraphBlockMessageCallbacks<Temporal> = keyof GraphBlockMessageCallbacks<Temporal>,
 > = {
   [key in Key]: ({
     data,
     errors,
-  }: Parameters<BlockGraphMessageCallbacks<Temporal>[key]>[0]) => ReturnType<
-    BlockGraphMessageCallbacks<Temporal>[key]
+  }: Parameters<GraphBlockMessageCallbacks<Temporal>[key]>[0]) => ReturnType<
+    GraphBlockMessageCallbacks<Temporal>[key]
   >;
 };
 
