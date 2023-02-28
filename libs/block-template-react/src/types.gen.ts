@@ -9,40 +9,40 @@ import { Entity, JsonObject } from "@blockprotocol/graph";
 /**
  * The name of something
  */
-export type Name = Text;
+export type NamePropertyValue = TextDataValue;
 /**
  * An ordered sequence of characters
  */
-export type Text = string;
+export type TextDataValue = string;
 /**
  * Complicated property type
  */
-export type Complicated =
+export type ComplicatedPropertyValue =
   | {
-      "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/": Name;
-      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/content/"?: Content[];
-      "https://blockprotocol-ae37rxcaw.stage.hash.ai/@nate/types/property-type/pause-duration/"?: PauseDuration;
+      "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/": NamePropertyValue;
+      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/content/"?: ContentPropertyValue[];
+      "https://blockprotocol-ae37rxcaw.stage.hash.ai/@nate/types/property-type/pause-duration/"?: PauseDurationPropertyValue;
     }
-  | Number;
+  | NumberDataValue;
 /**
  * Textual content
  */
-export type Content = Text;
+export type ContentPropertyValue = TextDataValue;
 /**
  * The duration of a pause
  */
-export type PauseDuration = Text;
+export type PauseDurationPropertyValue = TextDataValue;
 /**
  * An arithmetical value (in the Real number system)
  */
-export type Number = number;
+export type NumberDataValue = number;
 
 /**
  * Some description
  */
 export type ComplicatedProperties = {
-  "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/"?: Name;
-  "https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/property-type/complicated/"?: Complicated;
+  "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/"?: NamePropertyValue;
+  "https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/property-type/complicated/"?: ComplicatedPropertyValue;
 }
 
 export type Complicated = Entity<ComplicatedProperties>;
@@ -50,22 +50,15 @@ export type Complicated = Entity<ComplicatedProperties>;
 /**
  * A link
  */
-export type LinkProperties = LinkProperties1 & LinkProperties2;
-export type LinkProperties1 = Link;
+export type T1LinkProperties = {}
 
-export type Link = {
-  leftEntityId?: string;
-  rightEntityId?: string;
-}
-export type Link =Properties2 {}
-
-export type 1Link = Entity<1LinkProperties>;
-export type 1LinkLinksByLinkTypeId = {
+export type T1Link = Entity<T1LinkProperties>;
+export type T1LinkLinksByLinkTypeId = {
 
 };
 
-export type 1LinkLinkAndRightEntities = NonNullable<
-  1LinkLinksByLinkTypeId[keyof 1LinkLinksByLinkTypeId]
+export type T1LinkLinkAndRightEntities = NonNullable<
+  T1LinkLinksByLinkTypeId[keyof T1LinkLinksByLinkTypeId]
 >;
 /**
  * Some description
@@ -80,9 +73,9 @@ export type ComplicatedV1LinksByLinkTypeId = {
 export type ComplicatedV1LinkAndRightEntities = NonNullable<
   ComplicatedV1LinksByLinkTypeId[keyof ComplicatedV1LinksByLinkTypeId]
 >;
-export type Complicated1LinkLinks = [] |
+export type ComplicatedT1LinkLinks = [] |
   {
-    linkEntity: 1Link;
+    linkEntity: T1Link;
     rightEntity: ComplicatedV1;
   }[];
 
@@ -90,11 +83,7 @@ export type Complicated1LinkLinks = [] |
 /**
  * Another link
  */
-export type Link2Properties = Link2Properties1 & Link2Properties2;
-export type Link2Properties1 = Link;
-
-
-export type Link2Properties2 = {}
+export type Link2Properties = {}
 
 export type Link2 = Entity<Link2Properties>;
 export type Link2LinksByLinkTypeId = {
@@ -114,19 +103,15 @@ export type ComplicatedLink2Links = [] |
 /**
  * A complicated link
  */
-export type LinkSProperties = LinkSProperties1 & LinkSProperties2;
-export type LinkSProperties1 = Link;
+export type LinkSProperties = {}
 
-
-export type Link =SProperties2 {}
-
-export type Link's = Entity<Link'sProperties>;
-export type Link'sLinksByLinkTypeId = {
+export type LinkS = Entity<LinkSProperties>;
+export type LinkSLinksByLinkTypeId = {
 
 };
 
-export type Link'sLinkAndRightEntities = NonNullable<
-  Link'sLinksByLinkTypeId[keyof Link'sLinksByLinkTypeId]
+export type LinkSLinkAndRightEntities = NonNullable<
+  LinkSLinksByLinkTypeId[keyof LinkSLinksByLinkTypeId]
 >;
 /**
  * A word or set of words by which something is known, addressed, or referred to
@@ -139,14 +124,14 @@ export type Link'sLinkAndRightEntities = NonNullable<
 /**
  * A URL linking to a given website
  */
-export type Website = Text;
+export type WebsitePropertyValue = TextDataValue;
 
 /**
  * A group of entities (people, companies, etc.) focused on a common purpose
  */
 export type OrganizationProperties = {
-  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/"?: Name;
-  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/"?: Website;
+  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/"?: NamePropertyValue;
+  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/"?: WebsitePropertyValue;
 }
 
 export type Organization = Entity<OrganizationProperties>;
@@ -154,13 +139,9 @@ export type Organization = Entity<OrganizationProperties>;
 /**
  * Established, initiated, or created by this entity.
  */
-export type FoundedbyProperties = FoundedbyProperties1 & FoundedbyProperties2;
-export type FoundedbyProperties1 = Link;
+export type FoundedByProperties = {}
 
-
-export type FoundedbyProperties2 = {}
-
-export type Foundedby = Entity<FoundedbyProperties>;
+export type FoundedBy = Entity<FoundedByProperties>;
 
 /**
  * A word or set of words by which something is known, addressed, or referred to
@@ -177,47 +158,47 @@ export type Foundedby = Entity<FoundedbyProperties>;
 /**
  * A URL that contains an image associated with a user, person, character, or persona
  */
-export type Avatar = Text;
+export type AvatarPropertyValue = TextDataValue;
 /**
  * An e-mail address
  */
-export type EMail = Text;
+export type EMailPropertyValue = TextDataValue;
 
 /**
  * A human being or individual
  */
 export type PersonProperties = {
-  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/"?: Name;
-  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/"?: Website;
-  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/avatar/"?: Avatar;
-  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/e-mail/"?: EMail;
+  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/"?: NamePropertyValue;
+  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/"?: WebsitePropertyValue;
+  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/avatar/"?: AvatarPropertyValue;
+  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/e-mail/"?: EMailPropertyValue;
 }
 
 export type Person = Entity<PersonProperties>;
 
-export type OrganizationFoundedbyLinks = [] |
+export type OrganizationFoundedByLinks = [] |
   {
-    linkEntity: Foundedby;
+    linkEntity: FoundedBy;
     rightEntity: Person;
   }[];
 
 export type OrganizationLinksByLinkTypeId = {
-  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/founded-by/v/1": OrganizationFoundedbyLinks;
+  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/founded-by/v/1": OrganizationFoundedByLinks;
 };
 
 export type OrganizationLinkAndRightEntities = NonNullable<
   OrganizationLinksByLinkTypeId[keyof OrganizationLinksByLinkTypeId]
 >;
-export type ComplicatedLink'sLinks = [] |
+export type ComplicatedLinkSLinks = [] |
   {
-    linkEntity: Link's;
+    linkEntity: LinkS;
     rightEntity: Organization;
   }[];
 
 export type ComplicatedLinksByLinkTypeId = {
-  "https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/entity-type/1-link/v/1": Complicated1LinkLinks;
+  "https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/entity-type/1-link/v/1": ComplicatedT1LinkLinks;
   "https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/entity-type/link-2/v/1": ComplicatedLink2Links;
-  "https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/entity-type/links/v/1": ComplicatedLink'sLinks;
+  "https://blockprotocol-hhh1orwc8.stage.hash.ai/@alfie/types/entity-type/links/v/1": ComplicatedLinkSLinks;
 };
 
 export type ComplicatedLinkAndRightEntities = NonNullable<
