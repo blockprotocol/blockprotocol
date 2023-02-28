@@ -17,7 +17,7 @@ const testEntity: RootEntity = {
     entityTypeId: packageJson.blockprotocol.schema as VersionedUrl,
   },
   properties: {
-    "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/":
+    "https://blockprotocol.org/@blockprotocol/types/property-type/name/":
       "World",
   },
 } as const;

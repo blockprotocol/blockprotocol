@@ -53,6 +53,7 @@ type MockBlockDockProps<Temporal extends boolean> = {
   blockDefinition: BlockDefinition;
   blockEntityRecordId?: EntityRecordId;
   blockProtocolApiKey?: string;
+  blockProtocolSiteHost?: string;
   temporal?: Temporal;
   debug?: boolean;
   hideDebugToggle?: boolean;
@@ -78,6 +79,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   blockEntityRecordId: initialBlockEntityRecordId,
   blockInfo,
   blockProtocolApiKey,
+  blockProtocolSiteHost,
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
@@ -147,8 +149,15 @@ const MockBlockDockNonTemporal: FunctionComponent<
   const serviceModuleCallbacks = useMemo(
     () =>
       serviceModuleCallbacksFromProps ??
-      constructServiceModuleCallbacks({ blockProtocolApiKey }),
-    [blockProtocolApiKey, serviceModuleCallbacksFromProps],
+      constructServiceModuleCallbacks({
+        blockProtocolApiKey,
+        blockProtocolSiteHost,
+      }),
+    [
+      blockProtocolApiKey,
+      blockProtocolSiteHost,
+      serviceModuleCallbacksFromProps,
+    ],
   );
 
   useServiceEmbedderModule(wrapperRef, {
@@ -320,6 +329,7 @@ const MockBlockDockTemporal: FunctionComponent<
   blockEntityRecordId: initialBlockEntityRecordId,
   blockInfo,
   blockProtocolApiKey,
+  blockProtocolSiteHost,
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
@@ -390,8 +400,15 @@ const MockBlockDockTemporal: FunctionComponent<
   const serviceModuleCallbacks = useMemo(
     () =>
       serviceModuleCallbacksFromProps ??
-      constructServiceModuleCallbacks({ blockProtocolApiKey }),
-    [blockProtocolApiKey, serviceModuleCallbacksFromProps],
+      constructServiceModuleCallbacks({
+        blockProtocolApiKey,
+        blockProtocolSiteHost,
+      }),
+    [
+      blockProtocolApiKey,
+      blockProtocolSiteHost,
+      serviceModuleCallbacksFromProps,
+    ],
   );
 
   useServiceEmbedderModule(wrapperRef, {
@@ -564,7 +581,8 @@ const MockBlockDockTemporal: FunctionComponent<
  * @param props.blockDefinition the source for the block and any additional metadata required
  * @param [props.blockEntityRecordId] the `EntityRecordId` of the starting block entity
  * @param [props.blockInfo] metadata about the block
- * @param [props.blockProtocolApiKey] the BlockProtocol API Key
+ * @param [props.blockProtocolApiKey] the Block Protocol API Key
+ * @param [props.blockProtocolSiteHost] the origin of the Block Protocol server (defaults to https://blockprotocol.org)
  * @param [props.debug=false] display debugging information
  * @param [props.hideDebugToggle=false] hide the ability to toggle the debug UI
  * @param [props.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
@@ -580,6 +598,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   blockEntityRecordId: initialBlockEntityRecordId,
   blockInfo,
   blockProtocolApiKey,
+  blockProtocolSiteHost,
   temporal,
   debug: initialDebug = false,
   hideDebugToggle = false,
@@ -593,6 +612,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       blockEntityRecordId={initialBlockEntityRecordId}
       blockInfo={blockInfo}
       blockProtocolApiKey={blockProtocolApiKey}
+      blockProtocolSiteHost={blockProtocolSiteHost}
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData as InitialData<true>}
@@ -605,6 +625,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       blockEntityRecordId={initialBlockEntityRecordId}
       blockInfo={blockInfo}
       blockProtocolApiKey={blockProtocolApiKey}
+      blockProtocolSiteHost={blockProtocolSiteHost}
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData}

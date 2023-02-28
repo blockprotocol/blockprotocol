@@ -34,7 +34,7 @@ import { printErrorMessage } from "./cli/print-error-message.js";
   if (!foundCommand) {
     printHelp();
     printErrorMessage(`Unknown command '${command ?? ""}'`);
-    process.exit();
+    process.exit(1);
   }
 
   // parse the remaining arguments – the options
@@ -55,7 +55,7 @@ import { printErrorMessage } from "./cli/print-error-message.js";
   if (unknownOption) {
     console.log(commandManual);
     printErrorMessage(`Unknown option '${unknownOption}'`);
-    process.exit();
+    process.exit(1);
   }
 
   // execute the requested command with the given options, if any

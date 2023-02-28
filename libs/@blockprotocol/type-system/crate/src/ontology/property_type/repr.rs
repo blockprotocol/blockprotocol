@@ -10,6 +10,9 @@ use crate::{
     ParsePropertyTypeError,
 };
 
+const META_SCHEMA_ID: &str =
+    "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type";
+
 /// Will serialize as a constant value `"propertyType"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -21,6 +24,12 @@ enum PropertyTypeTag {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PropertyType {
+    #[cfg_attr(
+        target_arch = "wasm32",
+        tsify(type = "'https://blockprotocol.org/types/modules/graph/0.3/schema/property-type'")
+    )]
+    #[serde(rename = "$schema")]
+    schema: String,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'propertyType'"))]
     kind: PropertyTypeTag,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
@@ -40,6 +49,13 @@ impl TryFrom<PropertyType> for super::PropertyType {
     fn try_from(property_type_repr: PropertyType) -> Result<Self, Self::Error> {
         let id = VersionedUrl::from_str(&property_type_repr.id)
             .map_err(ParsePropertyTypeError::InvalidVersionedUrl)?;
+
+        if property_type_repr.schema != META_SCHEMA_ID {
+            return Err(ParsePropertyTypeError::InvalidMetaSchema(
+                property_type_repr.schema,
+            ));
+        }
+
         Ok(Self::new(
             id,
             property_type_repr.title,
@@ -55,6 +71,7 @@ impl TryFrom<PropertyType> for super::PropertyType {
 impl From<super::PropertyType> for PropertyType {
     fn from(property_type: super::PropertyType) -> Self {
         Self {
+            schema: META_SCHEMA_ID.to_owned(),
             kind: PropertyTypeTag::PropertyType,
             id: property_type.id.to_string(),
             title: property_type.title,

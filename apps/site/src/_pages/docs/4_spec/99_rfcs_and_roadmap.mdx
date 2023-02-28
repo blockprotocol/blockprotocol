@@ -78,12 +78,13 @@ The most detailed version of this would be for blocks to be able to:
 
 ### Graph
 
-#### Entity types
+#### Entity type extension and duplication
 
-We’re intending to move away from entities having to fully describe the constraints of each of their properties.
-Instead, type definitions are going to become shareable and reusable in a new type system which establishes
-a hierarchy of types to address a number of shortcomings in our current system.
-For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/352).
+Currently, if a user wants to add additional information to an existing entity type, their only option is to make a brand new one and manually copy the structure. We'd like to add support for users to be able to "extend" types in a way that doesn't break existing entity types and allows for reusability across embedding applications and blocks. To allow for situations where a user wants to customize an entity type in a way that a non-compatible fashion, we want a mechanism to "duplicate" or "fork" an existing entity type. For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/428).
+
+#### Non-primitive data types
+
+We define six primitive data types in the Graph type system. These data types define value spaces for the inner properties of entities, and currently are limited to basic primitives such as "text" or "number". Building robust data models will require the ability to define constraints and define validation mechanisms (think maximum/minimum lengths on properties, or applying regular expressions to define the pattern of a string). We are thinking about implementing this through allowing the creation of non-primitive data types, built off the composition and extension of other data types coupled with a suite of supported constraints. You can read more about this in [this RFC](https://github.com/blockprotocol/blockprotocol/pull/355).
 
 #### Pagination
 

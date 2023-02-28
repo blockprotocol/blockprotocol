@@ -42,7 +42,7 @@ const extractKeyFromRcFile = (filePath, namespace) => {
     `Config file ${chalk.red("does not contain")} '${configFileKey}' key.`,
   );
   console.log(`Path: ${filePath}`);
-  process.exit();
+  process.exit(1);
 };
 
 /**
@@ -100,5 +100,5 @@ export const findApiKey = async (namespace) => {
   }
 
   printSpacer();
-  process.exit();
+  process.exit(1);
 };
