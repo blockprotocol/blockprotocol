@@ -66,6 +66,26 @@ type CompiledType = {
 // A map of schema URLs to their TS type name and definition
 type UrlToType = { [entityTypeId: VersionedUrl]: CompiledType };
 
+/**
+ * Extracts the alphanumeric characters from the title and creates a Title Cased version that can be used as a
+ * TypeScript type name
+ *
+ * @param title
+ */
+const generateTypeNameFromTitle = (title: string) => {
+  // extract all letters and numbers from the title, and capitalise the start of each component
+  const titleCase = (title.match(/[a-zA-Z0-9]+/g) || [])
+    .map((word: string) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
+    .join("");
+
+  if (!/[a-zA-Z]/.test(titleCase.charAt(0))) {
+    // if it starts with a number, append `T` to the start to make a valid type name
+    return `T${titleCase}`;
+  } else {
+    return titleCase;
+  }
+};
+
 const generateTypeNameFromSchema = (
   schema: EntityType,
   existingTypes: UrlToType,
@@ -74,11 +94,7 @@ const generateTypeNameFromSchema = (
     throw new Error("Schema must have a 'title'");
   }
 
-  const nameToCase = schema.title.replace(/ /g, "");
-
-  const proposedName = `${nameToCase[0]!.toUpperCase()}${nameToCase.substring(
-    1,
-  )}`;
+  const proposedName = generateTypeNameFromTitle(schema.title);
 
   let typeWithProposedName = typedEntries(existingTypes).find(
     ([_entityTypeId, { typeName }]) => typeName === proposedName,
