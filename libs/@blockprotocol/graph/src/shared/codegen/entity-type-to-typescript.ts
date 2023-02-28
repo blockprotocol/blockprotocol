@@ -2,9 +2,10 @@ import {
   EntityType,
   extractBaseUrl,
   extractVersion,
+  validateVersionedUrl,
   VersionedUrl,
 } from "@blockprotocol/type-system/slim";
-import { compile, Options } from "json-schema-to-typescript";
+import { compile, JSONSchema, Options } from "json-schema-to-typescript";
 
 import { fetchAndValidateEntityType } from "../../non-temporal/codegen.js";
 import { typedEntries } from "../util.js";
@@ -23,48 +24,6 @@ const bannerComment = (url: string, depth: number) => `/**
  * @see ${url} for the root JSON Schema these types were generated from
  * Types for link entities and their destination were generated to a depth of ${depth} from the root
  */`;
-
-/**
- * Uses json-schema-to-typescript to chase down $refs and create a TypeScript type for the provided schema
- * Ignores 'links' which are followed manually elsewhere in order to manage depth
- * @todo
- * - type name is generated from schema title. Clashes append 1, 2 etc. Patch this to distinguish on URL/$id segments?
- *   @see https://github.com/bcherny/json-schema-to-typescript/blob/34de194e87cd54f43809efae110732569e0891c1/src/parser.ts#L303
- *
- */
-export const compileSchema = (schema: any, options?: Partial<Options>) =>
-  compile(schema, "This value doesn't appear to matter", {
-    strictIndexSignatures: true,
-    // @see https://apitools.dev/json-schema-ref-parser/docs/options.html
-    $refOptions: {
-      dereference: {
-        circular: true,
-        onDereference: () => null, // @todo why is this required
-      },
-      resolve: {
-        http: {
-          read({ url }) {
-            const hardcodedType =
-              hardcodedBpTypes[url as keyof typeof hardcodedBpTypes];
-            if (hardcodedType) {
-              return hardcodedType;
-            }
-            return fetchTypeAsJson(url);
-          },
-        },
-      },
-    },
-    ...options,
-  });
-
-// A named type and the TS string defining it and its type dependencies
-type CompiledType = {
-  typeName: string;
-  typeScriptString: string;
-};
-
-// A map of schema URLs to their TS type name and definition
-type UrlToType = { [entityTypeId: VersionedUrl]: CompiledType };
 
 /**
  * Extracts the alphanumeric characters from the title and creates a Title Cased version that can be used as a
@@ -87,13 +46,9 @@ const generateTypeNameFromTitle = (title: string) => {
 };
 
 const generateTypeNameFromSchema = (
-  schema: EntityType,
+  schema: { $id: VersionedUrl; title: string },
   existingTypes: UrlToType,
 ): string => {
-  if (!schema.title) {
-    throw new Error("Schema must have a 'title'");
-  }
-
   const proposedName = generateTypeNameFromTitle(schema.title);
 
   let typeWithProposedName = typedEntries(existingTypes).find(
@@ -134,6 +89,156 @@ const generateTypeNameFromSchema = (
 };
 
 /**
+ * Uses json-schema-to-typescript to chase down $refs and create a TypeScript type for the provided schema
+ * Ignores 'links' which are followed manually elsewhere in order to manage depth
+ * @todo
+ * - type name is generated from schema title. Clashes append 1, 2 etc. Patch this to distinguish on URL/$id segments?
+ *   @see https://github.com/bcherny/json-schema-to-typescript/blob/34de194e87cd54f43809efae110732569e0891c1/src/parser.ts#L303
+ *
+ */
+export const compileSchema = ({
+  schema,
+  options,
+  resolvedUrlsToType,
+}: {
+  schema: any;
+  options?: Partial<Options>;
+  resolvedUrlsToType: UrlToType;
+}) =>
+  compile(schema, "This value doesn't appear to matter", {
+    strictIndexSignatures: true,
+    // @see https://apitools.dev/json-schema-ref-parser/docs/options.html
+    $refOptions: {
+      dereference: {
+        circular: true,
+        onDereference: () => null, // @todo why is this required
+      },
+      resolve: {
+        http: {
+          read({ url }) {
+            return (async () => {
+              let type =
+                (hardcodedBpTypes as Record<string, unknown>)[url] ??
+                (await fetchTypeAsJson(url));
+
+              if (validateVersionedUrl(url).type === "Ok") {
+                if (typeof type !== "object" || type === null) {
+                  // eslint-disable-next-line no-console
+                  console.error(`Expected type at ${url} to be valid JSON`);
+                  throw new Error(`Expected type at ${url} to be valid JSON`);
+                }
+
+                // Spread the type to avoid modifying contents of `hardcodedBpTypes`
+                const remoteSchema = { ...type };
+
+                if (
+                  !(
+                    "$id" in remoteSchema &&
+                    typeof remoteSchema.$id === "string" &&
+                    validateVersionedUrl(remoteSchema.$id).type === "Ok"
+                  )
+                ) {
+                  // eslint-disable-next-line no-console
+                  console.error(
+                    `Expected type at ${url} to have a valid $id Versioned URL`,
+                  );
+                  throw new Error(
+                    `Expected type at ${url} to have a valid $id Versioned URL`,
+                  );
+                }
+
+                if (
+                  !(
+                    "kind" in remoteSchema &&
+                    typeof remoteSchema.kind === "string"
+                  )
+                ) {
+                  // eslint-disable-next-line no-console
+                  console.error(
+                    `Expected type at ${url} to have a string 'kind' property`,
+                  );
+                  throw new Error(
+                    `Expected type at ${url} to have a string 'kind' property`,
+                  );
+                }
+
+                if (
+                  !(
+                    "title" in remoteSchema &&
+                    typeof remoteSchema.title === "string"
+                  )
+                ) {
+                  // eslint-disable-next-line no-console
+                  console.error(
+                    `Expected type at ${url} to have a string 'title' property`,
+                  );
+                  throw new Error(
+                    `Expected type at ${url} to have a string 'title' property`,
+                  );
+                }
+
+                if (
+                  !["entityType", "propertyType", "dataType"].includes(
+                    remoteSchema.kind,
+                  )
+                ) {
+                  // eslint-disable-next-line no-console
+                  console.error(
+                    `Expected type at ${url} to have a 'kind' of 'entityType', 'propertyType' or 'dataType'`,
+                  );
+
+                  throw new Error(
+                    `Expected type at ${url} to have a 'kind' of 'entityType', 'propertyType' or 'dataType'`,
+                  );
+                }
+
+                if (remoteSchema.kind === "propertyType") {
+                  remoteSchema.title = `${remoteSchema.title} Property Value`;
+                } else if (remoteSchema.kind === "dataType") {
+                  remoteSchema.title = `${remoteSchema.title} Data Value`;
+                }
+
+                const proposedName = generateTypeNameFromTitle(
+                  /* @todo - this is checked above so we shouldn't have to cast here */
+                  remoteSchema.title as string,
+                );
+
+                const [resolvedUrl, _] =
+                  Object.entries(resolvedUrlsToType).find(
+                    ([_resolvedUrl, compiledType]) =>
+                      compiledType.typeName === proposedName,
+                  ) ?? [];
+
+                if (resolvedUrl && resolvedUrl !== url) {
+                  remoteSchema.title = generateTypeNameFromSchema(
+                    /* @todo - this is checked above so we shouldn't have to cast here */
+                    remoteSchema as { $id: VersionedUrl; title: string },
+                    resolvedUrlsToType,
+                  );
+                }
+
+                type = remoteSchema;
+              }
+
+              return type;
+            })();
+          },
+        },
+      },
+    },
+    ...options,
+  });
+
+// A named type and the TS string defining it and its type dependencies
+type CompiledType = {
+  typeName: string;
+  typeScriptString: string;
+};
+
+// A map of schema URLs to their TS type name and definition
+type UrlToType = { [entityTypeId: VersionedUrl]: CompiledType };
+
+/**
  * Generates TypeScript types from a given Entity Type schema
  * If depth > 0, follows 'links' from the schema to include types for link entities and their possible destinations
  * @param schema – the schema to generate types for
@@ -161,32 +266,46 @@ const _jsonSchemaToTypeScript = async (
   }
 
   // This first generated type is just going to cover the entity's properties – they have other fields typed elsewhere
-  const propertyTypeName = `${typeName}Properties`;
+  const propertiesTypeName = `${typeName}Properties`;
 
   // here we import the types defined elsewhere which we rely on, e.g. Entity
   let compiledSchema = rootSchema ? generateImportStatements(temporal) : "";
 
-  if (!schema.allOf || (schema.allOf && schema.allOf.length === 0)) {
+  if (
+    schema.allOf &&
+    schema.allOf.length > 0 &&
+    schema.allOf[0]!.$ref !==
+      "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1"
+  ) {
+    throw new Error(
+      `Invalid allOf entry, expected 'https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1' by received: ${
+        schema.allOf[0]!.$ref
+      }}`,
+    );
+  }
+
+  if (schema.allOf !== undefined) {
     // eslint-disable-next-line no-param-reassign -- must be deleted. an empty array -> garbage output, null/undefined -> crash
     delete schema.allOf;
   }
 
   // Generate the type for FooProperties, representing the entity's 'own properties' (not links or linked entities)
-  compiledSchema += await compileSchema(
-    {
+  compiledSchema += await compileSchema({
+    schema: {
       ...schema,
-      title: propertyTypeName,
+      title: propertiesTypeName,
     },
-    {
+    options: {
       additionalProperties: false,
       bannerComment: rootSchema ? bannerComment(schema.$id, depth) : "",
     },
-  );
+    resolvedUrlsToType,
+  });
 
   // This adds 'type Foo = Entity<FooProperties>;'
   const entityTypeDefinition = generateEntityDefinition(
     typeName,
-    propertyTypeName,
+    propertiesTypeName,
   );
   compiledSchema += entityTypeDefinition;
 
@@ -202,8 +321,8 @@ const _jsonSchemaToTypeScript = async (
   // temporary hack for the @todo mentioned above
   // this covers the one type we know is currently generated via inheritance
   compiledSchema = compiledSchema.replace(
-    /export interface Link/g,
-    "export type Link =",
+    /export interface Link /g,
+    "export type Link = ",
   );
 
   // Better type for the opaque JSON object type
