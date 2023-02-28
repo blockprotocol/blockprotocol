@@ -26,7 +26,6 @@ const WordPressPage: FunctionComponent = () => (
       <Header />
       <WhyInstall />
       <WhyDevelop />
-      <Availability />
     </EmailSubmittedProvider>
   </>
 );
