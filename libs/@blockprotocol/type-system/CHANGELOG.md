@@ -1,15 +1,5 @@
 # @blockprotocol/type-system
 
-## 0.1.0-canary-20230228220237
-
-### Minor Changes
-
-- [#1060](https://github.com/blockprotocol/blockprotocol/pull/1060) [`4bc6b615`](https://github.com/blockprotocol/blockprotocol/commit/4bc6b6150498534f20a7bea0d9ec36606debef3f) Thanks [@CiaranMn](https://github.com/CiaranMn)! - rename Block Protocol 'Services' to 'Modules'
-
-### Patch Changes
-
-- [#1060](https://github.com/blockprotocol/blockprotocol/pull/1060) [`4bc6b615`](https://github.com/blockprotocol/blockprotocol/commit/4bc6b6150498534f20a7bea0d9ec36606debef3f) Thanks [@CiaranMn](https://github.com/CiaranMn)! - update schema representations of ontology types to remove redundant fields, and add further validation
-
 ## 0.0.4
 
 ### Patch Changes
