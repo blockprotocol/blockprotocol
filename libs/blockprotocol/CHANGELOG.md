@@ -1,5 +1,13 @@
 # blockprotocol
 
+## 0.2.1-canary-20230228184514
+
+### Patch Changes
+
+- [#1060](https://github.com/blockprotocol/blockprotocol/pull/1060) [`a5988362`](https://github.com/blockprotocol/blockprotocol/commit/a5988362dc5f3a1976e96b56a7a42bc73c5c48d3) Thanks [@CiaranMn](https://github.com/CiaranMn)! - bump `node-fetch` version
+
+- [#1060](https://github.com/blockprotocol/blockprotocol/pull/1060) [`a5988362`](https://github.com/blockprotocol/blockprotocol/commit/a5988362dc5f3a1976e96b56a7a42bc73c5c48d3) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Use non-zero exit code in edge cases
+
 ## 0.2.0
 
 ### Minor Changes
