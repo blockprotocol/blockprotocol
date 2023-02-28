@@ -1,7 +1,5 @@
 import {
   Entity,
-  FileEntity,
-  FileEntityProperties,
   GraphEmbedderMessageCallbacks,
   isFileAtUrlData,
   isFileData,
@@ -9,6 +7,8 @@ import {
   isHasRightEntityEdge,
   KnowledgeGraphOutwardEdge,
   OntologyOutwardEdge,
+  RemoteFileEntity,
+  RemoteFileEntityProperties,
   Subgraph,
 } from "@blockprotocol/graph";
 import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
@@ -676,7 +676,7 @@ export const useMockDatastore = (
 
       const mimeType = mime.getType(filename) || "application/octet-stream";
 
-      const newEntityProperties: FileEntityProperties = {
+      const newEntityProperties: RemoteFileEntityProperties = {
         "https://blockprotocol.org/@blockprotocol/types/property-type/description/":
           description,
         "https://blockprotocol.org/@blockprotocol/types/property-type/file-name/":
@@ -705,7 +705,7 @@ export const useMockDatastore = (
           ],
         };
       }
-      return Promise.resolve({ data: newEntity as FileEntity });
+      return Promise.resolve({ data: newEntity as RemoteFileEntity });
     },
     [createEntity, readonly],
   );

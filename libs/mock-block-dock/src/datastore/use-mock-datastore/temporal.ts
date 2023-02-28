@@ -5,11 +5,11 @@ import {
 import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
 import {
   Entity,
-  FileEntity,
-  FileEntityProperties,
   GraphEmbedderMessageCallbacks,
   isFileAtUrlData,
   isFileData,
+  RemoteFileEntity,
+  RemoteFileEntityProperties,
   Subgraph,
 } from "@blockprotocol/graph/temporal";
 import { getEntityRevision } from "@blockprotocol/graph/temporal/stdlib";
@@ -658,7 +658,7 @@ export const useMockDatastore = (
 
       const mimeType = mime.getType(filename) || "application/octet-stream";
 
-      const newEntityProperties: FileEntityProperties = {
+      const newEntityProperties: RemoteFileEntityProperties = {
         "https://blockprotocol.org/@blockprotocol/types/property-type/description/":
           description,
         "https://blockprotocol.org/@blockprotocol/types/property-type/file-name/":
@@ -687,7 +687,7 @@ export const useMockDatastore = (
           ],
         };
       }
-      return Promise.resolve({ data: newEntity as FileEntity });
+      return Promise.resolve({ data: newEntity as RemoteFileEntity });
     },
     [createEntity, readonly],
   );

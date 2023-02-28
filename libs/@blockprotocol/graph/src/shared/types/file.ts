@@ -26,16 +26,17 @@ export const isFileData = (fileData: UploadFileData): fileData is FileData =>
   "file" in fileData;
 
 // @todo - auto-generate this from File type in blockprotocol.org when available
-export type FileEntityProperties = {
+export type RemoteFileEntityProperties = {
   "https://blockprotocol.org/@blockprotocol/types/property-type/description/"?: string;
   "https://blockprotocol.org/@blockprotocol/types/property-type/file-name/": string;
   "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/": string;
   "https://blockprotocol.org/@blockprotocol/types/property-type/file-url/": string;
 };
 
-export type FileEntity<Temporal extends boolean> = Entity<
+export type RemoteFileEntity<Temporal extends boolean> = Entity<
   Temporal,
-  FileEntityProperties
+  RemoteFileEntityProperties
 >;
 
-export type UploadFileReturn<Temporal extends boolean> = FileEntity<Temporal>;
+export type UploadFileReturn<Temporal extends boolean> =
+  RemoteFileEntity<Temporal>;
