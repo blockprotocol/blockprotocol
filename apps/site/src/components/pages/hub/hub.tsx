@@ -80,7 +80,7 @@ const HubItem = ({
           >
             @{author}
           </Box>
-          <Box>V{version}</Box>
+          <Box>{version}</Box>
           {updated ? (
             <Box>
               <ClientOnlyLastUpdated value={updated} />
