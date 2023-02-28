@@ -231,10 +231,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
           />
         )}
       </Box>
-      {stripeSubscriptionStatus === "active" ||
-      stripeSubscriptionStatus === "past_due" ? (
-        <UsageLimitSection />
-      ) : null}
+      <UsageLimitSection />
       {currentSubscriptionTierIsPaid && <TaxIdSection />}
       <PaymentHistorySection
         stripeSubscriptionStatus={stripeSubscriptionStatus}
