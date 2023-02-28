@@ -8,15 +8,13 @@ export const getAllBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
   return allDbBlocks as ExpandedBlockMetadata[];
 };
 
-const featuredBlocks = new Set([
-  "@alfie/github-pr-overview",
-  "@hash/code",
-  "@hash/shuffle",
-]);
-
 export const getFeaturedBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
-  return localBlocks.filter((block) =>
-    featuredBlocks.has(block.pathWithNamespace),
+  return await Promise.all([
+    getDbBlock({ author: "alfie", name: "github-pr-overview" }),
+    getDbBlock({ author: "hash", name: "code" }),
+    getDbBlock({ author: "hash", name: "shufle" }),
+  ]).then((result) =>
+    result.filter((block): block is ExpandedBlockMetadata => !!block),
   );
 };
 
