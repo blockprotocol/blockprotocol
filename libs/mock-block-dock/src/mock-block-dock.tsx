@@ -4,7 +4,7 @@ import { useGraphEmbedderModule as useGraphEmbedderModuleNonTemporal } from "@bl
 import { useGraphEmbedderModule as useGraphEmbedderModuleTemporal } from "@blockprotocol/graph/temporal/react";
 import { HookData, HookEmbedderMessageCallbacks } from "@blockprotocol/hook/.";
 import { useHookEmbedderModule } from "@blockprotocol/hook/react";
-import { EmbedderServiceMessageCallbacks } from "@blockprotocol/service";
+import { ServiceEmbedderMessageCallbacks } from "@blockprotocol/service";
 import { useServiceEmbedderModule } from "@blockprotocol/service/react";
 import {
   ComponentType,
@@ -59,7 +59,7 @@ type MockBlockDockProps<Temporal extends boolean> = {
   hideDebugToggle?: boolean;
   initialData?: InitialData<Temporal>;
   readonly?: boolean;
-  serviceModuleCallbacks?: EmbedderServiceMessageCallbacks;
+  serviceModuleCallbacks?: ServiceEmbedderMessageCallbacks;
   blockInfo?: {
     blockType: {
       entryPoint: "react" | "html" | "custom-element" | string;

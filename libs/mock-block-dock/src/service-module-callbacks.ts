@@ -1,10 +1,10 @@
-import { EmbedderServiceMessageCallbacks } from "@blockprotocol/service";
+import { ServiceEmbedderMessageCallbacks } from "@blockprotocol/service";
 import axios, { AxiosError } from "axios";
 
 const externalApiHttpClient = axios.create();
 
 type ServiceFunction =
-  EmbedderServiceMessageCallbacks[keyof EmbedderServiceMessageCallbacks];
+  ServiceEmbedderMessageCallbacks[keyof ServiceEmbedderMessageCallbacks];
 
 const callExternalApiMethod = async (params: {
   blockProtocolApiKey?: string;
@@ -67,7 +67,7 @@ const callExternalApiMethod = async (params: {
 export const constructServiceModuleCallbacks = (params: {
   blockProtocolApiKey?: string;
   blockProtocolSiteHost?: string;
-}): EmbedderServiceMessageCallbacks => {
+}): ServiceEmbedderMessageCallbacks => {
   const { blockProtocolApiKey, blockProtocolSiteHost } = params;
 
   return {
