@@ -21,6 +21,10 @@ import {
   ApiSendLoginCodeResponse,
 } from "../pages/api/send-login-code.api";
 import {
+  ApiSetUsageLimitRequestBody,
+  ApiSetUsageLimitResponse,
+} from "../pages/api/set-usage-limit.api";
+import {
   ApiSignupRequestBody,
   ApiSignupResponse,
 } from "../pages/api/signup.api";
@@ -262,5 +266,10 @@ export const apiClient = {
           ...(other ? { WISH_EA: other } : {}),
         },
       },
+    ),
+  setUsageLimit: (requestData: ApiSetUsageLimitRequestBody) =>
+    apiClient.post<ApiSetUsageLimitRequestBody, ApiSetUsageLimitResponse>(
+      "set-usage-limit",
+      requestData,
     ),
 };

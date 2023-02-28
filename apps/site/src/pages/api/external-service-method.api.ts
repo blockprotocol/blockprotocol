@@ -45,8 +45,22 @@ export default createApiKeyRequiredHandler<
     } catch (error) {
       const axiosError = error as AxiosError;
 
-      const { status, data } = axiosError.response ?? {};
+      const { status, data } = axiosError.response ?? {
+        status: 500,
+        data: { errors: [{ message: "An unknown error occurred." }] },
+      };
 
-      res.status(status ?? 500).json((data as any) ?? {});
+      res.status(status ?? 500).json(
+        formatErrors({
+          msg:
+            data &&
+            typeof data === "object" &&
+            "errors" in data &&
+            (data.errors as any[])?.[0].message
+              ? (data.errors as any[])?.[0].message
+              : "An unknown error occurred.",
+          code: status.toString(),
+        }),
+      );
     }
   });

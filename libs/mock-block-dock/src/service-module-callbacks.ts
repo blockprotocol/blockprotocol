@@ -1,41 +1,74 @@
 import { EmbedderServiceMessageCallbacks } from "@blockprotocol/service";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
-const bpSiteHost = `${
-  process.env.BLOCK_PROTOCOL_SITE_HOST ?? "https://blockprotocol.org"
-}/api`;
+const externalApiHttpClient = axios.create();
 
-const externalApiHttpClient = axios.create({
-  baseURL: bpSiteHost,
-});
+type ServiceFunction =
+  EmbedderServiceMessageCallbacks[keyof EmbedderServiceMessageCallbacks];
 
 const callExternalApiMethod = async (params: {
   blockProtocolApiKey?: string;
+  blockProtocolSiteHost?: string;
   providerName: string;
   methodName: string;
-  payload: any;
-}): Promise<{ data: any }> => {
-  const { providerName, methodName, payload, blockProtocolApiKey } = params;
+  payload: Parameters<ServiceFunction>[0]["data"];
+}): Promise<{
+  data?: any;
+  errors?: Awaited<ReturnType<ServiceFunction>>["errors"];
+}> => {
+  const {
+    providerName,
+    methodName,
+    payload,
+    blockProtocolApiKey,
+    blockProtocolSiteHost,
+  } = params;
+
+  const bpSiteHost = blockProtocolSiteHost ?? "https://blockprotocol.org";
+  const baseUrl = `${bpSiteHost}/api`;
 
   if (!blockProtocolApiKey) {
     throw new Error(
-      `Visit ${bpSiteHost}/dashboard to generate a Block Protocol API key, which is required to make calls to the "${methodName}" method of the BP service module, and ensure it is passed to the \`MockBlockDock\` component as \`${blockProtocolApiKey}\`.`,
+      `Visit ${bpSiteHost}/dashboard to generate a Block Protocol API key, which is required to make calls to the "${methodName}" method of the BP service module, and ensure it is passed to the \`MockBlockDock\` component as blockProtocolApiKey.`,
     );
   }
 
-  const { data } = await externalApiHttpClient.post(
-    "/external-service-method",
-    { providerName, methodName, payload },
-    { headers: { "x-api-key": blockProtocolApiKey } },
-  );
+  try {
+    const { data } = await externalApiHttpClient.post(
+      "/external-service-method",
+      { providerName, methodName, payload },
+      {
+        headers: { "x-api-key": blockProtocolApiKey },
+        baseURL: baseUrl,
+      },
+    );
 
-  return { data: data.externalServiceMethodResponse };
+    return { data: data.externalServiceMethodResponse };
+  } catch (error) {
+    const axiosError = error as AxiosError;
+
+    const { status, data } = axiosError.response ?? {};
+
+    return {
+      errors: [
+        {
+          message:
+            data && typeof data === "object" && "errors" in data
+              ? (data.errors as any)?.[0]?.message
+              : "An unknown error occurred.",
+          code:
+            status === 401 || status === 403 ? "FORBIDDEN" : "INTERNAL_ERROR",
+        },
+      ],
+    };
+  }
 };
 
 export const constructServiceModuleCallbacks = (params: {
   blockProtocolApiKey?: string;
+  blockProtocolSiteHost?: string;
 }): EmbedderServiceMessageCallbacks => {
-  const { blockProtocolApiKey } = params;
+  const { blockProtocolApiKey, blockProtocolSiteHost } = params;
 
   return {
     /** OpenAI */
@@ -46,6 +79,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "createImage",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     openaiCompleteText: async ({ data: payload }) =>
@@ -54,6 +88,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "completeText",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     /** Mapbox Geocoding API */
@@ -64,6 +99,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "forwardGeocoding",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     mapboxReverseGeocoding: async ({ data: payload }) =>
@@ -72,6 +108,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "reverseGeocoding",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     /** Mapbox Directions API */
@@ -82,6 +119,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "retrieveDirections",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     /** Mapbox Isochrone API */
@@ -92,6 +130,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "retrieveIsochrones",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     /** Mapbox Autofill API */
@@ -102,6 +141,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "suggestAddress",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     mapboxRetrieveAddress: async ({ data: payload }) =>
@@ -110,6 +150,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "retrieveAddress",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     mapboxCanRetrieveAddress: async ({ data: payload }) =>
@@ -118,6 +159,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "canRetrieveAddress",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
 
     /** Mapbox Static Map API */
@@ -128,6 +170,7 @@ export const constructServiceModuleCallbacks = (params: {
         methodName: "retrieveStaticMap",
         payload,
         blockProtocolApiKey,
+        blockProtocolSiteHost,
       }),
   };
 };
