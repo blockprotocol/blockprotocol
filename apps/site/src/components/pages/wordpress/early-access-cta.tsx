@@ -6,7 +6,7 @@ import { useEmailTextField } from "../../hooks/use-email-text-field";
 import { useEmailSubmitted } from "./email-submitted-context";
 import { Input } from "./input";
 
-const submittedEmailText = "You’re on the waitlist as";
+const submittedEmailText = "Download at https://wordpress.org/plugins/blockprotocol/";
 const submitErrorText = "There was an error submitting your email";
 
 export const EarlyAccessCTA = () => {
@@ -84,7 +84,7 @@ export const EarlyAccessCTA = () => {
         setSubmitError(false);
         setEmailValue(target.value);
       }}
-      buttonLabel={submittedEmail ? "Submitted" : "Get early access"}
+      buttonLabel={submittedEmail ? "Submitted" : "Download now"}
       handleSubmit={handleSubmit}
       loading={loading}
     />
