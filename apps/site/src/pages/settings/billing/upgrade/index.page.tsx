@@ -823,8 +823,8 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                       })}
                     >
                       By clicking “Upgrade my account and continue”, you agree
-                      to our <Link href="/">Terms of Service</Link> and{" "}
-                      <Link href="/">Privacy Statement</Link>.
+                      to our <Link href="/legal/terms">Terms of Service</Link>{" "}
+                      and <Link href="/legal/privacy">Privacy Statement</Link>.
                     </Typography>
                     {currentSubscriptionTier === "free" ? (
                       <Typography
