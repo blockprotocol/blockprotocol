@@ -33,7 +33,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
      * ID, the `stripeSubscriptionStatus` was manually populated by
      * another page due to a race-condition with the stripe webhook.
      *
-     * Therefore we should refetch the `user` in one second to obtain
+     * Therefore we should refetch the `user` in five seconds to obtain
      * the correct user record.
      */
     if (
