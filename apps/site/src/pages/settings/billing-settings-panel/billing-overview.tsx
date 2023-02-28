@@ -41,7 +41,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       user.stripeSubscriptionStatus &&
       !user.stripeSubscriptionId
     ) {
-      setTimeout(() => refetch(), 1000);
+      setTimeout(() => refetch(), 5000);
     }
   }, [user, refetch]);
 
