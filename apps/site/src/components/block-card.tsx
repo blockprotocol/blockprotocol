@@ -20,9 +20,7 @@ const blockWidthStyles = {
   width: "100%",
 };
 
-export const BlockCard: FunctionComponent<BlockCardProps> = ({
-  data,
-}) => {
+export const BlockCard: FunctionComponent<BlockCardProps> = ({ data }) => {
   if (!data) {
     return null;
   }
