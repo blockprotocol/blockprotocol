@@ -31,9 +31,13 @@
             entityId: "my-entity-1",
             editionId: new Date(0).toISOString(),
           },
-          entityTypeId: "http://example.com/types/entity-type/example/v/1",
+          entityTypeId:
+            "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
         },
-        properties: { "http://example.com/types/property-type/name/": "World" },
+        properties: {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/name/":
+            "World",
+        },
       };
 
       const initialData = {

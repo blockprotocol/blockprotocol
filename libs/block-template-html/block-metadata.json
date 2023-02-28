@@ -9,9 +9,13 @@
   "blockType": {
     "entryPoint": "html"
   },
-  "protocol": "0.2",
+  "protocol": "0.3",
   "displayName": "Template",
-  "examples": [{ "http://example.com/types/property-type/name/": "World" }],
+  "examples": [
+    {
+      "https://blockprotocol.org/@blockprotocol/types/property-type/name/": "World"
+    }
+  ],
   "icon": "public/omega.svg",
   "image": "public/block-preview.png",
   "source": "app.html"

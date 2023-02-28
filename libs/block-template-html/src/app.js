@@ -6,7 +6,7 @@ import {
 import { getRoots } from "https://esm.sh/@blockprotocol/graph@0.1.0-canary-20230228184514/stdlib";
 
 const propertyTypeIds = {
-  name: "http://example.com/types/property-type/name/v/1",
+  name: "https://blockprotocol.org/@blockprotocol/types/property-type/name/v/1",
 };
 
 const element = blockprotocol.getBlockContainer(import.meta.url);
