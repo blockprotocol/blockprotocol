@@ -236,10 +236,10 @@ export type MapboxRetrieveStaticMapData = {
   padding?: string;
 };
 
-/**
- * @todo: figure out if this is the best way of handling a "buffer array"
- */
-export type MapboxRetrieveStaticMapResponseData = string;
+export type MapboxRetrieveStaticMapResponseData = {
+  type: "Buffer";
+  data: ArrayBuffer;
+};
 
 export type ServiceMessageError = "FORBIDDEN";
 
