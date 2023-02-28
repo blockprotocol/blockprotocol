@@ -5,7 +5,7 @@ test("Hub page should contain key elements", async ({ page }) => {
 
   await expect(
     page.locator(
-      "h1 >> text=Interactive, data-driven blocks to use in your projects",
+      "h4 >> text=Open-source components for applications that work instantly without setup",
     ),
   ).toBeVisible();
 
