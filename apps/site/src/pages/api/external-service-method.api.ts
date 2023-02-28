@@ -9,6 +9,9 @@ import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { internalApi } from "../../lib/internal-api-client";
 import { formatErrors, mustGetEnvVar } from "../../util/api";
 
+const isErrorAxiosError = (error: unknown): error is AxiosError =>
+  (error as AxiosError).isAxiosError;
+
 export default createApiKeyRequiredHandler<
   ExternalServiceMethodRequest,
   ExternalServiceMethod200Response
@@ -44,26 +47,34 @@ export default createApiKeyRequiredHandler<
           "x-vercel-ip-country": req.headers["x-vercel-ip-country"],
         },
       });
-
       res.status(200).json(data);
     } catch (error) {
-      const axiosError = error as AxiosError;
+      let message;
+      let status = 500;
+      let code = "INTERNAL_ERROR";
+      if (isErrorAxiosError(error)) {
+        if (error.response?.status) {
+          status = error.response.status;
+        }
+        const { data } = error.response ?? {};
+        if (data && typeof data === "object") {
+          if ("message" in data && data.message) {
+            message = data.message;
+          }
+          if ("code" in data && typeof data.code === "string") {
+            code = data.code;
+          }
+        } else if (error.message) {
+          message = error.message;
+        }
+      } else if ("message" in (error as Error) && (error as Error).message) {
+        message = (error as Error).message;
+      }
 
-      const { status, data } = axiosError.response ?? {
-        status: 500,
-        data: { errors: [{ message: "An unknown error occurred." }] },
-      };
-
-      res.status(status ?? 500).json(
+      res.status(status).json(
         formatErrors({
-          msg:
-            data &&
-            typeof data === "object" &&
-            "errors" in data &&
-            (data.errors as any[])?.[0].message
-              ? (data.errors as any[])?.[0].message
-              : "An unknown error occurred.",
-          code: status.toString(),
+          msg: message,
+          code,
         }),
       );
     }
