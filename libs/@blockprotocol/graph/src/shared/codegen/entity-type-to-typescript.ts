@@ -5,7 +5,7 @@ import {
   validateVersionedUrl,
   VersionedUrl,
 } from "@blockprotocol/type-system/slim";
-import { compile, JSONSchema, Options } from "json-schema-to-typescript";
+import { compile, Options } from "json-schema-to-typescript";
 
 import { fetchAndValidateEntityType } from "../../non-temporal/codegen.js";
 import { typedEntries } from "../util.js";
@@ -16,7 +16,6 @@ import {
   generateImportStatements,
   generateLinkEntityAndRightEntityDefinition,
 } from "./entity-type-to-typescript/type-definition-generators.js";
-import { hardcodedBpTypes } from "./hardcoded-bp-types.js";
 import { fetchTypeAsJson } from "./shared.js";
 
 const bannerComment = (url: string, depth: number) => `/**
@@ -117,9 +116,7 @@ export const compileSchema = ({
         http: {
           read({ url }) {
             return (async () => {
-              let type =
-                (hardcodedBpTypes as Record<string, unknown>)[url] ??
-                (await fetchTypeAsJson(url));
+              let type = await fetchTypeAsJson(url);
 
               if (validateVersionedUrl(url).type === "Ok") {
                 if (typeof type !== "object" || type === null) {
