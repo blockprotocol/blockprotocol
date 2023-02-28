@@ -1,7 +1,5 @@
 import {
   Entity,
-  FileEntity,
-  FileEntityProperties,
   GraphEmbedderMessageCallbacks,
   isFileAtUrlData,
   isFileData,
@@ -9,6 +7,8 @@ import {
   isHasRightEntityEdge,
   KnowledgeGraphOutwardEdge,
   OntologyOutwardEdge,
+  RemoteFileEntity,
+  RemoteFileEntityProperties,
   Subgraph,
 } from "@blockprotocol/graph";
 import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
@@ -676,21 +676,21 @@ export const useMockDatastore = (
 
       const mimeType = mime.getType(filename) || "application/octet-stream";
 
-      const newEntityProperties: FileEntityProperties = {
+      const newEntityProperties: RemoteFileEntityProperties = {
         "https://blockprotocol.org/@blockprotocol/types/property-type/description/":
           description,
-        "https://blockprotocol.org/@blockprotocol/types/property-type/filename/":
+        "https://blockprotocol.org/@blockprotocol/types/property-type/file-name/":
           filename,
-        "https://blockprotocol.org/@blockprotocol/types/property-type/url/":
-          resolvedUrl,
         "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/":
           mimeType,
+        "https://blockprotocol.org/@blockprotocol/types/property-type/file-url/":
+          resolvedUrl,
       };
 
       const { data: newEntity, errors } = await createEntity({
         data: {
           entityTypeId:
-            "https://blockprotocol.org/@blockprotocol/types/entity-type/file/v/1",
+            "https://blockprotocol.org/@blockprotocol/types/entity-type/remote-file/v/2",
           properties: newEntityProperties,
         },
       });
@@ -705,7 +705,7 @@ export const useMockDatastore = (
           ],
         };
       }
-      return Promise.resolve({ data: newEntity as FileEntity });
+      return Promise.resolve({ data: newEntity as RemoteFileEntity });
     },
     [createEntity, readonly],
   );

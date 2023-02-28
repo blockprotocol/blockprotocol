@@ -62,7 +62,7 @@ export const App: BlockComponent<RootEntity> = ({
   const entityId = blockEntity.metadata.recordId.entityId;
 
   const nameKey: keyof RootEntity["properties"] =
-    "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/property-type/name/";
+    "https://blockprotocol.org/@blockprotocol/types/property-type/name/";
 
   const title = blockEntity.properties[nameKey];
 

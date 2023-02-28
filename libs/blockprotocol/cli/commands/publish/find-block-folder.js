@@ -47,7 +47,7 @@ export const findBlockFolder = async () => {
       )} or ${chalk.bold("--path")}`,
     );
     printSpacer();
-    process.exit();
+    process.exit(1);
   }
 
   const metadataJsonPath =

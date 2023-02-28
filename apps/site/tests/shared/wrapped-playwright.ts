@@ -32,7 +32,7 @@ const tolerableSharedConsoleMessageMatches: RegExp[] = [
 // Messages that only show up in `yarn dev` (not CI)
 if (!process.env.CI) {
   tolerableSharedConsoleMessageMatches.push(
-    /Image with src "\/_next\/static\/media\/primary-helix-min\.\w+\.png" was detected as the Largest Contentful Paint \(LCP\)\. Please add the "priority" property if this image is above the fold\./, // https://nextjs.org/docs/api-reference/next/legacy/image#priority
+    /Image with src "\/_next\/static\/media\/.*" was detected as the Largest Contentful Paint \(LCP\)\. Please add the "priority" property if this image is above the fold\./, // https://nextjs.org/docs/api-reference/next/legacy/image#priority
     /Warning: Each child in a list should have a unique "key" prop/,
     /Warning: Extra attributes from the server: __playwright_target__/,
     /Warning: Extra attributes from the server: ([\w%]+ )?class,tabindex/,

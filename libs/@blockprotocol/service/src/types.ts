@@ -20,9 +20,9 @@ import type {
   ImagesResponse,
 } from "./openai-types";
 
-export type BlockServiceMessageCallbacks = {};
+export type ServiceBlockMessageCallbacks = {};
 
-export type EmbedderServiceMessages = {};
+export type ServiceEmbedderMessages = {};
 
 /**
  * @todo: add definition for service errors
@@ -236,26 +236,28 @@ export type MapboxRetrieveStaticMapData = {
   padding?: string;
 };
 
-/**
- * @todo: figure out if this is the best way of handling a "buffer array"
- */
-export type MapboxRetrieveStaticMapResponseData = string;
+export type MapboxRetrieveStaticMapResponseData = {
+  type: "Buffer";
+  data: ArrayBuffer;
+};
 
-export type EmbedderServiceMessageCallbacks = {
+export type ServiceMessageError = "FORBIDDEN";
+
+export type ServiceEmbedderMessageCallbacks = {
   /** OpenAI */
 
   openaiCreateImage: MessageCallback<
     OpenAICreateImageData,
     null,
     { data: OpenAICreateImageResponseData },
-    null
+    ServiceMessageError
   >;
 
   openaiCompleteText: MessageCallback<
     OpenAICompleteTextData,
     null,
     { data: OpenAICompleteTextResponseData },
-    null
+    ServiceMessageError
   >;
 
   /** Mapbox Geocoding API */
@@ -264,14 +266,14 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxForwardGeocodingData,
     null,
     { data: MapboxForwardGeocodingResponseData },
-    null
+    ServiceMessageError
   >;
 
   mapboxReverseGeocoding: MessageCallback<
     MapboxReverseGeocodingData,
     null,
     { data: MapboxReverseGeocodingResponseData },
-    null
+    ServiceMessageError
   >;
 
   /** Mapbox Directions API */
@@ -280,7 +282,7 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxRetrieveDirectionsData,
     null,
     { data: MapboxRetrieveDirectionsResponseData },
-    null
+    ServiceMessageError
   >;
 
   /** Mapbox Isochrone API */
@@ -289,7 +291,7 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxRetrieveIsochronesData,
     null,
     { data: MapboxRetrieveIsochronesResponseData },
-    null
+    ServiceMessageError
   >;
 
   /** Mapbox Autofill API */
@@ -298,21 +300,21 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxSuggestAddressData,
     null,
     { data: MapboxSuggestAddressResponseData },
-    null
+    ServiceMessageError
   >;
 
   mapboxRetrieveAddress: MessageCallback<
     MapboxRetrieveAddressData,
     null,
     { data: MapboxRetrieveAddressResponseData },
-    null
+    ServiceMessageError
   >;
 
   mapboxCanRetrieveAddress: MessageCallback<
     MapboxCanRetrieveAddressData,
     null,
     { data: MapboxCanRetrieveAddressResponseData },
-    null
+    ServiceMessageError
   >;
 
   /** Mapbox Static Map API */
@@ -321,17 +323,17 @@ export type EmbedderServiceMessageCallbacks = {
     MapboxRetrieveStaticMapData,
     null,
     { data: MapboxRetrieveStaticMapResponseData },
-    null
+    ServiceMessageError
   >;
 };
 
-export type BlockServiceMessages<
-  Key extends keyof EmbedderServiceMessageCallbacks = keyof EmbedderServiceMessageCallbacks,
+export type ServiceBlockMessages<
+  Key extends keyof ServiceEmbedderMessageCallbacks = keyof ServiceEmbedderMessageCallbacks,
 > = {
   [key in Key]: ({
     data,
     errors,
-  }: Parameters<EmbedderServiceMessageCallbacks[key]>[0]) => ReturnType<
-    EmbedderServiceMessageCallbacks[key]
+  }: Parameters<ServiceEmbedderMessageCallbacks[key]>[0]) => ReturnType<
+    ServiceEmbedderMessageCallbacks[key]
   >;
 };
