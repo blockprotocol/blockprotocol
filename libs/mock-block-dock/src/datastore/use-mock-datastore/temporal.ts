@@ -661,18 +661,18 @@ export const useMockDatastore = (
       const newEntityProperties: FileEntityProperties = {
         "https://blockprotocol.org/@blockprotocol/types/property-type/description/":
           description,
-        "https://blockprotocol.org/@blockprotocol/types/property-type/filename/":
+        "https://blockprotocol.org/@blockprotocol/types/property-type/file-name/":
           filename,
-        "https://blockprotocol.org/@blockprotocol/types/property-type/url/":
-          resolvedUrl,
         "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/":
           mimeType,
+        "https://blockprotocol.org/@blockprotocol/types/property-type/file-url/":
+          resolvedUrl,
       };
 
       const { data: newEntity, errors } = await createEntity({
         data: {
           entityTypeId:
-            "https://blockprotocol.org/@blockprotocol/types/entity-type/file/v/1",
+            "https://blockprotocol.org/@blockprotocol/types/entity-type/remote-file/v/2",
           properties: newEntityProperties,
         },
       });
