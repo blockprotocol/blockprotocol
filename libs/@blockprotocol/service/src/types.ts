@@ -20,9 +20,9 @@ import type {
   ImagesResponse,
 } from "./openai-types";
 
-export type BlockServiceMessageCallbacks = {};
+export type ServiceBlockMessageCallbacks = {};
 
-export type EmbedderServiceMessages = {};
+export type ServiceEmbedderMessages = {};
 
 /**
  * @todo: add definition for service errors
@@ -243,7 +243,7 @@ export type MapboxRetrieveStaticMapResponseData = string;
 
 export type ServiceMessageError = "FORBIDDEN";
 
-export type EmbedderServiceMessageCallbacks = {
+export type ServiceEmbedderMessageCallbacks = {
   /** OpenAI */
 
   openaiCreateImage: MessageCallback<
@@ -327,13 +327,13 @@ export type EmbedderServiceMessageCallbacks = {
   >;
 };
 
-export type BlockServiceMessages<
-  Key extends keyof EmbedderServiceMessageCallbacks = keyof EmbedderServiceMessageCallbacks,
+export type ServiceBlockMessages<
+  Key extends keyof ServiceEmbedderMessageCallbacks = keyof ServiceEmbedderMessageCallbacks,
 > = {
   [key in Key]: ({
     data,
     errors,
-  }: Parameters<EmbedderServiceMessageCallbacks[key]>[0]) => ReturnType<
-    EmbedderServiceMessageCallbacks[key]
+  }: Parameters<ServiceEmbedderMessageCallbacks[key]>[0]) => ReturnType<
+    ServiceEmbedderMessageCallbacks[key]
   >;
 };

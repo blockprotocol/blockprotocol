@@ -56,6 +56,17 @@ const BackgroundHelix: FunctionComponent = () => {
     />
   );
 };
+const BackgroundBlocks: FunctionComponent = () => {
+  return (
+    <Image
+      objectFit="contain"
+      objectPosition="right"
+      src="https://static.blockprotocol.com/cdn-cgi/imagedelivery/EipKtqu98OotgfhvKf6Eew/68cb4318-cbc4-4171-3b1c-80eda9f45200/github"
+      width={567}
+      height={768}
+    />
+  );
+};
 
 const BannerCard: FunctionComponent<BannerCardProps> = ({
   sx = [],
@@ -163,7 +174,7 @@ export const BANNERS: Banner[] = [
                 },
               }}
             >
-              <BackgroundHelix />
+              <BackgroundBlocks />
             </Box>
 
             <Box sx={{ position: "relative", zIndex: 1 }}>
@@ -172,7 +183,7 @@ export const BANNERS: Banner[] = [
                 variant="bpHeading2"
                 sx={{ fontWeight: 700 }}
               >
-                Don't see the block you need?
+                Can’t find a block you need?
               </Typography>
               <Typography
                 component="h2"
@@ -183,15 +194,15 @@ export const BANNERS: Banner[] = [
                   mb: 2,
                 }}
               >
-                You can build it!
+                Build it!
               </Typography>
               <Typography
                 component="p"
                 variant="bpBodyCopy"
                 sx={{ maxWidth: 650 }}
               >
-                Anyone can create blocks and contribute to the growing,
-                open-source Hub. Read our{" "}
+                Anyone can create blocks and contribute to this growing,
+                open-source registry of blocks. Read our{" "}
                 <Link href="/docs/developing-blocks">quickstart guide</Link> to
                 start building your own blocks.
               </Typography>

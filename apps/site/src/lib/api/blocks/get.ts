@@ -8,6 +8,16 @@ export const getAllBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
   return allDbBlocks as ExpandedBlockMetadata[];
 };
 
+export const getFeaturedBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
+  return await Promise.all([
+    getDbBlock({ author: "alfie", name: "github-pr-overview" }),
+    getDbBlock({ author: "hash", name: "code" }),
+    getDbBlock({ author: "hash", name: "shufle" }),
+  ]).then((result) =>
+    result.filter((block): block is ExpandedBlockMetadata => !!block),
+  );
+};
+
 export const getAllBlocksByUser = async (params: {
   shortname: string;
 }): Promise<ExpandedBlockMetadata[]> => {
