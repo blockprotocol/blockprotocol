@@ -40,7 +40,6 @@ export default createApiKeyRequiredHandler<
           "bp-user-id": bpUserId,
         },
       });
-
       res.status(200).json(data);
     } catch (error) {
       const axiosError = error as AxiosError;
