@@ -8,7 +8,7 @@ const monorepoRoot = path.resolve(__dirname, "../../..");
  * Because .*ignore files are not composable, we cannot import or otherwise reuse
  * a top-level .eslintignore. To avoid repetition and to maintain a coherent behavior
  * of ESLint CLI and IDE extensions, we generate ignore patterns for each workspace
- * based from .gitignore. This is done via ignorePatterns option in ESLint config.
+ * based from .prettierignore. This is done via ignorePatterns option in ESLint config.
  *
  * @param {string} workspaceDirPath
  * @returns {string[]}
@@ -16,12 +16,12 @@ const monorepoRoot = path.resolve(__dirname, "../../..");
 module.exports = (workspaceDirPath) => {
   const [, match] =
     fs
-      .readFileSync(`${monorepoRoot}/.gitignore`, "utf8")
+      .readFileSync(`${monorepoRoot}/.prettierignore`, "utf8")
       .match(/Shared between git and linters([^\0]*?)$/) ?? [];
 
   if (!match) {
     throw new Error(
-      "Could not find shared .gitignore patterns. Please update .gitignore or the regexp in this file.",
+      "Could not find shared .prettierignore patterns. Please update .prettierignore or the regexp in this file.",
     );
   }
 
@@ -29,7 +29,7 @@ module.exports = (workspaceDirPath) => {
     .relative(monorepoRoot, workspaceDirPath)
     .replace(/\\/g, "/")}/`;
 
-  const sharedPatternsFromGitignore = match
+  const sharedPatternsFromPrettierignore = match
     .split("\n")
     .map((line) => {
       // Ignore empty lines and comments
@@ -62,10 +62,7 @@ module.exports = (workspaceDirPath) => {
     "!*.ts",
     "!*.tsx",
 
-    // Ignore auto-generated files
-    "*.gen.ts",
-
-    // Add patterns extracted from .gitignore
-    ...sharedPatternsFromGitignore,
+    // Add patterns extracted from .prettierignore
+    ...sharedPatternsFromPrettierignore,
   ];
 };

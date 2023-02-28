@@ -5,7 +5,7 @@
   "automerge": true,
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
-  "postUpdateOptions": ["yarnDedupeFewer"],
+  "postUpdateOptions": ["yarnDedupeHighest"],
   "rangeStrategy": "bump",
   "rebaseWhen": "conflicted",
   "packageRules": [

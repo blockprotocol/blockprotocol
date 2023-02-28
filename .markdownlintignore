@@ -21,6 +21,13 @@ yarn-debug.log*
 yarn-error.log*
 
 ## Dependency directories
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 node_modules
 
 ## TypeScript cache
@@ -28,9 +35,6 @@ node_modules
 
 ## Optional eslint cache
 .eslintcache
-
-## Yarn Integrity file
-.yarn-integrity
 
 ## macOS directory file
 .DS_Store
@@ -82,6 +86,9 @@ libs/mock-block-dock/src/version.ts
 #########################
 ## Shared between linters
 #########################
+
+.git/
+.yarn/
 
 # Keep license files as is
 LICENSE.md

@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "isolatedModules": true,
-    "lib": ["ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"], // needed for type-checking node_modules as part of lint:tsc
     "module": "ESNext",
     "moduleResolution": "Node",
     "noUncheckedIndexedAccess": true,

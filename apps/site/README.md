@@ -458,7 +458,7 @@ All commands are executed from the repo root dir.
 1.  Generate coverage report from the raw data:
 
     ```sh
-    yarn nyc report --reporter=lcov --reporter=text
+    yarn workspace @apps/site exec "cd ../..; nyc report --reporter=lcov --reporter=text"
     ```
 
     This command will show coverage stats in the terminal and also create `coverage/lcov-report/index.html` which you can explore locally.
