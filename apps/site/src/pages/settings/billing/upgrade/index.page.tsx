@@ -10,6 +10,7 @@ import {
   Container,
   Grid,
   Paper,
+  Skeleton,
   Tooltip,
   Typography,
   useTheme,
@@ -798,7 +799,14 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                             clientSecret={clientSecret}
                           />
                         </Elements>
-                      ) : null}
+                      ) : (
+                        <>
+                          <Skeleton height={20} />
+                          <Skeleton height={18} width={80} />
+                          <Skeleton height={40} />
+                          <Skeleton height={51} />
+                        </>
+                      )}
                     </Box>
                     <Typography
                       variant="bpSmallCopy"
