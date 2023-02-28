@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
 import { FunctionComponent } from "react";
 
-export const BinaryIcon: FunctionComponent<SvgIconProps> = (props) => {
+export const BinarySharpIcon: FunctionComponent<SvgIconProps> = (props) => {
   return (
     <SvgIcon {...props} width="384" height="512" viewBox="0 0 384 512">
       <path
