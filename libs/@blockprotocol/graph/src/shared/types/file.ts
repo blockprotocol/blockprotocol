@@ -25,7 +25,7 @@ export const isFileAtUrlData = (
 export const isFileData = (fileData: UploadFileData): fileData is FileData =>
   "file" in fileData;
 
-// @todo - auto-generate this from File type in blockprotocol.org when available
+// @todo - auto-generate this from File type in blockprotocol.org
 export type RemoteFileEntityProperties = {
   "https://blockprotocol.org/@blockprotocol/types/property-type/description/"?: string;
   "https://blockprotocol.org/@blockprotocol/types/property-type/file-name/": string;
