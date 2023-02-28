@@ -9,7 +9,6 @@
 import { BaseUrl } from "@blockprotocol/type-system/slim";
 
 import {
-  BlockGraphMessageCallbacks as BlockGraphMessageCallbacksGeneral,
   ConstrainsLinkDestinationsOnEdge as ConstrainsLinkDestinationsOnEdgeGeneral,
   ConstrainsLinksOnEdge as ConstrainsLinksOnEdgeGeneral,
   ConstrainsPropertiesOnEdge as ConstrainsPropertiesOnEdgeGeneral,
@@ -38,14 +37,13 @@ import {
   EntityVertex as EntityVertexGeneral,
   FileAtUrlData as FileAtUrlDataGeneral,
   FileData as FileDataGeneral,
-  FileEntity as FileEntityGeneral,
-  FileEntityProperties as FileEntityPropertiesGeneral,
   FilterOperatorRequiringValue as FilterOperatorRequiringValueGeneral,
   FilterOperatorType as FilterOperatorTypeGeneral,
   FilterOperatorWithoutValue as FilterOperatorWithoutValueGeneral,
   GetEntityData as GetEntityDataGeneral,
   GetEntityTypeData as GetEntityTypeDataGeneral,
   GetPropertyTypeData as GetPropertyTypeDataGeneral,
+  GraphBlockMessageCallbacks as GraphBlockMessageCallbacksGeneral,
   GraphBlockMessages as GraphBlockMessagesGeneral,
   GraphElementForIdentifier as GraphElementForIdentifierGeneral,
   GraphElementIdentifiers as GraphElementIdentifiersGeneral,
@@ -130,6 +128,8 @@ import {
   QueryPropertyTypesData as QueryPropertyTypesDataGeneral,
   QueryPropertyTypesResult as QueryPropertyTypesResultGeneral,
   ReadOrModifyResourceError as ReadOrModifyResourceErrorGeneral,
+  RemoteFileEntity as RemoteFileEntityGeneral,
+  RemoteFileEntityProperties as RemoteFileEntityPropertiesGeneral,
   SharedEdgeKind as SharedEdgeKindGeneral,
   SimpleProperties as SimplePropertiesGeneral,
   Sort as SortGeneral,
@@ -223,10 +223,10 @@ export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
     readonly?: boolean;
   };
 };
-export type BlockGraphMessageCallbacks =
-  BlockGraphMessageCallbacksGeneral<false>;
+export type GraphBlockMessageCallbacks =
+  GraphBlockMessageCallbacksGeneral<false>;
 export type GraphEmbedderMessages<
-  Key extends keyof BlockGraphMessageCallbacks = keyof BlockGraphMessageCallbacks,
+  Key extends keyof GraphBlockMessageCallbacks = keyof GraphBlockMessageCallbacks,
 > = GraphEmbedderMessagesGeneral<false, Key>;
 export type CreateResourceError = CreateResourceErrorGeneral;
 export type ReadOrModifyResourceError = ReadOrModifyResourceErrorGeneral;
@@ -276,9 +276,9 @@ export type FileData = FileDataGeneral;
 export type UploadFileData = UploadFileDataGeneral;
 export const isFileAtUrlData = isFileAtUrlDataGeneral;
 export const isFileData = isFileDataGeneral;
-export type FileEntityProperties = FileEntityPropertiesGeneral;
-export type FileEntity = FileEntityGeneral;
-export type UploadFileReturn = UploadFileReturnGeneral;
+export type RemoteFileEntityProperties = RemoteFileEntityPropertiesGeneral;
+export type RemoteFileEntity = RemoteFileEntityGeneral<false>;
+export type UploadFileReturn = UploadFileReturnGeneral<false>;
 export type DataTypeWithMetadata = DataTypeWithMetadataGeneral;
 export type EntityTypeWithMetadata = EntityTypeWithMetadataGeneral;
 export type QueryEntityTypesData = QueryEntityTypesDataGeneral;
