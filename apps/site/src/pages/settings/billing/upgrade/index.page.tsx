@@ -592,10 +592,9 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                   md={6}
                   sx={{
                     display: "flex",
-                    alignItems: "center",
                   }}
                 >
-                  <Box>
+                  <Box sx={{ paddingY: 4 }}>
                     <Typography
                       variant="bpHeading4"
                       sx={{ fontWeight: 400, marginBottom: 4 }}
