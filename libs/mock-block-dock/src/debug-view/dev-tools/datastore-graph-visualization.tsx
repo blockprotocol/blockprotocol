@@ -12,10 +12,9 @@ import {
 } from "@blockprotocol/graph";
 import { isTemporalSubgraph } from "@blockprotocol/graph/internal";
 import {
-  getEntityTypeById as getEntityTypeByIdNonTemporal,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesNonTemporal,
-  getPropertyTypesByBaseUrl as getPropertyTypesByBaseUrlNonTemporal,
   getVertexIdForRecordId as getVertexIdForRecordIdNonTemporal,
+  parseLabelFromEntity as parseLabelFromEntityNonTemporal,
 } from "@blockprotocol/graph/stdlib";
 import {
   Entity as EntityTemporal,
@@ -30,11 +29,10 @@ import {
   Subgraph as SubgraphTemporal,
 } from "@blockprotocol/graph/temporal";
 import {
-  getEntityTypeById as getEntityTypeByIdTemporal,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesTemporal,
-  getPropertyTypesByBaseUrl as getPropertyTypesByBaseUrlTemporal,
   getVertexIdForRecordId as getVertexIdForRecordIdTemporal,
   intervalOverlapsInterval,
+  parseLabelFromEntity as parseLabelFromEntityTemporal,
 } from "@blockprotocol/graph/temporal/stdlib";
 import { Box } from "@mui/material";
 import { GraphChart, GraphSeriesOption } from "echarts/charts";
@@ -47,73 +45,6 @@ import {
   useMockBlockDockTemporalContext,
 } from "../../mock-block-dock-context";
 import { mustBeDefined, typedEntries, typedKeys } from "../../util";
-
-const parseLabelFromEntity = (
-  entityToLabel: EntityTemporal | EntityNonTemporal,
-  subgraph: SubgraphTemporal | SubgraphNonTemporal,
-) => {
-  const getFallbackLabel = () => {
-    // fallback to the entity type and a few characters of the entityId
-    const entityId = entityToLabel.metadata.recordId.entityId;
-
-    const entityType = isTemporalSubgraph(subgraph)
-      ? getEntityTypeByIdTemporal(subgraph, entityToLabel.metadata.entityTypeId)
-      : getEntityTypeByIdNonTemporal(
-          subgraph,
-          entityToLabel.metadata.entityTypeId,
-        );
-    const entityTypeName = entityType?.schema.title ?? "Entity";
-
-    return `${entityTypeName}-${entityId.slice(0, 5)}`;
-  };
-
-  const getFallbackIfNotString = (val: any) => {
-    if (!val || typeof val !== "string") {
-      return getFallbackLabel();
-    }
-
-    return val;
-  };
-
-  // fallback to some likely display name properties
-  const options = [
-    "name",
-    "preferred name",
-    "display name",
-    "title",
-    "shortname",
-  ];
-
-  const propertyTypes: { title?: string; propertyTypeBaseUrl: string }[] =
-    Object.keys(entityToLabel.properties).map((propertyTypeBaseUrl) => {
-      /** @todo - pick the latest version, or the version in the entity type, rather than first element? */
-      const [propertyType] = isTemporalSubgraph(subgraph)
-        ? getPropertyTypesByBaseUrlTemporal(subgraph, propertyTypeBaseUrl)
-        : getPropertyTypesByBaseUrlNonTemporal(subgraph, propertyTypeBaseUrl);
-
-      return propertyType
-        ? {
-            title: propertyType.schema.title.toLowerCase(),
-            propertyTypeBaseUrl,
-          }
-        : {
-            title: undefined,
-            propertyTypeBaseUrl,
-          };
-    });
-
-  for (const option of options) {
-    const found = propertyTypes.find(({ title }) => title === option);
-
-    if (found) {
-      return getFallbackIfNotString(
-        entityToLabel.properties[found.propertyTypeBaseUrl],
-      );
-    }
-  }
-
-  return getFallbackLabel();
-};
 
 type SeriesOption = GraphSeriesOption;
 
@@ -166,7 +97,9 @@ const mapEntityToEChartNode = (
   subgraph: SubgraphNonTemporal | SubgraphTemporal,
 ): EChartNode => ({
   id: JSON.stringify(vertexId),
-  name: parseLabelFromEntity(entity, subgraph),
+  name: isTemporalSubgraph(subgraph)
+    ? parseLabelFromEntityTemporal(entity as EntityTemporal, subgraph)
+    : parseLabelFromEntityNonTemporal(entity, subgraph),
   label: { show: false },
 });
 
