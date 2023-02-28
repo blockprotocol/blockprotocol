@@ -262,7 +262,7 @@
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
-        "$ref": "https://blockprotocol.org/@blockprotocol/types/entity-type/file/v/1"
+        "$ref": "https://blockprotocol.org/@blockprotocol/types/entity-type/remote-file/v/2"
       },
       "errorCodes": [
         "FORBIDDEN",

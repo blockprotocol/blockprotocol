@@ -41,8 +41,6 @@ import {
   ExclusiveLimitedTemporalBound as ExclusiveLimitedTemporalBoundGeneral,
   FileAtUrlData as FileAtUrlDataGeneral,
   FileData as FileDataGeneral,
-  FileEntity as FileEntityGeneral,
-  FileEntityProperties as FileEntityPropertiesGeneral,
   FilterOperatorRequiringValue as FilterOperatorRequiringValueGeneral,
   FilterOperatorType as FilterOperatorTypeGeneral,
   FilterOperatorWithoutValue as FilterOperatorWithoutValueGeneral,
@@ -139,6 +137,8 @@ import {
   QueryTemporalAxes as QueryTemporalAxesGeneral,
   QueryTemporalAxesUnresolved as QueryTemporalAxesUnresolvedGeneral,
   ReadOrModifyResourceError as ReadOrModifyResourceErrorGeneral,
+  RemoteFileEntity as RemoteFileEntityGeneral,
+  RemoteFileEntityProperties as RemoteFileEntityPropertiesGeneral,
   SharedEdgeKind as SharedEdgeKindGeneral,
   SimpleProperties as SimplePropertiesGeneral,
   Sort as SortGeneral,
@@ -277,9 +277,9 @@ export type FileData = FileDataGeneral;
 export type UploadFileData = UploadFileDataGeneral;
 export const isFileAtUrlData = isFileAtUrlDataGeneral;
 export const isFileData = isFileDataGeneral;
-export type FileEntityProperties = FileEntityPropertiesGeneral;
-export type FileEntity = FileEntityGeneral;
-export type UploadFileReturn = UploadFileReturnGeneral;
+export type RemoteFileEntityProperties = RemoteFileEntityPropertiesGeneral;
+export type RemoteFileEntity = RemoteFileEntityGeneral<true>;
+export type UploadFileReturn = UploadFileReturnGeneral<true>;
 export type DataTypeWithMetadata = DataTypeWithMetadataGeneral;
 export type EntityTypeWithMetadata = EntityTypeWithMetadataGeneral;
 export type QueryEntityTypesData = QueryEntityTypesDataGeneral;
