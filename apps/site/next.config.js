@@ -136,6 +136,16 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "static.blockprotocol.com",
+        port: "",
+        pathname: "/cdn-cgi/imagedelivery/**",
+      },
+    ],
+  },
 };
 
 /** @type {Partial<import("@sentry/nextjs").SentryWebpackPluginOptions>} */

@@ -203,7 +203,7 @@ export type GraphEmbedderMessageCallbacks<Temporal extends boolean> = {
   uploadFile: MessageCallback<
     UploadFileData,
     null,
-    MessageReturn<UploadFileReturn>,
+    MessageReturn<UploadFileReturn<Temporal>>,
     CreateResourceError
   >;
 };

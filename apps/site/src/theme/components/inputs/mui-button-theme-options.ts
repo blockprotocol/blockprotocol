@@ -1,6 +1,6 @@
 import { Components, CSSObject, Theme } from "@mui/material";
 
-import { COPY_FONT_FAMILY, fallbackFonts } from "../../typography";
+import { COPY_FONT_FAMILY } from "../../typography";
 
 const buttonBorderRadius = 34;
 const buttonFocusBorderOffset = 6;
@@ -66,7 +66,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
         /** ===== PRIMARY button specific styling ===== */
 
         Object.assign(baseStyles, {
-          fontFamily: [COPY_FONT_FAMILY, ...fallbackFonts].join(", "),
+          fontFamily: COPY_FONT_FAMILY,
           color: theme.palette.gray[20],
           borderRadius: buttonBorderRadius,
           letterSpacing: 0,
