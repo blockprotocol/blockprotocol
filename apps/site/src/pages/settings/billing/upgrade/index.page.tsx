@@ -275,6 +275,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
     tier: Exclude<PaidSubscriptionTier, "hobby">;
   }) => {
     setIsUpgradingSubscription(true);
+    setUpgradeExistingPaidSubscriptionErrorMessage("");
 
     const {
       data: { updatedSubscription },
