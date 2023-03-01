@@ -48,8 +48,12 @@ const fetchUserProfileData = async (shortname: string) => {
   }
 
   return {
-    blocks: excludeHiddenBlocks(blocksResponse.data?.blocks || []),
-    entityTypes: entityTypesResponse.data?.entityTypes || [],
+    blocks: excludeHiddenBlocks(blocksResponse.data?.blocks || []).sort(
+      (a, b) => a.name.localeCompare(b.name),
+    ),
+    entityTypes: (entityTypesResponse.data?.entityTypes || []).sort((a, b) =>
+      a.schema.title.localeCompare(b.schema.title),
+    ),
     user: userResponse.data.user,
   };
 };
