@@ -350,39 +350,41 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
                 <>
                   <SearchNavButton />
 
-                  {pages.map(({ title, href }) => (
-                    <Link
-                      href={href}
-                      key={href}
-                      className={clsx(
-                        navbarClasses.link,
-                        navbarClasses.interactiveLink,
-                      )}
-                      sx={[
-                        {
-                          display: "flex",
-                          alignItems: "center",
-                        },
-                        hydrationFriendlyAsPath.startsWith(href) && {
-                          color: theme.palette.purple[600],
-                        },
-                      ]}
-                    >
-                      {NAVBAR_LINK_ICONS[title]}
-                      <Typography
-                        variant="bpHeading3"
-                        sx={{
-                          marginLeft: 1,
-                          fontWeight: 500,
-                          fontSize: "var(--step--1)",
-                          color: "currentColor",
-                          ...(title === "Hub" ? { fontStyle: "italic" } : {}),
-                        }}
+                  {pages
+                    .filter(({ title }) => title === "Docs" || title === "Hub")
+                    .map(({ title, href }) => (
+                      <Link
+                        href={href}
+                        key={href}
+                        className={clsx(
+                          navbarClasses.link,
+                          navbarClasses.interactiveLink,
+                        )}
+                        sx={[
+                          {
+                            display: "flex",
+                            alignItems: "center",
+                          },
+                          hydrationFriendlyAsPath.startsWith(href) && {
+                            color: theme.palette.purple[600],
+                          },
+                        ]}
                       >
-                        {title}
-                      </Typography>
-                    </Link>
-                  ))}
+                        {NAVBAR_LINK_ICONS[title]}
+                        <Typography
+                          variant="bpHeading3"
+                          sx={{
+                            marginLeft: 1,
+                            fontWeight: 500,
+                            fontSize: "var(--step--1)",
+                            color: "currentColor",
+                            ...(title === "Hub" ? { fontStyle: "italic" } : {}),
+                          }}
+                        >
+                          {title}
+                        </Typography>
+                      </Link>
+                    ))}
                   {user || pathname === "/login" ? null : (
                     <Link
                       href="#"
