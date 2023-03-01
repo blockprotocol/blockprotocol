@@ -12,35 +12,30 @@ This guide helps get you set up and introduces some of the key features of the g
 
 In practice, most block developers will not need to know the lower-level details of the specifications, as the libraries we provide implement them.
 
-## Choosing your approach
+## Creating a block
 
-We provide three templates which allow you to define the entry point for your block in different ways:
+1.  Move to a folder where you want to create your block.
+1.  Run `npx create-block-app@latest your-block-name`.
+1.  Switch to your new folder: `cd [your-block-name]`.
+1.  Run `yarn install && yarn dev` or `npm install && npm run dev`.
+1.  Open [http://localhost:63212](http://localhost:63212/) in your browser to see the starter template.
 
-- `custom-element`: create a block defined as a custom element (also known as Web Components).
-- `html`: create a block defined as an HTML file, with JavaScript added via `<script>` tags.
-- `react`: create a block defined as a React component.
-
-To create a new block, run `npx create-block-app block-name --template template`, replacing `block-name` with the name to give your block, and `template` with one of the template names listed above.
 
 ### I want to use a different technology
 
-If you want to write blocks **using other technologies or frameworks**, you have several options:
+If you want to write blocks **using other technologies or frameworks**, you may pass a template parameter to the above command: `npx create-block-app@latest your-block-name --template <TEMPLATE>`. For the template, there are several options:
 
-1.  use a `custom-element` template and use different approaches when constructing the element-i.e. use a custom element as a wrapper for anything else you like.
-1.  use an `html` template and import and use your additional libraries inside the `<script>` tag.
-1.  use a language which can be transpiled to JavaScript. As an example, see [this blog post](https://hash.dev/blog/build-blocks-in-any-language) on writing a block using F#. This block uses React – you can use transpiled JavaScript in blocks defined as HTML files or custom elements too.
+1.  use the `react` template and use React to create your block (default).
+1.  use the `html` template and import and use your additional libraries inside the `<script>` tag.
+1.  use the `custom-element` template and use different approaches when constructing the element-i.e. use a custom element as a wrapper for anything else you like.
+
+You may also use any other language which can be transpiled to JavaScript. As an example, see [this blog post](https://hash.dev/blog/build-blocks-in-any-language) on writing a block using F#. This block uses React – you can use transpiled JavaScript in blocks defined as HTML files or custom elements too.
+
+The sections below assume, that you're using the `react` template.
 
 ### I don’t want to use TypeScript
 
 You can write your block in regular JavaScript using the methods described above - just rename your files from `*.tsx/*.ts` to `*.jsx/*.js`, remove the types, and get coding.
-
-## Creating a block
-
-1.  Move to a folder where you want to create your block.
-1.  Run `npx create-block-app your-block-name --template react` (or `--template custom-element`).
-1.  Switch to your new folder: `cd [your-block-name]`.
-1.  Run `yarn install && yarn dev` or `npm install && npm run dev`.
-1.  Open [http://localhost:63212](http://localhost:63212/) in your browser to see the starter template.
 
 ## The development environment
 
@@ -425,15 +420,15 @@ To publish a block on the Hub take the following steps.
 ### Publish from your terminal
 
 - Run `npm run build` or `yarn build` to create a production build of your block (it will appear in the `dist` folder)
-- run `npx blockprotocol publish` to generate a `.blockprotocolrc` file when prompted
+- run `npx blockprotocol@latest publish` to generate a `.blockprotocolrc` file when prompted
 - Replace the placeholder key in that file with your API key
-- now run `npx blockprotocol publish` again
+- now run `npx blockprotocol@latest publish` again
 - See your block on the Hub!
 
 ### Updating your block
 
 You can update your published block at any time by running
-`npm run build && npx blockprotocol publish` or `yarn build && npx blockprotocol publish`
+`npm run build && npx blockprotocol@latest publish` or `yarn build && npx blockprotocol@latest publish`
 
 ### Have your block verified
 
