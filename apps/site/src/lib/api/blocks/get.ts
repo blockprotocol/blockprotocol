@@ -10,9 +10,9 @@ export const getAllBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
 
 export const getFeaturedBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
   return await Promise.all([
-    getDbBlock({ author: "alfie", name: "github-pr-overview" }),
-    getDbBlock({ author: "hash", name: "code" }),
-    getDbBlock({ author: "hash", name: "shufle" }),
+    getDbBlock({ author: "hash", name: "address" }),
+    getDbBlock({ author: "hash", name: "how-to" }),
+    getDbBlock({ author: "hash", name: "ai-image" }),
   ]).then((result) =>
     result.filter((block): block is ExpandedBlockMetadata => !!block),
   );
