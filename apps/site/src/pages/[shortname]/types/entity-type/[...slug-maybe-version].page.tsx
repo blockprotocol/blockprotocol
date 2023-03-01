@@ -214,6 +214,7 @@ const EntityTypePage: NextPage = () => {
               <Stack
                 flexDirection={{ md: "row" }}
                 spacing={{ xs: 1 }}
+                alignItems="center"
                 justifyContent="space-between"
               >
                 <Stack flexDirection="row" alignItems="center">
@@ -276,6 +277,8 @@ const EntityTypePage: NextPage = () => {
                       <Link
                         href="#"
                         onClick={copyEntityTypeId}
+                        variant="bpCode"
+                        fontSize={10}
                         sx={{
                           color: ({ palette }) => palette.purple[500],
                           "&:hover": {
