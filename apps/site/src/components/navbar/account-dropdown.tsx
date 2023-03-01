@@ -1,7 +1,6 @@
 import {
   Box,
   Divider,
-  ListItem,
   ListItemButton,
   Popover,
   Typography,
@@ -18,7 +17,6 @@ import { ArrowUpRightIcon } from "../icons/arrow-up-right-icon";
 import { MapboxIcon } from "../icons/mapbox-icon";
 import { OpenAiIcon } from "../icons/open-ai-icon";
 import { Link } from "../link";
-import { LinkButton } from "../link-button";
 import { UserAvatar } from "../user-avatar";
 
 export const AccountDropdown: FunctionComponent = () => {
@@ -128,7 +126,8 @@ export const AccountDropdown: FunctionComponent = () => {
           </ListItemButton>
           {isBillingFeatureFlagEnabled &&
           user.stripeSubscriptionTier !== "pro" ? (
-            <ListItem
+            <ListItemButton
+              href="/settings/billing"
               sx={{
                 position: "relative",
                 flexDirection: "column",
@@ -189,8 +188,7 @@ export const AccountDropdown: FunctionComponent = () => {
               </Box>
 
               <Box>
-                <LinkButton
-                  href="/settings/billing"
+                <Button
                   variant="tertiary"
                   size="small"
                   sx={{
@@ -220,9 +218,9 @@ export const AccountDropdown: FunctionComponent = () => {
                   >
                     Upgrade
                   </Typography>
-                </LinkButton>
+                </Button>
               </Box>
-            </ListItem>
+            </ListItemButton>
           ) : null}
         </Box>
       </Popover>
