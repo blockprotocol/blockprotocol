@@ -1,5 +1,5 @@
 import Box, { BoxProps } from "@mui/material/Box";
-import throttle from "lodash/throttle";
+// import throttle from "lodash/throttle";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
