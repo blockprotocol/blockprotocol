@@ -35,6 +35,7 @@ import {
   EntityTypeVertex as EntityTypeVertexGeneral,
   EntityTypeWithMetadata as EntityTypeWithMetadataGeneral,
   EntityVertex as EntityVertexGeneral,
+  EntityVertexId as EntityVertexIdGeneral,
   FileAtUrlData as FileAtUrlDataGeneral,
   FileData as FileDataGeneral,
   FilterOperatorRequiringValue as FilterOperatorRequiringValueGeneral,
@@ -390,7 +391,7 @@ export const isPropertyTypeVertex = isPropertyTypeVertexGeneral;
 export const isEntityTypeVertex = isEntityTypeVertexGeneral;
 export const isEntityVertex = isEntityVertexGeneral<false>;
 export type VertexId<BaseId, RevisionId> = VertexIdGeneral<BaseId, RevisionId>;
-export type EntityVertexId = VertexId<EntityId, "1970-01-01T00:00:00.000Z">;
+export type EntityVertexId = EntityVertexIdGeneral;
 export type OntologyTypeVertexId = OntologyTypeVertexIdGeneral;
 export type GraphElementVertexId = GraphElementVertexIdGeneral;
 export const isOntologyTypeVertexId = isOntologyTypeVertexIdGeneral;
