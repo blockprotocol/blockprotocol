@@ -67,7 +67,7 @@ export const returnTypeAsJson = async (request: NextRequest) => {
 
   const kind = url.match(versionedTypeUrlRegExp)?.[1];
 
-  let type: DataType | PropertyType | EntityType =
+  let type: DataType | PropertyType | EntityType | null =
     hardcodedTypes[productionUrl as keyof typeof hardcodedTypes];
 
   // Our hardcoded types have ALL data types and a single entity-type
@@ -77,6 +77,9 @@ export const returnTypeAsJson = async (request: NextRequest) => {
       url,
       kind as "entity-type" | "property-type",
     ).then((apiResponse) => {
+      if ("errors" in apiResponse) {
+        return null;
+      }
       return "propertyType" in apiResponse
         ? apiResponse.propertyType.schema
         : apiResponse.entityType.schema;
