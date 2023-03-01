@@ -17,7 +17,7 @@ export type PassportRequestExtensions = {
   user?: UserModel;
   login(user: UserModel, done: (err: any) => void): void;
   login(user: UserModel, options: any, done: (err: any) => void): void;
-  logout(): void;
+  logout(done: (err: any) => void): void;
 };
 
 passport.serializeUser<SerializedPassportUser>((user, done) =>

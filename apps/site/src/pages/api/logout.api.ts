@@ -3,10 +3,15 @@ import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-
 type LogoutResponse = "SUCCESS";
 
 export default createAuthenticatedHandler<unknown, LogoutResponse>().post(
-  async (req, res) => {
-    req.logout();
-    await req.session?.destroy();
+  (req, res, next) => {
+    req.logout(async (err?: Error) => {
+      if (err) {
+        return next(err);
+      }
 
-    res.status(200).send("SUCCESS");
+      await req.session?.destroy();
+
+      res.status(200).send("SUCCESS");
+    });
   },
 );
