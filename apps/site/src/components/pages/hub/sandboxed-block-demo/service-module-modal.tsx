@@ -56,7 +56,7 @@ export const ServiceModuleModal = ({
             <>Your Block Protocol account gives you</>
           ) : (
             <>
-              <Link href="/signup">Sign up for a Block Protocol account</Link>
+              <Link href="/signup">Sign up for a Block Protocol account</Link>{" "}
               to get
             </>
           )}{" "}
