@@ -253,7 +253,10 @@ const EntityTypePage: NextPage = () => {
                   >
                     Description
                   </Typography>
-                  <Typography variant="bpBodyCopy">
+                  <Typography
+                    variant="bpBodyCopy"
+                    style={{ whiteSpace: "pre" }}
+                  >
                     {entityType.schema.description}
                   </Typography>
                 </Box>

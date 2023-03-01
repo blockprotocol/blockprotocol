@@ -129,6 +129,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
             fullWidth
             value={newDescription}
             onChange={(evt) => setNewDescription(evt.target.value)}
+            multiline
             required
           />
 

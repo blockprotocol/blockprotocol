@@ -40,8 +40,6 @@ export type BlockMetadataRepository =
     }
   | string;
 
-type VersionedUrl = `${string}v/${number}`;
-
 export type BlockMetadata = {
   /**
    * The name of the author of the block
@@ -101,9 +99,9 @@ export type BlockMetadata = {
    */
   repository?: BlockMetadataRepository | null;
   /**
-   * The versioned URL to the block's schema
+   * The versioned URL to the block's schema, e.g. https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2
    */
-  schema: VersionedUrl;
+  schema: string;
   /**
    * The path or URL to the entrypoint source file (e.g. index.html, index.js).
    */
