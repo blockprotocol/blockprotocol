@@ -23,9 +23,7 @@ test("page header navigation works", async ({
   await navSelector.locator("text=Hub").click();
   await expect(page).toHaveURL("/hub");
   await expect(
-    page.locator(
-      'h1:has-text("Interactive, data-driven blocks to use in your projects")',
-    ),
+    page.locator('h4:has-text("Open-source components for")'),
   ).toBeVisible();
 
   if (isMobile) {

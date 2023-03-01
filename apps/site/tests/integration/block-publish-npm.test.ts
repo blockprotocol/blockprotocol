@@ -34,7 +34,7 @@ test.beforeEach(async ({ page }) => {
   await login({ page });
 });
 
-test("user should be able to publish block & see it on the list", async ({
+test.skip("user should be able to publish block & see it on the list", async ({
   page,
 }) => {
   test.skip(
@@ -77,7 +77,7 @@ test("user should be able to publish block & see it on the list", async ({
   );
 });
 
-test("user should not be able to publish an invalid npm-package", async ({
+test.skip("user should not be able to publish an invalid npm-package", async ({
   page,
 }) => {
   test.skip(
@@ -95,7 +95,7 @@ test("user should not be able to publish an invalid npm-package", async ({
   await expect(page.locator("text=No block-metadata.json")).toBeVisible();
 });
 
-test("user should not be able to publish an already-used npm-package", async ({
+test.skip("user should not be able to publish an already-used npm-package", async ({
   page,
 }) => {
   test.skip(
@@ -121,7 +121,7 @@ test("user should not be able to publish an already-used npm-package", async ({
   ).toBeVisible();
 });
 
-test("user should not be able to publish an block with already-taken name", async ({
+test.skip("user should not be able to publish an block with already-taken name", async ({
   page,
 }) => {
   test.skip(

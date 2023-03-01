@@ -5,7 +5,7 @@ import { login } from "../shared/nav.js";
 import { createSchema } from "../shared/schemas.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
 
-test.skip("user should be able to create an entity type", async ({ page }) => {
+test("user should be able to create an Entity Type", async ({ page }) => {
   await resetSite();
 
   await page.goto("/");
@@ -22,7 +22,7 @@ test.skip("user should be able to create an entity type", async ({ page }) => {
     page,
   });
 
-  await page.locator("button", { hasText: "Create New Entity Type" }).click();
+  await page.locator("button", { hasText: "Create an Entity Type" }).click();
 
   const schemaModal = page.locator("[data-testid='create-schema-modal']");
 
@@ -37,27 +37,31 @@ test.skip("user should be able to create an entity type", async ({ page }) => {
     ),
   ).toBeVisible();
 
-  const inputs = await schemaModal.locator("input").all();
+  const input = await schemaModal.locator("input");
 
-  await expect(inputs[0]!).toBeFocused();
+  await expect(input).toBeFocused();
 
-  await expect(inputs.length).toBe(2);
+  await input.fill(existingSchemaName);
 
-  await inputs[0]!.fill(existingSchemaName);
+  const textareas = await schemaModal.locator("textarea").all();
 
-  await inputs[1]!.fill("Test description");
+  expect(textareas.length).toBe(2);
+
+  const textarea = textareas[0]!;
+
+  await textarea.fill("Test description");
 
   await expect(schemaModal.locator('button:has-text("Create")')).toBeEnabled();
 
   await schemaModal.locator('button:has-text("Create")').click();
 
-  await page
-    .locator(
-      `text=Invalid schema: User already has an entity type with id ${existingSchemaWithMetadata.schema.$id}`,
-    )
-    .click();
+  await expect(
+    page.locator("[data-testid='create-schema-modal']", {
+      hasText: `User already has an entity type with id ${existingSchemaWithMetadata.schema.$id}`,
+    }),
+  ).toBeVisible();
 
-  await inputs[0]!.fill(newSchemaName);
+  await input.fill(newSchemaName);
 
   await expect(schemaModal.locator('button:has-text("Create")')).toBeEnabled();
 

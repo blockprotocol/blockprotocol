@@ -1,5 +1,5 @@
 import { SubscriptionTierPrices } from "@local/internal-api-client";
-import { Box, Typography } from "@mui/material";
+import { Box, Skeleton, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { AbstractAiIcon } from "../../../components/icons/abstract-ai-icon";
@@ -159,7 +159,7 @@ export const proSubscriptionFeatures: Record<
 };
 
 export const ProSubscriptionTierOverview: FunctionComponent<{
-  subscriptionTierPrices: SubscriptionTierPrices;
+  subscriptionTierPrices: SubscriptionTierPrices | undefined;
 }> = ({ subscriptionTierPrices }) => {
   return (
     <>
@@ -175,16 +175,20 @@ export const ProSubscriptionTierOverview: FunctionComponent<{
         }}
       >
         <Box display="flex" alignItems="center">
-          <Typography sx={{ fontSize: 28 }}>
-            <strong>
-              {priceToHumanReadable({
-                amountInCents: subscriptionTierPrices.pro.unit_amount!,
-                currency: subscriptionTierPrices.pro.currency,
-                decimalPlaces: 0,
-              })}
-            </strong>
-            /month
-          </Typography>
+          {subscriptionTierPrices ? (
+            <Typography sx={{ fontSize: 28 }}>
+              <strong>
+                {priceToHumanReadable({
+                  amountInCents: subscriptionTierPrices.pro.unit_amount!,
+                  currency: subscriptionTierPrices.pro.currency,
+                  decimalPlaces: 0,
+                })}
+              </strong>
+              /month
+            </Typography>
+          ) : (
+            <Skeleton width={130} height={47} />
+          )}
           <Typography sx={{ marginLeft: 3, fontSize: 14, fontWeight: 600 }}>
             PRO
           </Typography>

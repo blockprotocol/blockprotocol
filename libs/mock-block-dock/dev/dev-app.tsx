@@ -151,6 +151,7 @@ const DevApp: FunctionComponent = () => {
           image: "public/image",
         }}
         blockProtocolApiKey={process.env.BLOCK_PROTOCOL_API_KEY}
+        blockProtocolSiteHost={process.env.BLOCK_PROTOCOL_SITE_HOST}
         debug
         key={testBlockType} // completely reset the state when block type has changed
         initialData={{

@@ -27,7 +27,7 @@ export type GetEntityTypeData = {
   entityTypeId: VersionedUrl;
 };
 
-type SystemDefinedEntityTypeProperties = "$id" | "kind" | "type";
+type SystemDefinedEntityTypeProperties = "$schema" | "$id" | "kind" | "type";
 
 export type CreateEntityTypeData = {
   entityType: Omit<EntityType, SystemDefinedEntityTypeProperties>;

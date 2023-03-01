@@ -3,8 +3,8 @@
   "description": "Specifies the structure of an Entity Type",
   "type": "object",
   "properties": {
-    "type": {
-      "const": "object"
+    "$schema": {
+      "const": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type"
     },
     "kind": {
       "const": "entityType"
@@ -12,6 +12,9 @@
     "$id": {
       "type": "string",
       "format": "uri"
+    },
+    "type": {
+      "const": "object"
     },
     "title": {
       "type": "string"
@@ -23,8 +26,15 @@
       "$comment": "Entity types this entity type inherits from",
       "type": "array",
       "items": {
-        "type": "string",
-        "format": "uri"
+        "type": "object",
+        "properties": {
+          "$ref": {
+            "type": "string",
+            "const": "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1"
+          }
+        },
+        "required": ["$ref"],
+        "additionalProperties": false
       }
     },
     "examples": {
@@ -86,7 +96,7 @@
     }
   },
   "additionalProperties": false,
-  "required": ["kind", "$id", "title", "properties"],
+  "required": ["$schema", "kind", "$id", "title", "properties"],
   "$defs": {
     "propertyTypeObject": {
       "type": "object",

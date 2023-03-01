@@ -54,6 +54,8 @@ export type MockBlockHookResult<Temporal extends boolean> = {
   >;
 };
 
+const defaultMockData = initialMockData<false>(undefined);
+
 /**
  * A hook to generate Block Protocol properties and callbacks for use in testing blocks.
  * The starting mock data can be customized using the initial[X] props.
@@ -69,60 +71,38 @@ export type MockBlockHookResult<Temporal extends boolean> = {
 export const useMockBlockPropsNonTemporal = (
   args: MockBlockHookArgs<false>,
 ): MockBlockHookResult<false> => {
+  const mockData = useMemo(() => {
+    if (
+      args.blockEntityRecordId &&
+      !args.initialData?.initialEntities.find(
+        (entity) =>
+          entity.metadata.recordId.entityId ===
+            args.blockEntityRecordId!.entityId &&
+          entity.metadata.recordId.editionId ===
+            args.blockEntityRecordId!.editionId,
+      )
+    ) {
+      throw new Error(
+        "If you provide blockEntityRecordId, it must match the recordId of an entity in initialData.initialEntities",
+      );
+    }
+
+    return {
+      entities: [
+        ...(args.initialData?.initialEntities ?? []),
+        ...defaultMockData.entities,
+      ],
+    };
+  }, [args.blockEntityRecordId, args.initialData?.initialEntities]);
+
+  const defaultBlockEntity = mockData.entities[0]!;
+
   const [entityRecordIdOfEntityForBlock, setEntityRecordIdOfEntityForBlock] =
     useDefaultState<EntityRecordIdNonTemporal>(
-      args.blockEntityRecordId ?? {
-        entityId: "",
-        editionId: new Date().toISOString(),
-      },
+      args.blockEntityRecordId ?? defaultBlockEntity.metadata.recordId,
     );
 
   const [readonly, setReadonly] = useDefaultState<boolean>(args.readonly);
-
-  const { mockData } = useMemo((): {
-    mockData: MockData<false>;
-  } => {
-    const nextMockData = args.initialData
-      ? {
-          entities: [...args.initialData.initialEntities],
-          // linkedQueryDefinitions:
-          //   initialLinkedQueries
-        }
-      : initialMockData<false>(undefined);
-
-    if (nextMockData.entities.length === 0) {
-      throw new Error(
-        `Mock data didn't contain any entities, it has to at least contain the block entity`,
-      );
-    }
-
-    let blockEntity;
-    const { blockEntityRecordId } = args;
-    if (blockEntityRecordId) {
-      blockEntity = nextMockData.entities.find(
-        (entity) =>
-          entity.metadata.recordId.entityId === blockEntityRecordId.entityId &&
-          entity.metadata.recordId.editionId === blockEntityRecordId.editionId,
-      );
-
-      if (blockEntity === undefined) {
-        throw new Error(
-          `Mock data didn't contain the given block entity revision ID: ${JSON.stringify(
-            args.blockEntityRecordId,
-          )}`,
-        );
-      }
-    } else {
-      blockEntity = nextMockData.entities[0]!;
-      setEntityRecordIdOfEntityForBlock(blockEntity.metadata.recordId);
-    }
-
-    return { mockData: nextMockData };
-  }, [
-    args,
-    setEntityRecordIdOfEntityForBlock,
-    // initialLinkedQueries,
-  ]);
 
   const mockDatastore = useMockDatastoreNonTemporal(mockData, readonly);
 
@@ -135,6 +115,10 @@ export const useMockBlockPropsNonTemporal = (
     setReadonly,
   };
 };
+
+const defaultTemporalMockData = initialMockData<true>(
+  mockDataSubgraphTemporalAxes(),
+);
 
 /**
  * A hook to generate Block Protocol properties and callbacks for use in testing blocks.
@@ -151,64 +135,48 @@ export const useMockBlockPropsNonTemporal = (
 export const useMockBlockPropsTemporal = (
   args: MockBlockHookArgs<true>,
 ): MockBlockHookResult<true> => {
+  const mockData = useMemo((): MockData<true> => {
+    if (
+      args.blockEntityRecordId &&
+      !args.initialData?.initialEntities.find(
+        (entity) =>
+          entity.metadata.recordId.entityId ===
+            args.blockEntityRecordId!.entityId &&
+          entity.metadata.recordId.editionId ===
+            args.blockEntityRecordId!.editionId,
+      )
+    ) {
+      throw new Error(
+        "If you provide blockEntityRecordId, it must match the recordId of an entity in initialData.initialEntities",
+      );
+    }
+
+    return {
+      entities: [
+        ...(args.initialData?.initialEntities ?? []),
+        ...defaultTemporalMockData.entities,
+      ],
+      subgraphTemporalAxes: args.initialData?.initialTemporalAxes
+        ? {
+            initial: args.initialData?.initialTemporalAxes,
+            resolved: args.initialData?.initialTemporalAxes,
+          }
+        : defaultTemporalMockData.subgraphTemporalAxes,
+    };
+  }, [
+    args.blockEntityRecordId,
+    args.initialData?.initialEntities,
+    args.initialData?.initialTemporalAxes,
+  ]);
+
+  const defaultBlockEntity = mockData.entities[0]!;
+
   const [entityRecordIdOfEntityForBlock, setEntityRecordIdOfEntityForBlock] =
-    useDefaultState<EntityRecordIdTemporal>(
-      args.blockEntityRecordId ?? {
-        entityId: "",
-        editionId: new Date().toISOString(),
-      },
+    useDefaultState<EntityRecordIdNonTemporal>(
+      args.blockEntityRecordId ?? defaultBlockEntity.metadata.recordId,
     );
 
   const [readonly, setReadonly] = useDefaultState<boolean>(args.readonly);
-
-  const { mockData } = useMemo((): {
-    mockData: MockData<true>;
-  } => {
-    const nextMockData = args.initialData
-      ? {
-          entities: [...args.initialData.initialEntities],
-          // linkedQueryDefinitions:
-          //   initialLinkedQueries
-          subgraphTemporalAxes: {
-            initial: args.initialData.initialTemporalAxes,
-            resolved: args.initialData.initialTemporalAxes,
-          },
-        }
-      : initialMockData<true>(mockDataSubgraphTemporalAxes());
-
-    if (nextMockData.entities.length === 0) {
-      throw new Error(
-        `Mock data didn't contain any entities, it has to at least contain the block entity`,
-      );
-    }
-
-    let blockEntity;
-    const { blockEntityRecordId } = args;
-    if (blockEntityRecordId) {
-      blockEntity = nextMockData.entities.find(
-        (entity) =>
-          entity.metadata.recordId.entityId === blockEntityRecordId.entityId &&
-          entity.metadata.recordId.editionId === blockEntityRecordId.editionId,
-      );
-
-      if (blockEntity === undefined) {
-        throw new Error(
-          `Mock data didn't contain the given block entity revision ID: ${JSON.stringify(
-            args.blockEntityRecordId,
-          )}`,
-        );
-      }
-    } else {
-      blockEntity = nextMockData.entities[0]!;
-      setEntityRecordIdOfEntityForBlock(blockEntity.metadata.recordId);
-    }
-
-    return { mockData: nextMockData };
-  }, [
-    args,
-    setEntityRecordIdOfEntityForBlock,
-    // initialLinkedQueries,
-  ]);
 
   const mockDatastore = useMockDatastoreTemporal(mockData, readonly);
 

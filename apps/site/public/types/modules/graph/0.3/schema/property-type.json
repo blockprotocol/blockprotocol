@@ -5,7 +5,7 @@
   "description": "Specifies the structure of a Block Protocol property type",
   "type": "object",
   "properties": {
-    "schema": {
+    "$schema": {
       "type": "string",
       "const": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type"
     },

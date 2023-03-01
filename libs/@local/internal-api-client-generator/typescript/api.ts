@@ -189,6 +189,19 @@ export type ExternalServiceMethodRequestMethodNameEnum =
 /**
  *
  * @export
+ * @interface GetInvoices200Response
+ */
+export interface GetInvoices200Response {
+  /**
+   *
+   * @type {Array<StripeInvoice>}
+   * @memberof GetInvoices200Response
+   */
+  invoices: Array<StripeInvoice>;
+}
+/**
+ *
+ * @export
  * @interface GetPaymentMethods200Response
  */
 export interface GetPaymentMethods200Response {
@@ -241,15 +254,28 @@ export interface GetTaxId200Response {
 /**
  *
  * @export
+ * @interface GetTaxRate200Response
+ */
+export interface GetTaxRate200Response {
+  /**
+   *
+   * @type {number}
+   * @memberof GetTaxRate200Response
+   */
+  taxRate: number;
+}
+/**
+ *
+ * @export
  * @interface GetUpcomingInvoice200Response
  */
 export interface GetUpcomingInvoice200Response {
   /**
    *
-   * @type {StripeInvoice}
+   * @type {StripeUpcomingInvoice}
    * @memberof GetUpcomingInvoice200Response
    */
-  upcomingInvoice?: StripeInvoice;
+  upcomingInvoice: StripeUpcomingInvoice;
 }
 /**
  *
@@ -379,18 +405,7 @@ export type StatusContentsInner = ErrorInfo | ResourceInfo;
  * @interface StripeInvoice
  */
 export interface StripeInvoice {
-  /**
-   *
-   * @type {string}
-   * @memberof StripeInvoice
-   */
-  currency: string;
-  /**
-   *
-   * @type {number}
-   * @memberof StripeInvoice
-   */
-  amount_due: number;
+  [key: string]: any;
 }
 /**
  *
@@ -422,6 +437,14 @@ export interface StripeSubscription {
  * @interface StripeTaxId
  */
 export interface StripeTaxId {
+  [key: string]: any;
+}
+/**
+ *
+ * @export
+ * @interface StripeUpcomingInvoice
+ */
+export interface StripeUpcomingInvoice {
   [key: string]: any;
 }
 /**
@@ -832,6 +855,45 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Get all paid invoices
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getInvoices: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/invoices`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary Retrieve the payment methods of the BP user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -988,21 +1050,54 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Retrieve an upcoming invoice based on a new subscription tier
-     * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+     * @summary Get the user\'s tax rate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTaxRate: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/tax-rate`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Retrieve an upcoming invoice
+     * @param {SubscriptionTier} [newSubscriptionTier] Calculate the upcoming invoice based on a new subscription tier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getUpcomingInvoice: async (
-      newSubscriptionTier: SubscriptionTier,
+      newSubscriptionTier?: SubscriptionTier,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
-      // verify required parameter 'newSubscriptionTier' is not null or undefined
-      assertParamExists(
-        "getUpcomingInvoice",
-        "newSubscriptionTier",
-        newSubscriptionTier,
-      );
       const localVarPath = `/upcoming-invoice`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1404,6 +1499,30 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Get all paid invoices
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getInvoices(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetInvoices200Response>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getInvoices(
+        options,
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
      * @summary Retrieve the payment methods of the BP user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1498,13 +1617,37 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Retrieve an upcoming invoice based on a new subscription tier
-     * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+     * @summary Get the user\'s tax rate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getTaxRate(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetTaxRate200Response>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getTaxRate(
+        options,
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
+     * @summary Retrieve an upcoming invoice
+     * @param {SubscriptionTier} [newSubscriptionTier] Calculate the upcoming invoice based on a new subscription tier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getUpcomingInvoice(
-      newSubscriptionTier: SubscriptionTier,
+      newSubscriptionTier?: SubscriptionTier,
       options?: AxiosRequestConfig,
     ): Promise<
       (
@@ -1723,6 +1866,17 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary Get all paid invoices
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getInvoices(options?: any): AxiosPromise<GetInvoices200Response> {
+      return localVarFp
+        .getInvoices(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Retrieve the payment methods of the BP user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1771,13 +1925,24 @@ export const DefaultApiFactory = function (
     },
     /**
      *
-     * @summary Retrieve an upcoming invoice based on a new subscription tier
-     * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+     * @summary Get the user\'s tax rate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTaxRate(options?: any): AxiosPromise<GetTaxRate200Response> {
+      return localVarFp
+        .getTaxRate(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Retrieve an upcoming invoice
+     * @param {SubscriptionTier} [newSubscriptionTier] Calculate the upcoming invoice based on a new subscription tier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getUpcomingInvoice(
-      newSubscriptionTier: SubscriptionTier,
+      newSubscriptionTier?: SubscriptionTier,
       options?: any,
     ): AxiosPromise<GetUpcomingInvoice200Response> {
       return localVarFp
@@ -1925,6 +2090,17 @@ export interface DefaultApiInterface {
 
   /**
    *
+   * @summary Get all paid invoices
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getInvoices(
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<GetInvoices200Response>;
+
+  /**
+   *
    * @summary Retrieve the payment methods of the BP user
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -1967,14 +2143,23 @@ export interface DefaultApiInterface {
 
   /**
    *
-   * @summary Retrieve an upcoming invoice based on a new subscription tier
-   * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+   * @summary Get the user\'s tax rate
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getTaxRate(options?: AxiosRequestConfig): AxiosPromise<GetTaxRate200Response>;
+
+  /**
+   *
+   * @summary Retrieve an upcoming invoice
+   * @param {SubscriptionTier} [newSubscriptionTier] Calculate the upcoming invoice based on a new subscription tier
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
   getUpcomingInvoice(
-    newSubscriptionTier: SubscriptionTier,
+    newSubscriptionTier?: SubscriptionTier,
     options?: AxiosRequestConfig,
   ): AxiosPromise<GetUpcomingInvoice200Response>;
 
@@ -2119,6 +2304,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
   /**
    *
+   * @summary Get all paid invoices
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getInvoices(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .getInvoices(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
    * @summary Retrieve the payment methods of the BP user
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -2171,14 +2369,27 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
   /**
    *
-   * @summary Retrieve an upcoming invoice based on a new subscription tier
-   * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+   * @summary Get the user\'s tax rate
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getTaxRate(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .getTaxRate(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Retrieve an upcoming invoice
+   * @param {SubscriptionTier} [newSubscriptionTier] Calculate the upcoming invoice based on a new subscription tier
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
   public getUpcomingInvoice(
-    newSubscriptionTier: SubscriptionTier,
+    newSubscriptionTier?: SubscriptionTier,
     options?: AxiosRequestConfig,
   ) {
     return DefaultApiFp(this.configuration)
