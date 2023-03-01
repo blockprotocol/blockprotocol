@@ -9,6 +9,6 @@
 
 # Apps
 
-This `apps` directory contains the source-code and content for the [blockprotocol.org] website. It will be expanded to include other "runnable" applications" as they become available.
+This `apps` directory contains the source-code and content for the [blockprotocol.org] website. It will be expanded to include other "runnable" applications as they become available.
 
 **Please note:** the Block Protocol for Wordpress plugin is located in the [`/libs/wordpress-plugin`] directory. Links to other Block Protocol embedding applications can be found in the [Using Blocks] page within the [Þ Docs].
