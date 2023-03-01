@@ -1,14 +1,6 @@
-import {
-  faAsterisk,
-  faKey,
-  faUserPen,
-} from "@fortawesome/free-solid-svg-icons";
+import { faKey, faUserPen } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  isBillingFeatureFlagEnabled,
-  shouldAllowNpmBlockPublishing,
-} from "../../../lib/config";
-import { BlockIcon } from "../../icons/block-icon";
+import { isBillingFeatureFlagEnabled } from "../../../lib/config";
 import { SolidSparklesIcon } from "../../icons/solid-sparkles-icon";
 import { DashboardCardProps } from "./dashboard-card/dashboard-card";
 
