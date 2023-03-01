@@ -254,6 +254,19 @@ export interface GetTaxId200Response {
 /**
  *
  * @export
+ * @interface GetTaxRate200Response
+ */
+export interface GetTaxRate200Response {
+  /**
+   *
+   * @type {number}
+   * @memberof GetTaxRate200Response
+   */
+  taxRate: number;
+}
+/**
+ *
+ * @export
  * @interface GetUpcomingInvoice200Response
  */
 export interface GetUpcomingInvoice200Response {
@@ -842,7 +855,7 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Get all open or paid invoices
+     * @summary Get all paid invoices
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1006,6 +1019,45 @@ export const DefaultApiAxiosParamCreator = function (
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       const localVarPath = `/tax-id`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Get the user\'s tax rate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTaxRate: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/tax-rate`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -1447,7 +1499,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Get all open or paid invoices
+     * @summary Get all paid invoices
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1554,6 +1606,30 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       ) => AxiosPromise<GetTaxId200Response>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getTaxId(
+        options,
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
+     * @summary Get the user\'s tax rate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getTaxRate(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetTaxRate200Response>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getTaxRate(
         options,
       );
       return createRequestFunction(
@@ -1790,7 +1866,7 @@ export const DefaultApiFactory = function (
     },
     /**
      *
-     * @summary Get all open or paid invoices
+     * @summary Get all paid invoices
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1845,6 +1921,17 @@ export const DefaultApiFactory = function (
     getTaxId(options?: any): AxiosPromise<GetTaxId200Response> {
       return localVarFp
         .getTaxId(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Get the user\'s tax rate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTaxRate(options?: any): AxiosPromise<GetTaxRate200Response> {
+      return localVarFp
+        .getTaxRate(options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -2003,7 +2090,7 @@ export interface DefaultApiInterface {
 
   /**
    *
-   * @summary Get all open or paid invoices
+   * @summary Get all paid invoices
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
@@ -2053,6 +2140,15 @@ export interface DefaultApiInterface {
    * @memberof DefaultApiInterface
    */
   getTaxId(options?: AxiosRequestConfig): AxiosPromise<GetTaxId200Response>;
+
+  /**
+   *
+   * @summary Get the user\'s tax rate
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getTaxRate(options?: AxiosRequestConfig): AxiosPromise<GetTaxRate200Response>;
 
   /**
    *
@@ -2208,7 +2304,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
   /**
    *
-   * @summary Get all open or paid invoices
+   * @summary Get all paid invoices
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
@@ -2268,6 +2364,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   public getTaxId(options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .getTaxId(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Get the user\'s tax rate
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getTaxRate(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .getTaxRate(options)
       .then((request) => request(this.axios, this.basePath));
   }
 
