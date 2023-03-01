@@ -136,6 +136,7 @@ export const AccountDropdown: FunctionComponent = () => {
                 padding: (theme) => theme.spacing(2.125, 1.625),
                 background:
                   "linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.074) 100%), linear-gradient(90.25deg, #2600BC 52.19%, #4B0B8A 100.05%)",
+                mt: 1,
               }}
             >
               <Box
