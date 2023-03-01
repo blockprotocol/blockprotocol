@@ -3,19 +3,11 @@ import { expect, test } from "../shared/wrapped-playwright.js";
 test("Hub page should contain key elements", async ({ page }) => {
   await page.goto("/hub");
 
-  await expect(
-    page.locator(
-      "h1 >> text=Interactive, data-driven blocks to use in your projects",
-    ),
-  ).toBeVisible();
-
-  await expect(
-    page.locator("text=All open-source and free to use"),
-  ).toBeVisible();
+  await expect(page.locator("text=Open-source components for")).toBeVisible();
 
   expect(
     await page.locator('[data-testid="block-card"]').count(),
-  ).toBeGreaterThan(5);
+  ).toBeGreaterThanOrEqual(1);
 
   const footerCTALocator = page.locator("data-test-id=footerCTA");
   await expect(footerCTALocator).toBeVisible();

@@ -14,7 +14,7 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     - `HASHING_SECRET`: the secret used to hash API keys
     - `SESSION_SECRET`: the secret used to sign the session ID cookie
     - `MONGODB_URI`: the URL where the mongo developer db instance is hosted (for example at `mongodb://root:password@localhost:27017/`)
-    - `MONGODB_DB_NAME`: the name of the database (for example `local`)
+    - `MONGODB_DB_NAME`: the name of the database (for example `development-database`)
     - `MONGODB_USERNAME`: the database username
     - `MONGODB_PASSWORD`: the database password
     - `NEXT_PUBLIC_FRONTEND_URL` (optional): the URL where the frontend is hosted (defaults to `http://localhost:3000`)

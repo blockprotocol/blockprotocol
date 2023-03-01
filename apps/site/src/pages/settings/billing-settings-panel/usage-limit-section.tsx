@@ -1,5 +1,12 @@
 import { faCheck, faWarning } from "@fortawesome/free-solid-svg-icons";
-import { Box, CircularProgress, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  InputAdornment,
+  outlinedInputClasses,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import debounce from "lodash/debounce";
 import {
   ChangeEvent,
@@ -173,11 +180,15 @@ export const UsageLimitSection: FunctionComponent = () => {
       <TextField
         id="usage-limit-input"
         sx={{
-          maxWidth: 375,
+          maxWidth: 400,
+          [`.${outlinedInputClasses.input}`]: {
+            paddingLeft: 0,
+          },
         }}
         fullWidth
         type="text"
         InputProps={{
+          startAdornment: <InputAdornment position="start">$</InputAdornment>,
           endAdornment: (
             <Box display="inherit">
               <Adornment state={actionState} />

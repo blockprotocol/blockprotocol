@@ -9,8 +9,6 @@ import { ModuleHandler } from "@blockprotocol/core";
  */
 // import serviceModuleJson from "./service-service.json" assert { type: "json" };
 import {
-  BlockServiceMessageCallbacks,
-  BlockServiceMessages,
   MapboxCanRetrieveAddressData,
   MapboxCanRetrieveAddressResponseData,
   MapboxForwardGeocodingData,
@@ -31,6 +29,8 @@ import {
   OpenAICompleteTextResponseData,
   OpenAICreateImageData,
   OpenAICreateImageResponseData,
+  ServiceBlockMessageCallbacks,
+  ServiceBlockMessages,
   ServiceMessageError,
 } from "./types.js";
 
@@ -41,13 +41,13 @@ import {
  */
 export class ServiceBlockHandler
   extends ModuleHandler
-  implements BlockServiceMessages
+  implements ServiceBlockMessages
 {
   constructor({
     callbacks,
     element,
   }: {
-    callbacks?: Partial<BlockServiceMessageCallbacks>;
+    callbacks?: Partial<ServiceBlockMessageCallbacks>;
     element?: HTMLElement | null;
   }) {
     super({
@@ -67,7 +67,7 @@ export class ServiceBlockHandler
    * Registers multiple callbacks at once.
    * Useful for bulk updates to callbacks after the service is first initialised.
    */
-  registerCallbacks(callbacks: Partial<BlockServiceMessageCallbacks>) {
+  registerCallbacks(callbacks: Partial<ServiceBlockMessageCallbacks>) {
     super.registerCallbacks(callbacks);
   }
 
@@ -75,7 +75,7 @@ export class ServiceBlockHandler
    * Removes multiple callbacks at once.
    * Useful when replacing previously registered callbacks
    */
-  removeCallbacks(callbacks: Partial<BlockServiceMessageCallbacks>) {
+  removeCallbacks(callbacks: Partial<ServiceBlockMessageCallbacks>) {
     super.removeCallbacks(callbacks);
   }
 
@@ -85,10 +85,10 @@ export class ServiceBlockHandler
    * @param messageName the message name to listen for
    * @param handlerFunction the function to call when the message is received, with the message data / errors
    */
-  on<K extends keyof BlockServiceMessageCallbacks>(
+  on<K extends keyof ServiceBlockMessageCallbacks>(
     this: ServiceBlockHandler,
     messageName: K,
-    handlerFunction: BlockServiceMessageCallbacks[K],
+    handlerFunction: ServiceBlockMessageCallbacks[K],
   ) {
     // @todo restore this when module resolution issue resolved
     // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
