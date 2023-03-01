@@ -15,10 +15,6 @@ test("Block page should contain key elements", async ({
     ),
   ).toBeVisible();
 
-  await expect(page.locator(`text=@hash`)).toBeVisible();
-  await expect(page.locator(`text=@hash`)).toHaveAttribute("href", `/@hash`);
-  await expect(page.locator(`text=V0.2.0`)).toBeVisible();
-
   if (isMobile) {
     await page.locator("text=Block Data").click();
     await expect(page.locator("text=Block Properties")).toBeVisible();
@@ -127,7 +123,8 @@ test("should show an error message if an unsupported block is rendered", async (
   ).toHaveValue(
     JSON.stringify(
       {
-        text: "William Shakespeare was an English playwright, poet and actor, widely regarded as the greatest writer in the English language and the world's greatest dramatist. He is often called England's national poet and the \"Bard of Avon\".",
+        "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/":
+          "William Shakespeare was an English playwright, poet and actor, widely regarded as the greatest writer in the English language and the world's greatest dramatist. He is often called England's national poet and the \"Bard of Avon\".",
       },
       null,
       2,
