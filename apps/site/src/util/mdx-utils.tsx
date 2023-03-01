@@ -5,6 +5,7 @@ import matter from "gray-matter";
 import { htmlToText } from "html-to-text";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
+import remarkGfm from "remark-gfm";
 import remarkMdx from "remark-mdx";
 import remarkMdxDisableExplicitJsx from "remark-mdx-disable-explicit-jsx";
 import remarkParse from "remark-parse";
@@ -139,7 +140,7 @@ export const getSerializedPage = async (params: {
   const serializedMdx = await serialize(content, {
     // Optionally pass remark/rehype plugins
     mdxOptions: {
-      remarkPlugins: [remarkMdxDisableExplicitJsx],
+      remarkPlugins: [remarkMdxDisableExplicitJsx, remarkGfm],
       rehypePlugins: [],
     },
     scope: data,
