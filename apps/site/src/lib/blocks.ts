@@ -45,16 +45,6 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   verified?: boolean;
 };
 
-// The contents of the JSON file users provide when adding a block via PR, stored in the Hub/ folder
-export interface StoredBlockInfo {
-  repository: string;
-  commit: string;
-  distDir?: string;
-  folder?: string;
-  workspace?: string;
-  verified?: boolean;
-}
-
 // Generate an absolute url to a block file
 const generateBlockFileUrl = (
   mediaPath: string | undefined | null,
