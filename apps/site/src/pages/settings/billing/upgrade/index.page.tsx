@@ -3,9 +3,14 @@ import {
   faCaretRight,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
-import { SubscriptionTierPrices } from "@local/internal-api-client";
+import {
+  ErrorInfo,
+  Status as InternalApiStatus,
+  SubscriptionTierPrices,
+} from "@local/internal-api-client";
 import {
   Box,
+  Collapse,
   Container,
   Grid,
   Paper,
@@ -15,9 +20,10 @@ import {
 } from "@mui/material";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
+import { AxiosError } from "axios";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import Stripe from "stripe";
 
 import { Button } from "../../../../components/button";
@@ -50,6 +56,20 @@ import { SubscriptionFeatureListItem } from "../../billing-settings-panel/subscr
 import { ChangePaymentMethodModal } from "./change-payment-method-modal";
 import { CreateSubscriptionCheckoutForm } from "./create-subscription-form";
 import { UpgradeExistingPaidSubscriptionIntro } from "./upgrade-existing-paid-subscription-intro";
+
+type StripeErrorInfo = ErrorInfo & {
+  domain: "stripe";
+  metadata: {
+    invoiceId: string;
+    stripeDeclineCode: string;
+    message: string;
+  };
+};
+
+const isStatusContentStripeErrorInfo = (
+  content: NonNullable<InternalApiStatus["contents"]>[number],
+): content is StripeErrorInfo =>
+  "domain" in content && content.domain === "stripe";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLIC_API_KEY ?? "",
@@ -91,6 +111,10 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
 
   const [subscriptionId, setSubscriptionId] = useState<string>();
   const [clientSecret, setClientSecret] = useState<string>();
+  const [
+    upgradeExistingPaidSubscriptionErrorMessage,
+    setUpgradeExistingPaidSubscriptionErrorMessage,
+  ] = useState<ReactNode>();
 
   const [subscriptionTierPrices, setSubscriptionTierPrices] = useState<
     SubscriptionTierPrices | undefined
@@ -260,20 +284,38 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
     tier: Exclude<PaidSubscriptionTier, "hobby">;
   }) => {
     setIsUpgradingSubscription(true);
+    setUpgradeExistingPaidSubscriptionErrorMessage("");
 
-    await internalApi.updateSubscriptionTier({
-      updatedSubscriptionTier: params.tier,
-    });
+    const {
+      data: { updatedSubscription },
+    } = await internalApi
+      .updateSubscriptionTier({
+        updatedSubscriptionTier: params.tier,
+      })
+      .catch((axiosError: AxiosError<InternalApiStatus>) => {
+        const { response } = axiosError;
+
+        const stripeErrorInfo = response?.data.contents.find(
+          isStatusContentStripeErrorInfo,
+        );
+
+        if (stripeErrorInfo) {
+          const {
+            metadata: { message },
+          } = stripeErrorInfo;
+
+          setUpgradeExistingPaidSubscriptionErrorMessage(message);
+
+          return { data: { updatedSubscription: undefined } };
+        }
+        throw axiosError;
+      });
 
     setIsUpgradingSubscription(false);
 
-    /**
-     * @todo: catch payment error when upgrading existing subscription
-     *
-     * @see https://app.asana.com/0/0/1203880489778056/f
-     */
-
-    handleUpgradedSubscription();
+    if (updatedSubscription) {
+      handleUpgradedSubscription();
+    }
   };
 
   const defaultPaymentMethod = useMemo(
@@ -655,20 +697,34 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                     </Box>
 
                     {isUpgradingExistingPaidSubscription ? (
-                      <UpgradeExistingPaidSubscriptionIntro
-                        currentSubscriptionTier={
-                          currentSubscriptionTier as "hobby"
-                        }
-                        upgradedSubscriptionTier={upgradedSubscriptionTier}
-                        subscriptionTierPrices={subscriptionTierPrices}
-                        taxRate={taxRate}
-                        defaultPaymentMethod={defaultPaymentMethod}
-                        onChangePaymentMethod={() =>
-                          setChangePaymentMethodModalOpen(true)
-                        }
-                      />
+                      <>
+                        <UpgradeExistingPaidSubscriptionIntro
+                          currentSubscriptionTier={
+                            currentSubscriptionTier as "hobby"
+                          }
+                          upgradedSubscriptionTier={upgradedSubscriptionTier}
+                          subscriptionTierPrices={subscriptionTierPrices}
+                          taxRate={taxRate}
+                          defaultPaymentMethod={defaultPaymentMethod}
+                          onChangePaymentMethod={() =>
+                            setChangePaymentMethodModalOpen(true)
+                          }
+                        />
+                        <Collapse
+                          in={!!upgradeExistingPaidSubscriptionErrorMessage}
+                          sx={{ marginBottom: 4 }}
+                        >
+                          <Typography
+                            variant="bpSmallCopy"
+                            sx={{
+                              color: ({ palette }) => palette.error.main,
+                            }}
+                          >
+                            {upgradeExistingPaidSubscriptionErrorMessage}
+                          </Typography>
+                        </Collapse>
+                      </>
                     ) : null}
-
                     <Box marginBottom={4}>
                       {isUpgradingExistingPaidSubscription ? (
                         upgradedSubscriptionTier ? (

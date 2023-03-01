@@ -150,12 +150,7 @@ export const UpgradeExistingPaidSubscriptionIntro: FunctionComponent<{
             : ""}
         </Typography>
       </Box>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        marginBottom={4}
-      >
+      <Box display="flex" alignItems="center" justifyContent="space-between">
         <Typography variant="bpSmallCopy" component="p">
           <strong>Payment method</strong>
         </Typography>
