@@ -33,7 +33,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
 
   const handleSchemaTitleChange = (value: string) => {
     // trim surrounding whitespace and remove most special characters
-    const formattedText = value.replace(/[^a-zA-Z0-9-_ ]/g, "");
+    const formattedText = value.replace(/[^a-zA-Z0-9\-_ ()']/g, "");
 
     setNewSchemaTitle(formattedText);
   };
