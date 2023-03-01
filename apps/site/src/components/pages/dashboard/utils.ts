@@ -57,9 +57,7 @@ export const getDashboardSectionCards = (props: {
         description: "Browse your blocks or publish a new one to the Þ Hub",
         link: {
           title: "My blocks",
-          href: shouldAllowNpmBlockPublishing
-            ? "/blocks/publish"
-            : `${props.profileLink}/blocks`,
+          href: `${props.profileLink}/blocks`,
         },
       },
       {
