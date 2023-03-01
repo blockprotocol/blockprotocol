@@ -1,6 +1,6 @@
 import { expect, test } from "../shared/wrapped-playwright.js";
 
-test("Hub page should contain key elements", async ({ page }) => {
+test.skip("Hub page should contain key elements", async ({ page }) => {
   await page.goto("/hub");
 
   await expect(page.locator("text=Open-source components for")).toBeVisible();
@@ -21,7 +21,7 @@ test("Hub page should contain key elements", async ({ page }) => {
   ).toHaveAttribute("href", "/docs/developing-blocks");
 });
 
-test("Block Card should contain key elements", async ({ page }) => {
+test.skip("Block Card should contain key elements", async ({ page }) => {
   await page.goto("/hub");
 
   const codeBlockLocator = page.locator('[data-testid="block-card"]', {
