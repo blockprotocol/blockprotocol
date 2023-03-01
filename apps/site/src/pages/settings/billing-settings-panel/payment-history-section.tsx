@@ -85,7 +85,7 @@ export const PaymentHistorySection: FunctionComponent<{
       data: { invoices: fetchedInvoices },
     } = await internalApi.getInvoices();
 
-    setPastInvoices(fetchedInvoices.sort((a, b) => a.created - b.created));
+    setPastInvoices(fetchedInvoices.sort((a, b) => b.created - a.created));
   }, [setPastInvoices]);
 
   useEffect(() => {
