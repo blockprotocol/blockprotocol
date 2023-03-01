@@ -46,7 +46,7 @@ The `create-block-app` package and provides everything you need to develop a blo
 - `yarn dev` or `npm run dev` will run your block in development mode, serving it locally with hot reloading at [http://localhost:63212](http://localhost:63212).
   - This uses the file at `src/dev.tsx` to render your block within a mock embedding application called `MockBlockDock`.
   - By default, dev mode will also show you the properties that are being passed to your block and the contents of the mock datastore. Remove `debug` from `MockBlockDock` to turn this off, or toggle it via the provided switch in the UI.
-- `yarn build` or `npm run build` will:
+- `yarn build` or `npm run build` will (except for the HTML template):
   - Bundle the component into a single source file (without any dependencies listed as `peerDependencies`).
   - Generate a `block-metadata.json` file which:
     - points to the bundled `source` file.
@@ -59,6 +59,7 @@ The `create-block-app` package and provides everything you need to develop a blo
       - `icon`: an icon to be associated with your block (in place of `public/omega.svg`)
       - `name`: a slugified name for your block (which may differ to the package `name` in package.json); it can be defined as `blockname` or `@namespace/blockname`, where `namespace` must be your username on blockprotocol.org if you intend to publish it there
     - list the `externals`, which are generated from `peerDependencies` in package.json.
+- If using the HTML template, `yarn build` simply copies your block source and `block-metadata.json` file to a `dist/` folder.
 
 ### Updating the block schema
 
