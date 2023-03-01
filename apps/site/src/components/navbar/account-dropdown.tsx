@@ -1,7 +1,6 @@
 import {
   Box,
   Divider,
-  ListItem,
   ListItemButton,
   Popover,
   Typography,
@@ -18,7 +17,6 @@ import { ArrowUpRightIcon } from "../icons/arrow-up-right-icon";
 import { MapboxIcon } from "../icons/mapbox-icon";
 import { OpenAiIcon } from "../icons/open-ai-icon";
 import { Link } from "../link";
-import { LinkButton } from "../link-button";
 import { UserAvatar } from "../user-avatar";
 
 export const AccountDropdown: FunctionComponent = () => {
@@ -127,8 +125,12 @@ export const AccountDropdown: FunctionComponent = () => {
             </Typography>
           </ListItemButton>
           {isBillingFeatureFlagEnabled &&
-          user.stripeSubscriptionTier !== "pro" ? (
-            <ListItem
+          !(
+            user.stripeSubscriptionTier === "pro" &&
+            user.stripeSubscriptionStatus === "active"
+          ) ? (
+            <ListItemButton
+              href="/settings/billing"
               sx={{
                 position: "relative",
                 flexDirection: "column",
@@ -136,6 +138,7 @@ export const AccountDropdown: FunctionComponent = () => {
                 padding: (theme) => theme.spacing(2.125, 1.625),
                 background:
                   "linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.074) 100%), linear-gradient(90.25deg, #2600BC 52.19%, #4B0B8A 100.05%)",
+                mt: 1,
               }}
             >
               <Box
@@ -188,8 +191,7 @@ export const AccountDropdown: FunctionComponent = () => {
               </Box>
 
               <Box>
-                <LinkButton
-                  href="/settings/billing"
+                <Button
                   variant="tertiary"
                   size="small"
                   sx={{
@@ -219,9 +221,9 @@ export const AccountDropdown: FunctionComponent = () => {
                   >
                     Upgrade
                   </Typography>
-                </LinkButton>
+                </Button>
               </Box>
-            </ListItem>
+            </ListItemButton>
           ) : null}
         </Box>
       </Popover>
