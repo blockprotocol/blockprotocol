@@ -21,6 +21,9 @@ export type SiteMap = {
 export const getDocumentationSubPages = (): SiteMapPage[] =>
   getAllPages({ pathToDirectory: "docs" });
 
+export const getLegalSubPages = (): SiteMapPage[] =>
+  getAllPages({ pathToDirectory: "legal" });
+
 export const generateSiteMap = (): SiteMap => ({
   pages: [
     {
@@ -31,6 +34,11 @@ export const generateSiteMap = (): SiteMap => ({
       title: "Docs",
       href: "/docs",
       subPages: getDocumentationSubPages(),
+    },
+    {
+      title: "Legal",
+      href: "/legal",
+      subPages: getLegalSubPages(),
     },
   ],
 });

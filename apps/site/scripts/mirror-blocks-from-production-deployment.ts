@@ -5,12 +5,12 @@ import { publishBlockFromTarball } from "../src/lib/api/blocks/from-tarball";
 import { connectToDatabase } from "../src/lib/api/mongodb";
 
 const blockTarballUrls = [
-  "https://blockprotocol-preview.hashai.workers.dev/block-uploads/hash/callout/0.2.0.tar.gz",
-  "https://blockprotocol-preview.hashai.workers.dev/block-uploads/hash/code/0.2.0.tar.gz",
-  "https://blockprotocol-preview.hashai.workers.dev/block-uploads/hash/image/0.2.0.tar.gz",
-  "https://blockprotocol-preview.hashai.workers.dev/block-uploads/hash/paragraph/0.1.1.tar.gz",
-  "https://blockprotocol-preview.hashai.workers.dev/block-uploads/hash/timer/0.2.0.tar.gz",
-  "https://blockprotocol-preview.hashai.workers.dev/block-uploads/hash/video/0.2.0.tar.gz",
+  "https://blockprotocol.hashai.workers.dev/block-uploads/hash/callout/0.2.0.tar.gz",
+  "https://blockprotocol.hashai.workers.dev/block-uploads/hash/code/0.2.0.tar.gz",
+  "https://blockprotocol.hashai.workers.dev/block-uploads/hash/image/0.2.0.tar.gz",
+  "https://blockprotocol.hashai.workers.dev/block-uploads/hash/paragraph/0.1.1.tar.gz",
+  "https://blockprotocol.hashai.workers.dev/block-uploads/hash/timer/0.2.0.tar.gz",
+  "https://blockprotocol.hashai.workers.dev/block-uploads/hash/video/0.2.0.tar.gz",
 ];
 
 const script = async () => {
