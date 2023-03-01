@@ -43,7 +43,7 @@ export const Header = () => {
           textAlign="center"
           variant="bpSmallCaps"
         >
-          Early access
+          Available Now
         </Typography>
 
         <Box
