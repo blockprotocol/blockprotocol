@@ -1,4 +1,4 @@
-[block protocol docs]: [block-scripts](https://blockprotocol.org/docs?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_libs)
+[block protocol docs]: https://blockprotocol.org/docs?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_libs
 [block-scripts]: block-scripts
 [block-template-custom-element]: block-template-custom-element
 [block-template-html]: block-template-html
