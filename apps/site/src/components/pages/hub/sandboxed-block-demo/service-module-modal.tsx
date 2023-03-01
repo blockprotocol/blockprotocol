@@ -38,12 +38,11 @@ export const ServiceModuleModal = ({
             textAlign: "center",
           }}
         >
-          This block called the <br />
+          This block uses <br />
           <strong>
             {serviceModuleMessage?.providerName}{" "}
             {serviceModuleMessage?.methodName}
-          </strong>{" "}
-          service
+          </strong>
         </Typography>
         <Typography
           sx={{
