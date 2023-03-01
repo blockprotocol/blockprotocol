@@ -9,6 +9,7 @@ import {
   Container,
   Grid,
   Paper,
+  Skeleton,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -617,10 +618,9 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                   md={6}
                   sx={{
                     display: "flex",
-                    alignItems: "center",
                   }}
                 >
-                  <Box>
+                  <Box sx={{ paddingY: 4 }}>
                     <Typography
                       variant="bpHeading4"
                       sx={{ fontWeight: 400, marginBottom: 4 }}
@@ -698,7 +698,14 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                             clientSecret={clientSecret}
                           />
                         </Elements>
-                      ) : null}
+                      ) : (
+                        <>
+                          <Skeleton height={20} />
+                          <Skeleton height={18} width={80} />
+                          <Skeleton height={40} />
+                          <Skeleton height={51} />
+                        </>
+                      )}
                     </Box>
                     <Typography
                       variant="bpSmallCopy"
@@ -715,8 +722,8 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                       })}
                     >
                       By clicking “Upgrade my account and continue”, you agree
-                      to our <Link href="/">Terms of Service</Link> and{" "}
-                      <Link href="/">Privacy Statement</Link>.
+                      to our <Link href="/legal/terms">Terms of Service</Link>{" "}
+                      and <Link href="/legal/privacy">Privacy Statement</Link>.
                     </Typography>
                     {currentSubscriptionTier === "free" ? (
                       <Typography
@@ -731,7 +738,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                         })}
                       >
                         The charge will appear on your card statement as either{" "}
-                        <code>BLOCKPROTOL</code> or{" "}
+                        <code>BLOCKPROTO</code> or{" "}
                         <code>BLOCKPROTOCOL.ORG</code> depending on your payment
                         provider.
                       </Typography>
