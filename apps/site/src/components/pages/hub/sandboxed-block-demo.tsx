@@ -33,6 +33,10 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
 
   useEffect(() => {
     const listener = (message: MessageEvent) => {
+      if (sandboxBaseUrl && message.origin !== sandboxBaseUrl) {
+        return;
+      }
+
       if (message.data.type === "serviceModule") {
         const { providerName, methodName, payload } = message.data;
         setServiceModuleMessage({ providerName, methodName, payload });
@@ -44,7 +48,7 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
     return () => {
       window.removeEventListener("message", listener);
     };
-  }, []);
+  }, [sandboxBaseUrl]);
 
   useEffect(() => {
     postBlockProps();
