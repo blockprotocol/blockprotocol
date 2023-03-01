@@ -33,15 +33,13 @@ Currently the three templates are:
 
 You may also use any other language which can be transpiled to JavaScript. As an example, see [this blog post](https://hash.dev/blog/build-blocks-in-any-language) on writing a block using F#. This block uses React – you can use transpiled JavaScript in blocks defined as HTML files or custom elements too.
 
-The sections below assume that you're using the `react` template.
-
 ### I don’t want to use TypeScript
 
 You can write your block in regular JavaScript using the methods described above - just rename your files from `*.tsx/*.ts` to `*.jsx/*.js`, remove the types, and get coding.
 
 ## The development environment
 
-The `create-block-app` package and provides everything you need to develop a block.
+The `create-block-app` package and provides everything you need to develop a block. This section assumes you have run `npx create-block-app@latest your-block-name` and are in the resulting folder. For the HTML template, the folder structure is slightly different. The development server is in a `dev/` folder and the block entry point is `app.html`.
 
 - `src/app.tsx` or `src/app.ts` contains your block’s code.
   - You can include dependencies in your block but bear in mind that the more dependencies you add, the bigger your block’s download size will be. Common dependencies which you can reasonably expect an embedding application to provide (e.g. React) can be defined as `peerDependencies` in `package.json`.
@@ -77,7 +75,7 @@ See [working with types](/docs/working-with-types) for more information on the t
 
 Once you have created the type representing the data your block needs, copy its URL, and update the `schema` property
 in the `blockprotocol` object in `package.json`. In TypeScript block templates, you can then run `yarn schema` to
-regenerate the types for your block.
+regenerate the types for your block. When using the HTML template, you need to adjust the types manually.
 
 ## Lifecycle of a block
 
