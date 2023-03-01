@@ -33,7 +33,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
      * ID, the `stripeSubscriptionStatus` was manually populated by
      * another page due to a race-condition with the stripe webhook.
      *
-     * Therefore we should refetch the `user` in one second to obtain
+     * Therefore we should refetch the `user` in five seconds to obtain
      * the correct user record.
      */
     if (
@@ -41,7 +41,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       user.stripeSubscriptionStatus &&
       !user.stripeSubscriptionId
     ) {
-      setTimeout(() => refetch(), 1000);
+      setTimeout(() => refetch(), 5000);
     }
   }, [user, refetch]);
 
@@ -61,8 +61,14 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       : "free";
   }, [user]);
 
-  const userHasStripeSubscription = useMemo(
-    () => user && typeof user !== "string" && !!user.stripeSubscriptionId,
+  const { stripeSubscriptionStatus, stripeSubscriptionId } = useMemo(
+    () =>
+      user && typeof user !== "string"
+        ? {
+            stripeSubscriptionStatus: user.stripeSubscriptionStatus,
+            stripeSubscriptionId: user.stripeSubscriptionId,
+          }
+        : {},
     [user],
   );
 
@@ -228,10 +234,11 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
           />
         )}
       </Box>
-      {userHasStripeSubscription && <UsageLimitSection />}
+      <UsageLimitSection />
       {currentSubscriptionTierIsPaid && <TaxIdSection />}
       <PaymentHistorySection
-        userHasStripeSubscription={userHasStripeSubscription ?? false}
+        stripeSubscriptionId={stripeSubscriptionId}
+        stripeSubscriptionStatus={stripeSubscriptionStatus}
       />
     </>
   );
