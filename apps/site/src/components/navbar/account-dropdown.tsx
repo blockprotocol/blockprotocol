@@ -12,6 +12,7 @@ import { FunctionComponent, useRef, useState } from "react";
 import proTierBackground from "../../../public/assets/pricing/pro-tier-background.svg";
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
+import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { Button } from "../button";
 import { ArrowUpRightIcon } from "../icons/arrow-up-right-icon";
 import { MapboxIcon } from "../icons/mapbox-icon";
@@ -125,7 +126,8 @@ export const AccountDropdown: FunctionComponent = () => {
               Log Out
             </Typography>
           </ListItemButton>
-          {user.stripeSubscriptionTier !== "pro" ? (
+          {isBillingFeatureFlagEnabled &&
+          user.stripeSubscriptionTier !== "pro" ? (
             <ListItem
               sx={{
                 position: "relative",
