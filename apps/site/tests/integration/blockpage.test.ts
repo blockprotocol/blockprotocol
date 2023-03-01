@@ -24,11 +24,11 @@ test("Block page should contain key elements", async ({
 
   const stringifiedJson = JSON.stringify(
     {
-      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/content/":
+      "https://blockprotocol.org/@blockprotocol/types/property-type/content/":
         "function debounce(func, timeout = 300){\n  let timer;\n  return (...args) => {\n    clearTimeout(timer);\n    timer = setTimeout(() => { func.apply(this, args); }, timeout);\n  };\n}",
-      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/language/":
+      "https://blockprotocol.org/@blockprotocol/types/property-type/language/":
         "javascript",
-      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/caption/":
+      "https://blockprotocol.org/@blockprotocol/types/property-type/caption/":
         "A JavaScript code example.",
     },
     null,
@@ -111,7 +111,7 @@ test("should show an error message if an unsupported block is rendered", async (
   page,
   isMobile,
 }) => {
-  await page.goto("/@hash/blocks/paragraph");
+  await page.goto("/@hash/blocks/person");
 
   if (isMobile) {
     await page.locator("text=Block Data").click();
