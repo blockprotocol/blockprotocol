@@ -12,7 +12,7 @@ import { NextPage } from "next";
 import NextError from "next/error";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
-import { useCallback, useEffect, useState } from "react";
+import { MouseEventHandler, useCallback, useEffect, useState } from "react";
 import { tw } from "twind";
 
 import { LinkIcon } from "../../../../components/icons";
@@ -44,10 +44,27 @@ const EntityTypePage: NextPage = () => {
   const shortnameWithoutLeadingAt = shortname?.replace(/^@/, "");
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [entityTypeState, setEntityTypeState] =
     useState<EntityTypeState | null>(null);
 
   const { entityType, latestVersion } = entityTypeState ?? {};
+
+  const [hasCopied, setHasCopied] = useState<boolean>(false);
+  const copyEntityTypeId = useCallback<MouseEventHandler>(
+    (event) => {
+      event.preventDefault();
+
+      if (entityType && navigator.clipboard !== undefined) {
+        setHasCopied(true);
+        return navigator.clipboard.writeText(entityType.schema.$id);
+      }
+    },
+    [entityType, setHasCopied],
+  );
+  const handleTooltipOpen = () => {
+    setHasCopied(false);
+  };
 
   const formMethods = useEntityTypeForm<EntityTypeEditorFormData>({
     defaultValues: { properties: [], links: [] },
@@ -194,53 +211,83 @@ const EntityTypePage: NextPage = () => {
                 {shortname}
                 {" >"}
               </Link>
-              <Stack flexDirection="row" alignItems="center">
-                {isLinkEntityType && (
-                  <Tooltip
-                    title="This is a 'link' entity type. It is used to link other entities together."
-                    placement="top"
+              <Stack
+                flexDirection={{ md: "row" }}
+                spacing={{ xs: 1 }}
+                justifyContent="space-between"
+              >
+                <Stack flexDirection="row" alignItems="center">
+                  {isLinkEntityType && (
+                    <Tooltip
+                      title="This is a 'link' entity type. It is used to link other entities together."
+                      placement="top"
+                    >
+                      <Box>
+                        <LinkIcon
+                          sx={({ palette }) => ({
+                            stroke: palette.gray[50],
+                            mr: 0.5,
+                          })}
+                        />
+                      </Box>
+                    </Tooltip>
+                  )}
+                  <Typography variant="bpHeading3" component="h1">
+                    <strong>{title}</strong> {"  "}Entity Type
+                  </Typography>
+                  <Typography
+                    variant="bpHeading3"
+                    component="span"
+                    marginLeft={1}
                   >
-                    <Box>
-                      <LinkIcon
-                        sx={({ palette }) => ({
-                          stroke: palette.gray[50],
-                          mr: 0.5,
-                        })}
-                      />
-                    </Box>
-                  </Tooltip>
-                )}
-                <Typography variant="bpHeading3" component="h1">
-                  <strong>{title}</strong> {"  "}Entity Type
-                </Typography>
-                <Typography
-                  variant="bpHeading3"
-                  component="span"
-                  marginLeft={1}
-                >
-                  v{entityType.metadata.recordId.version}
-                </Typography>
-                {!isLatest && (
-                  <Link
-                    href={latestVersionUrl}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      setEntityType({
-                        entityType: latestVersion,
-                        latestVersion,
-                      });
-                    }}
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "1.2rem",
-                      marginLeft: 1.5,
-                    }}
-                  >
-                    <Typography variant="bpHeading4" color="inherit">
-                      (v{latestVersionNumber} available)
-                    </Typography>
-                  </Link>
-                )}
+                    v{entityType.metadata.recordId.version}
+                  </Typography>
+                  {!isLatest && (
+                    <Link
+                      href={latestVersionUrl}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        setEntityType({
+                          entityType: latestVersion,
+                          latestVersion,
+                        });
+                      }}
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: "1.2rem",
+                        marginLeft: 1.5,
+                      }}
+                    >
+                      <Typography variant="bpHeading4" color="inherit">
+                        (v{latestVersionNumber} available)
+                      </Typography>
+                    </Link>
+                  )}
+                </Stack>
+                <Box>
+                  {entityType?.schema.$id && (
+                    <Tooltip
+                      arrow
+                      placement="top"
+                      title={hasCopied ? "Copied!" : "Click to copy."}
+                      enterDelay={250}
+                      onOpen={handleTooltipOpen}
+                    >
+                      <Link
+                        href="#"
+                        onClick={copyEntityTypeId}
+                        sx={{
+                          color: ({ palette }) => palette.purple[500],
+                          "&:hover": {
+                            color: ({ palette }) => palette.purple[600],
+                          },
+                        }}
+                      >
+                        {entityType.schema.$id}
+                      </Link>
+                    </Tooltip>
+                  )}
+                </Box>
               </Stack>
             </header>
 
