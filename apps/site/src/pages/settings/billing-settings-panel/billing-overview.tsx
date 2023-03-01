@@ -76,13 +76,6 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
     currentSubscriptionTier,
   );
 
-  /**
-   * @todo: fetch the subscription tier prices server-side
-   */
-  if (!subscriptionTierPrices) {
-    return null;
-  }
-
   return (
     <>
       <Grid container spacing={4} sx={{ marginBottom: 6 }}>
@@ -131,7 +124,6 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
                 ? paymentMethodsPanelPageAsPath
                 : "#plans"
             }
-            scroll={false}
           >
             <Card
               elevation={0}
@@ -208,6 +200,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
         {currentSubscriptionTier === "pro" ? "Plan details" : "Plans"}
       </Typography>
       <Typography
+        id="plans"
         component="p"
         variant="bpSmallCopy"
         sx={{ fontWeight: 400, marginBottom: 2 }}

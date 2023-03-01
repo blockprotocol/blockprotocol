@@ -145,19 +145,8 @@ export const WhyInstall = () => {
             textAlign: "center",
           }}
         >
-          Get{" "}
-          <span
-            style={{
-              background: "linear-gradient(180deg, #293BDF 0%, #53A5F1 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            early access
-          </span>{" "}
-          to the <BlockProtocolIcon gradient sx={{ mb: 0.5 }} /> WordPress
-          Plugin
+          Download the free <BlockProtocolIcon gradient sx={{ mb: 0.5 }} />
+          WordPress plugin
         </Typography>
 
         <Box sx={{ maxWidth: 500, width: 1, mt: 5 }}>
