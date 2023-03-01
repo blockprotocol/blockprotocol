@@ -114,6 +114,9 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
     headingsRef.current = headings;
   }, [headings]);
 
+  // Automatic anchor setting is currently disabled to prevent jumpy scrolls
+
+  /*
   useEffect(() => {
     const onScroll = () => {
       if (
@@ -171,6 +174,7 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
       window.removeEventListener("scroll", throttledOnScroll);
     };
   }, [router]);
+  */
 
   const contextValue = useMemo(
     () => ({
