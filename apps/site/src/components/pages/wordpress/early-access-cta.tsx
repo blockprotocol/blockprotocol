@@ -6,7 +6,8 @@ import { useEmailTextField } from "../../hooks/use-email-text-field";
 import { useEmailSubmitted } from "./email-submitted-context";
 import { Input } from "./input";
 
-const submittedEmailText = "Download at https://wordpress.org/plugins/blockprotocol/";
+const submittedEmailText =
+  "Download at https://wordpress.org/plugins/blockprotocol/";
 const submitErrorText = "There was an error submitting your email";
 
 export const EarlyAccessCTA = () => {
