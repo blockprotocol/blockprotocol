@@ -23,7 +23,9 @@ In practice, most block developers will not need to know the lower-level details
 
 ### I want to use a different technology
 
-If you want to write blocks **using other technologies or frameworks**, you may pass a template parameter to the above command: `npx create-block-app@latest your-block-name --template <TEMPLATE>`. For the template, there are several options:
+If you want to write blocks **using other technologies or frameworks**, we provide three templates to choose from which allow you to define the entry point for your block in different ways. To change the template, pass a parameter to the above command as follows: `npx create-block-app@latest your-block-name --template <TEMPLATE>`. 
+
+Currently the three templates are:
 
 1.  use the `react` template and use React to create your block (default).
 1.  use the `html` template and import and use your additional libraries inside the `<script>` tag.
