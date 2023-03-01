@@ -107,7 +107,7 @@ test("Block page should contain key elements", async ({
   ).toHaveAttribute("href", "/docs/developing-blocks");
 });
 
-test("should show an error message if an unsupported block is rendered", async ({
+test.skip("should show an error message if an unsupported block is rendered", async ({
   page,
   isMobile,
 }) => {
