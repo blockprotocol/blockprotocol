@@ -125,7 +125,10 @@ export const AccountDropdown: FunctionComponent = () => {
             </Typography>
           </ListItemButton>
           {isBillingFeatureFlagEnabled &&
-          user.stripeSubscriptionTier !== "pro" ? (
+          !(
+            user.stripeSubscriptionTier === "pro" &&
+            user.stripeSubscriptionStatus === "active"
+          ) ? (
             <ListItemButton
               href="/settings/billing"
               sx={{
