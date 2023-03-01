@@ -6,6 +6,9 @@ export const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL
 
 export const isUsingHttps = new URL(FRONTEND_URL).protocol === "https";
 
+// eslint-disable-next-line no-console
+console.log("NEXT_PUBLIC_VERCEL_ENV: ", process.env.NEXT_PUBLIC_VERCEL_ENV);
+
 export const isProduction = process.env.NEXT_PUBLIC_VERCEL_ENV === "production";
 
 export const isFork =
