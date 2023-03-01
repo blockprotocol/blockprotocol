@@ -5,9 +5,11 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 use crate::{
-    uri::{ParseVersionedUriError, VersionedUri},
+    url::{ParseVersionedUrlError, VersionedUrl},
     ParseDataTypeError,
 };
+
+const META_SCHEMA_ID: &str = "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type";
 
 /// Will serialize as a constant value `"dataType"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -20,9 +22,15 @@ enum DataTypeTag {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DataType {
+    #[cfg_attr(
+        target_arch = "wasm32",
+        tsify(type = "'https://blockprotocol.org/types/modules/graph/0.3/schema/data-type'")
+    )]
+    #[serde(rename = "$schema")]
+    schema: String,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'dataType'"))]
     kind: DataTypeTag,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$id")]
     id: String,
     title: String,
@@ -44,8 +52,12 @@ impl TryFrom<DataType> for super::DataType {
     type Error = ParseDataTypeError;
 
     fn try_from(data_type_repr: DataType) -> Result<Self, Self::Error> {
-        let id = VersionedUri::from_str(&data_type_repr.id)
-            .map_err(ParseDataTypeError::InvalidVersionedUri)?;
+        let id = VersionedUrl::from_str(&data_type_repr.id)
+            .map_err(ParseDataTypeError::InvalidVersionedUrl)?;
+
+        if data_type_repr.schema != META_SCHEMA_ID {
+            return Err(ParseDataTypeError::InvalidMetaSchema(data_type_repr.schema));
+        }
 
         Ok(Self::new(
             id,
@@ -60,6 +72,7 @@ impl TryFrom<DataType> for super::DataType {
 impl From<super::DataType> for DataType {
     fn from(data_type: super::DataType) -> Self {
         Self {
+            schema: META_SCHEMA_ID.to_owned(),
             kind: DataTypeTag::DataType,
             id: data_type.id.to_string(),
             title: data_type.title,
@@ -74,24 +87,24 @@ impl From<super::DataType> for DataType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DataTypeReference {
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
-    uri: String,
+    url: String,
 }
 
 impl TryFrom<DataTypeReference> for super::DataTypeReference {
-    type Error = ParseVersionedUriError;
+    type Error = ParseVersionedUrlError;
 
     fn try_from(data_type_ref_repr: DataTypeReference) -> Result<Self, Self::Error> {
-        let uri = VersionedUri::from_str(&data_type_ref_repr.uri)?;
-        Ok(Self::new(uri))
+        let url = VersionedUrl::from_str(&data_type_ref_repr.url)?;
+        Ok(Self::new(url))
     }
 }
 
 impl From<super::DataTypeReference> for DataTypeReference {
     fn from(data_type_ref: super::DataTypeReference) -> Self {
         Self {
-            uri: data_type_ref.uri.to_string(),
+            url: data_type_ref.url.to_string(),
         }
     }
 }

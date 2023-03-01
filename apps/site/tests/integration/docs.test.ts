@@ -28,7 +28,7 @@ test("Docs page should contain key elements and interactions should work", async
   for (const [name, href] of [
     ["Introduction", "/docs"],
     ["Developing Blocks", "/docs/developing-blocks"],
-    ["Embedding Blocks", "/docs/embedding-blocks"],
+    ["Using Blocks", "/docs/using-blocks"],
     ["Specification", "/docs/spec"],
     ["FAQs", "/docs/faq"],
   ] as const) {
@@ -136,25 +136,6 @@ test("Docs page should contain key elements and interactions should work", async
       "text=The Block Protocol provides a specification for the interaction between web blocks and applications using them: how data structures are typed and passed around, and what data operations are available to blocks.",
     ),
   ).toBeVisible();
-
-  await page.goto("/docs/spec");
-
-  const footerCTALocator = page.locator("data-test-id=footerCTA");
-  await expect(footerCTALocator).toBeVisible();
-
-  await expect(footerCTALocator.locator('text="Learn more"')).toHaveAttribute(
-    "href",
-    "/docs/embedding-blocks",
-  );
-
-  await expect(footerCTALocator.locator('text="Hub"')).toHaveAttribute(
-    "href",
-    "/hub",
-  );
-
-  await expect(
-    footerCTALocator.locator('text="Read the quickstart guide"'),
-  ).toHaveAttribute("href", "/docs/developing-blocks");
 });
 
 test("invalid docs page should redirect to 404", async ({ page }) => {

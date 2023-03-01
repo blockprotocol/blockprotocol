@@ -49,7 +49,7 @@ export class CoreBlockHandler extends CoreHandler {
 
   /**
    * Receives the {@link EmbedderInitMessage} sent by the embedding application,
-   * which is a series of payloads namespaced by service and message name.
+   * which is a series of payloads namespaced by module and message name.
    * Calls the individual callbacks registered for each of these values.
    *
    * Useful for HTML blocks receiving messages which are sent on initialization by the app
@@ -65,14 +65,14 @@ export class CoreBlockHandler extends CoreHandler {
     },
   ) {
     const { data } = message;
-    for (const serviceName of Object.keys(data)) {
-      for (const messageName of Object.keys(data[serviceName])) {
+    for (const moduleName of Object.keys(data)) {
+      for (const messageName of Object.keys(data[moduleName])) {
         void this.callCallback({
           message: {
             ...message,
-            data: data[serviceName][messageName],
+            data: data[moduleName][messageName],
             messageName,
-            service: serviceName,
+            module: moduleName,
           },
         });
       }

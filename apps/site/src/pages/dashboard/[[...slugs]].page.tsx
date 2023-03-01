@@ -1,9 +1,6 @@
 import { Typography } from "@mui/material";
-import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
-import { useCallback, useEffect, useState } from "react";
 
-import { CreateSchemaModal } from "../../components/modal/create-schema-modal";
 import {
   AuthWallPageContent,
   withAuthWall,
@@ -20,22 +17,9 @@ import {
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName, shortname } = user ?? {};
-  const [schemaModalOpen, setSchemaModalOpen] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (router.query?.slugs?.includes("create-schema")) {
-      setSchemaModalOpen(true);
-    }
-  }, [router.query]);
-
-  const openSchemaModal = useCallback(() => {
-    setSchemaModalOpen(true);
-  }, [setSchemaModalOpen]);
 
   const dashboardCards = getDashboardSectionCards({
     profileLink: `/@${shortname}`,
-    openCreateSchemaModal: openSchemaModal,
   });
 
   const renderDashboardCards = (section: DashboardSection) =>
@@ -79,11 +63,6 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
           {renderDashboardCards("explore")}
         </DashboardSectionGrid>
       </PageContainer>
-
-      <CreateSchemaModal
-        open={schemaModalOpen}
-        onClose={() => setSchemaModalOpen(false)}
-      />
     </>
   );
 };

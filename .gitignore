@@ -58,9 +58,7 @@ target
 wasm-pack.log
 
 ## Workspace-specific
-apps/site/blocks-data.json
 apps/site/playwright-report
-apps/site/public/blocks
 apps/site/public/schemas
 apps/site/site-map.json
 apps/site/test-results
@@ -68,3 +66,4 @@ libs/@blockprotocol/type-system/.rollup.cache
 libs/@blockprotocol/type-system/wasm
 libs/block-template-html/dev/src
 libs/mock-block-dock/src/version.ts
+

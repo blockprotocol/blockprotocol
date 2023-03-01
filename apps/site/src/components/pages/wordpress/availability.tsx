@@ -63,7 +63,7 @@ export const Availability = () => {
             <ListItem sx={{ p: 0, pl: 1 }}>
               &#x2022;
               <Typography sx={{ lineHeight: 1.2, maxWidth: "unset", pl: 1 }}>
-                A major overhaul of the Core and Graph Service specifications
+                A major overhaul of the Core and Graph Module specifications
               </Typography>
             </ListItem>
             <ListItem sx={{ p: 0, pl: 1 }}>

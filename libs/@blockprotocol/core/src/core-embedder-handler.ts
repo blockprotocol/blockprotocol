@@ -48,7 +48,7 @@ export class CoreEmbedderHandler extends CoreHandler {
   /**
    * Process the initial message sent from the block.
    * Sends a {@link EmbedderInitMessage} in response, which has all the messages
-   * from registered services which can be sentOnInitialization.
+   * from registered modules which can be sentOnInitialization.
    */
   protected processInitMessage(
     this: CoreEmbedderHandler,
@@ -62,14 +62,14 @@ export class CoreEmbedderHandler extends CoreHandler {
   ) {
     this.updateDispatchElementFromEvent(event);
 
-    // get the properties sent on initialization for any registered services
+    // get the properties sent on initialization for any registered modules
     let data = this.initResponse;
 
     if (!data) {
       data = {};
 
-      for (const [serviceName, serviceInstance] of this.services) {
-        data[serviceName] = serviceInstance.getInitPayload();
+      for (const [moduleName, moduleInstance] of this.modules) {
+        data[moduleName] = moduleInstance.getInitPayload();
       }
     }
 

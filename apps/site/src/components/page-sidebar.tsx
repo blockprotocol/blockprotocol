@@ -429,6 +429,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
       height={`calc(100vh - ${height}px)`}
       sx={[
         {
+          m: 1.5,
           borderRightColor: theme.palette.gray[30],
           borderRightStyle: "solid",
           borderRightWidth: 1,
@@ -438,7 +439,6 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
     >
       <Box
         sx={{
-          p: 1.5,
           display: "flex",
           flexDirection: "column",
           transition: theme.transitions.create([

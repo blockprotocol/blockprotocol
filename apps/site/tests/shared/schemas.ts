@@ -1,4 +1,5 @@
-import type { EntityType } from "../../src/lib/api/model/entity-type.model";
+import { EntityTypeWithMetadata } from "@blockprotocol/graph";
+
 import { type Page, expect } from "./wrapped-playwright.js";
 
 /**
@@ -10,10 +11,10 @@ export const createSchema = async ({
 }: {
   title: string;
   page: Page;
-}): Promise<EntityType> => {
+}): Promise<EntityTypeWithMetadata> => {
   await page.waitForLoadState("networkidle");
 
-  const response = await page.request.post("/api/types/create", {
+  const response = await page.request.post("/api/types/entity-type/create", {
     data: {
       schema: {
         title,
@@ -23,7 +24,7 @@ export const createSchema = async ({
   });
 
   const { entityType } = (await response.json()) as {
-    entityType: EntityType;
+    entityType: EntityTypeWithMetadata;
   };
 
   expect(entityType.schema.title).toBe(title);

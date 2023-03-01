@@ -7,6 +7,8 @@ import {
 
 const primitiveDataTypes: DataType[] = [
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1",
     title: "Boolean",
@@ -14,6 +16,8 @@ const primitiveDataTypes: DataType[] = [
     type: "boolean",
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1",
     title: "Empty List",
@@ -22,6 +26,8 @@ const primitiveDataTypes: DataType[] = [
     const: [],
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/null/v/1",
     title: "Null",
@@ -29,6 +35,8 @@ const primitiveDataTypes: DataType[] = [
     type: "null",
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
     title: "Number",
@@ -36,6 +44,8 @@ const primitiveDataTypes: DataType[] = [
     type: "number",
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1",
     title: "Object",
@@ -43,6 +53,8 @@ const primitiveDataTypes: DataType[] = [
     type: "object",
   },
   {
+    $schema:
+      "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
     title: "Text",
@@ -56,14 +68,16 @@ const primitiveDataTypes: DataType[] = [
 const invalidDataTypes: [DataType, ParseDataTypeError][] = [
   [
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
       kind: "dataType",
-      $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/2.3", // incorrectly versioned URI
+      $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/2.3", // incorrectly versioned URL
       title: "Text",
       description: "An ordered sequence of characters",
       type: "string",
     },
     {
-      reason: "InvalidVersionedUri",
+      reason: "InvalidVersionedUrl",
       inner: {
         reason: "AdditionalEndContent",
       },
@@ -79,25 +93,40 @@ const brokenTypes: [any, ParseDataTypeError][] = [
     {},
     {
       reason: "InvalidJson",
-      inner: "missing field `kind` at line 1 column 2",
+      inner: "missing field `$schema` at line 1 column 2",
     },
   ],
   [
     { foo: "bar" },
     {
       reason: "InvalidJson",
-      inner: "missing field `kind` at line 1 column 13",
+      inner: "missing field `$schema` at line 1 column 13",
     },
   ],
   [
     {
+      $schema:
+        "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
       kind: "dataType",
       $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
       title: "Text",
     },
     {
       reason: "InvalidJson",
-      inner: "missing field `type` at line 1 column 108",
+      inner: "missing field `type` at line 1 column 187",
+    },
+  ],
+  [
+    {
+      $schema: "https://blockprotocol.org/types/modules/graph/0.3/schema/foo",
+      kind: "dataType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+      title: "Text",
+      type: "string",
+    },
+    {
+      reason: "InvalidMetaSchema",
+      inner: "https://blockprotocol.org/types/modules/graph/0.3/schema/foo",
     },
   ],
 ];

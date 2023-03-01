@@ -4,7 +4,7 @@ This document (version 0.2) specifies how to define and use "blocks" – discret
 
 It defines how "embedding applications" should render and communicate with blocks.
 
-It defines how "services" should be specified. Services provide functionality by describing the messages blocks and applications may exchange.
+It defines how "modules" should be specified. Modules provide functionality by describing the messages blocks and applications may exchange.
 
 You will see the following sub-headers within each section:
 
@@ -23,7 +23,7 @@ You will see the following sub-headers within each section:
 
 **Message:** the unit of communication between blocks and embedding applications, transported according to this specification.
 
-**Service:** a description of the purpose and content of messages sent between blocks and applications, and any additional required metadata, defined according to this specification.
+**Module:** a description of the purpose and content of messages sent between blocks and applications, and any additional required metadata, defined according to this specification.
 
 ## Defining blocks
 
@@ -246,7 +246,7 @@ Embedding applications:
 
 The basic structure of Block Protocol messages is defined by this specification, and involves `data` and possibly any `errors` encountered in producing the message.
 
-The content of `data` and the permissible codes under `errors` are left to service specifications to define.
+The content of `data` and the permissible codes under `errors` are left to module specifications to define.
 
 #### <Hidden>Message content </Hidden>Specification
 
@@ -257,12 +257,12 @@ The content of `data` and the permissible codes under `errors` are left to servi
   - MUST include a `requestId`, which MUST be a `uuid`
     - if the message is a direct response to another message, it MUST provide the `requestId` of the original message
     - otherwise, the dispatcher MUST generate the `requestId`
-  - MUST include the `service` this message relates to (or `"core"` for messages defined in this document)
+  - MUST include the `module` this message relates to (or `"core"` for messages defined in this document)
   - MUST include the `name` of the message, as defined in the relevant specification
   - MUST include the `source`, which MUST be one of `"block"` or `"embedder"`
   - MUST contain one or both of `data` and `errors`
     - `data` may be any type of JSON value (string, object, null, etc)
-    - `errors` MUST be an array of objects, each of which MUST have a `code` and `message` – both strings – and MAY have `extensions`, an arbitrary JSON object defined by the service specification. Valid error codes are defined per message, in an `errorCodes` property in [the message definition](#messages-error-codes)
+    - `errors` MUST be an array of objects, each of which MUST have a `code` and `message` – both strings – and MAY have `extensions`, an arbitrary JSON object defined by the module specification. Valid error codes are defined per message, in an `errorCodes` property in [the message definition](#messages-error-codes)
 
 Messages MUST therefore be an object which conforms to the following schema:
 
@@ -283,7 +283,7 @@ Messages MUST therefore be an object which conforms to the following schema:
         "name": {
           "type": "string"
         },
-        "service": {
+        "module": {
           "type": "string"
         },
         "source": {
@@ -304,14 +304,14 @@ Messages MUST therefore be an object which conforms to the following schema:
           }
         }
       },
-      "required": ["requestId", "name", "service", "source"]
+      "required": ["requestId", "name", "module", "source"]
     }
   },
   "required": ["detail", "type"]
 }
 ```
 
-The `data` and `errors` of any messages exchanged between applications and blocks, and not described in [Core messages](#core-messages), MUST be described in separate [service specifications](#defining-services).
+The `data` and `errors` of any messages exchanged between applications and blocks, and not described in [Core messages](#core-messages), MUST be described in separate [module specifications](#defining-modules).
 
 ### Core messages
 
@@ -322,7 +322,7 @@ The core specification defines messages which are related to the core functional
 - `"init"`: a message a block sends on load and whenever it changes the element it is dispatching from (e.g. destroys the previous one)
 - `"initResponse"`: a message the embedder sends in response
 
-These messages are how blocks may exchange messages which are `sentOnInitialization`, which might be values available immediately on load, or configuration information, or anything else the service defines as useful for blocks and embedders to exchange on initialization.
+These messages are how blocks may exchange messages which are `sentOnInitialization`, which might be values available immediately on load, or configuration information, or anything else the module defines as useful for blocks and embedders to exchange on initialization.
 
 #### <Hidden>Core messages </Hidden>Specification
 
@@ -335,7 +335,7 @@ Immediately on loading, blocks MUST send a message of the following shape:
   "type": "blockprotocolmessage",
   "detail": {
     "requestId": "<block-generated-uuid>",
-    "service": "core",
+    "module": "core",
     "name": "init",
     "data": {}
   }
@@ -360,7 +360,7 @@ When an `"init"` message is received, embedding applications MUST send a message
   "type": "blockprotocolmessage",
   "detail": {
     "requestId": "<requestId-from-initRequest>",
-    "service": "core",
+    "module": "core",
     "name": "initResponse",
     "data": {}
   }
@@ -371,9 +371,9 @@ When an `"init"` message is received, embedding applications MUST send a message
 
 The `data` for both `"init"` and `"initResponse"` MUST be an object, where
 
-- the keys of the object MUST be the names of services
+- the keys of the object MUST be the names of modules
 - the values for those keys MUST be objects
-- the keys for that object MUST match the `name` of `messages` for that service which are marked as `sentOnInitialization`, with the data as described in the relevant service specification
+- the keys for that object MUST match the `name` of `messages` for that module which are marked as `sentOnInitialization`, with the data as described in the relevant module specification
 
 For example:
 
@@ -382,7 +382,7 @@ For example:
   "type": "blockprotocolmessage",
   "detail": {
     "requestId": "abcd-1234-efg0-5678",
-    "service": "core",
+    "module": "core",
     "name": "initResponse",
     "data": {
       "graph": {
@@ -395,31 +395,31 @@ For example:
 }
 ```
 
-## Defining services
+## Defining modules
 
 ### Definition
 
 #### <Hidden>Definition </Hidden>Overview
 
-A service aims to provide a logical grouping of functionality and/or solve a specific problem related to block-application interaction.
+A module aims to provide a logical grouping of functionality and/or solve a specific problem related to block-application interaction.
 
-A service definition must set out the **messages** that a block and application will exchange as part of the service.
+A module definition must set out the **messages** that a block and application will exchange as part of the module.
 
-**Messages** should be specified in a JSON file. The JSON file must conform to [the constraints defined by the Service Specification JSON Schema.](#json-schema-for-service-specification) To aid understanding, the constraints defined by the JSON schema are laid out in this section (**definition**), and a section related to **messages.**
+**Messages** should be specified in a JSON file. The JSON file must conform to [the constraints defined by the Module Specification JSON Schema.](#json-schema-for-module-specification) To aid understanding, the constraints defined by the JSON schema are laid out in this section (**definition**), and a section related to **messages.**
 
-Services may also include an additional markdown file which provides further explanation and narrative, and imposes any additional requirements not captured via messages. This may, for example, specify additional metadata related to the service that can be expressed as part of a block package, whether in `block-metadata.json` or in an additional file or files.
+Modules may also include an additional markdown file which provides further explanation and narrative, and imposes any additional requirements not captured via messages. This may, for example, specify additional metadata related to the module that can be expressed as part of a block package, whether in `block-metadata.json` or in an additional file or files.
 
 #### <Hidden>Definition </Hidden>Specification
 
-Each service:
+Each module:
 
-- MUST define any messages it introduces in a JSON file conforming to [this schema](#json-schema-for-service-specification)
+- MUST define any messages it introduces in a JSON file conforming to [this schema](#json-schema-for-module-specification)
 - MAY define an additional Markdown file which:
   - MAY provide additional narrative and explanation on the contents of its JSON file
   - MAY impose additional arbitrary requirements on embedding applications and blocks
   - is OVERRULED by the JSON file in the event that there is any inconsistency between the two in how messages are defined
 
-The JSON schema requires that a service specification is a JSON object which
+The JSON schema requires that a module specification is a JSON object which
 
 - MUST contain:
   - `name`
@@ -436,13 +436,13 @@ If there are any discrepancies between the requirements listed above and the req
 
 Messages are the means by which blocks and applications communicate.
 
-The messages a service defines should be relevant to the delivery of the service.
+The messages a module defines should be relevant to the delivery of the module.
 
-Messages are listed under in the `messages` key of the JSON file which defines the service.
+Messages are listed under in the `messages` key of the JSON file which defines the module.
 
 #### <Hidden>Messages </Hidden>Specification
 
-A service specification SHOULD include any messages to be sent as part of the service under a `messages` key on the JSON file defining the service.
+A module specification SHOULD include any messages to be sent as part of the module under a `messages` key on the JSON file defining the module.
 
 The value of `messages` should be an array of JSON objects.
 
@@ -461,25 +461,25 @@ An entry in `messages` MAY specify:
   errors encountered in producing the message data. this may appear alongside or
   instead of `data` in the message contents.
 
-### JSON Schema for Service Specification
+### JSON Schema for Module Specification
 
 ```json
 {
-  "$id": "https://blockprotocol.org/types/core/service-meta",
+  "$id": "https://blockprotocol.org/types/core/0.3/schema/module-meta",
   "type": "object",
   "properties": {
     "description": {
       "type": "string",
-      "description": "A short description of the functionality the service provides and/or the problems it aims to solve. Markdown is permitted."
+      "description": "A short description of the functionality the module provides and/or the problems it aims to solve. Markdown is permitted."
     },
     "name": {
       "type": "string",
-      "description": "A unique name for the service, consisting of lowercase letters, numbers, and hyphens only.",
+      "description": "A unique name for the module, consisting of lowercase letters, numbers, and hyphens only.",
       "pattern": "^[-a-z0-9]$"
     },
     "messages": {
       "type": "array",
-      "description": "The messages that may be exchanged by blocks and embedding applications as part of the service",
+      "description": "The messages that may be exchanged by blocks and embedding applications as part of the module",
       "items": {
         "type": "object",
         "properties": {
@@ -513,7 +513,7 @@ An entry in `messages` MAY specify:
       },
       "version": {
         "type": "string",
-        "description": "The semantic version of this service specification"
+        "description": "The semantic version of this module specification"
       },
       "coreVersion": {
         "type": "string",

@@ -1,7 +1,7 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 
 import {
-  BinaryIcon,
+  BinarySharpIcon,
   BlockProtocolIcon,
   GlobeIcon,
   LayerPlusIcon,
@@ -93,7 +93,7 @@ export const WhyInstall = () => {
             xs={12}
             lg={6}
             color="#810A7C"
-            icon={<BinaryIcon sx={{ fontSize: 32 }} />}
+            icon={<BinarySharpIcon sx={{ fontSize: 32 }} />}
             title="Structured data made easier than unstructured"
             grayTitle=" ...a benefit not a chore"
             description="Quickly capture information in a typed fashion, and import structured data such as maps, weather, flight info, product reviews, and media details into your own WordPress database"

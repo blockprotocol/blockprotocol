@@ -1,43 +1,23 @@
-import { getBlocksData } from "../shared/fixtures.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
-
-const blocksData = await getBlocksData();
-
-const codeBlock = blocksData.find(
-  ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
-);
-
-const unsupportedBlock = blocksData.find(
-  ({ pathWithNamespace }) => pathWithNamespace === "@hash/embed",
-);
-
-if (!codeBlock || !unsupportedBlock) {
-  throw new Error("Code and Embed blocks need to be prepared before tests run");
-}
 
 test("Block page should contain key elements", async ({
   page,
   isMobile,
   browserName,
 }) => {
-  await page.goto(codeBlock.blockSitePath);
+  await page.goto("/@hash/blocks/code");
+
+  await expect(page.locator(`h1:has-text("Code")`)).toBeVisible();
 
   await expect(
-    page.locator(`h1:has-text("${codeBlock.displayName!}")`),
+    page.locator(
+      `p:has-text("Write monospaced code with syntax highlighting in a range of programming and markup languages")`,
+    ),
   ).toBeVisible();
 
-  await expect(
-    page.locator(`p:has-text("${codeBlock.description!}")`),
-  ).toBeVisible();
-
-  await expect(page.locator(`text=@${codeBlock.author!}`)).toBeVisible();
-  await expect(page.locator(`text=@${codeBlock.author!}`)).toHaveAttribute(
-    "href",
-    `/@${codeBlock.author!}`,
-  );
-  await expect(page.locator(`text=V${codeBlock.version!}`)).toBeVisible();
-
-  const blockExample = codeBlock.examples?.[0] as Record<string, string>;
+  await expect(page.locator(`text=@hash`)).toBeVisible();
+  await expect(page.locator(`text=@hash`)).toHaveAttribute("href", `/@hash`);
+  await expect(page.locator(`text=V0.2.0`)).toBeVisible();
 
   if (isMobile) {
     await page.locator("text=Block Data").click();
@@ -46,7 +26,18 @@ test("Block page should contain key elements", async ({
     await expect(page.locator("text=Block Properties")).toBeVisible();
   }
 
-  const stringifiedJson = JSON.stringify(blockExample, null, 2);
+  const stringifiedJson = JSON.stringify(
+    {
+      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/content/":
+        "function debounce(func, timeout = 300){\n  let timer;\n  return (...args) => {\n    clearTimeout(timer);\n    timer = setTimeout(() => { func.apply(this, args); }, timeout);\n  };\n}",
+      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/language/":
+        "javascript",
+      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/caption/":
+        "A JavaScript code example.",
+    },
+    null,
+    2,
+  );
 
   await expect(
     page.locator("[data-testid='block-properties-tabpanel'] >> textarea"),
@@ -87,7 +78,7 @@ test("Block page should contain key elements", async ({
     });
     await expect(
       page.frameLocator("iframe[title='block']").locator("input"),
-    ).toHaveValue(blockExample.caption!);
+    ).toHaveValue("A JavaScript code example.");
   }
 
   // check if readme was displayed
@@ -97,16 +88,16 @@ test("Block page should contain key elements", async ({
 
   await expect(
     page.locator("a:below(h2:has-text('Repository'))").first(),
-  ).toHaveAttribute("href", codeBlock.repository!);
+  ).toHaveAttribute("href", /^https:\/\/github.com\/hashintel\/hash\/tree\//);
 
   await expect(page.locator("text=Explore more blocks")).toBeVisible();
 
   await expect(page.locator('[data-testid="block-slider"]')).toBeVisible();
 
-  // New blocks can get added, hence the usage of greater than instead of equal too
+  // More blocks can be mirrored, hence the usage of greater than instead of equal too
   expect(
     await page.locator('[data-testid="block-slider"] >> .slick-slide').count(),
-  ).toBeGreaterThan(5);
+  ).toBeGreaterThan(4);
 
   const footerCTALocator = page.locator("data-test-id=footerCTA");
   await expect(footerCTALocator).toBeVisible();
@@ -124,9 +115,7 @@ test("should show an error message if an unsupported block is rendered", async (
   page,
   isMobile,
 }) => {
-  await page.goto(unsupportedBlock.blockSitePath);
-
-  const blockExample = unsupportedBlock.examples![0] as Record<string, string>;
+  await page.goto("/@hash/blocks/paragraph");
 
   if (isMobile) {
     await page.locator("text=Block Data").click();
@@ -135,7 +124,15 @@ test("should show an error message if an unsupported block is rendered", async (
   // confirm block properties tab contains example data
   await expect(
     page.locator("[data-testid='block-properties-tabpanel'] >> textarea"),
-  ).toHaveValue(JSON.stringify(blockExample, null, 2));
+  ).toHaveValue(
+    JSON.stringify(
+      {
+        text: "William Shakespeare was an English playwright, poet and actor, widely regarded as the greatest writer in the English language and the world's greatest dramatist. He is often called England's national poet and the \"Bard of Avon\".",
+      },
+      null,
+      2,
+    ),
+  );
 
   if (isMobile) {
     await page.locator("text=Preview").click();

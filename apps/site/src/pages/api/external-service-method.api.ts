@@ -1,18 +1,22 @@
 import {
-  ExternalApiMethod200Response,
-  ExternalApiMethodRequest,
+  ExternalServiceMethod200Response,
+  ExternalServiceMethodRequest,
 } from "@local/internal-api-client";
+import { AxiosError } from "axios";
 
 import { createApiKeyRequiredHandler } from "../../lib/api/handler/api-key-required-handler";
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { internalApi } from "../../lib/internal-api-client";
 import { formatErrors, mustGetEnvVar } from "../../util/api";
 
+const isErrorAxiosError = (error: unknown): error is AxiosError =>
+  (error as AxiosError).isAxiosError;
+
 export default createApiKeyRequiredHandler<
-  ExternalApiMethodRequest,
-  ExternalApiMethod200Response
+  ExternalServiceMethodRequest,
+  ExternalServiceMethod200Response
 >()
-  .use((_, res, next) => {
+  .use(async (req, res, next) => {
     if (isBillingFeatureFlagEnabled) {
       next();
     } else {
@@ -32,12 +36,46 @@ export default createApiKeyRequiredHandler<
 
     const { id: bpUserId } = req.user;
 
-    const { data } = await internalApi.externalApiMethod(req.body, {
-      headers: {
-        "internal-api-key": internalApiKey,
-        "bp-user-id": bpUserId,
-      },
-    });
+    try {
+      const { data } = await internalApi.externalServiceMethod(req.body, {
+        headers: {
+          "internal-api-key": internalApiKey,
+          "bp-user-id": bpUserId,
+          // The internal API falls back to the Vercel provided geolocation
+          // when it's unable to resolve an IP address location.
+          // See https://vercel.com/docs/concepts/edge-network/headers#x-vercel-ip-country
+          "x-vercel-ip-country": req.headers["x-vercel-ip-country"],
+        },
+      });
+      res.status(200).json(data);
+    } catch (error) {
+      let message;
+      let status = 500;
+      let code = "INTERNAL_ERROR";
+      if (isErrorAxiosError(error)) {
+        if (error.response?.status) {
+          status = error.response.status;
+        }
+        const { data } = error.response ?? {};
+        if (data && typeof data === "object") {
+          if ("message" in data && data.message) {
+            message = data.message;
+          }
+          if ("code" in data && typeof data.code === "string") {
+            code = data.code;
+          }
+        } else if (error.message) {
+          message = error.message;
+        }
+      } else if ("message" in (error as Error) && (error as Error).message) {
+        message = (error as Error).message;
+      }
 
-    res.status(200).json(data);
+      res.status(status).json(
+        formatErrors({
+          msg: message,
+          code,
+        }),
+      );
+    }
   });

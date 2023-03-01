@@ -1,0 +1,186 @@
+{
+  "title": "Entity Type",
+  "description": "Specifies the structure of an Entity Type",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "const": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type"
+    },
+    "kind": {
+      "const": "entityType"
+    },
+    "$id": {
+      "type": "string",
+      "format": "uri"
+    },
+    "type": {
+      "const": "object"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "allOf": {
+      "$comment": "Entity types this entity type inherits from",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "$ref": {
+            "type": "string",
+            "const": "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1"
+          }
+        },
+        "required": ["$ref"],
+        "additionalProperties": false
+      }
+    },
+    "examples": {
+      "$comment": "Example Entity instances",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "propertyNames": {
+          "$comment": "Property names must be a valid URL to a Property Type",
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "properties": {
+      "$ref": "#/$defs/propertyTypeObject"
+    },
+    "required": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "links": {
+      "type": "object",
+      "propertyNames": {
+        "$comment": "Property names must be a valid base URL of a link entity type",
+        "type": "string",
+        "format": "uri"
+      },
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "ordered": {
+              "type": "boolean",
+              "default": false
+            },
+            "type": {
+              "const": "array"
+            },
+            "minItems": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxItems": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "items": {
+              "$ref": "#/$defs/entityTypeConstrainedArray"
+            }
+          },
+          "required": ["items", "ordered", "type"],
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["$schema", "kind", "$id", "title", "properties"],
+  "$defs": {
+    "propertyTypeObject": {
+      "type": "object",
+      "propertyNames": {
+        "$comment": "Property names must be a valid URL to a Property Type",
+        "type": "string",
+        "format": "uri"
+      },
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "minProperties": 1,
+          "oneOf": [
+            {
+              "$ref": "#/$defs/propertyTypeReference"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "const": "array"
+                },
+                "items": {
+                  "$ref": "#/$defs/propertyTypeReference"
+                },
+                "minItems": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "maxItems": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": ["type", "items"]
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "propertyTypeReference": {
+      "type": "object",
+      "properties": {
+        "$ref": {
+          "$comment": "Property Object values must be defined through references to the same valid URL to a Property Type",
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": ["$ref"],
+      "additionalProperties": false
+    },
+    "entityTypeReference": {
+      "type": "object",
+      "properties": {
+        "$ref": {
+          "$comment": "Entity type references must point to a valid versioned URL of an entity type",
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": ["$ref"],
+      "additionalProperties": false
+    },
+    "entityTypeConstrainedArray": {
+      "type": "object",
+      "properties": {
+        "oneOf": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entityTypeReference"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { faCaretRight, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { SubscriptionTierPrices } from "@local/internal-api-client";
-import { Box, Grid, styled, Typography } from "@mui/material";
+import { Box, Grid, Skeleton, styled, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import {
@@ -70,6 +70,14 @@ export const paidSubscriptionFeatures: Record<
           </>
         ),
       },
+      {
+        icon: <MapLocationDotIcon sx={{ fontSize: 18 }} />,
+        title: (
+          <>
+            <strong>300</strong> Mapbox Static Maps
+          </>
+        ),
+      },
     ],
     additionalFeatures: [
       {
@@ -125,7 +133,7 @@ export const paidSubscriptionFeatures: Record<
               component="span"
               sx={{ color: ({ palette }) => palette.gray[60] }}
             >
-              300k+ words, 100 images, 40 address fills
+              300k+ words, 100 images, 40 address fills, etc.
             </Box>
           </>
         ),
@@ -230,7 +238,7 @@ const CustomLinkButton = styled(LinkButton)(({ theme }) => ({
 
 export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
   currentSubscriptionTier: "free" | "hobby";
-  subscriptionTierPrices: SubscriptionTierPrices;
+  subscriptionTierPrices: SubscriptionTierPrices | undefined;
 }> = ({ currentSubscriptionTier, subscriptionTierPrices }) => {
   const isCurrentSubscriptionTierHobby = currentSubscriptionTier === "hobby";
 
@@ -281,16 +289,25 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           }}
         >
           <Box display="flex" alignItems="center">
-            <Typography sx={{ fontSize: 28 }}>
-              <strong>
-                {priceToHumanReadable({
-                  amountInCents: subscriptionTierPrices.hobby.unit_amount!,
-                  currency: subscriptionTierPrices.hobby.currency,
-                  decimalPlaces: 0,
-                })}
-              </strong>
-              /month
-            </Typography>
+            {subscriptionTierPrices ? (
+              <Typography sx={{ fontSize: 28 }}>
+                <strong>
+                  {priceToHumanReadable({
+                    amountInCents: subscriptionTierPrices.hobby.unit_amount!,
+                    currency: subscriptionTierPrices.hobby.currency,
+                    decimalPlaces: 0,
+                  })}
+                </strong>
+                /month
+              </Typography>
+            ) : (
+              <Skeleton
+                width={130}
+                height={47}
+                sx={{ backgroundColor: ({ palette }) => palette.purple[40] }}
+              />
+            )}
+
             <Typography sx={{ marginLeft: 3, fontSize: 14, fontWeight: 600 }}>
               HOBBY
             </Typography>
@@ -329,7 +346,11 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           })}
         >
           <SubscriptionFeatureList
-            heading={<strong>Includes the following each month:</strong>}
+            heading={
+              <Box mb={1.5}>
+                <strong>Includes the following each month:</strong>
+              </Box>
+            }
             headingSx={({ palette }) => ({ color: palette.purple[80] })}
             features={paidSubscriptionFeatures.hobby.coreFeatures}
           />
@@ -381,7 +402,11 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           }}
         >
           <SubscriptionFeatureList
-            heading={<strong>As well as:</strong>}
+            heading={
+              <Box mb={1.5}>
+                <strong>As well as:</strong>
+              </Box>
+            }
             features={paidSubscriptionFeatures.hobby.additionalFeatures}
           />
           <Box
@@ -457,16 +482,24 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           })}
         >
           <Box display="flex" alignItems="center">
-            <Typography sx={{ fontSize: 28 }}>
-              <strong>
-                {priceToHumanReadable({
-                  amountInCents: subscriptionTierPrices.pro.unit_amount!,
-                  currency: subscriptionTierPrices.pro.currency,
-                  decimalPlaces: 0,
-                })}
-              </strong>
-              /month
-            </Typography>
+            {subscriptionTierPrices ? (
+              <Typography sx={{ fontSize: 28 }}>
+                <strong>
+                  {priceToHumanReadable({
+                    amountInCents: subscriptionTierPrices.pro.unit_amount!,
+                    currency: subscriptionTierPrices.pro.currency,
+                    decimalPlaces: 0,
+                  })}
+                </strong>
+                /month
+              </Typography>
+            ) : (
+              <Skeleton
+                width={130}
+                height={47}
+                sx={{ backgroundColor: ({ palette }) => palette.purple[50] }}
+              />
+            )}
             <Typography sx={{ marginLeft: 3, fontSize: 14, fontWeight: 600 }}>
               PRO
             </Typography>
@@ -510,7 +543,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         >
           <SubscriptionFeatureList
             heading={
-              <>
+              <Box sx={{ mb: 3 }}>
                 <ArrowLeftIcon sx={{ fontSize: 18, marginRight: 2 }} />
                 <strong>
                   Includes everything in{" "}
@@ -522,9 +555,10 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
                   </Box>
                   , plus...
                 </strong>
-              </>
+              </Box>
             }
             features={paidSubscriptionFeatures.pro.coreFeatures}
+            gap={2.25}
           />
         </Box>
         <Box
@@ -542,7 +576,11 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           }}
         >
           <SubscriptionFeatureList
-            heading={<strong>Plus you receive:</strong>}
+            heading={
+              <Box mb={1.5}>
+                <strong>Plus you receive:</strong>
+              </Box>
+            }
             features={paidSubscriptionFeatures.pro.additionalFeatures}
           />
           <Box

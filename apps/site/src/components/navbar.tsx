@@ -43,11 +43,9 @@ import {
   useHydrationFriendlyAsPath,
 } from "./shared";
 
-export const DESKTOP_NAVBAR_HEIGHT = 71.5;
+export const DESKTOP_NAVBAR_HEIGHT = 73;
 
 export const MOBILE_NAVBAR_HEIGHT = 53;
-
-const BREAD_CRUMBS_HEIGHT = 36;
 
 const IDLE_NAVBAR_TIMEOUT_MS = 3_000;
 
@@ -214,9 +212,14 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
     blockMetadata,
   );
 
+  const breadcrumbsRef = useRef<HTMLDivElement | null>();
+
   const displayBreadcrumbs = !md && !mobileNavVisible && crumbs.length > 0;
+  const breadcrumbsHeight = displayBreadcrumbs
+    ? breadcrumbsRef.current?.offsetHeight ?? 0
+    : 0;
   const neighbourOffset =
-    navbarHeight + (displayBreadcrumbs ? BREAD_CRUMBS_HEIGHT : 0);
+    navbarHeight + (displayBreadcrumbs ? breadcrumbsHeight : 0);
 
   useEffect(() => {
     document.body.style.overflow = mobileNavVisible ? "hidden" : "auto";
@@ -234,6 +237,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
     <Box
       sx={[
         {
+          height: navbarHeight,
           width: "100vw",
           position: "absolute",
           zIndex: ({ zIndex }) => zIndex.appBar,
@@ -346,39 +350,41 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
                 <>
                   <SearchNavButton />
 
-                  {pages.map(({ title, href }) => (
-                    <Link
-                      href={href}
-                      key={href}
-                      className={clsx(
-                        navbarClasses.link,
-                        navbarClasses.interactiveLink,
-                      )}
-                      sx={[
-                        {
-                          display: "flex",
-                          alignItems: "center",
-                        },
-                        hydrationFriendlyAsPath.startsWith(href) && {
-                          color: theme.palette.purple[600],
-                        },
-                      ]}
-                    >
-                      {NAVBAR_LINK_ICONS[title]}
-                      <Typography
-                        variant="bpHeading3"
-                        sx={{
-                          marginLeft: 1,
-                          fontWeight: 500,
-                          fontSize: "var(--step--1)",
-                          color: "currentColor",
-                          ...(title === "Hub" ? { fontStyle: "italic" } : {}),
-                        }}
+                  {pages
+                    .filter(({ title }) => title === "Docs" || title === "Hub")
+                    .map(({ title, href }) => (
+                      <Link
+                        href={href}
+                        key={href}
+                        className={clsx(
+                          navbarClasses.link,
+                          navbarClasses.interactiveLink,
+                        )}
+                        sx={[
+                          {
+                            display: "flex",
+                            alignItems: "center",
+                          },
+                          hydrationFriendlyAsPath.startsWith(href) && {
+                            color: theme.palette.purple[600],
+                          },
+                        ]}
                       >
-                        {title}
-                      </Typography>
-                    </Link>
-                  ))}
+                        {NAVBAR_LINK_ICONS[title]}
+                        <Typography
+                          variant="bpHeading3"
+                          sx={{
+                            marginLeft: 1,
+                            fontWeight: 500,
+                            fontSize: "var(--step--1)",
+                            color: "currentColor",
+                            ...(title === "Hub" ? { fontStyle: "italic" } : {}),
+                          }}
+                        >
+                          {title}
+                        </Typography>
+                      </Link>
+                    ))}
                   {user || pathname === "/login" ? null : (
                     <Link
                       href="#"
@@ -435,10 +441,12 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
             </Box>
           </Box>
           <Collapse in={displayBreadcrumbs}>
-            <MobileBreadcrumbs
-              hydrationFriendlyAsPath={hydrationFriendlyAsPath}
-              crumbs={crumbs}
-            />
+            <Box ref={breadcrumbsRef}>
+              <MobileBreadcrumbs
+                hydrationFriendlyAsPath={hydrationFriendlyAsPath}
+                crumbs={crumbs}
+              />
+            </Box>
           </Collapse>
         </Container>
       </Box>
