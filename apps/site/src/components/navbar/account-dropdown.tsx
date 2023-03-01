@@ -125,100 +125,103 @@ export const AccountDropdown: FunctionComponent = () => {
               Log Out
             </Typography>
           </ListItemButton>
-          <ListItem
-            sx={{
-              position: "relative",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              padding: (theme) => theme.spacing(2.125, 1.625),
-              background:
-                "linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.074) 100%), linear-gradient(90.25deg, #2600BC 52.19%, #4B0B8A 100.05%)",
-            }}
-            onClick={handleLogout}
-          >
-            <Box
-              sx={{ width: "65%", position: "absolute", bottom: 0, right: 0 }}
-            >
-              <Image layout="responsive" src={proTierBackground} />
-            </Box>
-
-            <Typography
-              variant="bpHeading5"
+          {user.stripeSubscriptionTier !== "pro" ? (
+            <ListItem
               sx={{
-                fontWeight: 400,
-                fontSize: 14,
-                lineHeight: "16px",
-                color: ({ palette }) => palette.common.white,
-                textShadow: "0px 10px 20px rgba(22, 37, 67, 0.2)",
-                mb: 1.25,
+                position: "relative",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                padding: (theme) => theme.spacing(2.125, 1.625),
+                background:
+                  "linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.074) 100%), linear-gradient(90.25deg, #2600BC 52.19%, #4B0B8A 100.05%)",
               }}
+              onClick={handleLogout}
             >
-              <strong>Upgrade for unlimited access</strong> to external services
-            </Typography>
-            <Box display="flex" justifyContent="flex-start" gap={1} mb={2.5}>
-              <OpenAiIcon
-                sx={{
-                  height: 15,
-                  width: "auto",
-                  color: ({ palette }) => palette.gray[50],
-                }}
-              />
-              <MapboxIcon
-                sx={{
-                  height: 15,
-                  width: "auto",
-                  color: ({ palette }) => palette.gray[50],
-                }}
-              />
+              <Box
+                sx={{ width: "65%", position: "absolute", bottom: 0, right: 0 }}
+              >
+                <Image layout="responsive" src={proTierBackground} />
+              </Box>
+
               <Typography
                 variant="bpHeading5"
                 sx={{
-                  fontWeight: 500,
-                  fontSize: 12,
+                  fontWeight: 400,
+                  fontSize: 14,
                   lineHeight: "16px",
-                  color: ({ palette }) => palette.gray[50],
+                  color: ({ palette }) => palette.common.white,
                   textShadow: "0px 10px 20px rgba(22, 37, 67, 0.2)",
+                  mb: 1.25,
                 }}
               >
-                & more...
+                <strong>Upgrade for unlimited access</strong> to external
+                services
               </Typography>
-            </Box>
-
-            <Box>
-              <LinkButton
-                href="/settings/billing"
-                variant="tertiary"
-                size="small"
-                sx={{
-                  padding: ({ spacing }) => spacing(0.75, 1.5),
-                  borderRadius: 1.5,
-                  boxShadow:
-                    "0px 33.0556px 50.9514px rgba(50, 65, 111, 0.19), 0px 19.6444px 27.7111px rgba(50, 65, 111, 0.15), 0px 10.2px 14.1375px rgba(50, 65, 111, 0.13), 0px 4.15556px 7.08889px rgba(50, 65, 111, 0.1), 0px 0.944444px 3.42361px rgba(50, 65, 111, 0.08)",
-                  "::before": {
-                    borderWidth: 0,
-                  },
-                }}
-              >
-                <ArrowUpRightIcon
+              <Box display="flex" justifyContent="flex-start" gap={1} mb={2.5}>
+                <OpenAiIcon
                   sx={{
-                    fontSize: 16,
-                    color: ({ palette }) => palette.gray[40],
-                    mr: 1,
+                    height: 15,
+                    width: "auto",
+                    color: ({ palette }) => palette.gray[50],
+                  }}
+                />
+                <MapboxIcon
+                  sx={{
+                    height: 15,
+                    width: "auto",
+                    color: ({ palette }) => palette.gray[50],
                   }}
                 />
                 <Typography
+                  variant="bpHeading5"
                   sx={{
                     fontWeight: 500,
-                    fontSize: 14,
-                    lineHeight: 1.5,
-                    color: ({ palette }) => palette.gray[80],
+                    fontSize: 12,
+                    lineHeight: "16px",
+                    color: ({ palette }) => palette.gray[50],
+                    textShadow: "0px 10px 20px rgba(22, 37, 67, 0.2)",
                   }}
                 >
-                  Upgrade
+                  & more...
                 </Typography>
-              </LinkButton>
-            </Box>
-          </ListItem>
+              </Box>
+
+              <Box>
+                <LinkButton
+                  href="/settings/billing"
+                  variant="tertiary"
+                  size="small"
+                  sx={{
+                    padding: ({ spacing }) => spacing(0.75, 1.5),
+                    borderRadius: 1.5,
+                    boxShadow:
+                      "0px 33.0556px 50.9514px rgba(50, 65, 111, 0.19), 0px 19.6444px 27.7111px rgba(50, 65, 111, 0.15), 0px 10.2px 14.1375px rgba(50, 65, 111, 0.13), 0px 4.15556px 7.08889px rgba(50, 65, 111, 0.1), 0px 0.944444px 3.42361px rgba(50, 65, 111, 0.08)",
+                    "::before": {
+                      borderWidth: 0,
+                    },
+                  }}
+                >
+                  <ArrowUpRightIcon
+                    sx={{
+                      fontSize: 16,
+                      color: ({ palette }) => palette.gray[40],
+                      mr: 1,
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: 14,
+                      lineHeight: 1.5,
+                      color: ({ palette }) => palette.gray[80],
+                    }}
+                  >
+                    Upgrade
+                  </Typography>
+                </LinkButton>
+              </Box>
+            </ListItem>
+          ) : null}
         </Box>
       </Popover>
     </Box>
