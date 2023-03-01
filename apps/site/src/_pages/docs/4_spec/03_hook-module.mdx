@@ -1,6 +1,6 @@
 # Hook Module
 
-This document (version 0.1) defines a **hook module** according to the terms set out in the [core specification](https://blockprotocol.org/docs/spec/core).
+This document (version 0.3) defines a **hook module** according to the terms set out in the [core specification](https://blockprotocol.org/docs/spec/core).
 
 Under the hook module, a block can invite embedding application to take over the rendering of an element within the block (the **hook**), allowing embedding applications to provide users with application-specific **views** of specific data types without the block needing to know about them.
 
@@ -36,6 +36,7 @@ If the embedding application **supports** the requested hook type:
     - of the appropriate `type`
     - by manipulating the specified `node` or by attaching elements within it
     - using data stored at the specified `path` on the entity associated with the specified `entityId`
+      - The path is expressed in its components as an array of strings or numbers, where strings are property accesses and numbers are array indices. e.g. `["friends", 1]`, `["address", "street"]`
   - send a `hookResponse` message specifying a `hookId` to identify the hook with in future
 - It MUST NOT destroy the node or move it within the DOM.
 

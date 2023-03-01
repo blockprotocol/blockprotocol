@@ -14,23 +14,20 @@
         "properties": {
           "entityTypeId": {
             "description": "The entityTypeId of the type of the entity to create",
-            "type": "string"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
           },
           "properties": {
             "description": "The properties of the entity to create",
-            "type": "object"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type-object"
           },
-          "links": {
-            "description": "Links to create along with the entity",
-            "type": "array",
-            "items": {
-              "$ref": "https://blockprotocol.org/types/modules/graph/link"
-            }
+          "linkData": {
+            "description": "Link data if the entity is a link entity",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-data"
           }
         },
         "required": ["entityTypeId", "properties"]
       },
-      "errorCodes": []
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "createEntityResponse",
@@ -39,16 +36,14 @@
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
-        "type": "object",
-        "properties": {
-          "entity": {
-            "description": "The newly created entity",
-            "$ref": "https://blockprotocol.org/types/modules/graph/entity"
-          }
-        },
-        "required": ["entity"]
+        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     },
     {
       "messageName": "updateEntity",
@@ -58,19 +53,30 @@
       "sentOnInitialization": false,
       "data": {
         "type": "object",
-        "properties": {
-          "entityId": {
-            "description": "The entityId of the entity to update",
-            "type": "string"
+        "allOf": [
+          {
+            "properties": {
+              "entityId": {
+                "description": "The entityId of the entity to update",
+                "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
+              },
+              "entityTypeId": {
+                "description": "The entityTypeId of the updated entity",
+                "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
+              },
+              "properties": {
+                "description": "The new properties object to assign to the entity",
+                "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type-object"
+              }
+            }
           },
-          "properties": {
-            "description": "The new properties object to assign to the entity",
-            "type": "object"
+          {
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders"
           }
-        },
-        "required": ["entityId", "properties"]
+        ],
+        "required": ["entityId", "entityTypeId", "properties"]
       },
-      "errorCodes": []
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "updateEntityResponse",
@@ -79,16 +85,15 @@
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
-        "type": "object",
-        "properties": {
-          "entity": {
-            "description": "The updated entity",
-            "$ref": "https://blockprotocol.org/types/modules/graph/entity"
-          }
-        },
-        "required": ["entity"]
+        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_FOUND",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     },
     {
       "messageName": "deleteEntity",
@@ -97,16 +102,10 @@
       "respondedToBy": "deleteEntityResponse",
       "sentOnInitialization": false,
       "data": {
-        "type": "object",
-        "properties": {
-          "entityId": {
-            "description": "The entityId of the entity to delete",
-            "type": "string"
-          }
-        },
-        "required": ["entityId"]
+        "description": "The entityId of the entity to delete",
+        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
       },
-      "errorCodes": []
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "deleteEntityResponse",
@@ -116,13 +115,20 @@
       "sentOnInitialization": false,
       "data": {
         "description": "'true' if the operation succeeded. Otherwise, errors should be returned.",
-        "type": "boolean"
+        "type": "boolean",
+        "const": true
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_FOUND",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     },
     {
       "messageName": "getEntity",
-      "description": "Request to retrieve an entity, expecting the entity in response.",
+      "description": "Request to retrieve a subgraph rooted at a specific entity",
       "source": "block",
       "respondedToBy": "getEntityResponse",
       "sentOnInitialization": false,
@@ -131,12 +137,15 @@
         "properties": {
           "entityId": {
             "description": "The entityId of the entity to retrieve",
-            "type": "string"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
+          },
+          "graphResolveDepths": {
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths"
           }
         },
         "required": ["entityId"]
       },
-      "errorCodes": []
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "getEntityResponse",
@@ -145,547 +154,62 @@
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
-        "type": "object",
-        "properties": {
-          "entity": {
-            "description": "The retrieved entity",
-            "$ref": "https://blockprotocol.org/types/modules/graph/entity"
-          }
-        },
-        "required": ["entity"]
+        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/subgraph"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_FOUND",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     },
     {
-      "messageName": "aggregateEntities",
-      "description": "Request to retrieve an aggregation of entities.",
+      "messageName": "queryEntities",
+      "description": "Request to query entities.",
       "source": "block",
-      "respondedToBy": "aggregateEntitiesResponse",
+      "respondedToBy": "queryEntitiesResponse",
       "sentOnInitialization": false,
       "data": {
+        "description": "The results of a query over entities, and the operation that was used to produce it.",
         "type": "object",
         "properties": {
           "operation": {
-            "description": "The aggregation operation to apply",
-            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/query-operation"
+          },
+          "graphResolveDepths": {
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/partial-graph-resolve-depths"
           }
         },
         "required": ["operation"]
       },
-      "errorCodes": []
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
-      "messageName": "aggregateEntitiesResponse",
-      "description": "The response to a request to retrieve an aggregation of entities",
+      "messageName": "queryEntitiesResponse",
+      "description": "The response to a request to query over entities",
       "source": "embedder",
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
+        "description": "The query operation to apply",
         "type": "object",
         "properties": {
-          "operation": {
-            "description": "The aggregation operation that was applied to generate the results, including any defaults set by the application.",
-            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
-          },
           "results": {
-            "description": "The entities returned by the aggregation operation",
-            "type": "array",
-            "items": {
-              "$ref": "https://blockprotocol.org/types/modules/graph/entity"
-            }
-          }
-        },
-        "required": ["operation", "results"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT"]
-    },
-    {
-      "messageName": "createEntityType",
-      "description": "Request to create an entity type, expecting the created entity type in response.",
-      "source": "block",
-      "respondedToBy": "createEntityTypeResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "schema": {
-            "description": "The schema of the entity type to create",
-            "type": "object"
-          }
-        },
-        "required": ["schema"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "createEntityTypeResponse",
-      "description": "The response to a request to create an entityType",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "entityType": {
-            "description": "The created entity type",
-            "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
-          }
-        },
-        "required": ["entityType"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT"]
-    },
-    {
-      "messageName": "updateEntityType",
-      "description": "Request to update an entityType, expecting the updated entityType in response.",
-      "source": "block",
-      "respondedToBy": "updateEntityTypeResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "entityTypeId": {
-            "description": "The entityTypeId of the entity to update",
-            "type": "string"
-          },
-          "schema": {
-            "description": "The new schema to assign to the entity type",
-            "type": "object"
-          }
-        },
-        "required": ["entityTypeId", "schema"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "updateEntityTypeResponse",
-      "description": "The response to a request to update an entity type",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "entityType": {
-            "description": "The updated entity type",
-            "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
-          }
-        },
-        "required": ["entityType"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "deleteEntityType",
-      "description": "Request to delete an entityType, expecting a boolean in response.",
-      "source": "block",
-      "respondedToBy": "deleteEntityTypeResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "entityTypeId": {
-            "description": "The entityTypeId of the entityType to delete",
-            "type": "string"
-          }
-        },
-        "required": ["entityTypeId"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "deleteEntityTypeResponse",
-      "description": "The response to a request to delete an entity type",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "description": "'true' if the operation succeeded. Otherwise, 'errors' will be returned.",
-        "type": "boolean"
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "getEntityType",
-      "description": "Request to retrieve an entity type, expecting the entity type in response.",
-      "source": "block",
-      "respondedToBy": "getEntityTypeResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "entityTypeId": {
-            "description": "The entityTypeId of the entity type to retrieve",
-            "type": "string"
-          }
-        },
-        "required": ["entityTypeId"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "getEntityTypeResponse",
-      "description": "The response to a request to get an entity type",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "entityType": {
-            "description": "The retrieved entity type",
-            "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
-          }
-        },
-        "required": ["entityType"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "aggregateEntityTypes",
-      "description": "Request to retrieve an aggregation of entity types.",
-      "source": "block",
-      "respondedToBy": "aggregateEntityTypesResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "operation": {
-            "description": "The aggregation operation to apply",
-            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
-          }
-        },
-        "required": ["operation"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "aggregateEntityTypesResponse",
-      "description": "The response to a request to retrieve an aggregation of entity types",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "operation": {
-            "description": "The aggregation operation that was applied to generate the results, including any defaults set by the application.",
-            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
-          },
-          "results": {
-            "description": "The entity types returned by the aggregation operation",
-            "type": "array",
-            "items": {
-              "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
-            }
-          }
-        },
-        "required": ["operation", "results"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT"]
-    },
-    {
-      "messageName": "createLink",
-      "description": "Request to create a link, expecting the created link in response.",
-      "source": "block",
-      "respondedToBy": "createLinkResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "sourceEntityId": {
-            "description": "The entityId of the source entity for the link",
-            "type": "string"
-          },
-          "destinationEntityId": {
-            "description": "The entityId of the destination entity for the link",
-            "type": "string"
-          },
-          "index": {
-            "description": "The position of this link in an ordered list of links, where ordering is important. An index of 0 represents the first position in the list.",
-            "type": "number"
-          },
-          "path": {
-            "description": "The path or field on the entity where this link is made (e.g. 'friend', 'employer')",
-            "type": "string"
-          }
-        },
-        "required": ["sourceEntityId", "destinationEntityId", "path"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "createLinkResponse",
-      "description": "The response to a request to create a link",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "link": {
-            "description": "The created link",
-            "$ref": "https://blockprotocol.org/types/modules/graph/link"
-          }
-        },
-        "required": ["link"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT"]
-    },
-    {
-      "messageName": "updateLink",
-      "description": "Request to update a link, expecting the updated link in response.",
-      "source": "block",
-      "respondedToBy": "updateLinkResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "linkId": {
-            "description": "The linkId of the entity to update",
-            "type": "string"
-          },
-          "index": {
-            "description": "The new index the link should occupy in an ordered list of links",
-            "type": "number"
-          }
-        },
-        "required": ["linkId", "index"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "updateLinkResponse",
-      "description": "The response to a request to update a link",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "link": {
-            "description": "The updated link",
-            "$ref": "https://blockprotocol.org/types/modules/graph/link"
-          }
-        },
-        "required": ["link"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "deleteLink",
-      "description": "Request to delete a link, expecting a boolean in response.",
-      "source": "block",
-      "respondedToBy": "deleteLinkResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "linkId": {
-            "description": "The linkId of the link to delete",
-            "type": "string"
-          }
-        },
-        "required": ["linkId"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "deleteLinkResponse",
-      "description": "The response to a request to delete a link",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "description": "'true' if the operation succeeded. Otherwise, 'errors' should be returned.",
-        "type": "boolean"
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "getLink",
-      "description": "Request to retrieve a link, expecting the link in response.",
-      "source": "block",
-      "respondedToBy": "getLinkResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "linkId": {
-            "description": "The linkId of the link to retrieve",
-            "type": "string"
-          }
-        },
-        "required": ["linkId"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "getLinkResponse",
-      "description": "The response to a request to get a link",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "link": {
-            "description": "The retrieved link",
-            "$ref": "https://blockprotocol.org/types/modules/graph/link"
-          }
-        },
-        "required": ["link"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "createLinkedAggregation",
-      "description": "Request to create a linked aggregation, expecting the created linked aggregation in response.",
-      "source": "block",
-      "respondedToBy": "createLinkedAggregationResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "sourceEntityId": {
-            "description": "The entityId of the source entity of this linked aggregation",
-            "type": "string"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/subgraph"
           },
           "operation": {
-            "description": "The aggregation operation to apply",
-            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
-          },
-          "path": {
-            "description": "The path or field on the entity where this linked aggregation is made (e.g. 'rows')",
-            "type": "string"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/query-operation"
           }
         },
-        "required": ["sourceEntityId", "operation", "path"]
+        "required": ["results", "operation"]
       },
-      "errorCodes": []
-    },
-    {
-      "messageName": "createLinkedAggregationResponse",
-      "description": "The response to a request to create a linkedAggregation",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "linkedAggregation": {
-            "description": "The created linked aggregation",
-            "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation-definition"
-          }
-        },
-        "required": ["linkedAggregation"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT"]
-    },
-    {
-      "messageName": "updateLinkedAggregation",
-      "description": "Request to update a linked aggregation, expecting the updated linked aggregation in response.",
-      "source": "block",
-      "respondedToBy": "updateLinkedAggregationResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "aggregationId": {
-            "description": "The aggregationId of the linked aggregation to update",
-            "type": "string"
-          },
-          "operation": {
-            "description": "The new aggregation operation",
-            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
-          }
-        },
-        "required": ["aggregationId", "operation"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "updateLinkedAggregationResponse",
-      "description": "The response to a request to update a linked aggregation",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "linkedAggregation": {
-            "description": "The updated linked aggregation definition",
-            "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation-definition"
-          }
-        },
-        "required": ["linkedAggregation"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "deleteLinkedAggregation",
-      "description": "Request to delete a linked aggregation, expecting a boolean in response.",
-      "source": "block",
-      "respondedToBy": "deleteLinkedAggregationResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "aggregationId": {
-            "description": "The aggregationId of the linked aggregation to delete",
-            "type": "string"
-          }
-        },
-        "required": ["aggregationId"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "deleteLinkedAggregationResponse",
-      "description": "The response to a request to delete a linked aggregation",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "boolean"
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "getLinkedAggregation",
-      "description": "Request to retrieve a linked aggregation, expecting the linked aggregation in response.",
-      "source": "block",
-      "respondedToBy": "getLinkedAggregationResponse",
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "aggregationId": {
-            "description": "The aggregationId of the linkedAggregation to retrieve",
-            "type": "string"
-          }
-        },
-        "required": ["aggregationId"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "getLinkedAggregationResponse",
-      "description": "The response to a request to get a linkedAggregation",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": false,
-      "data": {
-        "type": "object",
-        "properties": {
-          "linkedAggregation": {
-            "description": "The retrieved linked aggregation",
-            "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation"
-          }
-        },
-        "required": ["linkedAggregation"]
-      },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     },
     {
       "messageName": "uploadFile",
@@ -694,24 +218,42 @@
       "respondedToBy": "uploadFileResponse",
       "sentOnInitialization": false,
       "data": {
-        "type": "object",
-        "properties": {
-          "file": {
-            "description": "The file blob, if being uploaded directly. Either 'url' or 'file' is required."
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "$comment": "The URL to take the file from, if not being uploaded directly."
+              }
+            },
+            "required": ["url"]
           },
-          "url": {
-            "description": "The URL to take the file from, if not being uploaded directly. Either 'url' or 'file' is required.",
-            "type": "string"
-          },
-          "mediaType": {
-            "description": "The type of media file this is",
-            "type": "string",
-            "enum": ["image", "video"]
+          {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "file": {
+                "$comment": "the file blob, if being uploaded directly."
+              }
+            },
+            "required": ["file"]
           }
-        },
-        "required": ["mediaType"]
+        ]
       },
-      "errorCodes": []
+      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
     },
     {
       "messageName": "uploadFileResponse",
@@ -720,107 +262,15 @@
       "respondedToBy": null,
       "sentOnInitialization": false,
       "data": {
-        "type": "object",
-        "properties": {
-          "entityId": {
-            "description": "The entityId of the entity storing metadata about the file."
-          },
-          "url": {
-            "description": "The URL the file is now being served from.",
-            "type": "string"
-          },
-          "mediaType": {
-            "description": "The type of media file this is",
-            "type": "string",
-            "enum": ["image", "video"]
-          }
-        },
-        "required": ["entityId", "mediaType", "url"]
+        "$ref": "https://blockprotocol.org/@blockprotocol/types/entity-type/file/v/1"
       },
-      "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
-    },
-    {
-      "messageName": "blockEntity",
-      "description": "The entity associated with the block",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": true,
-      "data": {
-        "$ref": "https://blockprotocol.org/types/modules/graph/entity"
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "blockGraph",
-      "description": "A graph of entities with the block entity at the root, resolved to the specified depth.",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": true,
-      "data": {
-        "type": "object",
-        "properties": {
-          "linkedEntities": {
-            "description": "The entities linked from the block entity, and potentially entities linked from them, and so on, depending on depth.",
-            "type": "array",
-            "items": {
-              "$ref": "https://blockprotocol.org/types/modules/graph/entity"
-            }
-          },
-          "linkGroups": {
-            "description": "The links attached to the block or the entities provided in linkedEntities, grouped by entity and path.",
-            "type": "array",
-            "items": {
-              "$ref": "https://blockprotocol.org/types/modules/graph/link-group"
-            }
-          },
-          "depth": {
-            "description": "The number of links that will be followed from the block when resolving the graph.",
-            "type": "integer",
-            "inclusiveMinimum": 0
-          }
-        },
-        "required": ["linkedEntities", "linkGroups", "depth"]
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "entityTypes",
-      "description": "The entity types for any entities provided to the block as part of other messages.",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": true,
-      "data": {
-        "type": "array",
-        "items": {
-          "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
-        }
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "linkedAggregations",
-      "description": "Aggregations which are linked to from the block entity.",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": true,
-      "data": {
-        "type": "array",
-        "items": {
-          "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation-definition"
-        }
-      },
-      "errorCodes": []
-    },
-    {
-      "messageName": "readonly",
-      "description": "Indicates if the block should display in 'readonly' mode, i.e. without editing controls.",
-      "source": "embedder",
-      "respondedToBy": null,
-      "sentOnInitialization": true,
-      "data": {
-        "type": "boolean"
-      },
-      "errorCodes": []
+      "errorCodes": [
+        "FORBIDDEN",
+        "INVALID_INPUT",
+        "NOT_FOUND",
+        "NOT_IMPLEMENTED",
+        "INTERNAL_ERROR"
+      ]
     }
   ]
 }

@@ -1,6 +1,6 @@
 import { EntityType, VersionedUrl } from "@blockprotocol/type-system/slim";
 
-import { AggregateOperationInput } from "../entity.js";
+import { QueryOperationInput } from "../entity.js";
 import { EntityTypeRootType, Subgraph } from "../subgraph.js";
 import { OntologyElementMetadata } from "./metadata.js";
 
@@ -9,29 +9,25 @@ export type EntityTypeWithMetadata = {
   metadata: OntologyElementMetadata;
 };
 
-export type AggregateEntityTypesData = {
+export type QueryEntityTypesData = {
   // @todo mention in spec or remove
   // include entities that are used by, but don't belong to, the specified account
   includeOtherTypesInUse?: boolean | null;
-  operation?: Omit<AggregateOperationInput, "entityTypeId"> | null;
+  operation?: Omit<QueryOperationInput, "entityTypeId"> | null;
 };
 
-export type AggregateEntityTypesResult<
+export type QueryEntityTypesResult<
   T extends Subgraph<boolean, EntityTypeRootType>,
 > = {
   results: T[];
-  operation: AggregateOperationInput;
+  operation: QueryOperationInput;
 };
 
 export type GetEntityTypeData = {
   entityTypeId: VersionedUrl;
 };
 
-type SystemDefinedEntityTypeProperties =
-  | "$id"
-  | "additionalProperties"
-  | "kind"
-  | "type";
+type SystemDefinedEntityTypeProperties = "$id" | "kind" | "type";
 
 export type CreateEntityTypeData = {
   entityType: Omit<EntityType, SystemDefinedEntityTypeProperties>;

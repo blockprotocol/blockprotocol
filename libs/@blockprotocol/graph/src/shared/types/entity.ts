@@ -151,24 +151,24 @@ export type Sort = {
 
 export type MultiSort = Sort[];
 
-export type AggregateOperationInput = {
+export type QueryOperationInput = {
   multiSort?: MultiSort | null;
   multiFilter?: MultiFilter | null;
 };
 
-export type AggregateEntitiesData<Temporal extends boolean> = {
-  operation: AggregateOperationInput;
+export type QueryEntitiesData<Temporal extends boolean> = {
+  operation: QueryOperationInput;
   graphResolveDepths?: Partial<GraphResolveDepths>;
 } & (Temporal extends true
   ? { temporalAxes: QueryTemporalAxesUnresolved }
   : {});
 
-export type AggregateEntitiesResult<
+export type QueryEntitiesResult<
   Temporal extends boolean,
   T extends Subgraph<Temporal, EntityRootType<Temporal>>,
 > = {
   results: T;
-  operation: AggregateOperationInput;
+  operation: QueryOperationInput;
 };
 
 /**

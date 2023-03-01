@@ -23,6 +23,51 @@ const generateServiceSchema = (params: { typeName: string }): JsonObject => {
 };
 
 export const mapboxMessages: ModuleMessageDefinition[] = [
+  /** OpenAI */
+  {
+    messageName: "openaiCreateImage",
+    description: "Create an image using OpenAI",
+    source: "block",
+    respondedToBy: "openaiCreateImageResponse",
+    sentOnInitialization: false,
+    data: generateServiceSchema({
+      typeName: "OpenAICreateImageData",
+    }),
+    errorCodes: [],
+  },
+  {
+    messageName: "openaiCreateImageResponse",
+    description: "Response to a create OpenAI image request",
+    source: "embedder",
+    respondedToBy: null,
+    sentOnInitialization: false,
+    data: generateServiceSchema({
+      typeName: "OpenAICreateImageResponseData",
+    }),
+    errorCodes: [],
+  },
+  {
+    messageName: "openaiCompleteText",
+    description: "Complete text using OpenAI",
+    source: "block",
+    respondedToBy: "openaiCompleteTextResponse",
+    sentOnInitialization: false,
+    data: generateServiceSchema({
+      typeName: "OpenAICompleteTextData",
+    }),
+    errorCodes: [],
+  },
+  {
+    messageName: "openaiCompleteTextResponse",
+    description: "Response to a OpenAI complete text request",
+    source: "embedder",
+    respondedToBy: null,
+    sentOnInitialization: false,
+    data: generateServiceSchema({
+      typeName: "OpenAICompleteTextResponseData",
+    }),
+    errorCodes: [],
+  },
   /** Mapbox Geocoding API */
   {
     messageName: "mapboxForwardGeocoding",

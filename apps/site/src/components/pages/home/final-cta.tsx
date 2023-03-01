@@ -208,7 +208,7 @@ export const FinalCTA: NextPage = () => {
             md: "auto",
           },
           padding: {
-            xs: 4,
+            xs: 6,
             lg: 8,
           },
           background:

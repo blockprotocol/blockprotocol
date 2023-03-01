@@ -1,6 +1,3 @@
-mod error;
-#[cfg(target_arch = "wasm32")]
-mod wasm;
 use std::{fmt, result::Result, str::FromStr, sync::LazyLock};
 
 pub use error::{ParseBaseUrlError, ParseVersionedUrlError};
@@ -9,6 +6,10 @@ use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 use url::Url;
+
+mod error;
+#[cfg(target_arch = "wasm32")]
+mod wasm;
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Clone, PartialEq, Eq, Ord, PartialOrd, Hash)]
@@ -38,6 +39,9 @@ impl BaseUrl {
     }
 
     fn validate_str(url: &str) -> Result<(), ParseBaseUrlError> {
+        if url.len() > 2048 {
+            return Err(ParseBaseUrlError::TooLong);
+        }
         if !url.ends_with('/') {
             return Err(ParseBaseUrlError::MissingTrailingSlash);
         }
@@ -113,6 +117,11 @@ impl FromStr for VersionedUrl {
     fn from_str(url: &str) -> Result<Self, ParseVersionedUrlError> {
         static RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("regex failed to compile"));
+
+        if url.len() > 2048 {
+            return Err(ParseVersionedUrlError::TooLong);
+        }
+
         let captures = RE
             .captures(url)
             .ok_or(ParseVersionedUrlError::IncorrectFormatting)?;

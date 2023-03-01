@@ -13,6 +13,8 @@ pub enum ParseBaseUrlError {
     UrlParseError(String), // TODO: can we do better than a string here
     #[error("URL cannot cannot be a base")]
     CannotBeABase,
+    #[error("URL cannot cannot be more than 2048 characters long")]
+    TooLong,
 }
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
@@ -33,4 +35,6 @@ pub enum ParseVersionedUrlError {
     InvalidBaseUrl(ParseBaseUrlError),
     #[error("invalid json: {0}")]
     InvalidJson(String),
+    #[error("URL cannot cannot be more than 2048 characters long")]
+    TooLong,
 }

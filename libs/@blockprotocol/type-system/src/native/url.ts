@@ -16,6 +16,12 @@ import {
 export const validateBaseUrl = (
   url: string,
 ): Result<BaseUrl, ParseBaseUrlError> => {
+  if (url.length > 2048) {
+    return {
+      type: "Err",
+      inner: { reason: "TooLong" },
+    };
+  }
   try {
     void new URL(url);
     if (url.endsWith("/")) {
@@ -50,6 +56,12 @@ const versionedUrlRegExp = /(.+\/)v\/(\d+)(.*)/;
 export const validateVersionedUrl = (
   url: string,
 ): Result<VersionedUrl, ParseVersionedUrlError> => {
+  if (url.length > 2048) {
+    return {
+      type: "Err",
+      inner: { reason: "TooLong" },
+    };
+  }
   const groups = versionedUrlRegExp.exec(url);
 
   if (groups === null) {
@@ -113,6 +125,10 @@ export const validateVersionedUrl = (
  * @throws if the versioned URL is invalid.
  */
 export const extractBaseUrl = (url: VersionedUrl): BaseUrl => {
+  if (url.length > 2048) {
+    throw new Error(`URL too long: ${url}`);
+  }
+
   const groups = versionedUrlRegExp.exec(url);
 
   if (groups === null) {
@@ -135,6 +151,10 @@ export const extractBaseUrl = (url: VersionedUrl): BaseUrl => {
  * @throws if the versioned URL is invalid.
  */
 export const extractVersion = (url: VersionedUrl): number => {
+  if (url.length > 2048) {
+    throw new Error(`URL too long: ${url}`);
+  }
+
   const groups = versionedUrlRegExp.exec(url);
 
   if (groups === null) {

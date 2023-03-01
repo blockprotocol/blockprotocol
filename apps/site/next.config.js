@@ -119,12 +119,16 @@ const nextConfig = {
   rewrites: () => {
     return [
       {
+        source: "/blocks/:shortname/:blockslug/block-metadata.json",
+        destination: "/api/rewrites/block-metadata",
+      },
+      {
         source: "/:shortname/blocks/:blockslug/sandboxed-demo",
         destination: "/api/rewrites/sandboxed-block-demo",
       },
       {
-        source: "/types/modules/:modulename/:typename",
-        destination: "/types/modules/:modulename/:typename.json",
+        source: "/types/modules/:modulename/:typename*",
+        destination: "/types/modules/:modulename/:typename*.json",
       },
       {
         source: "/types/core/:typename",
