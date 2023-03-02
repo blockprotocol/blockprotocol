@@ -26,21 +26,14 @@ test("dashboard page should contain key elements", async ({ page }) => {
   await login({ page });
   await page.goto("/dashboard");
 
-  await expect(page.locator("text=Welcome Back, Alice!")).toBeVisible();
+  await expect(page.locator("text=Welcome back, Alice!")).toBeVisible();
 
   for (const [text, url] of [
-    [
-      "Publish a block",
-      process.env.NEXT_PUBLIC_NPM_PUBLISHING
-        ? "/blocks/publish"
-        : "/@alice/blocks",
-    ],
     ["Build a block", "/docs/developing-blocks"],
-    ["Create a Type", "/@alice/all-types"],
+    ["My blocks", "/@alice/blocks"],
+    ["My types", "/@alice/all-types"],
     ["Create and manage API keys", "/settings/api-keys"],
     ["View your public profile", "/@alice"],
-    ["Manage blocks", "/@alice/blocks"],
-    ["Manage types", "/@alice/all-types"],
     ["Browse blocks for inspiration", "/hub"],
   ] as const) {
     const card = page.locator(`[data-testid="dashboard-card"]`).filter({
