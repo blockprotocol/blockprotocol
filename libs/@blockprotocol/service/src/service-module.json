@@ -5,7 +5,7 @@
   "messages": [
     {
       "messageName": "openaiCreateImage",
-      "description": "Create an image using OpenAI",
+      "description": "Create an image using OpenAI – https://platform.openai.com/docs/api-reference/images",
       "source": "block",
       "respondedToBy": "openaiCreateImageResponse",
       "sentOnInitialization": false,
@@ -71,7 +71,7 @@
     },
     {
       "messageName": "openaiCompleteText",
-      "description": "Complete text using OpenAI",
+      "description": "Complete text using OpenAI – see https://platform.openai.com/docs/api-reference/completions",
       "source": "block",
       "respondedToBy": "openaiCompleteTextResponse",
       "sentOnInitialization": false,
@@ -268,7 +268,7 @@
     },
     {
       "messageName": "mapboxForwardGeocoding",
-      "description": "Forward geocoding request",
+      "description": "Forward geocoding request – see https://docs.mapbox.com/api/search/geocoding",
       "source": "block",
       "respondedToBy": "mapboxForwardGeocodingResponse",
       "sentOnInitialization": false,
@@ -982,7 +982,7 @@
       "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
-      "messageName": "mapboxReverseGeocoding",
+      "messageName": "mapboxReverseGeocoding – see https://docs.mapbox.com/api/search/geocoding/",
       "description": "Reverse geocoding request",
       "source": "block",
       "respondedToBy": "mapboxReverseGeocodingResponse",
@@ -1737,7 +1737,7 @@
       "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
-      "messageName": "mapboxRetrieveDirections",
+      "messageName": "mapboxRetrieveDirections – see https://docs.mapbox.com/api/navigation/directions/",
       "description": "Retrieve directions request",
       "source": "block",
       "respondedToBy": "mapboxRetrieveDirectionsResponse",
@@ -2313,7 +2313,7 @@
     },
     {
       "messageName": "mapboxRetrieveIsochrones",
-      "description": "Retrieve isochrones",
+      "description": "Retrieve isochrones – see https://docs.mapbox.com/api/navigation/isochrone/",
       "source": "block",
       "respondedToBy": "mapboxRetrieveIsochronesResponse",
       "sentOnInitialization": false,
@@ -2391,7 +2391,7 @@
     },
     {
       "messageName": "mapboxSuggestAddress",
-      "description": "Suggest an address",
+      "description": "Suggest an address – see https://docs.mapbox.com/api/search/search/#retrieve-a-suggestion",
       "source": "block",
       "respondedToBy": "mapboxSuggestAddressResponse",
       "sentOnInitialization": false,
@@ -2789,7 +2789,7 @@
     },
     {
       "messageName": "mapboxRetrieveAddress",
-      "description": "Retrieve an address",
+      "description": "Retrieve an address - see https://docs.mapbox.com/api/search/search/#retrieve-a-suggested-feature",
       "source": "block",
       "respondedToBy": "mapboxRetrieveAddressResponse",
       "sentOnInitialization": false,
@@ -3592,7 +3592,7 @@
     },
     {
       "messageName": "mapboxRetrieveStaticMap",
-      "description": "Retrieve a static map",
+      "description": "Retrieve a static map – see https://docs.mapbox.com/api/maps/static-images/",
       "source": "block",
       "respondedToBy": "mapboxRetrieveStaticMapResponse",
       "sentOnInitialization": false,

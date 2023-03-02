@@ -2,39 +2,47 @@
 
 This document (version 0.1) defines a **service module** according to the terms set out in the [core specification](https://blockprotocol.org/docs/spec/core).
 
-The service module describes a set of methods provided by external service providers (such as Mapbox and OpenAI).
+The service module enables blocks to interact with external services without needing to be provided with credentials: the embedding application calls the external service on the block's behalf.
+
+The module defines messages which correspond to specific requests available from those external services.
 
 ## Glossary
 
-## Defining blocks
+**Provider:** a company, organization or person that provides a service or services (e.g. Mapbox)
 
-### Block package
-
-#### <Hidden>Block package </Hidden>Summary
-
-TODO
-
-#### <Hidden>Block package </Hidden>Specification
-
-##### Blocks
-
-##### Embedding applications
-
-Embedding applications are respondible for implementing the relevant "callback" functions which handle calls made by blocks and forward them to a corresponding external API service.
+**Service:** a request which meets a specific functional goal, typically external to the embedding application and accessed via third-party API endpoint or integration (e.g. Retrieve Address).
 
 ## Messages
+
+### Handling messages
+
+### <Hidden>Handling messages </Hidden>Summary
+
+The service module specifies named messages from named service providers, any messages exchanged between application and block should be consistent with the shape and intent of those messages.
+
+How exactly the embedding application generates those messages is beyond the scope of the Block Protocol, so long as the schema and intent are met.
+
+#### <Hidden>Handling messages </Hidden>Specification
+
+Embedding applications MUST ensure that any responses they provide to blocks to messages sent under the service module are consistent with the schema and described intent of the message in this specification, and consistent with the response that the named service provider would return, except for any fields which are required by the named service provider but omitted from this specification (e.g. because they relate to authentication or other information that the block should not or does not have access to, and is added by the embedding application when making an onward request).
+
+They MAY implement messages by any of:
+
+- calling the named service provider directly, OR
+- generating the response internally, OR
+- calling another third-party that provides an appropriate response, whether directly or by themselves making a request to the named service provider.
 
 ### Error definitions
 
 #### <Hidden>Error definitions </Hidden>Specification
 
-TODO
+If a request fails, embedding applications MUST provide blocks with an error which complies with the specification, i.e. contains a listed code and a message.
+
+Embedding applications MAY withhold or translate error codes and messages sent by the service provider when reporting an error to the block.
+
+Blocks MUST NOT rely on error codes and messages providing information that the named service provider would if contacted directly, e.g. relating to billing.
 
 ### Message definitions
-
-#### <Hidden>Message definitions </Hidden>Summary
-
-TODO
 
 #### <Hidden>Message definitions </Hidden>Specification
 
