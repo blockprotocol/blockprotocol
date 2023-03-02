@@ -4,6 +4,7 @@ import { FunctionComponent, useState } from "react";
 
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
+import { isLinkEntityType } from "../../../util/type-system-util";
 import { CreateSchemaModal } from "../../modal/create-schema-modal";
 import { OverviewCard } from "./overview-card";
 import { Placeholder } from "./placeholder";
@@ -98,13 +99,13 @@ export const TabPanelContentsWithOverview: FunctionComponent<
           </Grid>
         ),
       )}
-      {entityTypes.map(({ schema }) => (
-        <Grid key={schema.$id} item xs={12} md={6}>
+      {entityTypes.map((entityType) => (
+        <Grid key={entityType.schema.$id} item xs={12} md={6}>
           <OverviewCard
-            url={schema.$id}
-            description={schema.description as string}
-            title={schema.title}
-            type="schema"
+            url={entityType.schema.$id}
+            description={entityType.schema.description as string}
+            title={entityType.schema.title}
+            type={isLinkEntityType(entityType) ? "link-entity-type" : "schema"}
           />
         </Grid>
       ))}
