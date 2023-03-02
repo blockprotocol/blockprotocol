@@ -378,14 +378,10 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
     typeof setTimeout
   > | null>(null);
 
-  const currentSelectedAnchorElement = useRef<HTMLAnchorElement | null>(null);
-
   const setSelectedAnchorElement = useCallback((node: HTMLAnchorElement) => {
     if (setSelectedAnchorElementTimeout.current) {
       clearTimeout(setSelectedAnchorElementTimeout.current);
     }
-
-    currentSelectedAnchorElement.current = node;
 
     setSelectedAnchorElementTimeout.current = setTimeout(() => {
       const parent = node.offsetParent as HTMLElement | undefined;
@@ -393,8 +389,6 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
       if (!parent) {
         return;
       }
-
-      currentSelectedAnchorElement.current = null;
 
       const min = parent.scrollTop;
       const max = min + parent.offsetHeight - 100;
