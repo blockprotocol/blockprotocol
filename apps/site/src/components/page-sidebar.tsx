@@ -17,6 +17,7 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -369,26 +370,32 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   sx = [],
   ...boxProps
 }) => {
-  const theme = useTheme();
   const { asPath } = useRouter();
 
-  const md = useMediaQuery(theme.breakpoints.up("md"));
-
-  const [openedPages, setOpenedPages] = useState<string[]>(
-    getInitialOpenedPages({ pages, asPath }),
-  );
+  const [openedPages, setOpenedPages] = useState<string[]>([]);
 
   const setSelectedAnchorElementTimeout = useRef<ReturnType<
     typeof setTimeout
   > | null>(null);
+
+  const currentSelectedAnchorElement = useRef<HTMLAnchorElement | null>(null);
 
   const setSelectedAnchorElement = useCallback((node: HTMLAnchorElement) => {
     if (setSelectedAnchorElementTimeout.current) {
       clearTimeout(setSelectedAnchorElementTimeout.current);
     }
 
+    currentSelectedAnchorElement.current = node;
+
     setSelectedAnchorElementTimeout.current = setTimeout(() => {
-      const parent = node.offsetParent as HTMLElement;
+      const parent = node.offsetParent as HTMLElement | undefined;
+
+      if (!parent) {
+        return;
+      }
+
+      currentSelectedAnchorElement.current = null;
+
       const min = parent.scrollTop;
       const max = min + parent.offsetHeight - 100;
       const pos = node.offsetTop;
@@ -400,14 +407,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   }, []);
 
   useEffect(() => {
-    return () => {
-      if (setSelectedAnchorElementTimeout.current) {
-        clearTimeout(setSelectedAnchorElementTimeout.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
+    // @todo this can be outside an effect
     setOpenedPages((prev) => [
       ...prev,
       ...getInitialOpenedPages({ pages, asPath }).filter(
@@ -416,7 +416,11 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
     ]);
   }, [asPath, pages]);
 
-  const height = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
+  const [ssr, setSsr] = useState(true);
+
+  useLayoutEffect(() => {
+    setSsr(false);
+  }, []);
 
   return (
     <Box
@@ -425,70 +429,40 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
       position="sticky"
       overflow="auto"
       width={SIDEBAR_WIDTH}
-      top={`${height}px`}
-      height={`calc(100vh - ${height}px)`}
       sx={[
         {
-          m: 1.5,
-          borderRightColor: theme.palette.gray[30],
           borderRightStyle: "solid",
           borderRightWidth: 1,
+
+          "--navbar-height": `${MOBILE_NAVBAR_HEIGHT}px`,
+
+          top: "var(--navbar-height)",
+          height: `calc(100vh - var(--navbar-height))`,
         },
+        (theme) => ({
+          borderRightColor: theme.palette.gray[30],
+
+          [theme.breakpoints.up("md")]: {
+            "--navbar-height": `${DESKTOP_NAVBAR_HEIGHT}px`,
+          },
+        }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          transition: theme.transitions.create([
-            "padding-top",
-            "padding-bottom",
-          ]),
-          wordBreak: "break-word",
-        }}
-      >
-        {pages.length > 1 ? (
-          pages.map((page) => (
-            <SidebarPage
-              key={page.href}
-              page={page}
-              setSelectedAnchorElement={setSelectedAnchorElement}
-              openedPages={openedPages}
-              setOpenedPages={setOpenedPages}
-            />
-          ))
-        ) : pages.length === 1 ? (
-          <>
-            {/* When the sidebar is only displaying one page, we can display its sub-sections and sub-pages directly */}
-            {pages[0]!.sections?.map((section, i) => (
-              <SidebarPageSection
-                key={section.anchor}
-                isSelectedByDefault={i === 0}
-                depth={0}
-                pageHref={pages[0]!.href}
-                section={section}
-                setSelectedAnchorElement={setSelectedAnchorElement}
-                openedPages={openedPages}
-                setOpenedPages={setOpenedPages}
-              />
-            ))}
-            {pages[0]!.subPages?.map((subpage) => (
-              <SidebarPage
-                key={subpage.href}
-                depth={0}
-                page={subpage}
-                setSelectedAnchorElement={setSelectedAnchorElement}
-                openedPages={openedPages}
-                setOpenedPages={setOpenedPages}
-              />
-            ))}
-          </>
-        ) : null}
-        {appendices && appendices.length > 0 ? (
-          <>
-            <Divider sx={{ marginBottom: 2 }} />
-            {appendices.map((page) => (
+      {ssr ? null : (
+        <Box
+          sx={(theme) => ({
+            display: "flex",
+            flexDirection: "column",
+            transition: theme.transitions.create([
+              "padding-top",
+              "padding-bottom",
+            ]),
+            wordBreak: "break-word",
+          })}
+        >
+          {pages.length > 1 ? (
+            pages.map((page) => (
               <SidebarPage
                 key={page.href}
                 page={page}
@@ -496,10 +470,50 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
                 openedPages={openedPages}
                 setOpenedPages={setOpenedPages}
               />
-            ))}
-          </>
-        ) : null}
-      </Box>
+            ))
+          ) : pages.length === 1 ? (
+            <>
+              {/* When the sidebar is only displaying one page, we can display its sub-sections and sub-pages directly */}
+              {pages[0]!.sections?.map((section, i) => (
+                <SidebarPageSection
+                  key={section.anchor}
+                  isSelectedByDefault={i === 0}
+                  depth={0}
+                  pageHref={pages[0]!.href}
+                  section={section}
+                  setSelectedAnchorElement={setSelectedAnchorElement}
+                  openedPages={openedPages}
+                  setOpenedPages={setOpenedPages}
+                />
+              ))}
+              {pages[0]!.subPages?.map((subpage) => (
+                <SidebarPage
+                  key={subpage.href}
+                  depth={0}
+                  page={subpage}
+                  setSelectedAnchorElement={setSelectedAnchorElement}
+                  openedPages={openedPages}
+                  setOpenedPages={setOpenedPages}
+                />
+              ))}
+            </>
+          ) : null}
+          {appendices && appendices.length > 0 ? (
+            <>
+              <Divider sx={{ marginBottom: 2 }} />
+              {appendices.map((page) => (
+                <SidebarPage
+                  key={page.href}
+                  page={page}
+                  setSelectedAnchorElement={setSelectedAnchorElement}
+                  openedPages={openedPages}
+                  setOpenedPages={setOpenedPages}
+                />
+              ))}
+            </>
+          ) : null}
+        </Box>
+      )}
     </Box>
   );
 };

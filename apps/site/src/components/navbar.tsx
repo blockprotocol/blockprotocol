@@ -193,17 +193,16 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
   const isHomePage = generatePathWithoutParams(hydrationFriendlyAsPath) === "/";
   const isDocs = hydrationFriendlyAsPath.startsWith("/docs");
 
-  const md = useMediaQuery(theme.breakpoints.up("md"));
+  // const md = useMediaQuery(theme.breakpoints.up("md"));
+  const belowMd = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [mobileNavVisible, setMobileNavVisible] = useMobileNavVisible(!md);
+  const [mobileNavVisible, setMobileNavVisible] = useMobileNavVisible(belowMd);
 
   const { scrolledPast, isNavbarHidden } = useScrollingNavbar(
     isDocs,
     isHomePage ? HOME_PAGE_HEADER_HEIGHT : null,
     mobileNavVisible,
   );
-
-  const navbarHeight = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
 
   const crumbs = useCrumbs(
     pages,
@@ -214,12 +213,10 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
 
   const breadcrumbsRef = useRef<HTMLDivElement | null>();
 
-  const displayBreadcrumbs = !md && !mobileNavVisible && crumbs.length > 0;
-  const breadcrumbsHeight = displayBreadcrumbs
-    ? breadcrumbsRef.current?.offsetHeight ?? 0
-    : 0;
-  const neighbourOffset =
-    navbarHeight + (displayBreadcrumbs ? breadcrumbsHeight : 0);
+  const displayBreadcrumbs = belowMd && !mobileNavVisible && crumbs.length > 0;
+  // @todo shouldn't be reading the size of a DOM node in render
+  const actualBreadcrumbsHeight = breadcrumbsRef.current?.offsetHeight ?? 0;
+  const breadcrumbsHeight = displayBreadcrumbs ? actualBreadcrumbsHeight : 0;
 
   useEffect(() => {
     document.body.style.overflow = mobileNavVisible ? "hidden" : "auto";
@@ -237,11 +234,23 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
     <Box
       sx={[
         {
-          height: navbarHeight,
+          "&,  + *": {
+            "--navbar-height": `${MOBILE_NAVBAR_HEIGHT}px`,
+            "--neighbour-offset": `calc(var(--navbar-height) + ${
+              // @todo use CSS
+              belowMd && crumbs.length ? actualBreadcrumbsHeight : 0
+            }px)`,
+          },
+
+          [theme.breakpoints.up("md")]: {
+            "--navbar-height": `${DESKTOP_NAVBAR_HEIGHT}px`,
+          },
+
+          height: "var(--navbar-height)",
           width: "100vw",
           position: "absolute",
           zIndex: ({ zIndex }) => zIndex.appBar,
-          "+ *": { paddingTop: `${neighbourOffset}px` },
+          "+ *": { paddingTop: "var(--neighbour-offset)" },
         },
       ]}
     >
@@ -258,9 +267,9 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
             width: "100vw",
             pr: `${lastScrollbarSize}px`,
             position: "fixed",
-            top: isNavbarHidden ? navbarHeight * -1 : 0,
+            top: isNavbarHidden ? `calc(0px - var(--navbar-height))` : 0,
             zIndex: theme.zIndex.appBar,
-            py: md ? 2 : 1,
+            py: { xs: 1, md: 2 },
             backgroundColor: theme.palette.common.white,
             transition: theme.transitions.create([
               ...(!isHomePage ||
@@ -346,83 +355,91 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
                 gap: { xs: 2.75, md: 4 },
               }}
             >
-              {md ? (
-                <>
-                  <SearchNavButton />
+              <Box
+                display={{ md: "flex", xs: "none" }}
+                gap={{ xs: 2.75, md: 4 }}
+                alignItems="center"
+              >
+                <SearchNavButton />
 
-                  {pages
-                    .filter(({ title }) => title === "Docs" || title === "Hub")
-                    .map(({ title, href }) => (
-                      <Link
-                        href={href}
-                        key={href}
-                        className={clsx(
-                          navbarClasses.link,
-                          navbarClasses.interactiveLink,
-                        )}
-                        sx={[
-                          {
-                            display: "flex",
-                            alignItems: "center",
-                          },
-                          hydrationFriendlyAsPath.startsWith(href) && {
-                            color: theme.palette.purple[600],
-                          },
-                        ]}
-                      >
-                        {NAVBAR_LINK_ICONS[title]}
-                        <Typography
-                          variant="bpHeading3"
-                          sx={{
-                            marginLeft: 1,
-                            fontWeight: 500,
-                            fontSize: "var(--step--1)",
-                            color: "currentColor",
-                            ...(title === "Hub" ? { fontStyle: "italic" } : {}),
-                          }}
-                        >
-                          {title}
-                        </Typography>
-                      </Link>
-                    ))}
-                  {user || pathname === "/login" ? null : (
+                {pages
+                  .filter(({ title }) => title === "Docs" || title === "Hub")
+                  .map(({ title, href }) => (
                     <Link
-                      href="#"
-                      onClick={handleLoginButtonClick}
+                      href={href}
+                      key={href}
                       className={clsx(
                         navbarClasses.link,
                         navbarClasses.interactiveLink,
                       )}
-                      sx={{ backgroundColor: "unset" }}
+                      sx={[
+                        {
+                          display: "flex",
+                          alignItems: "center",
+                        },
+                        hydrationFriendlyAsPath.startsWith(href) && {
+                          color: theme.palette.purple[600],
+                        },
+                      ]}
                     >
+                      {NAVBAR_LINK_ICONS[title]}
                       <Typography
                         variant="bpHeading3"
                         sx={{
+                          marginLeft: 1,
                           fontWeight: 500,
                           fontSize: "var(--step--1)",
                           color: "currentColor",
+                          ...(title === "Hub" ? { fontStyle: "italic" } : {}),
                         }}
                       >
-                        Log In
+                        {title}
                       </Typography>
                     </Link>
-                  )}
-                  {user !== "loading" && !user?.id ? (
-                    <LinkButton
-                      href="/signup"
-                      size="small"
-                      variant="primary"
-                      endIcon={<FontAwesomeIcon icon={faArrowRight} />}
+                  ))}
+                {user || pathname === "/login" ? null : (
+                  <Link
+                    href="#"
+                    onClick={handleLoginButtonClick}
+                    className={clsx(
+                      navbarClasses.link,
+                      navbarClasses.interactiveLink,
+                    )}
+                    sx={{ backgroundColor: "unset" }}
+                  >
+                    <Typography
+                      variant="bpHeading3"
                       sx={{
-                        color: "#F2F5FA",
-                        background: theme.palette.purple[700],
+                        fontWeight: 500,
+                        fontSize: "var(--step--1)",
+                        color: "currentColor",
                       }}
                     >
-                      Create your account
-                    </LinkButton>
-                  ) : null}
-                </>
-              ) : (
+                      Log In
+                    </Typography>
+                  </Link>
+                )}
+                {user !== "loading" && !user?.id ? (
+                  <LinkButton
+                    href="/signup"
+                    size="small"
+                    variant="primary"
+                    endIcon={<FontAwesomeIcon icon={faArrowRight} />}
+                    sx={{
+                      color: "#F2F5FA",
+                      background: theme.palette.purple[700],
+                    }}
+                  >
+                    Create your account
+                  </LinkButton>
+                ) : null}
+              </Box>
+
+              <Box
+                display={{ md: "none", xs: "flex" }}
+                gap={{ xs: 2.75, md: 4 }}
+                alignItems="center"
+              >
                 <IconButton
                   data-testid="mobile-nav-trigger"
                   onClick={() => setMobileNavVisible(!mobileNavVisible)}
@@ -434,20 +451,19 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
                     icon={faBars}
                   />
                 </IconButton>
-              )}
+              </Box>
+
               {user !== "loading" && user?.isSignedUp ? (
                 <AccountDropdown />
               ) : null}
             </Box>
           </Box>
-          <Collapse in={displayBreadcrumbs}>
-            <Box ref={breadcrumbsRef}>
-              <MobileBreadcrumbs
-                hydrationFriendlyAsPath={hydrationFriendlyAsPath}
-                crumbs={crumbs}
-              />
-            </Box>
-          </Collapse>
+          <Box ref={breadcrumbsRef}>
+            <MobileBreadcrumbs
+              hydrationFriendlyAsPath={hydrationFriendlyAsPath}
+              crumbs={crumbs}
+            />
+          </Box>
         </Container>
       </Box>
       <Slide
@@ -462,7 +478,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
       >
         <Box
           sx={{
-            zIndex: 1,
+            zIndex: theme.zIndex.appBar + 1,
             marginTop: `${MOBILE_NAVBAR_HEIGHT}px`,
             position: "fixed",
             background: theme.palette.common.white,
@@ -474,6 +490,9 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            borderTopStyle: "solid",
+            borderTopWidth: 1,
+            borderTopColor: theme.palette.gray[30],
           }}
         >
           <Box
