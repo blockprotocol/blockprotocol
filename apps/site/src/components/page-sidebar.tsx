@@ -401,7 +401,6 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   }, []);
 
   useEffect(() => {
-    // @todo this can be outside an effect
     setOpenedPages((prev) => [
       ...prev,
       ...getInitialOpenedPages({ pages, asPath }).filter(
