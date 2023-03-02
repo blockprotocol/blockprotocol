@@ -154,6 +154,9 @@ const MyApp = ({
     if (user && user !== "loading" && !user.isSignedUp && route !== "/signup") {
       void router.push("/signup");
     }
+    if (user && user !== "loading" && route === "/") {
+      void router.push("/dashboard");
+    }
   }, [user, router]);
 
   const userContextValue = useMemo<UserContextValue>(
