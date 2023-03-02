@@ -5,7 +5,10 @@ import {
   Collapse,
   Divider,
   IconButton,
+  Skeleton,
+  Stack,
   styled,
+  useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import {
@@ -14,7 +17,6 @@ import {
   FunctionComponent,
   SetStateAction,
   useCallback,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -25,10 +27,11 @@ import { theme as themeImport } from "../theme";
 import { parseHTML } from "../util/html-utils";
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
-import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar";
 import { generatePathWithoutParams } from "./shared";
 
 export const SIDEBAR_WIDTH = 300;
+
+const SIDEBAR_LINK_HEIGHT = 35;
 
 const SidebarLink = styled(Link)(({ theme }) => ({
   display: "block",
@@ -42,6 +45,7 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   fontSize: 15,
   paddingTop: 8,
   paddingBottom: 8,
+  height: SIDEBAR_LINK_HEIGHT,
   wordBreak: "break-word",
 }));
 
@@ -363,6 +367,35 @@ const getInitialOpenedPages = (params: {
   return [];
 };
 
+const useSsr = () => {
+  const [ssr, setSsr] = useState(true);
+
+  useLayoutEffect(() => {
+    setSsr(false);
+  }, []);
+  return ssr;
+};
+
+const useOpenedPages = (pages: SiteMapPage[], ssr: boolean) => {
+  const { asPath } = useRouter();
+  const [openedPages, setOpenedPages] = useState<string[]>([]);
+  const [prevPages, setPrevPages] = useState(pages);
+  const [prevAsPath, setPrevAsPath] = useState(asPath);
+  const [hasSetPages, setHasSetPages] = useState(false);
+  if (!ssr && (!hasSetPages || pages !== prevPages || asPath !== prevAsPath)) {
+    setPrevPages(pages);
+    setPrevAsPath(asPath);
+    setHasSetPages(true);
+    setOpenedPages((prev) => [
+      ...prev,
+      ...getInitialOpenedPages({ pages, asPath }).filter(
+        (href) => !prev.includes(href),
+      ),
+    ]);
+  }
+  return [openedPages, setOpenedPages] as const;
+};
+
 export const Sidebar: FunctionComponent<SidebarProps> = ({
   appendices,
   pages,
@@ -370,9 +403,8 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   isSsrSafe = true,
   ...boxProps
 }) => {
-  const { asPath } = useRouter();
-
-  const [openedPages, setOpenedPages] = useState<string[]>([]);
+  const ssr = useSsr();
+  const [openedPages, setOpenedPages] = useOpenedPages(pages, ssr);
 
   const setSelectedAnchorElementTimeout = useRef<ReturnType<
     typeof setTimeout
@@ -400,27 +432,14 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
     }, 100);
   }, []);
 
-  useEffect(() => {
-    setOpenedPages((prev) => [
-      ...prev,
-      ...getInitialOpenedPages({ pages, asPath }).filter(
-        (href) => !prev.includes(href),
-      ),
-    ]);
-  }, [asPath, pages]);
-
-  const [ssr, setSsr] = useState(true);
-
-  useLayoutEffect(() => {
-    setSsr(false);
-  }, []);
+  const renderSkeleton = ssr && !isSsrSafe;
 
   return (
     <Box
       {...boxProps}
       component="aside"
       position="sticky"
-      overflow="auto"
+      overflow={renderSkeleton ? "hidden" : "auto"}
       width={SIDEBAR_WIDTH}
       sx={[
         (theme) => ({
@@ -439,7 +458,18 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
         // they're active. This doesn't work on the server, so we need to avoid
         // rendering it on the server. We don't want a layout shift so we
         // still render the parent element on the server.
-        ssr && !isSsrSafe ? null : (
+        renderSkeleton ? (
+          <Stack spacing={1} pt="4px">
+            {new Array(50).fill(0).map((_, idx) => (
+              <Skeleton
+                // eslint-disable-next-line react/no-array-index-key
+                key={idx}
+                variant="rectangular"
+                height={SIDEBAR_LINK_HEIGHT - 8}
+              />
+            ))}
+          </Stack>
+        ) : (
           <Box
             sx={(theme) => ({
               display: "flex",
