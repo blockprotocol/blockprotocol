@@ -16,11 +16,12 @@ runs:
         node-version: 16 ## aligned with Node version on Vercel
         cache: yarn
 
-    - name: Install Cargo-Make
+    - name: Install Rust tools
       shell: bash
       run: |
         cargo install cargo-quickinstall
         cargo quickinstall cargo-make --version 0.35.15
+        curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
     - name: Cache Rust dependencies
       uses: Swatinem/rust-cache@v2
