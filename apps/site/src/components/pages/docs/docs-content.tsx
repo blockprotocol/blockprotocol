@@ -77,11 +77,12 @@ export const DocsContent: FunctionComponent<DocsPageProps> = ({
   return (
     <Box display="flex" alignItems="flex-start">
       <Sidebar
-        flexGrow={0}
-        marginRight="62px"
+        isSsrSafe={false}
         pages={pages}
         appendices={appendices}
         sx={(sxTheme) => ({
+          flexGrow: 0,
+          marginRight: "62px",
           p: 1.5,
           [sxTheme.breakpoints.down("md")]: { display: "none" },
         })}

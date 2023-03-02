@@ -6,8 +6,6 @@ import {
   Divider,
   IconButton,
   styled,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import {
@@ -300,6 +298,7 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
 type SidebarProps = {
   pages: SiteMapPage[];
   appendices?: SiteMapPage[];
+  isSsrSafe?: boolean;
 } & BoxProps;
 
 const findSectionPath = (
@@ -368,6 +367,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   appendices,
   pages,
   sx = [],
+  isSsrSafe = true,
   ...boxProps
 }) => {
   const { asPath } = useRouter();
@@ -449,59 +449,25 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      {ssr ? null : (
-        <Box
-          sx={(theme) => ({
-            display: "flex",
-            flexDirection: "column",
-            transition: theme.transitions.create([
-              "padding-top",
-              "padding-bottom",
-            ]),
-            wordBreak: "break-word",
-          })}
-        >
-          {pages.length > 1 ? (
-            pages.map((page) => (
-              <SidebarPage
-                key={page.href}
-                page={page}
-                setSelectedAnchorElement={setSelectedAnchorElement}
-                openedPages={openedPages}
-                setOpenedPages={setOpenedPages}
-              />
-            ))
-          ) : pages.length === 1 ? (
-            <>
-              {/* When the sidebar is only displaying one page, we can display its sub-sections and sub-pages directly */}
-              {pages[0]!.sections?.map((section, i) => (
-                <SidebarPageSection
-                  key={section.anchor}
-                  isSelectedByDefault={i === 0}
-                  depth={0}
-                  pageHref={pages[0]!.href}
-                  section={section}
-                  setSelectedAnchorElement={setSelectedAnchorElement}
-                  openedPages={openedPages}
-                  setOpenedPages={setOpenedPages}
-                />
-              ))}
-              {pages[0]!.subPages?.map((subpage) => (
-                <SidebarPage
-                  key={subpage.href}
-                  depth={0}
-                  page={subpage}
-                  setSelectedAnchorElement={setSelectedAnchorElement}
-                  openedPages={openedPages}
-                  setOpenedPages={setOpenedPages}
-                />
-              ))}
-            </>
-          ) : null}
-          {appendices && appendices.length > 0 ? (
-            <>
-              <Divider sx={{ marginBottom: 2 }} />
-              {appendices.map((page) => (
+      {
+        // Docs need the full path (including hash) to work out if
+        // they're active. This doesn't work on the server, so we need to avoid
+        // rendering it on the server. We don't want a layout shift so we
+        // still render the parent element on the server.
+        ssr && !isSsrSafe ? null : (
+          <Box
+            sx={(theme) => ({
+              display: "flex",
+              flexDirection: "column",
+              transition: theme.transitions.create([
+                "padding-top",
+                "padding-bottom",
+              ]),
+              wordBreak: "break-word",
+            })}
+          >
+            {pages.length > 1 ? (
+              pages.map((page) => (
                 <SidebarPage
                   key={page.href}
                   page={page}
@@ -509,11 +475,51 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
                   openedPages={openedPages}
                   setOpenedPages={setOpenedPages}
                 />
-              ))}
-            </>
-          ) : null}
-        </Box>
-      )}
+              ))
+            ) : pages.length === 1 ? (
+              <>
+                {/* When the sidebar is only displaying one page, we can display its sub-sections and sub-pages directly */}
+                {pages[0]!.sections?.map((section, i) => (
+                  <SidebarPageSection
+                    key={section.anchor}
+                    isSelectedByDefault={i === 0}
+                    depth={0}
+                    pageHref={pages[0]!.href}
+                    section={section}
+                    setSelectedAnchorElement={setSelectedAnchorElement}
+                    openedPages={openedPages}
+                    setOpenedPages={setOpenedPages}
+                  />
+                ))}
+                {pages[0]!.subPages?.map((subpage) => (
+                  <SidebarPage
+                    key={subpage.href}
+                    depth={0}
+                    page={subpage}
+                    setSelectedAnchorElement={setSelectedAnchorElement}
+                    openedPages={openedPages}
+                    setOpenedPages={setOpenedPages}
+                  />
+                ))}
+              </>
+            ) : null}
+            {appendices && appendices.length > 0 ? (
+              <>
+                <Divider sx={{ marginBottom: 2 }} />
+                {appendices.map((page) => (
+                  <SidebarPage
+                    key={page.href}
+                    page={page}
+                    setSelectedAnchorElement={setSelectedAnchorElement}
+                    openedPages={openedPages}
+                    setOpenedPages={setOpenedPages}
+                  />
+                ))}
+              </>
+            ) : null}
+          </Box>
+        )
+      }
     </Box>
   );
 };

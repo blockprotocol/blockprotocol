@@ -2,7 +2,6 @@ import { BlockMetadata } from "@blockprotocol/core";
 import { faArrowRight, faBars } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
-  Collapse,
   Container,
   IconButton,
   Slide,
@@ -16,9 +15,11 @@ import { useRouter } from "next/router";
 import {
   FunctionComponent,
   MouseEventHandler,
+  ReactNode,
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -26,10 +27,11 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import SiteMapContext from "../context/site-map-context";
 import { useUser } from "../context/user-context";
+import { SiteMapPage } from "../lib/sitemap";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
 import { getScrollbarSize } from "../util/mui-utils";
 import { Button } from "./button";
-import { useCrumbs } from "./hooks/use-crumbs";
+import { Crumb, useCrumbs } from "./hooks/use-crumbs";
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
 import { LinkButton } from "./link-button";
@@ -50,7 +52,6 @@ export const MOBILE_NAVBAR_HEIGHT = 53;
 const IDLE_NAVBAR_TIMEOUT_MS = 3_000;
 
 type NavbarProps = {
-  blockMetadata?: BlockMetadata;
   openLoginModal: () => void;
 };
 
@@ -59,24 +60,47 @@ const navbarClasses = {
   interactiveLink: "Navbar-InteractiveLink",
 };
 
-const useLastScrollbarSize = () => {
-  const [lastScrollbarSize, setLastScrollbarSize] = useState(0);
-  const observerRef = useRef<ResizeObserver>();
+const useResizeObserver = (handler: ResizeObserverCallback) => {
+  const observerRef = useRef<ResizeObserver | null>(null);
+
+  const handlerRef = useRef(handler);
+
+  useLayoutEffect(() => {
+    handlerRef.current = handler;
+  });
+
+  if (typeof window !== "undefined" && !observerRef.current) {
+    observerRef.current = new ResizeObserver((...args) => {
+      handlerRef.current(...args);
+    });
+  }
 
   useEffect(() => {
-    observerRef.current = new ResizeObserver(() => {
-      const scrollbarSize = getScrollbarSize(document);
-      if (scrollbarSize > 0) {
-        setLastScrollbarSize(scrollbarSize);
-      }
-    });
-
-    observerRef.current.observe(document.body);
-
     return () => {
       observerRef.current?.disconnect();
     };
   }, []);
+
+  return observerRef.current;
+};
+
+const useLastScrollbarSize = () => {
+  const [lastScrollbarSize, setLastScrollbarSize] = useState(0);
+
+  const observer = useResizeObserver(() => {
+    const scrollbarSize = getScrollbarSize(document);
+    if (scrollbarSize > 0) {
+      setLastScrollbarSize(scrollbarSize);
+    }
+  });
+
+  useEffect(() => {
+    observer?.observe(document.body);
+
+    return () => {
+      observer?.unobserve(document.body);
+    };
+  }, [observer]);
 
   return lastScrollbarSize;
 };
@@ -178,15 +202,39 @@ const useScrollingNavbar = (
   return { scrolledPast, isNavbarHidden };
 };
 
-// @todo remove asPath from Navbar
-export const Navbar: FunctionComponent<NavbarProps> = ({
-  blockMetadata,
-  openLoginModal,
-}) => {
+const useBreadcrumbsHeight = () => {
+  const [breadcrumbsHeight, setBreadcrumbsHeight] = useState(0);
+  const observer = useResizeObserver((entries) => {
+    const entry = entries[0]?.borderBoxSize?.[0];
+
+    if (entry) {
+      setBreadcrumbsHeight(entry.blockSize);
+    }
+  });
+
+  const breadcrumbsRef = useCallback(
+    (node: HTMLElement | null) => {
+      observer?.disconnect();
+      if (node) {
+        observer?.observe(node);
+      }
+    },
+    [observer],
+  );
+
+  return [breadcrumbsRef, breadcrumbsHeight] as const;
+};
+
+export const Navbar: FunctionComponent<
+  NavbarProps & {
+    crumbs: Crumb[];
+    pages: SiteMapPage[];
+    hydrationFriendlyAsPath: string;
+  }
+> = ({ openLoginModal, crumbs, hydrationFriendlyAsPath, pages }) => {
   const theme = useTheme();
-  const { pathname, route } = useRouter();
-  const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
-  const { pages } = useContext(SiteMapContext);
+  const { pathname } = useRouter();
+
   const { user } = useUser();
   const lastScrollbarSize = useLastScrollbarSize();
 
@@ -203,20 +251,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
     isHomePage ? HOME_PAGE_HEADER_HEIGHT : null,
     mobileNavVisible,
   );
-
-  const crumbs = useCrumbs(
-    pages,
-    hydrationFriendlyAsPath,
-    route,
-    blockMetadata,
-  );
-
-  const breadcrumbsRef = useRef<HTMLDivElement | null>();
-
-  const displayBreadcrumbs = belowMd && !mobileNavVisible && crumbs.length > 0;
-  // @todo shouldn't be reading the size of a DOM node in render
-  const actualBreadcrumbsHeight = breadcrumbsRef.current?.offsetHeight ?? 0;
-  const breadcrumbsHeight = displayBreadcrumbs ? actualBreadcrumbsHeight : 0;
+  const [breadcrumbsRef, breadcrumbsHeight] = useBreadcrumbsHeight();
 
   useEffect(() => {
     document.body.style.overflow = mobileNavVisible ? "hidden" : "auto";
@@ -236,14 +271,13 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
         {
           "&,  + *": {
             "--navbar-height": `${MOBILE_NAVBAR_HEIGHT}px`,
-            "--neighbour-offset": `calc(var(--navbar-height) + ${
-              // @todo use CSS
-              belowMd && crumbs.length ? actualBreadcrumbsHeight : 0
-            }px)`,
-          },
+            "--crumbs-height": `${crumbs.length ? breadcrumbsHeight : 0}px`,
+            "--neighbour-offset": `calc(var(--navbar-height) + var(--crumbs-height))`,
 
-          [theme.breakpoints.up("md")]: {
-            "--navbar-height": `${DESKTOP_NAVBAR_HEIGHT}px`,
+            [theme.breakpoints.up("md")]: {
+              "--navbar-height": `${DESKTOP_NAVBAR_HEIGHT}px`,
+              "--crumbs-height": "0px",
+            },
           },
 
           height: "var(--navbar-height)",
@@ -458,7 +492,10 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
               ) : null}
             </Box>
           </Box>
-          <Box ref={breadcrumbsRef}>
+          <Box
+            ref={breadcrumbsRef}
+            display={{ xs: crumbs.length ? "block" : "none", md: "none" }}
+          >
             <MobileBreadcrumbs
               hydrationFriendlyAsPath={hydrationFriendlyAsPath}
               crumbs={crumbs}
@@ -563,6 +600,40 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
           )}
         </Box>
       </Slide>
+    </Box>
+  );
+};
+
+export const NavbarContainer = ({
+  children,
+  blockMetadata,
+  ...props
+}: NavbarProps & {
+  blockMetadata?: BlockMetadata;
+  children: ReactNode;
+}) => {
+  const { route } = useRouter();
+  const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
+  const { pages } = useContext(SiteMapContext);
+
+  const crumbs = useCrumbs(
+    pages,
+    hydrationFriendlyAsPath,
+    route,
+    blockMetadata,
+  );
+
+  return (
+    <Box display="flex" flexDirection="column" flexGrow={1}>
+      <Navbar
+        {...props}
+        crumbs={crumbs}
+        hydrationFriendlyAsPath={hydrationFriendlyAsPath}
+        pages={pages}
+      />
+      <Box flexGrow={1} display="flex" flexDirection="column">
+        {children}
+      </Box>
     </Box>
   );
 };
