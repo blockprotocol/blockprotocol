@@ -643,6 +643,7 @@ export const NavbarContainer = ({
         crumbs={crumbs}
         hydrationFriendlyAsPath={hydrationFriendlyAsPath}
         pages={pages}
+        breadcrumbsRef={breadcrumbsRef}
       />
       <Box
         flexGrow={1}
