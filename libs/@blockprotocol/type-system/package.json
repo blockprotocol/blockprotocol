@@ -45,7 +45,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:wasm && yarn optimize && yarn build:bundle",
+    "build": "yarn clean && yarn build:wasm && yarn build:bundle",
     "build:bundle": "rollup -c --bundleConfigAsCjs",
     "build:wasm": "cd crate && cargo make build",
     "clean": "rimraf ./dist/",
