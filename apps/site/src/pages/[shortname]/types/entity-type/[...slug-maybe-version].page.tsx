@@ -1,4 +1,5 @@
-import { EntityTypeWithMetadata } from "@blockprotocol/graph";
+import { EntityType, EntityTypeWithMetadata } from "@blockprotocol/graph";
+import { validateEntityType } from "@blockprotocol/type-system";
 import { extractBaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
   EntityTypeEditorFormData,
@@ -12,7 +13,7 @@ import { NextPage } from "next";
 import NextError from "next/error";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { tw } from "twind";
 
 import { LinkIcon } from "../../../../components/icons";
@@ -36,6 +37,27 @@ type EntityTypePageQueryParams = {
 
 const EntityTypePage: NextPage = () => {
   const router = useRouter();
+  const isDraft = !!router.query.draft;
+
+  const draftEntityType = useMemo(() => {
+    if (router.query.draft) {
+      const entityType = JSON.parse(
+        Buffer.from(
+          decodeURIComponent(router.query.draft.toString()),
+          "base64",
+        ).toString("ascii"),
+      );
+
+      // @todo add validation
+      return entityType as EntityType;
+    } else {
+      return null;
+    }
+  }, [router.query.draft]);
+
+  console.log(draftEntityType);
+
+  return null;
 
   const { user } = useUser();
   const { shortname } = router.query as EntityTypePageQueryParams;
