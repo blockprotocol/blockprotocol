@@ -13,7 +13,6 @@ env:
 jobs:
   linting:
     name: Linting
-    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
 
     steps:
@@ -166,7 +165,6 @@ jobs:
 
   packages:
     name: NPM Packages
-    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
     timeout-minutes: 60
 
