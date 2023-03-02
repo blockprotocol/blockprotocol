@@ -430,21 +430,13 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
       overflow="auto"
       width={SIDEBAR_WIDTH}
       sx={[
-        {
+        (theme) => ({
           borderRightStyle: "solid",
           borderRightWidth: 1,
 
-          "--navbar-height": `${MOBILE_NAVBAR_HEIGHT}px`,
-
           top: "var(--navbar-height)",
           height: `calc(100vh - var(--navbar-height))`,
-        },
-        (theme) => ({
           borderRightColor: theme.palette.gray[30],
-
-          [theme.breakpoints.up("md")]: {
-            "--navbar-height": `${DESKTOP_NAVBAR_HEIGHT}px`,
-          },
         }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

@@ -16,6 +16,7 @@ import {
   FunctionComponent,
   MouseEventHandler,
   ReactNode,
+  RefCallback,
   useCallback,
   useContext,
   useEffect,
@@ -225,13 +226,20 @@ const useBreadcrumbsHeight = () => {
   return [breadcrumbsRef, breadcrumbsHeight] as const;
 };
 
-export const Navbar: FunctionComponent<
+const Navbar: FunctionComponent<
   NavbarProps & {
     crumbs: Crumb[];
     pages: SiteMapPage[];
     hydrationFriendlyAsPath: string;
+    breadcrumbsRef: RefCallback<HTMLDivElement>;
   }
-> = ({ openLoginModal, crumbs, hydrationFriendlyAsPath, pages }) => {
+> = ({
+  openLoginModal,
+  crumbs,
+  hydrationFriendlyAsPath,
+  pages,
+  breadcrumbsRef,
+}) => {
   const theme = useTheme();
   const { pathname } = useRouter();
 
@@ -241,7 +249,6 @@ export const Navbar: FunctionComponent<
   const isHomePage = generatePathWithoutParams(hydrationFriendlyAsPath) === "/";
   const isDocs = hydrationFriendlyAsPath.startsWith("/docs");
 
-  // const md = useMediaQuery(theme.breakpoints.up("md"));
   const belowMd = useMediaQuery(theme.breakpoints.down("md"));
 
   const [mobileNavVisible, setMobileNavVisible] = useMobileNavVisible(belowMd);
@@ -251,7 +258,6 @@ export const Navbar: FunctionComponent<
     isHomePage ? HOME_PAGE_HEADER_HEIGHT : null,
     mobileNavVisible,
   );
-  const [breadcrumbsRef, breadcrumbsHeight] = useBreadcrumbsHeight();
 
   useEffect(() => {
     document.body.style.overflow = mobileNavVisible ? "hidden" : "auto";
@@ -269,22 +275,10 @@ export const Navbar: FunctionComponent<
     <Box
       sx={[
         {
-          "&,  + *": {
-            "--navbar-height": `${MOBILE_NAVBAR_HEIGHT}px`,
-            "--crumbs-height": `${crumbs.length ? breadcrumbsHeight : 0}px`,
-            "--neighbour-offset": `calc(var(--navbar-height) + var(--crumbs-height))`,
-
-            [theme.breakpoints.up("md")]: {
-              "--navbar-height": `${DESKTOP_NAVBAR_HEIGHT}px`,
-              "--crumbs-height": "0px",
-            },
-          },
-
           height: "var(--navbar-height)",
           width: "100vw",
           position: "absolute",
           zIndex: ({ zIndex }) => zIndex.appBar,
-          "+ *": { paddingTop: "var(--neighbour-offset)" },
         },
       ]}
     >
@@ -616,6 +610,8 @@ export const NavbarContainer = ({
   const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
   const { pages } = useContext(SiteMapContext);
 
+  const [breadcrumbsRef, breadcrumbsHeight] = useBreadcrumbsHeight();
+
   const crumbs = useCrumbs(
     pages,
     hydrationFriendlyAsPath,
@@ -624,14 +620,36 @@ export const NavbarContainer = ({
   );
 
   return (
-    <Box display="flex" flexDirection="column" flexGrow={1}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      flexGrow={1}
+      sx={[
+        {
+          "--navbar-height": `${MOBILE_NAVBAR_HEIGHT}px`,
+          "--crumbs-height": `${crumbs.length ? breadcrumbsHeight : 0}px`,
+          "--neighbour-offset": `calc(var(--navbar-height) + var(--crumbs-height))`,
+        },
+        (theme) => ({
+          [theme.breakpoints.up("md")]: {
+            "--navbar-height": `${DESKTOP_NAVBAR_HEIGHT}px`,
+            "--crumbs-height": "0px",
+          },
+        }),
+      ]}
+    >
       <Navbar
         {...props}
         crumbs={crumbs}
         hydrationFriendlyAsPath={hydrationFriendlyAsPath}
         pages={pages}
       />
-      <Box flexGrow={1} display="flex" flexDirection="column">
+      <Box
+        flexGrow={1}
+        display="flex"
+        flexDirection="column"
+        sx={{ paddingTop: "var(--neighbour-offset)" }}
+      >
         {children}
       </Box>
     </Box>
