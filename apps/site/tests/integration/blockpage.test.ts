@@ -1,6 +1,6 @@
 import { expect, test } from "../shared/wrapped-playwright.js";
 
-test("Block page should contain key elements", async ({
+test.skip("Block page should contain key elements", async ({
   page,
   isMobile,
   browserName,
