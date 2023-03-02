@@ -2,6 +2,7 @@ import path from "node:path";
 
 import chalk from "chalk";
 import fs from "fs-extra";
+import isCi from "is-ci";
 import slugify from "slugify";
 import tar from "tar";
 import tmp from "tmp-promise";
@@ -151,7 +152,7 @@ const run = async (providedOptions) => {
     process.exit();
   }
 
-  if (!yes) {
+  if (!yes || !isCi) {
     const shouldProceed = await doesUserAgree("Continue with publishing?");
 
     if (!shouldProceed) {
