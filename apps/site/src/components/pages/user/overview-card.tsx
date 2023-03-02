@@ -25,14 +25,14 @@ const TypeContent: FunctionComponent<{
   if (type === "link-entity-type") {
     return (
       <>
-        Entity Type
         <LinkIcon
           sx={{
-            marginLeft: "0.25rem",
+            marginRight: "0.25rem",
             width: "1rem",
             height: "1rem",
           }}
         />
+        Entity Type
       </>
     );
   } else if (type === "block") {
