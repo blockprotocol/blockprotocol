@@ -8,7 +8,6 @@ import {
   Skeleton,
   Stack,
   styled,
-  useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import {
