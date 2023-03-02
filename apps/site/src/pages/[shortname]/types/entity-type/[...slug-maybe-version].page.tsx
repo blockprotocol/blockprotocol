@@ -214,7 +214,6 @@ const EntityTypePage: NextPage = () => {
               <Stack
                 flexDirection={{ md: "row" }}
                 spacing={{ xs: 1 }}
-                alignItems="center"
                 justifyContent="space-between"
               >
                 <Stack flexDirection="row" alignItems="center">
@@ -269,7 +268,7 @@ const EntityTypePage: NextPage = () => {
                   {entityType?.schema.$id && (
                     <Tooltip
                       arrow
-                      placement="top"
+                      placement="bottom"
                       title={hasCopied ? "Copied!" : "Click to copy."}
                       enterDelay={250}
                       onOpen={handleTooltipOpen}
