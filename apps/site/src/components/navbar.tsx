@@ -106,7 +106,9 @@ const useLastScrollbarSize = () => {
   return lastScrollbarSize;
 };
 
-const useMobileNavVisible = (canDisplayMobileNav: boolean) => {
+const useMobileNavVisible = () => {
+  const theme = useTheme();
+  const canDisplayMobileNav = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileNavVisible, setMobileNavVisible] = useState(false);
 
   if (!canDisplayMobileNav && mobileNavVisible) {
@@ -248,10 +250,7 @@ const Navbar: FunctionComponent<
 
   const isHomePage = generatePathWithoutParams(hydrationFriendlyAsPath) === "/";
   const isDocs = hydrationFriendlyAsPath.startsWith("/docs");
-
-  const belowMd = useMediaQuery(theme.breakpoints.down("md"));
-
-  const [mobileNavVisible, setMobileNavVisible] = useMobileNavVisible(belowMd);
+  const [mobileNavVisible, setMobileNavVisible] = useMobileNavVisible();
 
   const { scrolledPast, isNavbarHidden } = useScrollingNavbar(
     isDocs,
