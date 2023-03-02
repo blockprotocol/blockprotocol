@@ -3,8 +3,8 @@ import { ModuleHandler } from "@blockprotocol/core";
 // @todo restore this when an issue with module resolution has been resolved
 // import serviceModuleJson from "./service-service.json" assert { type: "json" };
 import {
-  EmbedderServiceMessageCallbacks,
-  EmbedderServiceMessages,
+  ServiceEmbedderMessageCallbacks,
+  ServiceEmbedderMessages,
 } from "./types.js";
 
 /**
@@ -15,13 +15,13 @@ import {
  */
 export class ServiceEmbedderHandler
   extends ModuleHandler
-  implements EmbedderServiceMessages
+  implements ServiceEmbedderMessages
 {
   constructor({
     callbacks,
     element,
   }: {
-    callbacks?: Partial<EmbedderServiceMessageCallbacks>;
+    callbacks?: Partial<ServiceEmbedderMessageCallbacks>;
     element?: HTMLElement | null;
   }) {
     super({
@@ -41,10 +41,10 @@ export class ServiceEmbedderHandler
    * @param handlerFunction the function to call when the message is received,
    *   with the message data / errors
    */
-  on<K extends keyof EmbedderServiceMessageCallbacks>(
+  on<K extends keyof ServiceEmbedderMessageCallbacks>(
     this: ServiceEmbedderHandler,
     messageName: K,
-    handlerFunction: NonNullable<EmbedderServiceMessageCallbacks[K]>,
+    handlerFunction: NonNullable<ServiceEmbedderMessageCallbacks[K]>,
   ) {
     // @todo restore this when module resolution issue resolved
     // @see https://app.asana.com/0/1202542409311090/1202614421149286/f

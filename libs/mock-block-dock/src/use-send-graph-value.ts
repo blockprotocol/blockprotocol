@@ -1,28 +1,28 @@
 import {
-  BlockGraphMessageCallbacks as BlockGraphMessageCallbacksNonTemporal,
+  GraphBlockMessageCallbacks as GraphBlockMessageCallbacksNonTemporal,
   GraphEmbedderHandler as GraphEmbedderHandlerNonTemporal,
 } from "@blockprotocol/graph";
 import {
-  BlockGraphMessageCallbacks as BlockGraphMessageCallbacksTemporal,
+  GraphBlockMessageCallbacks as GraphBlockMessageCallbacksTemporal,
   GraphEmbedderHandler as GraphEmbedderHandlerTemporal,
 } from "@blockprotocol/graph/temporal";
 import { useEffect, useRef } from "react";
 
 type GraphValue<Temporal extends boolean> = Temporal extends true
   ? {
-      [Key in keyof BlockGraphMessageCallbacksTemporal]: {
+      [Key in keyof GraphBlockMessageCallbacksTemporal]: {
         valueName: Key;
-        value: Parameters<BlockGraphMessageCallbacksTemporal[Key]>[0]["data"];
+        value: Parameters<GraphBlockMessageCallbacksTemporal[Key]>[0]["data"];
       };
-    }[keyof BlockGraphMessageCallbacksTemporal]
+    }[keyof GraphBlockMessageCallbacksTemporal]
   : {
-      [Key in keyof BlockGraphMessageCallbacksNonTemporal]: {
+      [Key in keyof GraphBlockMessageCallbacksNonTemporal]: {
         valueName: Key;
         value: Parameters<
-          BlockGraphMessageCallbacksNonTemporal[Key]
+          GraphBlockMessageCallbacksNonTemporal[Key]
         >[0]["data"];
       };
-    }[keyof BlockGraphMessageCallbacksNonTemporal];
+    }[keyof GraphBlockMessageCallbacksNonTemporal];
 
 type UseSendGraphValueArgs<Temporal extends boolean> = {
   graphModule:

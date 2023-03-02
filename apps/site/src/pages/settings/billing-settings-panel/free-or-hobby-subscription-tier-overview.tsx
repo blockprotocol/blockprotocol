@@ -1,6 +1,6 @@
 import { faCaretRight, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { SubscriptionTierPrices } from "@local/internal-api-client";
-import { Box, Grid, styled, Typography } from "@mui/material";
+import { Box, Grid, Skeleton, styled, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import {
@@ -238,7 +238,7 @@ const CustomLinkButton = styled(LinkButton)(({ theme }) => ({
 
 export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
   currentSubscriptionTier: "free" | "hobby";
-  subscriptionTierPrices: SubscriptionTierPrices;
+  subscriptionTierPrices: SubscriptionTierPrices | undefined;
 }> = ({ currentSubscriptionTier, subscriptionTierPrices }) => {
   const isCurrentSubscriptionTierHobby = currentSubscriptionTier === "hobby";
 
@@ -289,16 +289,25 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           }}
         >
           <Box display="flex" alignItems="center">
-            <Typography sx={{ fontSize: 28 }}>
-              <strong>
-                {priceToHumanReadable({
-                  amountInCents: subscriptionTierPrices.hobby.unit_amount!,
-                  currency: subscriptionTierPrices.hobby.currency,
-                  decimalPlaces: 0,
-                })}
-              </strong>
-              /month
-            </Typography>
+            {subscriptionTierPrices ? (
+              <Typography sx={{ fontSize: 28 }}>
+                <strong>
+                  {priceToHumanReadable({
+                    amountInCents: subscriptionTierPrices.hobby.unit_amount!,
+                    currency: subscriptionTierPrices.hobby.currency,
+                    decimalPlaces: 0,
+                  })}
+                </strong>
+                /month
+              </Typography>
+            ) : (
+              <Skeleton
+                width={130}
+                height={47}
+                sx={{ backgroundColor: ({ palette }) => palette.purple[40] }}
+              />
+            )}
+
             <Typography sx={{ marginLeft: 3, fontSize: 14, fontWeight: 600 }}>
               HOBBY
             </Typography>
@@ -473,16 +482,24 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           })}
         >
           <Box display="flex" alignItems="center">
-            <Typography sx={{ fontSize: 28 }}>
-              <strong>
-                {priceToHumanReadable({
-                  amountInCents: subscriptionTierPrices.pro.unit_amount!,
-                  currency: subscriptionTierPrices.pro.currency,
-                  decimalPlaces: 0,
-                })}
-              </strong>
-              /month
-            </Typography>
+            {subscriptionTierPrices ? (
+              <Typography sx={{ fontSize: 28 }}>
+                <strong>
+                  {priceToHumanReadable({
+                    amountInCents: subscriptionTierPrices.pro.unit_amount!,
+                    currency: subscriptionTierPrices.pro.currency,
+                    decimalPlaces: 0,
+                  })}
+                </strong>
+                /month
+              </Typography>
+            ) : (
+              <Skeleton
+                width={130}
+                height={47}
+                sx={{ backgroundColor: ({ palette }) => palette.purple[50] }}
+              />
+            )}
             <Typography sx={{ marginLeft: 3, fontSize: 14, fontWeight: 600 }}>
               PRO
             </Typography>

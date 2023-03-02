@@ -12,6 +12,8 @@ use crate::{
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParsePropertyTypeError {
+    #[error("invalid `$schema` property, expected `\"https://blockprotocol.org/types/modules/graph/0.3/schema/property-type\"` but received: `{0}`")]
+    InvalidMetaSchema(String),
     #[error("invalid versioned URL: `{0}`")]
     InvalidVersionedUrl(ParseVersionedUrlError),
     #[error("invalid data type reference: `{0}`")]

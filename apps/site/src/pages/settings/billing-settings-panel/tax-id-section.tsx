@@ -123,7 +123,7 @@ export const TaxIdSection: FunctionComponent = () => {
   }, []);
 
   return (
-    <Box marginBottom={2}>
+    <Box marginBottom={6}>
       <Typography
         variant="bpHeading2"
         sx={{ fontSize: 28, fontWeight: 400, marginBottom: 3 }}
@@ -142,7 +142,7 @@ export const TaxIdSection: FunctionComponent = () => {
             setTimeout(() => taxIdInputRef.current?.focus(), 150);
           }}
           getOptionLabel={({ shortCode, country }) =>
-            `${shortCode.split("_").join(" ").toUpperCase()} - ${country}`
+            `${shortCode?.split("_").join(" ").toUpperCase()} - ${country}`
           }
           renderInput={(params) => (
             <TextField

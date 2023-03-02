@@ -10,6 +10,8 @@ use crate::{
     ParseEntityTypeError,
 };
 
+const META_SCHEMA_ID: &str = "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type";
+
 /// Will serialize as a constant value `"entityType"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -21,6 +23,12 @@ enum EntityTypeTag {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct EntityType {
+    #[cfg_attr(
+        target_arch = "wasm32",
+        tsify(type = "'https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type'")
+    )]
+    #[serde(rename = "$schema")]
+    schema: String,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'entityType'"))]
     kind: EntityTypeTag,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
@@ -50,6 +58,12 @@ impl TryFrom<EntityType> for super::EntityType {
     fn try_from(entity_type_repr: EntityType) -> Result<Self, Self::Error> {
         let id = VersionedUrl::from_str(&entity_type_repr.id)
             .map_err(ParseEntityTypeError::InvalidVersionedUrl)?;
+
+        if entity_type_repr.schema != META_SCHEMA_ID {
+            return Err(ParseEntityTypeError::InvalidMetaSchema(
+                entity_type_repr.schema,
+            ));
+        }
 
         // TODO - validate examples against the entity type
         let examples = entity_type_repr
@@ -109,6 +123,7 @@ impl From<super::EntityType> for EntityType {
             .collect();
 
         Self {
+            schema: META_SCHEMA_ID.to_owned(),
             kind: EntityTypeTag::EntityType,
             id: entity_type.id.to_string(),
             title: entity_type.title,

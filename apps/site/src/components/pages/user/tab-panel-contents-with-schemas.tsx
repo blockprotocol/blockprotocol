@@ -7,7 +7,7 @@ import { Button } from "../../button";
 import { CreateSchemaModal } from "../../modal/create-schema-modal";
 import { ListViewCard } from "./list-view-card";
 import { Placeholder } from "./placeholder";
-import { BrowseHubButton, CreateSchemaButton } from "./placeholder-buttons";
+import { BrowseHubButton, CreateEntityTypeButton } from "./placeholder-buttons";
 import { useUserStatus } from "./use-user-status";
 
 export interface TabPanelContentsWithSchemasProps {
@@ -38,7 +38,7 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
           header="You haven’t created any types yet"
           tip="Start building to see your creations show up here."
           actions={
-            <CreateSchemaButton onClick={() => setSchemaModalOpen(true)} />
+            <CreateEntityTypeButton onClick={() => setSchemaModalOpen(true)} />
           }
         />
         {createSchemaModal}
@@ -62,7 +62,7 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
           }}
         >
           <Button squared size="small" onClick={() => setSchemaModalOpen(true)}>
-            Create New Entity Type
+            Create an Entity Type
           </Button>
         </Box>
       )}
@@ -73,6 +73,7 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
           description={schema.description as string}
           extraContent={`Version ${metadata.recordId.version}`}
           url={schema.$id}
+          sx={{ whiteSpace: "pre" }}
         />
       ))}
       {createSchemaModal}

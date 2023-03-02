@@ -57,13 +57,11 @@ run `yarn schema` to automatically generate TypeScript types from it.
 You can also view the raw JSON of any type by a simple fetch or curl:
 
 ```ts
-fetch(
-  "https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/entity-type/thing/v/2",
-)
+fetch("https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2")
   .then((resp) => resp.json())
   .then(console.log);
 ```
 
 ```shell
-curl https://blockprotocol-r2l2zq4gf.stage.hash.ai/@blockprotocol/types/entity-type/thing/v/2
+curl https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2
 ```

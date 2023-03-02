@@ -13,7 +13,6 @@ import {
  */
 // import graphModuleJson from "./graph-module.json" assert { type: "json" };
 import {
-  BlockGraphMessageCallbacks,
   CreateEntityData,
   CreateResourceError,
   DeleteEntityData,
@@ -22,6 +21,7 @@ import {
   EntityRootType,
   EntityTypeRootType,
   GetEntityTypeData,
+  GraphBlockMessageCallbacks,
   GraphBlockMessages,
   QueryEntitiesResult,
   QueryEntityTypesData,
@@ -55,7 +55,7 @@ export class GraphBlockHandler
     callbacks,
     element,
   }: {
-    callbacks?: Partial<BlockGraphMessageCallbacks>;
+    callbacks?: Partial<GraphBlockMessageCallbacks>;
     element?: HTMLElement | null;
   }) {
     super({ element, callbacks, moduleName: "graph", sourceType: "block" });
@@ -70,7 +70,7 @@ export class GraphBlockHandler
    * Registers multiple callbacks at once.
    * Useful for bulk updates to callbacks after the module is first initialised.
    */
-  registerCallbacks(callbacks: Partial<BlockGraphMessageCallbacks>) {
+  registerCallbacks(callbacks: Partial<GraphBlockMessageCallbacks>) {
     super.registerCallbacks(callbacks);
   }
 
@@ -78,7 +78,7 @@ export class GraphBlockHandler
    * Removes multiple callbacks at once.
    * Useful when replacing previously registered callbacks
    */
-  removeCallbacks(callbacks: Partial<BlockGraphMessageCallbacks>) {
+  removeCallbacks(callbacks: Partial<GraphBlockMessageCallbacks>) {
     super.removeCallbacks(callbacks);
   }
 
@@ -88,10 +88,10 @@ export class GraphBlockHandler
    * @param messageName the message name to listen for
    * @param handlerFunction the function to call when the message is received, with the message data / errors
    */
-  on<K extends keyof BlockGraphMessageCallbacks>(
+  on<K extends keyof GraphBlockMessageCallbacks>(
     this: GraphBlockHandler,
     messageName: K,
-    handlerFunction: BlockGraphMessageCallbacks[K],
+    handlerFunction: GraphBlockMessageCallbacks[K],
   ) {
     // @todo restore this when module resolution issue resolved
     // @see https://app.asana.com/0/1202542409311090/1202614421149286/f

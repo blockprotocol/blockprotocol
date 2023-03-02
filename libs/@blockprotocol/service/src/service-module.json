@@ -35,7 +35,7 @@
         "required": ["prompt"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "openaiCreateImageResponse",
@@ -67,7 +67,7 @@
         "required": ["created", "data"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "openaiCompleteText",
@@ -174,7 +174,7 @@
         "required": ["model"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "openaiCompleteTextResponse",
@@ -264,7 +264,7 @@
         "required": ["choices", "created", "id", "model", "object"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxForwardGeocoding",
@@ -515,7 +515,7 @@
         "required": ["searchText"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxForwardGeocodingResponse",
@@ -979,7 +979,7 @@
         "required": ["attribution", "features", "query", "type"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxReverseGeocoding",
@@ -1270,7 +1270,7 @@
         "required": ["lngLat"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxReverseGeocodingResponse",
@@ -1734,7 +1734,7 @@
         "required": ["attribution", "features", "query", "type"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxRetrieveDirections",
@@ -2287,7 +2287,7 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxRetrieveRetrieveDirectionsResponse",
@@ -2309,7 +2309,7 @@
         "required": ["code", "routes"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxRetrieveIsochrones",
@@ -2368,7 +2368,7 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxRetrieveIsochronesResponse",
@@ -2387,7 +2387,7 @@
         "required": ["features"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxSuggestAddress",
@@ -2612,7 +2612,7 @@
         "required": ["optionsArg", "searchText"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxSuggestAddressResponse",
@@ -2785,7 +2785,7 @@
         "required": ["suggestions"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxRetrieveAddress",
@@ -2983,7 +2983,7 @@
         "required": ["optionsArg", "suggestion"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxRetrieveAddressResponse",
@@ -3405,7 +3405,7 @@
         "required": ["features", "type"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxCanRetrieveAddress",
@@ -3570,7 +3570,7 @@
         "required": ["suggestion"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxCanRetrieveAddressResponse",
@@ -3588,7 +3588,7 @@
         "required": ["canRetrieveAddress"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxRetrieveStaticMap",
@@ -3838,7 +3838,7 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "RESOURCE_EXHAUSTED", "UNAUTHORIZED"]
     },
     {
       "messageName": "mapboxRetrieveStaticMapResponse",
@@ -3850,7 +3850,7 @@
         "type": "string",
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "errorCodes": []
+      "errorCodes": ["FORBIDDEN", "TOO_MANY_REQUESTS"]
     }
   ]
 }

@@ -6,8 +6,8 @@
 import {
   extractBaseUri,
   GraphBlockHandler,
-} from "https://esm.sh/@blockprotocol/graph@0.1.0-canary-20230223103409";
-import { getRoots } from "https://esm.sh/@blockprotocol/graph@0.1.0-canary-20230223103409/stdlib";
+} from "https://esm.sh/@blockprotocol/graph@0.1.0";
+import { getRoots } from "https://esm.sh/@blockprotocol/graph@0.1.0/stdlib";
 
 const propertyTypeIds = {
   name: "http://example.com/types/property-type/name/v/1",
