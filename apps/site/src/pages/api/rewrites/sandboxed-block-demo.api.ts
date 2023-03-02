@@ -110,13 +110,21 @@ const handler: NextApiHandler = async (req, res) => {
         window.removeEventListener("message", handleMessage);
       }
       window.addEventListener("message", handleMessage);
+  
+      globalThis.handleServiceMessage = ({ providerName, methodName, payload }) => {
+        window.parent.postMessage({ 
+          type: "serviceModule", 
+          payload, 
+          providerName, 
+          methodName 
+        }, "*");
+      }
     </script>
     <script type="module">
       import React from "https://esm.sh/react@${reactVersion}?target=es2021"
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
-      // @todo-0.3 revert this hardcoded version to ${mockBlockDockVersion}
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230225164454/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
 
       const requireLookup = {
         "react-dom": ReactDOM,
@@ -154,6 +162,59 @@ const handler: NextApiHandler = async (req, res) => {
       const timeout = setTimeout(() => { 
         document.getElementById("loading-indicator").style.visibility = "visible";
       }, 400);
+
+      const serviceModuleCallbacks = {
+        openaiCreateImage: (payload) => globalThis.handleServiceMessage({
+          providerName: "OpenAI",
+          methodName: "createImage",
+          payload,
+        }),
+        openaiCompleteText: payload => globalThis.handleServiceMessage({
+          providerName: "OpenAI",
+          methodName: "completeText",
+          payload,
+        }),
+        mapboxForwardGeocoding: payload => globalThis.handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "forwardGeocoding",
+          payload,
+        }),
+        mapboxReverseGeocoding: payload => globalThis.handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "reverseGeocoding",
+          payload,
+        }),
+        mapboxRetrieveDirections: payload => globalThis.handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "retrieveDirections",
+          payload,
+        }),
+        mapboxRetrieveIsochrones: payload => globalThis.handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "retrieveIsochrones",
+          payload,
+        }),
+        mapboxSuggestAddress: payload => globalThis.handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "suggestAddress",
+          payload,
+        }),
+        mapboxRetrieveAddress: payload => globalThis.handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "retrieveAddress",
+          payload,
+        }),
+        mapboxCanRetrieveAddress: payload => globalThis.handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "canRetrieveAddress",
+          payload,
+        }),
+        mapboxRetrieveStaticMap: payload => globalThis.handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "retrieveStaticMap",
+          payload,
+        }),
+      };
         
       fetch("${
         blockMetadata.source
@@ -182,7 +243,13 @@ const handler: NextApiHandler = async (req, res) => {
           const render = (props) => {
             const { blockEntity, readonly } = props;
             
-            const mockBlockDockProps = { blockDefinition, initialData: mockBlockDockInitialData, hideDebugToggle: true, readonly  };
+            const mockBlockDockProps = { 
+              blockDefinition, 
+              initialData: mockBlockDockInitialData, 
+              hideDebugToggle: true, 
+              readonly, 
+              serviceModuleCallbacks  
+            };
             
             // Check if we've previously added the block entity from the props message
             const existingBlockEntity = mockBlockDockProps.initialData.initialEntities.find(entity => 

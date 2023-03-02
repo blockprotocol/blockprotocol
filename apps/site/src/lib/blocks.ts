@@ -94,6 +94,8 @@ export const getRepositoryUrl = (
   return undefined;
 };
 
+const trustedAuthors = ["blockprotocol", "hash", "tldraw"];
+
 export const expandBlockMetadata = ({
   timestamps,
   includesExampleGraph,
@@ -140,9 +142,11 @@ export const expandBlockMetadata = ({
   // eslint-disable-next-line no-param-reassign -- could make a new object, but would need to update for any new metadata fields
   delete metadata.devReloadEndpoint;
 
+  const author = namespace.replace(/^@/, "");
+
   return {
     ...metadata,
-    author: namespace.replace(/^@/, ""),
+    author,
     blockSitePath: `/${namespace}/blocks/${name}`,
     // fallback while not all blocks have blockType defined
     blockType: metadata.blockType ?? { entryPoint: "react" },
@@ -170,6 +174,7 @@ export const expandBlockMetadata = ({
       includesExampleGraph ? "example-graph.json" : null,
       blockDistributionFolderUrl,
     ),
+    verified: trustedAuthors.includes(author),
     version: metadata.version ?? "0.0.0",
   };
 };

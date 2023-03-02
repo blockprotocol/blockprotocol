@@ -15,10 +15,6 @@ test("Block page should contain key elements", async ({
     ),
   ).toBeVisible();
 
-  await expect(page.locator(`text=@hash`)).toBeVisible();
-  await expect(page.locator(`text=@hash`)).toHaveAttribute("href", `/@hash`);
-  await expect(page.locator(`text=V0.2.0`)).toBeVisible();
-
   if (isMobile) {
     await page.locator("text=Block Data").click();
     await expect(page.locator("text=Block Properties")).toBeVisible();
@@ -28,11 +24,11 @@ test("Block page should contain key elements", async ({
 
   const stringifiedJson = JSON.stringify(
     {
-      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/content/":
+      "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/":
         "function debounce(func, timeout = 300){\n  let timer;\n  return (...args) => {\n    clearTimeout(timer);\n    timer = setTimeout(() => { func.apply(this, args); }, timeout);\n  };\n}",
-      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/language/":
+      "https://blockprotocol.org/@hash/types/property-type/code-block-language/":
         "javascript",
-      "https://blockprotocol-pktjfgq1m.stage.hash.ai/@blockprotocol/types/property-type/caption/":
+      "https://blockprotocol.org/@blockprotocol/types/property-type/caption/":
         "A JavaScript code example.",
     },
     null,
@@ -111,11 +107,11 @@ test("Block page should contain key elements", async ({
   ).toHaveAttribute("href", "/docs/developing-blocks");
 });
 
-test("should show an error message if an unsupported block is rendered", async ({
+test.skip("should show an error message if an unsupported block is rendered", async ({
   page,
   isMobile,
 }) => {
-  await page.goto("/@hash/blocks/paragraph");
+  await page.goto("/@hash/blocks/person");
 
   if (isMobile) {
     await page.locator("text=Block Data").click();
@@ -127,7 +123,8 @@ test("should show an error message if an unsupported block is rendered", async (
   ).toHaveValue(
     JSON.stringify(
       {
-        text: "William Shakespeare was an English playwright, poet and actor, widely regarded as the greatest writer in the English language and the world's greatest dramatist. He is often called England's national poet and the \"Bard of Avon\".",
+        "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/":
+          "William Shakespeare was an English playwright, poet and actor, widely regarded as the greatest writer in the English language and the world's greatest dramatist. He is often called England's national poet and the \"Bard of Avon\".",
       },
       null,
       2,

@@ -1,14 +1,6 @@
-import {
-  faAsterisk,
-  faKey,
-  faUserPen,
-} from "@fortawesome/free-solid-svg-icons";
+import { faKey, faUserPen } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  isBillingFeatureFlagEnabled,
-  shouldAllowNpmBlockPublishing,
-} from "../../../lib/config";
-import { BlockIcon } from "../../icons/block-icon";
+import { isBillingFeatureFlagEnabled } from "../../../lib/config";
 import { SolidSparklesIcon } from "../../icons/solid-sparkles-icon";
 import { DashboardCardProps } from "./dashboard-card/dashboard-card";
 
@@ -49,21 +41,19 @@ export const getDashboardSectionCards = (props: {
         },
       },
       {
-        title: "Publish a block",
+        title: "My blocks",
         colorGradient:
           "linear-gradient(310.17deg, #FFB172 -167.67%, #9482FF 13.54%, #84E6FF 126.83%)",
         colorGradientOnHover:
           "linear-gradient(304.41deg, #FFB172 -167.57%, #9482FF -22.66%, #84E6FF 53.07%)",
-        description: "Build a block you’re ready to release on the Hub?",
+        description: "Browse your blocks or publish a new one to the Þ Hub",
         link: {
-          title: "Publish a block",
-          href: shouldAllowNpmBlockPublishing
-            ? "/blocks/publish"
-            : `${props.profileLink}/blocks`,
+          title: "My blocks",
+          href: `${props.profileLink}/blocks`,
         },
       },
       {
-        title: "Create a Type",
+        title: "My types",
         colorGradient:
           "linear-gradient(91.21deg, #FFB172 -84.62%, #9482FF 62.56%, #84E6FF 154.58%)",
         colorGradientOnHover:
@@ -71,7 +61,7 @@ export const getDashboardSectionCards = (props: {
         description:
           "Types are a formal way to describe data, links, properties and entities",
         link: {
-          title: "Create a type",
+          title: "My types",
           href: `${props.profileLink}/all-types`,
         },
       },
@@ -98,28 +88,6 @@ export const getDashboardSectionCards = (props: {
           href: props.profileLink,
         },
         icon: faUserPen,
-        variant: "secondary",
-      },
-      {
-        title: "Manage blocks",
-        description:
-          "View and modify the listings for blocks you’ve published on the Hub",
-        link: {
-          title: "Manage blocks",
-          href: `${props.profileLink}/blocks`,
-        },
-        CustomIcon: BlockIcon,
-        variant: "secondary",
-      },
-      {
-        title: "Manage types",
-        description:
-          "View and update the types you’ve created and made public on the Hub",
-        link: {
-          title: "Manage types",
-          href: `${props.profileLink}/all-types`,
-        },
-        icon: faAsterisk,
         variant: "secondary",
       },
     ],
