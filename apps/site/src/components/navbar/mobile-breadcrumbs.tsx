@@ -1,6 +1,7 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Breadcrumbs, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
+
 import { Crumb } from "../hooks/use-crumbs";
 import { FontAwesomeIcon } from "../icons";
 import { Link } from "../link";
