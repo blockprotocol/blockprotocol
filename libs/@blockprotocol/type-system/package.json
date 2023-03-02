@@ -53,7 +53,7 @@
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
-    "optimize": "wasm-opt -Os wasm/type-system_bg.wasm -o tmp.wasm && mv tmp.wasm wasm/type-system_bg.wasm",
+    "optimize": "(cd crate && cargo make install-wasm-opt) && wasm-opt -Os wasm/type-system_bg.wasm -o tmp.wasm && mv tmp.wasm wasm/type-system_bg.wasm",
     "prepublishOnly": "yarn build:wasm && yarn test && yarn optimize && yarn build:bundle",
     "test": "jest"
   },

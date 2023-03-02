@@ -70,7 +70,7 @@ args = ["build", "--profile", "${CARGO_MAKE_CARGO_PROFILE}", "@@split(CARGO_BUIL
 extend = "node"
 cwd = "${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}"
 args = ["--loader", "ts-node/esm", "./../scripts/build-wasm.ts"]
-dependencies = ["install-wasm-pack", "install-wasm-opt"]
+dependencies = ["install-wasm-pack"]
 
 ################################################################################
 ## Lints                                                                      ##
@@ -178,5 +178,4 @@ private = true
 install_crate = { crate_name = "wasm-pack", version = "0.10.3", binary = "wasm-pack", test_arg = ["--version"] }
 
 [tasks.install-wasm-opt]
-private = true
 install_crate = { crate_name = "wasm-opt", version = "0.110.2", binary = "wasm-opt", test_arg = ["--version"] }
