@@ -57,16 +57,17 @@ command = "node"
 [tasks.build]
 category = "Build"
 description = "Builds the package"
-run_task = { name = ["build-host", "build-wasm"] }
+run_task = { name = ["build-host-target", "build-wasm-target"] }
 
-[tasks.build-host]
+[tasks.build-host-target]
 extend = "cargo"
+private = false
 args = ["build", "--profile", "${CARGO_MAKE_CARGO_PROFILE}", "@@split(CARGO_BUILD_FLAGS, )", "${@}"]
 
 # TODO: add profile
 # TODO: consider moving away from wasm-pack and using wasm-bindgen directly so we can use weak-refs
 #  https://github.com/iotaledger/identity.rs/pull/694
-[tasks.build-wasm]
+[tasks.build-wasm-target]
 extend = "node"
 private = false
 cwd = "${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}"
