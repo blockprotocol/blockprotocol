@@ -51,7 +51,7 @@ export const proSubscriptionFeatures: Record<
       icon: <MapboxLogoIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
-          <strong>40</strong> Mapbox Address Autofills
+          <strong>50</strong> Mapbox Address Autofills
         </>
       ),
     },

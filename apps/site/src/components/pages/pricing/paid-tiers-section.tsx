@@ -229,7 +229,7 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>20</strong> Mapbox Address Autofills
+            <strong>25</strong> Mapbox Address Autofills
             <br />
             <Typography
               component="span"
@@ -346,7 +346,7 @@ export const paidSubscriptionFeatures: Record<
                 color: ({ palette }) => palette.purple[60],
               }}
             >
-              e.g. 300k+ words, 100 images, and 40 address autofills
+              e.g. 300k+ words, 100 images, and 50 address autofills
             </Typography>
           </Box>
         ),

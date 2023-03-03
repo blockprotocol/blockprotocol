@@ -66,7 +66,7 @@ export const paidSubscriptionFeatures: Record<
         icon: <MapboxLogoIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>20</strong> Mapbox Address Autofills
+            <strong>25</strong> Mapbox Address Autofills
           </>
         ),
       },
@@ -133,7 +133,7 @@ export const paidSubscriptionFeatures: Record<
               component="span"
               sx={{ color: ({ palette }) => palette.gray[60] }}
             >
-              300k+ words, 100 images, 40 address fills, etc.
+              300k+ words, 100 images, 50 address fills, etc.
             </Box>
           </>
         ),
