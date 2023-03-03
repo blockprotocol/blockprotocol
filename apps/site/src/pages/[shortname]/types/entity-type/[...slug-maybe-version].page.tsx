@@ -194,7 +194,12 @@ const EntityTypePage: NextPage = () => {
     };
 
     void initialEntityTypeFetch();
-  }, [entityType?.metadata.recordId.baseUrl, isDraft, router, setEntityType]);
+  }, [
+    entityType?.metadata.recordId.baseUrl,
+    isDraft,
+    router.isReady,
+    setEntityType,
+  ]);
 
   if (isLoading || !shortname) {
     // @todo proper loading state
