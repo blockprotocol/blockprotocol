@@ -76,12 +76,22 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
         },
       };
 
-      // @todo validate unique
-      void router.push(
-        `${new URL(draft.schema.$id).pathname}?draft=${encodeURIComponent(
-          Buffer.from(JSON.stringify(draft)).toString("base64"),
-        )}`,
-      );
+      const exists = await apiClient
+        .getEntityTypeByUrl({
+          versionedUrl: `${baseUrl}/v/1`,
+        })
+        .then((res) => !res.error);
+
+      if (exists) {
+        setLoading(false);
+        setApiErrorMessage("Type title must be unique");
+      } else {
+        void router.push(
+          `${new URL(draft.schema.$id).pathname}?draft=${encodeURIComponent(
+            Buffer.from(JSON.stringify(draft)).toString("base64"),
+          )}`,
+        );
+      }
     },
     [user, newDescription, newSchemaTitle, router],
   );
