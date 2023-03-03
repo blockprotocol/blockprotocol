@@ -76,7 +76,7 @@ export const EntityTypeEditBar = ({
           variant="secondary"
           size="small"
           {...(isDraft
-            ? { href: `/${router.query["shortname"]}/all-types` }
+            ? { href: `/${router.query.shortname}/all-types` }
             : { onClick: () => reset() })}
         >
           Discard changes

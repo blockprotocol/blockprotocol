@@ -1,3 +1,4 @@
+import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import {
@@ -7,9 +8,11 @@ import {
   useCallback,
   useState,
 } from "react";
+import slugify from "slugify";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
+import { FRONTEND_URL } from "../../lib/config";
 import { Button } from "../button";
 import { TextField } from "../text-field";
 import { Modal } from "./modal";
@@ -49,18 +52,36 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       setLoading(true);
       setApiErrorMessage(undefined);
 
-      const { data, error } = await apiClient.createEntityType({
+      const title = newSchemaTitle.trim();
+      const baseUrl = `${FRONTEND_URL}/${
+        router.query.shortname
+      }/types/entity-type/${slugify(title, { lower: true })}`;
+
+      const draft: EntityTypeWithMetadata = {
         schema: {
           description: newDescription.trim(),
-          title: newSchemaTitle.trim(),
+          title,
+          $schema:
+            "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+          $id: `${baseUrl}/v/1`,
+          kind: "entityType",
+          properties: {},
+          type: "object",
         },
-      });
-      setLoading(false);
-      if (error) {
-        setApiErrorMessage(error.message);
-      } else if (data) {
-        void router.push(new URL(data.entityType.schema.$id).pathname);
-      }
+        metadata: {
+          recordId: {
+            baseUrl,
+            version: 1,
+          },
+        },
+      };
+
+      // @todo validate unique
+      void router.push(
+        `${new URL(draft.schema.$id).pathname}?draft=${encodeURIComponent(
+          Buffer.from(JSON.stringify(draft)).toString("base64"),
+        )}`,
+      );
     },
     [user, newDescription, newSchemaTitle, router],
   );

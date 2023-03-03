@@ -1,5 +1,4 @@
-import { EntityType, EntityTypeWithMetadata } from "@blockprotocol/graph";
-import { validateEntityType } from "@blockprotocol/type-system";
+import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import { extractBaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
   EntityTypeEditorFormData,
@@ -10,9 +9,9 @@ import {
 } from "@hashintel/type-editor";
 import { Box, Container, Stack, Tooltip, Typography } from "@mui/material";
 import { NextPage } from "next";
+import { NextSeo } from "next-seo";
 import NextError from "next/error";
 import { useRouter } from "next/router";
-import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { tw } from "twind";
 
