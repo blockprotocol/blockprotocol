@@ -114,6 +114,10 @@ impl FromStr for VersionedUrl {
     type Err = ParseVersionedUrlError;
 
     fn from_str(url: &str) -> Result<Self, ParseVersionedUrlError> {
+        if url.len() > 2048 {
+            return Err(ParseVersionedUrlError::TooLong);
+        }
+
         url.rsplit_once("v/").map_or(
             Err(ParseVersionedUrlError::IncorrectFormatting),
             |(base_url, version)| {

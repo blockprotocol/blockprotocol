@@ -31,4 +31,6 @@ pub enum ParseVersionedUrlError {
     AdditionalEndContent(String),
     #[error("invalid base url: {0}")]
     InvalidBaseUrl(ParseBaseUrlError),
+    #[error("URL cannot cannot be more than 2048 characters long")]
+    TooLong,
 }
