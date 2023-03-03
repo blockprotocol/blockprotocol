@@ -1,7 +1,6 @@
-use std::{fmt, result::Result, str::FromStr, sync::LazyLock};
+use std::{fmt, result::Result, str::FromStr};
 
 pub use error::{ParseBaseUrlError, ParseVersionedUrlError};
-use regex::Regex;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
@@ -115,38 +114,18 @@ impl FromStr for VersionedUrl {
     type Err = ParseVersionedUrlError;
 
     fn from_str(url: &str) -> Result<Self, ParseVersionedUrlError> {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("regex failed to compile"));
-
-        if url.len() > 2048 {
-            return Err(ParseVersionedUrlError::TooLong);
-        }
-
-        let captures = RE
-            .captures(url)
-            .ok_or(ParseVersionedUrlError::IncorrectFormatting)?;
-        let base_url = captures
-            .get(1)
-            .ok_or(ParseVersionedUrlError::MissingBaseUrl)?
-            .as_str();
-        let version = captures
-            .get(2)
-            .ok_or(ParseVersionedUrlError::MissingVersion)?
-            .as_str();
-
-        if let Some(suffix) = captures.get(3) {
-            // Regex returns an empty string for capturing groups that don't match anything
-            if !suffix.as_str().is_empty() {
-                return Err(ParseVersionedUrlError::AdditionalEndContent);
-            }
-        }
-
-        Ok(Self {
-            base_url: BaseUrl::new(base_url.to_owned())
-                .map_err(ParseVersionedUrlError::InvalidBaseUrl)?,
-            version: u32::from_str(version)
-                .map_err(|error| ParseVersionedUrlError::InvalidVersion(error.to_string()))?,
-        })
+        url.rsplit_once("v/").map_or(
+            Err(ParseVersionedUrlError::MissingVersion),
+            |(base_url, version)| {
+                Ok(Self {
+                    base_url: BaseUrl::new(base_url.to_owned())
+                        .map_err(ParseVersionedUrlError::InvalidBaseUrl)?,
+                    version: version.parse::<u32>().map_err(|error| {
+                        ParseVersionedUrlError::InvalidVersion(error.to_string())
+                    })?,
+                })
+            },
+        )
     }
 }
 
