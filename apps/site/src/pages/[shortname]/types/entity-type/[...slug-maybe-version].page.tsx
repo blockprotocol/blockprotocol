@@ -96,28 +96,46 @@ const EntityTypePage: NextPage = () => {
 
     const existingSchema = entityType.schema;
 
-    const { data: responseData, error: responseError } =
-      await apiClient.updateEntityType({
-        versionedUrl: entityType.schema.$id,
-        schema: {
-          ...existingSchema,
-          links: newPartialSchema.links ?? existingSchema.links ?? {},
-          properties:
-            newPartialSchema.properties ?? existingSchema.properties ?? {},
-          required: newPartialSchema.required ?? existingSchema.required ?? [],
-        },
+    const nextSchema = {
+      ...existingSchema,
+      links: newPartialSchema.links ?? existingSchema.links ?? {},
+      properties:
+        newPartialSchema.properties ?? existingSchema.properties ?? {},
+      required: newPartialSchema.required ?? existingSchema.required ?? [],
+    };
+
+    if (isDraft) {
+      const {
+        $schema: _,
+        $id: __,
+        kind: ___,
+        type: ____,
+        ...partial
+      } = nextSchema;
+
+      const { data, error } = await apiClient.createEntityType({
+        schema: partial,
       });
 
-    if (!responseData) {
-      throw new Error(
-        responseError?.message || "Unknown error updating entity type",
-      );
-    }
+      console.log(data, error, nextSchema);
+    } else {
+      const { data: responseData, error: responseError } =
+        await apiClient.updateEntityType({
+          versionedUrl: entityType.schema.$id,
+          schema: nextSchema,
+        });
 
-    setEntityType({
-      entityType: responseData.entityType,
-      latestVersion: responseData.entityType,
-    });
+      if (!responseData) {
+        throw new Error(
+          responseError?.message || "Unknown error updating entity type",
+        );
+      }
+
+      setEntityType({
+        entityType: responseData.entityType,
+        latestVersion: responseData.entityType,
+      });
+    }
   };
 
   // Handle fetching of types on initial load (subsequent updates in form submission)
