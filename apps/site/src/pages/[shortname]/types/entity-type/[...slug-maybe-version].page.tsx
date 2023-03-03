@@ -9,9 +9,9 @@ import {
 } from "@hashintel/type-editor";
 import { Box, Container, Stack, Tooltip, Typography } from "@mui/material";
 import { NextPage } from "next";
-import { NextSeo } from "next-seo";
 import NextError from "next/error";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { tw } from "twind";
 
@@ -113,11 +113,23 @@ const EntityTypePage: NextPage = () => {
         ...partial
       } = nextSchema;
 
-      const { data, error } = await apiClient.createEntityType({
-        schema: partial,
+      const { data: responseData, error: responseError } =
+        await apiClient.createEntityType({
+          schema: partial,
+        });
+
+      if (!responseData) {
+        throw new Error(
+          responseError?.message || "Unknown error creating entity type",
+        );
+      }
+
+      setEntityType({
+        entityType: responseData.entityType,
+        latestVersion: responseData.entityType,
       });
 
-      console.log(data, error, nextSchema);
+      void router.replace(responseData.entityType.schema.$id);
     } else {
       const { data: responseData, error: responseError } =
         await apiClient.updateEntityType({
