@@ -21,20 +21,10 @@ pub enum ParseBaseUrlError {
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseVersionedUrlError {
-    #[error("incorrect formatting")]
-    IncorrectFormatting,
-    #[error("missing base url")]
-    MissingBaseUrl,
     #[error("missing version")]
     MissingVersion,
     #[error("invalid version: {0}")]
     InvalidVersion(String),
-    #[error("additional end content")]
-    AdditionalEndContent,
     #[error("invalid base url: {0}")]
     InvalidBaseUrl(ParseBaseUrlError),
-    #[error("invalid json: {0}")]
-    InvalidJson(String),
-    #[error("URL cannot cannot be more than 2048 characters long")]
-    TooLong,
 }
