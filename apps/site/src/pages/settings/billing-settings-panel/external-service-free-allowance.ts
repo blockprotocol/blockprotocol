@@ -13,6 +13,12 @@ const externalServiceNames = [
 
 export type ExternalServicePriceName = (typeof externalServiceNames)[number];
 
+/**
+ * @todo use the internal API as the source of truth for these values, by fetching
+ * them from an internal API endpoint.
+ *
+ * @see https://app.asana.com/0/1203179076056209/1204082150544746/f
+ */
 export const externalServiceFreeAllowance: Record<
   ExternalServicePriceName,
   { free: number; hobby: number; pro: number }
