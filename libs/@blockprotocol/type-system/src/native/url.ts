@@ -95,13 +95,12 @@ export const validateVersionedUrl = (
           inner: [version, "invalid digit found in string"],
         },
       };
-    }
-    else if (index > 0) {
+    } else if (index > 0) {
       return {
         type: "Err",
         inner: {
           reason: "AdditionalEndContent",
-          inner: version.substring(index)
+          inner: version.substring(index),
         },
       };
     }

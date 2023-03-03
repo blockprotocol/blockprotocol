@@ -85,9 +85,24 @@ const invalidVersionedUrlCases: [string, ParseVersionedUrlError][] = [
   ["http://example.com", { reason: "IncorrectFormatting" }],
   ["http://example.com/v/", { reason: "MissingVersion" }],
   ["http://example.com/v/0.2", { reason: "AdditionalEndContent", inner: ".2" }],
-  ["http://example.com/v//20", { reason: "InvalidVersion", inner: ["/20", "invalid digit found in string"] }],
-  ["http://example.com/v/30/1", { reason: "AdditionalEndContent", inner: "/1" }],
-  ["http://example.com/v/foo", { reason: "InvalidVersion", inner: ["foo", "invalid digit found in string"] }],
+  [
+    "http://example.com/v//20",
+    {
+      reason: "InvalidVersion",
+      inner: ["/20", "invalid digit found in string"],
+    },
+  ],
+  [
+    "http://example.com/v/30/1",
+    { reason: "AdditionalEndContent", inner: "/1" },
+  ],
+  [
+    "http://example.com/v/foo",
+    {
+      reason: "InvalidVersion",
+      inner: ["foo", "invalid digit found in string"],
+    },
+  ],
   [`http://exampl${"e".repeat(2028)}.com/v/1`, { reason: "TooLong" }],
 ];
 

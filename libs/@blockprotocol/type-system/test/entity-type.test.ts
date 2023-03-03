@@ -485,7 +485,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
         reason: "EntityTypeReferenceError",
         inner: {
           reason: "AdditionalEndContent",
-          inner: ".2"
+          inner: ".2",
         },
       },
     },
