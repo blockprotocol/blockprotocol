@@ -84,9 +84,9 @@ const invalidVersionedUrlCases: [string, ParseVersionedUrlError][] = [
   ],
   ["http://example.com", { reason: "IncorrectFormatting" }],
   ["http://example.com/v/", { reason: "IncorrectFormatting" }],
-  ["http://example.com/v/0.2", { reason: "AdditionalEndContent" }],
+  ["http://example.com/v/0.2", { reason: "AdditionalEndContent", inner: ".2" }],
   ["http://example.com/v//20", { reason: "IncorrectFormatting" }],
-  ["http://example.com/v/30/1", { reason: "AdditionalEndContent" }],
+  ["http://example.com/v/30/1", { reason: "AdditionalEndContent", inner: "/1" }],
   ["http://example.com/v/foo", { reason: "IncorrectFormatting" }],
 ];
 

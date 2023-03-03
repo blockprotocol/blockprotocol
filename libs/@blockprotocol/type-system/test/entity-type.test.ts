@@ -298,6 +298,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       reason: "InvalidVersionedUrl",
       inner: {
         reason: "AdditionalEndContent",
+        inner: ".2",
       },
     },
   ],
@@ -484,6 +485,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
         reason: "EntityTypeReferenceError",
         inner: {
           reason: "AdditionalEndContent",
+          inner: ".2"
         },
       },
     },

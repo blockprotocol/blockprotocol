@@ -56,12 +56,6 @@ const versionedUrlRegExp = /(.+\/)v\/(\d+)(.*)/;
 export const validateVersionedUrl = (
   url: string,
 ): Result<VersionedUrl, ParseVersionedUrlError> => {
-  if (url.length > 2048) {
-    return {
-      type: "Err",
-      inner: { reason: "TooLong" },
-    };
-  }
   const groups = versionedUrlRegExp.exec(url);
 
   if (groups === null) {
@@ -75,7 +69,7 @@ export const validateVersionedUrl = (
     if (trailingContent) {
       return {
         type: "Err",
-        inner: { reason: "AdditionalEndContent" },
+        inner: { reason: "AdditionalEndContent", inner: trailingContent },
       };
     }
 
@@ -89,7 +83,7 @@ export const validateVersionedUrl = (
     if (!baseUrl) {
       return {
         type: "Err",
-        inner: { reason: "MissingBaseUrl" },
+        inner: { reason: "IncorrectFormatting" },
       };
     }
 
@@ -109,7 +103,7 @@ export const validateVersionedUrl = (
         type: "Err",
         inner: {
           reason: "InvalidVersion",
-          inner: `\`${version}\` is not a valid non-negative integer`,
+          inner: [version,  "not a valid non-negative integer"],
         },
       };
     }
