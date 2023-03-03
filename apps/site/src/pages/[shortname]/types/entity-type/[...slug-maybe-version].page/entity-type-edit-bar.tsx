@@ -1,11 +1,14 @@
+import { faSmile } from "@fortawesome/free-regular-svg-icons";
 import {
   EntityTypeEditorFormData,
   useEntityTypeFormState,
 } from "@hashintel/type-editor";
 import { Box, Stack, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { Button } from "../../../../../components/button";
+import { FontAwesomeIcon } from "../../../../../components/icons/font-awesome-icon";
 import { PencilSimpleLineIcon } from "../../../../../components/icons/pencil-simple-line";
 
 const useFrozenValue = <T extends any>(value: T): T => {
@@ -23,10 +26,13 @@ const useFrozenValue = <T extends any>(value: T): T => {
 export const EntityTypeEditBar = ({
   currentVersion,
   reset,
+  isDraft,
 }: {
   currentVersion: number;
   reset: () => void;
+  isDraft: boolean;
 }) => {
+  const router = useRouter();
   const { isDirty } = useEntityTypeFormState<EntityTypeEditorFormData>();
   const frozenVersion = useFrozenValue(currentVersion);
 
@@ -34,7 +40,7 @@ export const EntityTypeEditBar = ({
 
   const frozenSubmitting = useFrozenValue(isSubmitting);
 
-  if (!isDirty) {
+  if (!isDirty && !isDraft) {
     return null;
   }
 
@@ -48,20 +54,30 @@ export const EntityTypeEditBar = ({
         padding: "18px 30px",
       })}
     >
-      <PencilSimpleLineIcon />
+      {isDraft ? (
+        <FontAwesomeIcon icon={faSmile} sx={{ fontSize: 14 }} />
+      ) : (
+        <PencilSimpleLineIcon />
+      )}
       <Typography sx={{ ml: 1, color: "white" }}>
         <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
           Currently editing
         </Box>{" "}
-        {`Version ${frozenVersion} -> ${frozenVersion + 1}`}
+        {isDraft ? (
+          <>- this type has not yet been created</>
+        ) : (
+          `Version ${frozenVersion} -> ${frozenVersion + 1}`
+        )}
       </Typography>
       <Stack spacing={1.25} sx={{ marginLeft: "auto" }} direction="row">
         <Button
           disabled={frozenSubmitting}
-          onClick={() => reset()}
           type="button"
           variant="secondary"
           size="small"
+          {...(isDraft
+            ? { href: `/${router.query["shortname"]}/all-types` }
+            : { onClick: () => reset() })}
         >
           Discard changes
         </Button>
@@ -71,7 +87,7 @@ export const EntityTypeEditBar = ({
           size="small"
           type="submit"
         >
-          Publish update
+          {isDraft ? <>Create</> : <>Publish update</>}
         </Button>
       </Stack>
     </Box>

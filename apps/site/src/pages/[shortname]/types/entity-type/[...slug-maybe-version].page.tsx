@@ -49,15 +49,11 @@ const EntityTypePage: NextPage = () => {
       );
 
       // @todo add validation
-      return entityType as EntityType;
+      return entityType as EntityTypeWithMetadata;
     } else {
       return null;
     }
   }, [router.query.draft]);
-
-  console.log(draftEntityType);
-
-  return null;
 
   const { user } = useUser();
   const { shortname } = router.query as EntityTypePageQueryParams;
@@ -66,6 +62,14 @@ const EntityTypePage: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [entityTypeState, setEntityTypeState] =
     useState<EntityTypeState | null>(null);
+
+  if (isDraft && draftEntityType && !entityTypeState) {
+    setEntityTypeState({
+      entityType: draftEntityType,
+      latestVersion: draftEntityType,
+    });
+    setIsLoading(false);
+  }
 
   const { entityType, latestVersion } = entityTypeState ?? {};
 
@@ -130,6 +134,10 @@ const EntityTypePage: NextPage = () => {
     }
 
     const initialEntityTypeFetch = async () => {
+      if (isDraft || !router.isReady) {
+        return;
+      }
+
       const [requestedEntityTypeVersion, latestEntityTypeVersion] =
         await fetchEntityType(pageUrl);
 
@@ -157,7 +165,7 @@ const EntityTypePage: NextPage = () => {
     };
 
     void initialEntityTypeFetch();
-  }, [entityType?.metadata.recordId.baseUrl, router, setEntityType]);
+  }, [entityType?.metadata.recordId.baseUrl, isDraft, router, setEntityType]);
 
   if (isLoading || !shortname) {
     // @todo proper loading state
@@ -194,6 +202,7 @@ const EntityTypePage: NextPage = () => {
           <EntityTypeEditBar
             currentVersion={currentVersionNumber}
             reset={reset}
+            isDraft={isDraft}
           />
           <Container
             sx={{
@@ -236,7 +245,11 @@ const EntityTypePage: NextPage = () => {
                   component="span"
                   marginLeft={1}
                 >
-                  v{entityType.metadata.recordId.version}
+                  {isDraft ? (
+                    <em>(draft)</em>
+                  ) : (
+                    <>v{entityType.metadata.recordId.version}</>
+                  )}
                 </Typography>
                 {!isLatest && (
                   <Link
