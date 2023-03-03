@@ -341,7 +341,7 @@ mod tests {
                 {
                   "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
                   "kind": "propertyType",
-                  "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1.2",
+                  "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/",
                   "title": "Age",
                   "oneOf": [
                     {
@@ -350,9 +350,7 @@ mod tests {
                   ]
                 }
             ),
-            ParsePropertyTypeError::InvalidVersionedUrl(ParseVersionedUrlError::InvalidVersion(
-                "invalid digit found in string".to_owned(),
-            )),
+            ParsePropertyTypeError::InvalidVersionedUrl(ParseVersionedUrlError::MissingVersion),
         );
     }
 

@@ -1,4 +1,4 @@
-use std::{fmt, result::Result, str::FromStr};
+use std::{fmt, num::IntErrorKind, result::Result, str::FromStr};
 
 pub use error::{ParseBaseUrlError, ParseVersionedUrlError};
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
@@ -121,7 +121,14 @@ impl FromStr for VersionedUrl {
                     base_url: BaseUrl::new(base_url.to_owned())
                         .map_err(ParseVersionedUrlError::InvalidBaseUrl)?,
                     version: version.parse::<u32>().map_err(|error| {
-                        ParseVersionedUrlError::InvalidVersion(error.to_string())
+                        if *error.kind() == IntErrorKind::Empty {
+                            ParseVersionedUrlError::MissingVersion
+                        } else {
+                            ParseVersionedUrlError::InvalidVersion(
+                                version.to_owned(),
+                                error.to_string(),
+                            )
+                        }
                     })?,
                 })
             },
