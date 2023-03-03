@@ -21,6 +21,8 @@ pub enum ParseBaseUrlError {
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseVersionedUrlError {
+    #[error("incorrect formatting")]
+    IncorrectFormatting,
     #[error("missing version")]
     MissingVersion,
     #[error("invalid version `{0}`: {1}")]

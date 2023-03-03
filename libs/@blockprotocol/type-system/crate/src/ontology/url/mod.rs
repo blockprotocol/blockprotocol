@@ -115,7 +115,7 @@ impl FromStr for VersionedUrl {
 
     fn from_str(url: &str) -> Result<Self, ParseVersionedUrlError> {
         url.rsplit_once("v/").map_or(
-            Err(ParseVersionedUrlError::MissingVersion),
+            Err(ParseVersionedUrlError::IncorrectFormatting),
             |(base_url, version)| {
                 Ok(Self {
                     base_url: BaseUrl::new(base_url.to_owned())
