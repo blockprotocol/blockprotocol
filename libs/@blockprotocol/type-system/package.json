@@ -45,7 +45,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:wasm && yarn optimize && yarn build:bundle",
+    "build": "yarn clean && yarn build:wasm && yarn build:bundle",
     "build:bundle": "rollup -c --bundleConfigAsCjs",
     "build:wasm": "cd crate && cargo make build",
     "clean": "rimraf ./dist/",
@@ -53,8 +53,7 @@
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
-    "optimize": "wasm-opt -Os wasm/type-system_bg.wasm -o tmp.wasm && mv tmp.wasm wasm/type-system_bg.wasm",
-    "prepublishOnly": "yarn build:wasm && yarn test && yarn optimize && yarn build:bundle",
+    "prepublishOnly": "yarn build:wasm && yarn test && yarn build:bundle",
     "test": "jest"
   },
   "devDependencies": {
