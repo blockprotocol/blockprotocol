@@ -120,15 +120,21 @@ impl FromStr for VersionedUrl {
                 Ok(Self {
                     base_url: BaseUrl::new(base_url.to_owned())
                         .map_err(ParseVersionedUrlError::InvalidBaseUrl)?,
-                    version: version.parse::<u32>().map_err(|error| {
-                        if *error.kind() == IntErrorKind::Empty {
-                            ParseVersionedUrlError::MissingVersion
-                        } else {
-                            ParseVersionedUrlError::InvalidVersion(
-                                version.to_owned(),
-                                error.to_string(),
-                            )
+                    version: version.parse::<u32>().map_err(|error| match error.kind() {
+                        IntErrorKind::Empty => ParseVersionedUrlError::MissingVersion,
+                        IntErrorKind::InvalidDigit => {
+                            let i = version.find(|c: char| !c.is_numeric()).unwrap_or(0);
+                            #[expect(
+                                clippy::string_slice,
+                                reason = "we just found the index of the first non-numeric \
+                                          character"
+                            )]
+                            ParseVersionedUrlError::AdditionalEndContent(version[i..].to_owned())
                         }
+                        _ => ParseVersionedUrlError::InvalidVersion(
+                            version.to_owned(),
+                            error.to_string(),
+                        ),
                     })?,
                 })
             },

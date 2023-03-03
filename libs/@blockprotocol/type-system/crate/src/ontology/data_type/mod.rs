@@ -206,9 +206,8 @@ mod tests {
                   "type": "string"
                 }
             ),
-            ParseDataTypeError::InvalidVersionedUrl(ParseVersionedUrlError::InvalidVersion(
-                "1.5".to_string(),
-                "invalid digit found in string".to_owned(),
+            ParseDataTypeError::InvalidVersionedUrl(ParseVersionedUrlError::AdditionalEndContent(
+                ".5".to_owned(),
             )),
         );
     }

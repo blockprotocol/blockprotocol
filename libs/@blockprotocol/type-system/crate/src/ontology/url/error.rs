@@ -27,6 +27,8 @@ pub enum ParseVersionedUrlError {
     MissingVersion,
     #[error("invalid version `{0}`: {1}")]
     InvalidVersion(String, String),
+    #[error("additional end content: {0}")]
+    AdditionalEndContent(String),
     #[error("invalid base url: {0}")]
     InvalidBaseUrl(ParseBaseUrlError),
 }

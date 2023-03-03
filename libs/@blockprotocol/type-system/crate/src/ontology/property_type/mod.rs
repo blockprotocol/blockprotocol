@@ -390,7 +390,7 @@ mod tests {
             ),
             ParsePropertyTypeError::InvalidOneOf(Box::new(ParseOneOfError::PropertyValuesError(
                 ParsePropertyTypeError::InvalidDataTypeReference(
-                    ParseVersionedUrlError::MissingVersion,
+                    ParseVersionedUrlError::IncorrectFormatting,
                 ),
             ))),
         );
