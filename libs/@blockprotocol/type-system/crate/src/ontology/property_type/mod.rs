@@ -350,9 +350,9 @@ mod tests {
                   ]
                 }
             ),
-            ParsePropertyTypeError::InvalidVersionedUrl(
-                ParseVersionedUrlError::AdditionalEndContent,
-            ),
+            ParsePropertyTypeError::InvalidVersionedUrl(ParseVersionedUrlError::InvalidVersion(
+                "invalid digit found in string".to_owned(),
+            )),
         );
     }
 
@@ -392,7 +392,7 @@ mod tests {
             ),
             ParsePropertyTypeError::InvalidOneOf(Box::new(ParseOneOfError::PropertyValuesError(
                 ParsePropertyTypeError::InvalidDataTypeReference(
-                    ParseVersionedUrlError::IncorrectFormatting,
+                    ParseVersionedUrlError::MissingVersion,
                 ),
             ))),
         );
