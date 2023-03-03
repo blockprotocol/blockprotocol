@@ -32,7 +32,7 @@ const runWasmPack = () => {
     "--release",
     ".",
     "-Zbuild-std=panic_abort,std",
-    "-Zbuild-std-features=panic_immediate_abort"
+    "-Zbuild-std-features=panic_immediate_abort",
   ]);
 
   if (result.status !== 0) {
