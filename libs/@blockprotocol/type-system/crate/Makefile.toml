@@ -72,7 +72,6 @@ extend = "node"
 private = false
 cwd = "${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}"
 args = ["--loader", "ts-node/esm", "./../scripts/build-wasm.ts"]
-dependencies = ["install-wasm-pack"]
 
 ################################################################################
 ## Lints                                                                      ##
@@ -174,7 +173,3 @@ install_crate = { rustup_component_name = "rustfmt" }
 [tasks.install-cargo-nextest]
 private = true
 install_crate = { crate_name = "cargo-nextest", version = "0.9.28", binary = "cargo", test_arg = ["nextest", "--version"] }
-
-[tasks.install-wasm-pack]
-private = true
-install_crate = { crate_name = "wasm-pack", version = "0.10.3", binary = "wasm-pack", test_arg = ["--version"] }
