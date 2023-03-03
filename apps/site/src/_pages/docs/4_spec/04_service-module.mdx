@@ -24,7 +24,7 @@ How exactly the embedding application generates those messages is beyond the sco
 
 Embedding applications MUST ensure that any responses they provide to blocks to messages sent under the service module are consistent with the schema and described intent of the message in this specification, and consistent with the response that the named service provider would return, except for any fields which are required by the named service provider but omitted from this specification (e.g. because they relate to authentication or other information that the block should not or does not have access to, and is added by the embedding application when making an onward request).
 
-They MAY implement messages by any of:
+They MAY implement messages by doing any of the following:
 
 - calling the named service provider directly, OR
 - generating the response internally, OR
