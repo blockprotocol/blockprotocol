@@ -5,27 +5,12 @@ import {
 } from "@blockprotocol/graph/react";
 import { useRef } from "react";
 
-/**
- * The file referenced here provides some base styling for your block.
- * You can delete it and write your own, but we encourage you to keep the styling scoped, e.g.
- * - use CSS modules (this approach), e.g. overwrite the contents of .block in base.module.scss
- * - use a CSS-in-JS solution
- * - use a shadow DOM
- * any of these ensure that your styling does not affect anything outside your block.
- */
 import styles from "./base.module.scss";
+import { PersonFactory } from "./components/create-entity/person-factory";
 import {
   BlockEntity,
   BlockEntityOutgoingLinkAndTarget,
 } from "./types/generated/block-entity";
-
-/**
- * This function is to help illustrate a property being changed when the button is pressed.
- */
-const supplyRandomName = () => {
-  const names = ["Alice", "Bob", "Carol", "Dave", "Erin", "Frank"];
-  return names[Math.floor(Math.random() * names.length)]!;
-};
 
 /**
  * This is the entry point for your block – the function that embedding applications will call to create it.
@@ -57,17 +42,10 @@ export const App: BlockComponent<BlockEntity> = ({
   const blockRootRef = useRef<HTMLDivElement>(null);
   const { graphModule } = useGraphBlockModule(blockRootRef);
 
-  const { rootEntity: blockEntity } = useEntitySubgraph<
+  const { rootEntity: _blockEntity } = useEntitySubgraph<
     BlockEntity,
     BlockEntityOutgoingLinkAndTarget[]
   >(blockEntitySubgraph);
-
-  const entityId = blockEntity.metadata.recordId.entityId;
-
-  const nameKey: keyof BlockEntity["properties"] =
-    "https://blockprotocol.org/@blockprotocol/types/property-type/name/";
-
-  const title = blockEntity.properties[nameKey];
 
   return (
     /**
@@ -78,34 +56,7 @@ export const App: BlockComponent<BlockEntity> = ({
      *   - our module helper will dispatch messages to the app from this element, and listen for responses on it
      */
     <div className={styles.block} ref={blockRootRef}>
-      <h1>{`Hello, ${title}`}</h1>
-      <p>
-        The entityId of this block is {entityId}. Use it to update its data,
-        e.g. by calling <code>updateEntity</code>.
-      </p>
-      <button
-        onClick={() =>
-          /**
-           * This is an example of using the graph module to send a message to the embedding application
-           * – this particular message asks the application update an entity's properties.
-           * The specific entity to update is identified by 'entityId'
-           * – we are passing the 'entityId' of the entity loaded into the block ('blockEntity').
-           *
-           * Many other messages are available for your block to read and update entities, and links between entities
-           * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions
-           */
-          graphModule?.updateEntity({
-            data: {
-              entityId,
-              entityTypeId: blockEntity.metadata.entityTypeId,
-              properties: { [nameKey]: supplyRandomName() },
-            },
-          })
-        }
-        type="button"
-      >
-        Update Name
-      </button>
+      <PersonFactory graphModule={graphModule} />
     </div>
   );
 };
