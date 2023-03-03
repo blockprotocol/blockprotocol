@@ -57,9 +57,9 @@ command = "node"
 [tasks.build]
 category = "Build"
 description = "Builds the package"
-run_task = { name = ["cargo-build-task", "build-wasm"] }
+run_task = { name = ["build-host", "build-wasm"] }
 
-[tasks.cargo-build-task]
+[tasks.build-host]
 extend = "cargo"
 args = ["build", "--profile", "${CARGO_MAKE_CARGO_PROFILE}", "@@split(CARGO_BUILD_FLAGS, )", "${@}"]
 
