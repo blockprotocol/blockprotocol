@@ -26,6 +26,7 @@ runs:
       uses: Swatinem/rust-cache@v2
       with:
         workspaces: libs/@blockprotocol/type-system/crate
+        shared-key: "shared"
 
     - run: yarn install
       shell: bash
