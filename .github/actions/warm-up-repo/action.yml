@@ -14,7 +14,6 @@ runs:
     - uses: actions/setup-node@v3
       with:
         node-version: 16 ## aligned with Node version on Vercel
-        cache: yarn
 
     - name: Install Cargo-Make
       shell: bash
