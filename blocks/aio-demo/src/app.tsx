@@ -3,10 +3,12 @@ import {
   useEntitySubgraph,
   useGraphBlockModule,
 } from "@blockprotocol/graph/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import styles from "./base.module.scss";
+import { CompanyFactory } from "./components/create-entity/company-factory";
 import { PersonFactory } from "./components/create-entity/person-factory";
+import { RefreshDataProvider } from "./contexts/refresh-data";
 import {
   BlockEntity,
   BlockEntityOutgoingLinkAndTarget,
@@ -47,6 +49,8 @@ export const App: BlockComponent<BlockEntity> = ({
     BlockEntityOutgoingLinkAndTarget[]
   >(blockEntitySubgraph);
 
+  const [refreshSignal, setRefreshSignal] = useState(false);
+
   return (
     /**
      * This is the outermost element of the block. We do two things with this <div>:
@@ -55,8 +59,16 @@ export const App: BlockComponent<BlockEntity> = ({
      * 2. attach the ref we created earlier, so that we have a reference to this element
      *   - our module helper will dispatch messages to the app from this element, and listen for responses on it
      */
-    <div className={styles.block} ref={blockRootRef}>
-      <PersonFactory graphModule={graphModule} />
-    </div>
+    <RefreshDataProvider
+      value={{
+        refreshSignal,
+        sendRefreshSignal: () => setRefreshSignal((prevState) => !prevState),
+      }}
+    >
+      <div className={styles.block} ref={blockRootRef}>
+        <PersonFactory graphModule={graphModule} />
+        <CompanyFactory graphModule={graphModule} />
+      </div>
+    </RefreshDataProvider>
   );
 };

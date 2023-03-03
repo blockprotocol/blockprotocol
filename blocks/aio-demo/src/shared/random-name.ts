@@ -75,3 +75,45 @@ export const getRandomPersonNameParams = (): PersonNameParams => {
     lastName: lastNames[Math.floor(Math.random() * lastNames.length)]!,
   };
 };
+
+const companyPrefixes = [
+  "Acme",
+  "Global",
+  "Bright",
+  "Dynamic",
+  "Innovative",
+  "Enterprise",
+  "Strategic",
+  "Creative",
+  "Proactive",
+  "Soylent",
+  "Nakatomi",
+  "Sirius",
+  "Tyrell",
+  "Wayne",
+  "CHOAM",
+];
+const companySuffixes = [
+  "Corp",
+  "Airlines",
+  "Trading Corp.",
+  "Technologies",
+  "Cybernetics Corp.",
+  "Solutions",
+  "Enterprises",
+  "Incorporated",
+  "Ventures",
+  "Co.",
+  "Industries",
+  "Group",
+  "Partners",
+  "Systems",
+  "",
+];
+
+export const getRandomCompanyName = () => {
+  const prefixIndex = Math.floor(Math.random() * companyPrefixes.length);
+  const suffixIndex = Math.floor(Math.random() * companySuffixes.length);
+
+  return `${companyPrefixes[prefixIndex]} ${companySuffixes[suffixIndex]}`;
+};

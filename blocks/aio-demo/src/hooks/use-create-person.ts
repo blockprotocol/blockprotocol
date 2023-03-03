@@ -1,6 +1,7 @@
 import { GraphBlockHandler } from "@blockprotocol/graph";
 import { useState } from "react";
 
+import { useRefreshDataContext } from "../contexts/refresh-data";
 import { PersonNameParams } from "../shared/random-name";
 import { entityTypeIds, Person, PersonProperties } from "../types/entity-types";
 import { propertyTypeBaseUrls } from "../types/property-types";
@@ -11,6 +12,8 @@ export const useCreatePerson = (
   createPerson: (nameParams: PersonNameParams) => Promise<Person>;
   previousCreatedPerson: Person | null;
 } => {
+  const { sendRefreshSignal } = useRefreshDataContext();
+
   const [previousCreatedPerson, setPreviousCreatedPerson] =
     useState<Person | null>(null);
 
@@ -25,6 +28,8 @@ export const useCreatePerson = (
         properties,
       },
     });
+
+    sendRefreshSignal();
 
     if (!data) {
       throw new Error(
