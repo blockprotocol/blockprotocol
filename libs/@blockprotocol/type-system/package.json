@@ -47,7 +47,7 @@
   "scripts": {
     "build": "yarn clean && yarn build:wasm && yarn build:bundle",
     "build:bundle": "rollup -c --bundleConfigAsCjs",
-    "build:wasm": "cd crate && cargo make build",
+    "build:wasm": "cd crate && cargo make build-wasm-target",
     "clean": "rimraf ./dist/",
     "compressed-size": "yarn build && find dist -iname '*.js' -exec npx terser@latest --compress --mangle --output {} -- {} \\;",
     "fix:eslint": "eslint --fix .",
