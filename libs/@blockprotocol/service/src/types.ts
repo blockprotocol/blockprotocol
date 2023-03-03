@@ -14,6 +14,8 @@ import {
   SessionTokenOptions,
 } from "./mapbox-types";
 import type {
+  CreateChatCompletionRequest,
+  CreateChatCompletionResponse,
   CreateCompletionRequest,
   CreateCompletionResponse,
   CreateImageRequest,
@@ -39,6 +41,10 @@ export type OpenAICreateImageResponseData = ImagesResponse;
 export type OpenAICompleteTextData = Omit<CreateCompletionRequest, "user">;
 
 export type OpenAICompleteTextResponseData = CreateCompletionResponse;
+
+export type OpenAICompleteChatData = Omit<CreateChatCompletionRequest, "user">;
+
+export type OpenAICompleteChatResponseData = CreateChatCompletionResponse;
 
 /** Mapbox Geocoding API */
 
@@ -257,6 +263,13 @@ export type ServiceEmbedderMessageCallbacks = {
     OpenAICompleteTextData,
     null,
     { data: OpenAICompleteTextResponseData },
+    ServiceMessageError
+  >;
+
+  openaiCompleteChat: MessageCallback<
+    OpenAICompleteChatData,
+    null,
+    { data: OpenAICompleteChatResponseData },
     ServiceMessageError
   >;
 
