@@ -127,24 +127,24 @@ impl FromStr for VersionedUrl {
                     version: version.parse::<u32>().map_err(|error| match error.kind() {
                         IntErrorKind::Empty => ParseVersionedUrlError::MissingVersion,
                         IntErrorKind::InvalidDigit => {
-                            version.find(|c: char| !c.is_numeric()).map_or_else(
-                                || {
-                                    ParseVersionedUrlError::InvalidVersion(
-                                        version.to_owned(),
-                                        error.to_string(),
-                                    )
-                                },
-                                |idx| {
-                                    #[expect(
-                                        clippy::string_slice,
-                                        reason = "we just found the index of the first \
-                                                  non-numeric character"
-                                    )]
-                                    ParseVersionedUrlError::AdditionalEndContent(
-                                        version[idx..].to_owned(),
-                                    )
-                                },
-                            )
+                            let invalid_digit_index =
+                                version.find(|c: char| !c.is_numeric()).unwrap_or(0);
+
+                            if invalid_digit_index == 0 {
+                                ParseVersionedUrlError::InvalidVersion(
+                                    version.to_owned(),
+                                    error.to_string(),
+                                )
+                            } else {
+                                #[expect(
+                                    clippy::string_slice,
+                                    reason = "we just found the index of the first non-numeric \
+                                              character"
+                                )]
+                                ParseVersionedUrlError::AdditionalEndContent(
+                                    version[invalid_digit_index..].to_owned(),
+                                )
+                            }
                         }
                         _ => ParseVersionedUrlError::InvalidVersion(
                             version.to_owned(),
@@ -188,5 +188,52 @@ mod tests {
         let input_str = "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1";
         let url = VersionedUrl::from_str(input_str).expect("parsing versioned URL failed");
         assert_eq!(&url.to_string(), input_str);
+    }
+
+    fn versioned_url_test(input_str: &str, expected: ParseVersionedUrlError) {
+        assert_eq!(
+            VersionedUrl::from_str(input_str).expect_err("able to parse VersionedUrl"),
+            expected
+        );
+    }
+
+    #[test]
+    fn versioned_url_failed() {
+        versioned_url_test(
+            "example/v/2",
+            ParseVersionedUrlError::InvalidBaseUrl(ParseBaseUrlError::UrlParseError(
+                "relative URL without a base".to_owned(),
+            )),
+        );
+        versioned_url_test(
+            "http://example.com",
+            ParseVersionedUrlError::IncorrectFormatting,
+        );
+        versioned_url_test(
+            "http://example.com/v/",
+            ParseVersionedUrlError::MissingVersion,
+        );
+        versioned_url_test(
+            "http://example.com/v/0.2",
+            ParseVersionedUrlError::AdditionalEndContent(".2".to_owned()),
+        );
+        versioned_url_test(
+            "http://example.com/v//20",
+            ParseVersionedUrlError::InvalidVersion(
+                "/20".to_owned(),
+                "invalid digit found in string".to_owned(),
+            ),
+        );
+        versioned_url_test(
+            "http://example.com/v/30/1",
+            ParseVersionedUrlError::AdditionalEndContent("/1".to_owned()),
+        );
+        versioned_url_test(
+            "http://example.com/v/foo",
+            ParseVersionedUrlError::InvalidVersion(
+                "foo".to_owned(),
+                "invalid digit found in string".to_owned(),
+            ),
+        );
     }
 }
