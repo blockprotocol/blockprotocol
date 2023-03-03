@@ -19,6 +19,7 @@ import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode, useState } from "react";
 
 import proTierBackground from "../../../../public/assets/pricing/pro-tier-background.svg";
+import { externalServiceFreeAllowance } from "../../../pages/settings/billing-settings-panel/external-service-free-allowance";
 import { SubscriptionFeatureList } from "../../../pages/settings/billing-settings-panel/subscription-feature-list";
 import { SubscriptionFeature } from "../../../pages/settings/billing-settings-panel/subscription-feature-list-item";
 import {
@@ -229,7 +230,13 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>25</strong> Mapbox Address Autofills
+            <strong>
+              {
+                externalServiceFreeAllowance["Mapbox Address Autofill Session"]
+                  .hobby
+              }
+            </strong>{" "}
+            Mapbox Address Autofills
             <br />
             <Typography
               component="span"
@@ -346,7 +353,12 @@ export const paidSubscriptionFeatures: Record<
                 color: ({ palette }) => palette.purple[60],
               }}
             >
-              e.g. 300k+ words, 100 images, and 50 address autofills
+              e.g. 300k+ words, 100 images, and{" "}
+              {
+                externalServiceFreeAllowance["Mapbox Address Autofill Session"]
+                  .pro
+              }{" "}
+              address autofills
             </Typography>
           </Box>
         ),

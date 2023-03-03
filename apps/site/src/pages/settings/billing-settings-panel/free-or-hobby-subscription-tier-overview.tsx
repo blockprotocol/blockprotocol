@@ -32,6 +32,7 @@ import {
   PaidSubscriptionTier,
   priceToHumanReadable,
 } from "../../shared/subscription-utils";
+import { externalServiceFreeAllowance } from "./external-service-free-allowance";
 import { SubscriptionFeatureList } from "./subscription-feature-list";
 import { SubscriptionFeature } from "./subscription-feature-list-item";
 
@@ -66,7 +67,13 @@ export const paidSubscriptionFeatures: Record<
         icon: <MapboxLogoIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>25</strong> Mapbox Address Autofills
+            <strong>
+              {
+                externalServiceFreeAllowance["Mapbox Address Autofill Session"]
+                  .hobby
+              }
+            </strong>{" "}
+            Mapbox Address Autofills
           </>
         ),
       },
@@ -133,7 +140,12 @@ export const paidSubscriptionFeatures: Record<
               component="span"
               sx={{ color: ({ palette }) => palette.gray[60] }}
             >
-              300k+ words, 100 images, 50 address fills, etc.
+              300k+ words, 100 images,{" "}
+              {
+                externalServiceFreeAllowance["Mapbox Address Autofill Session"]
+                  .pro
+              }{" "}
+              address fills, etc.
             </Box>
           </>
         ),
