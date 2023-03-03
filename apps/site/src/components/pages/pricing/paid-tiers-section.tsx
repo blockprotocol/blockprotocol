@@ -787,7 +787,9 @@ export const PaidTiersSection: FunctionComponent<{
                 />
                 <HobbyTierPerk
                   headerIcon={faLocationDot}
-                  title="20"
+                  title={externalServiceFreeAllowance[
+                    "Mapbox Address Autofill Session"
+                  ].hobby.toString()}
                   description="Address autofills"
                   poweredByIcon={<MapboxLogoIcon sx={{ fontSize: 20 }} />}
                   poweredBy="MAPBOX"
