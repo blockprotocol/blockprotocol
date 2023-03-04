@@ -57,20 +57,21 @@ command = "node"
 [tasks.build]
 category = "Build"
 description = "Builds the package"
-run_task = { name = ["cargo-build-task", "wasm-pack-build-task"] }
+run_task = { name = ["build-host-target", "build-wasm-target"] }
 
-[tasks.cargo-build-task]
+[tasks.build-host-target]
 extend = "cargo"
+private = false
 args = ["build", "--profile", "${CARGO_MAKE_CARGO_PROFILE}", "@@split(CARGO_BUILD_FLAGS, )", "${@}"]
 
 # TODO: add profile
 # TODO: consider moving away from wasm-pack and using wasm-bindgen directly so we can use weak-refs
 #  https://github.com/iotaledger/identity.rs/pull/694
-[tasks.wasm-pack-build-task]
+[tasks.build-wasm-target]
 extend = "node"
+private = false
 cwd = "${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}"
 args = ["--loader", "ts-node/esm", "./../scripts/build-wasm.ts"]
-dependencies = ["install-wasm-pack"]
 
 ################################################################################
 ## Lints                                                                      ##
@@ -172,7 +173,3 @@ install_crate = { rustup_component_name = "rustfmt" }
 [tasks.install-cargo-nextest]
 private = true
 install_crate = { crate_name = "cargo-nextest", version = "0.9.28", binary = "cargo", test_arg = ["nextest", "--version"] }
-
-[tasks.install-wasm-pack]
-private = true
-install_crate = { crate_name = "wasm-pack", version = "0.10.3", binary = "wasm-pack", test_arg = ["--version"] }
