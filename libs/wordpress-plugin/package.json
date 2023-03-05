@@ -48,7 +48,7 @@
     "@wordpress/components": "23.5.0",
     "@wordpress/data": "8.5.0",
     "@wordpress/escape-html": "2.28.0",
-    "@wordpress/scripts": "23.4.0",
+    "@wordpress/scripts": "25.5.0",
     "buffer": "6.0.3",
     "lodash.debounce": "4.0.8",
     "patch-package": "6.5.1",

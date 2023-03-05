@@ -8,7 +8,6 @@ If you are looking to install it on your own WordPress server, please visit http
 
 ### First time set up
 
-- run `nvm use 16` (`@wordpress/scripts` does not currently support v18)
 - run `yarn`
 - run `yarn dev:wordpress`
 - run `yarn dev:plugin`
