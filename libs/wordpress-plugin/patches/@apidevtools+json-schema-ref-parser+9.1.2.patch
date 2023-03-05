@@ -12,14 +12,9 @@ index eaadd2d..467e760 100644
 ++ * 
 ++ * PATCH CHANGES
 ++ * 
-++ * bringing in browser support from https://github.com/APIDevTools/json-schema-ref-parser/pull/280
+++ * bringing in browser support from https://github.com/APIDevTools/json-schema-ref-parser/pull/280 plus additional changes
 ++ * 
-++ * cannot use 10.x due to Node requirement
-++ * 
-++ * Can be removed when one of the following is true:
-++ * - requirement for Node < 17 is dropped from "@wordpress/scripts" (brought in by eslint-plugin-jsdoc@37.9.7)
-++ * - requirement for Node >= 17 is dropped from json-schema-ref-parser
-++ *   @see https://github.com/APIDevTools/json-schema-ref-parser/issues/298
+++ * Updating to 10.x.x still causes browser support issues that need investigating
 ++ */
 +
  const { ono } = require("@jsdevtools/ono");
