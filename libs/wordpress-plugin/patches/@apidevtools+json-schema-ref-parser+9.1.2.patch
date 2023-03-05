@@ -1,0 +1,245 @@
+diff --git a/node_modules/@apidevtools/json-schema-ref-parser/lib/resolvers/http.js b/node_modules/@apidevtools/json-schema-ref-parser/lib/resolvers/http.js
+index eaadd2d..467e760 100644
+--- a/node_modules/@apidevtools/json-schema-ref-parser/lib/resolvers/http.js
++++ b/node_modules/@apidevtools/json-schema-ref-parser/lib/resolvers/http.js
+@@ -1,7 +1,20 @@
+ "use strict";
+ 
+-const http = require("http");
+-const https = require("https");
++/**
+++ * ****************************
+++ * 
+++ * PATCH CHANGES
+++ * 
+++ * bringing in browser support from https://github.com/APIDevTools/json-schema-ref-parser/pull/280
+++ * 
+++ * cannot use 10.x due to Node requirement
+++ * 
+++ * Can be removed when one of the following is true:
+++ * - requirement for Node < 17 is dropped from "@wordpress/scripts" (brought in by eslint-plugin-jsdoc@37.9.7)
+++ * - requirement for Node >= 17 is dropped from json-schema-ref-parser
+++ *   @see https://github.com/APIDevTools/json-schema-ref-parser/issues/298
+++ */
++
+ const { ono } = require("@jsdevtools/ono");
+ const url = require("../util/url");
+ const { ResolverError } = require("../util/errors");
+@@ -65,17 +78,17 @@ module.exports = {
+   },
+ 
+   /**
+-   * Reads the given URL and returns its raw contents as a Buffer.
++   * Reads the given URL and returns its raw contents as a string.
+    *
+    * @param {object} file           - An object containing information about the referenced file
+    * @param {string} file.url       - The full URL of the referenced file
+    * @param {string} file.extension - The lowercased file extension (e.g. ".txt", ".html", etc.)
+-   * @returns {Promise<Buffer>}
++   * @returns {Promise<string>}
+    */
+   read (file) {
+     let u = url.parse(file.url);
+ 
+-    if (process.browser && !u.protocol) {
++    if (typeof window !== "undefined" && !u.protocol) {
+       // Use the protocol of the current page
+       u.protocol = url.parse(location.href).protocol;
+     }
+@@ -91,42 +104,40 @@ module.exports = {
+  * @param {object} httpOptions  - The `options.resolve.http` object
+  * @param {number} [redirects]  - The redirect URLs that have already been followed
+  *
+- * @returns {Promise<Buffer>}
++ * @returns {Promise<string>}
+  * The promise resolves with the raw downloaded data, or rejects if there is an HTTP error.
+  */
+-function download (u, httpOptions, redirects) {
+-  return new Promise(((resolve, reject) => {
+-    u = url.parse(u);
+-    redirects = redirects || [];
+-    redirects.push(u.href);
+-
+-    get(u, httpOptions)
+-      .then((res) => {
+-        if (res.statusCode >= 400) {
+-          throw ono({ status: res.statusCode }, `HTTP ERROR ${res.statusCode}`);
++ function download (u, httpOptions, redirects) {
++  u = url.parse(u);
++  redirects = redirects || [];
++  redirects.push(u.href);
++
++  return get(u, httpOptions)
++    .then((res) => {
++      if (res.statusCode >= 400) {
++        throw ono({ status: res.statusCode }, `HTTP ERROR ${res.statusCode}`);
++      }
++      else if (res.statusCode >= 300) {
++        if (redirects.length > httpOptions.redirects) {
++          throw new ResolverError(ono({ status: res.statusCode },
++            `Error downloading ${redirects[0]}. \nToo many redirects: \n  ${redirects.join(" \n  ")}`));
+         }
+-        else if (res.statusCode >= 300) {
+-          if (redirects.length > httpOptions.redirects) {
+-            reject(new ResolverError(ono({ status: res.statusCode },
+-              `Error downloading ${redirects[0]}. \nToo many redirects: \n  ${redirects.join(" \n  ")}`)));
+-          }
+-          else if (!res.headers.location) {
+-            throw ono({ status: res.statusCode }, `HTTP ${res.statusCode} redirect with no location header`);
+-          }
+-          else {
+-            // console.log('HTTP %d redirect %s -> %s', res.statusCode, u.href, res.headers.location);
+-            let redirectTo = url.resolve(u, res.headers.location);
+-            download(redirectTo, httpOptions, redirects).then(resolve, reject);
+-          }
++        else if (!res.headers.location) {
++          throw ono({ status: res.statusCode }, `HTTP ${res.statusCode} redirect with no location header`);
+         }
+         else {
+-          resolve(res.body || Buffer.alloc(0));
++          // console.log('HTTP %d redirect %s -> %s', res.statusCode, u.href, res.headers.location);
++          let redirectTo = url.resolve(u, res.headers.location);
++          return download(redirectTo, httpOptions, redirects);
+         }
+-      })
+-      .catch((err) => {
+-        reject(new ResolverError(ono(err, `Error downloading ${u.href}`), u.href));
+-      });
+-  }));
++      }
++      else {
++        return res.text();
++      }
++    })
++    .catch((err) => {
++      throw new ResolverError(ono(err, `Error downloading ${u.href}`), u.href);
++    });
+ }
+ 
+ /**
+@@ -138,43 +149,24 @@ function download (u, httpOptions, redirects) {
+  * @returns {Promise<Response>}
+  * The promise resolves with the HTTP Response object.
+  */
+-function get (u, httpOptions) {
+-  return new Promise(((resolve, reject) => {
+-    // console.log('GET', u.href);
+-
+-    let protocol = u.protocol === "https:" ? https : http;
+-    let req = protocol.get({
+-      hostname: u.hostname,
+-      port: u.port,
+-      path: u.path,
+-      auth: u.auth,
+-      protocol: u.protocol,
+-      headers: httpOptions.headers || {},
+-      withCredentials: httpOptions.withCredentials
+-    });
++ function get (u, httpOptions) {
++  let controller;
++  let timeoutId;
++  if (httpOptions.timeout) {
++    controller = new AbortController();
++    timeoutId = setTimeout(() => controller.abort(), httpOptions.timeout);
++  }
+ 
+-    if (typeof req.setTimeout === "function") {
+-      req.setTimeout(httpOptions.timeout);
++  return fetch(u, {
++    method: "GET",
++    headers: httpOptions.headers || {},
++    credentials: httpOptions.withCredentials ? "include" : "same-origin",
++    signal: controller ? controller.signal : null,
++  }).then(response => {
++    if (timeoutId) {
++      clearTimeout(timeoutId);
+     }
+ 
+-    req.on("timeout", () => {
+-      req.abort();
+-    });
+-
+-    req.on("error", reject);
+-
+-    req.once("response", (res) => {
+-      res.body = Buffer.alloc(0);
+-
+-      res.on("data", (data) => {
+-        res.body = Buffer.concat([res.body, Buffer.from(data)]);
+-      });
+-
+-      res.on("error", reject);
+-
+-      res.on("end", () => {
+-        resolve(res);
+-      });
+-    });
+-  }));
++    return response;
++  });
+ }
+\ No newline at end of file
+diff --git a/node_modules/@apidevtools/json-schema-ref-parser/lib/util/url.js b/node_modules/@apidevtools/json-schema-ref-parser/lib/util/url.js
+index 81b3a0d..54e839d 100644
+--- a/node_modules/@apidevtools/json-schema-ref-parser/lib/util/url.js
++++ b/node_modules/@apidevtools/json-schema-ref-parser/lib/util/url.js
+@@ -1,6 +1,6 @@
+ "use strict";
+ 
+-let isWindows = /^win/.test(process.platform),
++let isWindows = /^win/.test(globalThis.process?.platform),
+     forwardSlashPattern = /\//g,
+     protocolPattern = /^(\w{2,}):\/\//i,
+     url = module.exports,
+@@ -22,8 +22,22 @@ let urlDecodePatterns = [
+   /\%40/g, "@"
+ ];
+ 
+-exports.parse = require("url").parse;
+-exports.resolve = require("url").resolve;
++exports.parse = (u) => new URL(u);
++
++/**
++ * Returns resolved target URL relative to a base URL in a manner similar to that of a Web browser resolving an anchor tag HREF.
++ *
++ * @return {string}
++ */
++exports.resolve = function (from, to) {
++  let resolvedUrl = new URL(to, new URL(from, "resolve://"));
++  if (resolvedUrl.protocol === "resolve:") {
++    // `from` is a relative URL.
++    let { pathname, search, hash } = resolvedUrl;
++    return pathname + search + hash;
++  }
++  return resolvedUrl.toString();
++}
+ 
+ /**
+  * Returns the current working directory (in Node) or the current page URL (in browsers).
+@@ -31,7 +45,7 @@ exports.resolve = require("url").resolve;
+  * @returns {string}
+  */
+ exports.cwd = function cwd () {
+-  if (process.browser) {
++  if (typeof window !== "undefined") {
+     return location.href;
+   }
+ 
+@@ -130,7 +144,7 @@ exports.isHttp = function isHttp (path) {
+   }
+   else if (protocol === undefined) {
+     // There is no protocol.  If we're running in a browser, then assume it's HTTP.
+-    return process.browser;
++    return typeof window !== "undefined";
+   }
+   else {
+     // It's some other protocol, such as "ftp://", "mongodb://", etc.
+@@ -146,7 +160,7 @@ exports.isHttp = function isHttp (path) {
+  * @returns {boolean}
+  */
+ exports.isFileSystemPath = function isFileSystemPath (path) {
+-  if (process.browser) {
++  if (typeof window !== "undefined") {
+     // We're running in a browser, so assume that all paths are URLs.
+     // This way, even relative paths will be treated as URLs rather than as filesystem paths
+     return false;

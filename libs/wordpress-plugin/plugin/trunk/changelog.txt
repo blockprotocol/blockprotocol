@@ -1,0 +1,8 @@
+== Changelog ==
+
+= 0.0.2 =
+* Improve rich text editing handling, handling older blocks in editor and API endpoints.
+
+= 0.0.1 =
+* First release of the plugin.
+

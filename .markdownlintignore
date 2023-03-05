@@ -22,6 +22,7 @@ yarn-error.log*
 
 ## Dependency directories
 node_modules
+vendor
 
 ## TypeScript cache
 *.tsbuildinfo
@@ -44,6 +45,7 @@ node_modules
 
 ## Build artifacts
 dist
+build
 
 ## VScode config
 .vscode
