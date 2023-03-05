@@ -31,7 +31,7 @@ require_once __DIR__ . "/server/block-api-endpoints.php";
 require_once __DIR__ . "/server/settings.php";
 require_once __DIR__ . "/server/util.php";
 
-// str_starts_with introduces a minimum WP version of 5.9.0 – we can avoid it by using this instead
+// str_starts_with introduces a minimum WP version of 5.9.0 - we can avoid it by using this instead
 function block_protocol_starts_with($haystack, $needle)
 {
 	return substr_compare($haystack, $needle, 0, strlen($needle)) === 0;

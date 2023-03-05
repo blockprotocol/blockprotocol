@@ -3,17 +3,20 @@
   "version": "0.0.2",
   "private": true,
   "description": "Repository for developing the Block Protocol WordPress plugin",
-  "keywords": [],
-  "homepage": "https://github.com/blockprotocol/wordpress-plugin#readme",
+  "homepage": "https://blockprotocol.org/wordpress",
   "bugs": {
-    "url": "https://github.com/blockprotocol/wordpress-plugin/issues"
+    "url": "https://github.com/blockprotocol/blockprotocol/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blockprotocol/wordpress-plugin.git"
+    "url": "git+https://github.com/blockprotocol/blockprotocol.git",
+    "directory": "libs/wordpress-plugin"
   },
   "license": "see LICENSE.md",
-  "author": "",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
   "scripts": {
     "build": "composer install -d plugin/trunk && wp-scripts build",
     "dev:plugin": "wp-scripts start",
@@ -23,7 +26,6 @@
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit"
   },
-  "dependencies": {},
   "devDependencies": {
     "@apidevtools/json-schema-ref-parser": "9.1.2",
     "@blockprotocol/core": "0.1.0",

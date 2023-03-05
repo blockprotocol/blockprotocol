@@ -169,8 +169,7 @@ export const getEntitySubgraph: GraphEmbedderMessageCallbacks["getEntity"] =
         errors: [
           {
             message: `Error when processing retrieval of entity ${entityId}: ${err}`,
-            // @todo make INTERNAL_ERROR or UNKNOWN_ERROR permitted
-            code: "INVALID_INPUT",
+            code: "INTERNAL_ERROR",
           },
         ],
       };
