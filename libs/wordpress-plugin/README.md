@@ -9,8 +9,9 @@ If you are looking to install it on your own WordPress server, please visit http
 ### First time set up
 
 - run `nvm use 16` (`@wordpress/scripts` does not currently support v18)
-- run `yarn install`
+- run `yarn`
 - run `yarn dev:wordpress`
+- run `yarn dev:plugin`
 - visit [http://localhost:8000](http://localhost:8000)
 - go through the WordPress set up flow
 - go to Plugins in the sidebar, activate Block Protocol
@@ -36,10 +37,10 @@ Some changes (e.g. switching or patching dependencies) may require killing and r
 ### Folder structure
 
 `wordpress` contains a Docker compose file for a local WordPress (run on `yarn dev:wordpress`)
-The `plugin` folder follows the same structure as in its [Subversion release repository]((https://plugins.trac.wordpress.org/browser/blockprotocol), i.e.:
+The `plugin` folder follows the same structure as in its [Subversion release repository](https://plugins.trac.wordpress.org/browser/blockprotocol), i.e.:
 
 - an `assets` folder which contains images for use on its [plugin directory page](https://wordpress.org/plugins/blockprotocol/)
-- a `trunk` folder which represents the latest plugi ncode
+- a `trunk` folder which represents the latest plugin code
 
 In Subversion, there is an additional `tags` folder which contains the code for each release.
 
@@ -51,17 +52,17 @@ Within `trunk` there are:
 - the Block Protocol block (which loads other blocks) in `block/`, inside which:
   - `edit-or-preview.tsx` is the entry point for the admin view of the block
   - `render.tsx` is the script that runs on the user-facing page to render blocks into the appropriate divs
-  - `block-loader.tsx` is shared between the above two and handles display of and communication with blocks
+  - `shared/*` is shared between the above two and handles display of and communication with blocks
   - The folder structure is named so that any sub-folder contains private dependencies for files in the folder above it, e.g.
-    - `src/edit/` contains files that are only used by `src/edit.tsx`
-    - `src/edit/block-loader/` . contains files that are only used by `src/edit/block-loader.tsx`
+    - `edit-or-preview/` contains files that are only used by `edit-or-preview.tsx`
+    - `edit-or-preview/edit/` . contains files that are only used by `edit-or-preview/edit.tsx`
     - and so on.
 
 ## Minimum WordPress Requirements
 
-- **WordPress:** you must be running at least WordPress 5.6
+- **WordPress:** you must be running at least WordPress 5.6 (due to Composer autoload)
 - **PHP 7.4 or later:** your server must be running at least PHP 7.4. PHP 8.0 and 8.1 are also supported.
-- **MySQL 8 _or_ MariaDB 10.2.7+:** your database must be using at least MySQL 8. Be aware, the previous version of MySQL (5.6 and 5.7) respectively reach(ed) end of life in February 2021 and October 2023. You should upgrade to MySQL 8 now to continue to receive security updates, as well as to use the Block Protocol within WordPress. As for MariaDB, although the plugin would work with an old version, we strongly recommend using the newest version available to you.
+- **MySQL 8 _or_ MariaDB 10.2.7+:** your database must be using at least MySQL 8 (due to use of recursive CTE queries). Be aware, the previous version of MySQL (5.6 and 5.7) respectively reach(ed) end of life in February 2021 and October 2023. You should upgrade to MySQL 8 now to continue to receive security updates, as well as to use the Block Protocol within WordPress. As for MariaDB, although the plugin would work with an old version, we strongly recommend using the newest version available to you.
 - **HTTPS:** your webhost must support HTTPS in order for the Block Protocol to properly function.
 
 To check what your WordPress instance supports, please navigate to `Admin -> Tools -> Site Health -> Info` and then click into either `Server` (for PHP) or `Database` (for MySQL/MariaDB).
