@@ -22,13 +22,13 @@ How exactly the embedding application generates those messages is beyond the sco
 
 #### <Hidden>Handling messages </Hidden>Specification
 
-Embedding applications MUST ensure that any responses they provide to blocks to messages sent under the service module are consistent with the schema and described intent of the message in this specification, and consistent with the response that the named service provider would return, except for any fields which are required by the named service provider but omitted from this specification (e.g. because they relate to authentication or other information that the block should not or does not have access to, and is added by the embedding application when making an onward request).
+Embedding applications MUST ensure that any responses they provide to blocks to messages sent under the service module are consistent with the schema and described intent of the message in this specification, and consistent with the response that the named service provider would return, except for any fields which are required by the named service provider but omitted from this specification (e.g. because they relate to authentication or other information that the block should not or does not have access to, and which can be added by the embedding application when making a request to an external service provider in order to produce a response for the block).
 
-They MAY implement messages by doing any of the following:
+Embedding applications MAY generate a response to a block's message by doing any of the following:
 
-- calling the named service provider directly, OR
+- calling the external service provider directly (augmenting the block's original request with any additional fields or headers the service provider requires), OR
 - generating the response internally, OR
-- calling another third-party that provides an appropriate response, whether directly or by themselves making a request to the named service provider.
+- calling a third party that provides an appropriate response, whether the third party generates this response directly or by themselves making a request to the named service provider.
 
 ### Error definitions
 
