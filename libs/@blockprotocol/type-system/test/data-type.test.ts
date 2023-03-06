@@ -80,6 +80,7 @@ const invalidDataTypes: [DataType, ParseDataTypeError][] = [
       reason: "InvalidVersionedUrl",
       inner: {
         reason: "AdditionalEndContent",
+        inner: ".3",
       },
     },
   ],
