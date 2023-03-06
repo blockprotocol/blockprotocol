@@ -1,6 +1,6 @@
 {
   "name": "blockprotocol",
-  "version": "0.2.1",
+  "version": "0.2.2-canary-20230306142735",
   "description": "Command Line Interface (CLI) for the Block Protocol API",
   "keywords": [
     "blockprotocol",
