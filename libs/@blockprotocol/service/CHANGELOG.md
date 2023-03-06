@@ -1,5 +1,11 @@
 # @blockprotocol/service
 
+## 0.1.1-canary-20230306175645
+
+### Patch Changes
+
+- [#1125](https://github.com/blockprotocol/blockprotocol/pull/1125) [`52cc687f`](https://github.com/blockprotocol/blockprotocol/commit/52cc687f13f1076e6bf77198e60e9cd5adc3a32b) Thanks [@benwerner01](https://github.com/benwerner01)! - Add OpenAI `completeChat` method
+
 ## 0.1.0
 
 ### Minor Changes
