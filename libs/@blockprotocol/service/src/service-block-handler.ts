@@ -25,6 +25,8 @@ import {
   MapboxReverseGeocodingResponseData,
   MapboxSuggestAddressData,
   MapboxSuggestAddressResponseData,
+  OpenAICompleteChatData,
+  OpenAICompleteChatResponseData,
   OpenAICompleteTextData,
   OpenAICompleteTextResponseData,
   OpenAICreateImageData,
@@ -135,6 +137,19 @@ export class ServiceBlockHandler
         data,
       },
       respondedToBy: "openaiCompleteTextResponse",
+    });
+  }
+
+  openaiCompleteChat({ data }: { data?: OpenAICompleteChatData }) {
+    return this.sendMessage<
+      OpenAICompleteChatResponseData,
+      ServiceMessageError
+    >({
+      message: {
+        messageName: "openaiCompleteChat",
+        data,
+      },
+      respondedToBy: "openaiCompleteChatResponse",
     });
   }
 

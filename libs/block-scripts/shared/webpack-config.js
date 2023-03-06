@@ -108,7 +108,7 @@ export const generateBuildWebpackConfig = async (mode) => {
   return {
     ...baseWebpackConfig,
     watch: mode === "development",
-    devtool: mode === "development" ? "inline-source-map" : "source-map",
+    devtool: mode === "development" ? "inline-source-map" : undefined,
     plugins: [
       ...(baseWebpackConfig.plugins ?? []),
       ...(mode === "production" ? [new BlockAssetsPlugin()] : []),

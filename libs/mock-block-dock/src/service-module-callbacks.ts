@@ -91,6 +91,15 @@ export const constructServiceModuleCallbacks = (params: {
         blockProtocolSiteHost,
       }),
 
+    openaiCompleteChat: async ({ data: payload }) =>
+      callExternalApiMethod({
+        providerName: "openai",
+        methodName: "completeChat",
+        payload,
+        blockProtocolApiKey,
+        blockProtocolSiteHost,
+      }),
+
     /** Mapbox Geocoding API */
 
     mapboxForwardGeocoding: async ({ data: payload }) =>
