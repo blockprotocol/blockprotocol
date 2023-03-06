@@ -22,7 +22,7 @@ yarn-error.log*
 
 ## Dependency directories
 node_modules
-vendor
+vendor/
 
 ## TypeScript cache
 *.tsbuildinfo
@@ -45,7 +45,7 @@ vendor
 
 ## Build artifacts
 dist
-build
+build/
 
 ## VScode config
 .vscode
