@@ -25,6 +25,8 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     restart: always
+    security_opt:
+      - no-new-privileges:true
     environment:
       MYSQL_ROOT_PASSWORD: somewordpress
       MYSQL_DATABASE: wordpress
@@ -38,6 +40,8 @@ services:
     ports:
       - "8000:80"
     restart: always
+    security_opt:
+      - no-new-privileges:true
     environment:
       BLOCK_PROTOCOL_SITE_HOST: https://blockprotocol.org
       WORDPRESS_DB_HOST: db:3306
