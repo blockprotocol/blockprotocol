@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/service",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Implementation of the Block Protocol service module specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
@@ -53,7 +53,7 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.14"
+    "@blockprotocol/core": "0.1.0"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
@@ -61,7 +61,7 @@
     "@mapbox/search-js-core": "^1.0.0-beta.14",
     "@types/node": "^18.13.0",
     "eslint": "8.33.0",
-    "openai": "^3.1.0",
+    "openai": "^3.2.1",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "typescript": "4.9.4",

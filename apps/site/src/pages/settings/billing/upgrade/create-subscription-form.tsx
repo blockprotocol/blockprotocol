@@ -1,4 +1,5 @@
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { SubscriptionTierPrices } from "@local/internal-api-client";
 import { Box, Collapse, Typography } from "@mui/material";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { PaymentIntent, StripeCardElementChangeEvent } from "@stripe/stripe-js";
@@ -14,12 +15,23 @@ import {
 import { Button } from "../../../../components/button";
 import { FontAwesomeIcon } from "../../../../components/icons";
 import { FRONTEND_URL } from "../../../../lib/config";
-import { priceToHumanReadable } from "../../../shared/subscription-utils";
+import {
+  dateToHumanReadable,
+  priceToHumanReadable,
+  subscriptionTierToHumanReadable,
+} from "../../../shared/subscription-utils";
 
 export const CreateSubscriptionCheckoutForm: FunctionComponent<{
+  upgradedSubscriptionTier?: "hobby" | "pro";
+  subscriptionTierPrices?: SubscriptionTierPrices;
   clientSecret?: string;
   onCompleted?: () => void;
-}> = ({ clientSecret, onCompleted }) => {
+}> = ({
+  upgradedSubscriptionTier,
+  subscriptionTierPrices,
+  clientSecret,
+  onCompleted,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -94,6 +106,52 @@ export const CreateSubscriptionCheckoutForm: FunctionComponent<{
 
   return (
     <>
+      <Box display="flex" justifyContent="space-between" marginBottom={2}>
+        <Box>
+          <Typography variant="bpSmallCopy" component="p">
+            <strong>New monthly total</strong>
+          </Typography>
+          <Typography
+            variant="bpSmallCopy"
+            component="p"
+            sx={{ color: ({ palette }) => palette.gray["60"] }}
+          >
+            {upgradedSubscriptionTier
+              ? subscriptionTierToHumanReadable(upgradedSubscriptionTier)
+              : ""}{" "}
+            plan starting on {dateToHumanReadable(new Date())}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="bpSmallCopy" component="p" textAlign="right">
+            {upgradedSubscriptionTier && subscriptionTierPrices
+              ? priceToHumanReadable({
+                  amountInCents:
+                    subscriptionTierPrices[upgradedSubscriptionTier]
+                      .unit_amount!,
+                  currency:
+                    subscriptionTierPrices[upgradedSubscriptionTier].currency,
+                  decimalPlaces: 0,
+                })
+              : ""}{" "}
+            /month
+          </Typography>
+          <Typography
+            variant="bpSmallCopy"
+            component="p"
+            sx={{ color: ({ palette }) => palette.gray["60"] }}
+            textAlign="right"
+          >
+            {paymentIntent
+              ? priceToHumanReadable({
+                  amountInCents: paymentIntent.amount,
+                  currency: paymentIntent.currency,
+                })
+              : ""}{" "}
+            inc. taxes
+          </Typography>
+        </Box>
+      </Box>
       <Box display="flex" justifyContent="space-between" marginBottom={2}>
         <Typography variant="bpSmallCopy" component="p">
           <strong>Due today</strong>

@@ -35,7 +35,7 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
 
       <PageContainer sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
         <Typography variant="bpHeading2" mb={-2}>
-          Welcome Back, {userName}!
+          Welcome back, {userName}!
         </Typography>
 
         <DashboardSectionTitle mb={-1}>Create</DashboardSectionTitle>

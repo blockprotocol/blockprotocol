@@ -75,39 +75,37 @@ const TableCell = styled(MuiTableCell)(({ theme }) =>
 );
 
 export const PaymentHistorySection: FunctionComponent<{
-  userHasStripeSubscription: boolean;
-}> = ({ userHasStripeSubscription }) => {
-  const [upcomingInvoice, setUpcomingInvoice] =
-    useState<Stripe.UpcomingInvoice>();
-  const [invoices, setInvoices] = useState<Stripe.Invoice[]>();
+  stripeSubscriptionId?: string;
+  stripeSubscriptionStatus?: Stripe.Subscription.Status;
+}> = ({ stripeSubscriptionId, stripeSubscriptionStatus }) => {
+  const [pastInvoices, setPastInvoices] = useState<Stripe.Invoice[]>();
 
   const fetchInvoices = useCallback(async () => {
     const {
       data: { invoices: fetchedInvoices },
     } = await internalApi.getInvoices();
 
-    setInvoices(fetchedInvoices.sort((a, b) => a.created - b.created));
-  }, [setInvoices]);
-
-  const fetchUpcomingInvoice = useCallback(async () => {
-    const {
-      data: { upcomingInvoice: fetchedUpcomingInvoice },
-    } = await internalApi.getUpcomingInvoice();
-
-    setUpcomingInvoice(fetchedUpcomingInvoice);
-  }, [setUpcomingInvoice]);
+    setPastInvoices(fetchedInvoices.sort((a, b) => b.created - a.created));
+  }, [setPastInvoices]);
 
   useEffect(() => {
-    if (userHasStripeSubscription) {
-      void fetchInvoices();
-      void fetchUpcomingInvoice();
-    }
-  }, [fetchInvoices, fetchUpcomingInvoice, userHasStripeSubscription]);
+    void fetchInvoices();
+  }, [fetchInvoices, stripeSubscriptionStatus]);
 
-  const allInvoices = useMemo<(Stripe.Invoice | Stripe.UpcomingInvoice)[]>(
+  const invoices = useMemo<(Stripe.Invoice | Stripe.UpcomingInvoice)[]>(
     () =>
-      upcomingInvoice ? [upcomingInvoice, ...(invoices ?? [])] : invoices ?? [],
-    [upcomingInvoice, invoices],
+      stripeSubscriptionStatus &&
+      stripeSubscriptionStatus !== "incomplete" &&
+      stripeSubscriptionStatus !== "incomplete_expired"
+        ? pastInvoices ?? []
+        : stripeSubscriptionId
+        ? pastInvoices?.filter(({ subscription }) =>
+            subscription && typeof subscription === "object"
+              ? subscription.id !== stripeSubscriptionId
+              : subscription !== stripeSubscriptionId,
+          ) ?? []
+        : [],
+    [stripeSubscriptionId, stripeSubscriptionStatus, pastInvoices],
   );
 
   return (
@@ -127,11 +125,11 @@ export const PaymentHistorySection: FunctionComponent<{
           marginBottom: 2,
         }}
       >
-        {!userHasStripeSubscription || allInvoices.length === 0
-          ? "No upcoming or previous payments could be found"
-          : "Upcoming and historical bills you’ve incurred on this account"}
+        {invoices.length === 0
+          ? "No previous payments could be found"
+          : "Historical bills you’ve incurred on this account"}
       </Typography>
-      {allInvoices.length > 0 ? (
+      {invoices.length > 0 ? (
         <>
           <Table
             sx={{
@@ -158,24 +156,16 @@ export const PaymentHistorySection: FunctionComponent<{
               </TableRow>
             </TableHead>
             <TableBody>
-              {allInvoices.map((invoice) => {
-                const isUpcomingInvoice = !("id" in invoice);
+              {invoices.map((invoice) => {
+                const invoiceStatus = invoice.status ?? "unknown";
 
-                const invoiceStatus = isUpcomingInvoice
-                  ? "pending"
-                  : invoice.status ?? "unknown";
-
-                const invoiceId = isUpcomingInvoice
-                  ? "-"
-                  : `#${invoice.number}`;
+                const invoiceId = `#${invoice.number}`;
 
                 const capitalizedInvoiceStatus = `${invoiceStatus[0]?.toUpperCase()}${invoiceStatus.slice(
                   1,
                 )}`;
 
-                const invoiceDateStripeDate = isUpcomingInvoice
-                  ? invoice.next_payment_attempt
-                  : invoice.created;
+                const invoiceDateStripeDate = invoice.created;
 
                 const invoiceDate = getDateFromStripeDate(
                   invoiceDateStripeDate ?? 0,
@@ -192,14 +182,6 @@ export const PaymentHistorySection: FunctionComponent<{
                   currency: invoice.currency,
                 });
 
-                const availableOnFormattedDate = new Intl.DateTimeFormat(
-                  "en-US",
-                  {
-                    month: "short",
-                    day: "numeric",
-                  },
-                ).format(invoiceDate);
-
                 return (
                   <TableRow key={invoiceId}>
                     <TableCell sx={{ position: "relative" }}>
@@ -213,18 +195,7 @@ export const PaymentHistorySection: FunctionComponent<{
                     </TableCell>
                     <TableCell>{formattedInvoiceDate}</TableCell>
                     <TableCell>{invoiceId}</TableCell>
-                    <TableCell>
-                      {invoicePrice}
-                      {isUpcomingInvoice ? (
-                        <Box
-                          component="span"
-                          sx={{ color: ({ palette }) => palette.gray[50] }}
-                        >
-                          {" "}
-                          to date
-                        </Box>
-                      ) : undefined}
-                    </TableCell>
+                    <TableCell>{invoicePrice}</TableCell>
                     <TableCell
                       sx={{ display: "flex", justifyContent: "center" }}
                     >
@@ -241,11 +212,7 @@ export const PaymentHistorySection: FunctionComponent<{
                           PDF
                         </LinkButton>
                       ) : (
-                        <Chip color="gray">
-                          {isUpcomingInvoice
-                            ? `Available ${availableOnFormattedDate}`
-                            : "Unavailable"}
-                        </Chip>
+                        <Chip color="gray">Unavailable</Chip>
                       )}
                     </TableCell>
                   </TableRow>

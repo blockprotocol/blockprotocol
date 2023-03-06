@@ -38,22 +38,41 @@ export const createBaseHandler = <
 }) => {
   const { isPublicApi } = options ?? {};
 
-  return nextConnect<BaseApiRequest<RequestBody>, BaseApiResponse<Response>>({
-    onError: async (error, request, response) => {
-      // Source: https://github.com/vercel/next.js/blob/cd3e054f14ce38f4ff57c727a997da2a6e1d05dd/examples/with-sentry/pages/api/test4.js
-      Sentry.captureException(error);
-      await Sentry.flush(2000);
+  return (
+    nextConnect<BaseApiRequest<RequestBody>, BaseApiResponse<Response>>({
+      onError: async (error, request, response) => {
+        // Source: https://github.com/vercel/next.js/blob/cd3e054f14ce38f4ff57c727a997da2a6e1d05dd/examples/with-sentry/pages/api/test4.js
+        Sentry.captureException(error);
+        await Sentry.flush(2000);
 
-      // Default next-connect behavior
-      // https://github.com/hoangvvo/next-connect/blob/e5ac7faf380a73114a2b6b07b0a43a01f8c1be36/src/node.ts#L125-L127
-      response.statusCode = 500;
-      // eslint-disable-next-line no-console
-      console.error(error);
-      response.end("Internal Server Error");
-    },
-  })
-    .use(cors({ origin: isPublicApi ? "*" : FRONTEND_URL, credentials: true }))
-    .use(dbMiddleware)
-    .use(sessionMiddleware)
-    .use(...passportMiddleware);
+        // Default next-connect behavior
+        // https://github.com/hoangvvo/next-connect/blob/e5ac7faf380a73114a2b6b07b0a43a01f8c1be36/src/node.ts#L125-L127
+        response.statusCode = 500;
+        // eslint-disable-next-line no-console
+        console.error(error);
+        response.end("Internal Server Error");
+      },
+    })
+      .use(
+        cors({ origin: isPublicApi ? "*" : FRONTEND_URL, credentials: true }),
+      )
+      .use(dbMiddleware)
+      .use(sessionMiddleware)
+      /**
+       * Manually set `req.session.regenerate` and `req.session.save` to prevent error
+       * in `passport`. This should be removed once an alternative solution is available.
+       *
+       * @see https://github.com/jaredhanson/passport/issues/904
+       */
+      .use((req, _res, next) => {
+        if (req.session && !req.session.regenerate) {
+          req.session.regenerate = (cb: () => any) => cb();
+        }
+        if (req.session && !req.session.save) {
+          req.session.save = (cb: () => any) => cb();
+        }
+        next();
+      })
+      .use(...passportMiddleware)
+  );
 };

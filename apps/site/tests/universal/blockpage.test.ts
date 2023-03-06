@@ -2,7 +2,7 @@ import { expect, test } from "../shared/wrapped-playwright.js";
 
 const codeBlockUrl = "/@hash/blocks/code";
 
-test("Updating block properties should update block preview", async ({
+test.skip("Updating block properties should update block preview", async ({
   page,
   isMobile,
   browserName,

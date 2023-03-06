@@ -1,6 +1,6 @@
 {
   "name": "mock-block-dock",
-  "version": "0.0.40",
+  "version": "0.1.0",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
@@ -37,10 +37,10 @@
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.14",
-    "@blockprotocol/graph": "0.0.20",
-    "@blockprotocol/hook": "0.0.10",
-    "@blockprotocol/service": "0.0.2",
+    "@blockprotocol/core": "0.1.0",
+    "@blockprotocol/graph": "0.1.0",
+    "@blockprotocol/hook": "0.1.0",
+    "@blockprotocol/service": "0.1.0",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@lit-labs/react": "^1.0.4",
@@ -59,19 +59,19 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.5",
+    "@babel/core": "^7.21.0",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/plugin-transform-runtime": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
-    "@babel/preset-typescript": "7.18.6",
-    "@babel/runtime": "^7.20.6",
+    "@babel/preset-typescript": "^7.21.0",
+    "@babel/runtime": "^7.21.0",
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "@types/dotenv-webpack": "^7.0.3",
     "@types/mime": "^3.0.1",
     "@types/react-resizable": "^3.0.3",
-    "babel-loader": "^9.1.0",
+    "babel-loader": "^9.1.2",
     "concurrently": "^7.6.0",
     "core-js": "^3.26.1",
     "cross-env": "^7.0.3",

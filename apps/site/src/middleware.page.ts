@@ -3,7 +3,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { SESSION_COOKIE_NAME } from "./lib/api/middleware/constants";
 import {
   returnTypeAsJson,
   versionedTypeUrlRegExp,
@@ -36,17 +35,6 @@ export async function middleware(request: NextRequest) {
 
     if (url.host === productionSandboxHost && !openingBlockSandboxPage) {
       return changeHostAndRedirect(productionFrontendHost);
-    }
-  }
-
-  if (url.pathname === "/") {
-    const { cookies } = request;
-
-    // destroying session at `logout.api.ts` removes this cookie
-    const isLoggedIn = !!cookies.get(SESSION_COOKIE_NAME);
-
-    if (isLoggedIn) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
 

@@ -19,6 +19,7 @@ import { LinkIcon } from "../../../../components/icons";
 import { Link } from "../../../../components/link";
 import { useUser } from "../../../../context/user-context";
 import { apiClient } from "../../../../lib/api-client";
+import { isLinkEntityType } from "../../../../util/type-system-util";
 import { EntityTypeEditBar } from "./[...slug-maybe-version].page/entity-type-edit-bar";
 import { EntityTypeForm } from "./[...slug-maybe-version].page/entity-type-form";
 import { fetchEntityType } from "./[...slug-maybe-version].page/fetch-entity-type";
@@ -32,9 +33,6 @@ type EntityTypePageQueryParams = {
   shortname?: string;
   title?: string;
 };
-
-const linkEntityTypeId =
-  "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1";
 
 const EntityTypePage: NextPage = () => {
   const router = useRouter();
@@ -164,9 +162,7 @@ const EntityTypePage: NextPage = () => {
 
   const title = entityType.schema.title;
 
-  const isLinkEntityType = !!entityType.schema.allOf?.some(
-    (parent) => parent.$ref === linkEntityTypeId,
-  );
+  const entityTypeIsLink = isLinkEntityType(entityType);
 
   return (
     <>
@@ -195,7 +191,7 @@ const EntityTypePage: NextPage = () => {
                 {" >"}
               </Link>
               <Stack flexDirection="row" alignItems="center">
-                {isLinkEntityType && (
+                {entityTypeIsLink && (
                   <Tooltip
                     title="This is a 'link' entity type. It is used to link other entities together."
                     placement="top"
@@ -253,7 +249,10 @@ const EntityTypePage: NextPage = () => {
                   >
                     Description
                   </Typography>
-                  <Typography variant="bpBodyCopy">
+                  <Typography
+                    variant="bpBodyCopy"
+                    style={{ whiteSpace: "pre" }}
+                  >
                     {entityType.schema.description}
                   </Typography>
                 </Box>

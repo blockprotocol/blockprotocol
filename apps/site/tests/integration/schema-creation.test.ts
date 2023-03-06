@@ -37,15 +37,19 @@ test("user should be able to create an Entity Type", async ({ page }) => {
     ),
   ).toBeVisible();
 
-  const inputs = await schemaModal.locator("input").all();
+  const input = await schemaModal.locator("input");
 
-  await expect(inputs[0]!).toBeFocused();
+  await expect(input).toBeFocused();
 
-  await expect(inputs.length).toBe(2);
+  await input.fill(existingSchemaName);
 
-  await inputs[0]!.fill(existingSchemaName);
+  const textareas = await schemaModal.locator("textarea").all();
 
-  await inputs[1]!.fill("Test description");
+  expect(textareas.length).toBe(2);
+
+  const textarea = textareas[0]!;
+
+  await textarea.fill("Test description");
 
   await expect(schemaModal.locator('button:has-text("Create")')).toBeEnabled();
 
@@ -57,7 +61,7 @@ test("user should be able to create an Entity Type", async ({ page }) => {
     }),
   ).toBeVisible();
 
-  await inputs[0]!.fill(newSchemaName);
+  await input.fill(newSchemaName);
 
   await expect(schemaModal.locator('button:has-text("Create")')).toBeEnabled();
 
