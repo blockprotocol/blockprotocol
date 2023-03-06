@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 
 import styles from "./base.module.scss";
 import { CompanyFactory } from "./components/create-entity/company-factory";
+import { LinkFactory } from "./components/create-entity/link-factory";
 import { PersonFactory } from "./components/create-entity/person-factory";
 import { RefreshDataProvider } from "./contexts/refresh-data";
 import {
@@ -68,6 +69,7 @@ export const App: BlockComponent<BlockEntity> = ({
       <div className={styles.block} ref={blockRootRef}>
         <PersonFactory graphModule={graphModule} />
         <CompanyFactory graphModule={graphModule} />
+        <LinkFactory graphModule={graphModule} />
       </div>
     </RefreshDataProvider>
   );
