@@ -1,11 +1,5 @@
 # blockprotocol
 
-## 0.2.2-canary-20230306142735
-
-### Patch Changes
-
-- [#1091](https://github.com/blockprotocol/blockprotocol/pull/1091) [`d09f5291`](https://github.com/blockprotocol/blockprotocol/commit/d09f5291d6f6f2df3690cc7bd75030516ca30abd) Thanks [@CiaranMn](https://github.com/CiaranMn)! - skip user prompts if running in ci
-
 ## 0.2.1
 
 ### Patch Changes

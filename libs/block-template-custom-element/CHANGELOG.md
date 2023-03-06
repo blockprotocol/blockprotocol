@@ -1,12 +1,5 @@
 # block-template-custom-element
 
-## 0.2.1-canary-20230306142735
-
-### Patch Changes
-
-- Updated dependencies [[`2bbeefa2`](https://github.com/blockprotocol/blockprotocol/commit/2bbeefa2888bfe9c81ad61d4dc7d41433e57ae75)]:
-  - block-scripts@0.1.1-canary-20230306142735
-
 ## 0.2.0
 
 ### Minor Changes

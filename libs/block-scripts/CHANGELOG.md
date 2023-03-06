@@ -1,11 +1,5 @@
 # block-scripts
 
-## 0.1.1-canary-20230306142735
-
-### Patch Changes
-
-- [#1116](https://github.com/blockprotocol/blockprotocol/pull/1116) [`2bbeefa2`](https://github.com/blockprotocol/blockprotocol/commit/2bbeefa2888bfe9c81ad61d4dc7d41433e57ae75) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Bump bundler dependencies
-
 ## 0.1.0
 
 ### Minor Changes

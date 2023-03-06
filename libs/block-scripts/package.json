@@ -1,6 +1,6 @@
 {
   "name": "block-scripts",
-  "version": "0.1.1-canary-20230306142735",
+  "version": "0.1.0",
   "description": "Block development framework",
   "keywords": [
     "blockprotocol",
