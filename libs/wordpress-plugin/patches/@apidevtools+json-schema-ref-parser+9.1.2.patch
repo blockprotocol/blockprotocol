@@ -9,12 +9,17 @@ index eaadd2d..467e760 100644
 -const https = require("https");
 +/**
 ++ * ****************************
-++ * 
+++ *
 ++ * PATCH CHANGES
-++ * 
-++ * bringing in browser support from https://github.com/APIDevTools/json-schema-ref-parser/pull/280 plus additional changes
-++ * 
-++ * Updating to 10.x.x still causes browser support issues that need investigating
+++ *
+++ * bringing in browser support from https://github.com/APIDevTools/json-schema-ref-parser/pull/280
+++ *
+++ * plus some other changes for browser support
+++ *
+++ * tried using json-schema-ref-parser 10.1.0 but there were still Node APIs being used
+++ *
+++ * true as of March 2023
+++ *
 ++ */
 +
  const { ono } = require("@jsdevtools/ono");
