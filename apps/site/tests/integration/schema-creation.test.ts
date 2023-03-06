@@ -57,7 +57,7 @@ test("user should be able to create an Entity Type", async ({ page }) => {
 
   await expect(
     page.locator("[data-testid='create-schema-modal']", {
-      hasText: `User already has an entity type with id ${existingSchemaWithMetadata.schema.$id}`,
+      hasText: `Type title must be unique`,
     }),
   ).toBeVisible();
 
