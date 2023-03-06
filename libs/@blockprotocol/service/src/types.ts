@@ -1,4 +1,4 @@
-import { MessageCallback } from "@blockprotocol/core";
+import { MessageCallback, MessageReturn } from "@blockprotocol/core";
 
 import {
   AutofillOptions,
@@ -14,6 +14,8 @@ import {
   SessionTokenOptions,
 } from "./mapbox-types";
 import type {
+  CreateChatCompletionRequest,
+  CreateChatCompletionResponse,
   CreateCompletionRequest,
   CreateCompletionResponse,
   CreateImageRequest,
@@ -39,6 +41,10 @@ export type OpenAICreateImageResponseData = ImagesResponse;
 export type OpenAICompleteTextData = Omit<CreateCompletionRequest, "user">;
 
 export type OpenAICompleteTextResponseData = CreateCompletionResponse;
+
+export type OpenAICompleteChatData = Omit<CreateChatCompletionRequest, "user">;
+
+export type OpenAICompleteChatResponseData = CreateChatCompletionResponse;
 
 /** Mapbox Geocoding API */
 
@@ -249,14 +255,21 @@ export type ServiceEmbedderMessageCallbacks = {
   openaiCreateImage: MessageCallback<
     OpenAICreateImageData,
     null,
-    { data: OpenAICreateImageResponseData },
+    MessageReturn<OpenAICreateImageResponseData>,
     ServiceMessageError
   >;
 
   openaiCompleteText: MessageCallback<
     OpenAICompleteTextData,
     null,
-    { data: OpenAICompleteTextResponseData },
+    MessageReturn<OpenAICompleteTextResponseData>,
+    ServiceMessageError
+  >;
+
+  openaiCompleteChat: MessageCallback<
+    OpenAICompleteChatData,
+    null,
+    MessageReturn<OpenAICompleteChatResponseData>,
     ServiceMessageError
   >;
 
@@ -265,14 +278,14 @@ export type ServiceEmbedderMessageCallbacks = {
   mapboxForwardGeocoding: MessageCallback<
     MapboxForwardGeocodingData,
     null,
-    { data: MapboxForwardGeocodingResponseData },
+    MessageReturn<MapboxForwardGeocodingResponseData>,
     ServiceMessageError
   >;
 
   mapboxReverseGeocoding: MessageCallback<
     MapboxReverseGeocodingData,
     null,
-    { data: MapboxReverseGeocodingResponseData },
+    MessageReturn<MapboxReverseGeocodingResponseData>,
     ServiceMessageError
   >;
 
@@ -281,7 +294,7 @@ export type ServiceEmbedderMessageCallbacks = {
   mapboxRetrieveDirections: MessageCallback<
     MapboxRetrieveDirectionsData,
     null,
-    { data: MapboxRetrieveDirectionsResponseData },
+    MessageReturn<MapboxRetrieveDirectionsResponseData>,
     ServiceMessageError
   >;
 
@@ -290,7 +303,7 @@ export type ServiceEmbedderMessageCallbacks = {
   mapboxRetrieveIsochrones: MessageCallback<
     MapboxRetrieveIsochronesData,
     null,
-    { data: MapboxRetrieveIsochronesResponseData },
+    MessageReturn<MapboxRetrieveIsochronesResponseData>,
     ServiceMessageError
   >;
 
@@ -299,21 +312,21 @@ export type ServiceEmbedderMessageCallbacks = {
   mapboxSuggestAddress: MessageCallback<
     MapboxSuggestAddressData,
     null,
-    { data: MapboxSuggestAddressResponseData },
+    MessageReturn<MapboxSuggestAddressResponseData>,
     ServiceMessageError
   >;
 
   mapboxRetrieveAddress: MessageCallback<
     MapboxRetrieveAddressData,
     null,
-    { data: MapboxRetrieveAddressResponseData },
+    MessageReturn<MapboxRetrieveAddressResponseData>,
     ServiceMessageError
   >;
 
   mapboxCanRetrieveAddress: MessageCallback<
     MapboxCanRetrieveAddressData,
     null,
-    { data: MapboxCanRetrieveAddressResponseData },
+    MessageReturn<MapboxCanRetrieveAddressResponseData>,
     ServiceMessageError
   >;
 
@@ -322,7 +335,7 @@ export type ServiceEmbedderMessageCallbacks = {
   mapboxRetrieveStaticMap: MessageCallback<
     MapboxRetrieveStaticMapData,
     null,
-    { data: MapboxRetrieveStaticMapResponseData },
+    MessageReturn<MapboxRetrieveStaticMapResponseData>,
     ServiceMessageError
   >;
 };
