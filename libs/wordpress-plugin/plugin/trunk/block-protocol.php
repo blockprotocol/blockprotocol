@@ -196,6 +196,11 @@ function block_dynamic_render_callback($block_attributes)
 //    - register each BP block as a variation of the plugin block
 function block_protocol_init()
 {
+	// DB is unsupported - bail
+  if (!block_protocol_is_database_supported()) {
+    return;
+  }
+
 	$response = get_block_protocol_blocks();
 	if (isset($response['errors'])) {
 		// user needs to set a valid API key – bail

@@ -63,6 +63,11 @@ function block_protocol_migrate()
 {
   $saved_version = (int) get_site_option('block_protocol_db_migration_version');
 
+  // Don't apply migrations if the DB version is unsupported.
+  if (!block_protocol_is_database_supported()) {
+    return;
+  }
+
   if ($saved_version < 2) {
     block_protocol_migration_1();
     update_site_option('block_protocol_db_migration_version', 2);
