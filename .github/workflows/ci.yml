@@ -3,7 +3,11 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main, 0.3]
+  merge_group:
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -13,7 +17,6 @@ env:
 jobs:
   linting:
     name: Linting
-    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
 
     steps:
@@ -166,7 +169,6 @@ jobs:
 
   packages:
     name: NPM Packages
-    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
     timeout-minutes: 60
 
@@ -335,7 +337,9 @@ jobs:
         if: ${{ success() || failure() }}
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
-          fail_ci_if_error: true
+          ## Temporarily disabled until https://github.com/codecov/codecov-action/issues/932 is resolved, and/or we rely
+          ## on coverage reports more strictly
+          fail_ci_if_error: false
           files: coverage/lcov.info
           flags: site-integration-${{ matrix.device }}
           token: ${{ secrets.CODECOV_TOKEN }} ## not required for public repos, can be removed when https://github.com/codecov/codecov-action/issues/837 is resolved
