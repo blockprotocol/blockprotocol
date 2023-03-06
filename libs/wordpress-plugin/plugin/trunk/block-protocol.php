@@ -145,9 +145,25 @@ function check_block_protocol_connection()
 	}
 }
 
+function block_protocol_database_unsupported()
+{
+	$supported = block_protocol_is_database_supported();
+
+	if (!$supported) {
+		?>
+		<div class="notice notice-error is-dismissible">
+			<p>Block Protocol:
+				<?php echo (esc_html("The database you are using is not supported by the plugin. Please use MySQL " . MINIMUM_MYSQL_VERSION . "+ or MariaDB " . MINIMUM_MARIADB_VERSION . "+")) ?>
+			<p>
+		</div>
+	<?php
+	}
+}
+
 global $pagenow;
 if ($pagenow == 'index.php' || $pagenow == 'plugins.php' || ($pagenow == 'admin.php' && ('block_protocol' === $_GET['page']))) {
 	add_action('admin_notices', 'check_block_protocol_connection');
+	add_action('admin_notices', 'block_protocol_database_unsupported');
 }
 
 /*
