@@ -9,6 +9,7 @@ import styles from "./base.module.scss";
 import { CompanyFactory } from "./components/create-entity/company-factory";
 import { LinkFactory } from "./components/create-entity/link-factory";
 import { PersonFactory } from "./components/create-entity/person-factory";
+import { EntityEraser } from "./components/delete-entity/entity-eraser";
 import { RefreshDataProvider } from "./contexts/refresh-data";
 import {
   BlockEntity,
@@ -70,6 +71,7 @@ export const App: BlockComponent<BlockEntity> = ({
         <PersonFactory graphModule={graphModule} />
         <CompanyFactory graphModule={graphModule} />
         <LinkFactory graphModule={graphModule} />
+        <EntityEraser graphModule={graphModule} />
       </div>
     </RefreshDataProvider>
   );
