@@ -68,6 +68,28 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     }),
     errorCodes: [],
   },
+  {
+    messageName: "openaiCompleteChat",
+    description: "Complete a chat using OpenAI",
+    source: "block",
+    respondedToBy: "openaiCompleteChatResponse",
+    sentOnInitialization: false,
+    data: generateServiceSchema({
+      typeName: "OpenAICompleteChatData",
+    }),
+    errorCodes: [],
+  },
+  {
+    messageName: "openaiCompleteChatResponse",
+    description: "Response to a OpenAI complete text request",
+    source: "embedder",
+    respondedToBy: null,
+    sentOnInitialization: false,
+    data: generateServiceSchema({
+      typeName: "OpenAICompleteChatResponseData",
+    }),
+    errorCodes: [],
+  },
   /** Mapbox Geocoding API */
   {
     messageName: "mapboxForwardGeocoding",

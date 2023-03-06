@@ -3,6 +3,7 @@ import {
   ExternalServiceMethodRequest,
 } from "@local/internal-api-client";
 import { AxiosError } from "axios";
+import { body as bodyValidator, validationResult } from "express-validator";
 
 import { createApiKeyRequiredHandler } from "../../lib/api/handler/api-key-required-handler";
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
@@ -16,7 +17,7 @@ export default createApiKeyRequiredHandler<
   ExternalServiceMethodRequest,
   ExternalServiceMethod200Response
 >()
-  .use(async (req, res, next) => {
+  .use(async (_req, res, next) => {
     if (isBillingFeatureFlagEnabled) {
       next();
     } else {
@@ -27,7 +28,17 @@ export default createApiKeyRequiredHandler<
       );
     }
   })
+  .use(
+    bodyValidator("providerName").isString().notEmpty(),
+    bodyValidator("methodName").isString().notEmpty(),
+    bodyValidator("payload").exists(),
+  )
   .post(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(formatErrors(...errors.array()));
+    }
+
     /**
      * @todo: stop evaluating theses at runtime once the "billing" feature
      * flag is removed.

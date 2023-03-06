@@ -11,7 +11,6 @@ name = "type_system"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-regex = "1.6.0"
 serde = { version = "1.0.152", features = ["derive"] }
 serde_json = "1.0.93"
 thiserror = "1.0.38"
@@ -32,3 +31,4 @@ wasm-bindgen-test = "0.3.13"
 [profile.release]
 lto = true
 opt-level = 's'
+panic = 'abort'
