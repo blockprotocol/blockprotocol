@@ -80,7 +80,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
 
       const exists = await apiClient
         .getEntityTypeByUrl({
-          versionedUrl: `${baseUrl}/v/1`,
+          versionedUrl,
         })
         .then((res) => !res.error);
 
