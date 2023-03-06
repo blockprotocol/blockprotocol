@@ -1,12 +1,5 @@
 # mock-block-dock
 
-## 0.1.1-canary-20230306175645
-
-### Patch Changes
-
-- Updated dependencies [[`52cc687f`](https://github.com/blockprotocol/blockprotocol/commit/52cc687f13f1076e6bf77198e60e9cd5adc3a32b)]:
-  - @blockprotocol/service@0.1.1-canary-20230306175645
-
 ## 0.1.0
 
 ### Minor Changes
