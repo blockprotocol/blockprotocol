@@ -1,7 +1,6 @@
-use std::{fmt, result::Result, str::FromStr, sync::LazyLock};
+use std::{fmt, num::IntErrorKind, result::Result, str::FromStr};
 
 pub use error::{ParseBaseUrlError, ParseVersionedUrlError};
-use regex::Regex;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
@@ -115,38 +114,46 @@ impl FromStr for VersionedUrl {
     type Err = ParseVersionedUrlError;
 
     fn from_str(url: &str) -> Result<Self, ParseVersionedUrlError> {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("regex failed to compile"));
-
         if url.len() > 2048 {
             return Err(ParseVersionedUrlError::TooLong);
         }
 
-        let captures = RE
-            .captures(url)
-            .ok_or(ParseVersionedUrlError::IncorrectFormatting)?;
-        let base_url = captures
-            .get(1)
-            .ok_or(ParseVersionedUrlError::MissingBaseUrl)?
-            .as_str();
-        let version = captures
-            .get(2)
-            .ok_or(ParseVersionedUrlError::MissingVersion)?
-            .as_str();
+        url.rsplit_once("v/").map_or(
+            Err(ParseVersionedUrlError::IncorrectFormatting),
+            |(base_url, version)| {
+                Ok(Self {
+                    base_url: BaseUrl::new(base_url.to_owned())
+                        .map_err(ParseVersionedUrlError::InvalidBaseUrl)?,
+                    version: version.parse::<u32>().map_err(|error| match error.kind() {
+                        IntErrorKind::Empty => ParseVersionedUrlError::MissingVersion,
+                        IntErrorKind::InvalidDigit => {
+                            let invalid_digit_index =
+                                version.find(|c: char| !c.is_numeric()).unwrap_or(0);
 
-        if let Some(suffix) = captures.get(3) {
-            // Regex returns an empty string for capturing groups that don't match anything
-            if !suffix.as_str().is_empty() {
-                return Err(ParseVersionedUrlError::AdditionalEndContent);
-            }
-        }
-
-        Ok(Self {
-            base_url: BaseUrl::new(base_url.to_owned())
-                .map_err(ParseVersionedUrlError::InvalidBaseUrl)?,
-            version: u32::from_str(version)
-                .map_err(|error| ParseVersionedUrlError::InvalidVersion(error.to_string()))?,
-        })
+                            if invalid_digit_index == 0 {
+                                ParseVersionedUrlError::InvalidVersion(
+                                    version.to_owned(),
+                                    error.to_string(),
+                                )
+                            } else {
+                                #[expect(
+                                    clippy::string_slice,
+                                    reason = "we just found the index of the first non-numeric \
+                                              character"
+                                )]
+                                ParseVersionedUrlError::AdditionalEndContent(
+                                    version[invalid_digit_index..].to_owned(),
+                                )
+                            }
+                        }
+                        _ => ParseVersionedUrlError::InvalidVersion(
+                            version.to_owned(),
+                            error.to_string(),
+                        ),
+                    })?,
+                })
+            },
+        )
     }
 }
 
@@ -181,5 +188,52 @@ mod tests {
         let input_str = "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1";
         let url = VersionedUrl::from_str(input_str).expect("parsing versioned URL failed");
         assert_eq!(&url.to_string(), input_str);
+    }
+
+    fn versioned_url_test(input_str: &str, expected: ParseVersionedUrlError) {
+        assert_eq!(
+            VersionedUrl::from_str(input_str).expect_err("able to parse VersionedUrl"),
+            expected
+        );
+    }
+
+    #[test]
+    fn versioned_url_failed() {
+        versioned_url_test(
+            "example/v/2",
+            ParseVersionedUrlError::InvalidBaseUrl(ParseBaseUrlError::UrlParseError(
+                "relative URL without a base".to_owned(),
+            )),
+        );
+        versioned_url_test(
+            "http://example.com",
+            ParseVersionedUrlError::IncorrectFormatting,
+        );
+        versioned_url_test(
+            "http://example.com/v/",
+            ParseVersionedUrlError::MissingVersion,
+        );
+        versioned_url_test(
+            "http://example.com/v/0.2",
+            ParseVersionedUrlError::AdditionalEndContent(".2".to_owned()),
+        );
+        versioned_url_test(
+            "http://example.com/v//20",
+            ParseVersionedUrlError::InvalidVersion(
+                "/20".to_owned(),
+                "invalid digit found in string".to_owned(),
+            ),
+        );
+        versioned_url_test(
+            "http://example.com/v/30/1",
+            ParseVersionedUrlError::AdditionalEndContent("/1".to_owned()),
+        );
+        versioned_url_test(
+            "http://example.com/v/foo",
+            ParseVersionedUrlError::InvalidVersion(
+                "foo".to_owned(),
+                "invalid digit found in string".to_owned(),
+            ),
+        );
     }
 }
