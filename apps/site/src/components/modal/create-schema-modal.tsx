@@ -8,11 +8,10 @@ import {
   useCallback,
   useState,
 } from "react";
-import slugify from "slugify";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
-import { FRONTEND_URL } from "../../lib/config";
+import { generateOntologyUrl } from "../../pages/shared/schema";
 import { Button } from "../button";
 import { TextField } from "../text-field";
 import { Modal } from "./modal";
@@ -53,9 +52,12 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       setApiErrorMessage(undefined);
 
       const title = newSchemaTitle.trim();
-      const baseUrl = `${FRONTEND_URL}/${
-        router.query.shortname
-      }/types/entity-type/${slugify(title, { lower: true })}`;
+      const { baseUrl, versionedUrl } = generateOntologyUrl({
+        author: router.query.shortname as `@${string}`,
+        title,
+        kind: "entityType",
+        version: 1,
+      });
 
       const draft: EntityTypeWithMetadata = {
         schema: {
@@ -63,7 +65,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
           title,
           $schema:
             "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
-          $id: `${baseUrl}/v/1`,
+          $id: versionedUrl,
           kind: "entityType",
           properties: {},
           type: "object",
