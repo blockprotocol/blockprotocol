@@ -19,7 +19,7 @@ If you are looking to install it on your own WordPress server, please visit http
 ### Regular development
 
 - `yarn dev:plugin` to run the plugin
-- Optional: `yarn dev:wordpress` (to attach to Docker – useful for inspecting server logs)
+- `yarn dev:wordpress` (WP server logs are visible in the output)
 - visit [http://localhost:8000](http://localhost:8000)
 - amend `BLOCK_PROTOCOL_SITE_HOST` in `docker-compose.yml` if you want to test against a staging Block Hub
 
