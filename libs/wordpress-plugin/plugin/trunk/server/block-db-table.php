@@ -1,5 +1,24 @@
 <?php
 
+const MINIMUM_MYSQL_VERSION = "8.0.0";
+const MINIMUM_MARIADB_VERSION = "10.2.7";
+
+function block_protocol_is_database_supported()
+{
+  global $wpdb;
+  
+  $db_version = $wpdb->db_version();
+  $db_server_info = $wpdb->db_server_info();
+
+  if (strpos($db_server_info, 'MariaDB') != false) {
+    // site is using MariaDB
+    return $db_version >= MINIMUM_MARIADB_VERSION;
+  } else {
+    // site is using MySQL
+    return $db_version >= MINIMUM_MYSQL_VERSION;
+  }
+}
+
 function block_protocol_migration_1()
 {
   global $wpdb;
