@@ -61,8 +61,7 @@ The Block Protocol is an open standard for building block-based interfaces.
 
 Each block that uses the protocol can be used in any application which supports it.
 
-WordPress is one of these applications. [HASH](https://hash.ai), an all-in-one platform for decision making developed 
-by the company behind the Block Protocol, is another. More are planned, including Figma and GitHub.
+WordPress is one of these applications. [HASH](https://hash.ai), an all-in-one platform for decision making developed by the company behind the Block Protocol, is another. More are planned, including Figma and GitHub.
 
 = Can I create a block for the Block Protocol? =
 
@@ -71,8 +70,7 @@ Absolutely. You can start coding your block in minutes and, once finished, publi
 
 = How might it change? =
 
-The Block Protocol is a new, evolving specification – features are being added all the time
-to enable blocks with a wider range of features.
+The Block Protocol is a new, evolving specification – features are being added all the time to enable blocks with a wider range of features.
 
 This means that certain versions of blocks will only work with certain versions of the plugin.
 
