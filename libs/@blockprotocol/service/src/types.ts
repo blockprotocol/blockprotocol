@@ -243,6 +243,9 @@ export type MapboxRetrieveStaticMapResponseData = {
 
 export type ServiceMessageError =
   | "FORBIDDEN"
+  | "INTERNAL_ERROR"
+  | "INVALID_INPUT"
+  | "NOT_IMPLEMENTED"
   | "TOO_MANY_REQUESTS"
   | "UNAUTHORIZED";
 

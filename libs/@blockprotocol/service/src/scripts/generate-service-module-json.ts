@@ -22,11 +22,21 @@ const generateServiceSchema = (params: { typeName: string }): JsonObject => {
   return schema as JsonObject;
 };
 
+const errorCodes = [
+  "FORBIDDEN",
+  "INTERNAL_ERROR",
+  "INVALID_INPUT",
+  "NOT_IMPLEMENTED",
+  "TOO_MANY_REQUESTS",
+  "UNAUTHORIZED",
+];
+
 export const mapboxMessages: ModuleMessageDefinition[] = [
   /** OpenAI */
   {
     messageName: "openaiCreateImage",
-    description: "Create an image using OpenAI",
+    description:
+      "Create an image using OpenAI - see https://platform.openai.com/docs/api-reference/images",
     source: "block",
     respondedToBy: "openaiCreateImageResponse",
     sentOnInitialization: false,
@@ -44,11 +54,12 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     data: generateServiceSchema({
       typeName: "OpenAICreateImageResponseData",
     }),
-    errorCodes: [],
+    errorCodes,
   },
   {
     messageName: "openaiCompleteText",
-    description: "Complete text using OpenAI",
+    description:
+      "Complete text using OpenAI – see https://platform.openai.com/docs/api-reference/completions",
     source: "block",
     respondedToBy: "openaiCompleteTextResponse",
     sentOnInitialization: false,
@@ -66,12 +77,13 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     data: generateServiceSchema({
       typeName: "OpenAICompleteTextResponseData",
     }),
-    errorCodes: [],
+    errorCodes,
   },
   /** Mapbox Geocoding API */
   {
     messageName: "mapboxForwardGeocoding",
-    description: "Forward geocoding request",
+    description:
+      "Forward geocoding request – see https://docs.mapbox.com/api/search/geocoding",
     source: "block",
     respondedToBy: "mapboxForwardGeocodingResponse",
     sentOnInitialization: false,
@@ -89,11 +101,12 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     data: generateServiceSchema({
       typeName: "MapboxForwardGeocodingResponseData",
     }),
-    errorCodes: [],
+    errorCodes,
   },
   {
     messageName: "mapboxReverseGeocoding",
-    description: "Reverse geocoding request",
+    description:
+      "Reverse geocoding request – see https://docs.mapbox.com/api/search/geocoding",
     source: "block",
     respondedToBy: "mapboxReverseGeocodingResponse",
     sentOnInitialization: false,
@@ -111,12 +124,13 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     data: generateServiceSchema({
       typeName: "MapboxReverseGeocodingResponseData",
     }),
-    errorCodes: [],
+    errorCodes,
   },
   /** Mapbox Directions API */
   {
     messageName: "mapboxRetrieveDirections",
-    description: "Retrieve directions request",
+    description:
+      "Retrieve directions request – see https://docs.mapbox.com/api/navigation/directions",
     source: "block",
     respondedToBy: "mapboxRetrieveDirectionsResponse",
     sentOnInitialization: false,
@@ -134,12 +148,13 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     data: generateServiceSchema({
       typeName: "MapboxRetrieveDirectionsResponseData",
     }),
-    errorCodes: [],
+    errorCodes,
   },
   /** Mapbox Isochrone API */
   {
     messageName: "mapboxRetrieveIsochrones",
-    description: "Retrieve isochrones",
+    description:
+      "Retrieve isochrones – see https://docs.mapbox.com/api/navigation/isochrone",
     source: "block",
     respondedToBy: "mapboxRetrieveIsochronesResponse",
     sentOnInitialization: false,
@@ -157,12 +172,13 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     data: generateServiceSchema({
       typeName: "MapboxRetrieveIsochronesResponseData",
     }),
-    errorCodes: [],
+    errorCodes,
   },
   /** Autofill API */
   {
     messageName: "mapboxSuggestAddress",
-    description: "Suggest an address",
+    description:
+      "Suggest an address – see https://docs.mapbox.com/api/search/search/#retrieve-a-suggestion",
     source: "block",
     respondedToBy: "mapboxSuggestAddressResponse",
     sentOnInitialization: false,
@@ -178,11 +194,12 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     data: generateServiceSchema({
       typeName: "MapboxSuggestAddressResponseData",
     }),
-    errorCodes: [],
+    errorCodes,
   },
   {
     messageName: "mapboxRetrieveAddress",
-    description: "Retrieve an address",
+    description:
+      "Retrieve an address - see https://docs.mapbox.com/api/search/search/#retrieve-a-suggested-feature",
     source: "block",
     respondedToBy: "mapboxRetrieveAddressResponse",
     sentOnInitialization: false,
@@ -200,7 +217,7 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     data: generateServiceSchema({
       typeName: "MapboxRetrieveAddressResponseData",
     }),
-    errorCodes: [],
+    errorCodes,
   },
   {
     messageName: "mapboxCanRetrieveAddress",
@@ -222,12 +239,13 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     data: generateServiceSchema({
       typeName: "MapboxCanRetrieveAddressResponseData",
     }),
-    errorCodes: [],
+    errorCodes,
   },
   /** Static Image API */
   {
     messageName: "mapboxRetrieveStaticMap",
-    description: "Retrieve a static map",
+    description:
+      "Retrieve a static map – see https://docs.mapbox.com/api/maps/static-images",
     source: "block",
     respondedToBy: "mapboxRetrieveStaticMapResponse",
     sentOnInitialization: false,
@@ -245,7 +263,7 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     data: generateServiceSchema({
       typeName: "MapboxRetrieveStaticMapResponseData",
     }),
-    errorCodes: [],
+    errorCodes,
   },
 ];
 
