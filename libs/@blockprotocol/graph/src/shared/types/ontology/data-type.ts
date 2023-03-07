@@ -11,10 +11,7 @@ export type DataTypeWithMetadata = {
 
 export type QueryDataTypesData = {
   graphResolveDepths?: Partial<
-    Pick<
-      Subgraph<true>["depths"],
-      "constrainsValuesOn" | "constrainsPropertiesOn"
-    >
+    Pick<Subgraph<true>["depths"], "constrainsValuesOn">
   >;
 };
 
