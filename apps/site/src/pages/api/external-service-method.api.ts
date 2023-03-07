@@ -16,7 +16,9 @@ const isErrorAxiosError = (error: unknown): error is AxiosError =>
 export default createApiKeyRequiredHandler<
   ExternalServiceMethodRequest,
   ExternalServiceMethod200Response
->()
+>({
+  allowCookieFallback: true,
+})
   .use(async (_req, res, next) => {
     if (isBillingFeatureFlagEnabled) {
       next();
