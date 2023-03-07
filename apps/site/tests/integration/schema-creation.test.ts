@@ -17,7 +17,7 @@ test("user should be able to create an Entity Type", async ({ page }) => {
   const existingSchemaName = "Testing";
   const newSchemaName = "Testing2";
 
-  const existingSchemaWithMetadata = await createSchema({
+  await createSchema({
     title: existingSchemaName,
     page,
   });
@@ -68,10 +68,12 @@ test("user should be able to create an Entity Type", async ({ page }) => {
   await schemaModal.locator('button:has-text("Create")').click();
 
   await expect(page).toHaveURL(
-    `/@alice/types/entity-type/${slugify(newSchemaName, {
-      lower: true,
-      strict: true,
-    })}/v/1`,
+    new RegExp(
+      `/@alice/types/entity-type/${slugify(newSchemaName, {
+        lower: true,
+        strict: true,
+      })}/v/1`,
+    ),
   );
 
   await expect(
