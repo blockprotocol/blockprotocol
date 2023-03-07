@@ -20,7 +20,7 @@
   "scripts": {
     "build": "composer install -d plugin/trunk && wp-scripts build",
     "dev:plugin": "wp-scripts start",
-    "dev:wordpress": "docker compose -f wordpress/docker-compose.yml  up",
+    "dev:wordpress": "docker compose -f ../../infra/docker/wordpress/docker-compose.yml",
     "fix:eslint": "eslint --fix .",
     "postinstall": "patch-package  --error-on-warn",
     "lint:eslint": "eslint --report-unused-disable-directives .",

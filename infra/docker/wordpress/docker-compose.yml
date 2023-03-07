@@ -51,7 +51,7 @@ services:
     volumes:
       # Mount the plugin folder inside our plugins directory so that WP automatically picks up our work.
       - type: bind
-        source: ../plugin/trunk
+        source: ../../../libs/wordpress-plugin/plugin/trunk
         target: /var/www/html/wp-content/plugins/blockprotocol
 
 volumes:
