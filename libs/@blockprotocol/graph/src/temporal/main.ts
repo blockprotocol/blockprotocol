@@ -46,6 +46,7 @@ import {
   GetEntityData as GetEntityDataGeneral,
   GetEntityTypeData as GetEntityTypeDataGeneral,
   GetPropertyTypeData as GetPropertyTypeDataGeneral,
+  GetDataTypeData as GetDataTypeDataGeneral,
   GraphBlockMessageCallbacks as GraphBlockMessageCallbacksGeneral,
   GraphBlockMessages as GraphBlockMessagesGeneral,
   GraphElementForIdentifier as GraphElementForIdentifierGeneral,
@@ -134,6 +135,8 @@ import {
   QueryOperationInput as QueryOperationInputGeneral,
   QueryPropertyTypesData as QueryPropertyTypesDataGeneral,
   QueryPropertyTypesResult as QueryPropertyTypesResultGeneral,
+  QueryDataTypesData as QueryDataTypesDataGeneral,
+  QueryDataTypesResult as QueryDataTypesResultGeneral,
   QueryTemporalAxes as QueryTemporalAxesGeneral,
   QueryTemporalAxesUnresolved as QueryTemporalAxesUnresolvedGeneral,
   ReadOrModifyResourceError as ReadOrModifyResourceErrorGeneral,
@@ -296,6 +299,10 @@ export type QueryPropertyTypesResult<T extends Subgraph<PropertyTypeRootType>> =
 export type GetPropertyTypeData = GetPropertyTypeDataGeneral;
 export type CreatePropertyTypeData = CreatePropertyTypeDataGeneral;
 export type UpdatePropertyTypeData = UpdatePropertyTypeDataGeneral;
+export type QueryDataTypesData = QueryDataTypesDataGeneral;
+export type QueryDataTypesResult<T extends Subgraph<DataTypeRootType>> =
+  QueryDataTypesResultGeneral<T>;
+export type GetDataTypeData = GetDataTypeDataGeneral;
 export type OntologyTypeRecordId = OntologyTypeRecordIdGeneral;
 export const isOntologyTypeRecordId = isOntologyTypeRecordIdGeneral;
 export type OntologyTypeRevisionId = OntologyTypeRevisionIdGeneral;
