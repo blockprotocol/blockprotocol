@@ -145,9 +145,33 @@ function check_block_protocol_connection()
 	}
 }
 
+function block_protocol_database_unsupported()
+{
+	$supported = block_protocol_is_database_supported();
+
+	if (!$supported) {
+		?>
+		<div class="notice notice-error is-dismissible">
+			<p>Block Protocol:
+				<?php 
+				
+				echo (esc_html(
+					"The database you are using is not supported by the plugin. Please use MySQL " 
+					. BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION 
+					. "+ or MariaDB " 
+					. BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION 
+					. "+"));
+				?>
+			<p>
+		</div>
+	<?php
+	}
+}
+
 global $pagenow;
 if ($pagenow == 'index.php' || $pagenow == 'plugins.php' || ($pagenow == 'admin.php' && ('block_protocol' === $_GET['page']))) {
 	add_action('admin_notices', 'check_block_protocol_connection');
+	add_action('admin_notices', 'block_protocol_database_unsupported');
 }
 
 /*
@@ -174,6 +198,17 @@ function block_dynamic_render_callback($block_attributes)
 // Add the block category for our block
 function block_protocol_init()
 {
+	// DB is unsupported - bail
+  if (!block_protocol_is_database_supported()) {
+    return;
+  }
+
+	$response = get_block_protocol_blocks();
+	if (isset($response['errors'])) {
+		// user needs to set a valid API key – bail
+		return;
+	}
+  
 	// add the block category
 	add_filter('block_categories_all', function ($categories) {
 		return array_merge(
@@ -205,6 +240,12 @@ add_action('admin_init', 'block_protocol_init');
 //    - enqueue block data for adding to the frontend
 // 3. enqueue script that registers each BP block as a variation of the plugin block
 function block_protocol_editor_assets() {
+	$response = get_block_protocol_blocks();
+	if (isset($response['errors'])) {
+		// user needs to set a valid API key – bail
+		return;
+	}
+  
 	// this file has a list of the dependencies our FE block code uses, so we can include those too
 	$asset_file = include(plugin_dir_path(__FILE__) . 'build/index.asset.php');
 
