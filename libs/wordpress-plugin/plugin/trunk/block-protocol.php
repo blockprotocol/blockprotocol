@@ -153,7 +153,15 @@ function block_protocol_database_unsupported()
 		?>
 		<div class="notice notice-error is-dismissible">
 			<p>Block Protocol:
-				<?php echo (esc_html("The database you are using is not supported by the plugin. Please use MySQL " . MINIMUM_MYSQL_VERSION . "+ or MariaDB " . MINIMUM_MARIADB_VERSION . "+")) ?>
+				<?php 
+				
+				echo (esc_html(
+					"The database you are using is not supported by the plugin. Please use MySQL " 
+					. BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION 
+					. "+ or MariaDB " 
+					. BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION 
+					. "+"));
+				?>
 			<p>
 		</div>
 	<?php

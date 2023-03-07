@@ -1,7 +1,7 @@
 <?php
 
-const MINIMUM_MYSQL_VERSION = "8.0.0";
-const MINIMUM_MARIADB_VERSION = "10.2.7";
+const BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION = "8.0.0";
+const BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION = "10.2.7";
 
 function block_protocol_is_database_supported()
 {
@@ -12,10 +12,10 @@ function block_protocol_is_database_supported()
 
   if (strpos($db_server_info, 'MariaDB') != false) {
     // site is using MariaDB
-    return $db_version >= MINIMUM_MARIADB_VERSION;
+    return $db_version >= BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION;
   } else {
     // site is using MySQL
-    return $db_version >= MINIMUM_MYSQL_VERSION;
+    return $db_version >= BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION;
   }
 }
 
