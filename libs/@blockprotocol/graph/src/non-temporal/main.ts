@@ -291,7 +291,8 @@ export type UpdateEntityTypeData = UpdateEntityTypeDataGeneral;
 export type OntologyElementMetadata = OntologyElementMetadataGeneral;
 export type PropertyTypeWithMetadata = PropertyTypeWithMetadataGeneral;
 export type QueryPropertyTypesData = QueryPropertyTypesDataGeneral;
-export type QueryPropertyTypesResult = QueryPropertyTypesResultGeneral;
+export type QueryPropertyTypesResult<T extends Subgraph<PropertyTypeRootType>> =
+  QueryPropertyTypesResultGeneral<T>;
 export type GetPropertyTypeData = GetPropertyTypeDataGeneral;
 export type CreatePropertyTypeData = CreatePropertyTypeDataGeneral;
 export type UpdatePropertyTypeData = UpdatePropertyTypeDataGeneral;
