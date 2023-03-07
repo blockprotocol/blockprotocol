@@ -25,10 +25,10 @@ if (is_readable(__DIR__ . '/vendor/autoload.php')) {
 require_once __DIR__ . "/server/data.php";
 add_action('init', 'block_protocol_sentry_init');
 
+require_once __DIR__ . "/server/settings.php";
 require_once __DIR__ . "/server/block-db-table.php";
 require_once __DIR__ . "/server/query.php";
 require_once __DIR__ . "/server/block-api-endpoints.php";
-require_once __DIR__ . "/server/settings.php";
 require_once __DIR__ . "/server/util.php";
 
 // str_starts_with introduces a minimum WP version of 5.9.0 - we can avoid it by using this instead
