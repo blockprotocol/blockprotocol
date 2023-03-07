@@ -5,6 +5,7 @@ const externalServiceNames = [
   "Mapbox Temporary Geocoding Request",
   "Mapbox Static Image Request",
   "OpenAI Create Image Request",
+  "OpenAI GPT-3.5 Turbo Token",
   "OpenAI Ada Token",
   "OpenAI Babbage Token",
   "OpenAI Curie Token",
@@ -52,6 +53,11 @@ export const externalServiceFreeAllowance: Record<
     free: 5,
     hobby: 50,
     pro: 100,
+  },
+  "OpenAI GPT-3.5 Turbo Token": {
+    free: 10_000,
+    hobby: 50_000,
+    pro: 100_000,
   },
   "OpenAI Ada Token": {
     free: 0,

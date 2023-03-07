@@ -160,6 +160,24 @@ export const paidSubscriptionFeatures: Record<
                       component="span"
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
+                      <strong>
+                        {externalServiceFreeAllowance[
+                          "OpenAI GPT-3.5 Turbo Token"
+                        ].hobby / 1000}
+                        k
+                      </strong>{" "}
+                      OpenAI GPT-3.5 Turbo tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
                       <strong>10k</strong> OpenAI Davinci tokens
                     </Box>
                   ),
