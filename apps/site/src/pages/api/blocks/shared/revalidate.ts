@@ -17,9 +17,9 @@ export const revalidateBlockPages = async (
       "Failed to revalidate path '/@[shortname]' - does it still have static props?",
     );
   });
-  await res.revalidate(`/@${username}/${blockName}`).catch(() => {
+  await res.revalidate(`/@${username}/blocks/${blockName}`).catch(() => {
     captureException(
-      "Failed to revalidate path '/@[shortname]/[block]' - does it still have static props?",
+      "Failed to revalidate path '/@[shortname]/blocks/[block]' - does it still have static props?",
     );
   });
 };

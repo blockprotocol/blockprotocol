@@ -43,7 +43,7 @@ export const validateBaseUrl = (
   }
 };
 
-const versionedUrlRegExp = /(.+\/)v\/(\d+)(.*)/;
+const versionedUrlRegExp = /(.+\/)v\/(.*)/;
 
 /**
  * Checks if a given URL string is a Block Protocol compliant Versioned URL.
@@ -70,26 +70,49 @@ export const validateVersionedUrl = (
       inner: { reason: "IncorrectFormatting" },
     };
   } else {
-    const [_match, baseUrl, version, trailingContent] = groups;
+    const [_match, baseUrl, version] = groups;
 
-    if (trailingContent) {
+    if (!baseUrl) {
       return {
         type: "Err",
-        inner: { reason: "AdditionalEndContent" },
+        inner: { reason: "IncorrectFormatting" },
       };
     }
 
-    if (!version) {
+    if (!version || version.length === 0) {
       return {
         type: "Err",
         inner: { reason: "MissingVersion" },
       };
     }
 
-    if (!baseUrl) {
+    const index = version.search(/[^0-9]/);
+    if (index === 0) {
       return {
         type: "Err",
-        inner: { reason: "MissingBaseUrl" },
+        inner: {
+          reason: "InvalidVersion",
+          inner: [version, "invalid digit found in string"],
+        },
+      };
+    } else if (index > 0) {
+      return {
+        type: "Err",
+        inner: {
+          reason: "AdditionalEndContent",
+          inner: version.substring(index),
+        },
+      };
+    }
+
+    const versionNumber = Number(version);
+    if (versionNumber > 4294967295) {
+      return {
+        type: "Err",
+        inner: {
+          reason: "InvalidVersion",
+          inner: [version, "number too large to fit in target type"],
+        },
       };
     }
 
@@ -99,18 +122,6 @@ export const validateVersionedUrl = (
       return {
         type: "Err",
         inner: { reason: "InvalidBaseUrl", inner: validBaseUrlResult.inner },
-      };
-    }
-
-    const versionNumber = Number(version);
-
-    if (!Number.isInteger(versionNumber) || versionNumber < 0) {
-      return {
-        type: "Err",
-        inner: {
-          reason: "InvalidVersion",
-          inner: `\`${version}\` is not a valid non-negative integer`,
-        },
       };
     }
 
