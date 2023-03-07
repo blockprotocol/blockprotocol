@@ -1,5 +1,24 @@
 <?php
 
+const BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION = "8.0.0";
+const BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION = "10.2.7";
+
+function block_protocol_is_database_supported()
+{
+  global $wpdb;
+  
+  $db_version = $wpdb->db_version();
+  $db_server_info = $wpdb->db_server_info();
+
+  if (strpos($db_server_info, 'MariaDB') != false) {
+    // site is using MariaDB
+    return $db_version >= BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION;
+  } else {
+    // site is using MySQL
+    return $db_version >= BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION;
+  }
+}
+
 function block_protocol_migration_1()
 {
   global $wpdb;
@@ -38,6 +57,11 @@ function block_protocol_migration_1()
 function block_protocol_migrate()
 {
   $saved_version = (int) get_site_option('block_protocol_db_migration_version');
+
+  // Don't apply migrations if the DB version is unsupported.
+  if (!block_protocol_is_database_supported()) {
+    return;
+  }
 
   if ($saved_version < 2) {
     block_protocol_migration_1();
