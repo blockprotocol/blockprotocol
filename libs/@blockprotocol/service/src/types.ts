@@ -247,7 +247,13 @@ export type MapboxRetrieveStaticMapResponseData = {
   data: ArrayBuffer;
 };
 
-export type ServiceMessageError = "FORBIDDEN";
+export type ServiceMessageError =
+  | "FORBIDDEN"
+  | "INTERNAL_ERROR"
+  | "INVALID_INPUT"
+  | "NOT_IMPLEMENTED"
+  | "TOO_MANY_REQUESTS"
+  | "UNAUTHORIZED";
 
 export type ServiceEmbedderMessageCallbacks = {
   /** OpenAI */

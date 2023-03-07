@@ -78,10 +78,13 @@ export type GraphEmbedderMessages<
 
 export type CreateResourceError =
   | "FORBIDDEN"
+  | "INTERNAL_ERROR"
   | "INVALID_INPUT"
   | "NOT_IMPLEMENTED";
+
 export type ReadOrModifyResourceError =
   | "FORBIDDEN"
+  | "INTERNAL_ERROR"
   | "INVALID_INPUT"
   | "NOT_FOUND"
   | "NOT_IMPLEMENTED";
