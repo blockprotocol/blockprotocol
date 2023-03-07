@@ -14,7 +14,7 @@ The service module enables blocks to interact with external services without nee
 
 ### Handling messages
 
-### <Hidden>Handling messages </Hidden>Summary
+#### <Hidden>Handling messages </Hidden>Summary
 
 Any messages exchanged between application and block should be consistent with the shape and intent of the messages as described in this specification.
 
@@ -32,10 +32,6 @@ Embedding applications MAY generate a response to a block's message by doing any
 
 ### Error definitions
 
-### <Hidden>Message definitions </Hidden>Summary
-
-The message signatures in the service specification aim to be as consistent as possible with the equivalent requests and responses from the named service provider, subject to exceptions mentioned elsewhere in this specification.
-
 #### <Hidden>Error definitions </Hidden>Specification
 
 If a request fails, embedding applications MUST provide blocks with an error which complies with this specification, i.e. contains a listed code and a message.
@@ -45,6 +41,10 @@ Embedding applications MAY withhold or translate error codes and messages sent b
 Blocks MUST NOT rely on error codes and messages providing information that the named service provider would if contacted directly, e.g. relating to billing.
 
 ### Message definitions
+
+#### <Hidden>Message definitions </Hidden>Summary
+
+The message signatures in the service specification aim to be as consistent as possible with the equivalent requests and responses from the named service provider, subject to exceptions mentioned elsewhere in this specification.
 
 #### <Hidden>Message definitions </Hidden>Specification
 
