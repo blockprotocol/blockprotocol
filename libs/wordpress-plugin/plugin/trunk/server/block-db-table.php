@@ -35,8 +35,8 @@ function block_protocol_migration_1()
     updated_at datetime NOT NULL,
 
     -- metadata for entities which represent links only
-    left_entity_id char(36),
-    right_entity_id char(36),
+    left_entity_id char(36) REFERENCES `{$wpdb->prefix}block_protocol_entities` (entity_id) ON DELETE CASCADE,
+    right_entity_id char(36) REFERENCES `{$wpdb->prefix}block_protocol_entities` (entity_id) ON DELETE CASCADE,
     left_to_right_order int UNSIGNED,
     right_to_left_order int UNSIGNED,
 
@@ -50,13 +50,8 @@ function block_protocol_migration_1()
 
   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-  // Some MariaDB versions doesn't support recursive references within the table itself,
-  // so we add the references after the table creation
-  $sql .= "ALTER TABLE `{$wpdb->prefix}block_protocol_entities` 
-    ADD FOREIGN KEY (left_entity_id) REFERENCES `{$wpdb->prefix}block_protocol_entities` (entity_id) ON DELETE CASCADE,
-    ADD FOREIGN KEY (right_entity_id) REFERENCES `{$wpdb->prefix}block_protocol_entities` (entity_id) ON DELETE CASCADE;
-  ";
   dbDelta($sql);
+  block_protocol_maybe_capture_error($wpdb->last_error);
 }
 
 function block_protocol_migrate()

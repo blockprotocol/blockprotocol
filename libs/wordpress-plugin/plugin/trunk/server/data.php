@@ -63,7 +63,7 @@ function block_protocol_debounced_view_data(bool $skip_check = false)
     update_option('block_protocol_view_count', $view_count + 1);
   }
 
-  if ($skip_check || $view_count % 100 == 0) {
+  if ($skip_check || $view_count % 30 == 0) {
     block_protocol_page_data("viewed", array_merge(block_protocol_aggregate_numbers(), [
       'viewCount' => (int) $view_count,
     ]));
@@ -183,4 +183,8 @@ function block_protocol_sentry_init()
         $scope->setUser(['id' => $public_id]);
     });
   }
+
+  \Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($public_id) {
+    $scope->setContext('versions', block_protocol_report_version_info());
+  });
 }
