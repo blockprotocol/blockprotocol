@@ -1146,7 +1146,7 @@ export const PaidTiersSection: FunctionComponent<{
             </Box>
             {lg ? (
               <Collapse in={fullPlanDetailsOpen}>
-                <Box sx={{ mt: 6.25 }}>
+                <Box sx={{ mt: 10.75 }}>
                   <Image
                     layout="responsive"
                     src={proTierBackground}
