@@ -1,6 +1,6 @@
 import { PropertyType, VersionedUrl } from "@blockprotocol/type-system/slim";
-import { QueryOperationInput } from "../entity.js";
 
+import { QueryOperationInput } from "../entity.js";
 import { PropertyTypeRootType, Subgraph } from "../subgraph.js";
 import { OntologyElementMetadata } from "./metadata.js";
 

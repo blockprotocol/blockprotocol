@@ -27,15 +27,15 @@ import {
   QueryEntityTypesResult,
 } from "./ontology/entity-type.js";
 import {
+  DataTypeRootType,
   EntityRootType,
   EntityTypeRootType,
   EntityVertexId,
-  PropertyTypeRootType,
-  DataTypeRootType,
-  Subgraph,
   GetDataTypeData,
+  PropertyTypeRootType,
   QueryDataTypesData,
   QueryDataTypesResult,
+  Subgraph,
 } from "./subgraph.js";
 
 export type BlockGraphProperties<
