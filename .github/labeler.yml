@@ -43,6 +43,9 @@
   - "libs/@blockprotocol/type-system-node/**"
   - "libs/@blockprotocol/type-system-web/**"
 
+"lib: @Þ/wordpress-plugin":
+  - "libs/@blockprotocol/wordpress-plugin/**"
+
 "lib: @local/*":
   - "libs/@local/**"
 
