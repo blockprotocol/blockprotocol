@@ -43,9 +43,6 @@
   - "libs/@blockprotocol/type-system-node/**"
   - "libs/@blockprotocol/type-system-web/**"
 
-"lib: @Þ/wordpress-plugin":
-  - "libs/@blockprotocol/wordpress-plugin/**"
-
 "lib: @local/*":
   - "libs/@local/**"
 
@@ -69,3 +66,6 @@
 
 "lib: mock-block-dock":
   - "libs/mock-block-dock/**"
+
+"lib: wordpress-plugin":
+  - "libs/wordpress-plugin/**"

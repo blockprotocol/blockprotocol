@@ -1,5 +1,5 @@
 {
-  "name": "@blockprotocol/wordpress",
+  "name": "wordpress-plugin",
   "version": "0.0.3",
   "private": true,
   "description": "Repository for developing the Block Protocol WordPress plugin",
