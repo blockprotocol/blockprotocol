@@ -64,6 +64,32 @@ type PaidSubscription = {
   additionalFeatures: SubscriptionFeature[];
 };
 
+const openaiLanguageFreeAllowances = [
+  externalServiceFreeAllowance["OpenAI GPT-3.5 Turbo Token"],
+  externalServiceFreeAllowance["OpenAI Ada Token"],
+  externalServiceFreeAllowance["OpenAI Babbage Token"],
+  externalServiceFreeAllowance["OpenAI Curie Token"],
+  externalServiceFreeAllowance["OpenAI Davinci Token"],
+];
+
+const numberOfOpenaiHobbyLanguageTokens = openaiLanguageFreeAllowances.reduce(
+  (prev, { hobby }) => prev + hobby,
+  0,
+);
+
+const numberOfOpenaiProLanguageTokens = openaiLanguageFreeAllowances.reduce(
+  (prev, { pro }) => prev + pro,
+  0,
+);
+
+const numberOfOpenaiHobbyWords = numberOfOpenaiHobbyLanguageTokens * 0.75;
+
+const numberOfOpenaiProWords = numberOfOpenaiProLanguageTokens * 0.75;
+
+const numberOfThousandOpenaiHobbyWords = numberOfOpenaiHobbyWords * 0.001;
+
+const numberOfThousandOpenaiProWords = numberOfOpenaiProWords * 0.001;
+
 export const paidSubscriptionFeatures: Record<
   PaidSubscriptionTier,
   PaidSubscription
@@ -94,7 +120,13 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>50</strong> OpenAI DALL-E images
+            <strong>
+              {
+                externalServiceFreeAllowance["OpenAI Create Image Request"]
+                  .hobby
+              }
+            </strong>{" "}
+            OpenAI DALL-E images
             <br />
             <Typography
               component="span"
@@ -134,7 +166,10 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>200,000</strong> OpenAI GPT-3 tokens
+            <strong>
+              {numberOfOpenaiHobbyLanguageTokens.toLocaleString()}
+            </strong>{" "}
+            OpenAI GPT language tokens
             <br />
             <Typography
               component="span"
@@ -145,7 +180,7 @@ export const paidSubscriptionFeatures: Record<
                 fontWeight: 400,
               }}
             >
-              Equating to ~150k words
+              Equating to ~{numberOfThousandOpenaiHobbyWords.toFixed(1)}k words
             </Typography>
           </Box>
         ),
@@ -178,7 +213,12 @@ export const paidSubscriptionFeatures: Record<
                       component="span"
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
-                      <strong>10k</strong> OpenAI Davinci tokens
+                      <strong>
+                        {externalServiceFreeAllowance["OpenAI Davinci Token"]
+                          .hobby / 1000}
+                        k
+                      </strong>{" "}
+                      OpenAI GPT-3 Davinci tokens
                     </Box>
                   ),
                   iconCentered: true,
@@ -190,7 +230,12 @@ export const paidSubscriptionFeatures: Record<
                       component="span"
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
-                      <strong>40k</strong> OpenAI Curie tokens
+                      <strong>
+                        {externalServiceFreeAllowance["OpenAI Curie Token"]
+                          .hobby / 1000}
+                        k
+                      </strong>{" "}
+                      OpenAI GPT-3 Curie tokens
                     </Box>
                   ),
                   iconCentered: true,
@@ -202,7 +247,12 @@ export const paidSubscriptionFeatures: Record<
                       component="span"
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
-                      <strong>50k</strong> OpenAI Babbage tokens
+                      <strong>
+                        {externalServiceFreeAllowance["OpenAI Babbage Token"]
+                          .hobby / 1000}
+                        k
+                      </strong>{" "}
+                      OpenAI GPT-3 Babbage tokens
                     </Box>
                   ),
                   iconCentered: true,
@@ -214,7 +264,12 @@ export const paidSubscriptionFeatures: Record<
                       component="span"
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
-                      <strong>100k</strong> OpenAI Ada tokens
+                      <strong>
+                        {externalServiceFreeAllowance["OpenAI Ada Token"]
+                          .hobby / 1000}
+                        k
+                      </strong>{" "}
+                      OpenAI GPT-3 Ada tokens
                     </Box>
                   ),
                   iconCentered: true,
@@ -294,7 +349,13 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>300</strong> Mapbox Static Images
+            <strong>
+              {
+                externalServiceFreeAllowance["Mapbox Static Image Request"]
+                  .hobby
+              }
+            </strong>{" "}
+            Mapbox Static Images
             <br />
             <Typography
               component="span"
@@ -371,7 +432,9 @@ export const paidSubscriptionFeatures: Record<
                 color: ({ palette }) => palette.purple[60],
               }}
             >
-              e.g. 300k+ words, 100 images, and{" "}
+              e.g. {numberOfThousandOpenaiProWords}k+ words,{" "}
+              {externalServiceFreeAllowance["OpenAI Create Image Request"].pro}{" "}
+              images, and{" "}
               {
                 externalServiceFreeAllowance["Mapbox Address Autofill Session"]
                   .pro
@@ -388,7 +451,10 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>500</strong> Mapbox Isochrone API calls
+            <strong>
+              {externalServiceFreeAllowance["Mapbox Isochrone Request"].pro}
+            </strong>{" "}
+            Mapbox Isochrone API calls
           </Box>
         ),
       },
@@ -399,7 +465,10 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>500</strong> Mapbox Directions API calls
+            <strong>
+              {externalServiceFreeAllowance["Mapbox Directions Request"].pro}
+            </strong>{" "}
+            Mapbox Directions API calls
           </Box>
         ),
       },
@@ -410,7 +479,14 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>500</strong> Mapbox Temporary Geocoding API calls
+            <strong>
+              {
+                externalServiceFreeAllowance[
+                  "Mapbox Temporary Geocoding Request"
+                ].pro
+              }
+            </strong>{" "}
+            Mapbox Temporary Geocoding API calls
           </Box>
         ),
       },
@@ -791,14 +867,16 @@ export const PaidTiersSection: FunctionComponent<{
               <Stack flexDirection="row" flexWrap="wrap" gap={1} mt={2.25}>
                 <HobbyTierPerk
                   headerIcon={faText}
-                  title="150k"
+                  title={`${numberOfThousandOpenaiHobbyWords.toFixed(1)}k`}
                   description="AI-generated words"
                   poweredByIcon={<AbstractAiIcon sx={{ fontSize: 20 }} />}
                   poweredBy="GPT-3"
                 />
                 <HobbyTierPerk
                   headerIcon={faImage}
-                  title="50"
+                  title={externalServiceFreeAllowance[
+                    "OpenAI Create Image Request"
+                  ].hobby.toString()}
                   description="AI-generated images"
                   poweredByIcon={<AbstractAiIcon sx={{ fontSize: 20 }} />}
                   poweredBy="DALL-E"
@@ -814,7 +892,9 @@ export const PaidTiersSection: FunctionComponent<{
                 />
                 <HobbyTierPerk
                   headerIcon={faMapLocationDot}
-                  title="300"
+                  title={externalServiceFreeAllowance[
+                    "Mapbox Static Image Request"
+                  ].hobby.toString()}
                   description="Unique maps created"
                   poweredByIcon={<MapboxLogoIcon sx={{ fontSize: 20 }} />}
                   poweredBy="MAPBOX"
