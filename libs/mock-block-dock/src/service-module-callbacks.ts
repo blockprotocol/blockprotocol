@@ -28,9 +28,14 @@ const callExternalApiMethod = async (params: {
   const baseUrl = `${bpSiteHost}/api`;
 
   if (!blockProtocolApiKey) {
-    throw new Error(
-      `Visit ${bpSiteHost}/dashboard to generate a Block Protocol API key, which is required to make calls to the "${methodName}" method of the BP service module, and ensure it is passed to the \`MockBlockDock\` component as blockProtocolApiKey.`,
-    );
+    return {
+      errors: [
+        {
+          code: "FORBIDDEN",
+          message: `Visit ${bpSiteHost}/dashboard to generate a Block Protocol API key, which is required to make calls to the "${methodName}" method of the BP service module, and ensure it is passed to the \`MockBlockDock\` component as blockProtocolApiKey.`,
+        },
+      ],
+    };
   }
 
   try {
@@ -56,8 +61,15 @@ const callExternalApiMethod = async (params: {
             data && typeof data === "object" && "errors" in data
               ? (data.errors as any)?.[0]?.message
               : "An unknown error occurred.",
+          // @ts-expect-error –– @todo why is this an error
           code:
-            status === 401 || status === 403 ? "FORBIDDEN" : "INTERNAL_ERROR",
+            status === 401
+              ? "FORBIDDEN"
+              : status === 403
+              ? "UNAUTHORIZED"
+              : status === 429
+              ? "TOO_MANY_REQUESTS"
+              : "INTERNAL_ERROR",
         },
       ],
     };

@@ -5,7 +5,7 @@ Tags: block protocol, blocks, gutenberg, gutenberg blocks, block, schema, countd
 Requires at least: 5.6.0
 Tested up to: 6.1.1
 Requires PHP: 7.4
-Stable tag: 0.0.2
+Stable tag: 0.0.3
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 
@@ -84,14 +84,16 @@ Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Disc
 
 <!-- The latest release should be found here, and older ones moved to changelog.txt -->
 
-= 0.0.2 =
-* Improve rich text editing handling, handling older blocks in editor and API endpoints.
+= 0.0.3 =
+* Notification when using unsupported database version
+* Fix rich text rendering
+* Icon for block category
+* Better error reporting
 
 == Upgrade Notice ==
 
-= 0.0.2 =
-
-* Upgrade for improved text editing in Block Protocol blocks
+= 0.0.3 =
+Upgrade for improved text rendering in Block Protocol blocks
 
 <!--
 = 1.0 =

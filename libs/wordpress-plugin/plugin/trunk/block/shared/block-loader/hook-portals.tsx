@@ -1,10 +1,10 @@
 import { JsonValue } from "@blockprotocol/graph";
 import { HookData } from "@blockprotocol/hook";
 import { RichText } from "@wordpress/block-editor";
-import { escapeHTML } from "@wordpress/escape-html";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import sanitizeHtml from "sanitize-html";
 
 import { DbEntity, getEntity, updateEntity } from "../api";
 import {
@@ -97,8 +97,8 @@ const HookPortal = ({
       if (readonly) {
         return (
           <p
-            /* eslint-disable-next-line react/no-danger -- value is escaped */
-            dangerouslySetInnerHTML={{ __html: escapeHTML(localValue) }}
+            /* eslint-disable-next-line react/no-danger -- value is sanitized */
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(localValue) }}
             style={{ whiteSpace: "pre-wrap" }}
           />
         );

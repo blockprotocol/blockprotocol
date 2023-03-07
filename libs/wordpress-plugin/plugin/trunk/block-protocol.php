@@ -1,7 +1,7 @@
 <?php
 /**
  * @package blockprotocol
- * @version 0.0.2
+ * @version 0.0.3
  */
 /*
 Plugin Name: Block Protocol
@@ -9,14 +9,14 @@ Plugin URI: https://blockprotocol.org/wordpress
 Description: Access an open, growing ecosystem of high-quality and powerful blocks via the Block Protocol.
 Author: Block Protocol
 Author URI: https://blockprotocol.org/?utm_medium=organic&utm_source=wordpress_plugin-directory_blockprotocol-plugin_author-name
-Version: 0.0.2
+Version: 0.0.3
 Requires at least: 5.6.0
 Tested up to: 6.1.1
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 */
 
-const BLOCK_PROTOCOL_PLUGIN_VERISON = "0.0.2";
+const BLOCK_PROTOCOL_PLUGIN_VERISON = "0.0.3";
 
 if (is_readable(__DIR__ . '/vendor/autoload.php')) {
 	require __DIR__ . '/vendor/autoload.php';
@@ -195,13 +195,7 @@ function block_dynamic_render_callback($block_attributes)
 	);
 }
 
-// Admin-side setup for the block:
-// 1. register the category for the block
-// 2. register the editor script + dependencies
-// 3. register the plugin block
-// 4. contact the BP API and fetch BP blocks
-//    - enqueue block data for adding to the frontend
-//    - register each BP block as a variation of the plugin block
+// Add the block category for our block
 function block_protocol_init()
 {
 	// DB is unsupported - bail
@@ -214,24 +208,48 @@ function block_protocol_init()
 		// user needs to set a valid API key – bail
 		return;
 	}
-
+  
 	// add the block category
 	add_filter('block_categories_all', function ($categories) {
 		return array_merge(
 			[
 				[
 					'slug' => 'blockprotocol',
-					'title' => 'Block Protocol'
+					'title' => 'Block Protocol',
 				]
 			],
 			$categories
 		);
 	});
 
+	if (!WP_Block_Type_Registry::get_instance()->is_registered('blockprotocol/block')) {
+		register_block_type(
+			"blockprotocol/block",
+			[
+				'render_callback' => 'block_dynamic_render_callback',
+			]
+		);
+	}
+}
+
+add_action('admin_init', 'block_protocol_init');
+
+// Register editor-only assets
+// 1. register the editor script + dependencies
+// 2. contact the BP API and fetch BP blocks
+//    - enqueue block data for adding to the frontend
+// 3. enqueue script that registers each BP block as a variation of the plugin block
+function block_protocol_editor_assets() {
+	$response = get_block_protocol_blocks();
+	if (isset($response['errors'])) {
+		// user needs to set a valid API key – bail
+		return;
+	}
+  
 	// this file has a list of the dependencies our FE block code uses, so we can include those too
 	$asset_file = include(plugin_dir_path(__FILE__) . 'build/index.asset.php');
 
-	// register and enqueue the main plugin script that registers the block and has the editing view
+	// register and enqueue the main block script
 	wp_register_script(
 		'blockprotocol-script',
 		plugins_url('build/index.js', __FILE__),
@@ -248,15 +266,6 @@ function block_protocol_init()
 	$data['entities'] = get_block_protocol_entities_and_locations();
 	wp_add_inline_script('blockprotocol-script', "block_protocol_data = " . json_encode($data));
 
-	if (!WP_Block_Type_Registry::get_instance()->is_registered('blockprotocol/block')) {
-		register_block_type(
-			"blockprotocol/block",
-			[
-				'render_callback' => 'block_dynamic_render_callback',
-			]
-		);
-	}
-
 	// register and enqueue the script that registers a variation of our block for each BP block available
 	$variations_asset_file = include(plugin_dir_path(__FILE__) . 'build/register-variations.asset.php');
 	wp_register_script(
@@ -268,7 +277,7 @@ function block_protocol_init()
 	wp_enqueue_script('blockprotocol-register-variations');
 }
 
-add_action('admin_init', 'block_protocol_init');
+add_action('enqueue_block_editor_assets', 'block_protocol_editor_assets');
 
 // End-user / rendered page setup for the plugin
 // 1. Register the block type

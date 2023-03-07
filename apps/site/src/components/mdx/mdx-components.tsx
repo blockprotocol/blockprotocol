@@ -30,6 +30,7 @@ import { EntityMetaSchema } from "./modules/graph/schemas/entity";
 import { EntityTypeMetaSchema } from "./modules/graph/schemas/entity-type";
 import { PropertyTypeMetaSchema } from "./modules/graph/schemas/property-type";
 import { HookModuleMessageList } from "./modules/hook/hook-module-message-list";
+import { ServiceModuleMessageList } from "./modules/service/service-module-message-list";
 import { usePageHeading } from "./shared/use-page-heading";
 import { stringifyChildren } from "./shared/util";
 
@@ -102,6 +103,7 @@ export const mdxComponents: Record<
   FAQ,
   GraphModuleMessageList,
   HookModuleMessageList,
+  ServiceModuleMessageList,
   DataTypeMetaSchema,
   PropertyTypeMetaSchema,
   EntityTypeMetaSchema,

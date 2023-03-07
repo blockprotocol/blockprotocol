@@ -9,7 +9,7 @@ If you are looking to install it on your own WordPress server, please visit http
 ### First time set up
 
 - run `yarn`
-- run `yarn dev:wordpress`
+- run `yarn dev:wordpress up`
 - run `yarn dev:plugin`
 - visit [http://localhost:8000](http://localhost:8000)
 - go through the WordPress set up flow
@@ -19,7 +19,7 @@ If you are looking to install it on your own WordPress server, please visit http
 ### Regular development
 
 - `yarn dev:plugin` to run the plugin
-- `yarn dev:wordpress` (WP server logs are visible in the output)
+- `yarn dev:wordpress up` (WP server logs are visible in the output)
 - visit [http://localhost:8000](http://localhost:8000)
 - amend `BLOCK_PROTOCOL_SITE_HOST` in `docker-compose.yml` if you want to test against a staging Block Hub
 
@@ -35,7 +35,7 @@ Some changes (e.g. switching or patching dependencies) may require killing and r
 
 ### Folder structure
 
-`wordpress` contains a Docker compose file for a local WordPress (run on `yarn dev:wordpress`)
+`wordpress` contains a Docker compose file for a local WordPress (run on `yarn dev:wordpress up`)
 The `plugin` folder follows the same structure as in its [Subversion release repository](https://plugins.trac.wordpress.org/browser/blockprotocol), i.e.:
 
 - an `assets` folder which contains images for use on its [plugin directory page](https://wordpress.org/plugins/blockprotocol/)
