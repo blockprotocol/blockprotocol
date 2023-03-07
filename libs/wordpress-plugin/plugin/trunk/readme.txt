@@ -88,6 +88,7 @@ Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Disc
 * Notification when using unsupported database version
 * Fix rich text rendering
 * Icon for block category
+* Better error reporting
 
 == Upgrade Notice ==
 
