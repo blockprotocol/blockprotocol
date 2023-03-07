@@ -31,7 +31,11 @@ import {
   EntityTypeRootType,
   EntityVertexId,
   PropertyTypeRootType,
+  DataTypeRootType,
   Subgraph,
+  GetDataTypeData,
+  QueryDataTypesData,
+  QueryDataTypesResult,
 } from "./subgraph.js";
 
 export type BlockGraphProperties<
@@ -172,7 +176,21 @@ export type GraphEmbedderMessageCallbacks<Temporal extends boolean> = {
   queryPropertyTypes: MessageCallback<
     QueryPropertyTypesData,
     null,
-    MessageReturn<QueryPropertyTypesResult>,
+    MessageReturn<
+      QueryPropertyTypesResult<Subgraph<Temporal, PropertyTypeRootType>>
+    >,
+    ReadOrModifyResourceError
+  >;
+  getDataType: MessageCallback<
+    GetDataTypeData,
+    null,
+    MessageReturn<Subgraph<Temporal, DataTypeRootType>>,
+    ReadOrModifyResourceError
+  >;
+  queryDataTypes: MessageCallback<
+    QueryDataTypesData,
+    null,
+    MessageReturn<QueryDataTypesResult<Subgraph<Temporal, DataTypeRootType>>>,
     ReadOrModifyResourceError
   >;
   /** @todo - Reimplement linked queries */
