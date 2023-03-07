@@ -181,7 +181,6 @@ function block_protocol_init()
 				[
 					'slug' => 'blockprotocol',
 					'title' => 'Block Protocol',
-					'icon' => ''
 				]
 			],
 			$categories
