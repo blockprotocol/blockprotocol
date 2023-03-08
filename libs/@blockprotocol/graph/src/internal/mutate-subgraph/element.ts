@@ -36,6 +36,7 @@ import { addOutwardEdgeToSubgraphByMutation } from "./edge.js";
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
  * @param {DataTypeWithMetadata[]} dataTypes – the data types to add to the provided subgraph
+ * @returns {OntologyTypeVertexId[]} – the vertex IDs of the data type vertices that were added
  */
 export const addDataTypesToSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
@@ -74,6 +75,7 @@ export const addDataTypesToSubgraphByMutation = (
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
  * @param {PropertyTypeWithMetadata[]} propertyTypes – the data types to add to the provided subgraph
+ * @returns {OntologyTypeVertexId[]} – the vertex IDs of the property type vertices that were added
  */
 export const addPropertyTypesToSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
@@ -158,6 +160,7 @@ export const addPropertyTypesToSubgraphByMutation = (
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
  * @param {EntityTypeWithMetadata[]} entityTypes – the data types to add to the provided subgraph
+ * @returns {OntologyTypeVertexId[]} – the vertex IDs of the entity type vertices that were added
  */
 export const addEntityTypesToSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
@@ -243,11 +246,13 @@ export const addEntityTypesToSubgraphByMutation = (
  * that are **directly implied** by any link entities in the list (see note below).
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
  *
+ *
  * *Note*: This only adds edges as implied by the given entities, if the {@link Subgraph} is invalid at the time of
  * method call (e.g. by missing link endpoints), this will not loop through the vertex set to finish incomplete edges.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
  * @param {Entity[]} entities – the entities to add to the provided subgraph
+ * @returns {EntityVertexId[]} – the vertex IDs of the added entities
  */
 export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
