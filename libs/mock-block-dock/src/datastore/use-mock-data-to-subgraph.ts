@@ -1,9 +1,14 @@
-import { Subgraph as SubgraphNonTemporal } from "@blockprotocol/graph";
+import {
+  extractBaseUrl,
+  extractVersion,
+  Subgraph as SubgraphNonTemporal,
+} from "@blockprotocol/graph";
 import { buildSubgraph as buildSubgraphNonTemporal } from "@blockprotocol/graph/stdlib";
 import { Subgraph as SubgraphTemporal } from "@blockprotocol/graph/temporal";
 import { buildSubgraph as buildSubgraphTemporal } from "@blockprotocol/graph/temporal/stdlib";
 import { useMemo } from "react";
 
+import { entityTypes } from "../data/entity-types";
 import { isTemporalMockData, MockData } from "./mock-data";
 
 export const useMockDataToSubgraph = <Temporal>(
@@ -15,7 +20,19 @@ export const useMockDataToSubgraph = <Temporal>(
 
       /** @todo - accept ontology elements within the MBD datastore */
       return buildSubgraphTemporal(
-        { dataTypes: [], propertyTypes: [], entityTypes: [], entities },
+        {
+          dataTypes: [],
+          propertyTypes: [],
+          entityTypes: Object.values(entityTypes).map((schema) => {
+            const baseUrl = extractBaseUrl(schema.$id);
+            const version = extractVersion(schema.$id);
+            return {
+              metadata: { recordId: { baseUrl, version } },
+              schema,
+            };
+          }),
+          entities,
+        },
         [],
         {
           hasLeftEntity: { incoming: 255, outgoing: 255 },
@@ -34,7 +51,19 @@ export const useMockDataToSubgraph = <Temporal>(
 
       /** @todo - accept ontology elements within the MBD datastore */
       return buildSubgraphNonTemporal(
-        { dataTypes: [], propertyTypes: [], entityTypes: [], entities },
+        {
+          dataTypes: [],
+          propertyTypes: [],
+          entityTypes: Object.values(entityTypes).map((schema) => {
+            const baseUrl = extractBaseUrl(schema.$id);
+            const version = extractVersion(schema.$id);
+            return {
+              metadata: { recordId: { baseUrl, version } },
+              schema,
+            };
+          }),
+          entities,
+        },
         [],
         {
           hasLeftEntity: { incoming: 255, outgoing: 255 },
