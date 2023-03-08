@@ -2,7 +2,6 @@ import {
   extractBaseUrl,
   extractVersion,
   getReferencedIdsFromEntityType,
-  getReferencedIdsFromPropertyType,
 } from "@blockprotocol/type-system/slim";
 
 import { unionOfIntervals } from "../../shared/stdlib/interval.js";
@@ -59,19 +58,14 @@ export const addDataTypeVerticesToSubgraphByMutation = (
 /**
  * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
  *
- * This MUTATES the given {@link Subgraph} by adding a given list of property types to the vertices, creating any ontology
- * related edges that are **directly implied** by them (see note below).
+ * This MUTATES the given {@link Subgraph} by adding a given list of property types to the vertices..
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
- *
- * *Note*: This only adds edges as implied by the given property types, if the {@link Subgraph} is invalid at the time of
- * method call (e.g. by missing property type endpoints), this will not loop through the vertex set to finish incomplete
- * edges.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
  * @param {PropertyTypeWithMetadata[]} propertyTypes – the data types to add to the provided subgraph
  * @returns {OntologyTypeVertexId[]} – the vertex IDs of the property type vertices that were added
  */
-export const addPropertyTypesToSubgraphByMutation = (
+export const addPropertyTypeVerticesToSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
   propertyTypes: PropertyTypeWithMetadata[],
 ): OntologyTypeVertexId[] => {
@@ -89,53 +83,6 @@ export const addPropertyTypesToSubgraphByMutation = (
     subgraph.vertices[baseUrl]![version] = propertyTypeVertex;
 
     vertexIds.push({ baseId: baseUrl, revisionId: version.toString() });
-
-    const { constrainsValuesOnDataTypes, constrainsPropertiesOnPropertyTypes } =
-      getReferencedIdsFromPropertyType(propertyType.schema);
-
-    for (const { edgeKind, endpoints } of [
-      {
-        edgeKind: "CONSTRAINS_VALUES_ON" as const,
-        endpoints: constrainsValuesOnDataTypes,
-      },
-      {
-        edgeKind: "CONSTRAINS_PROPERTIES_ON" as const,
-        endpoints: constrainsPropertiesOnPropertyTypes,
-      },
-    ]) {
-      for (const versionedUrl of endpoints) {
-        const targetBaseUrl = extractBaseUrl(versionedUrl);
-        const targetRevisionId = extractVersion(versionedUrl).toString();
-
-        addOutwardEdgeToSubgraphByMutation(
-          subgraph,
-          baseUrl,
-          version.toString(),
-          {
-            kind: edgeKind,
-            reversed: false,
-            rightEndpoint: {
-              baseId: targetBaseUrl,
-              revisionId: targetRevisionId,
-            },
-          },
-        );
-
-        addOutwardEdgeToSubgraphByMutation(
-          subgraph,
-          targetBaseUrl,
-          targetRevisionId,
-          {
-            kind: edgeKind,
-            reversed: true,
-            rightEndpoint: {
-              baseId: baseUrl,
-              revisionId: version.toString(),
-            },
-          },
-        );
-      }
-    }
   }
   /* eslint-enable no-param-reassign */
   return vertexIds;

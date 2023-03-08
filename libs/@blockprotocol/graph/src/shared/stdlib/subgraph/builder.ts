@@ -1,9 +1,12 @@
-import { resolveDataTypeEdgesToSubgraphByMutation } from "../../../internal/mutate-subgraph/edge.js";
+import {
+  resolveDataTypeEdgesToSubgraphByMutation,
+  resolvePropertyTypeEdgesToSubgraphByMutation,
+} from "../../../internal/mutate-subgraph/edge.js";
 import {
   addDataTypeVerticesToSubgraphByMutation,
   addEntitiesToSubgraphByMutation,
   addEntityTypesToSubgraphByMutation,
-  addPropertyTypesToSubgraphByMutation,
+  addPropertyTypeVerticesToSubgraphByMutation,
 } from "../../../internal/mutate-subgraph/element.js";
 import {
   DataTypeWithMetadata,
@@ -110,11 +113,15 @@ export const buildSubgraph = <Temporal extends boolean>(
     subgraph,
     data.dataTypes,
   );
-  addPropertyTypesToSubgraphByMutation(subgraph, data.propertyTypes);
+  const propertyTypeVertexIds = addPropertyTypeVerticesToSubgraphByMutation(
+    subgraph,
+    data.propertyTypes,
+  );
   addEntityTypesToSubgraphByMutation(subgraph, data.entityTypes);
   addEntitiesToSubgraphByMutation(subgraph, data.entities);
 
   resolveDataTypeEdgesToSubgraphByMutation(subgraph, dataTypeVertexIds);
+  resolvePropertyTypeEdgesToSubgraphByMutation(subgraph, propertyTypeVertexIds);
 
   const missingRootVertexIds = [];
   for (const rootRecordId of rootRecordIds) {

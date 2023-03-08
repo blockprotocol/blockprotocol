@@ -3,6 +3,6 @@ export {
   addEntitiesToSubgraphByMutation,
   addEntityTypesToSubgraphByMutation,
   addOutwardEdgeToSubgraphByMutation,
-  addPropertyTypesToSubgraphByMutation,
+  addPropertyTypeVerticesToSubgraphByMutation,
 } from "./internal/mutate-subgraph.js";
 export { isTemporalSubgraph } from "./shared/types/subgraph.js";
