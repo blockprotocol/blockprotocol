@@ -14,7 +14,9 @@ import {
   EntityTypeVertex,
   EntityTypeWithMetadata,
   EntityVertex,
+  EntityVertexId,
   isTemporalSubgraph,
+  OntologyTypeVertexId,
   PropertyTypeVertex,
   PropertyTypeWithMetadata,
   Subgraph,
@@ -38,7 +40,8 @@ import { addOutwardEdgeToSubgraphByMutation } from "./edge.js";
 export const addDataTypesToSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
   dataTypes: DataTypeWithMetadata[],
-) => {
+): OntologyTypeVertexId[] => {
+  const vertexIds: OntologyTypeVertexId[] = [];
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   for (const dataType of dataTypes) {
     const { baseUrl, version } = dataType.metadata.recordId;
@@ -52,8 +55,10 @@ export const addDataTypesToSubgraphByMutation = (
     subgraph.vertices[baseUrl]![version] = dataTypeVertex;
 
     /** @todo - with the introduction of non-primitive data types edges will need to be added here */
+    vertexIds.push({ baseId: baseUrl, revisionId: version.toString() });
   }
   /* eslint-enable no-param-reassign */
+  return vertexIds;
 };
 
 /**
@@ -73,7 +78,8 @@ export const addDataTypesToSubgraphByMutation = (
 export const addPropertyTypesToSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
   propertyTypes: PropertyTypeWithMetadata[],
-) => {
+): OntologyTypeVertexId[] => {
+  const vertexIds: OntologyTypeVertexId[] = [];
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   for (const propertyType of propertyTypes) {
     const { baseUrl, version } = propertyType.metadata.recordId;
@@ -85,6 +91,8 @@ export const addPropertyTypesToSubgraphByMutation = (
 
     subgraph.vertices[baseUrl] ??= {};
     subgraph.vertices[baseUrl]![version] = propertyTypeVertex;
+
+    vertexIds.push({ baseId: baseUrl, revisionId: version.toString() });
 
     const { constrainsValuesOnDataTypes, constrainsPropertiesOnPropertyTypes } =
       getReferencedIdsFromPropertyType(propertyType.schema);
@@ -134,6 +142,7 @@ export const addPropertyTypesToSubgraphByMutation = (
     }
   }
   /* eslint-enable no-param-reassign */
+  return vertexIds;
 };
 
 /**
@@ -153,7 +162,8 @@ export const addPropertyTypesToSubgraphByMutation = (
 export const addEntityTypesToSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
   entityTypes: EntityTypeWithMetadata[],
-) => {
+): OntologyTypeVertexId[] => {
+  const vertexIds: OntologyTypeVertexId[] = [];
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   for (const entityType of entityTypes) {
     const { baseUrl, version } = entityType.metadata.recordId;
@@ -165,6 +175,8 @@ export const addEntityTypesToSubgraphByMutation = (
 
     subgraph.vertices[baseUrl] ??= {};
     subgraph.vertices[baseUrl]![version] = entityTypeVertex;
+
+    vertexIds.push({ baseId: baseUrl, revisionId: version.toString() });
 
     const {
       constrainsPropertiesOnPropertyTypes,
@@ -221,6 +233,7 @@ export const addEntityTypesToSubgraphByMutation = (
     }
   }
   /* eslint-enable no-param-reassign */
+  return vertexIds;
 };
 
 /**
@@ -239,7 +252,8 @@ export const addEntityTypesToSubgraphByMutation = (
 export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entities: Entity<Temporal>[],
-) => {
+): EntityVertexId[] => {
+  const vertexIds: EntityVertexId[] = [];
   if (isTemporalSubgraph(subgraph)) {
     /*
      * @todo This assumes that the left and right entity ID of a link entity is static for its entire lifetime, that is
@@ -311,6 +325,11 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
       } else {
         subgraph.vertices[entityId]![entityInterval.start.limit] = entityVertex;
       }
+
+      vertexIds.push({
+        baseId: entityId,
+        revisionId: entityInterval.start.limit,
+      });
 
       // Add IS_OF_TYPE edges for the entity and entity type
       const entityTypeId = entityVertex.inner.metadata.entityTypeId;
@@ -455,6 +474,10 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
           `Encountered multiple entities with entityId ${entityId}`,
         );
       }
+      vertexIds.push({
+        baseId: entityId,
+        revisionId: timestamp,
+      });
 
       // Add IS_OF_TYPE edges for the entity and entity type
       const entityTypeId = entityVertex.inner.metadata.entityTypeId;
@@ -533,4 +556,5 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
     }
   }
   /* eslint-enable no-param-reassign */
+  return vertexIds;
 };
