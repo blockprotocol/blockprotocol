@@ -311,6 +311,38 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
       } else {
         subgraph.vertices[entityId]![entityInterval.start.limit] = entityVertex;
       }
+
+      // Add IS_OF_TYPE edges for the entity and entity type
+      const entityTypeId = entityVertex.inner.metadata.entityTypeId;
+      const entityTypeBaseUrl = extractBaseUrl(entityTypeId);
+      const entityTypeRevisionId = extractVersion(entityTypeId).toString();
+      addOutwardEdgeToSubgraphByMutation(
+        subgraph,
+        entityId,
+        entityInterval.start.limit,
+        {
+          kind: "IS_OF_TYPE",
+          reversed: false,
+          rightEndpoint: {
+            baseId: entityTypeBaseUrl,
+            revisionId: entityTypeRevisionId.toString(),
+          },
+        },
+      );
+
+      addOutwardEdgeToSubgraphByMutation(
+        subgraph,
+        entityTypeBaseUrl,
+        entityInterval.start.limit,
+        {
+          kind: "IS_OF_TYPE",
+          reversed: true,
+          rightEndpoint: {
+            entityId,
+            interval: entityInterval,
+          },
+        },
+      );
     }
     for (const [
       linkEntityId,
@@ -423,6 +455,35 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
           `Encountered multiple entities with entityId ${entityId}`,
         );
       }
+
+      // Add IS_OF_TYPE edges for the entity and entity type
+      const entityTypeId = entityVertex.inner.metadata.entityTypeId;
+      const entityTypeBaseUrl = extractBaseUrl(entityTypeId);
+      const entityTypeRevisionId = extractVersion(entityTypeId).toString();
+      addOutwardEdgeToSubgraphByMutation(
+        subgraphNonTemporal,
+        entityId,
+        timestamp,
+        {
+          kind: "IS_OF_TYPE",
+          reversed: false,
+          rightEndpoint: {
+            baseId: entityTypeBaseUrl,
+            revisionId: entityTypeRevisionId.toString(),
+          },
+        },
+      );
+
+      addOutwardEdgeToSubgraphByMutation(
+        subgraphNonTemporal,
+        entityTypeId,
+        timestamp,
+        {
+          kind: "IS_OF_TYPE",
+          reversed: true,
+          rightEndpoint: entityId,
+        },
+      );
 
       for (const [
         linkEntityId,
