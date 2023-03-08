@@ -1,5 +1,5 @@
 import Ajv from "ajv";
-import { query as queryValidator } from "express-validator";
+import { query as queryValidator, validationResult } from "express-validator";
 import cloneDeep from "lodash/cloneDeep";
 
 import { getAllBlocks } from "../../../lib/api/blocks/get";
@@ -8,6 +8,7 @@ import {
   ExpandedBlockMetadata,
   retrieveBlockFileContent,
 } from "../../../lib/blocks";
+import { formatErrors } from "../../../util/api";
 import { parseClientIp, sendReport } from "../../../util/usage";
 
 export type ApiBlockSearchQuery = {
@@ -23,12 +24,17 @@ export type ApiBlockSearchResponse = {
 };
 
 export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
-  .use(queryValidator("author").isString().toLowerCase())
-  .use(queryValidator("license").isString().toLowerCase())
-  .use(queryValidator("name").isString().toLowerCase())
-  .use(queryValidator("q").isString().toLowerCase())
-  .use(queryValidator("json").isJSON())
+  .use(queryValidator("author").optional().isString().toLowerCase())
+  .use(queryValidator("license").optional().isString().toLowerCase())
+  .use(queryValidator("name").optional().isString().toLowerCase())
+  .use(queryValidator("q").optional().isString().toLowerCase())
+  .use(queryValidator("json").optional().isJSON())
   .get(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(formatErrors(...errors.array()));
+    }
+
     const {
       author: authorQuery,
       license: licenseQuery,

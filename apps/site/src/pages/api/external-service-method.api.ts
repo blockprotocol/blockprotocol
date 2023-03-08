@@ -84,8 +84,17 @@ export default createApiKeyRequiredHandler<
 
       res.status(status).json(
         formatErrors({
+          ...(isErrorAxiosError(error)
+            ? error.response?.data ?? { code }
+            : { code }),
+          /**
+           * For the purposes of backwards compatibility, temporarily continue returning
+           * the `msg` alias.
+           *
+           * @todo update the wordpress plugin to stop using the `msg` alias for `message` when handling errors
+           * @see https://app.asana.com/0/1202805690238892/1204117110538079/f
+           */
           msg: message,
-          code,
         }),
       );
     }
