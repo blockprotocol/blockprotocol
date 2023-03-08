@@ -121,7 +121,7 @@ function block_protocol_section_api_key_intro($args)
     <p id="<?php echo esc_attr($args['id']); ?>"> Generate your Block Protocol API key at <a
             href="https://blockprotocol.org/settings/api-keys"
             target="_blank">https://blockprotocol.org/settings/api-keys</a></p>
-<?php
+    <?php
 }
 
 /**
@@ -141,8 +141,9 @@ function block_protocol_field_api_key_renderer($args)
     ?>
     <input id="<?php echo esc_attr($args['label_for']); ?>"
         name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]" style="width: 620px; max-width: 100%;"
+        type="password"
         value="<?php echo isset($options[$args['label_for']]) ? (esc_attr($options[$args['label_for']])) : (''); ?>"></input>
-<?php
+    <?php
 }
 
 /**
@@ -164,7 +165,7 @@ function block_protocol_section_permitted_blocks_intro($args)
             target="_blank">Block
             Hub</a>
     </p>
-<?php
+    <?php
 }
 
 function block_protocol_field_allow_unverified_renderer($args)
@@ -175,7 +176,7 @@ function block_protocol_field_allow_unverified_renderer($args)
         name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]" type="checkbox" <?php
            checked(($options[$args['label_for']] ?? "off") == "on") ?>>
     </input>
-<?php
+    <?php
 }
 
 function block_protocol_section_permitted_blocks_author_allow_list_intro($args)
@@ -184,7 +185,7 @@ function block_protocol_section_permitted_blocks_author_allow_list_intro($args)
     <p id="<?php echo esc_attr($args['id']); ?>" style="margin-bottom: 0;">
         Checking a publisher below will trust any block from that publisher, regardless of verification status.
     </p>
-<?php
+    <?php
 }
 
 function block_protocol_field_author_allow_list_renderer($args)
@@ -231,11 +232,11 @@ function block_protocol_field_author_allow_list_renderer($args)
                     </b>
                 </label>
             </div>
-        <?php
+            <?php
         }
         ?>
     </div>
-<?php
+    <?php
 }
 
 function block_protocol_section_plugin_usage_intro($args)
@@ -246,7 +247,7 @@ function block_protocol_section_plugin_usage_intro($args)
     <p>
         Crash reports and aggregated telemetry help us improve the plugin.
     </p>
-<?php
+    <?php
 }
 
 function block_protocol_field_plugin_usage_renderer($args)
@@ -257,7 +258,7 @@ function block_protocol_field_plugin_usage_renderer($args)
         name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]" type="checkbox" <?php
            checked(($options[$args['label_for']] ?? "off") == "on") ?>>
     </input>
-<?php
+    <?php
 }
 
 /**
@@ -369,5 +370,5 @@ function block_protocol_options_page_html()
             </table>
         </div>
     </div>
-<?php
+    <?php
 }
