@@ -333,7 +333,7 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
       addOutwardEdgeToSubgraphByMutation(
         subgraph,
         entityTypeBaseUrl,
-        entityInterval.start.limit,
+        entityTypeRevisionId,
         {
           kind: "IS_OF_TYPE",
           reversed: true,
@@ -476,8 +476,8 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
 
       addOutwardEdgeToSubgraphByMutation(
         subgraphNonTemporal,
-        entityTypeId,
-        timestamp,
+        entityTypeBaseUrl,
+        entityTypeRevisionId,
         {
           kind: "IS_OF_TYPE",
           reversed: true,
