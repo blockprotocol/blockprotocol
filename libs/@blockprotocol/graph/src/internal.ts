@@ -1,5 +1,5 @@
 export {
-  addDataTypesToSubgraphByMutation,
+  addDataTypeVerticesToSubgraphByMutation,
   addEntitiesToSubgraphByMutation,
   addEntityTypesToSubgraphByMutation,
   addOutwardEdgeToSubgraphByMutation,
