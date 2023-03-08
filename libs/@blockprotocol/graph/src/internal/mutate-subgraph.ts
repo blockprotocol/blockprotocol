@@ -3,5 +3,5 @@ export {
   addDataTypeVerticesToSubgraphByMutation,
   addEntitiesToSubgraphByMutation,
   addEntityTypesToSubgraphByMutation,
-  addPropertyTypesToSubgraphByMutation,
+  addPropertyTypeVerticesToSubgraphByMutation,
 } from "./mutate-subgraph/element.js";
