@@ -68,7 +68,7 @@ export const addOutwardEdgeToSubgraphByMutation = <Temporal extends boolean>(
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {OntologyTypeVertexId[]} dataTypeVertexIds - the IDs of the data types to resolve edges for
  */
-export const resolveDataTypeEdgesToSubgraphByMutation = (
+export const resolveDataTypeEdgesInSubgraphByMutation = (
   _subgraph: Subgraph<boolean>,
   _dataTypeVertexIds: OntologyTypeVertexId[],
 ) => {};
