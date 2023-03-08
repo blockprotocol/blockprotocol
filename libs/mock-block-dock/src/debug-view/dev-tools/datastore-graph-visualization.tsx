@@ -179,7 +179,7 @@ const getSubgraphEdgesAsEChartEdges = (
     return typedEntries(inner).flatMap(([revisionId, outwardEdges]) => {
       return outwardEdges.flatMap((outwardEdge) => {
         const sourceRevisions = typedKeys(
-          subgraph.vertices[sourceBaseId] ?? {},
+          subgraph.vertices[sourceBaseId]!,
         ).filter((sourceRevisionId) => {
           return sourceRevisionId >= revisionId;
         });
