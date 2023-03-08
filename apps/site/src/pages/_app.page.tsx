@@ -131,7 +131,11 @@ const MyApp = ({
       // routeChangeStart also runs on initial load,
       // so this condition prevents the initial URL being added to sessionStorage
       if (document && !document.location.href.includes(url)) {
-        sessionStorage.setItem("previousRoute", document.location.href);
+        try {
+          sessionStorage.setItem("previousRoute", document.location.href);
+        } catch {
+          // sessionStorage is not available
+        }
       }
     };
 
