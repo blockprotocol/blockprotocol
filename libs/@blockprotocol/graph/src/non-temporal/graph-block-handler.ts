@@ -15,17 +15,25 @@ import {
 import {
   CreateEntityData,
   CreateResourceError,
+  DataTypeRootType,
   DeleteEntityData,
   Entity,
   EntityPropertiesObject,
   EntityRootType,
   EntityTypeRootType,
+  GetDataTypeData,
   GetEntityTypeData,
+  GetPropertyTypeData,
   GraphBlockMessageCallbacks,
   GraphBlockMessages,
+  PropertyTypeRootType,
+  QueryDataTypesData,
+  QueryDataTypesResult,
   QueryEntitiesResult,
   QueryEntityTypesData,
   QueryEntityTypesResult,
+  QueryPropertyTypesData,
+  QueryPropertyTypesResult,
   ReadOrModifyResourceError,
   Subgraph,
   UpdateEntityData,
@@ -47,8 +55,6 @@ export class GraphBlockHandler
       | "updateEntityType"
       | "createPropertyType"
       | "updatePropertyType"
-      | "getPropertyType"
-      | "queryPropertyTypes"
     >
 {
   constructor({
@@ -230,6 +236,58 @@ export class GraphBlockHandler
         data,
       },
       respondedToBy: "queryEntityTypesResponse",
+    });
+  }
+
+  getPropertyType({ data }: { data?: GetPropertyTypeData }) {
+    return this.sendMessage<
+      Subgraph<PropertyTypeRootType>,
+      ReadOrModifyResourceError
+    >({
+      message: {
+        messageName: "getPropertyType",
+        data,
+      },
+      respondedToBy: "getPropertyTypeResponse",
+    });
+  }
+
+  queryPropertyTypes({ data }: { data?: QueryPropertyTypesData }) {
+    return this.sendMessage<
+      QueryPropertyTypesResult<Subgraph<PropertyTypeRootType>>,
+      ReadOrModifyResourceError
+    >({
+      message: {
+        messageName: "queryPropertyTypes",
+        data,
+      },
+      respondedToBy: "queryPropertyTypesResponse",
+    });
+  }
+
+  getDataType({ data }: { data?: GetDataTypeData }) {
+    return this.sendMessage<
+      Subgraph<DataTypeRootType>,
+      ReadOrModifyResourceError
+    >({
+      message: {
+        messageName: "getDataType",
+        data,
+      },
+      respondedToBy: "getDataTypeResponse",
+    });
+  }
+
+  queryDataTypes({ data }: { data?: QueryDataTypesData }) {
+    return this.sendMessage<
+      QueryDataTypesResult<Subgraph<DataTypeRootType>>,
+      ReadOrModifyResourceError
+    >({
+      message: {
+        messageName: "queryDataTypes",
+        data,
+      },
+      respondedToBy: "queryDataTypesResponse",
     });
   }
 

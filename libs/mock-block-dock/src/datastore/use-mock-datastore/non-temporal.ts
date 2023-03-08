@@ -36,10 +36,8 @@ export type MockDatastore = {
       | "createEntityType"
       | "updateEntityType"
       | "deleteEntityType"
-      | "getPropertyType"
       | "createPropertyType"
       | "updatePropertyType"
-      | "queryPropertyTypes"
     >
   >;
 };
@@ -444,6 +442,56 @@ export const useMockDatastore = (
       }
     }, []);
 
+  const getPropertyType: GraphEmbedderMessageCallbacks["getPropertyType"] =
+    useCallback(async ({ data: _ }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `getPropertyType is not currently supported`,
+          },
+        ],
+      };
+    }, []);
+
+  const queryPropertyTypes: GraphEmbedderMessageCallbacks["queryPropertyTypes"] =
+    useCallback(async ({ data: _ }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `queryPropertyTypes is not currently supported`,
+          },
+        ],
+      };
+    }, []);
+
+  const getDataType: GraphEmbedderMessageCallbacks["getDataType"] = useCallback(
+    async ({ data: _ }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `getDataType is not currently supported`,
+          },
+        ],
+      };
+    },
+    [],
+  );
+
+  const queryDataTypes: GraphEmbedderMessageCallbacks["queryDataTypes"] =
+    useCallback(async ({ data: _ }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `queryDataTypes is not currently supported`,
+          },
+        ],
+      };
+    }, []);
+
   /** @todo - Reimplement linkedQueries */
   // const createLinkedQuery: GraphEmbedderMessageCallbacks["createLinkedQuery"] =
   //   useCallback(
@@ -720,6 +768,10 @@ export const useMockDatastore = (
       updateEntity,
       queryEntityTypes,
       getEntityType,
+      getPropertyType,
+      queryPropertyTypes,
+      getDataType,
+      queryDataTypes,
       // getLinkedQuery,
       // createLinkedQuery,
       // deleteLinkedQuery,
