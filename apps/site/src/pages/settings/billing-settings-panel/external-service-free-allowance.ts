@@ -54,22 +54,22 @@ export const externalServiceFreeAllowance: Record<
     pro: 100,
   },
   "OpenAI Ada Token": {
-    free: 0,
+    free: 2_000,
     hobby: 100_000,
     pro: 200_000,
   },
   "OpenAI Babbage Token": {
-    free: 0,
+    free: 2_000,
     hobby: 50_000,
     pro: 100_000,
   },
   "OpenAI Curie Token": {
-    free: 0,
+    free: 2_000,
     hobby: 40_000,
     pro: 80_000,
   },
   "OpenAI Davinci Token": {
-    free: 0,
+    free: 2_000,
     hobby: 10_000,
     pro: 20_000,
   },
