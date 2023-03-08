@@ -2,11 +2,13 @@ import {
   BaseUrl,
   extractBaseUrl,
   extractVersion,
+  getReferencedIdsFromEntityType,
   getReferencedIdsFromPropertyType,
 } from "@blockprotocol/type-system/slim";
 
 import { EntityId } from "../../shared/types/entity.js";
 import {
+  isEntityTypeVertex,
   isPropertyTypeVertex,
   OntologyTypeRevisionId,
   OntologyTypeVertexId,
@@ -113,6 +115,96 @@ export const resolvePropertyTypeEdgesToSubgraphByMutation = (
       {
         edgeKind: "CONSTRAINS_PROPERTIES_ON" as const,
         endpoints: constrainsPropertiesOnPropertyTypes,
+      },
+    ]) {
+      for (const versionedUrl of endpoints) {
+        const targetBaseUrl = extractBaseUrl(versionedUrl);
+        const targetRevisionId = extractVersion(versionedUrl).toString();
+
+        // If the endpoint vertex isn't currently in the subgraph, we won't add the edge.
+        // We expect all vertices to be present before adding edges.
+        if (!subgraph.vertices[targetBaseUrl]?.[targetRevisionId]) {
+          continue;
+        }
+
+        addOutwardEdgeToSubgraphByMutation(
+          subgraph,
+          baseUrl,
+          version.toString(),
+          {
+            kind: edgeKind,
+            reversed: false,
+            rightEndpoint: {
+              baseId: targetBaseUrl,
+              revisionId: targetRevisionId,
+            },
+          },
+        );
+
+        addOutwardEdgeToSubgraphByMutation(
+          subgraph,
+          targetBaseUrl,
+          targetRevisionId,
+          {
+            kind: edgeKind,
+            reversed: true,
+            rightEndpoint: {
+              baseId: baseUrl,
+              revisionId: version.toString(),
+            },
+          },
+        );
+      }
+    }
+  }
+};
+
+/**
+ * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
+ *
+ * This MUTATES the given {@link Subgraph} by creating any ontology related edges that are **directly implied** by them (see note below).
+ * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
+ *
+ * *Note*: This only adds edges as implied by the given entity types, if the {@link Subgraph} is invalid at the time of
+ * method call (e.g. by missing entity type endpoints), this will not loop through the vertex set to finish incomplete
+ * edges.
+ *
+ * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
+ * @param {OntologyTypeVertexId[]} entityTypeVertexIds - the IDs of the entity types to resolve edges for
+ */
+export const resolveEntityTypeEdgesToSubgraphByMutation = (
+  subgraph: Subgraph<boolean>,
+  entityTypeVertexIds: OntologyTypeVertexId[],
+) => {
+  for (const { baseId: baseUrl, revisionId: version } of entityTypeVertexIds) {
+    const vertex = subgraph.vertices[baseUrl]?.[version];
+
+    if (!vertex) {
+      return undefined;
+    }
+
+    if (!isEntityTypeVertex(vertex)) {
+      throw new Error(`expected entity type vertex but got: ${vertex.kind}`);
+    }
+
+    const {
+      constrainsPropertiesOnPropertyTypes,
+      constrainsLinksOnEntityTypes,
+      constrainsLinkDestinationsOnEntityTypes,
+    } = getReferencedIdsFromEntityType(vertex.inner.schema);
+
+    for (const { edgeKind, endpoints } of [
+      {
+        edgeKind: "CONSTRAINS_PROPERTIES_ON" as const,
+        endpoints: constrainsPropertiesOnPropertyTypes,
+      },
+      {
+        edgeKind: "CONSTRAINS_LINKS_ON" as const,
+        endpoints: constrainsLinksOnEntityTypes,
+      },
+      {
+        edgeKind: "CONSTRAINS_LINK_DESTINATIONS_ON" as const,
+        endpoints: constrainsLinkDestinationsOnEntityTypes,
       },
     ]) {
       for (const versionedUrl of endpoints) {
