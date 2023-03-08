@@ -9,3 +9,8 @@ export const generatedTypeSuffix = {
   propertyType: "PropertyValue",
   entityType: "Properties",
 };
+
+/** A placeholder type used in the workaround in the "$ref" resolver of the JSON Schema compiler */
+export const redundantTypePlaceholder = "PLACEHOLDER";
+
+export type CompiledTsType = string;
