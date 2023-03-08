@@ -69,7 +69,7 @@ export const externalServiceFreeAllowance: Record<
     pro: 80_000,
   },
   "OpenAI Davinci Token": {
-    free: 5_000,
+    free: 0,
     hobby: 10_000,
     pro: 20_000,
   },
