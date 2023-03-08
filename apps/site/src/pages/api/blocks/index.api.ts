@@ -32,14 +32,7 @@ export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
   .get(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json(
-        formatErrors(
-          ...errors.array().map((validationError) => ({
-            message: validationError.msg,
-            ...validationError,
-          })),
-        ),
-      );
+      return res.status(400).json(formatErrors(...errors.array()));
     }
 
     const {
