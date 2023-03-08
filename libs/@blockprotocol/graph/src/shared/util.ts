@@ -6,6 +6,7 @@ export type Subtype<
   Type extends Record<string, unknown>,
   Sub extends Type,
 > = Sub;
+
 type TupleEntry<
   T extends readonly unknown[],
   I extends unknown[] = [],
@@ -13,6 +14,7 @@ type TupleEntry<
 > = T extends readonly [infer Head, ...infer Tail]
   ? TupleEntry<Tail, [...I, unknown], R | [`${I["length"]}`, Head]>
   : R;
+
 type ObjectEntry<T extends {}> = T extends object
   ? { [K in keyof T]: [K, Required<T>[K]] }[keyof T] extends infer E
     ? E extends [infer K, infer V]
@@ -22,6 +24,7 @@ type ObjectEntry<T extends {}> = T extends object
       : never
     : never
   : never;
+
 type Entry<T extends {}> = T extends readonly [unknown, ...unknown[]]
   ? TupleEntry<T>
   : T extends ReadonlyArray<infer U>
@@ -37,14 +40,17 @@ export const typedEntries = <T extends {}>(
 ): ReadonlyArray<Entry<T>> => {
   return Object.entries(object) as unknown as ReadonlyArray<Entry<T>>;
 };
+
 /** `Object.values` analogue which returns a well-typed array */
 export const typedKeys = <T extends {}>(object: T): Entry<T>[0][] => {
   return Object.keys(object) as Entry<T>[0][];
 };
+
 /** `Object.values` analogue which returns a well-typed array */
 export const typedValues = <T extends {}>(object: T): Entry<T>[1][] => {
   return Object.values(object);
 };
+
 /**
  * Checks if a given string is exactly a non-negative integer.
  *
@@ -68,4 +74,12 @@ export const stringIsNonNegativeInteger = (
 ): input is `${number}` => {
   const asInteger = Number.parseInt(input, 10);
   return asInteger.toString() === input && asInteger >= 0;
+};
+
+export const mustBeDefined = <T>(x: T | undefined, message?: string): T => {
+  if (x === undefined) {
+    throw new Error(`invariant was broken: ${message ?? ""}`);
+  }
+
+  return x;
 };

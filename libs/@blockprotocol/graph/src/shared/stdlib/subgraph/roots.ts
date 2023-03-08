@@ -10,7 +10,7 @@ import {
   SubgraphRootType,
 } from "../../types/subgraph.js";
 import { Vertex } from "../../types/subgraph/vertices.js";
-import { mustBeDefined } from "../must-be-defined.js";
+import { mustBeDefined } from "../../util";
 import { getDataTypeByVertexId } from "./element/data-type.js";
 import { getEntityRevision } from "./element/entity.js";
 import { getEntityTypeByVertexId } from "./element/entity-type.js";
