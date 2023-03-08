@@ -11,7 +11,7 @@ import {
   RemoteFileEntityProperties,
   Subgraph,
 } from "@blockprotocol/graph";
-import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
+import { addEntityVerticesToSubgraphByMutation } from "@blockprotocol/graph/internal";
 import { getEntityRevision } from "@blockprotocol/graph/stdlib";
 import {
   GetEntityData as GetEntityDataTemporal,
@@ -137,7 +137,7 @@ export const useMockDatastore = (
               JSON.stringify(currentGraph),
             ) as Subgraph;
 
-            addEntitiesToSubgraphByMutation(newSubgraph, [newEntity]);
+            addEntityVerticesToSubgraphByMutation(newSubgraph, [newEntity]);
             return newSubgraph;
           });
         });

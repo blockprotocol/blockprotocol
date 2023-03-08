@@ -6,10 +6,15 @@ import {
   getReferencedIdsFromPropertyType,
 } from "@blockprotocol/type-system/slim";
 
-import { EntityId } from "../../shared/types/entity.js";
+import { unionOfIntervals } from "../../shared/stdlib.js";
+import { Entity, EntityId } from "../../shared/types/entity.js";
 import {
+  EntityIdWithInterval,
+  EntityVertexId,
   isEntityTypeVertex,
+  isEntityVertex,
   isPropertyTypeVertex,
+  isTemporalSubgraph,
   OntologyTypeRevisionId,
   OntologyTypeVertexId,
   OutwardEdge,
@@ -242,6 +247,320 @@ export const resolveEntityTypeEdgesInSubgraphByMutation = (
               baseId: baseUrl,
               revisionId: version.toString(),
             },
+          },
+        );
+      }
+    }
+  }
+};
+
+/**
+ * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
+ *
+ * This MUTATES the given {@link Subgraph} by creating any link edges and ontology related edges that are **directly implied** by the entities in the list (see note below).
+ * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
+ *
+ * *Note*: This only adds edges as implied by the given entities, if the {@link Subgraph} is invalid at the time of
+ * method call (e.g. by missing link endpoints or missing entity types), this will not loop through the vertex set to finish incomplete edges.
+ *
+ * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
+ * @param {EntityVertexId[]} entityVertexIds - the IDs of the entities to resolve edges for
+ */
+export const resolveEntityEdgesInSubgraphByMutation = <
+  Temporal extends boolean,
+>(
+  subgraph: Subgraph<Temporal>,
+  entityVertexIds: EntityVertexId[],
+) => {
+  if (isTemporalSubgraph(subgraph)) {
+    /*
+     * @todo This assumes that the left and right entity ID of a link entity is static for its entire lifetime, that is
+     *   not necessarily going to continue being the case
+     */
+
+    const linkMap: Record<
+      EntityId,
+      {
+        leftEntityId: EntityId;
+        rightEntityId: EntityId;
+        edgeIntervals: EntityIdWithInterval["interval"][];
+      }
+    > = {};
+
+    for (const {
+      baseId: entityId,
+      revisionId: intervalStartLimit,
+    } of entityVertexIds) {
+      const vertex = subgraph.vertices[entityId]?.[intervalStartLimit];
+
+      if (!vertex) {
+        return undefined;
+      }
+
+      if (!isEntityVertex(vertex)) {
+        throw new Error(`expected entity vertex but got: ${vertex.kind}`);
+      }
+      /*
+        this cast should be safe as we have just checked if the Subgraph has temporal information, in which case the
+        entities should too
+      */
+      const entityTemporal = vertex.inner as Entity<true>;
+      const entityInterval: EntityIdWithInterval["interval"] =
+        entityTemporal.metadata.temporalVersioning[
+          subgraph.temporalAxes.resolved.variable.axis
+        ];
+
+      const entityTypeId = vertex.inner.metadata.entityTypeId;
+      const entityTypeBaseUrl = extractBaseUrl(entityTypeId);
+      const entityTypeRevisionId = extractVersion(entityTypeId).toString();
+
+      // If the entity type vertex is currently in the subgraph, we add the appropriate edge.
+      // We expect all vertices to be present before adding edges.
+      if (subgraph.vertices[entityTypeBaseUrl]?.[entityTypeRevisionId]) {
+        // Add IS_OF_TYPE edges for the entity and entity type
+        addOutwardEdgeToSubgraphByMutation(
+          subgraph,
+          entityId,
+          intervalStartLimit,
+          {
+            kind: "IS_OF_TYPE",
+            reversed: false,
+            rightEndpoint: {
+              baseId: entityTypeBaseUrl,
+              revisionId: entityTypeRevisionId.toString(),
+            },
+          },
+        );
+
+        addOutwardEdgeToSubgraphByMutation(
+          subgraph,
+          entityTypeBaseUrl,
+          entityTypeRevisionId,
+          {
+            kind: "IS_OF_TYPE",
+            reversed: true,
+            rightEndpoint: {
+              entityId,
+              interval: entityInterval,
+            },
+          },
+        );
+      }
+
+      if (entityTemporal.linkData) {
+        const linkInfo = linkMap[entityId];
+        if (!linkInfo) {
+          linkMap[entityId] = {
+            leftEntityId: entityTemporal.linkData.leftEntityId,
+            rightEntityId: entityTemporal.linkData.rightEntityId,
+            edgeIntervals: [entityInterval],
+          };
+        } else {
+          if (
+            linkMap[entityId]!.leftEntityId !==
+              entityTemporal.linkData.leftEntityId &&
+            linkMap[entityId]!.rightEntityId !==
+              entityTemporal.linkData.rightEntityId
+          ) {
+            /*
+             * @todo This assumes that the left and right entity ID of a link entity is static for its entire lifetime, that is
+             *   not necessarily going to continue being the case
+             */
+            throw new Error(
+              `Link entity ${entityId} has multiple left and right entities`,
+            );
+          }
+          linkInfo.edgeIntervals.push(
+            entityTemporal.metadata.temporalVersioning[
+              subgraph.temporalAxes.resolved.variable.axis
+            ],
+          );
+        }
+      }
+
+      for (const [
+        linkEntityId,
+        { leftEntityId, rightEntityId, edgeIntervals },
+      ] of Object.entries(linkMap)) {
+        // If the list of entities is comprehensive, and link destinations cannot change, the result of this should be an
+        // array with a single interval that spans the full lifespan of the link entity.
+        const unionedIntervals = unionOfIntervals(...edgeIntervals);
+
+        for (const edgeInterval of unionedIntervals) {
+          addOutwardEdgeToSubgraphByMutation(
+            subgraph,
+            linkEntityId,
+            edgeInterval.start.limit,
+            {
+              kind: "HAS_LEFT_ENTITY",
+              reversed: false,
+              rightEndpoint: { entityId: leftEntityId, interval: edgeInterval },
+            },
+          );
+          addOutwardEdgeToSubgraphByMutation(
+            subgraph,
+            leftEntityId,
+            edgeInterval.start.limit,
+            {
+              kind: "HAS_LEFT_ENTITY",
+              reversed: true,
+              rightEndpoint: { entityId: linkEntityId, interval: edgeInterval },
+            },
+          );
+          addOutwardEdgeToSubgraphByMutation(
+            subgraph,
+            linkEntityId,
+            edgeInterval.start.limit,
+            {
+              kind: "HAS_RIGHT_ENTITY",
+              reversed: false,
+              rightEndpoint: {
+                entityId: rightEntityId,
+                interval: edgeInterval,
+              },
+            },
+          );
+          addOutwardEdgeToSubgraphByMutation(
+            subgraph,
+            rightEntityId,
+            edgeInterval.start.limit,
+            {
+              kind: "HAS_RIGHT_ENTITY",
+              reversed: true,
+              rightEndpoint: { entityId: linkEntityId, interval: edgeInterval },
+            },
+          );
+        }
+      }
+    }
+  } else {
+    // unsure why this cast is needed
+    const subgraphNonTemporal = subgraph as Subgraph<false>;
+
+    const linkMap: Record<
+      EntityId,
+      {
+        leftEntityId: EntityId;
+        rightEntityId: EntityId;
+      }
+    > = {};
+
+    for (const { baseId: entityId, revisionId: timestamp } of entityVertexIds) {
+      const vertex = subgraphNonTemporal.vertices[entityId]?.[timestamp];
+
+      if (!vertex) {
+        return undefined;
+      }
+
+      if (!isEntityVertex(vertex)) {
+        throw new Error(`expected entity vertex but got: ${vertex.kind}`);
+      }
+
+      /*
+        this cast should be safe as we have just checked if the Subgraph has temporal information, in which case the
+        entities should too
+      */
+      const entityNonTemporal = vertex.inner as Entity<false>;
+
+      const entityTypeId = vertex.inner.metadata.entityTypeId;
+      const entityTypeBaseUrl = extractBaseUrl(entityTypeId);
+      const entityTypeRevisionId = extractVersion(entityTypeId).toString();
+
+      // If the entity type vertex is currently in the subgraph, we add the appropriate edge.
+      // We expect all vertices to be present before adding edges.
+      if (subgraph.vertices[entityTypeBaseUrl]?.[entityTypeRevisionId]) {
+        // Add IS_OF_TYPE edges for the entity and entity type
+        addOutwardEdgeToSubgraphByMutation(
+          subgraphNonTemporal,
+          entityId,
+          timestamp,
+          {
+            kind: "IS_OF_TYPE",
+            reversed: false,
+            rightEndpoint: {
+              baseId: entityTypeBaseUrl,
+              revisionId: entityTypeRevisionId.toString(),
+            },
+          },
+        );
+
+        addOutwardEdgeToSubgraphByMutation(
+          subgraphNonTemporal,
+          entityTypeBaseUrl,
+          entityTypeRevisionId,
+          {
+            kind: "IS_OF_TYPE",
+            reversed: true,
+            rightEndpoint: entityId,
+          },
+        );
+      }
+
+      if (entityNonTemporal.linkData) {
+        const linkInfo = linkMap[entityId];
+        if (!linkInfo) {
+          linkMap[entityId] = {
+            leftEntityId: entityNonTemporal.linkData.leftEntityId,
+            rightEntityId: entityNonTemporal.linkData.rightEntityId,
+          };
+        } else if (
+          linkMap[entityId]!.leftEntityId !==
+            entityNonTemporal.linkData.leftEntityId &&
+          linkMap[entityId]!.rightEntityId !==
+            entityNonTemporal.linkData.rightEntityId
+        ) {
+          /*
+           * @todo This assumes that the left and right entity ID of a link entity is static for its entire lifetime, that is
+           *   not necessarily going to continue being the case
+           */
+          throw new Error(
+            `Link entity ${entityId} has multiple left and right entities`,
+          );
+        }
+      }
+
+      for (const [
+        linkEntityId,
+        { leftEntityId, rightEntityId },
+      ] of Object.entries(linkMap)) {
+        addOutwardEdgeToSubgraphByMutation(
+          subgraphNonTemporal,
+          linkEntityId,
+          timestamp,
+          {
+            kind: "HAS_LEFT_ENTITY",
+            reversed: false,
+            rightEndpoint: leftEntityId,
+          },
+        );
+        addOutwardEdgeToSubgraphByMutation(
+          subgraphNonTemporal,
+          leftEntityId,
+          timestamp,
+          {
+            kind: "HAS_LEFT_ENTITY",
+            reversed: true,
+            rightEndpoint: linkEntityId,
+          },
+        );
+        addOutwardEdgeToSubgraphByMutation(
+          subgraphNonTemporal,
+          linkEntityId,
+          timestamp,
+          {
+            kind: "HAS_RIGHT_ENTITY",
+            reversed: false,
+            rightEndpoint: rightEntityId,
+          },
+        );
+        addOutwardEdgeToSubgraphByMutation(
+          subgraphNonTemporal,
+          rightEntityId,
+          timestamp,
+          {
+            kind: "HAS_RIGHT_ENTITY",
+            reversed: true,
+            rightEndpoint: linkEntityId,
           },
         );
       }

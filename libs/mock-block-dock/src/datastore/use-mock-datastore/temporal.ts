@@ -2,7 +2,7 @@ import {
   GetEntityData as GetEntityDataTemporal,
   QueryEntitiesData as QueryEntitiesDataTemporal,
 } from "@blockprotocol/graph/dist/cjs/temporal/main";
-import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
+import { addEntityVerticesToSubgraphByMutation } from "@blockprotocol/graph/internal";
 import {
   Entity,
   GraphEmbedderMessageCallbacks,
@@ -155,7 +155,7 @@ export const useMockDatastore = (
               JSON.stringify(currentGraph),
             ) as Subgraph;
 
-            addEntitiesToSubgraphByMutation(newSubgraph, [newEntity]);
+            addEntityVerticesToSubgraphByMutation(newSubgraph, [newEntity]);
             return newSubgraph;
           });
         });
@@ -342,7 +342,7 @@ export const useMockDatastore = (
 
             resolve({ data: updatedEntity });
 
-            addEntitiesToSubgraphByMutation(newSubgraph, [updatedEntity]);
+            addEntityVerticesToSubgraphByMutation(newSubgraph, [updatedEntity]);
             return newSubgraph;
           });
         });

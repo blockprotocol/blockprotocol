@@ -1,7 +1,7 @@
 export {
   addDataTypeVerticesToSubgraphByMutation,
-  addEntitiesToSubgraphByMutation,
   addEntityTypeVerticesToSubgraphByMutation,
+  addEntityVerticesToSubgraphByMutation,
   addOutwardEdgeToSubgraphByMutation,
   addPropertyTypeVerticesToSubgraphByMutation,
 } from "./internal/mutate-subgraph.js";
