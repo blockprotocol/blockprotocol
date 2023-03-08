@@ -128,10 +128,9 @@ export const ServiceModuleModal = ({
             textAlign: "center",
           }}
         >
-          This block uses <br />
+          This block uses
           <strong>
-            {serviceModuleMessage?.providerName}{" "}
-            {serviceModuleMessage?.methodName}
+            {serviceModuleMessage?.providerName}
           </strong>
         </Typography>
         {user ? (
