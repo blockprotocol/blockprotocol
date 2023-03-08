@@ -1,6 +1,6 @@
 import {
   resolveDataTypeEdgesInSubgraphByMutation,
-  resolveEntityTypeEdgesToSubgraphByMutation,
+  resolveEntityTypeEdgesInSubgraphByMutation,
   resolvePropertyTypeEdgesInSubgraphByMutation,
 } from "../../../internal/mutate-subgraph/edge.js";
 import {
@@ -126,7 +126,7 @@ export const buildSubgraph = <Temporal extends boolean>(
 
   resolveDataTypeEdgesInSubgraphByMutation(subgraph, dataTypeVertexIds);
   resolvePropertyTypeEdgesInSubgraphByMutation(subgraph, propertyTypeVertexIds);
-  resolveEntityTypeEdgesToSubgraphByMutation(subgraph, entityTypeVertexIds);
+  resolveEntityTypeEdgesInSubgraphByMutation(subgraph, entityTypeVertexIds);
 
   const missingRootVertexIds = [];
   for (const rootRecordId of rootRecordIds) {

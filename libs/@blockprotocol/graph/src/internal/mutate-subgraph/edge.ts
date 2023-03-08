@@ -172,7 +172,7 @@ export const resolvePropertyTypeEdgesInSubgraphByMutation = (
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {OntologyTypeVertexId[]} entityTypeVertexIds - the IDs of the entity types to resolve edges for
  */
-export const resolveEntityTypeEdgesToSubgraphByMutation = (
+export const resolveEntityTypeEdgesInSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
   entityTypeVertexIds: OntologyTypeVertexId[],
 ) => {
