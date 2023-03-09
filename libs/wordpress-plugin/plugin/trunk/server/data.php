@@ -1,7 +1,7 @@
 <?php
 
-const BLOCK_PROTOCOL_SENTRY_DATA_URL = 'https://data.blockprotocol.org/v1/batch';
-const BLOCK_PROTOCOL_SENTRY_PUBLIC_AUTH_HEADER = 'Basic MkxFRkhRODk3TWdRcG4zMFZwelZjaHRxNXdJOg==';
+const BLOCK_PROTOCOL_DATA_URL = 'https://data.blockprotocol.org/v1/batch';
+const BLOCK_PROTOCOL_PUBLIC_AUTH_HEADER = 'Basic MkxFRkhRODk3TWdRcG4zMFZwelZjaHRxNXdJOg==';
 
 const BLOCK_PROTOCOL_SENTRY_DSN = "https://949242e663cf415c8c1a6a928ae18daa@o146262.ingest.sentry.io/4504758458122240";
 
@@ -94,13 +94,13 @@ function block_protocol_page_data(string $event, array $data)
     'properties' => $data,
   ];
 
-  wp_remote_post(BLOCK_PROTOCOL_SENTRY_DATA_URL, [
+  wp_remote_post(BLOCK_PROTOCOL_DATA_URL, [
     'blocking' => false,
     'method' => 'POST',
     'body' => json_encode(['batch' => [$payload]]),
     'headers' => [
       'Content-Type' => 'application/json',
-      'Authorization' => BLOCK_PROTOCOL_SENTRY_PUBLIC_AUTH_HEADER,
+      'Authorization' => BLOCK_PROTOCOL_PUBLIC_AUTH_HEADER,
     ]
   ]);
 }
