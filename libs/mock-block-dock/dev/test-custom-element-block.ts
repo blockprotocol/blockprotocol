@@ -25,7 +25,7 @@ export class TestCustomElementBlock extends BlockElementBase {
 
     const paragraph = this.renderRoot.querySelector(`#${paragraphId}`);
     if (!paragraph || !(paragraph instanceof HTMLParagraphElement)) {
-      throw new Error("No paragraph for hook service found in element DOM");
+      throw new Error("No paragraph for hook module found in element DOM");
     }
 
     void this.hookModule.hook({
