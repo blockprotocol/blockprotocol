@@ -4,6 +4,7 @@ import { Box, Typography } from "@mui/material";
 import { useUser } from "../../../../../context/user-context";
 import { Button } from "../../../../button";
 import { Link } from "../../../../link";
+import { LinkButton } from "../../../../link-button";
 import { Modal } from "../../../../modal/modal";
 
 type ServiceModuleModalProps = {
@@ -12,9 +13,7 @@ type ServiceModuleModalProps = {
   serviceModuleMessage: ExternalServiceMethodRequest | null;
 };
 
-const AnonymousUserContent = ({
-  onClose,
-}: Pick<ServiceModuleModalProps, "onClose">) => (
+const AnonymousUserContent = () => (
   <>
     <Typography
       sx={{
@@ -39,9 +38,12 @@ const AnonymousUserContent = ({
       applications, including <Link href="/wordpress">WordPress</Link>.
     </Typography>
     <Box display="flex" justifyContent="center">
-      <Button onClick={onClose} sx={{ width: 160 }}>
-        Close
-      </Button>
+      <LinkButton sx={{ width: 160, mr: 4, fontWeight: 600 }} href="/signup">
+        Sign up
+      </LinkButton>
+      <LinkButton sx={{ width: 160, mr: 4, fontWeight: 600 }} href="/login">
+        Log in
+      </LinkButton>
     </Box>
   </>
 );
@@ -128,11 +130,8 @@ export const ServiceModuleModal = ({
             textAlign: "center",
           }}
         >
-          This block uses <br />
-          <strong>
-            {serviceModuleMessage?.providerName}{" "}
-            {serviceModuleMessage?.methodName}
-          </strong>
+          This block uses
+          <strong> {serviceModuleMessage?.providerName}</strong>
         </Typography>
         {user ? (
           <AuthenticatedUserContent
@@ -142,7 +141,7 @@ export const ServiceModuleModal = ({
             }}
           />
         ) : (
-          <AnonymousUserContent onClose={onClose} />
+          <AnonymousUserContent />
         )}
       </Box>
     </Modal>

@@ -31,7 +31,7 @@
     "@blockprotocol/core": "0.1.0",
     "@blockprotocol/graph": "0.1.0",
     "@blockprotocol/hook": "0.1.0",
-    "@blockprotocol/service": "0.1.0",
+    "@blockprotocol/service": "0.1.1",
     "@lit-labs/react": "1.1.1",
     "@rjsf/core": "5.0.1",
     "@rjsf/utils": "5.0.1",
