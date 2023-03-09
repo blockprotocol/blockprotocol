@@ -71,7 +71,7 @@ export const addOutwardEdgeToSubgraphByMutation = <Temporal extends boolean>(
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {OntologyTypeVertexId[]} dataTypeVertexIds - the IDs of the data types to resolve edges for
  */
-export const resolveDataTypeEdgesInSubgraphByMutation = (
+export const inferDataTypeEdgesInSubgraphByMutation = (
   _subgraph: Subgraph<boolean>,
   _dataTypeVertexIds: OntologyTypeVertexId[],
 ) => {};
@@ -87,7 +87,7 @@ export const resolveDataTypeEdgesInSubgraphByMutation = (
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {OntologyTypeVertexId[]} propertyTypeVertexIds - the IDs of the property types to resolve edges for
  */
-export const resolvePropertyTypeEdgesInSubgraphByMutation = (
+export const inferPropertyTypeEdgesInSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
   propertyTypeVertexIds: OntologyTypeVertexId[],
 ) => {
@@ -171,7 +171,7 @@ export const resolvePropertyTypeEdgesInSubgraphByMutation = (
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {OntologyTypeVertexId[]} entityTypeVertexIds - the IDs of the entity types to resolve edges for
  */
-export const resolveEntityTypeEdgesInSubgraphByMutation = (
+export const inferEntityTypeEdgesInSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
   entityTypeVertexIds: OntologyTypeVertexId[],
 ) => {
@@ -259,7 +259,7 @@ export const resolveEntityTypeEdgesInSubgraphByMutation = (
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {EntityVertexId[]} entityVertexIds - the IDs of the entities to resolve edges for
  */
-export const resolveEntityEdgesInSubgraphByMutation = <
+export const inferEntityEdgesInSubgraphByMutation = <
   Temporal extends boolean,
 >(
   subgraph: Subgraph<Temporal>,
