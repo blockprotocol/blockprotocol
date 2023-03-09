@@ -50,7 +50,7 @@ export const addDataTypeVerticesToSubgraphByMutation = (
 /**
  * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
  *
- * This MUTATES the given {@link Subgraph} by adding a given list of property types to the vertices..
+ * This MUTATES the given {@link Subgraph} by adding a given list of property types to the vertices.
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
