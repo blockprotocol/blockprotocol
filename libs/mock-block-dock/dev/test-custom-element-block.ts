@@ -1,12 +1,44 @@
 import { extractBaseUrl } from "@blockprotocol/graph";
 import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 import { getRoots } from "@blockprotocol/graph/stdlib";
+import { HookBlockHandler } from "@blockprotocol/hook";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { html } from "lit";
 
 import { propertyTypes } from "../src/data/property-types";
 
+const paragraphId = "hook-paragraph";
+
 export class TestCustomElementBlock extends BlockElementBase {
+  private hookModule?: HookBlockHandler;
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
+  firstUpdated() {
+    if (!this.hookModule || this.hookModule.destroyed) {
+      this.hookModule = new HookBlockHandler({
+        element: this,
+      });
+    }
+
+    const paragraph = this.renderRoot.querySelector(`#${paragraphId}`);
+    if (!paragraph || !(paragraph instanceof HTMLParagraphElement)) {
+      throw new Error("No paragraph for hook service found in element DOM");
+    }
+
+    void this.hookModule.hook({
+      data: {
+        node: paragraph,
+        entityId: this.getBlockEntity()?.metadata.recordId.entityId,
+        hookId: null,
+        path: [extractBaseUrl(propertyTypes.description.$id)],
+        type: "text",
+      },
+    });
+  }
+
   private handleInput(event: Event) {
     this.updateSelfProperties({
       [extractBaseUrl(propertyTypes.name.$id)]: (
@@ -51,6 +83,8 @@ export class TestCustomElementBlock extends BlockElementBase {
       <input
         @change=${this.handleInput}
         value=${blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)]}
-      />`;
+      />
+      <h2>Hook-handled description display</h2>
+      <p id="hook-paragraph" />`;
   }
 }
