@@ -1,0 +1,20 @@
+import { mustBeDefined } from "../../shared/util/must-be-defined";
+import { typedKeys } from "../../shared/util/typed-object-iter.js";
+import { PostprocessContext } from "../context/postprocess.js";
+
+const bannerComment = () => `/**
+ * This file was automatically generated – do not edit it.
+ * See the respective URLs for the Block Protocol Types this was generated from.
+ */
+
+`;
+
+export const prependBannerComments = (context: PostprocessContext) => {
+  context.logDebug("Prepending banner comments");
+
+  for (const file of typedKeys(context.filesToDependentIdentifiers)) {
+    context.logTrace(`Prepending banner comment for ${file}`);
+    context.filesToContents[file] =
+      bannerComment() + mustBeDefined(context.filesToContents[file]);
+  }
+};

@@ -32,14 +32,14 @@ const rolls = (fmt, input, outFileName) => ({
 
 const temporalDependent = ["es", "cjs"].flatMap((fmt) =>
   ["temporal", "non-temporal"].flatMap((temporal) =>
-    ["main", "custom-element", "react", "stdlib", "codegen"].map((input) =>
+    ["main", "custom-element", "react", "stdlib"].map((input) =>
       rolls(fmt, `src/${temporal}/${input}.ts`, `${input}-${temporal}`),
     ),
   ),
 );
 
 const shared = ["es", "cjs"].flatMap((fmt) =>
-  ["graph-module-json", "internal"].map((input) =>
+  ["graph-module-json", "internal", "codegen"].map((input) =>
     rolls(fmt, `src/${input}.ts`, `${input}`),
   ),
 );

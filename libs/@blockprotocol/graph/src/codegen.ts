@@ -5,10 +5,12 @@ import { compile } from "./codegen/compile.js";
 import {
   CompileContext,
   InitializeContext,
-  PreprocessContext
+  PostprocessContext,
+  PreprocessContext,
 } from "./codegen/context.js";
 import { initialize } from "./codegen/initialize.js";
 import { CodegenParameters } from "./codegen/parameters.js";
+import { postprocess } from "./codegen/postprocess.js";
 import { preprocess } from "./codegen/preprocess.js";
 import { LogLevel } from "./codegen/shared.js";
 
@@ -24,4 +26,7 @@ export const codegen = async (
 
   const compileContext = new CompileContext(preProcessContext);
   await compile(compileContext);
+
+  const postProcessContext = new PostprocessContext(compileContext);
+  await postprocess(postProcessContext);
 };
