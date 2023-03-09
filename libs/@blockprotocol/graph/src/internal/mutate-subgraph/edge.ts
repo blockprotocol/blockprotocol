@@ -259,9 +259,7 @@ export const inferEntityTypeEdgesInSubgraphByMutation = (
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {EntityVertexId[]} entityVertexIds - the IDs of the entities to resolve edges for
  */
-export const inferEntityEdgesInSubgraphByMutation = <
-  Temporal extends boolean,
->(
+export const inferEntityEdgesInSubgraphByMutation = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityVertexIds: EntityVertexId[],
 ) => {
