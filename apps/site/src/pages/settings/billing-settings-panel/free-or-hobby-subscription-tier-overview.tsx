@@ -384,7 +384,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         </Box>
         <Box
           sx={({ spacing }) => ({
-            padding: spacing(2, 4),
+            padding: spacing(2, 2, 2, 4),
             backgroundColor: "#FBF7FF",
             flexGrow: 1,
           })}
@@ -581,7 +581,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         </Box>
         <Box
           sx={({ palette, spacing }) => ({
-            padding: spacing(2, 4),
+            padding: spacing(2, 3, 2, 4),
             backgroundColor: palette.purple[20],
           })}
         >
