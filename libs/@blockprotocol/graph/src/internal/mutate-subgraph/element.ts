@@ -1,5 +1,3 @@
-import {} from "@blockprotocol/type-system/slim";
-
 import { Entity } from "../../shared/types/entity.js";
 import {
   DataTypeVertex,
