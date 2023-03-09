@@ -11,7 +11,10 @@ import {
   RemoteFileEntityProperties,
   Subgraph,
 } from "@blockprotocol/graph";
-import { addEntityVerticesToSubgraphByMutation } from "@blockprotocol/graph/internal";
+import {
+  addEntityVerticesToSubgraphByMutation,
+  inferEntityEdgesInSubgraphByMutation,
+} from "@blockprotocol/graph/internal";
 import { getEntityRevision } from "@blockprotocol/graph/stdlib";
 import {
   GetEntityData as GetEntityDataTemporal,
@@ -137,7 +140,12 @@ export const useMockDatastore = (
               JSON.stringify(currentGraph),
             ) as Subgraph;
 
-            addEntityVerticesToSubgraphByMutation(newSubgraph, [newEntity]);
+            const entityVertexIds = addEntityVerticesToSubgraphByMutation(
+              newSubgraph,
+              [newEntity],
+            );
+            inferEntityEdgesInSubgraphByMutation(newSubgraph, entityVertexIds);
+
             return newSubgraph;
           });
         });
@@ -286,6 +294,7 @@ export const useMockDatastore = (
               linkData,
             };
 
+            // Replace the entity vertex in the subgraph in place
             newSubgraph.vertices[entityId]![
               Object.keys(newSubgraph.vertices[entityId]!).pop()!
             ]!.inner = updatedEntity;
