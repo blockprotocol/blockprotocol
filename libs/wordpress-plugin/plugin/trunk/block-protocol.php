@@ -84,7 +84,7 @@ function get_block_protocol_blocks()
 
 	if (!isset($options['block_protocol_field_api_key']) || strlen($options['block_protocol_field_api_key']) < 1) {
 		$return['errors'][0] = [];
-		$return['errors'][0]['msg'] = 'You need to set an API key in order to use the plugin';
+		$return['errors'][0]['msg'] = 'You need to set an API key in order to use the plugin – select Block Protocol from the left sidebar';
 		return $return;
 	}
 
@@ -146,7 +146,8 @@ function check_block_protocol_connection()
 		?>
 		<div class="notice notice-error is-dismissible">
 			<p style="margin-bottom:0;">Block Protocol:
-				<?php echo (esc_html($message)) ?><a href="https://blockprotocol.org/contact" style="margin-left:10px;">Get Help</a>
+				<?php echo (esc_html($message)) ?>
+				<a href="https://blockprotocol.org/contact" style="margin-left:10px;">Get Help</a>
 			<p>
 		</div>
 	<?php
