@@ -7,6 +7,7 @@ import { RJSFSchema, UiSchema } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv8";
 import { useEffect, useRef, useState } from "react";
 
+import { CONTROLS_LOADING_IMAGE_HEIGHT } from "../block-controls";
 import { LoadingImage } from "../loading-image";
 import { fetchSchema } from "./fetch-schema";
 
@@ -43,7 +44,7 @@ const EntityEditor = ({
   };
 
   if (!schema) {
-    return <LoadingImage />;
+    return <LoadingImage height={CONTROLS_LOADING_IMAGE_HEIGHT} />;
   }
 
   return (

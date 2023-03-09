@@ -1,5 +1,12 @@
 # block-template-html
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [[`2bbeefa2`](https://github.com/blockprotocol/blockprotocol/commit/2bbeefa2888bfe9c81ad61d4dc7d41433e57ae75), [`68058034`](https://github.com/blockprotocol/blockprotocol/commit/68058034c112d858f6a7a9adbf71ee1984e218fd)]:
+  - block-scripts@0.1.1
+
 ## 0.2.0
 
 ### Minor Changes

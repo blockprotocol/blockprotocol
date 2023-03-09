@@ -50,6 +50,8 @@ const EntitySelectionRenderer = ({
 
 const EntityEditor = lazy(() => import("./block-controls/entity-editor"));
 
+export const CONTROLS_LOADING_IMAGE_HEIGHT = "400px";
+
 export const CustomBlockControls = ({
   entityId,
   entitySubgraph,
@@ -86,7 +88,7 @@ export const CustomBlockControls = ({
   }, [entitySubgraph]);
 
   if (!entityId) {
-    return <LoadingImage />;
+    return <LoadingImage height={CONTROLS_LOADING_IMAGE_HEIGHT} />;
   }
 
   const updateEntityProperties = (properties: JsonObject) => {
@@ -111,7 +113,9 @@ export const CustomBlockControls = ({
           />
         </PanelBody>
         <PanelBody>
-          <Suspense fallback={<LoadingImage />}>
+          <Suspense
+            fallback={<LoadingImage height={CONTROLS_LOADING_IMAGE_HEIGHT} />}
+          >
             <EntityEditor
               entityProperties={entityProperties}
               entityTypeId={entityTypeId}

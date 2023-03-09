@@ -7,4 +7,8 @@ import { EditOrPreview } from "./edit-or-preview";
 registerBlockType("blockprotocol/block", {
   ...blockJson,
   edit: EditOrPreview,
+  supports: {
+    customClassName: false,
+    html: false,
+  },
 });
