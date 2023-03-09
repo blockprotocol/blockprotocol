@@ -20,6 +20,7 @@ import {
   getEntityTypeByVertexId as getEntityTypeByVertexIdGeneral,
   getEntityTypes as getEntityTypesGeneral,
   getEntityTypesByBaseUrl as getEntityTypesByBaseUrlGeneral,
+  getEntityTypesReferencedByEntityType as getEntityTypesReferencedByEntityTypeGeneral,
   getIncomingLinksForEntity as getIncomingLinksForEntityGeneral,
   getLeftEntityForLinkEntity as getLeftEntityForLinkEntityGeneral,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesGeneral,
@@ -104,6 +105,8 @@ export const buildSubgraph = (
 
 export const getPropertyTypesReferencedByEntityType =
   getPropertyTypesReferencedByEntityTypeGeneral;
+export const getEntityTypesReferencedByEntityType =
+  getEntityTypesReferencedByEntityTypeGeneral;
 export const getIncomingLinksForEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
