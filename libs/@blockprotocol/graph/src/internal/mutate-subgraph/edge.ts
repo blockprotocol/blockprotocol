@@ -450,8 +450,8 @@ export const resolveEntityEdgesInSubgraphByMutation = <
       }
 
       /*
-        this cast should be safe as we have just checked if the Subgraph has temporal information, in which case the
-        entities should too
+        this cast should be safe as we have just checked the Subgraph doesn't have temporal information, in which case the
+        entities shouldn't either
       */
       const entityNonTemporal = vertex.inner as Entity<false>;
 
