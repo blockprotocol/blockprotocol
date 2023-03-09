@@ -6,7 +6,7 @@ import {
   OntologyTypeVertexId,
   Subgraph,
 } from "../../../types/subgraph.js";
-import { getXTypesReferencedByYType } from "./shared.js";
+import { getOntologyTypesReferencedBy } from "./shared.js";
 
 /**
  * Gets identifiers for all `PropertyType`s referenced within a given `PropertyType` schema by searching for
@@ -20,7 +20,7 @@ export const getPropertyTypesReferencedByPropertyType = (
   subgraph: Subgraph<boolean>,
   propertyTypeId: OntologyTypeVertexId | VersionedUrl,
 ): OntologyTypeVertexId[] =>
-  getXTypesReferencedByYType(
+  getOntologyTypesReferencedBy(
     subgraph,
     propertyTypeId,
     isConstrainsPropertiesOnEdge,
@@ -38,7 +38,7 @@ export const getDataTypesReferencedByPropertyType = (
   subgraph: Subgraph<boolean>,
   propertyTypeId: OntologyTypeVertexId | VersionedUrl,
 ): OntologyTypeVertexId[] =>
-  getXTypesReferencedByYType(
+  getOntologyTypesReferencedBy(
     subgraph,
     propertyTypeId,
     isConstrainsValuesOnEdge,

@@ -9,7 +9,7 @@ import {
   StrictOntologyOutwardEdge,
   Subgraph,
 } from "../../../types/subgraph.js";
-import { getXTypesReferencedByYType } from "./shared.js";
+import { getOntologyTypesReferencedBy } from "./shared.js";
 
 /**
  * Gets identifiers for all `PropertyType`s referenced within a given `EntityType` schema by searching for
@@ -23,7 +23,7 @@ export const getPropertyTypesReferencedByEntityType = (
   subgraph: Subgraph<boolean>,
   entityTypeId: OntologyTypeVertexId | VersionedUrl,
 ): OntologyTypeVertexId[] =>
-  getXTypesReferencedByYType(
+  getOntologyTypesReferencedBy(
     subgraph,
     entityTypeId,
     isConstrainsPropertiesOnEdge,
@@ -41,7 +41,7 @@ export const getEntityTypesReferencedByEntityType = (
   subgraph: Subgraph<boolean>,
   entityTypeId: OntologyTypeVertexId | VersionedUrl,
 ): OntologyTypeVertexId[] =>
-  getXTypesReferencedByYType(
+  getOntologyTypesReferencedBy(
     subgraph,
     entityTypeId,
     (outwardEdge): outwardEdge is StrictOntologyOutwardEdge =>

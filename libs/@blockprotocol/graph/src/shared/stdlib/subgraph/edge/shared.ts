@@ -23,7 +23,7 @@ import {
  * @param outwardEdgePredicate {(outwardEdge: OutwardEdge<boolean>) => outwardEdge is StrictOntologyOutwardEdge} - The predicate to filter edges by
  * @returns {OntologyTypeVertexId[]} - The resulting endpoints of the filtered edges
  */
-export const getXTypesReferencedByYType = (
+export const getOntologyTypesReferencedBy = (
   subgraph: Subgraph<boolean>,
   ontologyTypeId: OntologyTypeVertexId | VersionedUrl,
   outwardEdgePredicate: (
