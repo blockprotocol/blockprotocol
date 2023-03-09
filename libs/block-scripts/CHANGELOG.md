@@ -1,5 +1,13 @@
 # block-scripts
 
+## 0.1.1
+
+### Patch Changes
+
+- [#1116](https://github.com/blockprotocol/blockprotocol/pull/1116) [`2bbeefa2`](https://github.com/blockprotocol/blockprotocol/commit/2bbeefa2888bfe9c81ad61d4dc7d41433e57ae75) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Bump bundler dependencies
+
+- [#1118](https://github.com/blockprotocol/blockprotocol/pull/1118) [`68058034`](https://github.com/blockprotocol/blockprotocol/commit/68058034c112d858f6a7a9adbf71ee1984e218fd) Thanks [@CiaranMn](https://github.com/CiaranMn)! - don't include sourcemaps in production build
+
 ## 0.1.0
 
 ### Minor Changes

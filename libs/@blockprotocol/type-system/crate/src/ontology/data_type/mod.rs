@@ -206,7 +206,9 @@ mod tests {
                   "type": "string"
                 }
             ),
-            ParseDataTypeError::InvalidVersionedUrl(ParseVersionedUrlError::AdditionalEndContent),
+            ParseDataTypeError::InvalidVersionedUrl(ParseVersionedUrlError::AdditionalEndContent(
+                ".5".to_owned(),
+            )),
         );
     }
 

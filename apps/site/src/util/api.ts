@@ -11,7 +11,10 @@ export const mustGetEnvVar = (name: string) => {
 };
 
 export const formatErrors = (...errors: ErrorResponse["errors"]) => ({
-  errors,
+  errors: errors.map((error) => ({
+    ...(error.msg ? { message: error.msg } : {}),
+    ...error,
+  })),
 });
 
 const isObjectWithKey = <K extends PropertyKey>(

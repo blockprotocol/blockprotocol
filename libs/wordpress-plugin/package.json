@@ -1,0 +1,62 @@
+{
+  "name": "wordpress-plugin",
+  "version": "0.0.3",
+  "private": true,
+  "description": "Repository for developing the Block Protocol WordPress plugin",
+  "homepage": "https://blockprotocol.org/wordpress",
+  "bugs": {
+    "url": "https://github.com/blockprotocol/blockprotocol/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blockprotocol/blockprotocol.git",
+    "directory": "libs/wordpress-plugin"
+  },
+  "license": "see LICENSE.md",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "scripts": {
+    "build": "composer install -d plugin/trunk && wp-scripts build",
+    "dev:plugin": "wp-scripts start",
+    "dev:wordpress": "docker compose -f ../../infra/docker/wordpress/docker-compose.yml",
+    "fix:eslint": "eslint --fix .",
+    "postinstall": "patch-package  --error-on-warn",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
+    "lint:tsc": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@apidevtools/json-schema-ref-parser": "9.1.2",
+    "@blockprotocol/core": "0.1.0",
+    "@blockprotocol/graph": "0.1.0",
+    "@blockprotocol/hook": "0.1.0",
+    "@blockprotocol/service": "0.1.0",
+    "@lit-labs/react": "1.1.1",
+    "@rjsf/core": "5.0.1",
+    "@rjsf/utils": "5.0.1",
+    "@rjsf/validator-ajv8": "5.0.1",
+    "@types/lodash.debounce": "4.0.7",
+    "@types/react": "18.0.28",
+    "@types/react-dom": "18.0.11",
+    "@types/sanitize-html": "2.8.1",
+    "@types/uuid": "8.3.4",
+    "@types/wordpress__block-editor": "7.0.0",
+    "@types/wordpress__blocks": "11.0.7",
+    "@wordpress/api-fetch": "6.18.0",
+    "@wordpress/block-editor": "10.4.0",
+    "@wordpress/blocks": "11.20.0",
+    "@wordpress/components": "23.5.0",
+    "@wordpress/data": "8.5.0",
+    "@wordpress/scripts": "25.5.0",
+    "buffer": "6.0.3",
+    "lodash.debounce": "4.0.8",
+    "patch-package": "6.5.1",
+    "sanitize-html": "2.10.0",
+    "ts-loader": "9.4.1",
+    "typescript": "4.8.4",
+    "uuid": "9.0.0",
+    "webpack": "5.75.0",
+    "webpack-bundle-analyzer": "4.7.0"
+  }
+}

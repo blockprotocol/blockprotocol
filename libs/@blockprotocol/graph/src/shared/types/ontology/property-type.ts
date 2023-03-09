@@ -1,5 +1,6 @@
 import { PropertyType, VersionedUrl } from "@blockprotocol/type-system/slim";
 
+import { QueryOperationInput } from "../entity.js";
 import { PropertyTypeRootType, Subgraph } from "../subgraph.js";
 import { OntologyElementMetadata } from "./metadata.js";
 
@@ -17,8 +18,11 @@ export type QueryPropertyTypesData = {
   >;
 };
 
-export type QueryPropertyTypesResult = {
-  results: Subgraph<true, PropertyTypeRootType>;
+export type QueryPropertyTypesResult<
+  T extends Subgraph<boolean, PropertyTypeRootType>,
+> = {
+  results: T[];
+  operation: QueryOperationInput;
 };
 
 export type GetPropertyTypeData = {

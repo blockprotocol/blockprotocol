@@ -22,13 +22,13 @@ import { Alert } from "../../alert";
 import {
   BlockDataTabPanels,
   blockPreviewAndDataHeight,
-} from "./block-data-tab-panels";
-import { BlockDataTabs } from "./block-data-tabs";
-import { BlockModalButton } from "./block-modal-button";
-import { BlockTabsModal } from "./block-tabs-modal";
-import { BlockVariantsTabs } from "./block-variants-tabs";
+} from "./block-data-container/block-data-tab-panels";
+import { BlockDataTabs } from "./block-data-container/block-data-tabs";
+import { BlockModalButton } from "./block-data-container/block-modal-button";
+import { BlockTabsModal } from "./block-data-container/block-tabs-modal";
+import { BlockVariantsTabs } from "./block-data-container/block-variants-tabs";
+import { SandboxedBlockDemo } from "./block-data-container/sandboxed-block-demo";
 import { BlockExampleGraph, BlockSchema } from "./hub-utils";
-import { SandboxedBlockDemo } from "./sandboxed-block-demo";
 
 type BlockDataContainerProps = {
   metadata: BlockMetadata;

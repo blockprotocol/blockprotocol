@@ -1,0 +1,20 @@
+diff --git a/node_modules/@jsdevtools/ono/esm/types.js b/node_modules/@jsdevtools/ono/esm/types.js
+index e37d5cd..b1c6ec6 100644
+--- a/node_modules/@jsdevtools/ono/esm/types.js
++++ b/node_modules/@jsdevtools/ono/esm/types.js
+@@ -1,2 +1,11 @@
+-import { inspect } from "util";
+-//# sourceMappingURL=types.js.map
+\ No newline at end of file
++/**
++ * PATCH CHANGES
++ * 
++ * Don't require polyfilling 'util' in browsers, we don't need this.
++ * 
++ * Related to patch on @apidevtools/json-schema-ref-parser
++ */
++
++// import { inspect } from "util";
++
++// //# sourceMappingURL=types.js.map
+\ No newline at end of file

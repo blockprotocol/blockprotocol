@@ -14,7 +14,6 @@ runs:
     - uses: actions/setup-node@v3
       with:
         node-version: 16 ## aligned with Node version on Vercel
-        cache: yarn
 
     - name: Install Cargo-Make
       shell: bash
@@ -26,6 +25,7 @@ runs:
       uses: Swatinem/rust-cache@v2
       with:
         workspaces: libs/@blockprotocol/type-system/crate
+        shared-key: "shared"
 
     - run: yarn install
       shell: bash

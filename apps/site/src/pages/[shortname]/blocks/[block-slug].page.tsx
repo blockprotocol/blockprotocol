@@ -224,7 +224,7 @@ export const getStaticProps: GetStaticProps<
       schema,
       exampleGraph,
     },
-    revalidate: 1800,
+    revalidate: 180,
   };
 };
 
