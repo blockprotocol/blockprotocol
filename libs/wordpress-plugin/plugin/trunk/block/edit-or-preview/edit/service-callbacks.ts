@@ -92,6 +92,13 @@ export const constructServiceModuleCallbacks =
           data,
         }),
 
+      openaiCompleteChat: async ({ data }) =>
+        callService({
+          providerName: "openai",
+          methodName: "completeChat",
+          data,
+        }),
+
       openaiCompleteText: async ({ data }) =>
         callService({
           providerName: "openai",

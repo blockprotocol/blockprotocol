@@ -1,6 +1,7 @@
 == Changelog ==
 
 = 0.0.3 =
+* Add support for ChatGPT blocks
 * Notification when using unsupported database version
 * Fix rich text rendering
 * Icon for block category
