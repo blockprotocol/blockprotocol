@@ -31,6 +31,10 @@ export {
   getRightEntityForLinkEntity,
 } from "./stdlib/subgraph/edge/link-entity.js";
 export {
+  getDataTypesReferencedByPropertyType,
+  getPropertyTypesReferencedByPropertyType,
+} from "./stdlib/subgraph/edge/property-type.js";
+export {
   getDataTypeById,
   getDataTypeByVertexId,
   getDataTypes,
