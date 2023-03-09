@@ -114,6 +114,25 @@ const API_USAGE_ROWS = [
     ),
     provider: "OpenAI",
     serviceTooltip:
+      "GPT-3.5 Turbo is the latest model from OpenAI. It is the best current language model for many use cases, including chat. It is also ten times cheaper than GPT-3 Davinci, and much faster.",
+    serviceIcon: faText,
+    service: "GPT-3.5 Turbo",
+    price: "$0.0020",
+    unitTooltip:
+      "Text provided to GPT-3.5 turbo models is split into tokens. 1,000 tokens equates to roughly 750 words (i.e. approximately 4000 characters) in English",
+    unit: "/1k tokens",
+  },
+  {
+    providerIcon: (
+      <AbstractAiIcon
+        sx={{
+          fontSize: 16,
+        }}
+        fill={theme.palette.gray[50]}
+      />
+    ),
+    provider: "OpenAI",
+    serviceTooltip:
       "Davinci is the most advanced GPT-3 large language model, providing the highest-quality, longest-length outputs.",
     serviceIcon: faText,
     service: "GPT-3 Davinci",
