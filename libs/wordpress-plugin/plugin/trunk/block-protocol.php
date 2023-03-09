@@ -118,7 +118,7 @@ function get_block_protocol_blocks()
 	if (!isset($body['results'])) {
     $return['errors'][0] = [];
     $return['errors'][0]['msg'] = 'Error connecting to the API – please try again in a minute.';
-		block_protocol_maybe_capture_error("BP API error " . json_encode($block_response, JSON_PRETTY_PRINT));
+    block_protocol_maybe_capture_error("BP API error " . json_encode($block_response, JSON_PRETTY_PRINT));
     return $return;
   }
 
