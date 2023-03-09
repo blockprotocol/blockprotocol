@@ -66,9 +66,7 @@ export const addOutwardEdgeToSubgraphByMutation = <Temporal extends boolean>(
  * This MUTATES the given {@link Subgraph} by creating any ontology related edges that are **directly implied** by the given data type ids (see note below).
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
  *
- * *Note*: This only adds edges as implied by the given data types, if the {@link Subgraph} is invalid at the time of
- * method call (e.g. by missing data type endpoints), this will not loop through the vertex set to finish incomplete
- * edges.
+ * *Note*: This only creates edges when both endpoints are present in the {@link Subgraph} regardless of whether the data types reference more vertices.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {OntologyTypeVertexId[]} dataTypeVertexIds - the IDs of the data types to resolve edges for
@@ -84,9 +82,7 @@ export const resolveDataTypeEdgesInSubgraphByMutation = (
  * This MUTATES the given {@link Subgraph} by creating any ontology related edges that are **directly implied** by them (see note below).
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
  *
- * *Note*: This only adds edges as implied by the given property types, if the {@link Subgraph} is invalid at the time of
- * method call (e.g. by missing property type endpoints), this will not loop through the vertex set to finish incomplete
- * edges.
+ * *Note*: This only creates edges when both endpoints are present in the {@link Subgraph} regardless of whether the property types reference more vertices.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {OntologyTypeVertexId[]} propertyTypeVertexIds - the IDs of the property types to resolve edges for
@@ -170,9 +166,7 @@ export const resolvePropertyTypeEdgesInSubgraphByMutation = (
  * This MUTATES the given {@link Subgraph} by creating any ontology related edges that are **directly implied** by them (see note below).
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
  *
- * *Note*: This only adds edges as implied by the given entity types, if the {@link Subgraph} is invalid at the time of
- * method call (e.g. by missing entity type endpoints), this will not loop through the vertex set to finish incomplete
- * edges.
+ * *Note*: This only creates edges when both endpoints are present in the {@link Subgraph} regardless of whether the entity types reference more vertices.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {OntologyTypeVertexId[]} entityTypeVertexIds - the IDs of the entity types to resolve edges for
@@ -260,8 +254,7 @@ export const resolveEntityTypeEdgesInSubgraphByMutation = (
  * This MUTATES the given {@link Subgraph} by creating any link edges and ontology related edges that are **directly implied** by the entities in the list (see note below).
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
  *
- * *Note*: This only adds edges as implied by the given entities, if the {@link Subgraph} is invalid at the time of
- * method call (e.g. by missing link endpoints or missing entity types), this will not loop through the vertex set to finish incomplete edges.
+ * *Note*: This only creates edges when both endpoints are present in the {@link Subgraph} regardless of whether the entities reference more vertices.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
  * @param {EntityVertexId[]} entityVertexIds - the IDs of the entities to resolve edges for
