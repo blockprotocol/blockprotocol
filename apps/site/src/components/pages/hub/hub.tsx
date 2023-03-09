@@ -16,6 +16,7 @@ import { faBinary } from "../../icons/fa/binary";
 import { faBoxesStacked } from "../../icons/fa/boxes-stacked";
 import { ClientOnlyLastUpdated } from "../../last-updated";
 import { Link } from "../../link";
+import { VerifiedBadge } from "../../verified-badge";
 import { getHubBrowseQuery, getRouteHubBrowseType } from "./hub-utils";
 
 export const useRouteHubBrowseType = () => {
@@ -31,10 +32,11 @@ export type HubItemDescription = {
   version: string;
   updated?: string;
   url: string;
+  verified?: boolean;
 };
 
 const HubItem = ({
-  item: { image, title, description, author, version, updated, url },
+  item: { image, title, description, author, version, updated, url, verified },
 }: {
   item: HubItemDescription;
 }) => (
@@ -54,6 +56,7 @@ const HubItem = ({
         color={(theme) => theme.palette.gray[90]}
       >
         {title}
+        {!!verified && <VerifiedBadge compact />}
       </Typography>
       {description ? (
         <Typography
