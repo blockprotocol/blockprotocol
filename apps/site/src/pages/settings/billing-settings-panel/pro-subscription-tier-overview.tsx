@@ -15,7 +15,10 @@ import { MicrophoneLogoIcon } from "../../../components/icons/microphone-icon";
 import { TagIcon } from "../../../components/icons/tag-icon";
 import { TrophyStarIcon } from "../../../components/icons/trophy-star-icon";
 import { priceToHumanReadable } from "../../shared/subscription-utils";
-import { externalServiceFreeAllowance } from "./external-service-free-allowance";
+import {
+  externalServiceFreeAllowance,
+  numberOfThousandOpenaiProWords,
+} from "./external-service-free-allowance";
 import {
   SubscriptionFeature,
   SubscriptionFeatureListItem,
@@ -36,7 +39,8 @@ export const proSubscriptionFeatures: Record<
       icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
-          <strong>300k</strong> AI-generated words (powered by GPT-3)
+          <strong>~{numberOfThousandOpenaiProWords}k</strong> AI-generated words
+          (powered by GPT-3)
         </>
       ),
     },
@@ -44,7 +48,10 @@ export const proSubscriptionFeatures: Record<
       icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
-          <strong>100</strong> AI-generated images (powered by DALL-E)
+          <strong>
+            {externalServiceFreeAllowance["OpenAI Create Image Request"].pro}
+          </strong>{" "}
+          AI-generated images (powered by DALL-E)
         </>
       ),
     },
@@ -66,7 +73,10 @@ export const proSubscriptionFeatures: Record<
       icon: <MapLocationDotIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
-          <strong>600</strong> Mapbox Static Maps
+          <strong>
+            {externalServiceFreeAllowance["Mapbox Static Image Request"].pro}
+          </strong>{" "}
+          Mapbox Static Maps
         </>
       ),
     },
@@ -74,7 +84,10 @@ export const proSubscriptionFeatures: Record<
       icon: <LocationIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
-          <strong>500</strong> Mapbox Isochrone API calls
+          <strong>
+            {externalServiceFreeAllowance["Mapbox Isochrone Request"].pro}
+          </strong>{" "}
+          Mapbox Isochrone API calls
         </>
       ),
     },
@@ -82,7 +95,10 @@ export const proSubscriptionFeatures: Record<
       icon: <LocationArrowIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
-          <strong>500</strong> Mapbox Directions API calls
+          <strong>
+            {externalServiceFreeAllowance["Mapbox Directions Request"].pro}
+          </strong>{" "}
+          Mapbox Directions API calls
         </>
       ),
     },
@@ -90,7 +106,13 @@ export const proSubscriptionFeatures: Record<
       icon: <MapLocationDotIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
-          <strong>500</strong> Mapbox Temporary Geocoding API calls
+          <strong>
+            {
+              externalServiceFreeAllowance["Mapbox Temporary Geocoding Request"]
+                .pro
+            }
+          </strong>{" "}
+          Mapbox Temporary Geocoding API calls
         </>
       ),
     },

@@ -19,7 +19,12 @@ import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode, useState } from "react";
 
 import proTierBackground from "../../../../public/assets/pricing/pro-tier-background.svg";
-import { externalServiceFreeAllowance } from "../../../pages/settings/billing-settings-panel/external-service-free-allowance";
+import {
+  externalServiceFreeAllowance,
+  numberOfOpenaiHobbyLanguageTokens,
+  numberOfThousandOpenaiHobbyWords,
+  numberOfThousandOpenaiProWords,
+} from "../../../pages/settings/billing-settings-panel/external-service-free-allowance";
 import { SubscriptionFeatureList } from "../../../pages/settings/billing-settings-panel/subscription-feature-list";
 import { SubscriptionFeature } from "../../../pages/settings/billing-settings-panel/subscription-feature-list-item";
 import {
@@ -63,32 +68,6 @@ type PaidSubscription = {
   coreFeatures: SubscriptionFeature[];
   additionalFeatures: SubscriptionFeature[];
 };
-
-const openaiLanguageFreeAllowances = [
-  externalServiceFreeAllowance["OpenAI GPT-3.5 Turbo Token"],
-  externalServiceFreeAllowance["OpenAI Ada Token"],
-  externalServiceFreeAllowance["OpenAI Babbage Token"],
-  externalServiceFreeAllowance["OpenAI Curie Token"],
-  externalServiceFreeAllowance["OpenAI Davinci Token"],
-];
-
-const numberOfOpenaiHobbyLanguageTokens = openaiLanguageFreeAllowances.reduce(
-  (prev, { hobby }) => prev + hobby,
-  0,
-);
-
-const numberOfOpenaiProLanguageTokens = openaiLanguageFreeAllowances.reduce(
-  (prev, { pro }) => prev + pro,
-  0,
-);
-
-const numberOfOpenaiHobbyWords = numberOfOpenaiHobbyLanguageTokens * 0.75;
-
-const numberOfOpenaiProWords = numberOfOpenaiProLanguageTokens * 0.75;
-
-const numberOfThousandOpenaiHobbyWords = numberOfOpenaiHobbyWords * 0.001;
-
-const numberOfThousandOpenaiProWords = numberOfOpenaiProWords * 0.001;
 
 export const paidSubscriptionFeatures: Record<
   PaidSubscriptionTier,
@@ -432,7 +411,7 @@ export const paidSubscriptionFeatures: Record<
                 color: ({ palette }) => palette.purple[60],
               }}
             >
-              e.g. {numberOfThousandOpenaiProWords}k+ words,{" "}
+              e.g. ~{numberOfThousandOpenaiProWords}k+ words,{" "}
               {externalServiceFreeAllowance["OpenAI Create Image Request"].pro}{" "}
               images, and{" "}
               {
@@ -867,7 +846,7 @@ export const PaidTiersSection: FunctionComponent<{
               <Stack flexDirection="row" flexWrap="wrap" gap={1} mt={2.25}>
                 <HobbyTierPerk
                   headerIcon={faText}
-                  title={`${numberOfThousandOpenaiHobbyWords.toFixed(1)}k`}
+                  title={`~${numberOfThousandOpenaiHobbyWords.toFixed(1)}k`}
                   description="AI-generated words"
                   poweredByIcon={<AbstractAiIcon sx={{ fontSize: 20 }} />}
                   poweredBy="GPT-3"

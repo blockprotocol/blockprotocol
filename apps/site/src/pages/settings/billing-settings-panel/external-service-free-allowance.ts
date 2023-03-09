@@ -80,3 +80,27 @@ export const externalServiceFreeAllowance: Record<
     pro: 20_000,
   },
 };
+
+const openaiLanguageFreeAllowances = [
+  externalServiceFreeAllowance["OpenAI GPT-3.5 Turbo Token"],
+  externalServiceFreeAllowance["OpenAI Ada Token"],
+  externalServiceFreeAllowance["OpenAI Babbage Token"],
+  externalServiceFreeAllowance["OpenAI Curie Token"],
+  externalServiceFreeAllowance["OpenAI Davinci Token"],
+];
+
+export const numberOfOpenaiHobbyLanguageTokens =
+  openaiLanguageFreeAllowances.reduce((prev, { hobby }) => prev + hobby, 0);
+
+export const numberOfOpenaiProLanguageTokens =
+  openaiLanguageFreeAllowances.reduce((prev, { pro }) => prev + pro, 0);
+
+export const numberOfOpenaiHobbyWords =
+  numberOfOpenaiHobbyLanguageTokens * 0.75;
+
+export const numberOfOpenaiProWords = numberOfOpenaiProLanguageTokens * 0.75;
+
+export const numberOfThousandOpenaiHobbyWords =
+  numberOfOpenaiHobbyWords * 0.001;
+
+export const numberOfThousandOpenaiProWords = numberOfOpenaiProWords * 0.001;
