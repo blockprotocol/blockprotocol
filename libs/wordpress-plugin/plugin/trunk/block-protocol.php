@@ -104,7 +104,8 @@ function get_block_protocol_blocks()
 
 	if (is_wp_error($block_response)) {
 		$return['errors'][0] = [];
-		$return['errors'][0]['msg'] = 'Error connecting to Block Protocol API';
+		$return['errors'][0]['msg'] = 'Error connecting to Block Protocol API – please try again in a minute.';
+		block_protocol_maybe_capture_error("BP API error " . json_encode($block_response, JSON_PRETTY_PRINT));
 		return $return;
 	}
 
@@ -113,6 +114,13 @@ function get_block_protocol_blocks()
 	if (isset($body['errors'])) {
 		return $body;
 	}
+
+	if (!isset($body['results'])) {
+    $return['errors'][0] = [];
+    $return['errors'][0]['msg'] = 'Error connecting to the API – please try again in a minute.';
+		block_protocol_maybe_capture_error("BP API error " . json_encode($block_response, JSON_PRETTY_PRINT));
+    return $return;
+  }
 
 	$blocks = $body['results'];
 
@@ -137,8 +145,8 @@ function check_block_protocol_connection()
 
 		?>
 		<div class="notice notice-error is-dismissible">
-			<p>Block Protocol:
-				<?php echo (esc_html($message)) ?>
+			<p style="margin-bottom:0;">Block Protocol:
+				<?php echo (esc_html($message)) ?><a href="https://blockprotocol.org/contact" style="margin-left:10px;">Get Help</a>
 			<p>
 		</div>
 	<?php

@@ -1,9 +1,9 @@
 <?php
 
-const DATA_URL = 'https://data.blockprotocol.org/v1/batch';
-const PUBLIC_AUTH_HEADER = 'Basic MkxFRkhRODk3TWdRcG4zMFZwelZjaHRxNXdJOg==';
+const BLOCK_PROTOCOL_SENTRY_DATA_URL = 'https://data.blockprotocol.org/v1/batch';
+const BLOCK_PROTOCOL_SENTRY_PUBLIC_AUTH_HEADER = 'Basic MkxFRkhRODk3TWdRcG4zMFZwelZjaHRxNXdJOg==';
 
-const SENTRY_DSN = "https://949242e663cf415c8c1a6a928ae18daa@o146262.ingest.sentry.io/4504758458122240";
+const BLOCK_PROTOCOL_SENTRY_DSN = "https://949242e663cf415c8c1a6a928ae18daa@o146262.ingest.sentry.io/4504758458122240";
 
 function block_protocol_reporting_disabled()
 {
@@ -94,13 +94,13 @@ function block_protocol_page_data(string $event, array $data)
     'properties' => $data,
   ];
 
-  wp_remote_post(DATA_URL, [
+  wp_remote_post(BLOCK_PROTOCOL_SENTRY_DATA_URL, [
     'blocking' => false,
     'method' => 'POST',
     'body' => json_encode(['batch' => [$payload]]),
     'headers' => [
       'Content-Type' => 'application/json',
-      'Authorization' => PUBLIC_AUTH_HEADER,
+      'Authorization' => BLOCK_PROTOCOL_SENTRY_PUBLIC_AUTH_HEADER,
     ]
   ]);
 }
@@ -110,7 +110,7 @@ function block_protocol_maybe_capture_error($last_error)
   if(!function_exists('\Sentry\captureMessage')) { return; }
 
   if ($last_error) {
-    \Sentry\captureMessage("Database error: " . $last_error);
+    \Sentry\captureMessage($last_error);
   }
 }
 
@@ -163,7 +163,7 @@ function block_protocol_sentry_init()
   $environment = substr($server_url, 0, 16) == "http://localhost" ? "development" : "production";
 
   $sentry_init_args = [	
-    'dsn' => SENTRY_DSN,	
+    'dsn' => BLOCK_PROTOCOL_SENTRY_DSN,
     'environment' => $environment,
     'server_name' => $server_url,
     'release' => BLOCK_PROTOCOL_PLUGIN_VERISON,
