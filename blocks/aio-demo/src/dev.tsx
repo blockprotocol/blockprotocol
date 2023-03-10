@@ -47,6 +47,44 @@ const DevApp = () => {
       // initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it)
       initialEntityTypes={[
         {
+          $schema:
+            "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+          $id: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/organization/v/2",
+          kind: "entityType",
+          title: "Organization",
+          type: "object",
+          allOf: [],
+          description:
+            "A group of entities (people, companies, etc.) focused on a common purpose",
+          examples: [],
+          links: {
+            "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/founded-by/v/1":
+              {
+                type: "array",
+                minItems: 0,
+                ordered: false,
+                items: {
+                  oneOf: [
+                    {
+                      $ref: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/person/v/2",
+                    },
+                  ],
+                },
+              },
+          },
+          properties: {
+            "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/":
+              {
+                $ref: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/v/1",
+              },
+            "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/":
+              {
+                $ref: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/v/1",
+              },
+          },
+          required: [],
+        },
+        {
           allOf: [],
           description: "A generic thing",
           examples: [],
