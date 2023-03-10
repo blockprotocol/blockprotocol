@@ -129,7 +129,10 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
             onClick={(event) => {
               if (!currentSubscriptionTierIsPaid) {
                 event.preventDefault();
-                plansHeadingRef.current?.scrollIntoView();
+                setTimeout(
+                  () => plansHeadingRef.current?.scrollIntoView(),
+                  150,
+                );
               }
             }}
           >
