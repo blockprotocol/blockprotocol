@@ -1,5 +1,5 @@
 import { HtmlBlockDefinition } from "@blockprotocol/core";
-import { EntityRecordId } from "@blockprotocol/graph";
+import { EntityRecordId, EntityType } from "@blockprotocol/graph";
 import { useGraphEmbedderModule as useGraphEmbedderModuleNonTemporal } from "@blockprotocol/graph/react";
 import { useGraphEmbedderModule as useGraphEmbedderModuleTemporal } from "@blockprotocol/graph/temporal/react";
 import { HookData, HookEmbedderMessageCallbacks } from "@blockprotocol/hook/.";
@@ -58,6 +58,7 @@ type MockBlockDockProps<Temporal extends boolean> = {
   debug?: boolean;
   hideDebugToggle?: boolean;
   initialData?: InitialData<Temporal>;
+  initialEntityTypes?: EntityType[];
   readonly?: boolean;
   serviceModuleCallbacks?: ServiceEmbedderMessageCallbacks;
   blockInfo?: {
@@ -83,6 +84,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
+  initialEntityTypes,
   readonly: initialReadonly = false,
   serviceModuleCallbacks: serviceModuleCallbacksFromProps,
 }: Omit<MockBlockDockProps<false>, "temporal">) => {
@@ -96,6 +98,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   } = useMockBlockPropsNonTemporal({
     blockEntityRecordId: initialBlockEntityRecordId,
     initialData: initialData as InitialData<false>,
+    initialEntityTypes: initialEntityTypes,
     readonly: !!initialReadonly,
   });
 
@@ -333,6 +336,7 @@ const MockBlockDockTemporal: FunctionComponent<
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
+  initialEntityTypes,
   readonly: initialReadonly = false,
   serviceModuleCallbacks: serviceModuleCallbacksFromProps,
 }: Omit<MockBlockDockProps<true>, "temporal">) => {
@@ -346,6 +350,7 @@ const MockBlockDockTemporal: FunctionComponent<
   } = useMockBlockPropsTemporal({
     blockEntityRecordId: initialBlockEntityRecordId,
     initialData: initialData as InitialData<true>,
+    initialEntityTypes: initialEntityTypes,
     readonly: !!initialReadonly,
   });
 
@@ -603,6 +608,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
+  initialEntityTypes,
   readonly: initialReadonly = false,
   serviceModuleCallbacks,
 }: MockBlockDockProps<Temporal>) => {
@@ -616,6 +622,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData as InitialData<true>}
+      initialEntityTypes={initialEntityTypes}
       readonly={initialReadonly}
       serviceModuleCallbacks={serviceModuleCallbacks}
     />
@@ -629,6 +636,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData}
+      initialEntityTypes={initialEntityTypes}
       readonly={initialReadonly}
       serviceModuleCallbacks={serviceModuleCallbacks}
     />

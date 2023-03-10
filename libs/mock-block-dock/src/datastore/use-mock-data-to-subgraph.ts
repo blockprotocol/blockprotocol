@@ -1,4 +1,8 @@
-import { Subgraph as SubgraphNonTemporal } from "@blockprotocol/graph";
+import {
+  extractBaseUrl,
+  extractVersion,
+  Subgraph as SubgraphNonTemporal,
+} from "@blockprotocol/graph";
 import { buildSubgraph as buildSubgraphNonTemporal } from "@blockprotocol/graph/stdlib";
 import { Subgraph as SubgraphTemporal } from "@blockprotocol/graph/temporal";
 import { buildSubgraph as buildSubgraphTemporal } from "@blockprotocol/graph/temporal/stdlib";
@@ -11,11 +15,23 @@ export const useMockDataToSubgraph = <Temporal>(
 ): Temporal extends true ? SubgraphTemporal : SubgraphNonTemporal => {
   return useMemo(() => {
     if (isTemporalMockData(mockData)) {
-      const { entities, subgraphTemporalAxes } = mockData;
+      const { entities, subgraphTemporalAxes, entityTypes } = mockData;
 
       /** @todo - accept ontology elements within the MBD datastore */
       return buildSubgraphTemporal(
-        { dataTypes: [], propertyTypes: [], entityTypes: [], entities },
+        {
+          dataTypes: [],
+          propertyTypes: [],
+          entityTypes: entityTypes.map((schema) => {
+            const baseUrl = extractBaseUrl(schema.$id);
+            const version = extractVersion(schema.$id);
+            return {
+              metadata: { recordId: { baseUrl, version } },
+              schema,
+            };
+          }),
+          entities,
+        },
         [],
         {
           hasLeftEntity: { incoming: 255, outgoing: 255 },
@@ -30,11 +46,24 @@ export const useMockDataToSubgraph = <Temporal>(
         subgraphTemporalAxes,
       ) as Temporal extends true ? SubgraphTemporal : SubgraphNonTemporal;
     } else {
-      const { entities } = mockData;
+      const { entities, entityTypes } = mockData;
 
       /** @todo - accept ontology elements within the MBD datastore */
       return buildSubgraphNonTemporal(
-        { dataTypes: [], propertyTypes: [], entityTypes: [], entities },
+        {
+          dataTypes: [],
+          propertyTypes: [],
+
+          entityTypes: entityTypes.map((schema) => {
+            const baseUrl = extractBaseUrl(schema.$id);
+            const version = extractVersion(schema.$id);
+            return {
+              metadata: { recordId: { baseUrl, version } },
+              schema,
+            };
+          }),
+          entities,
+        },
         [],
         {
           hasLeftEntity: { incoming: 255, outgoing: 255 },

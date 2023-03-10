@@ -1,6 +1,7 @@
 import {
   Entity as EntityNonTemporal,
   EntityRecordId as EntityRecordIdNonTemporal,
+  EntityType,
 } from "@blockprotocol/graph";
 import {
   Entity as EntityTemporal,
@@ -35,6 +36,7 @@ export type MockBlockHookArgs<Temporal extends boolean> = {
     ? EntityRecordIdTemporal
     : EntityRecordIdNonTemporal;
   initialData?: InitialData<Temporal>;
+  initialEntityTypes?: EntityType[];
   readonly: boolean;
 };
 
@@ -71,7 +73,7 @@ const defaultMockData = initialMockData<false>(undefined);
 export const useMockBlockPropsNonTemporal = (
   args: MockBlockHookArgs<false>,
 ): MockBlockHookResult<false> => {
-  const mockData = useMemo(() => {
+  const mockData = useMemo((): MockData<false> => {
     if (
       args.blockEntityRecordId &&
       !args.initialData?.initialEntities.find(
@@ -92,8 +94,13 @@ export const useMockBlockPropsNonTemporal = (
       entities: [...(args.initialData?.initialEntities ?? [])] ?? [
         ...defaultMockData.entities,
       ],
+      entityTypes: args.initialEntityTypes ?? [],
     };
-  }, [args.blockEntityRecordId, args.initialData?.initialEntities]);
+  }, [
+    args.blockEntityRecordId,
+    args.initialData?.initialEntities,
+    args.initialEntityTypes,
+  ]);
 
   const defaultBlockEntity = mockData.entities[0]!;
 
@@ -162,11 +169,13 @@ export const useMockBlockPropsTemporal = (
             resolved: args.initialData?.initialTemporalAxes,
           }
         : defaultTemporalMockData.subgraphTemporalAxes,
+      entityTypes: args.initialEntityTypes ?? [],
     };
   }, [
     args.blockEntityRecordId,
     args.initialData?.initialEntities,
     args.initialData?.initialTemporalAxes,
+    args.initialEntityTypes,
   ]);
 
   const defaultBlockEntity = mockData.entities[0]!;
