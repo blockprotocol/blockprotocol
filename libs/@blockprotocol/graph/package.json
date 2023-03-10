@@ -125,8 +125,6 @@
     "build": "yarn clean && yarn build:bundle",
     "build:bundle": "node --max-old-space-size=8192 ../../../node_modules/rollup/dist/bin/rollup -c --bundleConfigAsCjs",
     "clean": "rimraf ./dist/",
-    "codegen": "yarn exe ./src/shared/temp.ts",
-    "exe": "node --unhandled-rejections=strict --experimental-loader ts-node/esm/transpile-only --es-module-specifier-resolution=node --require=suppress-experimental-warnings",
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit"

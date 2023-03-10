@@ -28,14 +28,6 @@
       "dependsOn": ["codegen"],
       "outputs": ["dist/**", ".next/**", "public/schemas/**"]
     },
-    "@blockprotocol/graph#codegen": {
-      "dependsOn": ["^build"],
-      "outputs": ["generated/**"]
-    },
-    "@blockprotocol/graph#build": {
-      "dependsOn": ["codegen"],
-      "outputs": []
-    },
     "mock-block-dock#codegen": {
       "outputs": ["src/version.ts"]
     },
