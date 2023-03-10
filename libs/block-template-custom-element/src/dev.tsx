@@ -1,20 +1,20 @@
-import { VersionedUrl } from "@blockprotocol/graph";
 import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
 import packageJson from "../package.json";
 import ElementClass from "./index";
-import { RootEntity } from "./types.gen";
+import { BlockEntity } from "./types/thing";
 
 const node = document.getElementById("app");
 
-const testEntity: RootEntity = {
+const testEntity: BlockEntity = {
   metadata: {
     recordId: {
       entityId: "test-entity",
       editionId: new Date().toISOString(),
     },
-    entityTypeId: packageJson.blockprotocol.schema as VersionedUrl,
+    entityTypeId:
+      "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
   },
   properties: {
     "https://blockprotocol.org/@blockprotocol/types/property-type/name/":
