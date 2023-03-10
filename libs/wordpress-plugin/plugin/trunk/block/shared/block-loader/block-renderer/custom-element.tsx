@@ -10,14 +10,30 @@ type CustomElementLoaderProps = {
 
 /**
  * Registers (if not already registered) and loads a custom element.
+ *
+ * @todo share this between wordpress-plugin and mock-block-dock (currently duplicated)
  */
 export const CustomElementLoader: FunctionComponent<
   CustomElementLoaderProps
-> = ({ elementClass, properties, tagName }) => {
+> = ({ elementClass, properties, tagName: originalTagName }) => {
   /**
    * Register the element with the CustomElementsRegistry, if not already registered.
    */
+  let tagName = originalTagName;
   let existingCustomElement = customElements.get(tagName);
+  let i = 1;
+
+  /**
+   * If an element with a different constructor is already registered with this tag,
+   * rename until we find a free tag or the tag this element is already registered with.
+   * This may break elements that rely on being defined with a specific tag.
+   */
+  while (existingCustomElement && existingCustomElement !== elementClass) {
+    tagName = `${tagName}${i}`;
+    existingCustomElement = customElements.get(tagName);
+    i++;
+  }
+
   if (!existingCustomElement) {
     try {
       customElements.define(tagName, elementClass);
@@ -26,28 +42,10 @@ export const CustomElementLoader: FunctionComponent<
       console.error(`Error defining custom element: ${(err as Error).message}`);
       throw err;
     }
-  } else if (existingCustomElement !== elementClass) {
-    /**
-     * If an element with a different constructor is already registered with this name,
-     * give this element a different name.
-     * This may break elements that rely on being defined with a specific name.
-     */
-    let i = 0;
-    do {
-      existingCustomElement = customElements.get(tagName);
-      i++;
-    } while (existingCustomElement);
-    try {
-      customElements.define(`${tagName}${i}`, elementClass);
-    } catch (err) {
-      // eslint-disable-next-line no-console -- debugging tool
-      console.error(`Error defining custom element: ${(err as Error).message}`);
-      throw err;
-    }
   }
 
   const CustomElement = useMemo(
-    () => createComponent(React, tagName, elementClass),
+    () => createComponent({ react: React, tagName, elementClass }),
     [elementClass, tagName],
   );
 
