@@ -27,7 +27,7 @@ export const UpgradePageLayout: FunctionComponent<{
         }}
       >
         <BlockProtocolLogoIcon
-          sx={{ height: 30, marginBottom: 4, marginLeft: 2 }}
+          sx={{ height: 24, marginBottom: 4, marginLeft: 2 }}
         />
         {children}
       </Container>
@@ -42,7 +42,7 @@ export const UpgradePageLayout: FunctionComponent<{
       >
         <Container>
           <BlockProtocolIcon
-            sx={{ color: ({ palette }) => palette.gray[40], height: 24 }}
+            sx={{ color: ({ palette }) => palette.gray[40], height: 18 }}
           />
         </Container>
       </Box>
