@@ -129,6 +129,10 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
             onClick={(event) => {
               if (!currentSubscriptionTierIsPaid) {
                 event.preventDefault();
+                /**
+                 * @todo: figure out why calling `scrollIntoView` directly results
+                 * in flakiness.
+                 */
                 setTimeout(
                   () => plansHeadingRef.current?.scrollIntoView(),
                   150,
