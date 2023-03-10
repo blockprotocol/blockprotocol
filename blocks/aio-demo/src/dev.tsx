@@ -49,6 +49,24 @@ const DevApp = () => {
         {
           $schema:
             "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+          $id: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/founded-by/v/1",
+          kind: "entityType",
+          title: "Founded by",
+          type: "object",
+          allOf: [
+            {
+              $ref: "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1",
+            },
+          ],
+          description: "Established, initiated, or created by this entity.",
+          examples: [],
+          links: {},
+          properties: {},
+          required: [],
+        },
+        {
+          $schema:
+            "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
           $id: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/organization/v/2",
           kind: "entityType",
           title: "Organization",
