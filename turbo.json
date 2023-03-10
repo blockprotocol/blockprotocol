@@ -2,11 +2,8 @@
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
     "build": {
-      "outputs": ["dist/**", ".next/**", "public/schemas/**"],
-      "dependsOn": ["codegen", "^build"]
-    },
-    "codegen": {
-      "outputs": ["site-map.json", "src/version.ts"]
+      "outputs": [],
+      "dependsOn": ["^build"]
     },
     "fix:eslint": {
       "dependsOn": ["^build"],
@@ -23,6 +20,16 @@
     "test": {
       "dependsOn": ["^build"],
       "outputs": []
+    },
+    "@apps/site#codegen": {
+      "outputs": ["site-map.json"]
+    },
+    "@apps/site#build": {
+      "dependsOn": ["codegen"],
+      "outputs": ["dist/**", ".next/**", "public/schemas/**"]
+    },
+    "mock-block-dock#codegen": {
+      "outputs": ["src/version.ts"]
     },
     "@blockprotocol/type-system#build": {
       "dependsOn": [],
