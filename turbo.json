@@ -31,6 +31,14 @@
     "mock-block-dock#codegen": {
       "outputs": ["src/version.ts"]
     },
+    "block-template-custom-element#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/types/**.ts"]
+    },
+    "block-template-react#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/types/**.ts"]
+    },
     "@blockprotocol/type-system#build": {
       "dependsOn": [],
       "outputs": ["dist/**", "wasm/**"]
