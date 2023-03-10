@@ -32,6 +32,7 @@ import {
   getRightEntityForLinkEntity as getRightEntityForLinkEntityGeneral,
   getRoots as getRootsGeneral,
   getVertexIdForRecordId as getVertexIdForRecordIdGeneral,
+  inferSubgraphEdges as inferSubgraphEdgesGeneral,
   isDataTypeRootedSubgraph as isDataTypeRootedSubgraphGeneral,
   isEntityRootedSubgraph as isEntityRootedSubgraphGeneral,
   isEntityTypeRootedSubgraph as isEntityTypeRootedSubgraphGeneral,
@@ -101,6 +102,8 @@ export const buildSubgraph = (
   rootRecordIds: (EntityRecordId | OntologyTypeRecordId)[],
   depths: GraphResolveDepths,
 ) => buildSubgraphGeneral<false>(data, rootRecordIds, depths, undefined);
+export const inferSubgraphEdges = (subgraph: Subgraph) =>
+  inferSubgraphEdgesGeneral<false>(subgraph);
 
 export const getPropertyTypesReferencedByEntityType =
   getPropertyTypesReferencedByEntityTypeGeneral;

@@ -16,14 +16,17 @@ import {
   EntityRecordId,
   EntityRootType,
   EntityTypeWithMetadata,
+  EntityVertexId,
   GraphResolveDepths,
   isEntityRecordId,
   isOntologyTypeRecordId,
   OntologyTypeRecordId,
+  OntologyTypeVertexId,
   PropertyTypeWithMetadata,
   Subgraph,
   SubgraphTemporalAxes,
 } from "../../types.js";
+import { typedEntries, typedKeys } from "../../util.js";
 import { getVertexIdForRecordId } from "./vertex-id-for-element";
 
 /**
@@ -150,4 +153,85 @@ export const buildSubgraph = <Temporal extends boolean>(
   }
 
   return subgraph;
+};
+
+/**
+ * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
+ *
+ * This function will infer/add edges to a subgraph based on the vertices that are already present.
+ * The {@link Subgraph} must not have any edges already present, as this would result in invalid state.
+ * It will add edges for:
+ *  - data type vertices
+ *  - property type vertices
+ *  - entity type vertices
+ *  - entity vertices
+ *
+ * This operation MUTATES the given {@link Subgraph} - you should know why you need to do it.
+ *
+ * @param {Subgraph} subgraph – the subgraph to mutate by adding edges
+ */
+export const inferSubgraphEdges = <Temporal extends boolean>(
+  subgraph: Subgraph<Temporal, EntityRootType<Temporal>>,
+): void => {
+  // Construct object with vertex ids for each vertex kind
+  const vertexIds = typedEntries(subgraph.vertices).reduce(
+    (
+      acc: {
+        dataTypeVertexIds: OntologyTypeVertexId[];
+        propertyTypeVertexIds: OntologyTypeVertexId[];
+        entityTypeVertexIds: OntologyTypeVertexId[];
+        entityVertexIds: EntityVertexId[];
+      },
+      [baseId, entry],
+    ) => {
+      const revisionIds = typedKeys(entry);
+      let firstEntry = null;
+      if (revisionIds[0] && revisionIds[0] in entry) {
+        firstEntry = entry[revisionIds[0]];
+      }
+
+      const newVertexIds = revisionIds.map((revisionId) => ({
+        baseId,
+        revisionId,
+      }));
+
+      switch (firstEntry?.kind) {
+        case "dataType":
+          acc.dataTypeVertexIds.push(...newVertexIds);
+          break;
+        case "propertyType":
+          acc.propertyTypeVertexIds.push(...newVertexIds);
+          break;
+        case "entityType":
+          acc.entityTypeVertexIds.push(...newVertexIds);
+          break;
+        case "entity":
+          acc.entityVertexIds.push(...newVertexIds);
+          break;
+        default:
+          throw new Error(
+            `Internal implementation error, unexpected vertex: ${firstEntry}`,
+          );
+      }
+
+      return acc;
+    },
+    {
+      dataTypeVertexIds: [],
+      propertyTypeVertexIds: [],
+      entityTypeVertexIds: [],
+      entityVertexIds: [],
+    },
+  );
+
+  inferDataTypeEdgesInSubgraphByMutation(subgraph, vertexIds.dataTypeVertexIds);
+  inferPropertyTypeEdgesInSubgraphByMutation(
+    subgraph,
+    vertexIds.propertyTypeVertexIds,
+  );
+  inferEntityTypeEdgesInSubgraphByMutation(
+    subgraph,
+    vertexIds.entityTypeVertexIds,
+  );
+  inferEntityEdgesInSubgraphByMutation(subgraph, vertexIds.entityVertexIds);
 };
