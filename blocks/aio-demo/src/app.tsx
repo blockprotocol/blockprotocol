@@ -10,6 +10,7 @@ import { LinkFactory } from "./components/create-entity/link-factory";
 import { OrganizationFactory } from "./components/create-entity/organization-factory";
 import { PersonFactory } from "./components/create-entity/person-factory";
 import { EntityEraser } from "./components/delete-entity/entity-eraser";
+import { EntityUpdater } from "./components/update-entity/entity-updater";
 import { RefreshDataProvider } from "./contexts/refresh-data";
 import { RootEntity, RootEntityLinkedEntities } from "./types.gen";
 
@@ -55,6 +56,7 @@ export const App: BlockComponent<RootEntity> = ({
         <OrganizationFactory graphModule={graphModule} />
         <LinkFactory graphModule={graphModule} />
         <EntityEraser graphModule={graphModule} />
+        <EntityUpdater graphModule={graphModule} />
       </div>
     </RefreshDataProvider>
   );
