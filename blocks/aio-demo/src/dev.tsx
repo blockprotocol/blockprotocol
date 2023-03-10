@@ -45,7 +45,72 @@ const DevApp = () => {
       }}
       // hideDebugToggle <- uncomment this to disable the debug UI entirely
       // initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it)
-      // initialEntityTypes={[]} <- customise the entity types in the datastore
+      initialEntityTypes={[
+        {
+          allOf: [],
+          description: "A generic thing",
+          examples: [],
+          $id: "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
+          kind: "entityType",
+          links: {},
+          properties: {
+            "https://blockprotocol.org/@blockprotocol/types/property-type/name/":
+              {
+                $ref: "https://blockprotocol.org/@blockprotocol/types/property-type/name/v/1",
+              },
+          },
+          required: [],
+          title: "Thing",
+          type: "object",
+          $schema:
+            "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+        },
+        {
+          $schema:
+            "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+          $id: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/person/v/3",
+          kind: "entityType",
+          title: "Person",
+          type: "object",
+          allOf: [],
+          description: "A human being or individual",
+          examples: [],
+          links: {
+            "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/employed-by/v/1":
+              {
+                type: "array",
+                minItems: 0,
+                ordered: false,
+                items: {
+                  oneOf: [
+                    {
+                      $ref: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/organization/v/2",
+                    },
+                  ],
+                },
+              },
+          },
+          properties: {
+            "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/":
+              {
+                $ref: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/v/1",
+              },
+            "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/":
+              {
+                $ref: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/v/1",
+              },
+            "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/avatar/":
+              {
+                $ref: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/avatar/v/1",
+              },
+            "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/e-mail/":
+              {
+                $ref: "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/e-mail/v/1",
+              },
+          },
+          required: [],
+        },
+      ]}
       // initialLinks={[]} <- customise the links in the datastore
       // initialLinkedQueries={[]} <- customise the linkedQueries in the datastore
       // readonly <- uncomment this to start your block in readonly mode. You can also toggle it in the UI

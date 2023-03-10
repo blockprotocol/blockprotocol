@@ -137,7 +137,7 @@ export const EntityUpdater: FunctionComponent<PersonFactoryProps> = ({
       <input
         type="text"
         value={entityTypeIdValue}
-        onChange={(event) => setEntityPropertiesValue(event.target.value)}
+        onChange={(event) => setEntityTypeIdValue(event.target.value)}
         style={{ display: "block", width: "768px" }}
       />
       <textarea
