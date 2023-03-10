@@ -1,8 +1,9 @@
-import { writeFileSync } from "node:fs";
-import path, { join } from "node:path";
+import path from "node:path";
 
-import { generateTypeScriptFromEntityType } from "@blockprotocol/graph/codegen";
-import { validateVersionedUrl } from "@blockprotocol/type-system/slim";
+import {
+  codegen,
+  validateCodegenParameters,
+} from "@blockprotocol/graph/codegen";
 import chalk from "chalk";
 import fs from "fs-extra";
 
@@ -12,34 +13,29 @@ const script = async () => {
   const packageJsonPath = path.resolve(blockRootDirPath, "./package.json");
 
   const {
-    blockprotocol: { schema },
+    blockprotocol: { codegen: codegenParams },
   } = await fs.readJson(packageJsonPath);
 
-  if (!schema) {
+  if (!codegenParams) {
     console.error(
       chalk.red(
-        "package.json must contain a 'schema' key in 'blockprotocol' object",
+        "package.json must contain a 'codegen' key in 'blockprotocol' object",
       ),
     );
     process.exit(1);
   }
 
-  const validationResult = validateVersionedUrl(schema);
-  if (validationResult.type === "Err") {
+  const { errors } = validateCodegenParameters(codegenParams) ?? {};
+
+  if (errors && errors.length > 0) {
     console.error(
-      chalk.red(`Invalid 'schema' URL: ${validationResult.inner.reason}`),
+      chalk.red(`codegen parameters are invalid:\n${errors.join("\n")}`),
     );
     process.exit(1);
-    return;
   }
-  const { typeScriptString } = await generateTypeScriptFromEntityType(
-    validationResult.inner,
-    2, // @todo blocks should be able to statically declare desired subgraph depth from EA
-  );
 
-  const generatedFilePath = join(blockRootDirPath, "src", "types.gen.ts");
-
-  writeFileSync(generatedFilePath, typeScriptString);
+  /* @todo - optionally take a log level in from command-line or environment */
+  await codegen(codegenParams);
 };
 
 await script();

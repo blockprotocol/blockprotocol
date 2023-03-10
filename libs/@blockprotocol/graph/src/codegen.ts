@@ -14,6 +14,11 @@ import { postprocess } from "./codegen/postprocess.js";
 import { preprocess } from "./codegen/preprocess.js";
 import { LogLevel } from "./codegen/shared.js";
 
+export {
+  type CodegenParameters,
+  validateCodegenParameters,
+} from "./codegen/parameters.js";
+
 export const codegen = async (
   params: CodegenParameters,
   logLevel: LogLevel = "info",
