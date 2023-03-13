@@ -97,6 +97,9 @@ export const traverseAndCollateSchemas = async (
 
   const fetchQueue: Promise<void>[] = [];
 
+  // This is a helper method which adds a fetch promise to the queue, and removes it once it has resolved, this avoids
+  // the need to have logic that somehow polls for completed promises (which would require awaiting), or an additional
+  // collection.
   const addFetchPromise = (fetchPromise: Promise<void>) => {
     fetchQueue.push(fetchPromise);
 
