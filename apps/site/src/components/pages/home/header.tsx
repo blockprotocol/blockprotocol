@@ -93,7 +93,16 @@ export const Header = () => {
           with interoperable components known as blocks
         </Typography>
       </Container>
-      <Image layout="responsive" src={helixBoxes} style={{ zIndex: 999 }} />
+      <Image
+        layout="responsive"
+        src={helixBoxes}
+        style={{ zIndex: 999 }}
+        /**
+         * not using placeholder="blur" on this image, since it's transparent, making it blur looks weird
+         * `priority` makes sure this image is loaded ASAP, because this is the first image in the homepage
+         */
+        priority
+      />
     </Box>
   );
 };
