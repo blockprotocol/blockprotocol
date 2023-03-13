@@ -5,8 +5,8 @@ import {
   isConstrainsLinksOnEdge,
   isConstrainsPropertiesOnEdge,
   isInheritsFromEdge,
+  OntologyToOntologyOutwardEdge,
   OntologyTypeVertexId,
-  StrictOntologyOutwardEdge,
   Subgraph,
 } from "../../../types/subgraph.js";
 import { getOntologyTypesReferencedBy } from "./shared.js";
@@ -44,7 +44,7 @@ export const getEntityTypesReferencedByEntityType = (
   getOntologyTypesReferencedBy(
     subgraph,
     entityTypeId,
-    (outwardEdge): outwardEdge is StrictOntologyOutwardEdge =>
+    (outwardEdge): outwardEdge is OntologyToOntologyOutwardEdge =>
       isInheritsFromEdge(outwardEdge) ||
       isConstrainsLinksOnEdge(outwardEdge) ||
       isConstrainsLinkDestinationsOnEdge(outwardEdge),

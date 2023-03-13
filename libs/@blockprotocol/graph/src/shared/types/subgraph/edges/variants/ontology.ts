@@ -180,7 +180,7 @@ export const isIsTypeOfEdge = <Temporal extends boolean>(
   return outwardEdge.kind === "IS_OF_TYPE" && outwardEdge.reversed;
 };
 
-export type StrictOntologyOutwardEdge =
+export type OntologyToOntologyOutwardEdge =
   | InheritsFromEdge
   | IsInheritedByEdge
   | ConstrainsValuesOnEdge
@@ -193,7 +193,7 @@ export type StrictOntologyOutwardEdge =
   | LinkDestinationsConstrainedByEdge;
 
 export type OntologyOutwardEdge<Temporal extends boolean> =
-  | StrictOntologyOutwardEdge
+  | OntologyToOntologyOutwardEdge
   | IsTypeOfEdge<Temporal>;
 
 /**

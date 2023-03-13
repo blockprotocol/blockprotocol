@@ -7,10 +7,10 @@ import {
 
 import {
   OntologyOutwardEdge,
+  OntologyToOntologyOutwardEdge,
   OntologyTypeRevisionId,
   OntologyTypeVertexId,
   OutwardEdge,
-  StrictOntologyOutwardEdge,
   Subgraph,
 } from "../../../types/subgraph.js";
 
@@ -20,7 +20,7 @@ import {
  * @internal
  * @param subgraph {Subgraph} - The `Subgraph` containing the underlying ontology types
  * @param ontologyTypeId {OntologyTypeVertexId | VersionedUrl} - The identifier of the `EntityType` to search for
- * @param outwardEdgePredicate {(outwardEdge: OutwardEdge<boolean>) => outwardEdge is StrictOntologyOutwardEdge} - The predicate to filter edges by
+ * @param outwardEdgePredicate {(outwardEdge: OutwardEdge<boolean>) => outwardEdge is OntologyToOntologyOutwardEdge} - The predicate to filter edges by
  * @returns {OntologyTypeVertexId[]} - The resulting endpoints of the filtered edges
  */
 export const getOntologyTypesReferencedBy = (
@@ -28,7 +28,7 @@ export const getOntologyTypesReferencedBy = (
   ontologyTypeId: OntologyTypeVertexId | VersionedUrl,
   outwardEdgePredicate: (
     outwardEdge: OutwardEdge<boolean>,
-  ) => outwardEdge is StrictOntologyOutwardEdge,
+  ) => outwardEdge is OntologyToOntologyOutwardEdge,
 ): OntologyTypeVertexId[] => {
   let baseUrl: BaseUrl;
   let revisionId: OntologyTypeRevisionId;
