@@ -2,7 +2,8 @@
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
     },
     "fix:eslint": {
       "dependsOn": ["^build"],
@@ -27,25 +28,13 @@
       "dependsOn": ["codegen"],
       "outputs": ["dist/**", ".next/**", "public/schemas/**"]
     },
-    "@blockprotocol/core#build": {
-      "outputs": ["dist/**"]
-    },
-    "@blockprotocol/graph#build": {
-      "outputs": ["dist/**"]
-    },
-    "@blockprotocol/hook#build": {
-      "outputs": ["dist/**"]
-    },
-    "@blockprotocol/service#build": {
-      "outputs": ["dist/**"]
-    },
     "@blockprotocol/type-system#build": {
       "dependsOn": [],
       "outputs": ["dist/**", "wasm/**"]
     },
     "@blockprotocol/type-system#fix:eslint": {
       "dependsOn": ["build"],
-      "outputs": []
+      "cache": false
     },
     "@blockprotocol/type-system#lint:eslint": {
       "dependsOn": ["build"],
@@ -59,23 +48,19 @@
       "dependsOn": ["build"],
       "outputs": []
     },
-    "mock-block-dock#build": {
-      "outputs": ["dist/**"]
-    },
     "mock-block-dock#codegen": {
       "outputs": ["src/version.ts"]
     },
     "block-template-custom-element#build": {
+      "dependsOn": ["^build", "codegen"],
       "outputs": ["dist/**"]
     },
     "block-template-custom-element#codegen": {
       "dependsOn": ["^build"],
       "outputs": ["src/types/**.ts"]
     },
-    "block-template-html#build": {
-      "outputs": ["dist/**"]
-    },
     "block-template-react#build": {
+      "dependsOn": ["^build", "codegen"],
       "outputs": ["dist/**"]
     },
     "block-template-react#codegen": {
