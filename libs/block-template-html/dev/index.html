@@ -53,10 +53,12 @@
               },
             }}
             initialData=${initialData}
+            includeProvidedMockData
             blockEntityRecordId=${blockEntity.metadata.recordId}
             debug
           />
         `;
+        // `includeProvidedMockData` seeds the datastore with sample entities and links, remove it to start with just the contents of `initialData`
         // remove 'debug' above to start with the debug UI minimised. You can also toggle it in the UI
         // hideDebugToggle <- add 'hideDebugToggle' to disable the debug UI entirely
         // readonly <- add this above to start your block in readonly mode. You can also toggle it in the UI
