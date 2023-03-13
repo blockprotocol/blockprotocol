@@ -21,7 +21,7 @@ type BlockLoaderProps =
   | {
       blockName: string;
       entitySubgraph: Subgraph<EntityRootType>;
-      LoadingImage: FunctionComponent;
+      LoadingImage: FunctionComponent<{ height: string }>;
       sourceString?: string;
       sourceUrl: string;
     } & (
@@ -169,7 +169,7 @@ export const BlockLoader = ({
   });
 
   if (loading) {
-    return <LoadingImage />;
+    return <LoadingImage height="8rem" />;
   }
 
   if (!blockSource || err) {

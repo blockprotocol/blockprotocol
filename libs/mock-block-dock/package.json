@@ -1,6 +1,6 @@
 {
   "name": "mock-block-dock",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
@@ -37,7 +37,7 @@
     "@blockprotocol/core": "0.1.0",
     "@blockprotocol/graph": "0.1.0",
     "@blockprotocol/hook": "0.1.0",
-    "@blockprotocol/service": "0.1.0",
+    "@blockprotocol/service": "0.1.1",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@lit-labs/react": "^1.0.4",

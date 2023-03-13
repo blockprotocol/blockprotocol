@@ -44,6 +44,7 @@ const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
           updated: item.lastUpdated ?? "",
           version: item.version,
           url: item.blockSitePath,
+          verified: item.verified,
         }),
       );
     },

@@ -325,7 +325,7 @@ export const Edit = ({
   if (!entitySubgraph) {
     return (
       <div style={{ marginTop: 10 }}>
-        <LoadingImage />
+        <LoadingImage height="8rem" />
       </div>
     );
   }
