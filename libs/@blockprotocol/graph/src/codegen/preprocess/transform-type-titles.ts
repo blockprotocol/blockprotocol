@@ -35,27 +35,21 @@ const isTypescriptKeyword = (name: string) => {
 const generateValidTypeScriptIdentifierFromTitle = (title: string): string => {
   /* @todo - Handle acronyms, we should do a non-case-sensitive match and then convert all the groups to lower-case */
   // extract all letters and numbers from the title, and capitalise the start of each component
-  const titleCase = (title.match(/[a-zA-Z0-9]+/g) || [])
+  const pascalCase = (title.match(/[a-zA-Z0-9]+/g) || [])
     .map((word: string) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
     .join("");
 
-  if (!/[a-zA-Z]/.test(titleCase.charAt(0))) {
-    // if it starts with a number, append `T` to the start to make a valid type name
-    const typeName = `T${titleCase}`;
-    if (isTypescriptKeyword(typeName)) {
-      throw new Error(
-        `Generated type name "${typeName}" is a TypeScript keyword`,
-      );
-    }
-    return typeName;
-  } else {
-    if (isTypescriptKeyword(titleCase)) {
-      throw new Error(
-        `Generated type name "${titleCase}" is a TypeScript keyword`,
-      );
-    }
-    return titleCase;
+  const typeName = !/[a-zA-Z]/.test(pascalCase.charAt(0))
+    ? `T${pascalCase}`
+    : pascalCase;
+
+  if (isTypescriptKeyword(typeName)) {
+    throw new Error(
+      `Internal error: generated type name "${typeName}" is a TypeScript keyword`,
+    );
   }
+
+  return typeName;
 };
 
 /**
@@ -86,7 +80,7 @@ export const rewriteTypeTitles = (context: PreprocessContext) => {
 
     if (override && typeNameFromTitle !== override) {
       context.logWarn(
-        `Type name override of "${override}" for "${typeId}" isn't in Title Case, using "${typeNameFromTitle}" instead.`,
+        `Type name override of "${override}" for "${typeId}" isn't in PascalCase, using "${typeNameFromTitle}" instead.`,
       );
     }
 
