@@ -21,7 +21,6 @@ import {
   QueryEntitiesData as QueryEntitiesDataTemporal,
 } from "@blockprotocol/graph/temporal";
 import mime from "mime/lite";
-import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
 import { useDefaultState } from "../../use-default-state";
@@ -30,6 +29,7 @@ import { getEntity as getEntityImpl } from "../hook-implementations/entity/get-e
 import { queryEntities as queryEntitiesImpl } from "../hook-implementations/entity/query-entities";
 import { MockData } from "../mock-data";
 import { useMockDataToSubgraph } from "../use-mock-data-to-subgraph";
+import { useCallbackWithLatency } from "./shared";
 
 export type MockDatastore = {
   graph: Subgraph;
@@ -59,6 +59,7 @@ const readonlyErrorReturn: {
 export const useMockDatastore = (
   initialData: MockData<false>,
   readonly?: boolean,
+  simulateLatency?: { min: number; max: number },
 ): MockDatastore => {
   const mockDataSubgraph = useMockDataToSubgraph(initialData);
   const [graph, setGraph] = useDefaultState(mockDataSubgraph);
@@ -67,7 +68,7 @@ export const useMockDatastore = (
   // >(initialData.linkedQueryDefinitions);
 
   const queryEntities: GraphEmbedderMessageCallbacks["queryEntities"] =
-    useCallback(
+    useCallbackWithLatency(
       async ({ data }) => {
         if (!data) {
           return {
@@ -95,10 +96,11 @@ export const useMockDatastore = (
         return { data: queryEntitiesImpl<false>(data, graph) };
       },
       [graph],
+      simulateLatency,
     );
 
   const createEntity: GraphEmbedderMessageCallbacks["createEntity"] =
-    useCallback(
+    useCallbackWithLatency(
       async ({ data }) => {
         if (readonly) {
           return readonlyErrorReturn;
@@ -149,52 +151,55 @@ export const useMockDatastore = (
         });
       },
       [readonly, setGraph],
+      simulateLatency,
     );
 
-  const getEntity: GraphEmbedderMessageCallbacks["getEntity"] = useCallback(
-    async ({ data }) => {
-      if (!data) {
-        return {
-          errors: [
-            {
-              code: "INVALID_INPUT",
-              message: "getEntity requires 'data' input",
-            },
-          ],
-        };
-      }
+  const getEntity: GraphEmbedderMessageCallbacks["getEntity"] =
+    useCallbackWithLatency(
+      async ({ data }) => {
+        if (!data) {
+          return {
+            errors: [
+              {
+                code: "INVALID_INPUT",
+                message: "getEntity requires 'data' input",
+              },
+            ],
+          };
+        }
 
-      if ((data as GetEntityDataTemporal).temporalAxes !== undefined) {
-        return {
-          errors: [
-            {
-              code: "NOT_IMPLEMENTED",
-              message:
-                "The datastore has been initialized without support for temporal versioning, temporal queries from blocks are not supported",
-            },
-          ],
-        };
-      }
+        if ((data as GetEntityDataTemporal).temporalAxes !== undefined) {
+          return {
+            errors: [
+              {
+                code: "NOT_IMPLEMENTED",
+                message:
+                  "The datastore has been initialized without support for temporal versioning, temporal queries from blocks are not supported",
+              },
+            ],
+          };
+        }
 
-      const entitySubgraph = getEntityImpl<false>(data, graph);
+        const entitySubgraph = getEntityImpl<false>(data, graph);
 
-      if (!entitySubgraph) {
-        return {
-          errors: [
-            {
-              code: "NOT_FOUND",
-              message: `Could not find entity with entityId '${data.entityId}'`,
-            },
-          ],
-        };
-      }
-      return { data: entitySubgraph };
-    },
-    [graph],
-  );
+        if (!entitySubgraph) {
+          return {
+            errors: [
+              {
+                code: "NOT_FOUND",
+                message: `Could not find entity with entityId '${data.entityId}'`,
+              },
+            ],
+          };
+        }
+        return { data: entitySubgraph };
+      },
+      [graph],
+      simulateLatency,
+    );
 
   const updateEntity: GraphEmbedderMessageCallbacks["updateEntity"] =
-    useCallback(
+    useCallbackWithLatency(
       async ({ data }) => {
         if (readonly) {
           return readonlyErrorReturn;
@@ -304,10 +309,11 @@ export const useMockDatastore = (
         });
       },
       [readonly, setGraph],
+      simulateLatency,
     );
 
   const deleteEntity: GraphEmbedderMessageCallbacks["deleteEntity"] =
-    useCallback(
+    useCallbackWithLatency(
       async ({ data }) => {
         if (readonly) {
           return readonlyErrorReturn;
@@ -411,99 +417,122 @@ export const useMockDatastore = (
         });
       },
       [setGraph, readonly],
+      simulateLatency,
     );
 
   const queryEntityTypes: GraphEmbedderMessageCallbacks["queryEntityTypes"] =
-    useCallback(async ({ data: _ }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `queryEntityTypes is not currently supported`,
-          },
-        ],
-      };
-    }, []);
-
-  const getEntityType: GraphEmbedderMessageCallbacks["getEntityType"] =
-    useCallback(async ({ data }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `Retrieving Entity Types is not currently supported`,
-          },
-        ],
-      };
-
-      /** @todo - interim solution: retrieve entity type from URL */
-      /** @todo - implement entity type resolution */
-      // eslint-disable-next-line no-unreachable -- currently unimplemented
-      if (!data) {
+    useCallbackWithLatency(
+      async ({ data: _ }) => {
         return {
           errors: [
             {
-              code: "INVALID_INPUT",
-              message: "getEntityType requires 'data' input",
+              code: "NOT_IMPLEMENTED",
+              message: `queryEntityTypes is not currently supported`,
             },
           ],
         };
-      }
-    }, []);
+      },
+      [],
+      simulateLatency,
+    );
+
+  const getEntityType: GraphEmbedderMessageCallbacks["getEntityType"] =
+    useCallbackWithLatency(
+      async ({ data }) => {
+        return {
+          errors: [
+            {
+              code: "NOT_IMPLEMENTED",
+              message: `Retrieving Entity Types is not currently supported`,
+            },
+          ],
+        };
+
+        /** @todo - interim solution: retrieve entity type from URL */
+        /** @todo - implement entity type resolution */
+        // eslint-disable-next-line no-unreachable -- currently unimplemented
+        if (!data) {
+          return {
+            errors: [
+              {
+                code: "INVALID_INPUT",
+                message: "getEntityType requires 'data' input",
+              },
+            ],
+          };
+        }
+      },
+      [],
+      simulateLatency,
+    );
 
   const getPropertyType: GraphEmbedderMessageCallbacks["getPropertyType"] =
-    useCallback(async ({ data: _ }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `getPropertyType is not currently supported`,
-          },
-        ],
-      };
-    }, []);
+    useCallbackWithLatency(
+      async ({ data: _ }) => {
+        return {
+          errors: [
+            {
+              code: "NOT_IMPLEMENTED",
+              message: `getPropertyType is not currently supported`,
+            },
+          ],
+        };
+      },
+      [],
+      simulateLatency,
+    );
 
   const queryPropertyTypes: GraphEmbedderMessageCallbacks["queryPropertyTypes"] =
-    useCallback(async ({ data: _ }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `queryPropertyTypes is not currently supported`,
-          },
-        ],
-      };
-    }, []);
+    useCallbackWithLatency(
+      async ({ data: _ }) => {
+        return {
+          errors: [
+            {
+              code: "NOT_IMPLEMENTED",
+              message: `queryPropertyTypes is not currently supported`,
+            },
+          ],
+        };
+      },
+      [],
+      simulateLatency,
+    );
 
-  const getDataType: GraphEmbedderMessageCallbacks["getDataType"] = useCallback(
-    async ({ data: _ }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `getDataType is not currently supported`,
-          },
-        ],
-      };
-    },
-    [],
-  );
+  const getDataType: GraphEmbedderMessageCallbacks["getDataType"] =
+    useCallbackWithLatency(
+      async ({ data: _ }) => {
+        return {
+          errors: [
+            {
+              code: "NOT_IMPLEMENTED",
+              message: `getDataType is not currently supported`,
+            },
+          ],
+        };
+      },
+      [],
+      simulateLatency,
+    );
 
   const queryDataTypes: GraphEmbedderMessageCallbacks["queryDataTypes"] =
-    useCallback(async ({ data: _ }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `queryDataTypes is not currently supported`,
-          },
-        ],
-      };
-    }, []);
+    useCallbackWithLatency(
+      async ({ data: _ }) => {
+        return {
+          errors: [
+            {
+              code: "NOT_IMPLEMENTED",
+              message: `queryDataTypes is not currently supported`,
+            },
+          ],
+        };
+      },
+      [],
+      simulateLatency,
+    );
 
   /** @todo - Reimplement linkedQueries */
   // const createLinkedQuery: GraphEmbedderMessageCallbacks["createLinkedQuery"] =
-  //   useCallback(
+  //   useCallbackWithLatency(
   //     async ({ data }) => {
   //       if (readonly) {
   //         return readonlyErrorReturn;
@@ -526,14 +555,14 @@ export const useMockDatastore = (
   //       setLinkedQueries((currentLinkedQueries) => [
   //         ...currentLinkedQueries,
   //         newLinkedQuery,
-  //       ]);
+  //       ], simulateLatency);
   //       return { data: newLinkedQuery };
   //     },
   //     [setLinkedQueries, readonly],
   //   );
   //
   // const getLinkedQuery: GraphEmbedderMessageCallbacks["getLinkedQuery"] =
-  //   useCallback(
+  //   useCallbackWithLatency(
   //     async ({ data }) => {
   //       if (!data) {
   //         return {
@@ -570,7 +599,7 @@ export const useMockDatastore = (
   //   );
   //
   // const updateLinkedQuery: GraphEmbedderMessageCallbacks["updateLinkedQuery"] =
-  //   useCallback(
+  //   useCallbackWithLatency(
   //     async ({ data }) => {
   //       if (readonly) {
   //         return readonlyErrorReturn;
@@ -621,7 +650,7 @@ export const useMockDatastore = (
   //   );
   //
   // const deleteLinkedQuery: GraphEmbedderMessageCallbacks["deleteLinkedQuery"] =
-  //   useCallback(
+  //   useCallbackWithLatency(
   //     async ({ data }) => {
   //       if (readonly) {
   //         return readonlyErrorReturn;
@@ -667,44 +696,46 @@ export const useMockDatastore = (
   //     [setLinkedQueries, readonly],
   //   );
 
-  const uploadFile: GraphEmbedderMessageCallbacks["uploadFile"] = useCallback(
-    async ({ data }) => {
-      if (readonly) {
-        return readonlyErrorReturn;
-      }
-
-      if (!data) {
-        return {
-          errors: [
-            {
-              code: "INVALID_INPUT",
-              message: "uploadFile requires 'data' input",
-            },
-          ],
-        };
-      }
-      const { description } = data;
-
-      const file = isFileData(data) ? data.file : null;
-      const url = isFileAtUrlData(data) ? data.url : null;
-      if (!file && !url?.trim()) {
-        throw new Error("Please provide either a valid URL or file");
-      }
-
-      let filename: string | undefined = data.name;
-      let resolvedUrl: string = "https://unknown-url.example.com";
-      if (url) {
-        if (!filename) {
-          filename = url.split("/").pop() ?? filename;
+  const uploadFile: GraphEmbedderMessageCallbacks["uploadFile"] =
+    useCallbackWithLatency(
+      async ({ data }) => {
+        if (readonly) {
+          return readonlyErrorReturn;
         }
-        resolvedUrl = url;
-      } else if (file) {
-        if (!filename) {
-          filename = file.name;
+
+        if (!data) {
+          return {
+            errors: [
+              {
+                code: "INVALID_INPUT",
+                message: "uploadFile requires 'data' input",
+              },
+            ],
+          };
         }
-        try {
-          const readFileResult = await new Promise<FileReader["result"] | null>(
-            (resolve, reject) => {
+        const { description } = data;
+
+        const file = isFileData(data) ? data.file : null;
+        const url = isFileAtUrlData(data) ? data.url : null;
+        if (!file && !url?.trim()) {
+          throw new Error("Please provide either a valid URL or file");
+        }
+
+        let filename: string | undefined = data.name;
+        let resolvedUrl: string = "https://unknown-url.example.com";
+        if (url) {
+          if (!filename) {
+            filename = url.split("/").pop() ?? filename;
+          }
+          resolvedUrl = url;
+        } else if (file) {
+          if (!filename) {
+            filename = file.name;
+          }
+          try {
+            const readFileResult = await new Promise<
+              FileReader["result"] | null
+            >((resolve, reject) => {
               const reader = new FileReader();
 
               reader.onload = (event) => {
@@ -716,56 +747,56 @@ export const useMockDatastore = (
               };
 
               reader.readAsDataURL(file);
-            },
-          );
-          if (!readFileResult) {
-            throw new Error("No result from file reader");
+            });
+            if (!readFileResult) {
+              throw new Error("No result from file reader");
+            }
+            resolvedUrl = readFileResult.toString();
+          } catch (err) {
+            throw new Error("Could not upload file");
           }
-          resolvedUrl = readFileResult.toString();
-        } catch (err) {
-          throw new Error("Could not upload file");
         }
-      }
 
-      if (!filename) {
-        throw new Error("Could not determine filename and no name provided");
-      }
+        if (!filename) {
+          throw new Error("Could not determine filename and no name provided");
+        }
 
-      const mimeType = mime.getType(filename) || "application/octet-stream";
+        const mimeType = mime.getType(filename) || "application/octet-stream";
 
-      const newEntityProperties: RemoteFileEntityProperties = {
-        "https://blockprotocol.org/@blockprotocol/types/property-type/description/":
-          description,
-        "https://blockprotocol.org/@blockprotocol/types/property-type/file-name/":
-          filename,
-        "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/":
-          mimeType,
-        "https://blockprotocol.org/@blockprotocol/types/property-type/file-url/":
-          resolvedUrl,
-      };
-
-      const { data: newEntity, errors } = await createEntity({
-        data: {
-          entityTypeId:
-            "https://blockprotocol.org/@blockprotocol/types/entity-type/remote-file/v/2",
-          properties: newEntityProperties,
-        },
-      });
-
-      if (errors || !newEntity) {
-        return {
-          errors: errors ?? [
-            {
-              code: "INVALID_INPUT",
-              message: "Could not create File entity ",
-            },
-          ],
+        const newEntityProperties: RemoteFileEntityProperties = {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/description/":
+            description,
+          "https://blockprotocol.org/@blockprotocol/types/property-type/file-name/":
+            filename,
+          "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/":
+            mimeType,
+          "https://blockprotocol.org/@blockprotocol/types/property-type/file-url/":
+            resolvedUrl,
         };
-      }
-      return Promise.resolve({ data: newEntity as RemoteFileEntity });
-    },
-    [createEntity, readonly],
-  );
+
+        const { data: newEntity, errors } = await createEntity({
+          data: {
+            entityTypeId:
+              "https://blockprotocol.org/@blockprotocol/types/entity-type/remote-file/v/2",
+            properties: newEntityProperties,
+          },
+        });
+
+        if (errors || !newEntity) {
+          return {
+            errors: errors ?? [
+              {
+                code: "INVALID_INPUT",
+                message: "Could not create File entity ",
+              },
+            ],
+          };
+        }
+        return Promise.resolve({ data: newEntity as RemoteFileEntity });
+      },
+      [createEntity, readonly],
+      simulateLatency,
+    );
 
   return {
     graph,
