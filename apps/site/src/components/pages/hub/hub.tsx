@@ -1,28 +1,22 @@
-import { faAsterisk } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Container,
   Grid,
   Skeleton,
   Stack,
-  svgIconClasses,
   Typography,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 
-import { HUB_SERVICES_ENABLED } from "../../../pages/hub.page";
-import { FontAwesomeIcon } from "../../icons";
-import { faBinary } from "../../icons/fa/binary";
-import { faBoxesStacked } from "../../icons/fa/boxes-stacked";
 import { ClientOnlyLastUpdated } from "../../last-updated";
 import { Link } from "../../link";
 import { VerifiedBadge } from "../../verified-badge";
+import { HubListBrowse } from "./hub-list-browse";
 import {
   fadeInChildren,
   fadeInWrapper,
-  getHubBrowseQuery,
   getRouteHubBrowseType,
   useRouteChangingWithTrigger as useRouteChangingWithListener,
 } from "./hub-utils";
@@ -121,93 +115,6 @@ const HubItemLoading = () => (
     </Stack>
   </Stack>
 );
-
-const HubListBrowseType = ({
-  children,
-  type,
-  onClick,
-}: {
-  children: ReactNode;
-  type: string;
-  onClick: () => void;
-}) => {
-  const currentType = useRouteHubBrowseType();
-  const active = type === currentType;
-
-  return (
-    <Typography
-      onClick={onClick}
-      component={Link}
-      scroll={false}
-      href={{ query: getHubBrowseQuery(type) }}
-      pl={1.5}
-      sx={[
-        (theme) => ({
-          fontWeight: 500,
-          color: theme.palette.gray[90],
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          [`.${svgIconClasses.root}`]: {
-            marginRight: 1,
-            fontSize: 15,
-            color: theme.palette.gray[50],
-          },
-        }),
-        active &&
-          ((theme) => ({
-            fontWeight: 600,
-            color: theme.palette.purple[70],
-
-            [`.${svgIconClasses.root}`]: {
-              color: "inherit",
-            },
-
-            "&:before": {
-              position: "absolute",
-              content: `""`,
-              display: "block",
-              background: "currentColor",
-              height: 12,
-              top: "50%",
-              transform: "translateY(-50%)",
-              left: 0,
-              width: 3,
-              borderRadius: "8px",
-            },
-          })),
-      ]}
-    >
-      {children}
-    </Typography>
-  );
-};
-
-const HubListBrowse = ({ onBrowseClick }: { onBrowseClick: () => void }) => {
-  return (
-    <Stack spacing={1.25}>
-      <Typography
-        variant="bpSmallCaps"
-        fontSize={14}
-        color="#000"
-        fontWeight={500}
-      >
-        Browse
-      </Typography>
-      <HubListBrowseType type="blocks" onClick={onBrowseClick}>
-        <FontAwesomeIcon icon={faBoxesStacked} /> Blocks
-      </HubListBrowseType>
-      <HubListBrowseType type="types" onClick={onBrowseClick}>
-        <FontAwesomeIcon icon={faAsterisk} /> Types
-      </HubListBrowseType>
-      {HUB_SERVICES_ENABLED ? (
-        <HubListBrowseType type="services" onClick={onBrowseClick}>
-          <FontAwesomeIcon icon={faBinary} /> Services
-        </HubListBrowseType>
-      ) : null}
-    </Stack>
-  );
-};
 
 const AnimatedTypography = motion(Typography);
 
