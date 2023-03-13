@@ -595,6 +595,7 @@ const MockBlockDockTemporal: FunctionComponent<
  * @param [props.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [props.readonly=false] whether the block should display in readonly mode or not
  * @param [props.serviceModuleCallbacks] overrides the default service module callbacks
+ * @param [props.includeProvidedMockData] whether to populate the datastore with mock data provided by MBD (in addition to the user-provided data through the `initialData` prop)
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   Temporal extends boolean,
