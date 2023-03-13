@@ -20,7 +20,9 @@ export {
 } from "./stdlib/interval.js";
 export { buildSubgraph } from "./stdlib/subgraph/builder.js";
 export {
-  getEntityTypesReferencedByEntityType,
+  getEntityTypeLinkDestinationsFromEntityType,
+  getEntityTypesInheritedFromEntityType,
+  getLinkEntityTypeConstraintsFromEntityType,
   getPropertyTypesReferencedByEntityType,
 } from "./stdlib/subgraph/edge/entity-type.js";
 export {

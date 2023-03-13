@@ -31,13 +31,13 @@ export const getPropertyTypesReferencedByEntityType = (
 
 /**
  * Gets identifiers for all `EntityType`s referenced within a given `EntityType` schema by searching for
- * "InheritsFrom", "ConstrainsLinksOn" and "ConstrainsLinkDestinationsOn" `Edge`s from the respective `Vertex` within a `Subgraph`.
+ * "InheritsFrom" `Edge`s from the respective `Vertex` within a `Subgraph`.
  *
  * @param subgraph {Subgraph} - The `Subgraph` containing the type tree of the `EntityType`
  * @param entityTypeId {OntologyTypeVertexId | VersionedUrl} - The identifier of the `EntityType` to search for
- * @returns {OntologyTypeVertexId[]} - The identifiers of the `EntityType`s referenced from the `EntityType`
+ * @returns {OntologyTypeVertexId[]} - The identifiers of the `EntityType`s inherited from the `EntityType`
  */
-export const getEntityTypesReferencedByEntityType = (
+export const getEntityTypesInheritedFromEntityType = (
   subgraph: Subgraph<boolean>,
   entityTypeId: OntologyTypeVertexId | VersionedUrl,
 ): OntologyTypeVertexId[] =>
@@ -45,7 +45,43 @@ export const getEntityTypesReferencedByEntityType = (
     subgraph,
     entityTypeId,
     (outwardEdge): outwardEdge is OntologyToOntologyOutwardEdge =>
-      isInheritsFromEdge(outwardEdge) ||
-      isConstrainsLinksOnEdge(outwardEdge) ||
+      isInheritsFromEdge(outwardEdge),
+  );
+
+/**
+ * Gets identifiers for all `EntityType`s referenced within a given `EntityType` schema by searching for
+ * "ConstrainsLinksOn" `Edge`s from the respective `Vertex` within a `Subgraph`.
+ *
+ * @param subgraph {Subgraph} - The `Subgraph` containing the type tree of the `EntityType`
+ * @param entityTypeId {OntologyTypeVertexId | VersionedUrl} - The identifier of the `EntityType` to search for
+ * @returns {OntologyTypeVertexId[]} - The identifiers of the link `EntityType`s the `EntityType` constrains links on
+ */
+export const getLinkEntityTypeConstraintsFromEntityType = (
+  subgraph: Subgraph<boolean>,
+  entityTypeId: OntologyTypeVertexId | VersionedUrl,
+): OntologyTypeVertexId[] =>
+  getOntologyEndpointsForOntologyOutwardEdge(
+    subgraph,
+    entityTypeId,
+    (outwardEdge): outwardEdge is OntologyToOntologyOutwardEdge =>
+      isConstrainsLinksOnEdge(outwardEdge),
+  );
+
+/**
+ * Gets identifiers for all `EntityType`s referenced within a given `EntityType` schema by searching for
+ * "ConstrainsLinkDestinationsOn" `Edge`s from the respective `Vertex` within a `Subgraph`.
+ *
+ * @param subgraph {Subgraph} - The `Subgraph` containing the type tree of the `EntityType`
+ * @param entityTypeId {OntologyTypeVertexId | VersionedUrl} - The identifier of the `EntityType` to search for
+ * @returns {OntologyTypeVertexId[]} - The identifiers of the `EntityType`s the `EntityType` constrains link destinations on
+ */
+export const getEntityTypeLinkDestinationsFromEntityType = (
+  subgraph: Subgraph<boolean>,
+  entityTypeId: OntologyTypeVertexId | VersionedUrl,
+): OntologyTypeVertexId[] =>
+  getOntologyEndpointsForOntologyOutwardEdge(
+    subgraph,
+    entityTypeId,
+    (outwardEdge): outwardEdge is OntologyToOntologyOutwardEdge =>
       isConstrainsLinkDestinationsOnEdge(outwardEdge),
   );

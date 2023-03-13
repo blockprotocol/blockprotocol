@@ -18,12 +18,14 @@ import {
   getEntityRevisionsByEntityId as getEntityRevisionsByEntityIdGeneral,
   getEntityTypeById as getEntityTypeByIdGeneral,
   getEntityTypeByVertexId as getEntityTypeByVertexIdGeneral,
+  getEntityTypeLinkDestinationsFromEntityType as getEntityTypeLinkDestinationsFromEntityTypeGeneral,
   getEntityTypes as getEntityTypesGeneral,
   getEntityTypesByBaseUrl as getEntityTypesByBaseUrlGeneral,
-  getEntityTypesReferencedByEntityType as getEntityTypesReferencedByEntityTypeGeneral,
+  getEntityTypesInheritedFromEntityType as getEntityTypesInheritedFromEntityTypeGeneral,
   getIncomingLinksForEntity as getIncomingLinksForEntityGeneral,
   getLatestInstantIntervalForSubgraph as getLatestInstantIntervalForSubgraphGeneral,
   getLeftEntityForLinkEntity as getLeftEntityForLinkEntityGeneral,
+  getLinkEntityTypeConstraintsFromEntityType as getLinkEntityTypeConstraintsFromEntityTypeGeneral,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesGeneral,
   getOutgoingLinksForEntity as getOutgoingLinksForEntityGeneral,
   getPropertyTypeById as getPropertyTypeByIdGeneral,
@@ -108,8 +110,12 @@ export const buildSubgraph = (
 
 export const getPropertyTypesReferencedByEntityType =
   getPropertyTypesReferencedByEntityTypeGeneral;
-export const getEntityTypesReferencedByEntityType =
-  getEntityTypesReferencedByEntityTypeGeneral;
+export const getEntityTypesInheritedFromEntityType =
+  getEntityTypesInheritedFromEntityTypeGeneral;
+export const getEntityTypeLinkDestinationsFromEntityType =
+  getEntityTypeLinkDestinationsFromEntityTypeGeneral;
+export const getLinkEntityTypeConstraintsFromEntityType =
+  getLinkEntityTypeConstraintsFromEntityTypeGeneral;
 export const getPropertyTypesReferencedByPropertyType =
   getPropertyTypesReferencedByPropertyTypeGeneral;
 export const getDataTypesReferencedByPropertyType =
