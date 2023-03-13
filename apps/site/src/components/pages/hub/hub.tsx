@@ -3,10 +3,12 @@ import {
   Box,
   Container,
   Grid,
+  Skeleton,
   Stack,
   svgIconClasses,
   Typography,
 } from "@mui/material";
+import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 
@@ -17,7 +19,13 @@ import { faBoxesStacked } from "../../icons/fa/boxes-stacked";
 import { ClientOnlyLastUpdated } from "../../last-updated";
 import { Link } from "../../link";
 import { VerifiedBadge } from "../../verified-badge";
-import { getHubBrowseQuery, getRouteHubBrowseType } from "./hub-utils";
+import {
+  fadeInChildren,
+  fadeInWrapper,
+  getHubBrowseQuery,
+  getRouteHubBrowseType,
+  useRouteChangingWithTrigger as useRouteChangingWithListener,
+} from "./hub-utils";
 
 export const useRouteHubBrowseType = () => {
   const router = useRouter();
@@ -95,18 +103,40 @@ const HubItem = ({
   </Stack>
 );
 
+const HubItemLoading = () => (
+  <Stack direction="row" spacing={2}>
+    <Skeleton variant="rounded" width={24} height={24} />
+    <Stack spacing={0.75} flex={1}>
+      <Typography fontSize={18} lineHeight={1.2}>
+        <Skeleton width="40%" />
+      </Typography>
+
+      <Typography variant="bpSmallCopy" fontSize={15}>
+        <Skeleton width="70%" />
+      </Typography>
+
+      <Typography fontSize={14}>
+        <Skeleton width={200} />
+      </Typography>
+    </Stack>
+  </Stack>
+);
+
 const HubListBrowseType = ({
   children,
   type,
+  onClick,
 }: {
   children: ReactNode;
   type: string;
+  onClick: () => void;
 }) => {
   const currentType = useRouteHubBrowseType();
   const active = type === currentType;
 
   return (
     <Typography
+      onClick={onClick}
       component={Link}
       scroll={false}
       href={{ query: getHubBrowseQuery(type) }}
@@ -152,7 +182,8 @@ const HubListBrowseType = ({
     </Typography>
   );
 };
-const HubListBrowse = () => {
+
+const HubListBrowse = ({ onBrowseClick }: { onBrowseClick: () => void }) => {
   return (
     <Stack spacing={1.25}>
       <Typography
@@ -163,14 +194,14 @@ const HubListBrowse = () => {
       >
         Browse
       </Typography>
-      <HubListBrowseType type="blocks">
+      <HubListBrowseType type="blocks" onClick={onBrowseClick}>
         <FontAwesomeIcon icon={faBoxesStacked} /> Blocks
       </HubListBrowseType>
-      <HubListBrowseType type="types">
+      <HubListBrowseType type="types" onClick={onBrowseClick}>
         <FontAwesomeIcon icon={faAsterisk} /> Types
       </HubListBrowseType>
       {HUB_SERVICES_ENABLED ? (
-        <HubListBrowseType type="services">
+        <HubListBrowseType type="services" onClick={onBrowseClick}>
           <FontAwesomeIcon icon={faBinary} /> Services
         </HubListBrowseType>
       ) : null}
@@ -178,48 +209,80 @@ const HubListBrowse = () => {
   );
 };
 
+const AnimatedTypography = motion(Typography);
+
+const HubHeaderWrapper = ({ children }: { children: ReactNode }) => (
+  <motion.div variants={fadeInWrapper} initial="hidden" animate="show">
+    {children}
+  </motion.div>
+);
+
 const HubHeading = ({ children }: { children: ReactNode }) => (
-  <Typography
+  <AnimatedTypography
+    variants={fadeInChildren}
     variant="bpHeading3"
     fontWeight={500}
     color={(theme) => theme.palette.gray[80]}
   >
     {children}
-  </Typography>
+  </AnimatedTypography>
 );
 
 const HubSubHeading = ({ children }: { children: ReactNode }) => (
-  <Typography mt={2} color={(theme) => theme.palette.gray[80]} fontSize={21}>
+  <AnimatedTypography
+    variants={fadeInChildren}
+    mt={2}
+    color={(theme) => theme.palette.gray[80]}
+    fontSize={21}
+  >
     {children}
-  </Typography>
+  </AnimatedTypography>
 );
 
 const HubBrowseHeaderComponents = {
   blocks: () => {
     return (
-      <>
+      <HubHeaderWrapper>
         <HubHeading>Blocks</HubHeading>
         <HubSubHeading>
           Blocks are interactive components that can be used to view and/or edit
           information on a page
         </HubSubHeading>
-      </>
+      </HubHeaderWrapper>
     );
   },
   types: () => {
     return (
-      <>
+      <HubHeaderWrapper>
         <HubHeading>Types</HubHeading>
         <HubSubHeading>
           Types provide a standardized way of describing things, and can used by
           blocks and services
         </HubSubHeading>
-      </>
+      </HubHeaderWrapper>
     );
   },
   services: () => {
-    return <HubHeading>Services</HubHeading>;
+    return (
+      <HubHeaderWrapper>
+        <HubHeading>Services</HubHeading>
+      </HubHeaderWrapper>
+    );
   },
+};
+
+const HubBrowseHeaderLoading = () => {
+  return (
+    <>
+      <HubHeading>
+        <Skeleton width={150} />
+      </HubHeading>
+      <HubSubHeading>
+        <Skeleton width="100%" />
+        <Skeleton width="100%" />
+      </HubSubHeading>
+    </>
+  );
 };
 
 const HubBrowseHeader = () => {
@@ -235,6 +298,10 @@ const HubBrowseHeader = () => {
 };
 
 export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
+  const browseType = useRouteHubBrowseType();
+
+  const [routeChanging, listenRouteChange] = useRouteChangingWithListener();
+
   return (
     <>
       <Box
@@ -255,10 +322,10 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
               pt={6.5}
               pb={5}
             >
-              <HubListBrowse />
+              <HubListBrowse onBrowseClick={listenRouteChange} />
             </Grid>
             <Grid item xs={9} pt={6.5} pb={6.5}>
-              <HubBrowseHeader />
+              {routeChanging ? <HubBrowseHeaderLoading /> : <HubBrowseHeader />}
             </Grid>
           </Grid>
         </Container>
@@ -276,11 +343,33 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
               pt={6.5}
             />
             <Grid item xs={9} pt={6.5} pb={9}>
-              <Stack spacing={6}>
-                {listing.map((item) => (
-                  <HubItem key={item.url} item={item} />
-                ))}
-              </Stack>
+              {routeChanging ? (
+                <Stack gap={6}>
+                  <HubItemLoading />
+                  <HubItemLoading />
+                  <HubItemLoading />
+                  <HubItemLoading />
+                </Stack>
+              ) : (
+                <Box
+                  key={browseType}
+                  component={motion.div}
+                  variants={fadeInWrapper}
+                  initial="hidden"
+                  animate="show"
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 6,
+                  }}
+                >
+                  {listing.map((item) => (
+                    <motion.div key={item.url} variants={fadeInChildren}>
+                      <HubItem item={item} />
+                    </motion.div>
+                  ))}
+                </Box>
+              )}
             </Grid>
           </Grid>
         </Container>
