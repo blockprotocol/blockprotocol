@@ -58,6 +58,7 @@ type MockBlockDockProps<Temporal extends boolean> = {
   debug?: boolean;
   hideDebugToggle?: boolean;
   initialData?: InitialData<Temporal>;
+  includeProvidedMockData?: boolean;
   readonly?: boolean;
   serviceModuleCallbacks?: ServiceEmbedderMessageCallbacks;
   blockInfo?: {
@@ -83,6 +84,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
+  includeProvidedMockData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks: serviceModuleCallbacksFromProps,
 }: Omit<MockBlockDockProps<false>, "temporal">) => {
@@ -96,6 +98,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   } = useMockBlockPropsNonTemporal({
     blockEntityRecordId: initialBlockEntityRecordId,
     initialData: initialData as InitialData<false>,
+    includeProvidedMockData,
     readonly: !!initialReadonly,
   });
 
@@ -333,6 +336,7 @@ const MockBlockDockTemporal: FunctionComponent<
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
+  includeProvidedMockData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks: serviceModuleCallbacksFromProps,
 }: Omit<MockBlockDockProps<true>, "temporal">) => {
@@ -346,6 +350,7 @@ const MockBlockDockTemporal: FunctionComponent<
   } = useMockBlockPropsTemporal({
     blockEntityRecordId: initialBlockEntityRecordId,
     initialData: initialData as InitialData<true>,
+    includeProvidedMockData,
     readonly: !!initialReadonly,
   });
 
@@ -603,6 +608,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
+  includeProvidedMockData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks,
 }: MockBlockDockProps<Temporal>) => {
@@ -616,6 +622,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData as InitialData<true>}
+      includeProvidedMockData={includeProvidedMockData}
       readonly={initialReadonly}
       serviceModuleCallbacks={serviceModuleCallbacks}
     />
@@ -629,6 +636,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData}
+      includeProvidedMockData={includeProvidedMockData}
       readonly={initialReadonly}
       serviceModuleCallbacks={serviceModuleCallbacks}
     />
