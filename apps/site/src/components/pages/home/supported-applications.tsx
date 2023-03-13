@@ -461,7 +461,11 @@ export const SupportedApplications = () => {
           pb: { xs: 3, sm: 5 },
         }}
       >
-        <Image layout="responsive" src={supportedApplicationsFullImage} />
+        <Image
+          layout="responsive"
+          src={supportedApplicationsFullImage}
+          placeholder="blur"
+        />
       </Box>
     </>
   );
