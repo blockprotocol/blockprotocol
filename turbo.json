@@ -2,7 +2,6 @@
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
     "build": {
-      "outputs": [],
       "dependsOn": ["^build"]
     },
     "fix:eslint": {
@@ -28,16 +27,17 @@
       "dependsOn": ["codegen"],
       "outputs": ["dist/**", ".next/**", "public/schemas/**"]
     },
-    "mock-block-dock#codegen": {
-      "outputs": ["src/version.ts"]
+    "@blockprotocol/core#build": {
+      "outputs": ["dist/**"]
     },
-    "block-template-custom-element#codegen": {
-      "dependsOn": ["^build"],
-      "outputs": ["src/types/**.ts"]
+    "@blockprotocol/graph#build": {
+      "outputs": ["dist/**"]
     },
-    "block-template-react#codegen": {
-      "dependsOn": ["^build"],
-      "outputs": ["src/types/**.ts"]
+    "@blockprotocol/hook#build": {
+      "outputs": ["dist/**"]
+    },
+    "@blockprotocol/service#build": {
+      "outputs": ["dist/**"]
     },
     "@blockprotocol/type-system#build": {
       "dependsOn": [],
@@ -58,6 +58,29 @@
     "@blockprotocol/type-system#test": {
       "dependsOn": ["build"],
       "outputs": []
+    },
+    "mock-block-dock#build": {
+      "outputs": ["dist/**"]
+    },
+    "mock-block-dock#codegen": {
+      "outputs": ["src/version.ts"]
+    },
+    "block-template-custom-element#build": {
+      "outputs": ["dist/**"]
+    },
+    "block-template-custom-element#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/types/**.ts"]
+    },
+    "block-template-html#build": {
+      "outputs": ["dist/**"]
+    },
+    "block-template-react#build": {
+      "outputs": ["dist/**"]
+    },
+    "block-template-react#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/types/**.ts"]
     }
   }
 }
