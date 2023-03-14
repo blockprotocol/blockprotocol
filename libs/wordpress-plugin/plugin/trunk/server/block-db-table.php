@@ -71,6 +71,12 @@ function block_protocol_migrate()
   // future migrations go here
 }
 
+function block_protocol_database_available() 
+{
+  $migration_version = get_site_option('block_protocol_db_migration_version');
+  return block_protocol_is_database_supported() && is_numeric($migration_version);
+}
+
 add_action('admin_init', 'block_protocol_migrate');
 
 function count_block_protocol_entities()

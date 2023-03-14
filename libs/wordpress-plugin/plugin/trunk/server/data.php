@@ -7,8 +7,9 @@ const BLOCK_PROTOCOL_SENTRY_DSN = "https://949242e663cf415c8c1a6a928ae18daa@o146
 
 function block_protocol_reporting_disabled()
 {
-  $option = get_option('block_protocol_options')['block_protocol_field_plugin_usage'] ?? "off";
-  return $option !== "on";
+  // If the `block_protocol_options` options don't exist, we haven't activated the plugin fully.
+  $options = get_option('block_protocol_options') ?: ['block_protocol_field_plugin_usage' => "on"];
+  return ($options['block_protocol_field_plugin_usage'] ?? "off") !== "on";
 }
 
 function block_protocol_anonymous_user_id()
@@ -27,6 +28,8 @@ function block_protocol_report_version_info()
     "wpVersion" => $wp_version,
     "dbServerInfo" => $wpdb->db_server_info(),
     "phpVersion" => phpversion(),
+    "dbVersion" => $wpdb->db_version(),
+    "dbSupported" => block_protocol_is_database_supported(),
   ];
 }
 
@@ -86,6 +89,7 @@ function block_protocol_page_data(string $event, array $data)
   $data['keyPublicId'] = $public_id;
   $data['origin'] = get_site_url();
   $data['wpTimestamp'] = gmdate("Y-m-d\TH:i:s\Z");
+  $data["plugin_version"] = BLOCK_PROTOCOL_PLUGIN_VERISON;
 
   $payload = [
     'userId' => block_protocol_anonymous_user_id(),
