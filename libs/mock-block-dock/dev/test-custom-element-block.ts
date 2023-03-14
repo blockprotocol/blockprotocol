@@ -2,7 +2,6 @@ import { extractBaseUrl } from "@blockprotocol/graph";
 import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 import { getRoots } from "@blockprotocol/graph/stdlib";
 import { HookBlockHandler } from "@blockprotocol/hook";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { html } from "lit";
 
 import { propertyTypes } from "../src/data/property-types";
