@@ -33,26 +33,31 @@ Designing a comparable extension of the system for other kinds of types could be
 
 [guide-level-explanation]: #guide-level-explanation
 
-> ⭐ Usage of the word "types" in this RFC can be assumed to refer to _entity types_ unless stated otherwise.
+Entity type extension is the act of taking an existing entity type, and producing a new one which 'inherits' all of the existing constraints, and is able to add additional ones.
+This process will allow the new type to be used in places where the original could be used (i.e. it is compatible with the original type), and will allow the new type to be used in places where the original could not be used (i.e. it is more specific than the original type).
 
-Type extension can be seen as the concept of adding properties to an existing entity type `Type` by creating a new type `SubType` that has a specific relation to `Type`.
-Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may _not_ be modified. This property of extended types is an explicit design decision, as types are considered "reused" when they are extended, _not_ "modified". Extending types further empowers the idea of gradual convergence, as users can reuse publicly-available types they are not fully satisfied with.
+Say you have an existing entity type `Type`, and you wish to create a new type `SubType` which has all of the constraints of `Type` as well as some additional ones.
+Using `SubType` in place of `Type` must be possible when extending a type, which means that existing constraints on properties and links may _not_ be _weakened_.
 
-For example, an `Employee` entity type could extend `Person`. This `Employee` type would then inherit the properties of `Person` as well as having _additional_ domain-specific properties, making it more concrete while keeping compatibility with `Person`.
+For an example, let's say we have a `Person` entity type, and we wish to extend it to create an `Employee` entity type.
+Doing so would allow it to add _additional_ domain-specific constraints (e.g. specifying new properties and links) to `Employee`, making it more specialized, while still allowing it to be used in all places a `Person` could be used.
 
-If the `Person` entity type contains the required properties `name` and `age`, the `Employee` entity type would inherit these properties and could add other properties (e.g. an `occupation` property). `Employee` would _not_ be able to override any of the properties inherited from `Person` (e.g. it's not possible to turn `name` into an array or make it optional) to ensure that instances of `Employee` are also valid instances of `Person` (i.e. compatibility with `Person` is preserved).
+If the `Person` entity type contains the required properties `name` and `age`, the `Employee` entity type would inherit these properties and would be allowed to add other properties, for example an optional `occupation` property.
+If it did so, then `Employee` would have the required properties `name` and `age`, and an optional property `occupation`.
 
-Type duplication can be seen as a literal copy of an entity type's contents, providing full control over any properties present on the source entity type. If a user wants to use the `Employee` entity type from above, removing the `occupation` property and adding a `tenure` property in its place, it would have to be through duplication, as we are talking about overriding properties from `Employee` in a schema-breaking way.
+Importantly, `Employee` would _not_ be able to weaken any of the constraints inherited from `Person` to ensure that instances of `Employee` are also valid instances of `Person` (i.e. compatibility with `Person` is preserved). This means that it would not be able to make `name` or `age` optional, or remove them entirely. It also wouldn't be able to change their definition to being an array. A full list of modifications that are allowed and disallowed are described in greater detail below.
 
-Duplication can behave in different ways for extended types, such as acting on an "expanded" version of an extended type where the duplicated type would inherit all properties from the type hierarchy and be able to change any of them **or** duplication could act on only an immediate (sub)type, and reuse any extended type declarations. Alternatively, a hybrid version of the two ways to duplicate could be used where "expansion" could happen up to a certain part of the type hierarchy before reusing extended type declarations such that we empower partial consensus as outlined in the [Type System RFC](./0352-graph-type-system.md##convergence-and-divergence-of-consensus).
+If someone needed to create an `Employee` type, but didn't have `age` data in their domain, they could take the (generally less ideal) route of _duplicating_ the `Person` type.
+Type duplication can be seen as a literal copy of an entity type's contents, providing full control over any properties present on the source entity type.
+As it is a **copy**, the creator is free to modify it as they wish, as there is no longer a programmatic relationship between the original type and the new type.
 
 As a consequence of the above definition, these questions arise:
 
 - How do we ensure that `Employee` instances can be used in place of `Person` instances in practice? (we refer to this as "subtyping")
-- Do multiple supertypes impose constraints on extending types?
-- How does having `additionalProperties` in existing schemas influence extended types?
+- Do we allow, and if so, under what conditions, extending multiple types?
+- How does having `additionalProperties` in existing schemas influence type extension?
 - How should the Block Protocol type system support extending types?
-- What type duplication strategy should the Block Protocol support?
+- What strategies for type duplication should the Block Protocol recommend?
 
 ## Subtyping
 
