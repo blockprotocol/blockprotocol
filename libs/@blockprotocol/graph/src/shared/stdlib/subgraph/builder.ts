@@ -182,12 +182,12 @@ export const inferSubgraphEdges = <Temporal extends boolean>(
         entityTypeVertexIds: OntologyTypeVertexId[];
         entityVertexIds: EntityVertexId[];
       },
-      [baseId, entry],
+      [baseId, revisionObject],
     ) => {
-      const revisionIds = typedKeys(entry);
+      const revisionIds = typedKeys(revisionObject);
       let firstEntry = null;
-      if (revisionIds[0] && revisionIds[0] in entry) {
-        firstEntry = entry[revisionIds[0]];
+      if (revisionIds[0] && revisionIds[0] in revisionObject) {
+        firstEntry = revisionObject[revisionIds[0]];
       }
 
       const newVertexIds = revisionIds.map((revisionId) => ({
