@@ -27,7 +27,7 @@ jobs:
         ## https://github.com/changesets/changesets/issues/517
       - name: Create git reference to main branch (for Changesets)
         if: ${{ github.event.pull_request.title != 'Version Packages' }}
-        run: git pull --force --no-tags origin main:main
+        run: git pull --force --ff-only --no-tags origin main:main
 
       - uses: ./.github/actions/warm-up-repo
 
