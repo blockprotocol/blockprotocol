@@ -61,10 +61,16 @@ As a consequence of the above definition, these questions arise:
 
 ## Subtyping
 
-Compatibility between extended types is the ability to use the subtype in place of a supertype. [In academia](https://en.wikipedia.org/wiki/Subtyping#Coercions), this is `coercive subtyping` when it can happen implicitly.
-_Composition_ rather than inheritance allows us to have more guarantees about the relationship between subtypes and supertypes. If a subtype never modifies a supertype's inherited properties, we are sure that the supertype properties are left untouched, which eliminates the need for evaluating compatibility (i.e. no need for [`subsumption`](https://en.wikipedia.org/wiki/Subtyping#Subsumption), the concept of finding out whether or not a supertype is a supertype of a subtype or not).
+An essential attribute of type extension is the ability of a subtype to be used in place of its super type.
+In cases where such a usage is able to happen implicitly, it is called [_coercive subtyping_](https://en.wikipedia.org/wiki/Subtyping#Coercions).
 
-For example, an `Employee` instance looks as follows (simplified):
+If a subtype is defined by purely adding _additional_ constraints to that defined by the supertype, without modifying or overriding the supertype's constraints, then it is not necessary to check for compatibility between the two types.
+Such a check is referred to as [`subsumption`](https://en.wikipedia.org/wiki/Subtyping#Subsumption), which is necessary when the mechanism that can create subtypes can result in the modification of the supertype's constraints.
+
+The extension mechanism outlined in this proposal satisfies such a requirement, as types which extend another type are only able to add new constraints, which are resolved _in addition_ to the existing constraints.
+There is no mechanism to invalidate, remove, or weaken a previous constraint, and as such, any satisfiable type that extends another type is necessarily compatible with it.
+
+Building off the earlier example, take an `Employee` instance which looks as follows (simplified for brevity, omitting base URL keys, metadata, etc.):
 
 ```json
 {
@@ -74,7 +80,7 @@ For example, an `Employee` instance looks as follows (simplified):
 }
 ```
 
-And the properties would have the following relation to `Employee`:
+The properties would have the following relation to `Employee`:
 
 ```txt
       name◄┐ (supertype)    (subtype)
@@ -84,10 +90,15 @@ And the properties would have the following relation to `Employee`:
 occupation◄─────────────────┘
 ```
 
-We can visually see how selecting `Person` in the type hierarchy would provide `name` and `age` properties but exclude the `occupation` property.
-Assuming that we can project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype. This is a somewhat strong assumption to make, but it unlocks expressing how to extend types. The reason the selection/projection of properties is important for coercive subtyping will be explained in more detail in the coming sections, specifically in the [`additionalProperties` problem explanation section](#the-additionalproperties-problem).
+We can visually see that a `Person` would include `name` and `age` properties but not include the `occupation` property.
+Assuming we have the `Employee` instance above, we can see that it's possible to satisfy the constraints of `Person` by selecting the properties from it which are defined by `Person` which can be referred to as _projecting_ the type.
+Some considerations in this projection mechanism are explored in more detail in the coming sections, specifically in the [`additionalProperties` problem explanation section](#the-additionalproperties-problem) due to the nature of JSON schema composition.
 
-While it was mentioned that we don't allow overriding properties, we do allow modifications to a certain extent. When properties are still _compatible_ (using the definition of compatible given in the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility)), properties can be overridden. For example, if `Person` had an optional property `name`, `Employee` could override it to be a required property. This is because the property is still compatible, but it is now more specific. This is also the reason why we can't allow overriding properties to be arrays or objects, as that would make the property incompatible.
+As mentioned above, modifications do not have to be limited to the addition of new properties, as long as they do not _weaken_ existing constraints.
+It is possible to add a constraint about a property which is also constrained in the supertype, as long as the resultant constraints are still _compatible_ (using the definition of compatible given in the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility)).
+
+For example, if `name` was actually _optional_ in `Person`, `Employee` would be able to _add_ the constraint of it being _required_.
+Adding such a constraint still results in the `name` definition within `Employee` being compatible with the one in `Person`, just more specific.
 
 ```txt
        age◄┐ (supertype)    (subtype)
@@ -99,11 +110,17 @@ While it was mentioned that we don't allow overriding properties, we do allow mo
  [required]
 ```
 
-The same compatibility rules apply to other constraints, such as `minLength` and `maxLength`. If a supertype has a `minLength` of `1`, a subtype can override it to be `2`, but not `0`. The reason why this is still accepted is that JSON Schemas semantics would apply all rules given in the schema, so if a property is required, it must be present.
+Understanding that type extension works through the _addition_ of new constraints is important when considering constraints such as `minLength` and `maxLength`.
+If a supertype has a `minLength` of `1`, a subtype can add an _additional_ constraint that `minLength` is `0`, however this does not _override_ the constraint given by the super type, and data that satisfies the schema will still end up needing to satisfy the stronger constraint of `1`.
+_Adding_ a new constraint of `minLength: 2` is however a stronger constraint, which would end up taking precedence.
+This is consistent with the behavior of JSON schema semantics, whereby all rules are applied in a given schema, even when one is superseded by another.
 
 ## Multiple supertypes
 
-A type must allow extending multiple supertypes if and only if the supertypes can coexist. For supertypes to be able to coexist, their properties should either be disjoint, or overlap in a compatible manner.
+Constraining type extension to only having a single parent would be a pretty major limitation for how expressive the system is.
+As such, this proposal includes the specification of how to extend multiple types (this is generally referred to _multiple inheritance_).
+
+A type must allow extending multiple supertypes **if and only if** the supertypes can coexist. For supertypes to be able to coexist, their properties should either be disjoint, or overlap in a compatible manner.
 
 **An example of _disjoint_ properties**:
 
