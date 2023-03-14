@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "block-scripts build",
-    "codegen": "rimraf ./src/types && block-scripts codegen && yarn format && yarn fix:eslint",
+    "codegen": "rimraf ./src/types && block-scripts codegen | xargs -I {} yarn prettier --write {}",
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",

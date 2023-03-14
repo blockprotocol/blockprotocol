@@ -55,7 +55,9 @@ const script = async () => {
   }
 
   /* @todo - optionally take a log level in from command-line or environment */
-  await codegen(codegenParams);
+  const affectedFiles = await codegen(codegenParams);
+  // Output a space-separated list of affected files on stdout so that it can be piped into other tooling
+  console.log(affectedFiles.join(" "));
 };
 
 await script();
