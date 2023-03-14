@@ -19,7 +19,10 @@ export {
   unionOfIntervals,
 } from "./stdlib/interval.js";
 export { buildSubgraph } from "./stdlib/subgraph/builder.js";
-export { getPropertyTypesReferencedByEntityType } from "./stdlib/subgraph/edge/entity-type.js";
+export {
+  getEntityTypesReferencedByEntityType,
+  getPropertyTypesReferencedByEntityType,
+} from "./stdlib/subgraph/edge/entity-type.js";
 export {
   getIncomingLinksForEntity,
   getLeftEntityForLinkEntity,
@@ -27,6 +30,10 @@ export {
   getOutgoingLinksForEntity,
   getRightEntityForLinkEntity,
 } from "./stdlib/subgraph/edge/link-entity.js";
+export {
+  getDataTypesReferencedByPropertyType,
+  getPropertyTypesReferencedByPropertyType,
+} from "./stdlib/subgraph/edge/property-type.js";
 export {
   getDataTypeById,
   getDataTypeByVertexId,
