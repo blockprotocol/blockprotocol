@@ -21,6 +21,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      
+      - uses: ./.github/actions/warm-up-repo
 
       - name: Run yarn lint:dependency-version-consistency
         if: ${{ success() || failure() }}
