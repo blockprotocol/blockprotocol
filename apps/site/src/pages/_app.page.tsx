@@ -27,6 +27,7 @@ import { apiClient } from "../lib/api-client";
 import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
 import { ApiMeResponse } from "./api/me.api";
+import { NextPageWithLayout } from "./shared/next-types";
 
 NProgress.configure({ showSpinner: false });
 
@@ -50,9 +51,13 @@ const defaultSeoConfig: DefaultSeoProps = {
 
 const clientSideEmotionCache = createEmotionCache();
 
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
 type MyAppProps = {
   emotionCache?: EmotionCache;
-} & AppProps;
+} & AppPropsWithLayout;
 
 const MyApp = ({
   Component,
@@ -168,6 +173,13 @@ const MyApp = ({
     [refetchUser, user],
   );
 
+  // Use the layout defined at the page level, if available
+  const getLayout =
+    Component.getLayout ??
+    ((page) => (
+      <PageLayout blockMetadata={pageProps.blockMetadata}>{page}</PageLayout>
+    ));
+
   return (
     <UserContext.Provider value={userContextValue}>
       <SiteMapContext.Provider value={siteMap}>
@@ -175,10 +187,8 @@ const MyApp = ({
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <SnackbarProvider maxSnack={3}>
-              <PageLayout blockMetadata={pageProps.blockMetadata}>
-                <DefaultSeo {...defaultSeoConfig} />
-                <Component {...pageProps} />
-              </PageLayout>
+              <DefaultSeo {...defaultSeoConfig} />
+              {getLayout(<Component {...pageProps} />)}
             </SnackbarProvider>
           </ThemeProvider>
         </CacheProvider>

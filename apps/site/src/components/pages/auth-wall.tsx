@@ -1,15 +1,14 @@
-import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { FunctionComponent } from "react";
 
 import { useUser } from "../../context/user-context";
 import { SerializedUser } from "../../lib/api/model/user.model";
+import { NextPageWithLayout } from "../../pages/shared/next-types";
 
 export interface AuthWallPageContentProps {
   user: SerializedUser;
 }
 
-export type AuthWallPageContent<P = {}> = FunctionComponent<
+export type AuthWallPageContent<P = {}> = NextPageWithLayout<
   AuthWallPageContentProps & P
 >;
 
@@ -45,8 +44,12 @@ const AuthWallWrapper = <P,>({
  */
 export function withAuthWall<P = {}>(
   Content: AuthWallPageContent<P>,
-): NextPage<P> {
-  return (nextPageProps) => (
+): NextPageWithLayout<P> {
+  const NextPageComponent: NextPageWithLayout<P> = (nextPageProps) => (
     <AuthWallWrapper<P> Content={Content} nextPageProps={nextPageProps} />
   );
+
+  NextPageComponent.getLayout = Content.getLayout;
+
+  return NextPageComponent;
 }

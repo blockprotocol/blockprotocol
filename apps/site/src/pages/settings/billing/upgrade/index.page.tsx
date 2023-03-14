@@ -11,7 +11,6 @@ import {
 import {
   Box,
   Collapse,
-  Container,
   Grid,
   Paper,
   Skeleton,
@@ -56,6 +55,7 @@ import { SubscriptionFeatureListItem } from "../../billing-settings-panel/subscr
 import { ChangePaymentMethodModal } from "./change-payment-method-modal";
 import { CreateSubscriptionCheckoutForm } from "./create-subscription-form";
 import { UpgradeExistingPaidSubscriptionIntro } from "./upgrade-existing-paid-subscription-intro";
+import { UpgradePageLayout } from "./upgrade-page-layout";
 
 type StripeErrorInfo = ErrorInfo & {
   domain: "stripe";
@@ -349,503 +349,499 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
         justifyContent="center"
         flexGrow={1}
       >
-        <Container
+        <Paper
+          elevation={4}
           sx={{
-            py: { xs: 8, md: 14 },
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            borderRadius: "8px",
+            padding: { xs: 2, md: 6 },
           }}
         >
-          <Paper
-            elevation={4}
-            sx={{
-              borderRadius: "8px",
-              padding: { xs: 2, md: 6 },
-            }}
-          >
-            <Box>
-              <Grid container spacing={6}>
-                <Grid item sm={12} md={6} display="flex" flexDirection="column">
-                  <Box
-                    sx={({ palette, spacing }) => ({
-                      backgroundColor: palette.gray[10],
-                      borderColor: palette.gray[20],
-                      borderWidth: 1,
-                      borderStyle: "solid",
-                      borderRadius: 4,
-                      borderBottomRightRadius: 0,
-                      borderBottomLeftRadius: 0,
-                      padding: {
-                        xs: 2,
-                        md: spacing(4, 6),
-                      },
-                    })}
-                  >
-                    <Box display="flex" alignItems="center">
-                      <Typography
-                        variant="bpBodyCopy"
-                        sx={{ color: ({ palette }) => palette.gray[80] }}
-                      >
-                        <strong>
-                          {currentSubscriptionTier === "free" ? (
-                            "Upgrading to "
-                          ) : (
-                            <>
-                              Upgrading from{" "}
-                              <Box
-                                component="span"
-                                sx={{
-                                  color: ({ palette }) => palette.common.black,
-                                }}
-                              >
-                                {subscriptionTierToHumanReadable(
-                                  currentSubscriptionTier,
-                                )}
-                              </Box>{" "}
-                              to{" "}
-                            </>
-                          )}
-                          <Box
-                            component="span"
-                            sx={{
-                              color: ({ palette }) => palette.common.black,
-                            }}
-                          >
-                            {upgradedSubscriptionTier
-                              ? subscriptionTierToHumanReadable(
-                                  upgradedSubscriptionTier,
-                                )
-                              : undefined}
-                          </Box>
-                        </strong>
-                      </Typography>
-                      <FontAwesomeIcon
-                        icon={faCheck}
-                        sx={{
-                          marginLeft: 1,
-                          color: ({ palette }) => palette.gray[80],
-                        }}
-                      />
-                    </Box>
-                    <Typography variant="bpSmallCopy" component="p">
-                      Includes access to premium APIs from providers such as
-                      OpenAI and Mapbox
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={({ palette, spacing }) => ({
-                      backgroundColor: palette.purple[10],
-                      padding: {
-                        xs: 2,
-                        md: spacing(4, 6),
-                      },
-                      paddingBottom: 2,
-                      borderColor: palette.gray[20],
-                      borderWidth: 1,
-                      borderStyle: "solid",
-                      borderTopWidth: 0,
-                    })}
-                  >
-                    <Typography variant="bpBodyCopy" sx={{ fontSize: 32 }}>
-                      <strong>
-                        {upgradedSubscriptionTier && subscriptionTierPrices
-                          ? priceToHumanReadable({
-                              amountInCents:
-                                subscriptionTierPrices[upgradedSubscriptionTier]
-                                  .unit_amount!,
-                              currency:
-                                subscriptionTierPrices[upgradedSubscriptionTier]
-                                  .currency,
-                              decimalPlaces: 0,
-                            })
-                          : ""}
-                      </strong>
-                      /month
-                    </Typography>
-                    <Typography
-                      variant="bpSmallCopy"
-                      component="p"
-                      sx={{ color: ({ palette }) => palette.purple[50] }}
-                    >
-                      {upgradedSubscriptionTier === "hobby"
-                        ? "Best for casual users of blocks"
-                        : "Best for embedders, devs and power users of blocks"}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={({ palette, spacing }) => ({
-                      backgroundColor: palette.purple[10],
-                      padding: {
-                        xs: 2,
-                        md: spacing(4, 6),
-                      },
-                      borderColor: palette.gray[20],
-                      borderWidth: 1,
-                      borderStyle: "solid",
-                      borderTopWidth: 0,
-                    })}
-                  >
-                    <Typography
-                      gutterBottom
-                      component="p"
-                      variant="bpSmallCopy"
-                      sx={({ palette }) => ({
-                        color: palette.purple[80],
-                        mb: 1.5,
-                      })}
-                    >
-                      <strong>Includes the following each month:</strong>
-                    </Typography>
-                    <Box
-                      component="ul"
-                      display="flex"
-                      flexDirection="column"
-                      marginBottom={3}
-                      gap={1.5}
-                    >
-                      {(upgradedSubscriptionTier === "hobby"
-                        ? paidSubscriptionFeatures.hobby.coreFeatures
-                        : proSubscriptionFeatures["api-access"]
-                      ).map((feature, index) => (
-                        <SubscriptionFeatureListItem
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={index}
-                          feature={feature}
-                        />
-                      ))}
-                    </Box>
-                    {upgradedSubscriptionTier === "hobby" ? (
-                      <Link href="/pricing">
-                        <Typography
-                          component="p"
-                          variant="bpSmallCopy"
-                          sx={({ palette, transitions }) => ({
-                            color: palette.purple[80],
-                            textTransform: "uppercase",
-                            transition: transitions.create("opacity"),
-                            "&:hover": {
-                              opacity: 0.8,
-                              "& svg": {
-                                marginLeft: 1,
-                              },
-                            },
-                          })}
-                        >
-                          <strong>View full plan details</strong>
-                          <FontAwesomeIcon
-                            icon={faCaretRight}
-                            sx={{
-                              position: "relative",
-                              top: -1,
-                              marginLeft: 0.5,
-                              transition: ({ transitions }) =>
-                                transitions.create("margin-left"),
-                            }}
-                          />
-                        </Typography>
-                      </Link>
-                    ) : null}
-                  </Box>
-                  <Box
-                    sx={({ palette, spacing }) => ({
-                      padding: {
-                        xs: 2,
-                        md: spacing(4, 6),
-                      },
-                      borderColor: palette.gray[20],
-                      borderWidth: 1,
-                      borderStyle: "solid",
-                      borderTopWidth: 0,
-                      borderRadius: 4,
-                      borderTopLeftRadius: 0,
-                      borderTopRightRadius: 0,
-                      flexGrow: 1,
-                    })}
-                  >
-                    <Typography
-                      gutterBottom
-                      component="p"
-                      variant="bpSmallCopy"
-                      mb={1.5}
-                    >
-                      <strong>As well as:</strong>
-                    </Typography>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      component="ul"
-                      sx={{
-                        marginBottom: {
-                          xs: 0,
-                          md: 4,
-                        },
-                      }}
-                      gap={1.5}
-                    >
-                      {(upgradedSubscriptionTier === "hobby"
-                        ? paidSubscriptionFeatures.hobby.additionalFeatures
-                        : [
-                            {
-                              icon: <TrophyStarIcon sx={{ fontSize: 18 }} />,
-                              title: (
-                                <>
-                                  2x profile badges{" "}
-                                  <strong>
-                                    exclusive to early Þ supporters
-                                  </strong>
-                                </>
-                              ),
-                            },
-                            {
-                              icon: <LockIcon sx={{ fontSize: 18 }} />,
-                              title: (
-                                <>
-                                  <strong>Private</strong> blocks and types
-                                </>
-                              ),
-                              planned: true,
-                            },
-                            {
-                              icon: <JetFighterUpIcon sx={{ fontSize: 18 }} />,
-                              title: (
-                                <>
-                                  <strong>Bonus</strong> features, updates and
-                                  special event invites
-                                </>
-                              ),
-                              planned: true,
-                            },
-                            {
-                              icon: <FlaskVialIcon sx={{ fontSize: 18 }} />,
-                              title: (
-                                <>
-                                  <strong>Early-access</strong> to new APIs
-                                </>
-                              ),
-                            },
-                            {
-                              icon: <CoinsIcon sx={{ fontSize: 18 }} />,
-                              title: (
-                                <>
-                                  <strong>Discounted access</strong> to
-                                  additional API calls beyond those already
-                                  included
-                                </>
-                              ),
-                            },
-                            {
-                              icon: <HandIcon sx={{ fontSize: 18 }} />,
-                              title: (
-                                <>
-                                  Ability to <strong>prevent or cap</strong>{" "}
-                                  additional API use
-                                </>
-                              ),
-                            },
-                          ]
-                      ).map((feature, index) => (
-                        <SubscriptionFeatureListItem
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={index}
-                          feature={feature}
-                        />
-                      ))}
-                    </Box>
-                  </Box>
-                </Grid>
-                <Grid
-                  item
-                  sm={12}
-                  md={6}
-                  sx={{
-                    display: "flex",
-                  }}
+          <Box>
+            <Grid container spacing={6}>
+              <Grid item sm={12} md={6} display="flex" flexDirection="column">
+                <Box
+                  sx={({ palette, spacing }) => ({
+                    backgroundColor: palette.gray[10],
+                    borderColor: palette.gray[20],
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    borderRadius: 4,
+                    borderBottomRightRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    padding: {
+                      xs: 2,
+                      md: spacing(4, 6),
+                    },
+                  })}
                 >
-                  <Box sx={{ paddingY: 4 }}>
+                  <Box display="flex" alignItems="center">
                     <Typography
-                      variant="bpHeading4"
-                      sx={{ fontWeight: 400, marginBottom: 4 }}
+                      variant="bpBodyCopy"
+                      sx={{ color: ({ palette }) => palette.gray[80] }}
                     >
-                      Upgrade Summary
-                    </Typography>
-                    <Box display="flex" alignItems="center" marginBottom={2}>
-                      <UserAvatar user={user} size={50} />
-                      <Box marginLeft={2}>
-                        <Typography
-                          variant="bpSmallCopy"
-                          component="p"
-                          sx={{ "& a": { borderBottomWidth: 0 } }}
-                        >
-                          <strong>{user.preferredName}</strong> (
-                          <Link href={`/@${user.shortname}`}>
-                            @{user.shortname}
-                          </Link>
-                          )
-                        </Typography>
-                        <Typography
-                          variant="bpSmallCopy"
-                          component="p"
+                      <strong>
+                        {currentSubscriptionTier === "free" ? (
+                          "Upgrading to "
+                        ) : (
+                          <>
+                            Upgrading from{" "}
+                            <Box
+                              component="span"
+                              sx={{
+                                color: ({ palette }) => palette.common.black,
+                              }}
+                            >
+                              {subscriptionTierToHumanReadable(
+                                currentSubscriptionTier,
+                              )}
+                            </Box>{" "}
+                            to{" "}
+                          </>
+                        )}
+                        <Box
+                          component="span"
                           sx={{
-                            fontSize: 14,
-                            color: ({ palette }) => palette.gray["60"],
+                            color: ({ palette }) => palette.common.black,
                           }}
                         >
-                          The account you're upgrading
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    {isUpgradingExistingPaidSubscription ? (
-                      <>
-                        <UpgradeExistingPaidSubscriptionIntro
-                          currentSubscriptionTier={
-                            currentSubscriptionTier as "hobby"
-                          }
-                          upgradedSubscriptionTier={upgradedSubscriptionTier}
-                          subscriptionTierPrices={subscriptionTierPrices}
-                          taxRate={taxRate}
-                          defaultPaymentMethod={defaultPaymentMethod}
-                          onChangePaymentMethod={() =>
-                            setChangePaymentMethodModalOpen(true)
-                          }
-                        />
-                        <Collapse
-                          in={!!upgradeExistingPaidSubscriptionErrorMessage}
-                          sx={{ marginBottom: 4 }}
-                        >
-                          <Typography
-                            variant="bpSmallCopy"
-                            sx={{
-                              color: ({ palette }) => palette.error.main,
-                            }}
-                          >
-                            {upgradeExistingPaidSubscriptionErrorMessage}
-                          </Typography>
-                        </Collapse>
-                      </>
-                    ) : null}
-                    <Box marginBottom={4}>
-                      {isUpgradingExistingPaidSubscription ? (
-                        upgradedSubscriptionTier ? (
-                          <Button
-                            fullWidth
-                            squared
-                            onClick={() =>
-                              upgradeSubscription({
-                                tier: upgradedSubscriptionTier as "pro",
-                              })
-                            }
-                            endIcon={<FontAwesomeIcon icon={faArrowRight} />}
-                            loading={isUpgradingSubscription}
-                          >
-                            Upgrade my account and continue
-                          </Button>
-                        ) : null
-                      ) : stripeElementsOptions.clientSecret ? (
-                        <Elements
-                          stripe={stripePromise}
-                          options={stripeElementsOptions}
-                        >
-                          <CreateSubscriptionCheckoutForm
-                            upgradedSubscriptionTier={upgradedSubscriptionTier}
-                            subscriptionTierPrices={subscriptionTierPrices}
-                            onCompleted={handleUpgradedSubscription}
-                            clientSecret={clientSecret}
-                          />
-                        </Elements>
-                      ) : (
-                        <>
-                          <Skeleton height={20} />
-                          <Skeleton height={18} width={80} />
-                          <Skeleton height={40} />
-                          <Skeleton height={51} />
-                        </>
-                      )}
-                    </Box>
-                    <Typography
-                      variant="bpSmallCopy"
-                      component="p"
-                      sx={({ palette, transitions }) => ({
-                        marginBottom: 2,
-                        fontSize: 14,
-                        color: "#464852",
-                        "& a": {
-                          color: palette.purple[70],
-                          borderColor: "transparent",
-                          transition: transitions.create("border-color"),
-                        },
-                      })}
-                    >
-                      By clicking “Upgrade my account and continue”, you agree
-                      to our <Link href="/legal/terms">Terms of Service</Link>{" "}
-                      and <Link href="/legal/privacy">Privacy Statement</Link>.
+                          {upgradedSubscriptionTier
+                            ? subscriptionTierToHumanReadable(
+                                upgradedSubscriptionTier,
+                              )
+                            : undefined}
+                        </Box>
+                      </strong>
                     </Typography>
-                    {currentSubscriptionTier === "free" ? (
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      sx={{
+                        marginLeft: 1,
+                        color: ({ palette }) => palette.gray[80],
+                      }}
+                    />
+                  </Box>
+                  <Typography variant="bpSmallCopy" component="p">
+                    Includes access to premium APIs from providers such as
+                    OpenAI and Mapbox
+                  </Typography>
+                </Box>
+                <Box
+                  sx={({ palette, spacing }) => ({
+                    backgroundColor: palette.purple[10],
+                    padding: {
+                      xs: 2,
+                      md: spacing(4, 6),
+                    },
+                    paddingBottom: 2,
+                    borderColor: palette.gray[20],
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    borderTopWidth: 0,
+                  })}
+                >
+                  <Typography variant="bpBodyCopy" sx={{ fontSize: 32 }}>
+                    <strong>
+                      {upgradedSubscriptionTier && subscriptionTierPrices
+                        ? priceToHumanReadable({
+                            amountInCents:
+                              subscriptionTierPrices[upgradedSubscriptionTier]
+                                .unit_amount!,
+                            currency:
+                              subscriptionTierPrices[upgradedSubscriptionTier]
+                                .currency,
+                            decimalPlaces: 0,
+                          })
+                        : ""}
+                    </strong>
+                    /month
+                  </Typography>
+                  <Typography
+                    variant="bpSmallCopy"
+                    component="p"
+                    sx={{ color: ({ palette }) => palette.purple[50] }}
+                  >
+                    {upgradedSubscriptionTier === "hobby"
+                      ? "Best for casual users of blocks"
+                      : "Best for embedders, devs and power users of blocks"}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={({ palette, spacing }) => ({
+                    backgroundColor: palette.purple[10],
+                    padding: {
+                      xs: 2,
+                      md: spacing(4, 6),
+                    },
+                    borderColor: palette.gray[20],
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    borderTopWidth: 0,
+                  })}
+                >
+                  <Typography
+                    gutterBottom
+                    component="p"
+                    variant="bpSmallCopy"
+                    sx={({ palette }) => ({
+                      color: palette.purple[80],
+                      mb: 1.5,
+                    })}
+                  >
+                    <strong>Includes the following each month:</strong>
+                  </Typography>
+                  <Box
+                    component="ul"
+                    display="flex"
+                    flexDirection="column"
+                    marginBottom={3}
+                    gap={1.5}
+                  >
+                    {(upgradedSubscriptionTier === "hobby"
+                      ? paidSubscriptionFeatures.hobby.coreFeatures
+                      : proSubscriptionFeatures["api-access"]
+                    ).map((feature, index) => (
+                      <SubscriptionFeatureListItem
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                        feature={feature}
+                      />
+                    ))}
+                  </Box>
+                  {upgradedSubscriptionTier === "hobby" ? (
+                    <Link href="/pricing">
                       <Typography
-                        variant="bpSmallCopy"
                         component="p"
-                        sx={({ palette }) => ({
-                          fontSize: 14,
-                          color: palette.gray[60],
-                          "& code": {
-                            color: palette.gray[80],
+                        variant="bpSmallCopy"
+                        sx={({ palette, transitions }) => ({
+                          color: palette.purple[80],
+                          textTransform: "uppercase",
+                          transition: transitions.create("opacity"),
+                          "&:hover": {
+                            opacity: 0.8,
+                            "& svg": {
+                              marginLeft: 1,
+                            },
                           },
                         })}
                       >
-                        The charge will appear on your card statement as either{" "}
-                        <code>BLOCKPROTO</code> or{" "}
-                        <code>BLOCKPROTOCOL.ORG</code> depending on your payment
-                        provider. You will be billed every 30 days, until you
-                        cancel.
+                        <strong>View full plan details</strong>
+                        <FontAwesomeIcon
+                          icon={faCaretRight}
+                          sx={{
+                            position: "relative",
+                            top: -1,
+                            marginLeft: 0.5,
+                            transition: ({ transitions }) =>
+                              transitions.create("margin-left"),
+                          }}
+                        />
                       </Typography>
+                    </Link>
+                  ) : null}
+                </Box>
+                <Box
+                  sx={({ palette, spacing }) => ({
+                    padding: {
+                      xs: 2,
+                      md: spacing(4, 6),
+                    },
+                    borderColor: palette.gray[20],
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    borderTopWidth: 0,
+                    borderRadius: 4,
+                    borderTopLeftRadius: 0,
+                    borderTopRightRadius: 0,
+                    flexGrow: 1,
+                  })}
+                >
+                  <Typography
+                    gutterBottom
+                    component="p"
+                    variant="bpSmallCopy"
+                    mb={1.5}
+                  >
+                    <strong>As well as:</strong>
+                  </Typography>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    component="ul"
+                    sx={{
+                      marginBottom: {
+                        xs: 0,
+                        md: 4,
+                      },
+                    }}
+                    gap={1.5}
+                  >
+                    {(upgradedSubscriptionTier === "hobby"
+                      ? paidSubscriptionFeatures.hobby.additionalFeatures
+                      : [
+                          {
+                            icon: <TrophyStarIcon sx={{ fontSize: 18 }} />,
+                            title: (
+                              <>
+                                2x profile badges{" "}
+                                <strong>exclusive to early Þ supporters</strong>
+                              </>
+                            ),
+                          },
+                          {
+                            icon: <LockIcon sx={{ fontSize: 18 }} />,
+                            title: (
+                              <>
+                                <strong>Private</strong> blocks and types
+                              </>
+                            ),
+                            planned: true,
+                          },
+                          {
+                            icon: <JetFighterUpIcon sx={{ fontSize: 18 }} />,
+                            title: (
+                              <>
+                                <strong>Bonus</strong> features, updates and
+                                special event invites
+                              </>
+                            ),
+                            planned: true,
+                          },
+                          {
+                            icon: <FlaskVialIcon sx={{ fontSize: 18 }} />,
+                            title: (
+                              <>
+                                <strong>Early-access</strong> to new APIs
+                              </>
+                            ),
+                          },
+                          {
+                            icon: <CoinsIcon sx={{ fontSize: 18 }} />,
+                            title: (
+                              <>
+                                <strong>Discounted access</strong> to additional
+                                API calls beyond those already included
+                              </>
+                            ),
+                          },
+                          {
+                            icon: <HandIcon sx={{ fontSize: 18 }} />,
+                            title: (
+                              <>
+                                Ability to <strong>prevent or cap</strong>{" "}
+                                additional API use
+                              </>
+                            ),
+                          },
+                        ]
+                    ).map((feature, index) => (
+                      <SubscriptionFeatureListItem
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                        feature={feature}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid
+                item
+                sm={12}
+                md={6}
+                sx={{
+                  display: "flex",
+                }}
+              >
+                <Box sx={{ paddingY: 4 }}>
+                  <Typography
+                    variant="bpHeading4"
+                    sx={{ fontWeight: 400, marginBottom: 4 }}
+                  >
+                    Upgrade Summary
+                  </Typography>
+                  <Box display="flex" alignItems="center" marginBottom={2}>
+                    <UserAvatar user={user} size={50} />
+                    <Box marginLeft={2}>
+                      <Typography
+                        variant="bpSmallCopy"
+                        component="p"
+                        sx={{ "& a": { borderBottomWidth: 0 } }}
+                      >
+                        <strong>{user.preferredName}</strong> (
+                        <Link href={`/@${user.shortname}`}>
+                          @{user.shortname}
+                        </Link>
+                        )
+                      </Typography>
+                      <Typography
+                        variant="bpSmallCopy"
+                        component="p"
+                        sx={{
+                          fontSize: 14,
+                          color: ({ palette }) => palette.gray["60"],
+                        }}
+                      >
+                        The account you're upgrading
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  {isUpgradingExistingPaidSubscription ? (
+                    <>
+                      <UpgradeExistingPaidSubscriptionIntro
+                        currentSubscriptionTier={
+                          currentSubscriptionTier as "hobby"
+                        }
+                        upgradedSubscriptionTier={upgradedSubscriptionTier}
+                        subscriptionTierPrices={subscriptionTierPrices}
+                        taxRate={taxRate}
+                        defaultPaymentMethod={defaultPaymentMethod}
+                        onChangePaymentMethod={() =>
+                          setChangePaymentMethodModalOpen(true)
+                        }
+                      />
+                      <Collapse
+                        in={!!upgradeExistingPaidSubscriptionErrorMessage}
+                        sx={{ marginBottom: 4 }}
+                      >
+                        <Typography
+                          variant="bpSmallCopy"
+                          sx={{
+                            color: ({ palette }) => palette.error.main,
+                          }}
+                        >
+                          {upgradeExistingPaidSubscriptionErrorMessage}
+                        </Typography>
+                      </Collapse>
+                    </>
+                  ) : null}
+                  <Box marginBottom={4}>
+                    {isUpgradingExistingPaidSubscription ? (
+                      upgradedSubscriptionTier ? (
+                        <Button
+                          fullWidth
+                          squared
+                          onClick={() =>
+                            upgradeSubscription({
+                              tier: upgradedSubscriptionTier as "pro",
+                            })
+                          }
+                          endIcon={<FontAwesomeIcon icon={faArrowRight} />}
+                          loading={isUpgradingSubscription}
+                        >
+                          Upgrade my account and continue
+                        </Button>
+                      ) : null
+                    ) : stripeElementsOptions.clientSecret ? (
+                      <Elements
+                        stripe={stripePromise}
+                        options={stripeElementsOptions}
+                      >
+                        <CreateSubscriptionCheckoutForm
+                          upgradedSubscriptionTier={upgradedSubscriptionTier}
+                          subscriptionTierPrices={subscriptionTierPrices}
+                          onCompleted={handleUpgradedSubscription}
+                          clientSecret={clientSecret}
+                        />
+                      </Elements>
                     ) : (
                       <>
-                        <Typography
-                          variant="bpSmallCopy"
-                          component="p"
-                          sx={{
-                            marginBottom: 2,
-                            fontSize: 14,
-                            color: ({ palette }) => palette.gray[70],
-                          }}
-                        >
-                          You will immediately receive the number of credits
-                          equal to the difference between those included in the
-                          Hobby and Pro plans.
-                        </Typography>
-                        <Typography
-                          variant="bpSmallCopy"
-                          component="p"
-                          sx={{
-                            fontSize: 14,
-                            color: ({ palette }) => palette.gray[70],
-                          }}
-                        >
-                          Your new{" "}
-                          <strong>
-                            {upgradedSubscriptionTier
-                              ? subscriptionTierToHumanReadable(
-                                  upgradedSubscriptionTier,
-                                )
-                              : ""}
-                          </strong>{" "}
-                          discount on additional usage charges incurred takes
-                          immediate effect. Additional use charges already
-                          accrued are unaffected and will still be billed at the
-                          rate in effect at that time.
-                        </Typography>
+                        <Skeleton height={20} />
+                        <Skeleton height={18} width={80} />
+                        <Skeleton height={40} />
+                        <Skeleton height={51} />
                       </>
                     )}
                   </Box>
-                </Grid>
+                  <Typography
+                    variant="bpSmallCopy"
+                    component="p"
+                    sx={({ palette, transitions }) => ({
+                      marginBottom: 2,
+                      fontSize: 14,
+                      color: "#464852",
+                      "& a": {
+                        color: palette.purple[70],
+                        borderColor: "transparent",
+                        transition: transitions.create("border-color"),
+                      },
+                    })}
+                  >
+                    By clicking “Upgrade my account and continue”, you agree to
+                    our{" "}
+                    <Link href="/legal/terms" target="_blank">
+                      Terms of Service
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/legal/privacy" target="_blank">
+                      Privacy Statement
+                    </Link>
+                    .
+                  </Typography>
+                  {currentSubscriptionTier === "free" ? (
+                    <Typography
+                      variant="bpSmallCopy"
+                      component="p"
+                      sx={({ palette }) => ({
+                        fontSize: 14,
+                        color: palette.gray[60],
+                        "& code": {
+                          color: palette.gray[80],
+                        },
+                      })}
+                    >
+                      The charge will appear on your card statement as either{" "}
+                      <code>BLOCKPROTO</code> or <code>BLOCKPROTOCOL.ORG</code>{" "}
+                      depending on your payment provider. You will be billed
+                      every 30 days, until you cancel.
+                    </Typography>
+                  ) : (
+                    <>
+                      <Typography
+                        variant="bpSmallCopy"
+                        component="p"
+                        sx={{
+                          marginBottom: 2,
+                          fontSize: 14,
+                          color: ({ palette }) => palette.gray[70],
+                        }}
+                      >
+                        You will immediately receive the number of credits equal
+                        to the difference between those included in the Hobby
+                        and Pro plans.
+                      </Typography>
+                      <Typography
+                        variant="bpSmallCopy"
+                        component="p"
+                        sx={{
+                          fontSize: 14,
+                          color: ({ palette }) => palette.gray[70],
+                        }}
+                      >
+                        Your new{" "}
+                        <strong>
+                          {upgradedSubscriptionTier
+                            ? subscriptionTierToHumanReadable(
+                                upgradedSubscriptionTier,
+                              )
+                            : ""}
+                        </strong>{" "}
+                        discount on additional usage charges incurred takes
+                        immediate effect. Additional use charges already accrued
+                        are unaffected and will still be billed at the rate in
+                        effect at that time.
+                      </Typography>
+                    </>
+                  )}
+                </Box>
               </Grid>
-            </Box>
-          </Paper>
-        </Container>
+            </Grid>
+          </Box>
+        </Paper>
       </Box>
     </>
   );
 };
+
+UpgradePage.getLayout = (page) => <UpgradePageLayout>{page}</UpgradePageLayout>;
 
 export default withAuthWall(UpgradePage);
