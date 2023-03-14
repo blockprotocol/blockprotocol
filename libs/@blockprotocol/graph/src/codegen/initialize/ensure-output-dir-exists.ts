@@ -3,7 +3,7 @@ import * as path from "node:path";
 
 import { InitializeContext } from "../context/initialize.js";
 
-export const ensureTargetDirExists = async (
+export const ensureOutputDirExists = async (
   context: InitializeContext,
 ): Promise<void> => {
   context.logDebug("Checking target directory exists");

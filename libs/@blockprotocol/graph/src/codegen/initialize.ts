@@ -1,8 +1,10 @@
 import { InitializeContext } from "./context/initialize.js";
-import { ensureTargetDirExists } from "./initialize/ensure-target-dir-exists.js";
+import { cleanOutputDir } from "./initialize/clean-output-dir.js";
+import { ensureOutputDirExists } from "./initialize/ensure-output-dir-exists.js";
 import { traverseAndCollateSchemas } from "./initialize/traverse-and-collate-schemas.js";
 
 export const initialize = async (context: InitializeContext) => {
-  await ensureTargetDirExists(context);
+  await ensureOutputDirExists(context);
+  await cleanOutputDir(context);
   await traverseAndCollateSchemas(context);
 };

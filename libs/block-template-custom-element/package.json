@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "block-scripts build",
-    "codegen": "rimraf ./src/types && block-scripts codegen | xargs -I {} yarn prettier --write {}",
+    "codegen": "block-scripts codegen | xargs -I {} yarn prettier --write {}",
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
@@ -44,8 +44,7 @@
     "mock-block-dock": "0.1.1",
     "prettier": "2.8.2",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "rimraf": "^3.0.2"
+    "react-dom": "18.2.0"
   },
   "block-scripts": {
     "port": 63212
