@@ -1,6 +1,5 @@
 /**
  * This file was automatically generated – do not edit it.
- * See the respective URLs for the Block Protocol Types this was generated from.
  */
 
 import { Entity } from "@blockprotocol/graph";
