@@ -1,6 +1,6 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Box, Card, Grid, Typography } from "@mui/material";
-import { FunctionComponent, useEffect, useMemo } from "react";
+import { FunctionComponent, useEffect, useMemo, useRef } from "react";
 
 import { FontAwesomeIcon } from "../../../components/icons";
 import { MapboxIcon } from "../../../components/icons/mapbox-icon";
@@ -26,6 +26,8 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
   const { user, refetch } = useUser();
   const { paymentMethods, subscription, subscriptionTierPrices } =
     useBillingPageContext();
+
+  const plansHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     /**
@@ -122,8 +124,21 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
             href={
               currentSubscriptionTierIsPaid
                 ? paymentMethodsPanelPageAsPath
-                : "#plans"
+                : "#"
             }
+            onClick={(event) => {
+              if (!currentSubscriptionTierIsPaid) {
+                event.preventDefault();
+                /**
+                 * @todo: figure out why calling `scrollIntoView` directly results
+                 * in flakiness.
+                 */
+                setTimeout(
+                  () => plansHeadingRef.current?.scrollIntoView(),
+                  150,
+                );
+              }
+            }}
           >
             <Card
               elevation={0}
@@ -195,7 +210,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       <Typography
         variant="bpHeading2"
         sx={{ fontSize: 28, fontWeight: 400 }}
-        id="plans"
+        ref={plansHeadingRef}
       >
         {currentSubscriptionTier === "pro" ? "Plan details" : "Plans"}
       </Typography>

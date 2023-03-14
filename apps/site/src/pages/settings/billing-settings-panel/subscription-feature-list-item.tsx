@@ -36,7 +36,7 @@ export const SubscriptionFeatureListItem: FunctionComponent<{
             sx={[
               {
                 marginLeft: 1,
-                fontWeight: 500,
+                fontWeight: 700,
                 background:
                   "linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(96.93deg, #6834FB 18.76%, #FF45EC 49.79%);",
                 backgroundClip: "text",
