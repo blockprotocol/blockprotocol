@@ -8,7 +8,7 @@ export const ensureTargetDirExists = async (
 ): Promise<void> => {
   context.logDebug("Checking target directory exists");
 
-  const resolvedTargetDir = path.resolve(context.parameters.targetRoot);
+  const resolvedTargetDir = path.resolve(context.parameters.outputFolder);
 
   try {
     // Check the file exists

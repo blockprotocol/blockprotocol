@@ -10,7 +10,7 @@ import { typedEntries, typedKeys } from "../shared/util/typed-object-iter.js";
  */
 export type CodegenParameters = {
   /** Files, and the types to generate within them */
-  targetRoot: string;
+  outputFolder: string;
   targets: {
     [fileName: string]: [
       {
@@ -48,15 +48,15 @@ export const validateCodegenParameters = (
   }
 
   const {
-    targetRoot,
+    outputFolder,
     targets,
     typeNameOverrides,
     versionedUrlAliases,
     temporal,
   } = parameters as Record<string, unknown>;
 
-  if (typeof targetRoot !== "string") {
-    errors.push("`targetRoot` must be a string pointing to a directory");
+  if (typeof outputFolder !== "string") {
+    errors.push("`outputFolder` must be a string pointing to a directory");
   }
 
   if (

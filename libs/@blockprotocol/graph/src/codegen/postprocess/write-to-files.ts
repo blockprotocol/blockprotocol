@@ -10,7 +10,7 @@ export const writeToFiles = async (
 
   const writeQueue: Promise<void>[] = [];
 
-  const targetDir = path.resolve(context.parameters.targetRoot);
+  const targetDir = path.resolve(context.parameters.outputFolder);
 
   for (const [file, contents] of Object.entries(context.filesToContents)) {
     context.logTrace(`Writing file ${file}`);
