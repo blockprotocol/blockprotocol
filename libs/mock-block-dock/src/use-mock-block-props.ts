@@ -35,7 +35,7 @@ export type MockBlockHookArgs<Temporal extends boolean> = {
     ? EntityRecordIdTemporal
     : EntityRecordIdNonTemporal;
   initialData?: InitialData<Temporal>;
-  includeProvidedMockData?: boolean;
+  includeDefaultMockData?: boolean;
   readonly: boolean;
 };
 
@@ -91,13 +91,13 @@ export const useMockBlockPropsNonTemporal = (
     return {
       entities: [
         ...(args.initialData?.initialEntities ?? []),
-        ...(args.includeProvidedMockData ? defaultMockData.entities : []),
+        ...(args.includeDefaultMockData ? defaultMockData.entities : []),
       ],
     };
   }, [
     args.blockEntityRecordId,
     args.initialData?.initialEntities,
-    args.includeProvidedMockData,
+    args.includeDefaultMockData,
   ]);
 
   const defaultBlockEntity = mockData.entities[0]!;
@@ -159,7 +159,7 @@ export const useMockBlockPropsTemporal = (
     return {
       entities: [
         ...(args.initialData?.initialEntities ?? []),
-        ...(args.includeProvidedMockData
+        ...(args.includeDefaultMockData
           ? defaultTemporalMockData.entities
           : []),
       ],
@@ -174,7 +174,7 @@ export const useMockBlockPropsTemporal = (
     args.blockEntityRecordId,
     args.initialData?.initialEntities,
     args.initialData?.initialTemporalAxes,
-    args.includeProvidedMockData,
+    args.includeDefaultMockData,
   ]);
 
   const defaultBlockEntity = mockData.entities[0]!;

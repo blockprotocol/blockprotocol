@@ -58,7 +58,7 @@ type MockBlockDockProps<Temporal extends boolean> = {
   debug?: boolean;
   hideDebugToggle?: boolean;
   initialData?: InitialData<Temporal>;
-  includeProvidedMockData?: boolean;
+  includeDefaultMockData?: boolean;
   readonly?: boolean;
   serviceModuleCallbacks?: ServiceEmbedderMessageCallbacks;
   blockInfo?: {
@@ -84,7 +84,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
-  includeProvidedMockData,
+  includeDefaultMockData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks: serviceModuleCallbacksFromProps,
 }: Omit<MockBlockDockProps<false>, "temporal">) => {
@@ -98,7 +98,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   } = useMockBlockPropsNonTemporal({
     blockEntityRecordId: initialBlockEntityRecordId,
     initialData: initialData as InitialData<false>,
-    includeProvidedMockData,
+    includeDefaultMockData,
     readonly: !!initialReadonly,
   });
 
@@ -336,7 +336,7 @@ const MockBlockDockTemporal: FunctionComponent<
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
-  includeProvidedMockData,
+  includeDefaultMockData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks: serviceModuleCallbacksFromProps,
 }: Omit<MockBlockDockProps<true>, "temporal">) => {
@@ -350,7 +350,7 @@ const MockBlockDockTemporal: FunctionComponent<
   } = useMockBlockPropsTemporal({
     blockEntityRecordId: initialBlockEntityRecordId,
     initialData: initialData as InitialData<true>,
-    includeProvidedMockData,
+    includeDefaultMockData,
     readonly: !!initialReadonly,
   });
 
@@ -595,7 +595,7 @@ const MockBlockDockTemporal: FunctionComponent<
  * @param [props.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [props.readonly=false] whether the block should display in readonly mode or not
  * @param [props.serviceModuleCallbacks] overrides the default service module callbacks
- * @param [props.includeProvidedMockData] whether to populate the datastore with mock data provided by MBD (in addition to the user-provided data through the `initialData` prop)
+ * @param [props.includeDefaultMockData] whether to populate the datastore with mock data provided by MBD (in addition to the user-provided data through the `initialData` prop)
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   Temporal extends boolean,
@@ -609,7 +609,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
-  includeProvidedMockData,
+  includeDefaultMockData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks,
 }: MockBlockDockProps<Temporal>) => {
@@ -623,7 +623,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData as InitialData<true>}
-      includeProvidedMockData={includeProvidedMockData}
+      includeDefaultMockData={includeDefaultMockData}
       readonly={initialReadonly}
       serviceModuleCallbacks={serviceModuleCallbacks}
     />
@@ -637,7 +637,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData}
-      includeProvidedMockData={includeProvidedMockData}
+      includeDefaultMockData={includeDefaultMockData}
       readonly={initialReadonly}
       serviceModuleCallbacks={serviceModuleCallbacks}
     />

@@ -5,4 +5,4 @@
 "mock-block-dock": patch
 ---
 
-Introduce `includeProvidedMockData` toggle on MockBlockDock
+Introduce `includeDefaultMockData` toggle on MockBlockDock

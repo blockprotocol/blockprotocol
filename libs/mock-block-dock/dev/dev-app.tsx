@@ -157,7 +157,7 @@ const DevApp: FunctionComponent = () => {
         initialData={{
           initialEntities: Object.values(blockEntityMap),
         }}
-        includeProvidedMockData
+        includeDefaultMockData
         temporal={false}
       />
     </>
