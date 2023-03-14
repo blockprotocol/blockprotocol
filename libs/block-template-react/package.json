@@ -74,10 +74,6 @@
           {
             "sourceTypeId": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
             "blockEntity": true
-          },
-          {
-            "sourceTypeId": "https://blockprotocol.org/@blockprotocol/types/entity-type/person/v/2",
-            "blockEntity": true
           }
         ]
       }
