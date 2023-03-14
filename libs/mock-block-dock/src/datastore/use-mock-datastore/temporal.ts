@@ -351,9 +351,6 @@ export const useMockDatastore = (
 
             resolve({ data: updatedEntity });
 
-            /**
-             * @todo this update logic may be incorrect, we have to do some
-             * testing to ensure it behaves as expected */
             addEntityVerticesToSubgraphByMutation(newSubgraph, [updatedEntity]);
 
             // Clear the subgraph edges in preparation for inferring edges again
