@@ -59,7 +59,7 @@
     "displayName": "Template",
     "examples": [
       {
-        "name": "World"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/name/": "World"
       }
     ],
     "icon": "public/omega.svg",
