@@ -1,4 +1,4 @@
-- Feature Name: extending-and-duplicating-types
+- Feature Name: extending-and-duplicating-entity-types
 - Start Date: 2022-07-11
 - RFC PR: [blockprotocol/blockprotocol#428](https://github.com/blockprotocol/blockprotocol/pull/428)
 - Block Protocol Discussion: [blockprotocol/blockprotocol#439](https://github.com/blockprotocol/blockprotocol/discussions/439)
@@ -7,21 +7,27 @@
 
 [summary]: #summary
 
-As a follow-up to the [Graph type system RFC](./0352-graph-type-system.md), this RFC will describe the behavior of which types in the type system can be extended and duplicated to enhance reusability while giving more control to users (both block authors and users of embedding applications). Extending types can be considered the same as "type inheritance", but there are some important nuances that make these concepts different.
+This RFC describes an extension to the [Graph module's Type System](./0352-graph-type-system.md) whereby entity types can be _extended_ and _duplicated_. These mechanisms allow users of the system to take existing entity types, and reuse their definitions to create new ones, in a compatible and incompatible fashion respectively.
 
-Type duplication allows for modifying a type completely without restrictions on how, at the expense of the guarantees that can be made for type extension. Duplication can be considered the same as "forking".
+In brief, entity type extension can be considered as a flavor of inheritance that one popularly sees in object-oriented programming, while duplication is similar to "forking" that one sees in other systems (such as Git).
 
 # Motivation
 
 [motivation]: #motivation
 
-Reusing public types in the type system comes with the potential disadvantage of not fully conforming to a user's intention. If a user is interested in a public type but needs certain additional properties to make the type usable for their use case, they would have to recreate the type themself in the current system.
+The Type System specifies a method of creating well-defined descriptions of data within a graph.
+The fact that those descriptions are comprehensive and well-defined is an essential characteristic that comes with many positives for usages of the types.
+However, those benefits come with compromises on reusability and flexibility.
+Various domains may have overlapping concepts and similar but slightly different representations of those concepts.
+Handling this within the current system is unergonomic, users are generally faced with the option of creating a new competing type for their specific domain, or using another type which ineffectively describes their representation.
+It's possible that the latter isn't even an option, as if the existing type is sufficiently strict, the user may not be able to satisfy the non-overlapping constraints.
 
-The types in the type systems assume an implicit `{ "additionalProperties": false }` JSON Schema attribute that has implications for how the schemas can be composed together. The presence of this option will be addressed in this proposal.
+As such, this RFC intends to define a way through which new entity types can be created which reference and extend existing ones in a compatible fashion.
+This should allow increasingly specific entity types to be created, while maintaining programmatic assurances that they are compatible with the more general entity types they extend.
+As an escape hatch, this RFC also describes a process that type-creating environments can implement and expose, which allows users to take an existing type and create a new branch of types that diverge from the original, while giving up the programmatic assurances about compatibility.
 
-Allowing entity types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain. As an alternative to extending types, type duplication (or type forking) is a less compatible way to make use of existing public types, without a direct data mapping strategy.
-
-This RFC introduces a way for types to be extended in a way where the reusability and sharing design philosophies of the Block Protocol are maintained, and a way for types to be duplicated for use cases where extending a type is insufficient.
+Entity types are focused on as the most essential high-level building blocks of the system.
+Designing a comparable extension of the system for other kinds of types could be looked into as a piece of future work.
 
 # Guide-level explanation
 
