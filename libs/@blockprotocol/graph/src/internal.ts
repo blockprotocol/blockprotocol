@@ -1,8 +1,12 @@
 export {
-  addDataTypesToSubgraphByMutation,
-  addEntitiesToSubgraphByMutation,
-  addEntityTypesToSubgraphByMutation,
+  addDataTypeVerticesToSubgraphByMutation,
+  addEntityTypeVerticesToSubgraphByMutation,
+  addEntityVerticesToSubgraphByMutation,
   addOutwardEdgeToSubgraphByMutation,
-  addPropertyTypesToSubgraphByMutation,
+  addPropertyTypeVerticesToSubgraphByMutation,
+  inferDataTypeEdgesInSubgraphByMutation,
+  inferEntityEdgesInSubgraphByMutation,
+  inferEntityTypeEdgesInSubgraphByMutation,
+  inferPropertyTypeEdgesInSubgraphByMutation,
 } from "./internal/mutate-subgraph.js";
 export { isTemporalSubgraph } from "./shared/types/subgraph.js";

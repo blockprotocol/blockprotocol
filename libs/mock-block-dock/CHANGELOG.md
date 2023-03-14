@@ -1,5 +1,14 @@
 # mock-block-dock
 
+## 0.1.1
+
+### Patch Changes
+
+- [#1049](https://github.com/blockprotocol/blockprotocol/pull/1049) [`fdb366cb`](https://github.com/blockprotocol/blockprotocol/commit/fdb366cb29a5b2bdd209a6ea56b2925bc8ee1c12) Thanks [@benwerner01](https://github.com/benwerner01)! - handle additional error codes from the service module
+
+- Updated dependencies [[`52cc687f`](https://github.com/blockprotocol/blockprotocol/commit/52cc687f13f1076e6bf77198e60e9cd5adc3a32b), [`fdb366cb`](https://github.com/blockprotocol/blockprotocol/commit/fdb366cb29a5b2bdd209a6ea56b2925bc8ee1c12)]:
+  - @blockprotocol/service@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

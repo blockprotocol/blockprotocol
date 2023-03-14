@@ -778,8 +778,15 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                       })}
                     >
                       By clicking “Upgrade my account and continue”, you agree
-                      to our <Link href="/legal/terms">Terms of Service</Link>{" "}
-                      and <Link href="/legal/privacy">Privacy Statement</Link>.
+                      to our{" "}
+                      <Link href="/legal/terms" target="_blank">
+                        Terms of Service
+                      </Link>{" "}
+                      and{" "}
+                      <Link href="/legal/privacy" target="_blank">
+                        Privacy Statement
+                      </Link>
+                      .
                     </Typography>
                     {currentSubscriptionTier === "free" ? (
                       <Typography
@@ -796,7 +803,8 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                         The charge will appear on your card statement as either{" "}
                         <code>BLOCKPROTO</code> or{" "}
                         <code>BLOCKPROTOCOL.ORG</code> depending on your payment
-                        provider.
+                        provider. You will be billed every 30 days, until you
+                        cancel.
                       </Typography>
                     ) : (
                       <>

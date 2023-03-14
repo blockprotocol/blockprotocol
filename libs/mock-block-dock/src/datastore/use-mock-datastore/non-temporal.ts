@@ -11,7 +11,10 @@ import {
   RemoteFileEntityProperties,
   Subgraph,
 } from "@blockprotocol/graph";
-import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
+import {
+  addEntityVerticesToSubgraphByMutation,
+  inferEntityEdgesInSubgraphByMutation,
+} from "@blockprotocol/graph/internal";
 import { getEntityRevision } from "@blockprotocol/graph/stdlib";
 import {
   GetEntityData as GetEntityDataTemporal,
@@ -36,10 +39,8 @@ export type MockDatastore = {
       | "createEntityType"
       | "updateEntityType"
       | "deleteEntityType"
-      | "getPropertyType"
       | "createPropertyType"
       | "updatePropertyType"
-      | "queryPropertyTypes"
     >
   >;
 };
@@ -137,7 +138,12 @@ export const useMockDatastore = (
               JSON.stringify(currentGraph),
             ) as Subgraph;
 
-            addEntitiesToSubgraphByMutation(newSubgraph, [newEntity]);
+            const entityVertexIds = addEntityVerticesToSubgraphByMutation(
+              newSubgraph,
+              [newEntity],
+            );
+            inferEntityEdgesInSubgraphByMutation(newSubgraph, entityVertexIds);
+
             return newSubgraph;
           });
         });
@@ -286,6 +292,7 @@ export const useMockDatastore = (
               linkData,
             };
 
+            // Replace the entity vertex in the subgraph in place
             newSubgraph.vertices[entityId]![
               Object.keys(newSubgraph.vertices[entityId]!).pop()!
             ]!.inner = updatedEntity;
@@ -442,6 +449,56 @@ export const useMockDatastore = (
           ],
         };
       }
+    }, []);
+
+  const getPropertyType: GraphEmbedderMessageCallbacks["getPropertyType"] =
+    useCallback(async ({ data: _ }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `getPropertyType is not currently supported`,
+          },
+        ],
+      };
+    }, []);
+
+  const queryPropertyTypes: GraphEmbedderMessageCallbacks["queryPropertyTypes"] =
+    useCallback(async ({ data: _ }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `queryPropertyTypes is not currently supported`,
+          },
+        ],
+      };
+    }, []);
+
+  const getDataType: GraphEmbedderMessageCallbacks["getDataType"] = useCallback(
+    async ({ data: _ }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `getDataType is not currently supported`,
+          },
+        ],
+      };
+    },
+    [],
+  );
+
+  const queryDataTypes: GraphEmbedderMessageCallbacks["queryDataTypes"] =
+    useCallback(async ({ data: _ }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `queryDataTypes is not currently supported`,
+          },
+        ],
+      };
     }, []);
 
   /** @todo - Reimplement linkedQueries */
@@ -720,6 +777,10 @@ export const useMockDatastore = (
       updateEntity,
       queryEntityTypes,
       getEntityType,
+      getPropertyType,
+      queryPropertyTypes,
+      getDataType,
+      queryDataTypes,
       // getLinkedQuery,
       // createLinkedQuery,
       // deleteLinkedQuery,

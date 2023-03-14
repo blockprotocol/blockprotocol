@@ -1,3 +1,4 @@
+import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import {
@@ -10,6 +11,7 @@ import {
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
+import { generateOntologyUrl } from "../../pages/shared/schema";
 import { Button } from "../button";
 import { TextField } from "../text-field";
 import { Modal } from "./modal";
@@ -49,17 +51,48 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       setLoading(true);
       setApiErrorMessage(undefined);
 
-      const { data, error } = await apiClient.createEntityType({
+      const title = newSchemaTitle.trim();
+      const { baseUrl, versionedUrl } = generateOntologyUrl({
+        author: router.query.shortname as `@${string}`,
+        title,
+        kind: "entityType",
+        version: 1,
+      });
+
+      const draft: EntityTypeWithMetadata = {
         schema: {
           description: newDescription.trim(),
-          title: newSchemaTitle.trim(),
+          title,
+          $schema:
+            "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+          $id: versionedUrl,
+          kind: "entityType",
+          properties: {},
+          type: "object",
         },
-      });
-      setLoading(false);
-      if (error) {
-        setApiErrorMessage(error.message);
-      } else if (data) {
-        void router.push(new URL(data.entityType.schema.$id).pathname);
+        metadata: {
+          recordId: {
+            baseUrl,
+            version: 1,
+          },
+        },
+      };
+
+      const exists = await apiClient
+        .getEntityTypeByUrl({
+          versionedUrl,
+        })
+        .then((res) => !res.error);
+
+      if (exists) {
+        setLoading(false);
+        setApiErrorMessage("Type title must be unique");
+      } else {
+        void router.push(
+          `${new URL(draft.schema.$id).pathname}?draft=${encodeURIComponent(
+            Buffer.from(JSON.stringify(draft)).toString("base64"),
+          )}`,
+        );
       }
     },
     [user, newDescription, newSchemaTitle, router],
