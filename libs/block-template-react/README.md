@@ -64,6 +64,22 @@ Please see [the React docs](https://reactjs.org/docs/getting-started.html) for g
 
 You can format your code using `yarn format` (or `npm run format`).
 
+If you want to use environment variables in development, add a `.env` file in this directory, and then you can access variables defined in it via `process.env.VARIABLE_NAME`. This is useful for providing a `blockProtocolApiKey` to `MockBlockDock` in `dev.tsx`.
+
+e.g. your `.env` file might look like this:
+
+```text
+BLOCK_PROTOCOL_API_KEY=super-secret
+```
+
+and `dev.tsx` like this:
+
+```typescript
+  return (
+    <MockBlockDock
+      blockProtocolApiKey={process.env.BLOCK_PROTOCOL_API_KEY}
+```
+
 ## Step five: publish your block
 
 Head over to [blockprotocol.org](https://blockprotocol.org/docs/developing-blocks#publish) to read instructions on publishing your block.
