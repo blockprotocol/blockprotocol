@@ -157,6 +157,7 @@ const DevApp: FunctionComponent = () => {
         initialData={{
           initialEntities: Object.values(blockEntityMap),
         }}
+        includeDefaultMockData
         temporal={false}
         simulateDatastoreLatency={{ min: 50, max: 200 }}
       />
