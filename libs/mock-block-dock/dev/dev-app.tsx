@@ -158,6 +158,7 @@ const DevApp: FunctionComponent = () => {
           initialEntities: Object.values(blockEntityMap),
         }}
         temporal={false}
+        simulateDatastoreLatency={{ min: 50, max: 200 }}
       />
     </>
   );
