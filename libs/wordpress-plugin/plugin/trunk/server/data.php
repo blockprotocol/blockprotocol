@@ -89,7 +89,7 @@ function block_protocol_page_data(string $event, array $data)
   $data['keyPublicId'] = $public_id;
   $data['origin'] = get_site_url();
   $data['wpTimestamp'] = gmdate("Y-m-d\TH:i:s\Z");
-  $data["plugin_version"] = BLOCK_PROTOCOL_PLUGIN_VERISON;
+  $data["pluginVersion"] = BLOCK_PROTOCOL_PLUGIN_VERISON;
 
   $payload = [
     'userId' => block_protocol_anonymous_user_id(),
