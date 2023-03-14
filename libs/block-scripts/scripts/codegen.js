@@ -34,6 +34,26 @@ const script = async () => {
     process.exit(1);
   }
 
+  const blockEntityDefinitions = [];
+  for (const sources of Object.values(codegenParams.targets)) {
+    for (const source of sources) {
+      if (source.blockEntity) {
+        blockEntityDefinitions.push(source.sourceTypeId);
+      }
+    }
+  }
+
+  if (blockEntityDefinitions.length > 1) {
+    console.error(
+      chalk.red(
+        `codegen parameters are invalid: only one type can be defined as the \`blockEntity\`. Found multiple: [${blockEntityDefinitions.join(
+          ", ",
+        )}]`,
+      ),
+    );
+    process.exit(1);
+  }
+
   /* @todo - optionally take a log level in from command-line or environment */
   await codegen(codegenParams);
 };
