@@ -23,7 +23,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean && tsc --skipLibCheck",
+    "build": "yarn clean && tsc --skipLibCheck --project tsconfig.build.json",
     "build:dev": "yarn clean && cross-env NODE_ENV=development webpack --mode development --config=dev/webpack.config.js",
     "clean": "rimraf ./dist/",
     "codegen": "node -p \"'export const MOCK_BLOCK_DOCK_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
