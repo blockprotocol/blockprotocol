@@ -26,7 +26,7 @@ import {
   Subgraph,
   SubgraphTemporalAxes,
 } from "../../types.js";
-import { typedEntries, typedKeys } from "../../util.js";
+import { typedEntries } from "../../util.js";
 import { getVertexIdForRecordId } from "./vertex-id-for-element";
 
 /**
