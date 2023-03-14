@@ -24,8 +24,9 @@ export class CompileContext {
   /** Map of entity type IDs to whether or not they are link entity types */
   readonly linkTypeMap: Record<keyof typeof this.entityTypes, boolean>;
 
-  /** Map of versionedUrls to their compiled schemas */
-  urlsToCompiledTypes: Record<keyof typeof this.allTypes, CompiledTsType> = {};
+  /** Map of type IDs to their compiled schemas */
+  typeIdsToCompiledTypes: Record<keyof typeof this.allTypes, CompiledTsType> =
+    {};
 
   constructor(preprocessContext: PreprocessContext) {
     this.parameters = preprocessContext.parameters;
@@ -72,9 +73,9 @@ export class CompileContext {
   }
 
   addCompiledTsType(
-    versionedUrl: keyof typeof this.allTypes,
+    typeId: keyof typeof this.allTypes,
     compiledTsType: CompiledTsType,
   ) {
-    this.urlsToCompiledTypes[versionedUrl] = compiledTsType;
+    this.typeIdsToCompiledTypes[typeId] = compiledTsType;
   }
 }

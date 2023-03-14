@@ -70,7 +70,7 @@
       "targets": {
         "thing.ts": [
           {
-            "versionedUrl": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
+            "sourceTypeId": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
             "blockEntity": true
           }
         ]

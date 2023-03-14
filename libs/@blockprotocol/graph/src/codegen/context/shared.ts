@@ -3,7 +3,7 @@ import { VersionedUrl } from "@blockprotocol/type-system/slim";
 import { mustBeDefined } from "../../shared/util/must-be-defined.js";
 
 type TypeDependencies = {
-  versionedUrl: VersionedUrl;
+  typeId: VersionedUrl;
   dependencies: TypeDependencies[];
 };
 
@@ -18,31 +18,31 @@ type TypeDependencies = {
 export class TypeDependencyMap {
   private readonly dependencyMap: Record<VersionedUrl, TypeDependencies> = {};
 
-  addDependencyForType(typeUrl: VersionedUrl, dependency: VersionedUrl) {
+  addDependencyForType(typeId: VersionedUrl, dependency: VersionedUrl) {
     this.dependencyMap[dependency] ??= {
-      versionedUrl: dependency,
+      typeId: dependency,
       dependencies: [],
     };
 
-    this.dependencyMap[typeUrl] ??= { versionedUrl: typeUrl, dependencies: [] };
-    this.dependencyMap[typeUrl]!.dependencies.push(
+    this.dependencyMap[typeId] ??= { typeId, dependencies: [] };
+    this.dependencyMap[typeId]!.dependencies.push(
       this.dependencyMap[dependency]!,
     );
   }
 
-  getDependenciesForType(typeUrl: VersionedUrl): Set<VersionedUrl> {
+  getDependenciesForType(typeId: VersionedUrl): Set<VersionedUrl> {
     const flattenedDependencies = new Set<VersionedUrl>();
 
-    const dependencyQueue = [this.dependencyMap[typeUrl]] ?? [];
+    const dependencyQueue = [this.dependencyMap[typeId]] ?? [];
 
     while (dependencyQueue.length > 0) {
       const dependencies = mustBeDefined(dependencyQueue.pop());
 
-      if (flattenedDependencies.has(dependencies.versionedUrl)) {
+      if (flattenedDependencies.has(dependencies.typeId)) {
         continue;
       }
 
-      flattenedDependencies.add(dependencies.versionedUrl);
+      flattenedDependencies.add(dependencies.typeId);
       dependencyQueue.push(...dependencies.dependencies);
     }
 

@@ -44,8 +44,8 @@ export class PostprocessContext {
   /** Map of entity type IDs to whether or not they are link entity types */
   readonly linkTypeMap: Record<keyof typeof this.entityTypes, boolean>;
 
-  /** Map of versionedUrls to their compiled schemas */
-  readonly urlsToCompiledTypes: Record<
+  /** Map of sourceTypeIds to their compiled schemas */
+  readonly typeIdsToCompiledTypes: Record<
     keyof typeof this.allTypes,
     CompiledTsType
   >;
@@ -74,7 +74,7 @@ export class PostprocessContext {
     this.allTypes = compileContext.allTypes;
     this.typeDependencyMap = compileContext.typeDependencyMap;
     this.linkTypeMap = compileContext.linkTypeMap;
-    this.urlsToCompiledTypes = compileContext.urlsToCompiledTypes;
+    this.typeIdsToCompiledTypes = compileContext.typeIdsToCompiledTypes;
 
     const graphModuleImportPath = this.parameters.temporal
       ? "@blockprotocol/graph/temporal"

@@ -21,10 +21,10 @@ const replaceInterfaceWithTypeInCompiledTsType = (
 export const replaceInterfaceWithType = (context: CompileContext): void => {
   context.logDebug("Replacing `interface` with `type`");
 
-  for (const [typeUrl, compiledTsType] of typedEntries(
-    context.urlsToCompiledTypes,
+  for (const [typeId, compiledTsType] of typedEntries(
+    context.typeIdsToCompiledTypes,
   )) {
-    context.urlsToCompiledTypes[typeUrl] =
+    context.typeIdsToCompiledTypes[typeId] =
       replaceInterfaceWithTypeInCompiledTsType(compiledTsType);
   }
 };

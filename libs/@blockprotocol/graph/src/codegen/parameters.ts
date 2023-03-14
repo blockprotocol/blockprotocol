@@ -14,23 +14,23 @@ export type CodegenParameters = {
   targets: {
     [fileName: string]: [
       {
-        versionedUrl: VersionedUrl;
+        sourceTypeId: VersionedUrl;
         /** Whether to generate helper types which mark this Entity Type as the Block Entity */
         blockEntity?: boolean;
       },
     ];
   };
   typeNameOverrides?: {
-    [versionedUrl: string]: string;
+    [sourceTypeId: string]: string;
   };
   /** Generate look-up maps with aliases for all type URLs */
-  versionedUrlAliases?:
+  typeIdAliases?:
     | { enabled: false }
     | {
         enabled: true;
         /** Override the generated name for certain aliases */
         overrides?: {
-          [versionedUrl: string]: string;
+          [sourceTypeId: string]: string;
         };
       };
   /* @todo - Add support for generating Base URL aliases? */
@@ -47,13 +47,8 @@ export const validateCodegenParameters = (
     return { errors: ["Parameters must be an object"] };
   }
 
-  const {
-    outputFolder,
-    targets,
-    typeNameOverrides,
-    versionedUrlAliases,
-    temporal,
-  } = parameters as Record<string, unknown>;
+  const { outputFolder, targets, typeNameOverrides, typeIdAliases, temporal } =
+    parameters as Record<string, unknown>;
 
   if (typeof outputFolder !== "string") {
     errors.push("`outputFolder` must be a string pointing to a directory");
@@ -79,14 +74,14 @@ export const validateCodegenParameters = (
             );
             continue;
           }
-          if (typeof target.versionedUrl !== "string") {
+          if (typeof target.sourceTypeId !== "string") {
             errors.push(
-              `each entry under file '${fileName}' in 'targets' must have a 'versionedUrl' string`,
+              `each entry under file '${fileName}' in 'targets' must have a 'sourceTypeId' string`,
             );
           }
-          if (!validateVersionedUrl(target.versionedUrl)) {
+          if (!validateVersionedUrl(target.sourceTypeId)) {
             errors.push(
-              `each entry under file '${fileName}' in 'targets' must have a valid 'versionedUrl' property set to the Versioned URL of an entity type`,
+              `each entry under file '${fileName}' in 'targets' must have a valid 'sourceTypeId' property set to the Versioned URL of an entity type`,
             );
           }
 
@@ -109,59 +104,57 @@ export const validateCodegenParameters = (
     ) {
       errors.push("`typeNameOverrides` must be an object");
     } else {
-      for (const [versionedUrl, typeNameOverride] of Object.entries(
+      for (const [typeId, typeNameOverride] of Object.entries(
         typeNameOverrides,
       )) {
-        if (!validateVersionedUrl(versionedUrl)) {
+        if (!validateVersionedUrl(typeId)) {
           errors.push(
             `each key in 'typeNameOverrides' must be a valid Versioned URL`,
           );
         }
         if (typeof typeNameOverride !== "string") {
           errors.push(
-            `each entry in 'typeNameOverrides' must be a string, but '${versionedUrl}' is a ${typeof typeNameOverride}`,
+            `each entry in 'typeNameOverrides' must be a string, but '${typeId}' is a ${typeof typeNameOverride}`,
           );
         }
       }
     }
   }
 
-  if (versionedUrlAliases !== undefined) {
-    if (
-      !(typeof versionedUrlAliases === "object" && versionedUrlAliases !== null)
-    ) {
-      errors.push("`versionedUrlAliases` must be an object");
+  if (typeIdAliases !== undefined) {
+    if (!(typeof typeIdAliases === "object" && typeIdAliases !== null)) {
+      errors.push("`typeIdAliases` must be an object");
     } else if (
-      !("enabled" in versionedUrlAliases) ||
-      versionedUrlAliases.enabled === undefined
+      !("enabled" in typeIdAliases) ||
+      typeIdAliases.enabled === undefined
     ) {
-      errors.push("`versionedUrlAliases.enabled` must be set");
-    } else if (typeof versionedUrlAliases.enabled !== "boolean") {
-      errors.push("`versionedUrlAliases.enabled` must be a boolean");
-    } else if (versionedUrlAliases.enabled) {
+      errors.push("`typeIdAliases.enabled` must be set");
+    } else if (typeof typeIdAliases.enabled !== "boolean") {
+      errors.push("`typeIdAliases.enabled` must be a boolean");
+    } else if (typeIdAliases.enabled) {
       if (
-        "overrides" in versionedUrlAliases &&
-        versionedUrlAliases.overrides !== undefined
+        "overrides" in typeIdAliases &&
+        typeIdAliases.overrides !== undefined
       ) {
         if (
           !(
-            typeof versionedUrlAliases.overrides === "object" &&
-            versionedUrlAliases.overrides !== null
+            typeof typeIdAliases.overrides === "object" &&
+            typeIdAliases.overrides !== null
           )
         ) {
-          errors.push("`versionedUrlAliases.overrides` must be an object");
+          errors.push("`typeIdAliases.overrides` must be an object");
         } else {
           for (const [versionedUrl, alias] of Object.entries(
-            versionedUrlAliases.overrides,
+            typeIdAliases.overrides,
           )) {
             if (!validateVersionedUrl(versionedUrl)) {
               errors.push(
-                `each key in 'versionedUrlAliases.overrides' must be a valid Versioned URL`,
+                `each key in 'typeIdAliases.overrides' must be a valid Versioned URL`,
               );
             }
             if (typeof alias !== "string") {
               errors.push(
-                `each entry in 'versionedUrlAliases.overrides' must be a string, but '${versionedUrl}' is a ${typeof alias}`,
+                `each entry in 'typeIdAliases.overrides' must be a string, but '${versionedUrl}' is a ${typeof alias}`,
               );
             }
           }
@@ -185,7 +178,7 @@ export type ProcessedCodegenParameters = Omit<
 > & {
   targets: {
     [fileName: string]: {
-      versionedUrls: VersionedUrl[];
+      sourceTypeIds: VersionedUrl[];
       blockEntity?: VersionedUrl;
     };
   };
@@ -199,25 +192,25 @@ export const processCodegenParameters = (
   const targets = Object.fromEntries(
     typedEntries(parameters.targets).map(([fileName, targetsForFile]) => {
       const blockEntityTargets = [];
-      const versionedUrls: VersionedUrl[] = [];
+      const sourceTypeIds: VersionedUrl[] = [];
 
       for (const target of targetsForFile) {
         if (target.blockEntity) {
           blockEntityTargets.push(target);
         }
 
-        versionedUrls.push(target.versionedUrl);
+        sourceTypeIds.push(target.sourceTypeId);
       }
 
       if (blockEntityTargets.length > 1) {
         blockEntityTypeClashes[fileName] = blockEntityTargets.map(
-          (target) => target.versionedUrl,
+          (target) => target.sourceTypeId,
         );
       }
 
-      const blockEntity = blockEntityTargets[0]?.versionedUrl;
+      const blockEntity = blockEntityTargets[0]?.sourceTypeId;
 
-      return [fileName, { versionedUrls, blockEntity }];
+      return [fileName, { sourceTypeIds, blockEntity }];
     }),
   );
 
@@ -234,7 +227,7 @@ export const processCodegenParameters = (
   return {
     ...parameters,
     targets,
-    versionedUrlAliases: parameters.versionedUrlAliases ?? { enabled: true },
+    typeIdAliases: parameters.typeIdAliases ?? { enabled: true },
     typeNameOverrides: parameters.typeNameOverrides ?? {},
     temporal: parameters.temporal ?? false,
   };

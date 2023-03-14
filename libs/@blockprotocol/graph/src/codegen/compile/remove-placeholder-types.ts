@@ -14,10 +14,10 @@ const removePlaceholderDefinitionInCompiledTsType = (
 export const removePlaceholderTypes = (context: CompileContext): void => {
   context.logDebug("Removing placeholder types");
 
-  for (const [typeUrl, compiledTsType] of typedEntries(
-    context.urlsToCompiledTypes,
+  for (const [typeId, compiledTsType] of typedEntries(
+    context.typeIdsToCompiledTypes,
   )) {
-    context.urlsToCompiledTypes[typeUrl] =
+    context.typeIdsToCompiledTypes[typeId] =
       removePlaceholderDefinitionInCompiledTsType(compiledTsType);
   }
 };

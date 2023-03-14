@@ -15,14 +15,14 @@ export const allocateTypesToFiles = (context: PostprocessContext): void => {
 
   const typesToFiles: Record<VersionedUrl, Set<string>> = typedEntries(
     context.parameters.targets,
-  ).reduce((mapObject, [file, { versionedUrls }]) => {
-    for (const typeUrl of versionedUrls) {
+  ).reduce((mapObject, [file, { sourceTypeIds }]) => {
+    for (const typeId of sourceTypeIds) {
       // eslint-disable-next-line no-param-reassign -- this is a reduce function..
-      mapObject[typeUrl] ??= new Set();
-      mapObject[typeUrl]!.add(file);
+      mapObject[typeId] ??= new Set();
+      mapObject[typeId]!.add(file);
 
       for (const dependencyUrl of context.typeDependencyMap.getDependenciesForType(
-        typeUrl,
+        typeId,
       )) {
         // eslint-disable-next-line no-param-reassign -- this is a reduce function..
         mapObject[dependencyUrl] ??= new Set();
@@ -33,9 +33,9 @@ export const allocateTypesToFiles = (context: PostprocessContext): void => {
     return mapObject;
   }, {} as Record<VersionedUrl, Set<string>>);
 
-  for (const [typeUrl, fileSet] of typedEntries(typesToFiles)) {
+  for (const [typeId, fileSet] of typedEntries(typesToFiles)) {
     const files = [...fileSet];
-    const type = mustBeDefined(context.allTypes[typeUrl]);
+    const type = mustBeDefined(context.allTypes[typeId]);
 
     let definingFile;
     if (files.length > 1) {
@@ -61,7 +61,7 @@ export const allocateTypesToFiles = (context: PostprocessContext): void => {
     );
 
     const compiledContents = mustBeDefined(
-      context.urlsToCompiledTypes[typeUrl],
+      context.typeIdsToCompiledTypes[typeId],
     );
 
     context.logTrace(

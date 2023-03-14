@@ -37,12 +37,12 @@ class TraversalContext {
     this.explored = new Set();
     this.exploreQueue = new Set();
 
-    for (const { versionedUrls } of typedValues(
+    for (const { sourceTypeIds } of typedValues(
       initialContext.parameters.targets,
     )) {
-      for (const versionedUrl of versionedUrls) {
-        initialContext.logTrace(`Adding ${versionedUrl} to explore queue.`);
-        this.exploreQueue.add(versionedUrl);
+      for (const typeId of sourceTypeIds) {
+        initialContext.logTrace(`Adding ${typeId} to explore queue.`);
+        this.exploreQueue.add(typeId);
       }
     }
   }
@@ -53,27 +53,27 @@ class TraversalContext {
    * If the type has been encountered and resolved before, this updates the relevant references to it, otherwise it
    * adds it to the explore queue for continued traversal.
    *
-   * @param sourceUrl
-   * @param dependentUrl
+   * @param sourceTypeId
+   * @param dependencyTypeId
    */
-  encounter(sourceUrl: VersionedUrl, dependentUrl: VersionedUrl) {
+  encounter(sourceTypeId: VersionedUrl, dependencyTypeId: VersionedUrl) {
     if (
-      !this.explored.has(dependentUrl) &&
-      !this.exploreQueue.has(dependentUrl)
+      !this.explored.has(dependencyTypeId) &&
+      !this.exploreQueue.has(dependencyTypeId)
     ) {
       this.initialContext.logTrace(
-        `Adding ${dependentUrl} to explore queue, as it was encountered as a dependency of ${sourceUrl}.`,
+        `Adding ${dependencyTypeId} to explore queue, as it was encountered as a dependency of ${sourceTypeId}.`,
       );
-      this.exploreQueue.add(dependentUrl);
+      this.exploreQueue.add(dependencyTypeId);
     } else {
       this.initialContext.logTrace(
-        `Skipping ${dependentUrl} as a dependency of ${sourceUrl}, as it has already been explored.`,
+        `Skipping ${dependencyTypeId} as a dependency of ${sourceTypeId}, as it has already been explored.`,
       );
     }
 
     this.initialContext.typeDependencyMap.addDependencyForType(
-      sourceUrl,
-      dependentUrl,
+      sourceTypeId,
+      dependencyTypeId,
     );
   }
 
@@ -81,12 +81,12 @@ class TraversalContext {
    * This indicates the next type to explore, if there is one in the queue.
    */
   nextToExplore(): VersionedUrl | undefined {
-    const typeUrl = this.exploreQueue.values().next().value;
-    if (typeUrl) {
-      this.exploreQueue.delete(typeUrl);
-      this.explored.add(typeUrl);
+    const typeId = this.exploreQueue.values().next().value;
+    if (typeId) {
+      this.exploreQueue.delete(typeId);
+      this.explored.add(typeId);
     }
-    return typeUrl;
+    return typeId;
   }
 }
 
@@ -111,9 +111,9 @@ export const traverseAndCollateSchemas = async (
   // Somewhat concurrent fetch queue, keep exploring as long as there is an in-flight request or there are more to
   // explore
   while (traversalContext.exploreQueue.size > 0 || fetchQueue.length > 0) {
-    const typeUrl = traversalContext.nextToExplore();
+    const typeId = traversalContext.nextToExplore();
 
-    if (!typeUrl) {
+    if (!typeId) {
       // wait a bit before checking the loop again
       await new Promise((resolve) => {
         setTimeout(resolve, 10);
@@ -122,10 +122,10 @@ export const traverseAndCollateSchemas = async (
       continue;
     }
 
-    initialContext.logDebug(`Fetching ${typeUrl}...`);
+    initialContext.logDebug(`Fetching ${typeId}...`);
 
     addFetchPromise(
-      fetchTypeAsJson(typeUrl).then((type) => {
+      fetchTypeAsJson(typeId).then((type) => {
         if (isDataType(type)) {
           initialContext.addDataType(type);
         } else if (isPropertyType(type)) {
@@ -136,7 +136,8 @@ export const traverseAndCollateSchemas = async (
 
           nestedForEach(
             [constrainsValuesOnDataTypes, constrainsPropertiesOnPropertyTypes],
-            (dependentUrl) => traversalContext.encounter(typeUrl, dependentUrl),
+            (dependencyTypeId) =>
+              traversalContext.encounter(typeId, dependencyTypeId),
           );
 
           initialContext.addPropertyType(type);
@@ -155,12 +156,13 @@ export const traverseAndCollateSchemas = async (
               constrainsLinksOnEntityTypes,
               inheritsFromEntityTypes,
             ],
-            (dependentUrl) => traversalContext.encounter(typeUrl, dependentUrl),
+            (dependencyTypeId) =>
+              traversalContext.encounter(typeId, dependencyTypeId),
           );
 
           initialContext.addEntityType(type);
         } else {
-          throw new Error(`Unexpected type, was it malformed? URL: ${typeUrl}`);
+          throw new Error(`Unexpected type, was it malformed? URL: ${typeId}`);
         }
       }),
     );
