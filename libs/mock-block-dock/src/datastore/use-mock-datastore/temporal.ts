@@ -57,7 +57,7 @@ const readonlyErrorReturn: {
 export const useMockDatastore = (
   initialData: MockData<true>,
   readonly?: boolean,
-  simulateLatency?: { min: number; max: number },
+  simulateDatastoreLatency?: { min: number; max: number },
 ): MockDatastore => {
   const mockDataSubgraph = useMockDataToSubgraph(initialData);
   const [graph, setGraph] = useDefaultState(mockDataSubgraph);
@@ -100,7 +100,7 @@ export const useMockDatastore = (
         };
       },
       [graph],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   const createEntity: GraphEmbedderMessageCallbacks["createEntity"] =
@@ -169,7 +169,7 @@ export const useMockDatastore = (
         });
       },
       [readonly, setGraph],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   const getEntity: GraphEmbedderMessageCallbacks["getEntity"] =
@@ -213,7 +213,7 @@ export const useMockDatastore = (
         return { data: entitySubgraph };
       },
       [graph],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   const updateEntity: GraphEmbedderMessageCallbacks["updateEntity"] =
@@ -367,7 +367,7 @@ export const useMockDatastore = (
         });
       },
       [readonly, setGraph],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   const deleteEntity: GraphEmbedderMessageCallbacks["deleteEntity"] =
@@ -406,7 +406,7 @@ export const useMockDatastore = (
         });
       },
       [setGraph, readonly],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   const queryEntityTypes: GraphEmbedderMessageCallbacks["queryEntityTypes"] =
@@ -422,7 +422,7 @@ export const useMockDatastore = (
         };
       },
       [],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   const getEntityType: GraphEmbedderMessageCallbacks["getEntityType"] =
@@ -452,7 +452,7 @@ export const useMockDatastore = (
         }
       },
       [],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   const getPropertyType: GraphEmbedderMessageCallbacks["getPropertyType"] =
@@ -468,7 +468,7 @@ export const useMockDatastore = (
         };
       },
       [],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   const queryPropertyTypes: GraphEmbedderMessageCallbacks["queryPropertyTypes"] =
@@ -484,7 +484,7 @@ export const useMockDatastore = (
         };
       },
       [],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   const getDataType: GraphEmbedderMessageCallbacks["getDataType"] =
@@ -500,7 +500,7 @@ export const useMockDatastore = (
         };
       },
       [],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   const queryDataTypes: GraphEmbedderMessageCallbacks["queryDataTypes"] =
@@ -516,7 +516,7 @@ export const useMockDatastore = (
         };
       },
       [],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   /** @todo - Reimplement linkedQueries */
@@ -784,7 +784,7 @@ export const useMockDatastore = (
         return Promise.resolve({ data: newEntity as RemoteFileEntity });
       },
       [createEntity, readonly],
-      simulateLatency,
+      simulateDatastoreLatency,
     );
 
   return {

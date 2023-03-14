@@ -55,7 +55,7 @@ const DevApp = () => {
       initialData={{
         initialEntities: [testEntity],
       }}
-      simulateLatency={{
+      simulateDatastoreLatency={{
         // configure this to adjust the range of artificial latency (in ms)
         min: 50,
         max: 200,

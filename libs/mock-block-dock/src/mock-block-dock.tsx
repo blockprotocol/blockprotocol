@@ -70,7 +70,7 @@ type MockBlockDockProps<Temporal extends boolean> = {
     name: string;
     protocol: string;
   };
-  simulateLatency?: { min: number; max: number };
+  simulateDatastoreLatency?: { min: number; max: number };
 };
 
 const MockBlockDockNonTemporal: FunctionComponent<
@@ -86,7 +86,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
   initialData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks: serviceModuleCallbacksFromProps,
-  simulateLatency,
+  simulateDatastoreLatency,
 }: Omit<MockBlockDockProps<false>, "temporal">) => {
   const {
     blockEntityRecordId,
@@ -99,7 +99,7 @@ const MockBlockDockNonTemporal: FunctionComponent<
     blockEntityRecordId: initialBlockEntityRecordId,
     initialData: initialData as InitialData<false>,
     readonly: !!initialReadonly,
-    simulateLatency,
+    simulateDatastoreLatency,
   });
 
   const [debugMode, setDebugMode] = useDefaultState<boolean>(initialDebug);
@@ -338,7 +338,7 @@ const MockBlockDockTemporal: FunctionComponent<
   initialData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks: serviceModuleCallbacksFromProps,
-  simulateLatency,
+  simulateDatastoreLatency,
 }: Omit<MockBlockDockProps<true>, "temporal">) => {
   const {
     blockEntityRecordId,
@@ -351,7 +351,7 @@ const MockBlockDockTemporal: FunctionComponent<
     blockEntityRecordId: initialBlockEntityRecordId,
     initialData: initialData as InitialData<true>,
     readonly: !!initialReadonly,
-    simulateLatency,
+    simulateDatastoreLatency,
   });
 
   const [debugMode, setDebugMode] = useDefaultState<boolean>(initialDebug);
@@ -595,7 +595,7 @@ const MockBlockDockTemporal: FunctionComponent<
  * @param [props.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [props.readonly=false] whether the block should display in readonly mode or not
  * @param [props.serviceModuleCallbacks] overrides the default service module callbacks
- * @param {{min: number, max: number}} [props.simulateLatency] simulate latency in responses where each delay is randomly chosen from the supplied range
+ * @param {{min: number, max: number}} [props.simulateDatastoreLatency] simulate latency in responses where each delay is randomly chosen from the supplied range
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   Temporal extends boolean,
@@ -611,7 +611,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   initialData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks,
-  simulateLatency,
+  simulateDatastoreLatency,
 }: MockBlockDockProps<Temporal>) => {
   return temporal ? (
     <MockBlockDockTemporal
@@ -625,7 +625,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       initialData={initialData as InitialData<true>}
       readonly={initialReadonly}
       serviceModuleCallbacks={serviceModuleCallbacks}
-      simulateLatency={simulateLatency}
+      simulateDatastoreLatency={simulateDatastoreLatency}
     />
   ) : (
     <MockBlockDockNonTemporal
@@ -639,7 +639,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       initialData={initialData}
       readonly={initialReadonly}
       serviceModuleCallbacks={serviceModuleCallbacks}
-      simulateLatency={simulateLatency}
+      simulateDatastoreLatency={simulateDatastoreLatency}
     />
   );
 };
