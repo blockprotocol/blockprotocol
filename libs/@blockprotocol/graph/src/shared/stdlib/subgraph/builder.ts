@@ -184,35 +184,12 @@ export const inferSubgraphEdges = <Temporal extends boolean>(
       },
       [baseId, revisionObject],
     ) => {
-      const revisionIds = typedKeys(revisionObject);
-      let firstEntry = null;
-      if (revisionIds[0] && revisionIds[0] in revisionObject) {
-        firstEntry = revisionObject[revisionIds[0]];
-      }
-
-      const newVertexIds = revisionIds.map((revisionId) => ({
-        baseId,
-        revisionId,
-      }));
-
-      switch (firstEntry?.kind) {
-        case "dataType":
-          acc.dataTypeVertexIds.push(...newVertexIds);
-          break;
-        case "propertyType":
-          acc.propertyTypeVertexIds.push(...newVertexIds);
-          break;
-        case "entityType":
-          acc.entityTypeVertexIds.push(...newVertexIds);
-          break;
-        case "entity":
-          acc.entityVertexIds.push(...newVertexIds);
-          break;
-        default:
-          throw new Error(
-            `Internal implementation error, unexpected vertex: ${firstEntry}`,
-          );
-      }
+      typedEntries(revisionObject).forEach(([revisionId, vertex]) => {
+        acc[`${vertex.kind}VertexIds`].push({
+          baseId,
+          revisionId,
+        });
+      });
 
       return acc;
     },
