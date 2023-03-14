@@ -29,7 +29,7 @@ export const CustomElementLoader: FunctionComponent<
    * This may break elements that rely on being defined with a specific tag.
    */
   while (existingCustomElement && existingCustomElement !== elementClass) {
-    tagName = `${tagName}${i}`;
+    tagName = `${originalTagName}${i}`;
     existingCustomElement = customElements.get(tagName);
     i++;
   }
