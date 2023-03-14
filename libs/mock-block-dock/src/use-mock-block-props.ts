@@ -37,6 +37,7 @@ export type MockBlockHookArgs<Temporal extends boolean> = {
   initialData?: InitialData<Temporal>;
   includeDefaultMockData?: boolean;
   readonly: boolean;
+  simulateDatastoreLatency?: { min: number; max: number };
 };
 
 export type MockBlockHookResult<Temporal extends boolean> = {
@@ -68,6 +69,7 @@ const defaultMockData = initialMockData<false>(undefined);
  * @param [args.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
  * @param [args.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
  * @param [args.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param {{min: number, max: number}} [args.simulateDatastoreLatency] simulate latency in responses to datastore-related requests, where each delay is randomly chosen from the supplied range
  */
 export const useMockBlockPropsNonTemporal = (
   args: MockBlockHookArgs<false>,
@@ -109,7 +111,11 @@ export const useMockBlockPropsNonTemporal = (
 
   const [readonly, setReadonly] = useDefaultState<boolean>(args.readonly);
 
-  const mockDatastore = useMockDatastoreNonTemporal(mockData, readonly);
+  const mockDatastore = useMockDatastoreNonTemporal(
+    mockData,
+    readonly,
+    args.simulateDatastoreLatency,
+  );
 
   return {
     blockEntityRecordId: entityRecordIdOfEntityForBlock,
@@ -136,6 +142,7 @@ const defaultTemporalMockData = initialMockData<true>(
  * @param [args.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
  * @param [args.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
  * @param [args.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param {{min: number, max: number}} [args.simulateDatastoreLatency] simulate latency in responses to datastore-related requests, where each delay is randomly chosen from the supplied range
  */
 export const useMockBlockPropsTemporal = (
   args: MockBlockHookArgs<true>,
@@ -186,7 +193,11 @@ export const useMockBlockPropsTemporal = (
 
   const [readonly, setReadonly] = useDefaultState<boolean>(args.readonly);
 
-  const mockDatastore = useMockDatastoreTemporal(mockData, readonly);
+  const mockDatastore = useMockDatastoreTemporal(
+    mockData,
+    readonly,
+    args.simulateDatastoreLatency,
+  );
 
   return {
     blockEntityRecordId: entityRecordIdOfEntityForBlock,

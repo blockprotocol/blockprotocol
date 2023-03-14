@@ -56,9 +56,14 @@
             includeDefaultMockData
             blockEntityRecordId=${blockEntity.metadata.recordId}
             debug
+            simulateDatastoreLatency=${{
+              min: 100,
+              max: 200,
+            }}
           />
         `;
         // `includeDefaultMockData` seeds the datastore with sample entities and links, remove it to start with just the contents of `initialData`
+        // modify `simulateDatastoreLatency` above to adjust the range of artificial latency in responses to datastore-related requests  (in ms)
         // remove 'debug' above to start with the debug UI minimised. You can also toggle it in the UI
         // hideDebugToggle <- add 'hideDebugToggle' to disable the debug UI entirely
         // readonly <- add this above to start your block in readonly mode. You can also toggle it in the UI

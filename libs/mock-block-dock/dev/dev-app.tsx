@@ -159,6 +159,7 @@ const DevApp: FunctionComponent = () => {
         }}
         includeDefaultMockData
         temporal={false}
+        simulateDatastoreLatency={{ min: 50, max: 200 }}
       />
     </>
   );
