@@ -595,7 +595,7 @@ const MockBlockDockTemporal: FunctionComponent<
  * @param [props.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [props.readonly=false] whether the block should display in readonly mode or not
  * @param [props.serviceModuleCallbacks] overrides the default service module callbacks
- * @param {{min: number, max: number}} [props.simulateDatastoreLatency] simulate latency in responses where each delay is randomly chosen from the supplied range
+ * @param {{min: number, max: number}} [props.simulateDatastoreLatency] simulate latency in responses to datastore-related requests, where each delay is randomly chosen from the supplied range
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   Temporal extends boolean,
