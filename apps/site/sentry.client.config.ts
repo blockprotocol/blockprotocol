@@ -8,7 +8,7 @@ Sentry.init({
   dsn,
   enabled: !!dsn,
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? "unset",
-  integrations: [new Sentry.Replay({ stickySession: true })],
+  integrations: [new Sentry.Replay({ stickySession: false })],
   replaysOnErrorSampleRate: 1,
   replaysSessionSampleRate: parseFloat(
     process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SESSION_SAMPLE_RATE ?? "0",

@@ -85,6 +85,7 @@ Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Disc
 <!-- The latest release should be found here, and older ones moved to changelog.txt -->
 
 = 0.0.3 =
+* Add support for ChatGPT blocks
 * Notification when using unsupported database version
 * Fix rich text rendering
 * Icon for block category
@@ -93,7 +94,7 @@ Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Disc
 == Upgrade Notice ==
 
 = 0.0.3 =
-Upgrade for improved text rendering in Block Protocol blocks
+Upgrade for ChatGPT support and improved text rendering in Block Protocol blocks
 
 <!--
 = 1.0 =

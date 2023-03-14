@@ -119,7 +119,10 @@ test("API key page should generate a valid key", async ({
   expect(response1.status()).toBe(401);
   expect(await response1.json()).toEqual({
     errors: [
-      { msg: "A valid API key must be provided in a 'x-api-key' header." },
+      {
+        message: "A valid API key must be provided in a 'x-api-key' header.",
+        msg: "A valid API key must be provided in a 'x-api-key' header.",
+      },
     ],
   });
 
@@ -128,7 +131,12 @@ test("API key page should generate a valid key", async ({
   });
   expect(response2.status()).toBe(401);
   expect(await response2.json()).toEqual({
-    errors: [{ msg: "API key has been revoked." }],
+    errors: [
+      {
+        message: "API key has been revoked.",
+        msg: "API key has been revoked.",
+      },
+    ],
   });
 
   const response3 = await request.get("/api/blocks", {
@@ -136,7 +144,12 @@ test("API key page should generate a valid key", async ({
   });
   expect(response3.status()).toBe(401);
   expect(await response3.json()).toEqual({
-    errors: [{ msg: "API key does not match the expected format." }],
+    errors: [
+      {
+        message: "API key does not match the expected format.",
+        msg: "API key does not match the expected format.",
+      },
+    ],
   });
 
   const response4 = await request.get("/api/blocks", {
@@ -147,7 +160,7 @@ test("API key page should generate a valid key", async ({
   });
   expect(response4.status()).toBe(401);
   expect(await response4.json()).toEqual({
-    errors: [{ msg: "Invalid API key." }],
+    errors: [{ message: "Invalid API key.", msg: "Invalid API key." }],
   });
 
   const response5 = await request.get("/api/blocks", {

@@ -1083,10 +1083,10 @@
     "@blockprotocol/core" "0.1.0"
     "@blockprotocol/graph" "0.1.0"
 
-"@blockprotocol/service@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/service/-/service-0.1.0.tgz#d9aaa3b1694ee4a6184aa48b3a10e67042d89b52"
-  integrity sha512-5H73nuBDKewIpstSPaqqdRKTpbMIFNEGI6q5pBGbfnDgAHiH9bVSIz1uiDobtApKRrwwbRTpku42j9Cw+7VqLg==
+"@blockprotocol/service@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/service/-/service-0.1.1.tgz#8513255b94af747e52cde70288d75cbfa2a53ffd"
+  integrity sha512-9N5A0adwLTKNDwy29/xnWzmWTyig5YyVBgBw9ydHazJZAlfZZWQfgsWGgOw3J8dSIaqTfv5U/LvvaUa4wxeL3g==
   dependencies:
     "@blockprotocol/core" "0.1.0"
 

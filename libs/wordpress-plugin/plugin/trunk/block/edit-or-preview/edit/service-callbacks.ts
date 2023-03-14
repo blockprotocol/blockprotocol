@@ -60,7 +60,7 @@ export const callService = async ({
         url: billingUrl,
         label: "Upgrade",
       });
-      errorMessage = `You have exceeded your monthly free API calls for ${providerName} ${methodName} requests. Please upgrade your Block Protocol account to make more API calls this month.`;
+      errorMessage = `You have exceeded your monthly free API calls for this ${providerName} service. Please upgrade your Block Protocol account to use this service again, this month.`;
     }
 
     dispatch("core/notices").createNotice("error", errorMessage, {
@@ -89,6 +89,13 @@ export const constructServiceModuleCallbacks =
         callService({
           providerName: "openai",
           methodName: "createImage",
+          data,
+        }),
+
+      openaiCompleteChat: async ({ data }) =>
+        callService({
+          providerName: "openai",
+          methodName: "completeChat",
           data,
         }),
 
