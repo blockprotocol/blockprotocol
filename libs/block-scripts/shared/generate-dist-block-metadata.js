@@ -38,14 +38,9 @@ export const generateDistBlockMetadata = async (extra) => {
     variants,
     ...blockprotocol,
     ...extra,
-    /*
-     * @todo - deprecate support for the old `blockprotocol.schema` definition and migrate to only supporting
-     *   `blockprotocol.codegen.targets` instead.
-     */
-    schema:
-      Object.values(blockprotocol.codegen.targets).find((sources) =>
-        sources.find((source) => source.blockEntity),
-      )?.sourceTypeId ?? blockprotocol.schema,
+    schema: Object.values(blockprotocol.codegen.targets).find((sources) =>
+      sources.find((source) => source.blockEntity),
+    )?.sourceTypeId,
   };
 
   return writeFormattedJson(
