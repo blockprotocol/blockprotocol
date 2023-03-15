@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { CollapseIcon, ExpandIcon } from "../../icons";
+import { CollapseIcon, ExpandIcon } from "../../../icons";
 
 type BlockModalButtonProps = {
   setBlockModalOpen: (setBlockCallback: (oldValue: boolean) => boolean) => void;

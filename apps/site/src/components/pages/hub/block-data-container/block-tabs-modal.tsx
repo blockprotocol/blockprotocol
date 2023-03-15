@@ -1,10 +1,10 @@
 import { Box, Modal } from "@mui/material";
 import { FunctionComponent } from "react";
 
+import { BlockExampleGraph, BlockSchema } from "../hub-utils";
 import { BlockDataTabPanels } from "./block-data-tab-panels";
 import { BlockDataTabs } from "./block-data-tabs";
 import { BlockModalButton } from "./block-modal-button";
-import { BlockExampleGraph, BlockSchema } from "./hub-utils";
 
 interface BlockTabsModalProps {
   open: boolean;

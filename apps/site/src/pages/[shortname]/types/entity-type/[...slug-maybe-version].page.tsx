@@ -12,7 +12,7 @@ import { NextPage } from "next";
 import NextError from "next/error";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { tw } from "twind";
 
 import { LinkIcon } from "../../../../components/icons";
@@ -36,6 +36,23 @@ type EntityTypePageQueryParams = {
 
 const EntityTypePage: NextPage = () => {
   const router = useRouter();
+  const isDraft = !!router.query.draft;
+
+  const draftEntityType = useMemo(() => {
+    if (router.query.draft) {
+      const entityType = JSON.parse(
+        Buffer.from(
+          decodeURIComponent(router.query.draft.toString()),
+          "base64",
+        ).toString("ascii"),
+      );
+
+      // @todo add validation
+      return entityType as EntityTypeWithMetadata;
+    } else {
+      return null;
+    }
+  }, [router.query.draft]);
 
   const { user } = useUser();
   const { shortname } = router.query as EntityTypePageQueryParams;
@@ -44,6 +61,14 @@ const EntityTypePage: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [entityTypeState, setEntityTypeState] =
     useState<EntityTypeState | null>(null);
+
+  if (isDraft && draftEntityType && !entityTypeState) {
+    setEntityTypeState({
+      entityType: draftEntityType,
+      latestVersion: draftEntityType,
+    });
+    setIsLoading(false);
+  }
 
   const { entityType, latestVersion } = entityTypeState ?? {};
 
@@ -71,28 +96,58 @@ const EntityTypePage: NextPage = () => {
 
     const existingSchema = entityType.schema;
 
-    const { data: responseData, error: responseError } =
-      await apiClient.updateEntityType({
-        versionedUrl: entityType.schema.$id,
-        schema: {
-          ...existingSchema,
-          links: newPartialSchema.links ?? existingSchema.links ?? {},
-          properties:
-            newPartialSchema.properties ?? existingSchema.properties ?? {},
-          required: newPartialSchema.required ?? existingSchema.required ?? [],
-        },
+    const nextSchema = {
+      ...existingSchema,
+      links: newPartialSchema.links ?? existingSchema.links ?? {},
+      properties:
+        newPartialSchema.properties ?? existingSchema.properties ?? {},
+      required: newPartialSchema.required ?? existingSchema.required ?? [],
+    };
+
+    if (isDraft) {
+      const {
+        $schema: _,
+        $id: __,
+        kind: ___,
+        type: ____,
+        ...partial
+      } = nextSchema;
+
+      const { data: responseData, error: responseError } =
+        await apiClient.createEntityType({
+          schema: partial,
+        });
+
+      if (!responseData) {
+        throw new Error(
+          responseError?.message || "Unknown error creating entity type",
+        );
+      }
+
+      setEntityType({
+        entityType: responseData.entityType,
+        latestVersion: responseData.entityType,
       });
 
-    if (!responseData) {
-      throw new Error(
-        responseError?.message || "Unknown error updating entity type",
-      );
-    }
+      void router.replace(responseData.entityType.schema.$id);
+    } else {
+      const { data: responseData, error: responseError } =
+        await apiClient.updateEntityType({
+          versionedUrl: entityType.schema.$id,
+          schema: nextSchema,
+        });
 
-    setEntityType({
-      entityType: responseData.entityType,
-      latestVersion: responseData.entityType,
-    });
+      if (!responseData) {
+        throw new Error(
+          responseError?.message || "Unknown error updating entity type",
+        );
+      }
+
+      setEntityType({
+        entityType: responseData.entityType,
+        latestVersion: responseData.entityType,
+      });
+    }
   };
 
   // Handle fetching of types on initial load (subsequent updates in form submission)
@@ -108,6 +163,10 @@ const EntityTypePage: NextPage = () => {
     }
 
     const initialEntityTypeFetch = async () => {
+      if (isDraft || !router.isReady) {
+        return;
+      }
+
       const [requestedEntityTypeVersion, latestEntityTypeVersion] =
         await fetchEntityType(pageUrl);
 
@@ -135,7 +194,12 @@ const EntityTypePage: NextPage = () => {
     };
 
     void initialEntityTypeFetch();
-  }, [entityType?.metadata.recordId.baseUrl, router, setEntityType]);
+  }, [
+    entityType?.metadata.recordId.baseUrl,
+    isDraft,
+    router.isReady,
+    setEntityType,
+  ]);
 
   if (isLoading || !shortname) {
     // @todo proper loading state
@@ -172,6 +236,7 @@ const EntityTypePage: NextPage = () => {
           <EntityTypeEditBar
             currentVersion={currentVersionNumber}
             reset={reset}
+            isDraft={isDraft}
           />
           <Container
             sx={{
@@ -214,7 +279,11 @@ const EntityTypePage: NextPage = () => {
                   component="span"
                   marginLeft={1}
                 >
-                  v{entityType.metadata.recordId.version}
+                  {isDraft ? (
+                    <em>(draft)</em>
+                  ) : (
+                    <>v{entityType.metadata.recordId.version}</>
+                  )}
                 </Typography>
                 {!isLatest && (
                   <Link

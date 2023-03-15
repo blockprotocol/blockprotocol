@@ -1,3 +1,7 @@
+import {
+  ExternalServiceMethod200Response,
+  ExternalServiceMethodRequest,
+} from "@local/internal-api-client";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import axiosRetry from "axios-retry";
 import { ValidationError } from "express-validator";
@@ -159,6 +163,11 @@ export const apiClient = {
   get,
   post,
   put,
+  externalServiceMethod: (requestData: ExternalServiceMethodRequest) =>
+    apiClient.post<
+      ExternalServiceMethodRequest,
+      ExternalServiceMethod200Response
+    >("external-service-method", requestData),
   generateApiKey: (requestData: ApiGenerateApiKeyBody) =>
     apiClient.post<ApiGenerateApiKeyBody, ApiGenerateApiKeyResponse>(
       "me/generate-api-key",

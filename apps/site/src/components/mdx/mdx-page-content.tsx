@@ -48,7 +48,12 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
         (heading) => heading.anchor === anchor,
       );
 
-      const previousRoute = sessionStorage.getItem("previousRoute");
+      let previousRoute;
+      try {
+        previousRoute = window.sessionStorage.getItem("previousRoute");
+      } catch {
+        // sessionStorage is not available
+      }
 
       const shouldScrollToAnchor =
         // if anchor is empty and we haven't scrolled, prevent it

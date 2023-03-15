@@ -31,6 +31,10 @@ export const mustBeDefined = <T>(x: T | undefined, message?: string): T => {
   return x;
 };
 
+export const randomNumberFromRange = (min: number, max: number) => {
+  return Math.random() * (max - min) + min;
+};
+
 // @todo deduplicate this and libs/@blockprotocol/graph/src/internal/mutate-subgraph/is-equal.ts
 // https://gist.github.com/jsjain/a2ba5d40f20e19f734a53c0aad937fbb
 export const isEqual = (first: any, second: any): boolean => {

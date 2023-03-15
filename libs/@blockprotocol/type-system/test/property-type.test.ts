@@ -200,6 +200,7 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
       reason: "InvalidVersionedUrl",
       inner: {
         reason: "AdditionalEndContent",
+        inner: ".4",
       },
     },
   ],
