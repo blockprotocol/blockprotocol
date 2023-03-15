@@ -38,9 +38,7 @@ export const generateDistBlockMetadata = async (extra) => {
     variants,
     ...blockprotocol,
     ...extra,
-    schema: Object.values(blockprotocol.codegen.targets).find((sources) =>
-      sources.find((source) => source.blockEntity),
-    )?.sourceTypeId,
+    schema: blockprotocol.blockEntityType,
   };
 
   return writeFormattedJson(

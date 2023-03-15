@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "block-scripts build",
-    "codegen": "block-scripts codegen | xargs -I {} yarn prettier --write {}",
+    "codegen": "set -o pipefail; block-scripts codegen | xargs -I {} yarn prettier --write {}",
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
@@ -66,13 +66,13 @@
     "image": "public/block-preview.png",
     "name": "block-template-react",
     "protocol": "0.3",
+    "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
     "codegen": {
       "outputFolder": "src/types/generated",
       "targets": {
-        "thing.ts": [
+        "block-entity.ts": [
           {
-            "sourceTypeId": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
-            "blockEntity": true
+            "blockEntityType": true
           }
         ]
       }

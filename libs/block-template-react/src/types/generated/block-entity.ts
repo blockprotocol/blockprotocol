@@ -4,10 +4,6 @@
 
 import { Entity } from "@blockprotocol/graph";
 
-export type BlockEntity = Thing;
-
-export type BlockEntityOutgoingLinkAndTarget = ThingOutgoingLinkAndTarget;
-
 /**
  * A word or set of words by which something is known, addressed, or referred to.
  */

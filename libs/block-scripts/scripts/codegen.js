@@ -13,7 +13,7 @@ const script = async () => {
   const packageJsonPath = path.resolve(blockRootDirPath, "./package.json");
 
   const {
-    blockprotocol: { codegen: codegenParams },
+    blockprotocol: { blockEntityType, codegen: codegenParams },
   } = await fs.readJson(packageJsonPath);
 
   if (!codegenParams) {
@@ -25,6 +25,42 @@ const script = async () => {
     process.exit(1);
   }
 
+  // For block author ergonomics, we only require them to define their block entity type in one place.
+  // As such, we loop through the codegen parameters and replace the `"blockEntityType": true` placeholder with the
+  // `blockEntityType` field. We do this recursively and naively as we want to benefit from the Codegen validation
+  // function, so we can't be sure of the structure right now.
+  const replaceBlockEntityTypePlaceholder = (obj) => {
+    if (obj instanceof Array) {
+      for (let i = 0; i < obj.length; i++) {
+        replaceBlockEntityTypePlaceholder(obj[i]);
+      }
+    } else if (obj instanceof Object) {
+      for (const prop in obj) {
+        if (Object.hasOwn(obj, prop)) {
+          if (prop === "blockEntityType" && obj[prop] === true) {
+            if (!blockEntityType) {
+              console.error(
+                chalk.red(
+                  "to generate code for the block entity type, package.json must contain a 'blockEntityType' key in 'blockprotocol' object",
+                ),
+              );
+              process.exit(1);
+            }
+            // eslint-disable-next-line no-param-reassign
+            obj.sourceTypeId = blockEntityType;
+            // eslint-disable-next-line no-param-reassign
+            delete obj[prop];
+          } else {
+            replaceBlockEntityTypePlaceholder(obj[prop]);
+          }
+        }
+      }
+    }
+    return obj;
+  };
+
+  replaceBlockEntityTypePlaceholder(codegenParams);
+
   const { errors } = validateCodegenParameters(codegenParams) ?? {};
 
   if (errors && errors.length > 0) {
@@ -34,19 +70,19 @@ const script = async () => {
     process.exit(1);
   }
 
-  const blockEntityDefinitions = [];
-  for (const sources of Object.values(codegenParams.targets)) {
+  const filesWithBlockEntityDefinitions = [];
+  for (const [fileName, sources] of Object.entries(codegenParams.targets)) {
     for (const source of sources) {
       if (source.blockEntity) {
-        blockEntityDefinitions.push(source.sourceTypeId);
+        filesWithBlockEntityDefinitions.push(fileName);
       }
     }
   }
 
-  if (blockEntityDefinitions.length > 1) {
+  if (filesWithBlockEntityDefinitions.length > 1) {
     console.error(
       chalk.red(
-        `codegen parameters are invalid: only one type can be defined as the \`blockEntity\`. Found multiple: [${blockEntityDefinitions.join(
+        `codegen parameters are invalid: only one set of type can be generated for the \`blockEntityType\`. Found definitions in multiple files: [${filesWithBlockEntityDefinitions.join(
           ", ",
         )}]`,
       ),
