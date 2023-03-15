@@ -25,7 +25,7 @@ Once you have created the type representing the data your block needs, copy its 
 
 1.  Update the `blockprotocol` metadata object in package.json:
 
-- set `schema` to the URL of the entity type you created in the previous step
+- set `blockEntityType` to the URL of the entity type you created in the previous step
 - change the default `tagName` under `blockType` to the tag for your element
 - optionally update additional fields which will be used to identify and describe the block when published:
   - `displayName`: a friendly display name
@@ -35,7 +35,7 @@ Once you have created the type representing the data your block needs, copy its 
   - `name`: a slugified name for your block (which may differ to the package `name` in package.json)
     - this may either be in the format `slug` or `@namespace/slug` where `namespace` is your blockprotocol.org username
 
-1.  Run `yarn schema` to automatically generate TypeScript types from your block's entity type / `schema`
+1.  Run `yarn codegen` to automatically generate TypeScript types from your block's entity type (you can modify the `codegen` field to generate code for other types as well)
 
 ## Step four: implement your block's logic and UI
 
