@@ -75,14 +75,13 @@ export const DocsContent: FunctionComponent<DocsPageProps> = ({
   const parents = currentPage ? getParentPages(pages, currentPage) : null;
 
   return (
-    <Box display="flex" alignItems="flex-start">
+    <Box display="flex" alignItems="flex-start" gap={7.75}>
       <Sidebar
         isSsrSafe={false}
         pages={pages}
         appendices={appendices}
         sx={(sxTheme) => ({
           flexGrow: 0,
-          marginRight: "62px",
           p: 1.5,
           [sxTheme.breakpoints.down("md")]: { display: "none" },
         })}
@@ -93,6 +92,7 @@ export const DocsContent: FunctionComponent<DocsPageProps> = ({
           marginTop: { xs: 5, md: 8 },
           width: "inherit",
           maxWidth: "100%",
+          minWidth: 0,
         }}
       >
         {title ? (
