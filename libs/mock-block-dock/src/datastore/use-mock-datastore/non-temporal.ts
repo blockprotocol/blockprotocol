@@ -15,7 +15,10 @@ import {
   addEntityVerticesToSubgraphByMutation,
   inferEntityEdgesInSubgraphByMutation,
 } from "@blockprotocol/graph/internal";
-import { getEntityRevision } from "@blockprotocol/graph/stdlib";
+import {
+  getEntityRevision,
+  inferSubgraphEdges,
+} from "@blockprotocol/graph/stdlib";
 import {
   GetEntityData as GetEntityDataTemporal,
   QueryEntitiesData as QueryEntitiesDataTemporal,
@@ -30,6 +33,7 @@ import { getEntity as getEntityImpl } from "../hook-implementations/entity/get-e
 import { queryEntities as queryEntitiesImpl } from "../hook-implementations/entity/query-entities";
 import { MockData } from "../mock-data";
 import { useMockDataToSubgraph } from "../use-mock-data-to-subgraph";
+import { waitForRandomLatency } from "./shared";
 
 export type MockDatastore = {
   graph: Subgraph;
@@ -59,9 +63,15 @@ const readonlyErrorReturn: {
 export const useMockDatastore = (
   initialData: MockData<false>,
   readonly?: boolean,
+  simulateDatastoreLatency?: { min: number; max: number },
 ): MockDatastore => {
   const mockDataSubgraph = useMockDataToSubgraph(initialData);
   const [graph, setGraph] = useDefaultState(mockDataSubgraph);
+  const waitForLatency = useCallback(
+    () => waitForRandomLatency(simulateDatastoreLatency),
+    [simulateDatastoreLatency],
+  );
+
   // const [linkedQueries, setLinkedQueries] = useDefaultState<
   //   MockDataStore["linkedQueryDefinitions"]
   // >(initialData.linkedQueryDefinitions);
@@ -69,6 +79,8 @@ export const useMockDatastore = (
   const queryEntities: GraphEmbedderMessageCallbacks["queryEntities"] =
     useCallback(
       async ({ data }) => {
+        await waitForLatency();
+
         if (!data) {
           return {
             errors: [
@@ -94,12 +106,14 @@ export const useMockDatastore = (
 
         return { data: queryEntitiesImpl<false>(data, graph) };
       },
-      [graph],
+      [graph, waitForLatency],
     );
 
   const createEntity: GraphEmbedderMessageCallbacks["createEntity"] =
     useCallback(
       async ({ data }) => {
+        await waitForLatency();
+
         if (readonly) {
           return readonlyErrorReturn;
         }
@@ -148,11 +162,13 @@ export const useMockDatastore = (
           });
         });
       },
-      [readonly, setGraph],
+      [readonly, setGraph, waitForLatency],
     );
 
   const getEntity: GraphEmbedderMessageCallbacks["getEntity"] = useCallback(
     async ({ data }) => {
+      await waitForLatency();
+
       if (!data) {
         return {
           errors: [
@@ -190,12 +206,14 @@ export const useMockDatastore = (
       }
       return { data: entitySubgraph };
     },
-    [graph],
+    [graph, waitForLatency],
   );
 
   const updateEntity: GraphEmbedderMessageCallbacks["updateEntity"] =
     useCallback(
       async ({ data }) => {
+        await waitForLatency();
+
         if (readonly) {
           return readonlyErrorReturn;
         }
@@ -297,18 +315,25 @@ export const useMockDatastore = (
               Object.keys(newSubgraph.vertices[entityId]!).pop()!
             ]!.inner = updatedEntity;
 
+            // Clear the subgraph edges in preparation for inferring edges again
+            newSubgraph.edges = {};
+
+            inferSubgraphEdges(newSubgraph);
+
             resolve({ data: updatedEntity });
 
             return newSubgraph;
           });
         });
       },
-      [readonly, setGraph],
+      [readonly, setGraph, waitForLatency],
     );
 
   const deleteEntity: GraphEmbedderMessageCallbacks["deleteEntity"] =
     useCallback(
       async ({ data }) => {
+        await waitForLatency();
+
         if (readonly) {
           return readonlyErrorReturn;
         }
@@ -410,73 +435,95 @@ export const useMockDatastore = (
           });
         });
       },
-      [setGraph, readonly],
+      [setGraph, readonly, waitForLatency],
     );
 
   const queryEntityTypes: GraphEmbedderMessageCallbacks["queryEntityTypes"] =
-    useCallback(async ({ data: _ }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `queryEntityTypes is not currently supported`,
-          },
-        ],
-      };
-    }, []);
+    useCallback(
+      async ({ data: _ }) => {
+        await waitForLatency();
 
-  const getEntityType: GraphEmbedderMessageCallbacks["getEntityType"] =
-    useCallback(async ({ data }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `Retrieving Entity Types is not currently supported`,
-          },
-        ],
-      };
-
-      /** @todo - interim solution: retrieve entity type from URL */
-      /** @todo - implement entity type resolution */
-      // eslint-disable-next-line no-unreachable -- currently unimplemented
-      if (!data) {
         return {
           errors: [
             {
-              code: "INVALID_INPUT",
-              message: "getEntityType requires 'data' input",
+              code: "NOT_IMPLEMENTED",
+              message: `queryEntityTypes is not currently supported`,
             },
           ],
         };
-      }
-    }, []);
+      },
+      [waitForLatency],
+    );
+
+  const getEntityType: GraphEmbedderMessageCallbacks["getEntityType"] =
+    useCallback(
+      async ({ data }) => {
+        await waitForLatency();
+
+        return {
+          errors: [
+            {
+              code: "NOT_IMPLEMENTED",
+              message: `Retrieving Entity Types is not currently supported`,
+            },
+          ],
+        };
+
+        /** @todo - interim solution: retrieve entity type from URL */
+        /** @todo - implement entity type resolution */
+        // eslint-disable-next-line no-unreachable -- currently unimplemented
+        if (!data) {
+          return {
+            errors: [
+              {
+                code: "INVALID_INPUT",
+                message: "getEntityType requires 'data' input",
+              },
+            ],
+          };
+        }
+      },
+      [waitForLatency],
+    );
 
   const getPropertyType: GraphEmbedderMessageCallbacks["getPropertyType"] =
-    useCallback(async ({ data: _ }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `getPropertyType is not currently supported`,
-          },
-        ],
-      };
-    }, []);
+    useCallback(
+      async ({ data: _ }) => {
+        await waitForLatency();
+
+        return {
+          errors: [
+            {
+              code: "NOT_IMPLEMENTED",
+              message: `getPropertyType is not currently supported`,
+            },
+          ],
+        };
+      },
+      [waitForLatency],
+    );
 
   const queryPropertyTypes: GraphEmbedderMessageCallbacks["queryPropertyTypes"] =
-    useCallback(async ({ data: _ }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `queryPropertyTypes is not currently supported`,
-          },
-        ],
-      };
-    }, []);
+    useCallback(
+      async ({ data: _ }) => {
+        await waitForLatency();
+
+        return {
+          errors: [
+            {
+              code: "NOT_IMPLEMENTED",
+              message: `queryPropertyTypes is not currently supported`,
+            },
+          ],
+        };
+      },
+      [waitForLatency],
+    );
 
   const getDataType: GraphEmbedderMessageCallbacks["getDataType"] = useCallback(
     async ({ data: _ }) => {
+      await waitForLatency();
+
       return {
         errors: [
           {
@@ -486,25 +533,32 @@ export const useMockDatastore = (
         ],
       };
     },
-    [],
+    [waitForLatency],
   );
 
   const queryDataTypes: GraphEmbedderMessageCallbacks["queryDataTypes"] =
-    useCallback(async ({ data: _ }) => {
-      return {
-        errors: [
-          {
-            code: "NOT_IMPLEMENTED",
-            message: `queryDataTypes is not currently supported`,
-          },
-        ],
-      };
-    }, []);
+    useCallback(
+      async ({ data: _ }) => {
+        await waitForLatency();
+
+        return {
+          errors: [
+            {
+              code: "NOT_IMPLEMENTED",
+              message: `queryDataTypes is not currently supported`,
+            },
+          ],
+        };
+      },
+      [waitForLatency],
+    );
 
   /** @todo - Reimplement linkedQueries */
   // const createLinkedQuery: GraphEmbedderMessageCallbacks["createLinkedQuery"] =
   //   useCallback(
   //     async ({ data }) => {
+  //       await waitForLatency();
+  //
   //       if (readonly) {
   //         return readonlyErrorReturn;
   //       }
@@ -526,15 +580,17 @@ export const useMockDatastore = (
   //       setLinkedQueries((currentLinkedQueries) => [
   //         ...currentLinkedQueries,
   //         newLinkedQuery,
-  //       ]);
+  //       ], simulateDatastoreLatency);
   //       return { data: newLinkedQuery };
   //     },
-  //     [setLinkedQueries, readonly],
+  //     [setLinkedQueries, readonly, waitForLatency],
   //   );
   //
   // const getLinkedQuery: GraphEmbedderMessageCallbacks["getLinkedQuery"] =
   //   useCallback(
   //     async ({ data }) => {
+  //       await waitForLatency();
+  //
   //       if (!data) {
   //         return {
   //           errors: [
@@ -566,12 +622,14 @@ export const useMockDatastore = (
   //         },
   //       };
   //     },
-  //     [entities, linkedQueries],
+  //     [entities, linkedQueries, waitForLatency],
   //   );
   //
   // const updateLinkedQuery: GraphEmbedderMessageCallbacks["updateLinkedQuery"] =
   //   useCallback(
   //     async ({ data }) => {
+  //       await waitForLatency();
+  //
   //       if (readonly) {
   //         return readonlyErrorReturn;
   //       }
@@ -617,12 +675,14 @@ export const useMockDatastore = (
   //         });
   //       });
   //     },
-  //     [setLinkedQueries, readonly],
+  //     [setLinkedQueries, readonly, waitForLatency],
   //   );
   //
   // const deleteLinkedQuery: GraphEmbedderMessageCallbacks["deleteLinkedQuery"] =
   //   useCallback(
   //     async ({ data }) => {
+  //       await waitForLatency();
+  //
   //       if (readonly) {
   //         return readonlyErrorReturn;
   //       }
@@ -664,11 +724,13 @@ export const useMockDatastore = (
   //         });
   //       });
   //     },
-  //     [setLinkedQueries, readonly],
+  //     [setLinkedQueries, readonly, waitForLatency],
   //   );
 
   const uploadFile: GraphEmbedderMessageCallbacks["uploadFile"] = useCallback(
     async ({ data }) => {
+      await waitForLatency();
+
       if (readonly) {
         return readonlyErrorReturn;
       }
@@ -764,7 +826,7 @@ export const useMockDatastore = (
       }
       return Promise.resolve({ data: newEntity as RemoteFileEntity });
     },
-    [createEntity, readonly],
+    [createEntity, readonly, waitForLatency],
   );
 
   return {

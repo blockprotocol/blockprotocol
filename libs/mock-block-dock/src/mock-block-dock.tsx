@@ -58,6 +58,7 @@ type MockBlockDockProps<Temporal extends boolean> = {
   debug?: boolean;
   hideDebugToggle?: boolean;
   initialData?: InitialData<Temporal>;
+  includeDefaultMockData?: boolean;
   readonly?: boolean;
   serviceModuleCallbacks?: ServiceEmbedderMessageCallbacks;
   blockInfo?: {
@@ -70,6 +71,7 @@ type MockBlockDockProps<Temporal extends boolean> = {
     name: string;
     protocol: string;
   };
+  simulateDatastoreLatency?: { min: number; max: number };
 };
 
 const MockBlockDockNonTemporal: FunctionComponent<
@@ -83,8 +85,10 @@ const MockBlockDockNonTemporal: FunctionComponent<
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
+  includeDefaultMockData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks: serviceModuleCallbacksFromProps,
+  simulateDatastoreLatency,
 }: Omit<MockBlockDockProps<false>, "temporal">) => {
   const {
     blockEntityRecordId,
@@ -96,7 +100,9 @@ const MockBlockDockNonTemporal: FunctionComponent<
   } = useMockBlockPropsNonTemporal({
     blockEntityRecordId: initialBlockEntityRecordId,
     initialData: initialData as InitialData<false>,
+    includeDefaultMockData,
     readonly: !!initialReadonly,
+    simulateDatastoreLatency,
   });
 
   const [debugMode, setDebugMode] = useDefaultState<boolean>(initialDebug);
@@ -333,8 +339,10 @@ const MockBlockDockTemporal: FunctionComponent<
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
+  includeDefaultMockData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks: serviceModuleCallbacksFromProps,
+  simulateDatastoreLatency,
 }: Omit<MockBlockDockProps<true>, "temporal">) => {
   const {
     blockEntityRecordId,
@@ -346,7 +354,9 @@ const MockBlockDockTemporal: FunctionComponent<
   } = useMockBlockPropsTemporal({
     blockEntityRecordId: initialBlockEntityRecordId,
     initialData: initialData as InitialData<true>,
+    includeDefaultMockData,
     readonly: !!initialReadonly,
+    simulateDatastoreLatency,
   });
 
   const [debugMode, setDebugMode] = useDefaultState<boolean>(initialDebug);
@@ -588,8 +598,10 @@ const MockBlockDockTemporal: FunctionComponent<
  * @param [props.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
  * @param [props.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
  * @param [props.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param [props.includeDefaultMockData] whether to populate the datastore with mock data provided by MBD (in addition to the user-provided data through the `initialData` prop)
  * @param [props.readonly=false] whether the block should display in readonly mode or not
  * @param [props.serviceModuleCallbacks] overrides the default service module callbacks
+ * @param {{min: number, max: number}} [props.simulateDatastoreLatency] simulate latency in responses to datastore-related requests, where each delay is randomly chosen from the supplied range
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   Temporal extends boolean,
@@ -603,8 +615,10 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialData,
+  includeDefaultMockData,
   readonly: initialReadonly = false,
   serviceModuleCallbacks,
+  simulateDatastoreLatency,
 }: MockBlockDockProps<Temporal>) => {
   return temporal ? (
     <MockBlockDockTemporal
@@ -616,8 +630,10 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData as InitialData<true>}
+      includeDefaultMockData={includeDefaultMockData}
       readonly={initialReadonly}
       serviceModuleCallbacks={serviceModuleCallbacks}
+      simulateDatastoreLatency={simulateDatastoreLatency}
     />
   ) : (
     <MockBlockDockNonTemporal
@@ -629,8 +645,10 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps<boolean>> = <
       debug={initialDebug}
       hideDebugToggle={hideDebugToggle}
       initialData={initialData}
+      includeDefaultMockData={includeDefaultMockData}
       readonly={initialReadonly}
       serviceModuleCallbacks={serviceModuleCallbacks}
+      simulateDatastoreLatency={simulateDatastoreLatency}
     />
   );
 };

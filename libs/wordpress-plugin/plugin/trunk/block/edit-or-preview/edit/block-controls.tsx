@@ -52,6 +52,28 @@ const EntityEditor = lazy(() => import("./block-controls/entity-editor"));
 
 export const CONTROLS_LOADING_IMAGE_HEIGHT = "400px";
 
+/**
+ * The entity editor for these blocks is hidden as editing their properties directly
+ * may cause unexpected behavior.
+ *
+ * @todo allow blocks to specify which properties in their schema should be editable
+ *   from outside the block itself
+ */
+const schemasToHideEditorFor = [
+  "https://blockprotocol.org/@hash/types/entity-type/ai-image-block/",
+  "https://blockprotocol.org/@hash/types/entity-type/ai-text-block/",
+  "https://blockprotocol.org/@hash/types/entity-type/address-block/",
+  "https://blockprotocol.org/@hash/types/entity-type/callout-block/",
+  "https://blockprotocol.org/@hash/types/entity-type/heading-block/",
+  "https://blockprotocol.org/@hash/types/entity-type/paragraph-block/",
+  "https://blockprotocol.org/@hash/types/entity-type/shuffle-block/v/2",
+  "https://blockprotocol.org/@tldraw/types/entity-type/drawing-block/",
+];
+
+const shouldEditorBeHidden = (schema: VersionedUrl) => {
+  return schemasToHideEditorFor.find((option) => schema.startsWith(option));
+};
+
 export const CustomBlockControls = ({
   entityId,
   entitySubgraph,
@@ -113,15 +135,19 @@ export const CustomBlockControls = ({
           />
         </PanelBody>
         <PanelBody>
-          <Suspense
-            fallback={<LoadingImage height={CONTROLS_LOADING_IMAGE_HEIGHT} />}
-          >
-            <EntityEditor
-              entityProperties={entityProperties}
-              entityTypeId={entityTypeId}
-              updateProperties={updateEntityProperties}
-            />
-          </Suspense>
+          {shouldEditorBeHidden(entityTypeId) ? (
+            <p>Please use the controls in the block to update its data.</p>
+          ) : (
+            <Suspense
+              fallback={<LoadingImage height={CONTROLS_LOADING_IMAGE_HEIGHT} />}
+            >
+              <EntityEditor
+                entityProperties={entityProperties}
+                entityTypeId={entityTypeId}
+                updateProperties={updateEntityProperties}
+              />
+            </Suspense>
+          )}
         </PanelBody>
       </InspectorControls>
     </>
