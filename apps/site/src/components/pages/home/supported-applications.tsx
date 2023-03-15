@@ -410,6 +410,8 @@ export const SupportedApplications = () => {
                 </Link>{" "}
                 to extend the functionality of the apps you use, and enjoy
                 high-quality, consistent interfaces across applications.
+                Use services like **OpenAI** without your own subscription,
+                for free, including in apps that don't yet support them.
               </Typography>
 
               <Stack flexDirection="row" gap={2}>
