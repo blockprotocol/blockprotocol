@@ -29,7 +29,7 @@ const individualOutgoingLinkAndTargetDefinition = (
   const identifier = `${sourceName}${linkIdentifier}Links`;
 
   const targetUnion = targetIdentifiers.join(" | ");
-  const compiledContents = `export type ${identifier} = { linkEntity: ${linkIdentifier}; target: ${targetUnion} }`;
+  const compiledContents = `export type ${identifier} = { linkEntity: ${linkIdentifier}; rightEntity: ${targetUnion} }`;
   return {
     identifier,
     compiledContents,
@@ -76,7 +76,7 @@ const linkAndTargetsUnionDefinition = (
   entityName: string,
   linkAndTargetIdentifiers: string[],
 ): IdentifierToCompiledDefinition => {
-  const identifier = `${entityName}OutgoingLinksAndTargets`;
+  const identifier = `${entityName}OutgoingLinkAndTarget`;
   const unionItems =
     linkAndTargetIdentifiers.length > 0
       ? linkAndTargetIdentifiers.join(" | ")

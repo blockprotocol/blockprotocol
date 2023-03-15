@@ -14,7 +14,7 @@ import { useRef } from "react";
  * any of these ensure that your styling does not affect anything outside your block.
  */
 import styles from "./base.module.scss";
-import { BlockEntity, BlockEntityOutgoingLinksAndTargets } from "./types/thing";
+import { BlockEntity, BlockEntityOutgoingLinkAndTarget } from "./types/thing";
 
 /**
  * This function is to help illustrate a property being changed when the button is pressed.
@@ -56,7 +56,7 @@ export const App: BlockComponent<BlockEntity> = ({
 
   const { rootEntity: blockEntity } = useEntitySubgraph<
     BlockEntity,
-    BlockEntityOutgoingLinksAndTargets[]
+    BlockEntityOutgoingLinkAndTarget[]
   >(blockEntitySubgraph);
 
   const entityId = blockEntity.metadata.recordId.entityId;

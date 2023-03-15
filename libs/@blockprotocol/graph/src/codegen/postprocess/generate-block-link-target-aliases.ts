@@ -19,7 +19,7 @@ export const generateBlockLinkTargetAliases = (
       const typeName = entityDefinitionNameForEntityType(type.title);
 
       /* @todo - make this more robust */
-      const entityLinkAndTargetsIdentifier = `${typeName}OutgoingLinksAndTargets`;
+      const entityLinkAndTargetsIdentifier = `${typeName}OutgoingLinkAndTarget`;
 
       if (
         typedValues(context.filesToDefinedIdentifiers).find(
@@ -31,7 +31,7 @@ export const generateBlockLinkTargetAliases = (
           `Generating block entity links and targets alias ${typeName} for file ${fileName}`,
         );
 
-        const identifier = "BlockEntityOutgoingLinksAndTargets";
+        const identifier = "BlockEntityOutgoingLinkAndTarget";
 
         const blockEntityLinkAndTargetTypesFragment = `\nexport type ${identifier} = ${entityLinkAndTargetsIdentifier}\n`;
 

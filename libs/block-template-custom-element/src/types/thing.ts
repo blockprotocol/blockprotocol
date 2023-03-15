@@ -6,7 +6,7 @@ import { Entity } from "@blockprotocol/graph";
 
 export type BlockEntity = Thing;
 
-export type BlockEntityOutgoingLinksAndTargets = ThingOutgoingLinksAndTargets;
+export type BlockEntityOutgoingLinkAndTarget = ThingOutgoingLinkAndTarget;
 
 /**
  * A word or set of words by which something is known, addressed, or referred to.
@@ -20,7 +20,7 @@ export type Text = string;
 
 export type Thing = Entity<ThingProperties>;
 
-export type ThingOutgoingLinksAndTargets = never;
+export type ThingOutgoingLinkAndTarget = never;
 
 export type ThingOutgoingLinksByLinkEntityTypeId = {};
 
