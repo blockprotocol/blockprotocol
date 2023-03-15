@@ -55,6 +55,7 @@ const DevApp = () => {
       initialData={{
         initialEntities: [testEntity],
       }}
+      includeDefaultMockData // this seeds the datastore with sample entities and links, remove this to start with just the contents of `initialData`
       simulateDatastoreLatency={{
         // configure this to adjust the range of artificial latency in responses to datastore-related requests (in ms)
         min: 50,
