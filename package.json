@@ -24,7 +24,6 @@
     "fix:prettier": "prettier --cache --write --ignore-unknown .",
     "fix:yarn-deduplicate": "yarn install && yarn-deduplicate --strategy=fewer && yarn install",
     "lint": "npm-run-all --continue-on-error \"lint:*\"",
-    "lint:changeset": "changeset status",
     "lint:dependency-version-consistency": "check-dependency-version-consistency .",
     "lint:eslint": "turbo run --continue lint:eslint",
     "lint:knip": "knip --no-exit-code",
