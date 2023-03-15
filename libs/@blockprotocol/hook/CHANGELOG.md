@@ -1,5 +1,15 @@
 # @blockprotocol/hook
 
+## 0.1.1
+
+### Patch Changes
+
+- [#1147](https://github.com/blockprotocol/blockprotocol/pull/1147) [`065e6ac4`](https://github.com/blockprotocol/blockprotocol/commit/065e6ac4b3722b633fb3996b5482f61a9f5b2b69) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add example of Hook Module usage in custom element blocks
+
+- Updated dependencies [[`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2), [`9a98416d`](https://github.com/blockprotocol/blockprotocol/commit/9a98416df8756c26037a4559affd421f80f84547)]:
+  - @blockprotocol/core@0.1.1
+  - @blockprotocol/graph@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes
