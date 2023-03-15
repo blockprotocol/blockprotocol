@@ -80,6 +80,7 @@ const Settings: AuthWallPageContent = () => {
               maxWidth: sidebarMaxWidth,
               background: "transparent",
               borderRightWidth: 0,
+              m: 1.5,
               marginLeft: 0,
             }}
             pages={settingsPanels.map(({ title, slug }) => ({
