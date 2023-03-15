@@ -19,7 +19,7 @@ const script = async () => {
   if (!codegenParams) {
     console.error(
       chalk.red(
-        "package.json must contain a 'codegen' key in 'blockprotocol' object",
+        "package.json must contain a 'codegen' key in 'blockprotocol' object, see https://blockprotocol.org/docs/working-with-types#typescript-types-for-entities for more details",
       ),
     );
     process.exit(1);
