@@ -59,6 +59,8 @@ Within `trunk` there are:
 
 ### Publishing
 
+`@TODO`: automate this process
+
 #### Prerequisites
 
 1.  Choose the appropriate semver version number (e.g. `0.1.0`), and then make sure it is reflected in the following places in `plugin/trunk/`:
@@ -68,7 +70,7 @@ Within `trunk` there are:
 - `Stable tag` in `readme.txt`
 - also update `version` in `package.json` (next to this README)
 
-1.  Updating the changelog:
+2.  Updating the changelog:
 
 - in `readme.txt`:
   - **replace** the current entry under `Changelog`
@@ -76,7 +78,7 @@ Within `trunk` there are:
 - in `changelog.txt`:
   - **copy** the new `Changelog` entry from `readme.txt` to the top
 
-1.  Commit these changes, have them reviewed and merged to `main`
+3.  Commit these changes, have them reviewed and merged to `main`
 
 #### Uploading to the WordPress plugin directory
 
