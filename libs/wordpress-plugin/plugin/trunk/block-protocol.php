@@ -397,12 +397,13 @@ add_filter("plugin_action_links_$block_protocol_plugin_name", 'block_protocol_ad
  */
 function block_protocol_plugin_activate()
 {
-	add_option('block_protocol_view_count', 0);
+	if(!is_numeric(get_option('block_protocol_view_count'))){
+		add_option('block_protocol_view_count', 0);
+	}
 
 	block_protocol_page_data(
 		'activated',
 		array_merge(
-			block_protocol_aggregate_numbers(),
 			block_protocol_report_version_info(),
 			['userCount' => count_users()['total_users']]
 		)
@@ -416,10 +417,16 @@ register_activation_hook(__FILE__, 'block_protocol_plugin_activate');
  */
 function block_protocol_plugin_deactivate()
 {
-	block_protocol_debounced_view_data(true);
+	block_protocol_page_data(
+		'deactivated', 
+		array_merge(
+			block_protocol_report_version_info(),
+			['userCount' => count_users()['total_users']]
+		)
+	);
 
-	block_protocol_page_data('deactivated', array_merge(block_protocol_aggregate_numbers(), [
-		'userCount' => count_users()['total_users'],
-	]));
+	if(block_protocol_database_available()) {
+		block_protocol_debounced_view_data(true);
+	}
 }
 register_deactivation_hook(__FILE__, 'block_protocol_plugin_deactivate');
