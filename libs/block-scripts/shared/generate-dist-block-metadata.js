@@ -35,21 +35,18 @@ export const generateDistBlockMetadata = async (extra) => {
     author,
     license,
     externals: peerDependencies,
-    schema: "block-schema.json",
     variants,
     ...blockprotocol,
     ...extra,
+    /*
+     * @todo - deprecate support for the old `blockprotocol.schema` definition and migrate to only supporting
+     *   `blockprotocol.codegen.targets` instead.
+     */
+    schema:
+      Object.values(blockprotocol.codegen.targets).find((sources) =>
+        sources.find((source) => source.blockEntity),
+      )?.sourceTypeId ?? blockprotocol.schema,
   };
-
-  /* @todo - deprecate support for the old `schema` definitions and migrate to this being the primary implementation */
-  for (const sources of Object.values(blockprotocol.codegen.targets)) {
-    for (const source of sources) {
-      if (source.blockEntity) {
-        blockMetadata.schema = source.sourceTypeId;
-        break;
-      }
-    }
-  }
 
   return writeFormattedJson(
     path.resolve(blockDistDirPath, "block-metadata.json"),
