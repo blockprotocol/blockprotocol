@@ -19,13 +19,13 @@
   },
   "scripts": {
     "build": "block-scripts build",
+    "codegen": "block-scripts codegen && yarn format",
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
     "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/cleanup-before-publishing.ts",
-    "schema": "block-scripts codegen",
     "serve": "block-scripts serve"
   },
   "prettier": {
@@ -66,6 +66,16 @@
     "image": "public/block-preview.png",
     "name": "block-template-react",
     "protocol": "0.3",
-    "schema": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2"
+    "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
+    "codegen": {
+      "outputFolder": "src/types/generated",
+      "targets": {
+        "block-entity.ts": [
+          {
+            "blockEntityType": true
+          }
+        ]
+      }
+    }
   }
 }

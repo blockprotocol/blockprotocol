@@ -73,9 +73,11 @@ declared entity type. We call such an entity the 'block entity'.
 See [working with types](/docs/working-with-types) for more information on the type system, or jump straight to
 [your dashboard](/dashboard) to create a type.
 
-Once you have created the type representing the data your block needs, copy its URL, and update the `schema` property
-in the `blockprotocol` object in `package.json`. In TypeScript block templates, you can then run `yarn schema` to
-regenerate the types for your block. When using the HTML template, you need to adjust the types manually.
+Once you have created the type representing the data your block needs, copy its URL, and:
+
+- for blocks from the `html` template, update the `schema` property in the `block-metadata.json`
+- for blocks made from the `react` and `custom-element` template, update the `blockEntityType` property in the `blockprotocol` object in `package.json`
+  - blocks made from these templates also support generation of TypeScript types, which can be ran with `yarn codegen`. See the [relevant section in working with types](/docs/working-with-types#typescript-types-for-entities) for more information.
 
 ## Lifecycle of a block
 
@@ -99,8 +101,10 @@ such as reading and writing data within the embedding application.
 
 The starter blocks created by `create-block-app` implement a simple example of this:
 
-1.  the `Thing` entity type referred to in `blockprotocol.schema` in `package.json`, for which types are found in `src/types.gen.ts`,
-    defines the properties expected for the block entity.
+1.  the `Thing` entity type referred to in `blockprotocol.blockEntityType` in `package.json` (or `schema` in `block-metadata.json`) defines the properties expected for the block entity.
+
+- `react` and `custom-element` blocks generate TypeScript types from this entity type, using the configuration set in the `codegen` object in `package.json`
+
 1.  mock values for the block entity are passed to `MockBlockDock` in `dev.tsx`, including the `properties` it expects
 1.  the block receives the data for `blockEntitySubgraph` ([described below](#using-the-graph-module)):
 
@@ -243,7 +247,7 @@ graphModule.createEntity({
 ```
 
 You can define the type of relationships between your block entity and other entities when [defining its type](/docs/working-with-types),
-and the `entityTypeId` of the relevant relationship will then be available in the generated types (after running `yarn schema`)/
+and, in `react` and `custom-element` blocks, the `entityTypeId` of the relevant relationship will then be available in the generated types (after running `yarn codegen`)/
 
 Any entities linked directly from the block will appear in the `blockEntitySubgraph` property.
 

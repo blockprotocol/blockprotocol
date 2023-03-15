@@ -34,14 +34,9 @@
       "import": "./dist/es/main-temporal.js"
     },
     "./codegen": {
-      "types": "./dist/cjs/non-temporal/codegen.d.ts",
-      "require": "./dist/cjs/codegen-non-temporal.cjs",
-      "import": "./dist/es/codegen-non-temporal.js"
-    },
-    "./temporal/codegen": {
-      "types": "./dist/cjs/temporal/codegen.d.ts",
-      "require": "./dist/cjs/codegen-temporal.cjs",
-      "import": "./dist/es/codegen-temporal.js"
+      "types": "./dist/cjs/codegen.d.ts",
+      "require": "./dist/cjs/codegen.cjs",
+      "import": "./dist/es/codegen.js"
     },
     "./custom-element": {
       "types": "./dist/cjs/non-temporal/custom-element.d.ts",
@@ -95,10 +90,7 @@
         "./dist/cjs/temporal/main.d.ts"
       ],
       "codegen": [
-        "./dist/cjs/non-temporal/codegen.d.ts"
-      ],
-      "temporal/codegen": [
-        "./dist/cjs/temporal/codegen.d.ts"
+        "./dist/cjs/codegen.d.ts"
       ],
       "custom-element": [
         "./dist/cjs/non-temporal/custom-element.d.ts"
@@ -144,7 +136,8 @@
     "ajv-formats": "^2.1.1",
     "json-schema-to-typescript": "^11.0.2",
     "lit": "^2.4.1",
-    "node-fetch": "^3.3.0"
+    "node-fetch": "^3.3.0",
+    "typescript": "4.9.4"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
@@ -154,8 +147,7 @@
     "@rollup/plugin-typescript": "9.0.2",
     "eslint": "8.33.0",
     "rimraf": "^3.0.2",
-    "rollup": "3.5.1",
-    "typescript": "4.9.4"
+    "rollup": "3.5.1"
   },
   "peerDependencies": {
     "react": "^18.0.0"
