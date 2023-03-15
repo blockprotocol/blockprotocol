@@ -458,14 +458,29 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
         // rendering it on the server. We don't want a layout shift so we
         // still render the parent element on the server.
         renderSkeleton ? (
-          <Stack spacing={1} pt="4px">
-            {new Array(50).fill(0).map((_, idx) => (
-              <Skeleton
-                // eslint-disable-next-line react/no-array-index-key
-                key={idx}
-                variant="rectangular"
-                height={SIDEBAR_LINK_HEIGHT - 8}
-              />
+          <Stack spacing={1} pt="4px" alignItems="flex-end">
+            {pages.map(({ sections }, idx) => (
+              <>
+                <Skeleton
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={idx}
+                  variant="rectangular"
+                  height={SIDEBAR_LINK_HEIGHT - 8}
+                  width="100%"
+                />
+
+                {idx === 0
+                  ? sections?.map((_, subIdx) => (
+                      <Skeleton
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={`${idx}-${subIdx}`}
+                        variant="rectangular"
+                        height={SIDEBAR_LINK_HEIGHT - 8}
+                        width="90%"
+                      />
+                    ))
+                  : null}
+              </>
             ))}
           </Stack>
         ) : (
