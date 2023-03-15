@@ -117,10 +117,10 @@ This is consistent with the behavior of JSON schema semantics, whereby all rules
 
 ## Multiple supertypes
 
-Constraining type extension to only having a single parent would be a pretty major limitation for how expressive the system is.
+Constraining type extension to allow extending one type would be a pretty major limitation for how expressive the system is.
 As such, this proposal includes the specification of how to extend multiple types (this is generally referred to _multiple inheritance_).
 
-A type must allow extending multiple supertypes **if and only if** the supertypes can coexist. For supertypes to be able to coexist, their properties should either be disjoint, or overlap in a compatible manner.
+As such, we say that a type can extend multiple supertypes **if and only if** the supertypes can coexist. For supertypes to be able to coexist, their properties should either be disjoint, or overlap in a compatible manner.
 
 **An example of _disjoint_ properties**:
 
@@ -169,30 +169,40 @@ In this example, the array of `name`s on the `Superhero` type would not be compa
 
 ## The `additionalProperties` problem
 
-In the proposed [Versioning RFC](./0408-versioning-types.md) for the type system, having `{ "additionalProperties": false }` for all schemas is an assumption made for determining type compatibility, which means that any supertype will not validate against a subtype that adds properties if it receives all properties of a subtype instance. For example, if we supply the `Employee` instance from above to a `Person`, it will receive properties that are considered `additionalProperties` (the `occupation` property is not present on `Person`).
+As established in the [Versioning RFC](./0408-versioning-types.md) for the type system, having `{ "additionalProperties": false }` for all schemas is an assumption made for determining type compatibility.
+If we assume this for _any_ entity type, then we lose the ability for [_coercive subtyping_](https://en.wikipedia.org/wiki/Subtyping#Coercions).
+An instance that satisfies a given supertype will not validate against a subtype if that subtype adds additional properties.
+
+For example, if we supply the `Employee` instance from above to a `Person`, it will receive properties that are considered `additionalProperties` (the `occupation` property is not present on `Person`).
 
 The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping strictness in JSON Schemas.
 
-We propose slight modifications to how `{ "additionalProperties": true }` and `{ "unevaluatedProperties": false }` behave and may be used within our type extension system to let supertypes keep strictness while allowing composition. This modification is a semantic change and does not change any syntax.
+We propose slight modifications to how `{ "additionalProperties": true }` and `{ "unevaluatedProperties": false }` are used within our type extension system to let supertypes keep strictness while allowing composition. This modification refers to the implicit constraints that should be applied when validating types and instances, and should not affect syntax.
 
-Concrete examples of how JSON Schema breaks with these validation constraints are shown in the [Reference-level explanation](#problems-with-unevaluatedproperties).
+Concrete examples of the issues that arise with `additionalProperties` and `unevaluatedProperties` are shown in the [Reference-level explanation](#problems-with-additionalproperties-and-unevaluatedproperties).
 
 ## Defining extended entity types
 
 Extended types will be defined with conventional JSON Schema syntax: the `allOf` keyword. An entity type can extend another entity type by adding a versioned URL reference to the root-level `allOf` array.
-A [versioned URL](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0408-versioning-types.md#type-uris) is used so that subtypes aren't automatically updated (and potentially invalidated) when the supertype is updated.
+A [_versioned_ URL](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0408-versioning-types.md#type-uris) (as opposed to a base URL) is used so that subtypes aren't implicitly modified (and potentially invalidated) when the supertype is updated.
 
-As extended types can extend other extended types we must also make sure that there are no cycles within the type hierarchy, as it makes types difficult to resolve/reason about and could lead to unpredictable behavior.
+As extended types can extend other extended types we also make the conservative decision to disallow cycles within the type hierarchy for now.
+Although it is unclear if allowing it would definitely cause problems, cycles can make reasoning about type hierarchies difficult, and changing the decision later on would be a non-breaking change.
 
 ## Defining entity type duplication
 
-When looking for public types, if extending an entity type is insufficient, an alternative is to duplicate the type so that individual properties can be removed or overridden. Duplicated types become new complete, standalone types.
+When looking to create a new type which is based of existing types, if extending an entity type is insufficient, an alternative is to duplicate the type so that constraints can be removed or overridden. Duplicated types become new complete, standalone types.
 
-Type duplication, unlike extended types, does not imply that instances of the original type can be substituted by instances of the duplicated type because the types may be incompatible. A mapping may be used to persist some of the compatibility, but mapping is yet to be defined within the type system.
+Type duplication, unlike extended types, is not a concrete well-defined mechanism within the Type System.
+Instead, it is a guiding set of principles and behaviours which type-creating environments can support.
+
+**Duplication does not imply that instances of the original type can be substituted by instances of the duplicated type** because the types may be incompatible.
 
 ### Duplication strategy
 
-As outlined in the beginning, duplication can take place in many different ways for entity types. Since entity types can extend other entity types in this proposal, duplication can happen at different conceptual locations. As an example, if a user wanted to redefine an `Employee` that has the following type hierarchy:
+As alluded to earlier in the document, duplication can take place in many different ways for entity types. Since entity types can extend other entity types in this proposal, the need for duplication can arrive from differing points of that hierarchy.
+
+As an example, if a user wanted to modify an `Employee` entity type that has the following type hierarchy:
 
 ```txt
 name◄─────Being───┐
@@ -202,8 +212,12 @@ name◄─────Being───┐
    occupation◄───────────────┘
 ```
 
-where `Employee` is a subtype of `Person` which in turn is a subtype of `Being`. The three properties `name`, `age` and `occupation` would be present on `Employee` and considered all expanded properties for `Employee`.
-The user wants to change the `age` property to a `tenure` property through duplication. They would have to create a new subtype of `Being` with the desired changes:
+where `Employee` is a subtype of `Person` which in turn is a subtype of `Being`.
+
+The three properties `name`, `age` and `occupation` would be present on `Employee` and considered all expanded properties for `Employee`.
+The user wants to remove the `age` property and add a `tenure` property.
+To do so would involve modifying existing constraints, and thus could not be done through type extension.
+As such, they would have to create a new subtype of `Being` with the desired changes:
 
 ```txt
 name◄─────Being───┐
@@ -213,9 +227,12 @@ name◄─────Being───┐
    occupation◄────┘
 ```
 
-From the perspective of the user duplicating a type, the `Person` and `Employee` entity types were squashed together or "expanded" for duplication to have the desired effect. The `Being` supertype relation is still kept when changing a property on the `MyEmployee` duplicated type. But in this process, the `MyEmployee` entity type loses the ability to trivially be treated as a `Person`, as there is no subtyping relation with `Person` on the new `MyEmployee` duplicated type.
+From the perspective of the user duplicating a type, the `Person` and `Employee` entity types were squashed together or "expanded" for duplication to have the desired effect.
+The `Being` supertype relation is still kept when changing a property on the `MyEmployee` duplicated type.
+But in this process, the `MyEmployee` entity type loses the ability to trivially be treated as a `Person`, as there is no subtyping relation with `Person` on the new `MyEmployee` duplicated type.
 
-The duplication happened on the expanded type resulting in combining/expanding `Person` and `Employee`, but it would also have been possible to expand the entire type, getting rid of `Being`. This would have resulted in the following type hierarchy:
+The duplication happened on the expanded type resulting in combining/expanding `Person` and `Employee`, but it would also have been possible to expand the entire type, getting rid of `Being`.
+This would have resulted in the following type hierarchy:
 
 ```txt
       name◄────┐
@@ -318,7 +335,7 @@ and a _subtype_ `Employee`:
 }
 ```
 
-The two types do not share any properties, which establishes compatibility. It is possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
+The two types do not share any top-level defined constraints on properties or links, which establishes compatibility. It is possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
 For example, we may have the following `Employee` instance:
 
 ```json
@@ -469,12 +486,18 @@ and a _subtype_ `Employee`:
 }
 ```
 
-In this example, `Person` has an optional `name` property and `Employee` defines `name` as required. These are still compatible as it's possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
+In this example, `Person` has an optional `name` property and `Employee` defines `name` as required.
+These are still compatible as it's possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
 
-### Problems with `unevaluatedProperties`
+### Problems with `additionalProperties` and `unevaluatedProperties`
 
-`unevaluatedProperties` _almost_ provides the functionality we're after, but unfortunately it just barely misses. If supertypes themselves specify `{ "unevaluatedProperties": false }`, they are not able to be part of an `allOf` validator, as they will error out as soon as they see properties that are not part of the supertype itself.
+The intention of the type system is to strongly type the data, so that users of the system can benefit from strong guarantees about the shape of, and existence (or non-existence) of parts of the data.
+As such, entity types are intended to comprehensively describe data within entities of that type, which means we wish to disallow additional or untyped properties within them.
 
+In JSON schema this is generally achieved by setting `additionalProperties: false`, or `unevaluatedProperties: false`.
+Unfortunately, this causes problems when you start composing schemas (e.g. with entity type inheritance)
+
+If supertypes themselves specify one of these `{ "unevaluatedProperties": false }`, they are not able to be part of an `allOf` validator, as they will error out as soon as they see properties that are not part of the supertype itself.
 When composing schemas that all contain `{ "unevaluatedProperties": false }`, each schema will disallow any other properties which they do not define. Using the following JSON Schema as an example:
 
 ```json
@@ -512,13 +535,14 @@ Changing from `unevaluatedProperties` to `additionalProperties` results in error
 
 Both of these solutions for strict schemas would not be suitable for the type of expressiveness we want for type extension, unfortunately.
 
-The required behavior is that `unevaluatedProperties` should only validate at the top level of a type, allowing supertypes to validate `unevaluatedProperties` but defer checking if they're used within in subtype.
+The required behavior is that `unevaluatedProperties` should only apply to a "flattened" view of the schema, whereby all the constraints of the subtype and its supertypes are combined.
 
-### Redefining `unevaluatedProperties`
+### Defining an implicit `unevaluatedProperties`
 
-We're already implicitly defining `{ "additionalProperties": false }` in the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) for all schemas, this RFC will piggyback on that, and change the existing, implicit `additionalProperties` usage to `unevaluatedProperties` and slightly change its [vocabulary definition](https://json-schema.org/draft/2020-12/json-schema-core.html#name-unevaluatedproperties).
+We're already implicitly defining `{ "additionalProperties": false }` in the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) for all schemas, this RFC will piggyback on that, and change the existing, implicit `additionalProperties` usage to `unevaluatedProperties` change the conditions in which it is implied.
 
-The vocabulary change is that the `unevaluatedProperties` keyword will only be applicable at top-level schemas (i.e. subtypes or schemas that don't specify `allOf`), and ignored when present on a schema that resides in the `allOf` array. Instead of the default value being `{ "unevaluatedProperties": {} }`, the default value will be `{ "unevaluatedProperties": false }`. Together this makes it so that all supertypes will be able to compose, as their individual, implicit `unevaluatedProperties` values won't have any effect on validation and defer evaluation to the extending type (the subtype).
+Instead of applying it to every schema for an entity type, we suggest the constraint is implied at the top-level when validating data against a specific entity type.
+In other words, if you have a type `Employee` which extends `Person`, when you validate an entity of type `Employee` against the `Employee` type, the implicit `unevaluatedProperties` constraint will be implicitly inserted once, in the top-level of the `Employee` schema, and _not_ in the `Person` schema.
 
 Concretely, this means that for a free-standing type that doesn't extend any other type such as this `Person` type:
 
@@ -544,7 +568,9 @@ Concretely, this means that for a free-standing type that doesn't extend any oth
 }
 ```
 
-would implicitly have `{ "unevaluatedProperties": false }` set. In the case of the `Employee` type:
+would implicitly have `{ "unevaluatedProperties": false }` set at time of validation.
+
+In the case of the `Employee` type:
 
 ```json
 {
@@ -571,7 +597,7 @@ would implicitly have `{ "unevaluatedProperties": false }` set. In the case of t
 }
 ```
 
-the resolved schema residing at `{ "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }` would _not_ have `{ "unevaluatedProperties": false }` set, whereas the top-level entity type itself would have `{ "unevaluatedProperties": false }` set.
+the resolved schema residing at `{ "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }` would _not_ have `{ "unevaluatedProperties": false }` set at time of validation, whereas the top-level entity type itself would have `{ "unevaluatedProperties": false }` set at time of validation.
 
 ### Liskov substitution principle
 
