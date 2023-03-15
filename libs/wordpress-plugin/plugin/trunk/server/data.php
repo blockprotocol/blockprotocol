@@ -174,14 +174,11 @@ function block_protocol_sentry_has_other_config()
   // Check if sentry is already instantiated
   $client = \Sentry\SentrySdk::getCurrentHub()->getClient();
 
-  $different_dsn_set = $client->getOptions()->getDsn() != BLOCK_PROTOCOL_SENTRY_DSN ?: false;
+  $different_dsn_set = 
+    $client != null 
+    ? $client->getOptions()->getDsn() != BLOCK_PROTOCOL_SENTRY_DSN ?: false
+    : false;
 
-  if($client == null) {
-    // The get call creates a new hub for some reason, 
-    // we need to remove it if there is no client
-    \Sentry\SentrySdk::setCurrentHub(null);
-  } 
-  
   return $different_dsn_set;
 }
 
