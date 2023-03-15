@@ -94,8 +94,7 @@ function get_block_protocol_blocks()
 			'Content-Type' => 'application/json',
 			'X-Api-Key' => $api_key,
 			'Origin' => get_site_url(),
-		],
-		'timeout' => 10 // wait for potentially cold lambda warmup in development
+		]
 	];
 
 	$site_host = get_block_protocol_site_host();
