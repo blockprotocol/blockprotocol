@@ -1,4 +1,7 @@
 {
   "extends": "@local/tsconfig/dom+jsx.json",
-  "include": ["assets.d.ts", "src", "dev"]
+  "include": ["assets.d.ts", "dev", "src"],
+  "compilerOptions": {
+    "outDir": "dist"
+  }
 }
