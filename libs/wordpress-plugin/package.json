@@ -26,6 +26,9 @@
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit"
   },
+  "dependencies": {
+    "react-toastify": "9.1.1"
+  },
   "devDependencies": {
     "@apidevtools/json-schema-ref-parser": "9.1.2",
     "@blockprotocol/core": "0.1.0",

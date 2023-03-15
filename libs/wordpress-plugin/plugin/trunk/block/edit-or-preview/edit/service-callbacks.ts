@@ -1,21 +1,27 @@
 import { ServiceEmbedderMessageCallbacks } from "@blockprotocol/service";
 import apiFetch from "@wordpress/api-fetch";
-import { dispatch } from "@wordpress/data";
+
+import { ToastProps } from "./toast";
 
 type ServiceFunction =
   ServiceEmbedderMessageCallbacks[keyof ServiceEmbedderMessageCallbacks];
 
 const billingUrl = "https://blockprotocol.org/settings/billing";
 
-export const callService = async ({
-  providerName,
-  methodName,
-  data,
-}: {
-  providerName: string;
-  methodName: string;
-  data: Parameters<ServiceFunction>[0]["data"];
-}): Promise<{
+type DisplayToastFunction = (toastProps: ToastProps) => void;
+
+export const callService = async (
+  {
+    providerName,
+    methodName,
+    data,
+  }: {
+    providerName: string;
+    methodName: string;
+    data: Parameters<ServiceFunction>[0]["data"];
+  },
+  displayToast: DisplayToastFunction,
+): Promise<{
   data?: any;
   errors?: Awaited<ReturnType<ServiceFunction>>["errors"];
 }> => {
@@ -63,10 +69,11 @@ export const callService = async ({
       errorMessage = `You have exceeded your monthly free API calls for this ${providerName} service. Please upgrade your Block Protocol account to use this service again, this month.`;
     }
 
-    dispatch("core/notices").createNotice("error", errorMessage, {
-      isDismissible: true,
+    displayToast({
+      message: errorMessage,
       actions,
     });
+
     return {
       errors: [
         {
@@ -80,96 +87,130 @@ export const callService = async ({
   return apiResponse as any;
 };
 
-export const constructServiceModuleCallbacks =
-  (): ServiceEmbedderMessageCallbacks => {
-    return {
-      /** OpenAI */
+export const constructServiceModuleCallbacks = (
+  displayToast: (toastProps: ToastProps) => void,
+): ServiceEmbedderMessageCallbacks => {
+  return {
+    /** OpenAI */
 
-      openaiCreateImage: async ({ data }) =>
-        callService({
+    openaiCreateImage: async ({ data }) =>
+      callService(
+        {
           providerName: "openai",
           methodName: "createImage",
           data,
-        }),
+        },
+        displayToast,
+      ),
 
-      openaiCompleteChat: async ({ data }) =>
-        callService({
+    openaiCompleteChat: async ({ data }) =>
+      callService(
+        {
           providerName: "openai",
           methodName: "completeChat",
           data,
-        }),
+        },
+        displayToast,
+      ),
 
-      openaiCompleteText: async ({ data }) =>
-        callService({
+    openaiCompleteText: async ({ data }) =>
+      callService(
+        {
           providerName: "openai",
           methodName: "completeText",
           data,
-        }),
+        },
+        displayToast,
+      ),
 
-      /** Mapbox Geocoding API */
+    /** Mapbox Geocoding API */
 
-      mapboxForwardGeocoding: async ({ data }) =>
-        callService({
+    mapboxForwardGeocoding: async ({ data }) =>
+      callService(
+        {
           providerName: "mapbox",
           methodName: "forwardGeocoding",
           data,
-        }),
+        },
+        displayToast,
+      ),
 
-      mapboxReverseGeocoding: async ({ data }) =>
-        callService({
+    mapboxReverseGeocoding: async ({ data }) =>
+      callService(
+        {
           providerName: "mapbox",
           methodName: "reverseGeocoding",
           data,
-        }),
+        },
+        displayToast,
+      ),
 
-      /** Mapbox Directions API */
+    /** Mapbox Directions API */
 
-      mapboxRetrieveDirections: async ({ data }) =>
-        callService({
+    mapboxRetrieveDirections: async ({ data }) =>
+      callService(
+        {
           providerName: "mapbox",
           methodName: "retrieveDirections",
           data,
-        }),
+        },
+        displayToast,
+      ),
 
-      /** Mapbox Isochrone API */
+    /** Mapbox Isochrone API */
 
-      mapboxRetrieveIsochrones: async ({ data }) =>
-        callService({
+    mapboxRetrieveIsochrones: async ({ data }) =>
+      callService(
+        {
           providerName: "mapbox",
           methodName: "retrieveIsochrones",
           data,
-        }),
+        },
+        displayToast,
+      ),
 
-      /** Mapbox Autofill API */
+    /** Mapbox Autofill API */
 
-      mapboxSuggestAddress: async ({ data }) =>
-        callService({
+    mapboxSuggestAddress: async ({ data }) =>
+      callService(
+        {
           providerName: "mapbox",
           methodName: "suggestAddress",
           data,
-        }),
+        },
+        displayToast,
+      ),
 
-      mapboxRetrieveAddress: async ({ data }) =>
-        callService({
+    mapboxRetrieveAddress: async ({ data }) =>
+      callService(
+        {
           providerName: "mapbox",
           methodName: "retrieveAddress",
           data,
-        }),
+        },
+        displayToast,
+      ),
 
-      mapboxCanRetrieveAddress: async ({ data }) =>
-        callService({
+    mapboxCanRetrieveAddress: async ({ data }) =>
+      callService(
+        {
           providerName: "mapbox",
           methodName: "canRetrieveAddress",
           data,
-        }),
+        },
+        displayToast,
+      ),
 
-      /** Mapbox Static Map API */
+    /** Mapbox Static Map API */
 
-      mapboxRetrieveStaticMap: async ({ data }) =>
-        callService({
+    mapboxRetrieveStaticMap: async ({ data }) =>
+      callService(
+        {
           providerName: "mapbox",
           methodName: "retrieveStaticMap",
           data,
-        }),
-    };
+        },
+        displayToast,
+      ),
   };
+};

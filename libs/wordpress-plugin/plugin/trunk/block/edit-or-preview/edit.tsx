@@ -9,6 +9,7 @@ import { buildSubgraph } from "@blockprotocol/graph/stdlib";
 import { ServiceEmbedderMessageCallbacks } from "@blockprotocol/service";
 import { useBlockProps } from "@wordpress/block-editor";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 import {
   blockSubgraphResolveDepths,
@@ -24,6 +25,7 @@ import { BlockLoader } from "../shared/block-loader";
 import { CustomBlockControls } from "./edit/block-controls";
 import { LoadingImage } from "./edit/loading-image";
 import { constructServiceModuleCallbacks } from "./edit/service-callbacks";
+import { Toast, ToastProps } from "./edit/toast";
 
 type BlockProtocolBlockAttributes = {
   author: string;
@@ -51,6 +53,19 @@ export const Edit = ({
 
   const [entitySubgraph, setEntitySubgraph] =
     useState<Subgraph<EntityRootType> | null>(null);
+
+  const displayToast = useCallback(
+    (toastProps: ToastProps, options?: Parameters<typeof toast>[1]) => {
+      toast(<Toast {...toastProps} />, {
+        autoClose: false,
+        containerId: entityId,
+        position: toast.POSITION.BOTTOM_RIGHT,
+        type: toast.TYPE.ERROR,
+        ...options,
+      });
+    },
+    [entityId],
+  );
 
   // this represents the latest versions of blocks from the Block Protocol API
   // the page may contain older versions of blocks, so do not rely on all blocks being here
@@ -142,8 +157,11 @@ export const Edit = ({
   }, [entityId]);
 
   const serviceCallbacks = useMemo<ServiceEmbedderMessageCallbacks>(
-    () => constructServiceModuleCallbacks(),
-    [],
+    () =>
+      constructServiceModuleCallbacks((toastProps) =>
+        displayToast(toastProps, { toastId: "billing" }),
+      ),
+    [displayToast],
   );
 
   const graphCallbacks = useMemo<
@@ -332,6 +350,7 @@ export const Edit = ({
 
   return (
     <div {...blockProps} style={{ marginBottom: 30 }}>
+      <ToastContainer enableMultiContainer containerId={entityId} />
       <CustomBlockControls
         entityId={entityId}
         entityTypeId={entityTypeId as VersionedUrl} // @todo fix this in @blockprotocol/graph
