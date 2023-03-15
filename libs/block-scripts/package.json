@@ -40,6 +40,7 @@
     "copy-webpack-plugin": "10.2.4",
     "core-js": "^3.26.1",
     "css-loader": "^6.7.1",
+    "dotenv-webpack": "^8.0.1",
     "fs-extra": "^10.1.0",
     "html-webpack-plugin": "^5.5.0",
     "sass": "^1.52.3",
@@ -57,6 +58,7 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
+    "@types/dotenv-webpack": "^7.0.3",
     "@types/serve-handler": "^6.1.1",
     "@types/webpack-assets-manifest": "^5.1.0",
     "@types/webpack-bundle-analyzer": "^4.6.0",
