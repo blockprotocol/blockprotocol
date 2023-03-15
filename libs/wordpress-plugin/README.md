@@ -78,6 +78,8 @@ When running `composer`, you should use the minimum version of PHP that we suppo
 
 Our future plans include:
 
+- Support for local mirroring of block source (allow blocks to be downloaded and served locally, rather than from the CDN)
+- Integration of WordPress theme appearance variables with the forthcoming Þ Style Module, to ensure seamless integration of blocks into rendered websites
 - Tons more blocks
 - Allowing the use of existing data within your WordPress instance within blocks:
   - Exposing all WordPress _core_ entities as Þ types accessible to blocks (e.g. `Post`, `User`, etc.)
