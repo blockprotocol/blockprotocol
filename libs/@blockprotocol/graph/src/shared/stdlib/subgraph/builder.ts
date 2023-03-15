@@ -1,8 +1,14 @@
 import {
-  addDataTypesToSubgraphByMutation,
-  addEntitiesToSubgraphByMutation,
-  addEntityTypesToSubgraphByMutation,
-  addPropertyTypesToSubgraphByMutation,
+  inferDataTypeEdgesInSubgraphByMutation,
+  inferEntityEdgesInSubgraphByMutation,
+  inferEntityTypeEdgesInSubgraphByMutation,
+  inferPropertyTypeEdgesInSubgraphByMutation,
+} from "../../../internal/mutate-subgraph/edge.js";
+import {
+  addDataTypeVerticesToSubgraphByMutation,
+  addEntityTypeVerticesToSubgraphByMutation,
+  addEntityVerticesToSubgraphByMutation,
+  addPropertyTypeVerticesToSubgraphByMutation,
 } from "../../../internal/mutate-subgraph/element.js";
 import {
   DataTypeWithMetadata,
@@ -105,10 +111,27 @@ export const buildSubgraph = <Temporal extends boolean>(
       : {}),
   };
 
-  addDataTypesToSubgraphByMutation(subgraph, data.dataTypes);
-  addPropertyTypesToSubgraphByMutation(subgraph, data.propertyTypes);
-  addEntityTypesToSubgraphByMutation(subgraph, data.entityTypes);
-  addEntitiesToSubgraphByMutation(subgraph, data.entities);
+  const dataTypeVertexIds = addDataTypeVerticesToSubgraphByMutation(
+    subgraph,
+    data.dataTypes,
+  );
+  const propertyTypeVertexIds = addPropertyTypeVerticesToSubgraphByMutation(
+    subgraph,
+    data.propertyTypes,
+  );
+  const entityTypeVertexIds = addEntityTypeVerticesToSubgraphByMutation(
+    subgraph,
+    data.entityTypes,
+  );
+  const entityVertexIds = addEntityVerticesToSubgraphByMutation(
+    subgraph,
+    data.entities,
+  );
+
+  inferDataTypeEdgesInSubgraphByMutation(subgraph, dataTypeVertexIds);
+  inferPropertyTypeEdgesInSubgraphByMutation(subgraph, propertyTypeVertexIds);
+  inferEntityTypeEdgesInSubgraphByMutation(subgraph, entityTypeVertexIds);
+  inferEntityEdgesInSubgraphByMutation(subgraph, entityVertexIds);
 
   const missingRootVertexIds = [];
   for (const rootRecordId of rootRecordIds) {

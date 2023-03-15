@@ -38,7 +38,7 @@ const Partners: NextPage = () => {
             alignItems="center"
           >
             <Typography mb={2} variant="bpTitle">
-              Register an interest
+              Get in touch
             </Typography>
             <Typography
               textAlign="center"
@@ -46,9 +46,10 @@ const Partners: NextPage = () => {
               variant="bpSubtitle"
               sx={{ fontSize: 20, marginBottom: 2 }}
             >
-              If you’re working on an existing or upcoming block editor, or
-              would otherwise like to contribute to the new standard, fill in
-              some details below and we’ll be in touch.
+              If you need help with using the Block Protocol, if you’re working
+              on an existing or upcoming block editor, or would otherwise like
+              to contribute to the new standard, fill in some details below and
+              we’ll be in touch.
             </Typography>
             <Typography
               textAlign="center"
