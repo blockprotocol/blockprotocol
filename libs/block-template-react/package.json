@@ -67,7 +67,7 @@
     "name": "block-template-react",
     "protocol": "0.3",
     "codegen": {
-      "outputFolder": "src/types",
+      "outputFolder": "src/types/generated",
       "targets": {
         "thing.ts": [
           {

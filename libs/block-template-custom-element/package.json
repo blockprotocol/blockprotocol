@@ -65,7 +65,7 @@
     "name": "block-template-custom-element",
     "protocol": "0.3",
     "codegen": {
-      "outputFolder": "src/types",
+      "outputFolder": "src/types/generated",
       "targets": {
         "thing.ts": [
           {

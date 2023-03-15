@@ -57,7 +57,7 @@
     },
     "block-template-custom-element#codegen": {
       "dependsOn": ["^build"],
-      "outputs": ["src/types/**.ts"]
+      "outputs": ["src/types/generated/**.ts"]
     },
     "block-template-react#build": {
       "dependsOn": ["^build", "codegen"],
@@ -65,7 +65,7 @@
     },
     "block-template-react#codegen": {
       "dependsOn": ["^build"],
-      "outputs": ["src/types/**.ts"]
+      "outputs": ["src/types/generated/**.ts"]
     }
   }
 }
