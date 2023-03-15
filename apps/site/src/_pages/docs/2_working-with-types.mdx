@@ -69,11 +69,9 @@ curl https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2
 ### TypeScript types for entities
 
 Types within the Type System are representable within TypeScript, and as such it is possible to create TypeScript representations of entity types.
-There is a provided `codegen` utility in the graph module package which provides an implementation of such generation.
+There is a provided `codegen` utility in the `@blockprotocol/graph` package which provides an implementation of such generation.
 For relatively simple cases, a wrapper around this is exposed through `block-scripts` which is able to parse the metadata about your block and generate types for you.
 An example usage of this is included within the `react` and `custom-element` block templates.
-
-The `block-scripts codegen` utility is configured through the `codegen` object in a block's `package.json`.
 
 For `react` and `custom-element` blocks, the `codegen` object in `package.json` can be used to configure `block-scripts codegen`.
 This is setup by default within the templates, and can be ran with `yarn codegen`.
@@ -81,14 +79,13 @@ This is setup by default within the templates, and can be ran with `yarn codegen
 The `codegen` object has the following:
 
 - a field `outputFolder` which describes the folder which will contain the files with the generated types
-- **all contents of this folder are deleted when the codegen is run**
+  - **all contents of this folder are deleted when the codegen is run**
 - a field `targets` which is an object which is a mapping of files to the types that should be generated within them
-- keys of `targets` are the names of the files to be generated (e.g. `person.ts`)
-- values of `targets` are an array where the items are objects which satisfy the following:
-- contain the key `sourceTypeId` with a value of an ID of a type in the Type System (e.g. `https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2`), _or_
-- contain the key `blockEntityType` with value `true`
-- this says to generate types for the block entity type (given by the `blockEntityType` property in the `blockprotocol` object in `package.json`), alongside type aliases to identify it as such (e.g. `type BlockEntity = ...`)
-- there can be **one at most** of these entries in the whole of the `codegen` object
+  - keys of `targets` are the names of the files to be generated (e.g. `person.ts`)
+  - values of `targets` are an array where the items are objects which satisfy the following:
+    - contain the key `sourceTypeId` with a value of an ID of a type in the Type System (e.g. `https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2`), _or_
+    - contain the key `blockEntityType` with value `true`, which if present will generate types for the type given by the `blockEntityType` property in the `blockprotocol` object in `package.json`, alongside type aliases for it such as `BlockEntity`
+      - there can be **one at most** of these entries in the whole of the `codegen` object
 
 For example:
 
