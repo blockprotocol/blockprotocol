@@ -88,7 +88,7 @@ export const callService = async (
 };
 
 export const constructServiceModuleCallbacks = (
-  displayToast: (toastProps: ToastProps) => void,
+  displayToast: DisplayToastFunction,
 ): ServiceEmbedderMessageCallbacks => {
   return {
     /** OpenAI */

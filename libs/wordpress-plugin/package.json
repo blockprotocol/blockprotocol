@@ -26,9 +26,6 @@
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit"
   },
-  "dependencies": {
-    "react-toastify": "9.1.1"
-  },
   "devDependencies": {
     "@apidevtools/json-schema-ref-parser": "9.1.2",
     "@blockprotocol/core": "0.1.0",
@@ -55,6 +52,7 @@
     "buffer": "6.0.3",
     "lodash.debounce": "4.0.8",
     "patch-package": "6.5.1",
+    "react-toastify": "9.1.1",
     "sanitize-html": "2.10.0",
     "ts-loader": "9.4.1",
     "typescript": "4.8.4",

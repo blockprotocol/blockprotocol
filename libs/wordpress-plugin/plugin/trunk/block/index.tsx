@@ -1,5 +1,3 @@
-import "react-toastify/dist/ReactToastify.css";
-
 import { registerBlockType } from "@wordpress/blocks";
 
 import blockJson from "./block.json";
