@@ -33,9 +33,8 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
   const loadedRef = useRef(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const [serviceUsageIsPermitted, setServiceUsageIsPermitted] = useState<
-    boolean | undefined
-  >(undefined);
+  const [serviceUsageIsPermitted, setServiceUsageIsPermitted] =
+    useState<boolean>();
 
   const [serviceModuleMessage, setServiceModuleMessage] =
     useState<ServiceModuleMessageState | null>(null);
