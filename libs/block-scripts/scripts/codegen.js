@@ -25,10 +25,14 @@ const script = async () => {
     process.exit(1);
   }
 
-  // For block author ergonomics, we only require them to define their block entity type in one place.
-  // As such, we loop through the codegen parameters and replace the `"blockEntityType": true` placeholder with the
-  // `blockEntityType` field. We do this recursively and naively as we want to benefit from the Codegen validation
-  // function, so we can't be sure of the structure right now.
+  /**
+   * For block author ergonomics, we only require them to define their block entity type in one place.
+   * As such, this loops through the codegen parameters and replace the `"blockEntityType": true` placeholder with the
+   * `blockEntityType` field. We do this recursively and naively as we want to benefit from the Codegen validation
+   * function, so we can't be sure of the structure right now.
+   *
+   * @param {any} obj
+   */
   const replaceBlockEntityTypePlaceholder = (obj) => {
     if (obj instanceof Array) {
       for (let i = 0; i < obj.length; i++) {
