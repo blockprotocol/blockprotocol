@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "block-scripts build",
-    "codegen": "set -o pipefail; block-scripts codegen | xargs -I {} yarn prettier --write {}",
+    "codegen": "block-scripts codegen && yarn format",
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
