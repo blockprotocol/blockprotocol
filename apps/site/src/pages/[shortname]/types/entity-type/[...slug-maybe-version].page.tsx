@@ -274,12 +274,12 @@ const EntityTypePage: NextPage = () => {
                         onClick={copyEntityTypeId}
                         variant="bpCode"
                         fontSize={10}
-                        sx={{
-                          color: ({ palette }) => palette.purple[500],
+                        sx={({ palette }) => ({
+                          color:  palette.purple[500],
                           "&:hover": {
-                            color: ({ palette }) => palette.purple[600],
+                            color: palette.purple[600],
                           },
-                        }}
+                        })}
                       >
                         {entityType.schema.$id}
                       </Link>
