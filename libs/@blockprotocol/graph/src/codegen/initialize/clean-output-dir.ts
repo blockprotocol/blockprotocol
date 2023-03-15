@@ -11,8 +11,9 @@ export const cleanOutputDir = async (
   const resolvedTargetDir = path.resolve(context.parameters.outputFolder);
   const promises = [];
   for (const dirContents of await fs.readdir(resolvedTargetDir)) {
-    context.logTrace(`Removing ${dirContents} from ${resolvedTargetDir}..`);
-    promises.push(fs.rm(dirContents, { recursive: true }));
+    const dirContentsPath = path.resolve(resolvedTargetDir, dirContents);
+    context.logTrace(`Removing ${dirContentsPath} from ${resolvedTargetDir}..`);
+    promises.push(fs.rm(dirContentsPath, { recursive: true }));
   }
   await Promise.all(promises);
 };
