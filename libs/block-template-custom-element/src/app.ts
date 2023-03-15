@@ -1,7 +1,7 @@
 import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 import { css, html } from "lit";
 
-import { BlockEntity } from "./types/thing";
+import { BlockEntity } from "./types/generated/block-entity";
 
 const nameKey: keyof BlockEntity["properties"] =
   "https://blockprotocol.org/@blockprotocol/types/property-type/name/";

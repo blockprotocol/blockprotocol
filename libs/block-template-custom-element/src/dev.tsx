@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import packageJson from "../package.json";
 import ElementClass from "./index";
-import { BlockEntity } from "./types/thing";
+import { BlockEntity } from "./types/generated/block-entity";
 
 const node = document.getElementById("app");
 

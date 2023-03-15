@@ -14,7 +14,10 @@ import { useRef } from "react";
  * any of these ensure that your styling does not affect anything outside your block.
  */
 import styles from "./base.module.scss";
-import { BlockEntity, BlockEntityOutgoingLinkAndTarget } from "./types/thing";
+import {
+  BlockEntity,
+  BlockEntityOutgoingLinkAndTarget,
+} from "./types/generated/block-entity";
 
 /**
  * This function is to help illustrate a property being changed when the button is pressed.

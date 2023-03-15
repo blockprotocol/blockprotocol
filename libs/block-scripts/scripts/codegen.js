@@ -46,10 +46,11 @@ const script = async () => {
               );
               process.exit(1);
             }
-            // eslint-disable-next-line no-param-reassign
+            /* eslint-disable no-param-reassign */
             obj.sourceTypeId = blockEntityType;
-            // eslint-disable-next-line no-param-reassign
+            obj.blockEntity = true;
             delete obj[prop];
+            /* eslint-enable no-param-reassign */
           } else {
             replaceBlockEntityTypePlaceholder(obj[prop]);
           }
