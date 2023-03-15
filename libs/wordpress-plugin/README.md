@@ -57,6 +57,51 @@ Within `trunk` there are:
     - `edit-or-preview/edit/` . contains files that are only used by `edit-or-preview/edit.tsx`
     - and so on.
 
+### Publishing
+
+#### Prerequisites
+
+1.  Choose the appropriate semver version number (e.g. `0.1.0`), and then make sure it is reflected in the following places in `plugin/trunk/`:
+
+- in the header in `block-protocol.php` (two places)
+- the value for `BLOCK_PROTOCOL_PLUGIN_VERISON` in `block-protocol.php`
+- `Stable tag` in `readme.txt`
+- also update `version` in `package.json` (next to this README)
+
+1.  Updating the changelog:
+
+- in `readme.txt`:
+  - **replace** the current entry under `Changelog`
+  - **replace** the current entry under `Upgrade Notice` (should be shorter, snappier than changelog – 300 chars max)
+- in `changelog.txt`:
+  - **copy** the new `Changelog` entry from `readme.txt` to the top
+
+1.  Commit these changes, have them reviewed and merged to `main`
+
+#### Uploading to the WordPress plugin directory
+
+1.  Run `yarn build`
+
+1.  Create a zip of `plugin/trunk` and upload it to a test WordPress instance – don't leave the zip in `plugin/trunk`!
+
+1.  Get an SVN Client
+
+1.  Check out the SVN repository: [https://plugins.svn.wordpress.org/blockprotocol](https://plugins.svn.wordpress.org/blockprotocol)
+
+1.  Replace the contents of `trunk` in the SVN repository with the contents of `plugin/trunk` in this repo (including build files)
+
+1.  Check the diff and commit (you will need to log in with the 'plugin publishing' credentials)
+
+1.  Create a new folder in `tags` in the SVN repository, e.g. `tags/0.1.0`
+
+1.  Copy the contents of `trunk` into the new tag folder
+
+1.  Commit
+
+1.  Check that the version and changelog appears correctly on the [plugin's page](https://wordpress.org/plugins/blockprotocol/)
+
+1.  Check that installing & upgrading the plugin from the directory works as expected
+
 ## Minimum WordPress Requirements
 
 - **WordPress:** you must be running at least WordPress 5.6 (due to Composer autoload)
