@@ -15,7 +15,10 @@ import {
   RemoteFileEntityProperties,
   Subgraph,
 } from "@blockprotocol/graph/temporal";
-import { getEntityRevision } from "@blockprotocol/graph/temporal/stdlib";
+import {
+  getEntityRevision,
+  inferSubgraphEdges,
+} from "@blockprotocol/graph/temporal/stdlib";
 import mime from "mime/lite";
 import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
@@ -362,14 +365,12 @@ export const useMockDatastore = (
 
             resolve({ data: updatedEntity });
 
-            /**
-             * @todo this update logic may be incorrect, we have to do some
-             * testing to ensure it behaves as expected */
-            const entityVertexIds = addEntityVerticesToSubgraphByMutation(
-              newSubgraph,
-              [updatedEntity],
-            );
-            inferEntityEdgesInSubgraphByMutation(newSubgraph, entityVertexIds);
+            addEntityVerticesToSubgraphByMutation(newSubgraph, [updatedEntity]);
+
+            // Clear the subgraph edges in preparation for inferring edges again
+            newSubgraph.edges = {};
+
+            inferSubgraphEdges(newSubgraph);
 
             return newSubgraph;
           });

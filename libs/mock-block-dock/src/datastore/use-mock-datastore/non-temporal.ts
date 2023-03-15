@@ -15,7 +15,10 @@ import {
   addEntityVerticesToSubgraphByMutation,
   inferEntityEdgesInSubgraphByMutation,
 } from "@blockprotocol/graph/internal";
-import { getEntityRevision } from "@blockprotocol/graph/stdlib";
+import {
+  getEntityRevision,
+  inferSubgraphEdges,
+} from "@blockprotocol/graph/stdlib";
 import {
   GetEntityData as GetEntityDataTemporal,
   QueryEntitiesData as QueryEntitiesDataTemporal,
@@ -311,6 +314,11 @@ export const useMockDatastore = (
             newSubgraph.vertices[entityId]![
               Object.keys(newSubgraph.vertices[entityId]!).pop()!
             ]!.inner = updatedEntity;
+
+            // Clear the subgraph edges in preparation for inferring edges again
+            newSubgraph.edges = {};
+
+            inferSubgraphEdges(newSubgraph);
 
             resolve({ data: updatedEntity });
 
