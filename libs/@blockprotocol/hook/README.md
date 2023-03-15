@@ -55,9 +55,43 @@ useHook(
 
 Where `nodeRef` is a `RefObject` containing the DOM node you'd like to pass to the embedding application.
 
-### Custom elements
+### Custom element example
 
-There are no helpers for custom elements yet.
+You can use the `firstUpdate` Lit [lifecycle hook](https://lit.dev/docs/components/lifecycle/#reactive-update-cycle-completing) to request that the embedding application take over control of a DOM node.
+
+```typescript
+export class MyBlock extends BlockElementBase {
+  private hookModule?: HookBlockHandler;
+
+  firstUpdated() {
+    if (!this.hookModule || this.hookModule.destroyed) {
+      this.hookModule = new HookBlockHandler({
+        element: this,
+      });
+    }
+
+    const paragraph = this.renderRoot.querySelector(`#my-hook-paragraph`);
+    if (!paragraph || !(paragraph instanceof HTMLParagraphElement)) {
+      throw new Error("No paragraph element for hook module found in element DOM");
+    }
+
+    void this.hookModule.hook({
+      data: {
+        node: paragraph,
+        entityId: this.getBlockEntity()?.metadata.recordId.entityId,
+        hookId: null,
+        path: [extractBaseUrl(propertyTypes.description.$id)],
+        type: "text",
+      },
+    });
+  }
+
+  render() {
+    return html`
+      <p id="my-hook-paragraph"></p>
+    `;
+  }
+```
 
 ## Embedding applications
 

@@ -1,0 +1,7 @@
+{
+  "extends": "@local/tsconfig/dom+jsx.json",
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
+  "include": ["plugin/trunk/block/**/*", "plugin/trunk/block/window.d.ts"]
+}

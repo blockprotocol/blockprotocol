@@ -6,6 +6,10 @@ on:
     - cron: "*/10 * * * *" ## Every 10 minutes
     - cron: "0 4 * * *" ## Around 4am every night (UTC time)
 
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   warm_up_vercel:
     ## Vercel uses AWS Lambda. When we call getStaticProps in fallback mode or getServerSideProps,

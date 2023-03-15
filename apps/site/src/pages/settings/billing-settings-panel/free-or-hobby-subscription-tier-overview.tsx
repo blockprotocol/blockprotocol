@@ -32,6 +32,11 @@ import {
   PaidSubscriptionTier,
   priceToHumanReadable,
 } from "../../shared/subscription-utils";
+import {
+  externalServiceFreeAllowance,
+  numberOfThousandOpenaiHobbyWords,
+  numberOfThousandOpenaiProWords,
+} from "./external-service-free-allowance";
 import { SubscriptionFeatureList } from "./subscription-feature-list";
 import { SubscriptionFeature } from "./subscription-feature-list-item";
 
@@ -50,7 +55,8 @@ export const paidSubscriptionFeatures: Record<
         icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>150k</strong> AI-generated words (powered by GPT-3)
+            <strong>~{numberOfThousandOpenaiHobbyWords}k</strong> AI-generated
+            words (powered by GPT-3)
           </>
         ),
       },
@@ -58,7 +64,13 @@ export const paidSubscriptionFeatures: Record<
         icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>50</strong> AI-generated images (powered by DALL-E)
+            <strong>
+              {
+                externalServiceFreeAllowance["OpenAI Create Image Request"]
+                  .hobby
+              }
+            </strong>{" "}
+            AI-generated images (powered by DALL-E)
           </>
         ),
       },
@@ -66,7 +78,13 @@ export const paidSubscriptionFeatures: Record<
         icon: <MapboxLogoIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>20</strong> Mapbox Address Autofills
+            <strong>
+              {
+                externalServiceFreeAllowance["Mapbox Address Autofill Session"]
+                  .hobby
+              }
+            </strong>{" "}
+            Mapbox Address Autofills
           </>
         ),
       },
@@ -74,7 +92,13 @@ export const paidSubscriptionFeatures: Record<
         icon: <MapLocationDotIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>300</strong> Mapbox Static Maps
+            <strong>
+              {
+                externalServiceFreeAllowance["Mapbox Static Image Request"]
+                  .hobby
+              }
+            </strong>{" "}
+            Mapbox Static Maps
           </>
         ),
       },
@@ -133,7 +157,14 @@ export const paidSubscriptionFeatures: Record<
               component="span"
               sx={{ color: ({ palette }) => palette.gray[60] }}
             >
-              300k+ words, 100 images, 40 address fills, etc.
+              ~{numberOfThousandOpenaiProWords}k+ words,{" "}
+              {externalServiceFreeAllowance["OpenAI Create Image Request"].pro}{" "}
+              images,{" "}
+              {
+                externalServiceFreeAllowance["Mapbox Address Autofill Session"]
+                  .pro
+              }{" "}
+              address fills, etc.
             </Box>
           </>
         ),
@@ -142,7 +173,10 @@ export const paidSubscriptionFeatures: Record<
         icon: <LocationIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>500</strong> Mapbox Isochrone API calls
+            <strong>
+              {externalServiceFreeAllowance["Mapbox Isochrone Request"].pro}
+            </strong>{" "}
+            Mapbox Isochrone API calls
           </>
         ),
       },
@@ -150,7 +184,10 @@ export const paidSubscriptionFeatures: Record<
         icon: <LocationArrowIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>500</strong> Mapbox Directions API calls
+            <strong>
+              {externalServiceFreeAllowance["Mapbox Directions Request"].pro}
+            </strong>{" "}
+            Mapbox Directions API calls
           </>
         ),
       },
@@ -158,7 +195,14 @@ export const paidSubscriptionFeatures: Record<
         icon: <MapLocationDotIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>500</strong> Mapbox Temporary Geocoding API calls
+            <strong>
+              {
+                externalServiceFreeAllowance[
+                  "Mapbox Temporary Geocoding Request"
+                ].pro
+              }
+            </strong>{" "}
+            Mapbox Temporary Geocoding API calls
           </>
         ),
       },
@@ -340,7 +384,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         </Box>
         <Box
           sx={({ spacing }) => ({
-            padding: spacing(2, 4),
+            padding: spacing(2, 2, 2, 4),
             backgroundColor: "#FBF7FF",
             flexGrow: 1,
           })}
@@ -537,7 +581,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         </Box>
         <Box
           sx={({ palette, spacing }) => ({
-            padding: spacing(2, 4),
+            padding: spacing(2, 3, 2, 4),
             backgroundColor: palette.purple[20],
           })}
         >

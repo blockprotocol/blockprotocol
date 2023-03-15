@@ -108,7 +108,7 @@ export const ConfinedBlocks = () => {
             width: { xs: "100%", md: "55%" },
           }}
         >
-          <Image src={darkBoxImage} />
+          <Image src={darkBoxImage} placeholder="blur" />
         </Box>
       </Box>
     </Box>

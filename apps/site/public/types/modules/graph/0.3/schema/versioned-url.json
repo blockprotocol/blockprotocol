@@ -5,5 +5,6 @@
   "description": "The versioned URL of a Block Protocol ontology type (the $id of the schema). It should be of the form `${baseUrl}v/${versionNumber}`",
   "type": "string",
   "format": "uri",
-  "maxLength": 2048
+  "maxLength": 2048,
+  "$comment": "The version number must be a valid unsigned 32-bit integer, that is, between 0 and 4,294,967,295 (inclusive)."
 }

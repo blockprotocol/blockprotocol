@@ -175,7 +175,7 @@ export const UsageLimitSection: FunctionComponent = () => {
           color: ({ palette }) => palette.gray[70],
         }}
       >
-        Spending cap
+        Spending cap (in USD)
       </Typography>
       <TextField
         id="usage-limit-input"

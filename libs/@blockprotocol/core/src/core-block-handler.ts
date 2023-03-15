@@ -34,11 +34,19 @@ export class CoreBlockHandler extends CoreHandler {
       sender: this,
     });
 
+    // In case the embedding application's handler is set up after the block's,
+    // retry the init message.
     return Promise.race([
       resp,
 
       new Promise<void>((resolve) => {
-        queueMicrotask(resolve);
+        // using queueMicrotask here leads to an infinite loop with some rendering strategies
+        // we could consider using setImmediate instead, but it would add a dependency.
+        // the 'time to init message exchange' is only material for:
+        // 1) HTML blocks, which depend on the exchange of init messages to receive init data
+        // 2) any block which sends other messages immediately after the init exchange
+        // React and Custom Element blocks receive their initial data as properties.
+        setTimeout(resolve);
       }),
     ]).then((response) => {
       if (!response) {
