@@ -109,15 +109,6 @@ function block_protocol_page_data(string $event, array $data)
   ]);
 }
 
-function block_protocol_maybe_capture_error($last_error)
-{
-  if(!function_exists('\Sentry\captureMessage')) { return; }
-
-  if ($last_error) {
-    \Sentry\captureMessage($last_error);
-  }
-}
-
 function block_protocol_filter_sentry_event($event)
 {
   if(block_protocol_reporting_disabled()) {
@@ -159,14 +150,14 @@ function block_protocol_filter_sentry_event($event)
   return null;
 }
 
-function block_protocol_sentry_init()
+function block_protocol_sentry_init_args() 
 {
-  if(!function_exists('\Sentry\init')) { return; }
+  if(!function_exists('\Sentry\init')) { return []; }
 
   $server_url = get_site_url();
   $environment = substr($server_url, 0, 16) == "http://localhost" ? "development" : "production";
 
-  $sentry_init_args = [	
+  return [	
     'dsn' => BLOCK_PROTOCOL_SENTRY_DSN,
     'environment' => $environment,
     'server_name' => $server_url,
@@ -175,20 +166,70 @@ function block_protocol_sentry_init()
     'error_types' => E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_USER_DEPRECATED,	
     'attach_stacktrace' => TRUE,
     'before_send' => 'block_protocol_filter_sentry_event'
-  ];	
+  ];
+};
 
+function block_protocol_sentry_has_other_config()
+{
+  // Check if sentry is already instantiated
+  $client = \Sentry\SentrySdk::getCurrentHub()->getClient();
 
-  \Sentry\init($sentry_init_args);	
+  $different_dsn_set = $client->getOptions()->getDsn() != BLOCK_PROTOCOL_SENTRY_DSN ?: false;
 
+  if($client == null) {
+    // The get call creates a new hub for some reason, 
+    // we need to remove it if there is no client
+    \Sentry\SentrySdk::setCurrentHub(null);
+  } 
+  
+  return $different_dsn_set;
+}
+
+function block_protocol_configure_sentry_scope($scope)
+{
   $public_id = block_protocol_public_id();
-
   if(!empty($public_id)){
-    \Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($public_id) {
-        $scope->setUser(['id' => $public_id]);
-    });
+    $scope->setUser(['id' => $public_id]);
   }
 
-  \Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($public_id) {
-    $scope->setContext('versions', block_protocol_report_version_info());
+  $anonymous_id = block_protocol_anonymous_user_id();
+  if(!empty($anonymous_id)){
+    $scope->setTag('anonymous_id', $anonymous_id);
+  }
+
+  $scope->setContext('versions', block_protocol_report_version_info());
+}
+
+function block_protocol_maybe_capture_error($last_error)
+{
+  if(!function_exists('\Sentry\captureMessage')) { return; }
+
+  if (!$last_error) { return; }
+
+  // If sentry is configured with a different DSN, we want to report the error manually.
+  // This manual reporting is only for our manually instrumented errors.
+  if(block_protocol_sentry_has_other_config()) { 
+    $client = \Sentry\ClientBuilder::create(block_protocol_sentry_init_args())->getClient();
+
+    $scope = new \Sentry\State\Scope();
+    block_protocol_configure_sentry_scope($scope);
+
+    $client->captureMessage($last_error, $level = null, $scope = $scope);
+  } else {
+    \Sentry\captureMessage($last_error);
+  }
+}
+
+function block_protocol_sentry_init()
+{
+  if(!function_exists('\Sentry\init')) { return; }
+
+  // If sentry is configured, we don't want to overwrite the config currently set.
+  if(block_protocol_sentry_has_other_config()) { return; }
+
+  \Sentry\init(block_protocol_sentry_init_args());	
+
+  \Sentry\configureScope(function (\Sentry\State\Scope $scope) {
+    block_protocol_configure_sentry_scope($scope);
   });
 }
