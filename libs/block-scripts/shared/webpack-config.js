@@ -2,6 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import CopyPlugin from "copy-webpack-plugin";
+import Dotenv from "dotenv-webpack";
 import fs from "fs-extra";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import webpack from "webpack";
@@ -145,6 +146,7 @@ export const generateDevWebpackConfig = async () => {
     plugins: [
       ...(baseWebpackConfig.plugins ?? []),
       new BlockAssetsPlugin(),
+      new Dotenv(),
       new HtmlWebpackPlugin({
         filename: "index.html",
         template: path.resolve(

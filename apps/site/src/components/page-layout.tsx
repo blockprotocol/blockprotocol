@@ -7,7 +7,7 @@ import { useUser } from "../context/user-context";
 import { Footer } from "./footer";
 import { BANNERS, FooterBanner } from "./footer-banner";
 import { LoginModal } from "./modal/login-modal";
-import { Navbar } from "./navbar";
+import { NavbarContainer } from "./navbar";
 
 type PageLayoutProps = {
   blockMetadata?: BlockMetadata;
@@ -42,13 +42,12 @@ export const PageLayout: FunctionComponent<PageLayoutProps> = ({
         onClose={() => setDisplayLoginModal(false)}
       />
       <Box display="flex" flexDirection="column" sx={{ minHeight: "100vh" }}>
-        <Navbar
+        <NavbarContainer
           openLoginModal={() => setDisplayLoginModal(true)}
           blockMetadata={blockMetadata}
-        />
-        <Box flexGrow={1} display="flex" flexDirection="column">
+        >
           {children}
-        </Box>
+        </NavbarContainer>
         {banner ? <FooterBanner banner={banner} /> : null}
         <Footer
           sx={{

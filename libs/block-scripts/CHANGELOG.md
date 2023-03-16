@@ -1,5 +1,18 @@
 # block-scripts
 
+## 0.2.0
+
+### Minor Changes
+
+- [#1158](https://github.com/blockprotocol/blockprotocol/pull/1158) [`9a98416d`](https://github.com/blockprotocol/blockprotocol/commit/9a98416df8756c26037a4559affd421f80f84547) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Introduce an improved codegen utility with support for multiple files, better errors, type name overrides, and more.
+
+### Patch Changes
+
+- [#1170](https://github.com/blockprotocol/blockprotocol/pull/1170) [`50ad5e72`](https://github.com/blockprotocol/blockprotocol/commit/50ad5e72d25d1b888e49dba1801920a2b1f3954f) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add .env file support to block templates
+
+- Updated dependencies [[`9a98416d`](https://github.com/blockprotocol/blockprotocol/commit/9a98416df8756c26037a4559affd421f80f84547)]:
+  - @blockprotocol/graph@0.2.0
+
 ## 0.1.1
 
 ### Patch Changes
