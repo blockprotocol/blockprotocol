@@ -5,7 +5,7 @@ Tags: block protocol, blocks, gutenberg, gutenberg blocks, block, schema, countd
 Requires at least: 5.6.0
 Tested up to: 6.1.1
 Requires PHP: 7.4
-Stable tag: 0.0.3
+Stable tag: 0.0.4
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 
@@ -82,21 +82,15 @@ Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Disc
 
 == Changelog ==
 
-<!-- The latest release should be found here, and older ones moved to changelog.txt -->
+<!-- The latest release's entry only goes here – the full log should be in changelog.txt -->
 
-= 0.0.3 =
-* Add support for ChatGPT blocks
-* Notification when using unsupported database version
-* Fix rich text rendering
-* Icon for block category
-* Better error reporting
+= 0.0.4 =
+* Improved error handling, including more visible error messages
+* Add labels to custom block settings, fix 'found in post' for entities
 
 == Upgrade Notice ==
 
-= 0.0.3 =
-Upgrade for ChatGPT support and improved text rendering in Block Protocol blocks
+<!-- Upgrade notices describe the reason a user should upgrade. No more than 300 characters. -->
 
-<!--
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
--->
+= 0.0.4 =
+Upgrade for better custom block settings panel, and better error handling

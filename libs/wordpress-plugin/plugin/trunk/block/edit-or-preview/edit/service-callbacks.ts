@@ -39,7 +39,7 @@ export const callService = async (
   });
 
   if ("error" in apiResponse) {
-    let errorMessage = apiResponse.error ?? "An unknown error occured";
+    let errorMessage = apiResponse.error ?? "An unknown error occurred";
     const actions = [
       {
         url: "https://blockprotocol.org/contact",

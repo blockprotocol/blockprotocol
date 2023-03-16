@@ -8,7 +8,7 @@ export const Toast = ({ message, actions }: ToastProps) => (
     <div style={{ marginBottom: 5, marginRight: 10 }}>{message}</div>
     {actions.map((action) => (
       <a
-        href={action.url}
+        href={`${action.url}?utm_medium=organic&utm_source=wordpress_error-toast`}
         key={action.url}
         style={{ marginRight: 20 }}
         target="_blank"
