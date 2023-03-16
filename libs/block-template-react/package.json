@@ -66,7 +66,7 @@
     "image": "public/block-preview.png",
     "name": "block-template-react",
     "protocol": "0.3",
-    "blockEntityType": "https://blockprotocol-molpob88k.stage.hash.ai/@ciaranm/types/entity-type/minesweeper-block/v/2",
+    "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
     "codegen": {
       "outputFolder": "src/types/generated",
       "targets": {
