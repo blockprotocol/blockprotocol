@@ -59,7 +59,7 @@ export const Edit = ({
       toast(<Toast {...toastProps} />, {
         autoClose: false,
         containerId: entityId,
-        position: toast.POSITION.BOTTOM_RIGHT,
+        position: toast.POSITION.BOTTOM_LEFT,
         type: toast.TYPE.ERROR,
         ...options,
       });
