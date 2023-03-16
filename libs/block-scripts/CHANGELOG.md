@@ -1,5 +1,13 @@
 # block-scripts
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [[`2b771f30`](https://github.com/blockprotocol/blockprotocol/commit/2b771f30e88ae610a01cb024eab082b8c7bb9a8a), [`2b771f30`](https://github.com/blockprotocol/blockprotocol/commit/2b771f30e88ae610a01cb024eab082b8c7bb9a8a)]:
+  - @blockprotocol/type-system@0.1.1
+  - @blockprotocol/graph@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

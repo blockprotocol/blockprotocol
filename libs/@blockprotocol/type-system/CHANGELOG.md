@@ -1,5 +1,11 @@
 # @blockprotocol/type-system
 
+## 0.1.1
+
+### Patch Changes
+
+- [#1182](https://github.com/blockprotocol/blockprotocol/pull/1182) [`2b771f30`](https://github.com/blockprotocol/blockprotocol/commit/2b771f30e88ae610a01cb024eab082b8c7bb9a8a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add inheritsFromEntityTypes to getReferencedIdsFromEntityType return
+
 ## 0.1.0
 
 ### Minor Changes
