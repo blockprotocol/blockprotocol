@@ -13,15 +13,15 @@ Access a growing collection of high-quality and powerful blocks with a one-time 
 
 == Description ==
 
-The [Block Protocol](https://blockprotocol.org) plugin gives you an ever-growing set of high-quality blocks to use in your WordPress site. 
+Install the [Block Protocol](https://blockprotocol.org) plugin to access an ever-growing library of high-quality blocks within WordPress. 
 
-Discover and use new blocks when you need them, directly from within the WordPress Gutenberg Editor. No more installing new plugins to get more blocks.
+Discover and use new blocks when you need them, at the point of insertion, directly from within the WordPress editor. No more installing new plugins to get more blocks.
 
-In addition to useful blocks like Callouts, Headings, Images, and Quotes, the Block Protocol plugin provides powerful, new blocks for services such as OpenAI, and Mapbox.
+- Blocks that provide access to external services including **OpenAI** and **Mapbox**, without needing to sign up for these separately.
+- A wide-range of structured data blocks with SEO benefits for your website.
+- "Traditional" content management blocks such as callouts, headings, images, and quotes.
 
-You can also build your own block for the Block Protocol and publish it instantly. 
-
-To get started building a block, [check out the documentation](https://blockprotocol.org/docs/developing-blocks).
+You can also build your own block for the Block Protocol without any PHP, and publish it instantly.  To build a block, [check out the developer docs](https://blockprotocol.org/docs/developing-blocks).
 
 == Installation ==
 
