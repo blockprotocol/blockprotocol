@@ -84,7 +84,9 @@ const HubListTabs = ({
     sx={({ breakpoints }) => ({
       display: "flex",
       minHeight: 0,
-      gap: 1,
+      [`.${tabsClasses.flexContainer}`]: {
+        gap: 1,
+      },
       [`.${tabsClasses.indicator}`]: {
         borderRadius: 2,
         background: (theme) => theme.palette.purple[70],
@@ -117,6 +119,7 @@ const HubListTabs = ({
           width: "min-content",
           minHeight: 0,
           p: 0,
+          mr: 0,
           [breakpoints.down("sm")]: {
             mb: 1,
           },
