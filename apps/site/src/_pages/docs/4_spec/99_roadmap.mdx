@@ -7,7 +7,9 @@ Our aim is to develop a new standard for building frontend components, or "block
 - **Develop valuable new blocks that provide utility to early-adopters.** Users of blocks should be attracted by the promise of obtaining new superpowers in their existing block-based applications, not merely out of appreciation for the protocol's technical design.
 - **Prototype implementations at every step.** Battle-testing the specification and proving (or disproving) ideas early saves time, and minimizes arguments about hypotheticals. Multiple diverse prototype environments ensure abstractions generalize across embedding applications, with fewer navel gazing committees.
 - **Design and build in the open.** Our public RFC process is outlined on this page. Our monorepo is publicly accessible to anybody. Our code is open-source and can be hosted, forked, or otherwise evolved by the community without our prior permission.
-- **Hosted services as a convenience.** While we provide hosted services such as the [Þ Hub](https://blockprotocol.org/hub), these are offered as a convenience, and complement the specification. Their use is not required to utilize the protocol, although they make the discovery of blocks, types, services, and hooks easier, while providing fallbacks that embedding applications can opt-in to use where blocks require things beyond their current capabilities.
+- **Zero reliance on centralized hosted services.** Hosted services are provided as a convenience only.
+  - Things like the [Þ Hub](https://blockprotocol.org/hub) complement the specification by providing a means of discovering blocks, types, services, and hooks, but its use is not required.
+  - Similarly, embedding applications can utilize the Block Protocol's hosted middleware to provide fallbacks to users where blocks ask for things that an app itself doesn't natively support — for example, an integration with a particular new external service. But embedders may equally well choose not to fallback to the Þ middleware, and instead limit the selection of blocks their users are shown in the first place to only those which are fully supported locally.
 
 ## History
 
