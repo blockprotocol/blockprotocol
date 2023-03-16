@@ -212,22 +212,6 @@ function block_protocol_init()
     return;
   }
 
-	// register and enqueue the sentry plugin if plugin analytics are enabled
-	if (!block_protocol_reporting_disabled()) {
-		wp_register_script(
-			'blockprotocol-sentry',
-			plugins_url('build/sentry.js', __FILE__),
-			[],
-			BLOCK_PROTOCOL_PLUGIN_VERISON
-		);
-		wp_add_inline_script(
-			'blockprotocol-sentry',
-			"block_protocol_sentry_config = " . json_encode(block_protocol_client_sentry_init_args()),
-			$position = 'before'
-		);
-		wp_enqueue_script('blockprotocol-sentry');
-	}
-
 	$response = get_block_protocol_blocks();
 	if (isset($response['errors'])) {
 		// user needs to set a valid API key – bail
@@ -269,6 +253,23 @@ function block_protocol_editor_assets() {
 	if (isset($response['errors'])) {
 		// user needs to set a valid API key – bail
 		return;
+	}
+
+	// Register and enqueue the sentry plugin if plugin analytics are enabled
+	// We want to ensure errors are caught early, so we enqueue this first.
+	if (!block_protocol_reporting_disabled()) {
+		wp_register_script(
+			'blockprotocol-sentry',
+			plugins_url('build/sentry.js', __FILE__),
+			[],
+			BLOCK_PROTOCOL_PLUGIN_VERISON
+		);
+		wp_add_inline_script(
+			'blockprotocol-sentry',
+			"block_protocol_sentry_config = " . json_encode(block_protocol_client_sentry_init_args()),
+			$position = 'before'
+		);
+		wp_enqueue_script('blockprotocol-sentry');
 	}
   
 	// this file has a list of the dependencies our FE block code uses, so we can include those too
