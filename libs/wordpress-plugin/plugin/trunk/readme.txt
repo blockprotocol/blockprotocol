@@ -20,7 +20,7 @@ Discover and use new blocks when you need them, at the point of insertion, direc
 - Blocks that provide access to external services including **OpenAI** and **Mapbox**, without needing to sign up for these separately
 - Structured data blocks with SEO benefits for your website, helping you rank more highly in Google and Bing (e.g. the [Address](https://blockprotocol.org/@hash/blocks/address) and [How-to](https://blockprotocol.org/@hash/blocks/how-to) blocks)
 - Interactive blocks such as the [drawing](https://blockprotocol.org/@tldraw/blocks/drawing) and [countdown timer](https://blockprotocol.org/@hash/blocks/timer) blocks
-- "Traditional" content management blocks such as [callouts](https://blockprotocol.org/@hash/blocks/callout), headings, images, and quotes
+- "Traditional" content management blocks such as [callouts](https://blockprotocol.org/@hash/blocks/callout), [tables](https://blockprotocol.org/@hash/blocks/table), headings, images, and quotes
 
 You can also build your own block for the Block Protocol without any PHP, and publish it instantly.  To build a block, [check out the developer docs](https://blockprotocol.org/docs/developing-blocks).
 
