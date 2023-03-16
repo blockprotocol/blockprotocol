@@ -1,37 +1,56 @@
-# RFCs & Roadmap
+# Roadmap
 
-## Planned modules
+## Adoption Strategy
 
-We will introduce the following new modules to the Block Protocol to support additional functionality that requires application-block cooperation.
+_Coming soon_
+
+## History
+
+_Coming soon_
+<!-- Link to RFCs accepted, document module releases and new versions of spec -->
+
+## Roadmap
+
+### Proposed Changes
+
+**RFCs:** the "RFC" (Request For Comment) process provides a consistent and controlled path for new features to enter the protocol's specification. Many changes, including most bug fixes and documentation improvements can be implemented and reviewed without going through this process. However, when changes are considered "substantial" enough, we require that they first take shape as RFCs, are subject to community comment, and are designed in a way that produces broad agreement approved by the Block Protocol core team. This process serves to transparently document in detail the considerations behind major changes, and enables spec evolution to take place in a way that accounts for all community member's interests.
+
+**Planned modules:** we expect to introduce the following new modules to the Block Protocol to support additional functionality that requires application-block cooperation.
+
+#### Active RFCs
+
+_Insert list to active RFCs hosted on blockprotocol.org, generated from `rfcs` contents_
+
+#### New Modules
 
 We welcome suggestions for other modules that may be useful, via GitHub [discussions](https://github.com/blockprotocol/blockprotocol/discussions) or by creating [RFCs](https://github.com/blockprotocol/blockprotocol/tree/main/rfcs).
 
-### Actions
+##### Actions module
 
 A generalized approach to capturing user actions could involve a module whereby a block reports on which elements within it capture actions (e.g. a button), and embedding applications could choose to bind further actions to them as a response.
 
-### Comments
+##### Comments module
 
 We want to facilitate users leaving comments on elements within blocks. This could be
 
 - managed entirely outside the block, e.g. by a wrapper around the block which provides a context menu to users for adding comments on blocks – which avoids blocks having to have any knowledge of commenting, but could interfere with how the block wants to respond to user input, or
 - managed by providing a new module whereby blocks could send messages requesting that comments be attached to specific elements in blocks – which allows blocks to have control over how and to what element the user is able to attach comments.
 
-### Internationalization
+##### Internationalization module
 
 A module to provide the user’s preferred locale to blocks. Please see the [GitHub discussion](https://github.com/blockprotocol/blockprotocol/discussions/315).
 
-### Location
+##### Location module
 
 A module to provide the user’s location to blocks (with appropriate safeguarding).
 
-### Styling
+##### Styling module
 
 The styling module would involve the embedding application to communicate styling or theming data to blocks, to allow blocks to apply styling to make them appear more visually consistent with the application embedding them.
 
 Please see the [GitHub discussion](https://github.com/blockprotocol/blockprotocol/discussions/180) for a discussion of what data might be transported as part of a styling module (e.g. a `styleObject`, or a CSS file).
 
-### Users
+##### Users module
 
 Much familiar functionality requires a reference to the current user, or being able to select from users in the system. For example:
 
@@ -41,31 +60,27 @@ Much familiar functionality requires a reference to the current user, or being a
 
 A users module could help expose some of this data to blocks, with appropriate safeguarding and permissions sought.
 
-### Versioning
+##### Versioning module
 
 While embedding applications can handle displaying an interface for reloading blocks at particular earlier versions, we will specify a way of communicating to blocks that (a) an earlier version is being displayed, and (b) the difference with the current version would allow blocks to implement visual diffs.
 
-## Changes to existing modules
+#### Changes to existing modules
 
-### Core
+##### Core
 
-#### Block definition
+###### Block definition
 
-##### Block entry point
+**Block entry point:** we currently provide that blocks can be exposed to applications in three different ways: as custom elements, HTML files, or React components. We may wish to reduce this to a single entry point. Please [see the discussion](https://github.com/blockprotocol/blockprotocol/discussions/392) for more.
 
-We currently provide that blocks can be exposed to applications in three different ways: as custom elements, HTML files, or React components. We may wish to reduce this to a single entry point.
+###### Module permissions / requirements
 
-Please [see the discussion](https://github.com/blockprotocol/blockprotocol/discussions/392) for more.
+**Problem:**
 
-#### Module permissions / requirements
+- Applications may implement some modules only, or implement part of a module only (e.g. allowing `createEntity` but not `createEntityType`).
+- Many blocks will require certain modules, and parts of modules.
+- Blocks will not work in applications that do not implement the modules they require, and the parts of modules they require. If there is a mismatch which is not identified prior to a block being selected for use, they may crash or be non-functional at the point of use.
 
-Applications may implement some modules only, or implement part of a module only (e.g. allowing `createEntity` but not `createEntityType`).
-
-Many blocks will require certain modules, and parts of modules.
-
-Blocks will not work in applications that do not implement the modules they require, and the parts of modules they require. If there is a mismatch which is not identified prior to a block being selected for use, they may crash or be non-functional at the point of use.
-
-##### Proposal
+**Proposal:**
 
 In order to predict in advance whether a given block will work in a given application, it would be helpful for blocks to be able to indicate which modules and parts of modules they require.
 
@@ -76,21 +91,21 @@ The most detailed version of this would be for blocks to be able to:
   - which specific messages from a module they require/support
   - any additional detail on what they require from a message, which might be a particular scope, e.g. access to retrieve or create particular types of entities.
 
-### Graph
+##### Graph
 
-#### Entity type extension and duplication
+###### Entity type extension and duplication
 
 Currently, if a user wants to add additional information to an existing entity type, their only option is to make a brand new one and manually copy the structure. We'd like to add support for users to be able to "extend" types in a way that doesn't break existing entity types and allows for reusability across embedding applications and blocks. To allow for situations where a user wants to customize an entity type in a way that a non-compatible fashion, we want a mechanism to "duplicate" or "fork" an existing entity type. For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/428).
 
-#### Non-primitive data types
+###### Non-primitive data types
 
 We define six primitive data types in the Graph type system. These data types define value spaces for the inner properties of entities, and currently are limited to basic primitives such as "text" or "number". Building robust data models will require the ability to define constraints and define validation mechanisms (think maximum/minimum lengths on properties, or applying regular expressions to define the pattern of a string). We are thinking about implementing this through allowing the creation of non-primitive data types, built off the composition and extension of other data types coupled with a suite of supported constraints. You can read more about this in [this RFC](https://github.com/blockprotocol/blockprotocol/pull/355).
 
-#### Pagination
+###### Pagination
 
 We intend to move to a cursor-based method for paginating results of querying entities, likely based on the [Connections](https://relay.dev/graphql/connections.htm) specification.
 
-#### Schema mapping
+###### Schema mapping
 
 The Block Protocol does not seek to describe or prescribe the shape of particular entities (e.g. what fields a `Person` has).
 
