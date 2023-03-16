@@ -127,6 +127,15 @@ const script = async () => {
     );
 
     logStepEnd();
+
+    if (blockTemplate && ["custom-element", "react"].includes(blockTemplate)) {
+      logStepStart("Test codegen");
+
+      await execa("npm", ["run", "codegen"], execaOptionsInBlockDir);
+
+      logStepEnd();
+    }
+
     logStepStart("Dev Server");
 
     const devProcess = execa("npm", ["run", "dev"], {
