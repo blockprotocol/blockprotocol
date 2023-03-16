@@ -1,6 +1,6 @@
 {
   "name": "block-template-custom-element",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Block Protocol block template for a custom element-based block",
   "keywords": [
     "blockprotocol",
@@ -19,13 +19,13 @@
   },
   "scripts": {
     "build": "block-scripts build",
+    "codegen": "block-scripts codegen && yarn format",
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
     "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/cleanup-before-publishing.ts",
-    "schema": "block-scripts codegen",
     "serve": "block-scripts serve"
   },
   "prettier": {
@@ -33,15 +33,15 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.1.0",
+    "@blockprotocol/graph": "0.2.0",
     "lit": "^2.4.1"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@types/react-dom": "^18.0.9",
-    "block-scripts": "0.1.1",
+    "block-scripts": "0.2.0",
     "eslint": "8.33.0",
-    "mock-block-dock": "0.1.1",
+    "mock-block-dock": "0.1.2",
     "prettier": "2.8.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -64,6 +64,16 @@
     "image": "public/block-preview.png",
     "name": "block-template-custom-element",
     "protocol": "0.3",
-    "schema": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2"
+    "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
+    "codegen": {
+      "outputFolder": "src/types/generated",
+      "targets": {
+        "block-entity.ts": [
+          {
+            "blockEntityType": true
+          }
+        ]
+      }
+    }
   }
 }

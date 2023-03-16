@@ -23,7 +23,7 @@ Once you have created the type representing the data your block needs, copy its 
 
 1.  Change into the folder: `cd path/to/your-block-name`
 
-1.  Update the `blockprotocol` metadata object in package.json:
+1.  Update the contents of `block-metadata.json`:
 
 - set `schema` to the URL of the entity type you created in the previous step
 - optionally update additional fields which will be used to identify and describe the block when published:

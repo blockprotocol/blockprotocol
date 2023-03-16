@@ -14,10 +14,12 @@ export const getReferencedIdsFromEntityType = (
   constrainsPropertiesOnPropertyTypes: VersionedUrl[];
   constrainsLinksOnEntityTypes: VersionedUrl[];
   constrainsLinkDestinationsOnEntityTypes: VersionedUrl[];
+  inheritsFromEntityTypes: VersionedUrl[];
 } => {
   const constrainsPropertiesOnPropertyTypes: Set<VersionedUrl> = new Set();
   const constrainsLinksOnEntityTypes: Set<VersionedUrl> = new Set();
   const constrainsLinkDestinationsOnEntityTypes: Set<VersionedUrl> = new Set();
+  const inheritsFromEntityTypes: VersionedUrl[] = [];
 
   for (const propertyDefinition of Object.values(entityType.properties)) {
     if ("items" in propertyDefinition) {
@@ -26,9 +28,9 @@ export const getReferencedIdsFromEntityType = (
       constrainsPropertiesOnPropertyTypes.add(propertyDefinition.$ref);
     }
   }
-  // for (const inheritedEntityType of entityType.allOf ?? []) {
-  //   values.push(inheritedEntityType.$ref)
-  // }
+  for (const inheritedEntityType of entityType.allOf ?? []) {
+    inheritsFromEntityTypes.push(inheritedEntityType.$ref);
+  }
 
   for (const [linkTypeId, linkDefinition] of Object.entries(
     entityType.links ?? {},
@@ -51,5 +53,6 @@ export const getReferencedIdsFromEntityType = (
     constrainsLinkDestinationsOnEntityTypes: [
       ...constrainsLinkDestinationsOnEntityTypes,
     ],
+    inheritsFromEntityTypes: [...inheritsFromEntityTypes],
   };
 };

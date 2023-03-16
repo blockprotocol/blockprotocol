@@ -55,12 +55,14 @@ const findCrumbs = (params: {
   return null;
 };
 
+export type Crumb = SiteMapPage | SiteMapPageSection;
+
 export const useCrumbs = (
   pages: SiteMapPage[],
   asPath: string,
   route: string = "/docs/[[...docs-slug]]",
   blockMetadata?: BlockMetadata,
-) => {
+): Crumb[] => {
   return useMemo(() => {
     // Documentation pages
     if (route === "/docs/[[...docs-slug]]") {

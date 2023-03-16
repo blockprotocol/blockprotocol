@@ -285,6 +285,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
                   </>
                 ) : (
                   <SandboxedBlockDemo
+                    key={metadata.blockSitePath} // reset sandbox state when switching block
                     metadata={metadata}
                     props={props}
                     sandboxBaseUrl={sandboxBaseUrl}
