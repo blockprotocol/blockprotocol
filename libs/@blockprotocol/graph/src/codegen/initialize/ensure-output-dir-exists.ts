@@ -19,6 +19,6 @@ export const ensureOutputDirExists = async (
       `Target directory ${resolvedTargetDir} didn't exist, creating..`,
     );
     // If it doesn't, try and create it
-    await fs.mkdir(resolvedTargetDir);
+    await fs.mkdir(resolvedTargetDir, { recursive: true });
   }
 };
