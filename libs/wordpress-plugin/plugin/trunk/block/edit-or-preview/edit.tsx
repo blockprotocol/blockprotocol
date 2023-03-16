@@ -94,27 +94,44 @@ export const Edit = ({
           sourceUrl,
           version: selectedBlock?.version ?? "unknown",
         },
-      }).then(({ entity }) => {
-        const { entity_id } = entity;
-        const subgraph = buildSubgraph(
-          {
-            entities: [dbEntityToEntity(entity)],
-            dataTypes: [],
-            entityTypes: [],
-            propertyTypes: [],
-          },
-          [
+      })
+        .then(({ entity }) => {
+          if (!entity) {
+            throw new Error("no entity returned from createEntity");
+          }
+          const { entity_id } = entity;
+          const subgraph = buildSubgraph(
             {
-              entityId: entity.entity_id,
-              editionId: new Date(entity.updated_at).toISOString(),
+              entities: [dbEntityToEntity(entity)],
+              dataTypes: [],
+              entityTypes: [],
+              propertyTypes: [],
             },
-          ],
-          blockSubgraphResolveDepths,
-        );
-        setEntitySubgraph(subgraph);
-        setEntityId(entity_id);
-        creating.current = false;
-      });
+            [
+              {
+                entityId: entity.entity_id,
+                editionId: new Date(entity.updated_at).toISOString(),
+              },
+            ],
+            blockSubgraphResolveDepths,
+          );
+          setEntitySubgraph(subgraph);
+          setEntityId(entity_id);
+          creating.current = false;
+        })
+        .catch((error) => {
+          displayToast({
+            message: `Error creating Block Protocol entity: ${
+              error as Error
+            }.message`,
+            actions: [
+              {
+                label: "Get Help",
+                url: "https://blockprotocol.org/contact",
+              },
+            ],
+          });
+        });
     } else if (
       !entitySubgraph ||
       entitySubgraph.roots[0]?.baseId !== entityId
@@ -124,14 +141,26 @@ export const Edit = ({
           entityId,
           graphResolveDepths: blockSubgraphResolveDepths,
         },
-      }).then(({ data }) => {
+      }).then(async ({ data, errors }) => {
         if (!data) {
-          throw new Error("No data returned from getEntitySubgraph");
+          displayToast({
+            message:
+              errors?.[0]?.message ||
+              `Error fetching Block Protocol entity with id '${entityId}'`,
+            actions: [
+              {
+                label: "Get Help",
+                url: "https://blockprotocol.org/contact",
+              },
+            ],
+          });
+          return;
         }
         setEntitySubgraph(data);
       });
     }
   }, [
+    displayToast,
     entitySubgraph,
     entityId,
     entityTypeId,
@@ -145,16 +174,27 @@ export const Edit = ({
       return;
     }
 
-    const { data: subgraph } = await getEntitySubgraph({
+    const { data: subgraph, errors } = await getEntitySubgraph({
       data: { entityId, graphResolveDepths: blockSubgraphResolveDepths },
     });
 
     if (!subgraph) {
-      throw new Error("No data returned from getEntitySubgraph");
+      displayToast({
+        message:
+          errors?.[0]?.message ||
+          `Error retrieving Block Protocol entity with id '${entityId}'`,
+        actions: [
+          {
+            label: "Get Help",
+            url: "https://blockprotocol.org/contact",
+          },
+        ],
+      });
+      return;
     }
 
     setEntitySubgraph(subgraph);
-  }, [entityId]);
+  }, [displayToast, entityId]);
 
   const serviceCallbacks = useMemo<ServiceEmbedderMessageCallbacks>(
     () =>
@@ -343,6 +383,7 @@ export const Edit = ({
   if (!entitySubgraph) {
     return (
       <div style={{ marginTop: 10 }}>
+        <ToastContainer enableMultiContainer containerId={entityId} />
         <LoadingImage height="8rem" />
       </div>
     );

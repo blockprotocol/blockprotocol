@@ -5,7 +5,7 @@ export type ToastProps = {
 
 export const Toast = ({ message, actions }: ToastProps) => (
   <div style={{ marginLeft: 10 }}>
-    <div>{message}</div>
+    <div style={{ marginBottom: 5, marginRight: 10 }}>{message}</div>
     {actions.map((action) => (
       <a
         href={action.url}
@@ -31,7 +31,7 @@ export const Toast = ({ message, actions }: ToastProps) => (
         --toastify-icon-color-success: var(--toastify-color-success);
         --toastify-icon-color-warning: var(--toastify-color-warning);
         --toastify-icon-color-error: var(--toastify-color-error);
-        --toastify-toast-width: 80%;
+        --toastify-toast-width: auto;
         --toastify-toast-background: #fff;
         --toastify-toast-min-height: 64px;
         --toastify-toast-max-height: 800px;
@@ -67,6 +67,7 @@ export const Toast = ({ message, actions }: ToastProps) => (
         position: fixed;
         padding: 4px;
         width: var(--toastify-toast-width);
+        max-width: 100%;
         box-sizing: border-box;
         color: #fff;
       }
@@ -673,8 +674,6 @@ export const Toast = ({ message, actions }: ToastProps) => (
           transform: rotate(360deg);
         }
       }
-
-      /*# sourceMappingURL=ReactToastify.css.map */
     `}</style>
   </div>
 );
