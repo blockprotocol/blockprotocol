@@ -82,7 +82,7 @@ Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Disc
 
 == Changelog ==
 
-<!-- The latest release's entry only goes here – the full log should be in changelog.txt -->
+<!-- Only the latest release's entry should appear here – the full log should be in changelog.txt -->
 
 = 0.0.4 =
 * Improved error handling, including more visible error messages
