@@ -95,17 +95,32 @@ const nextConfig = {
       },
       {
         source: "/docs/spec/graph-module-specification",
-        destination: "/docs/spec/graph-module",
+        destination: "/docs/spec/graph",
         permanent: true,
       },
       {
         source: "/docs/spec/graph-service",
-        destination: "/docs/spec/graph-module",
+        destination: "/docs/spec/graph",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/graph-module",
+        destination: "/docs/spec/graph",
         permanent: true,
       },
       {
         source: "/docs/spec/hook-service",
-        destination: "/docs/spec/hook-module",
+        destination: "/docs/spec/hook",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/hook-module",
+        destination: "/docs/spec/hook",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/service-module",
+        destination: "/docs/spec/service",
         permanent: true,
       },
       {
