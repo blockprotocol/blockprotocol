@@ -1,31 +1,36 @@
+import { ReactNode } from "react";
+
 export type ToastProps = {
-  message: string;
-  actions: { label: string; url: string }[];
+  content: ReactNode;
+  type: "error";
 };
 
-export const Toast = ({ message, actions }: ToastProps) => (
-  <div style={{ marginLeft: 10 }}>
-    <div style={{ marginBottom: 5, marginRight: 10 }}>{message}</div>
-    {actions.map((action) => (
-      <a
-        href={`${action.url}?utm_medium=organic&utm_source=wordpress_error-toast`}
-        key={action.url}
-        style={{ marginRight: 20 }}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {action.label}
-      </a>
-    ))}
+const colors = {
+  error: "#DF3449",
+};
+
+export const Toast = ({ content, type }: ToastProps) => (
+  <div style={{ marginLeft: 5, lineHeight: 1.4 }}>
+    <div
+      style={{
+        color: colors[type],
+        fontWeight: 600,
+        lineHeight: 1,
+        marginBottom: 6,
+      }}
+    >
+      Error
+    </div>
+    {content}
     <style>{` 
-      /* react-toastify/dist/ReactToastify.css */
+      /* MODIFIED from react-toastify/dist/ReactToastify.css (don't vendor in again) */
       .Toastify__toast-container {
         --toastify-color-light: #fff;
         --toastify-color-dark: #121212;
-        --toastify-color-info: #3498db;
-        --toastify-color-success: #07bc0c;
-        --toastify-color-warning: #f1c40f;
-        --toastify-color-error: #e74c3c;
+        --toastify-color-info: #3445DF;
+        --toastify-color-success: #04AF48;
+        --toastify-color-warning: #E9A621;
+        --toastify-color-error: ${colors.error};
         --toastify-color-transparent: rgba(255, 255, 255, 0.7);
         --toastify-icon-color-info: var(--toastify-color-info);
         --toastify-icon-color-success: var(--toastify-color-success);
@@ -35,9 +40,9 @@ export const Toast = ({ message, actions }: ToastProps) => (
         --toastify-toast-background: #fff;
         --toastify-toast-min-height: 64px;
         --toastify-toast-max-height: 800px;
-        --toastify-font-family: sans-serif;
+        --toastify-font-family: "Helvetica Neue", "Arial", sans-serif;
         --toastify-z-index: 9999;
-        --toastify-text-color-light: #757575;
+        --toastify-text-color-light: #000;
         --toastify-text-color-dark: #fff;
         --toastify-text-color-info: #fff;
         --toastify-text-color-success: #fff;
@@ -67,7 +72,7 @@ export const Toast = ({ message, actions }: ToastProps) => (
         position: fixed;
         padding: 4px;
         width: var(--toastify-toast-width);
-        max-width: 100%;
+        max-width: 460px;
         box-sizing: border-box;
         color: #fff;
       }
@@ -127,10 +132,13 @@ export const Toast = ({ message, actions }: ToastProps) => (
         min-height: var(--toastify-toast-min-height);
         box-sizing: border-box;
         margin-bottom: 1rem;
-        padding: 8px;
-        border-radius: 4px;
-        box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1),
-          0 2px 15px 0 rgba(0, 0, 0, 0.05);
+        padding: 10px 16px;
+        border-radius: 7px;
+        border-top: 6px solid black;
+        box-shadow: 0px 11px 30px rgba(61, 78, 133, 0.04), 
+          0px 7.12963px 18.37px rgba(61, 78, 133, 0.05), 
+          0px 4.23704px 8.1px rgba(61, 78, 133, 0.06), 
+          0px 0.203704px 0.62963px rgba(61, 78, 133, 0.07);
         display: -ms-flexbox;
         display: flex;
         -ms-flex-pack: justify;
@@ -138,11 +146,54 @@ export const Toast = ({ message, actions }: ToastProps) => (
         max-height: var(--toastify-toast-max-height);
         overflow: hidden;
         font-family: var(--toastify-font-family);
+        font-size: 15px;
+        font-weight: 400;
         cursor: default;
         direction: ltr;
         /* webkit only issue #791 */
         z-index: 0;
       }
+      
+      .Toastify__toast a {
+        font-weight: 600;
+        text-decoration: none !important;
+        transition: opacity 0.1s;
+      }
+      
+      .Toastify__toast a:hover {
+        opacity: 0.8;
+        text-decoration: none !important;
+        transition: opacity 0.1s;
+      }
+      
+      .Toastify__toast--error {
+        border-top-color: var(--toastify-color-error);
+      }
+      .Toastify__toast--error a {
+        color: var(--toastify-color-error) !important;
+      }
+       
+      .Toastify__toast--info {
+        border-top-color: var(--toastify-color-info);
+      }
+      .Toastify__toast--info a {
+        color: var(--toastify-color-info) !important;
+      }
+      
+      .Toastify__toast--success {
+        border-top-color: var(--toastify-color-success);
+      }
+      .Toastify__toast--success a {
+        color: var(--toastify-color-success) !important;
+      }
+      
+      .Toastify__toast--warning {
+        border-top-color: var(--toastify-color-warning);
+      }
+      .Toastify__toast--warning a {
+        color: var(--toastify-color-warning) !important;
+      }
+      
       .Toastify__toast--rtl {
         direction: rtl;
       }

@@ -1,5 +1,6 @@
 import { ServiceEmbedderMessageCallbacks } from "@blockprotocol/service";
 import apiFetch from "@wordpress/api-fetch";
+import { Fragment } from "react";
 
 import { ToastProps } from "./toast";
 
@@ -53,10 +54,10 @@ export const callService = async (
         label: "Billing",
       });
       errorMessage =
-        "You have an unpaid Block Protocol invoice. Please pay them to make more API calls.";
+        "You have an unpaid invoice. Please pay it to make more API calls.";
     } else if (errorMessage.includes("monthly overage")) {
       errorMessage =
-        "You have reached the monthly overage charge cap you previously set. Please increase it to make more API calls this months.";
+        "You have reached the monthly overage cap you set. Please increase it to make more calls this month.";
       actions.unshift({
         url: billingUrl,
         label: "Increase",
@@ -66,12 +67,24 @@ export const callService = async (
         url: billingUrl,
         label: "Upgrade",
       });
-      errorMessage = `You have exceeded your monthly free API calls for this ${providerName} service. Please upgrade your Block Protocol account to use this service again, this month.`;
+      errorMessage = `You have exceeded your free calls for this ${providerName} service. Please upgrade to use it again this month.`;
     }
 
     displayToast({
-      message: errorMessage,
-      actions,
+      content: (
+        <div>
+          {errorMessage}{" "}
+          {actions.map((action, index) => (
+            <Fragment key={action.url}>
+              {index > 0 && " | "}
+              <a href={action.url} target="_blank" rel="noreferrer">
+                {action.label}
+              </a>
+            </Fragment>
+          ))}
+        </div>
+      ),
+      type: "error",
     });
 
     return {

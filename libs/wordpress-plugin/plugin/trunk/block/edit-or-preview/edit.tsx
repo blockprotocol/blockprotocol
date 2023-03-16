@@ -26,6 +26,8 @@ import { CustomBlockControls } from "./edit/block-controls";
 import { LoadingImage } from "./edit/loading-image";
 import { constructServiceModuleCallbacks } from "./edit/service-callbacks";
 import { Toast, ToastProps } from "./edit/toast";
+import { CloseButton } from "./edit/toast/close-button";
+import { CrossIcon } from "./edit/toast/cross-icon";
 
 type BlockProtocolBlockAttributes = {
   author: string;
@@ -56,9 +58,14 @@ export const Edit = ({
 
   const displayToast = useCallback(
     (toastProps: ToastProps, options?: Parameters<typeof toast>[1]) => {
-      toast(<Toast {...toastProps} />, {
+      toast(<Toast {...toastProps} type="error" />, {
         autoClose: false,
+        closeButton: <CloseButton />,
+        closeOnClick: false,
+        draggable: true,
+        draggablePercent: 30,
         containerId: entityId,
+        icon: <CrossIcon />,
         position: toast.POSITION.BOTTOM_LEFT,
         type: toast.TYPE.ERROR,
         ...options,
@@ -121,15 +128,20 @@ export const Edit = ({
         })
         .catch((error) => {
           displayToast({
-            message: `Error creating Block Protocol entity: ${
-              error as Error
-            }.message`,
-            actions: [
-              {
-                label: "Get Help",
-                url: "https://blockprotocol.org/contact",
-              },
-            ],
+            content: (
+              <div>
+                Could not create Block Protocol entity
+                {error?.message ? `: ${error.message}` : "."}{" "}
+                <a
+                  href="https://blockprotocol.org/contact"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Get Help
+                </a>
+              </div>
+            ),
+            type: "error",
           });
         });
     } else if (
@@ -141,18 +153,23 @@ export const Edit = ({
           entityId,
           graphResolveDepths: blockSubgraphResolveDepths,
         },
-      }).then(async ({ data, errors }) => {
+      }).then(({ data }) => {
         if (!data) {
           displayToast({
-            message:
-              errors?.[0]?.message ||
-              `Error fetching Block Protocol entity with id '${entityId}'`,
-            actions: [
-              {
-                label: "Get Help",
-                url: "https://blockprotocol.org/contact",
-              },
-            ],
+            content: (
+              <div>
+                Could not find Block Protocol entity with id starting{" "}
+                <strong>{entityId.slice(0, 8)}</strong>.{" "}
+                <a
+                  href="https://blockprotocol.org/contact"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Get Help
+                </a>
+              </div>
+            ),
+            type: "error",
           });
           return;
         }
@@ -174,21 +191,26 @@ export const Edit = ({
       return;
     }
 
-    const { data: subgraph, errors } = await getEntitySubgraph({
+    const { data: subgraph } = await getEntitySubgraph({
       data: { entityId, graphResolveDepths: blockSubgraphResolveDepths },
     });
 
     if (!subgraph) {
       displayToast({
-        message:
-          errors?.[0]?.message ||
-          `Error retrieving Block Protocol entity with id '${entityId}'`,
-        actions: [
-          {
-            label: "Get Help",
-            url: "https://blockprotocol.org/contact",
-          },
-        ],
+        content: (
+          <div>
+            Could not find Block Protocol entity with id starting{" "}
+            <strong>{entityId.slice(0, 8)}</strong>.{" "}
+            <a
+              href="https://blockprotocol.org/contact"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Get Help
+            </a>
+          </div>
+        ),
+        type: "error",
       });
       return;
     }
