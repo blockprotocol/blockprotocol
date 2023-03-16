@@ -1,5 +1,12 @@
 # @blockprotocol/service
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [[`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2)]:
+  - @blockprotocol/core@0.1.1
+
 ## 0.1.1
 
 ### Patch Changes

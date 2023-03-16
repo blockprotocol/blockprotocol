@@ -258,6 +258,23 @@ function block_protocol_editor_assets() {
 		// user needs to set a valid API key – bail
 		return;
 	}
+
+	// Register and enqueue the sentry plugin if plugin analytics are enabled
+	// We want to ensure errors are caught early, so we enqueue this first.
+	if (!block_protocol_reporting_disabled()) {
+		wp_register_script(
+			'blockprotocol-sentry',
+			plugins_url('build/sentry.js', __FILE__),
+			[],
+			BLOCK_PROTOCOL_PLUGIN_VERISON
+		);
+		wp_add_inline_script(
+			'blockprotocol-sentry',
+			"block_protocol_sentry_config = " . json_encode(block_protocol_client_sentry_init_args()),
+			$position = 'before'
+		);
+		wp_enqueue_script('blockprotocol-sentry');
+	}
   
 	// this file has a list of the dependencies our FE block code uses, so we can include those too
 	$asset_file = include(plugin_dir_path(__FILE__) . 'build/index.asset.php');

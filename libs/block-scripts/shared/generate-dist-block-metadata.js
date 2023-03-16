@@ -35,10 +35,10 @@ export const generateDistBlockMetadata = async (extra) => {
     author,
     license,
     externals: peerDependencies,
-    schema: "block-schema.json",
     variants,
     ...blockprotocol,
     ...extra,
+    schema: blockprotocol.blockEntityType,
   };
 
   return writeFormattedJson(

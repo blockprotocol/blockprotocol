@@ -2,14 +2,13 @@ import { Entity, EntityId, EntityRevisionId } from "../../../types/entity.js";
 import { Subgraph } from "../../../types/subgraph.js";
 import { isEntityVertex } from "../../../types/subgraph/vertices.js";
 import { TimeInterval, Timestamp } from "../../../types/temporal-versioning.js";
-import { typedEntries, typedValues } from "../../../util.js";
+import { mustBeDefined, typedEntries, typedValues } from "../../../util.js";
 import {
   intervalContainsTimestamp,
   intervalForTimestamp,
   intervalIsStrictlyAfterInterval,
   intervalOverlapsInterval,
 } from "../../interval.js";
-import { mustBeDefined } from "../../must-be-defined.js";
 
 /**
  * Returns all {@link Entity}s within the vertices of the given {@link Subgraph}, optionally filtering to only get their

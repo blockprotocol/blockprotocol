@@ -1,5 +1,31 @@
 # mock-block-dock
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [[`2b771f30`](https://github.com/blockprotocol/blockprotocol/commit/2b771f30e88ae610a01cb024eab082b8c7bb9a8a)]:
+  - @blockprotocol/graph@0.2.1
+  - @blockprotocol/hook@0.1.2
+
+## 0.1.2
+
+### Patch Changes
+
+- [#1161](https://github.com/blockprotocol/blockprotocol/pull/1161) [`dcfb45a4`](https://github.com/blockprotocol/blockprotocol/commit/dcfb45a4f1f3cbc47ff00a434e6eb52fef10c9b3) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Add latency simulation
+
+- [#1157](https://github.com/blockprotocol/blockprotocol/pull/1157) [`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2) Thanks [@CiaranMn](https://github.com/CiaranMn)! - fix handling of duplicate tag names in custom element renderer
+
+- [#1162](https://github.com/blockprotocol/blockprotocol/pull/1162) [`032352a9`](https://github.com/blockprotocol/blockprotocol/commit/032352a998d960f1c9a0527f8681173860585a83) Thanks [@CiaranMn](https://github.com/CiaranMn)! - remove (broken) commonjs build output
+
+- [#1160](https://github.com/blockprotocol/blockprotocol/pull/1160) [`bbb00ce6`](https://github.com/blockprotocol/blockprotocol/commit/bbb00ce66c9175fecd9c017880f2cf7845b0a3d9) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Introduce `includeDefaultMockData` toggle on MockBlockDock
+
+- Updated dependencies [[`065e6ac4`](https://github.com/blockprotocol/blockprotocol/commit/065e6ac4b3722b633fb3996b5482f61a9f5b2b69), [`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2), [`9a98416d`](https://github.com/blockprotocol/blockprotocol/commit/9a98416df8756c26037a4559affd421f80f84547)]:
+  - @blockprotocol/hook@0.1.1
+  - @blockprotocol/core@0.1.1
+  - @blockprotocol/graph@0.2.0
+  - @blockprotocol/service@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
