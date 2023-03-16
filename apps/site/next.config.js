@@ -109,6 +109,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/docs/spec/rfcs_and_roadmap",
+        destination: "/docs/spec/roadmap",
+        permanent: true,
+      },
+      {
         source: "/docs/embedding-blocks",
         destination: "/docs/using-blocks",
         permanent: true,
