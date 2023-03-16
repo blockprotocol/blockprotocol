@@ -13,24 +13,25 @@ Our aim is to develop a new standard for building frontend components, or "block
 
 ## History
 
-_Coming soon_
-/* Link to RFCs accepted, document module releases and new versions of spec */
+_Coming soon:_ links to RFCs accepted, module release announcements, and new versions of the spec will be collated here.
 
-## Roadmap
+## Proposed Changes
 
-### Proposed changes
+### RFCs
 
-**RFCs:** the "RFC" (Request For Comment) process provides a consistent and controlled path for new features to enter the protocol's specification. Many changes, including most bug fixes and documentation improvements can be implemented and reviewed without going through this process. However, when changes are considered "substantial" enough, we require that they first take shape as RFCs, are subject to community comment, and are designed in a way that produces broad agreement approved by the Block Protocol core team. This process serves to transparently document in detail the considerations behind major changes, and enables spec evolution to take place in a way that accounts for all community member's interests.
+The "RFC" (Request For Comment) process provides a consistent and controlled path for new features to enter the protocol's specification. Many changes, including most bug fixes and documentation improvements can be implemented and reviewed without going through this process. However, when changes are considered "substantial" enough, we require that they first take shape as RFCs, are subject to community comment, and are designed in a way that produces broad agreement approved by the Block Protocol core team. This process serves to transparently document in detail the considerations behind major changes, and enables spec evolution to take place in a way that accounts for all community member's interests.
 
-**Planned modules:** we expect to introduce the following new modules to the Block Protocol to support additional functionality that requires application-block cooperation.
+**Active RFCs:**
 
-#### Active RFCs
+[Browse here](https://github.com/blockprotocol/blockprotocol/tree/main/rfcs/text)
 
-/* Insert list to active RFCs hosted on blockprotocol.org, generated from `rfcs` contents */
+_This link will be replaced with direct links to the RFCs on blockprotocol.org soon_
+
+### Modules
 
 #### New modules
 
-We welcome suggestions for other modules that may be useful, via GitHub [discussions](https://github.com/blockprotocol/blockprotocol/discussions) or by creating [RFCs](https://github.com/blockprotocol/blockprotocol/tree/main/rfcs).
+We expect to introduce the following new modules to the Block Protocol to support additional functionality that requires application-block cooperation. We welcome suggestions for other modules that may be useful, via GitHub [discussions](https://github.com/blockprotocol/blockprotocol/discussions) or by creating [RFCs](https://github.com/blockprotocol/blockprotocol/tree/main/rfcs).
 
 ##### Actions module
 
@@ -38,14 +39,14 @@ A generalized approach to capturing user actions could involve a module whereby 
 
 ##### Comments module
 
-We want to facilitate users leaving comments on elements within blocks. This could be
+We want to facilitate users leaving comments on elements within blocks. This could be:
 
 - managed entirely outside the block, e.g. by a wrapper around the block which provides a context menu to users for adding comments on blocks – which avoids blocks having to have any knowledge of commenting, but could interfere with how the block wants to respond to user input, or
 - managed by providing a new module whereby blocks could send messages requesting that comments be attached to specific elements in blocks – which allows blocks to have control over how and to what element the user is able to attach comments.
 
 ##### Internationalization module
 
-A module to provide the user’s preferred locale to blocks. Please see the [GitHub discussion](https://github.com/blockprotocol/blockprotocol/discussions/315).
+A module to provide the user’s preferred locale to blocks, for localization and internationalization. Please see the [GitHub discussion](https://github.com/blockprotocol/blockprotocol/discussions/315). This module could be generalized to support passing other user-specific preferences or options which can be used to customize blocks (e.g. accessibility choices around font-size, or color vision deficiency).
 
 ##### Location module
 
