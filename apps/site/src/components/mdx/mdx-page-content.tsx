@@ -204,7 +204,7 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
               },
             },
           /** Headers that come after headers shouldn't have a top margin */
-          "& h2 + h3, h2 + h4, h2 + h5, h3 + h4, h3 + h5, h4 + h5": {
+          "& h2 + h3, h2 + h4, h2 + h5, h2 + h6, h3 + h4, h3 + h5, h3 + h6, h4 + h5, h4 + h6, h5 + h6": {
             marginTop: 0,
           },
           "& > h1:first-of-type": {

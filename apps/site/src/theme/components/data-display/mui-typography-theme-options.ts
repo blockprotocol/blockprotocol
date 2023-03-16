@@ -10,6 +10,7 @@ export const MuiTypographyThemeOptions: Components<Theme>["MuiTypography"] = {
       bpHeading3: "h3",
       bpHeading4: "h4",
       bpHeading5: "h5",
+      bpHeading5: "h6",
       bpSmallCaps: "p",
       bpLargeText: "p",
       bpBodyCopy: "p",
