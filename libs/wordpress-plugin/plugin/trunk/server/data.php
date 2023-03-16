@@ -150,23 +150,39 @@ function block_protocol_filter_sentry_event($event)
   return null;
 }
 
-function block_protocol_sentry_init_args() 
+function block_protocol_shared_sentry_args()
 {
-  if(!function_exists('\Sentry\init')) { return []; }
-
   $server_url = get_site_url();
   $environment = substr($server_url, 0, 16) == "http://localhost" ? "development" : "production";
 
   return [	
-    'dsn' => BLOCK_PROTOCOL_SENTRY_DSN,
     'environment' => $environment,
     'server_name' => $server_url,
     'release' => BLOCK_PROTOCOL_PLUGIN_VERISON,
+  ];
+}
+
+function block_protocol_client_sentry_init_args()
+{
+  $public_id = block_protocol_public_id();
+  $anonymous_id = block_protocol_anonymous_user_id();
+
+  return array_merge([
+    "dsn" => BLOCK_PROTOCOL_SENTRY_CLIENT_DSN,
+    "anonymous_id" => $anonymous_id,
+    "public_id" => $public_id,
+  ], block_protocol_shared_sentry_args());
+}
+
+function block_protocol_sentry_init_args() 
+{
+  return array_merge([	
+    'dsn' => BLOCK_PROTOCOL_SENTRY_DSN,
     'sample_rate' => 1,
     'error_types' => E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_USER_DEPRECATED,	
     'attach_stacktrace' => TRUE,
     'before_send' => 'block_protocol_filter_sentry_event'
-  ];
+  ], block_protocol_shared_sentry_args());
 };
 
 function block_protocol_sentry_has_other_config()
