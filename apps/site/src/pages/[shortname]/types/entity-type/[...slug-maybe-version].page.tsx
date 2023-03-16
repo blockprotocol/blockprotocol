@@ -338,7 +338,6 @@ const EntityTypePage: NextPage = () => {
                 <Box>
                   {!isDraft && entityType?.schema.$id && (
                     <Tooltip
-                      arrow
                       placement="bottom"
                       title={hasCopied ? "Copied!" : "Click to copy."}
                       enterDelay={250}
