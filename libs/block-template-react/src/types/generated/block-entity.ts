@@ -4,36 +4,29 @@
 
 import { Entity } from "@blockprotocol/graph";
 
-export type BlockEntity = MinesweeperBlock;
+export type BlockEntity = Thing;
 
-export type BlockEntityOutgoingLinkAndTarget =
-  MinesweeperBlockOutgoingLinkAndTarget;
-
-export type MinesweeperBlock = Entity<MinesweeperBlockProperties>;
-
-export type MinesweeperBlockOutgoingLinkAndTarget = never;
-
-export type MinesweeperBlockOutgoingLinksByLinkEntityTypeId = {};
+export type BlockEntityOutgoingLinkAndTarget = ThingOutgoingLinkAndTarget;
 
 /**
- * The block entity of the "Minesweeper" block
+ * A word or set of words by which something is known, addressed, or referred to.
  */
-export type MinesweeperBlockProperties = {
-  "https://blockprotocol-molpob88k.stage.hash.ai/@ciaranm/types/property-type/number-of-columns/"?: NumberOfColumnsPropertyValue;
-  "https://blockprotocol-molpob88k.stage.hash.ai/@ciaranm/types/property-type/number-of-bombs/"?: NumberOfBombsPropertyValue;
+export type NamePropertyValue = Text;
+
+/**
+ * An ordered sequence of characters
+ */
+export type Text = string;
+
+export type Thing = Entity<ThingProperties>;
+
+export type ThingOutgoingLinkAndTarget = never;
+
+export type ThingOutgoingLinksByLinkEntityTypeId = {};
+
+/**
+ * A generic thing
+ */
+export type ThingProperties = {
+  "https://blockprotocol.org/@blockprotocol/types/property-type/name/"?: NamePropertyValue;
 };
-
-/**
- * An arithmetical value (in the Real number system)
- */
-export type Number = number;
-
-/**
- * How many bombs should be or are in something
- */
-export type NumberOfBombsPropertyValue = Number;
-
-/**
- * How many columns should be or are in something
- */
-export type NumberOfColumnsPropertyValue = Number;
