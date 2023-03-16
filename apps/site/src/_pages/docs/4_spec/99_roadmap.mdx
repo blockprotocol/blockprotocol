@@ -10,6 +10,7 @@ Our aim is to develop a new standard for building frontend components, or "block
 - **Zero reliance on centralized hosted services.** Hosted services are provided as a convenience only.
   - Things like the [Þ Hub](https://blockprotocol.org/hub) complement the specification by providing a means of discovering blocks, types, services, and hooks, but its use is not required.
   - Similarly, embedding applications can utilize the Block Protocol's hosted middleware to provide fallbacks to users where blocks ask for things that an app itself doesn't natively support — for example, an integration with a particular new external service. But embedders may equally well choose not to fallback to the Þ middleware, and instead limit the selection of blocks their users are shown in the first place to only those which are fully supported locally.
+  - In due course, we intend to allow third-party services to "announce" the existence of externally hosted schemas and blocks to the Þ Hub, enabling content published and hosted elsewhere to be easily discovered via the same endpoints. We want to make it easy for people to host their own hubs, whose contents remain discoverable and mappable (where users choose to make them public).
 
 ## History
 
