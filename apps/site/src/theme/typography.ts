@@ -59,6 +59,12 @@ export const typography: ThemeOptions["typography"] = {
     lineHeight: 1.1,
     color: customColors.gray[80],
   },
+  bpHeading6: {
+    fontFamily: HEADING_FONT_FAMILY,
+    fontSize: "var(--step-0)",
+    lineHeight: 1.1,
+    color: customColors.gray[80],
+  },
   bpSmallCaps: {
     fontFamily: HEADING_FONT_FAMILY,
     fontSize: "var(--step--1)",

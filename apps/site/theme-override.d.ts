@@ -109,6 +109,7 @@ declare module "@mui/material/styles" {
     bpHeading3: CSSProperties;
     bpHeading4: CSSProperties;
     bpHeading5: CSSProperties;
+    bpHeading6: CSSProperties;
     bpLargeText: CSSProperties;
     bpBodyCopy: CSSProperties;
     bpSmallCopy: CSSProperties;
@@ -124,6 +125,7 @@ declare module "@mui/material/styles" {
     bpHeading3?: CSSProperties;
     bpHeading4?: CSSProperties;
     bpHeading5?: CSSProperties;
+    bpHeading6: CSSProperties;
     bpSmallCaps?: CSSProperties;
     bpLargeText?: CSSProperties;
     bpBodyCopy?: CSSProperties;
@@ -142,6 +144,7 @@ declare module "@mui/material/Typography" {
     bpHeading3: true;
     bpHeading4: true;
     bpHeading5: true;
+    bpHeading6: true;
     bpSmallCaps: true;
     bpLargeText: true;
     bpBodyCopy: true;
