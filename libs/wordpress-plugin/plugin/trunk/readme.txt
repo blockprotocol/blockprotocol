@@ -65,8 +65,7 @@ WordPress is one of these applications. [HASH](https://hash.ai), an all-in-one p
 
 = Can I create a block for the Block Protocol? =
 
-Absolutely. You can start coding your block in minutes and, once finished, publish your block instantly.
-[Check out the docs to get started](https://blockprotocol.org/docs/developing-blocks).
+Absolutely. You can start coding your block in minutes and, once finished, publish your block instantly. [Check out the docs to get started](https://blockprotocol.org/docs/developing-blocks).
 
 = How might it change? =
 
