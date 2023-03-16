@@ -63,22 +63,22 @@ Within `trunk` there are:
 
 #### Prerequisites
 
-1.  Choose the appropriate semver version number (e.g. `0.1.0`), and then make sure it is reflected in the following places in `plugin/trunk/`:
+- Choose the appropriate semver version number (e.g. `0.1.0`), and then make sure it is reflected in the following places in `plugin/trunk/`:
 
-- in the header in `block-protocol.php` (two places)
-- the value for `BLOCK_PROTOCOL_PLUGIN_VERISON` in `block-protocol.php`
-- `Stable tag` in `readme.txt`
-- also update `version` in `package.json` (next to this README)
+  - in the header in `block-protocol.php` (two places)
+  - the value for `BLOCK_PROTOCOL_PLUGIN_VERISON` in `block-protocol.php`
+  - `Stable tag` in `readme.txt`
+  - also update `version` in `package.json` (next to this README)
 
-2.  Updating the changelog:
+- Updating the changelog:
 
-- in `readme.txt`:
-  - **replace** the current entry under `Changelog`
-  - **replace** the current entry under `Upgrade Notice` (should be shorter, snappier than changelog – 300 chars max)
-- in `changelog.txt`:
-  - **copy** the new `Changelog` entry from `readme.txt` to the top
+  - in `readme.txt`:
+    - **replace** the current entry under `Changelog`
+    - **replace** the current entry under `Upgrade Notice` (should be shorter, snappier than changelog – 300 chars max)
+  - in `changelog.txt`:
+    - **copy** the new `Changelog` entry from `readme.txt` to the top
 
-3.  Commit these changes, have them reviewed and merged to `main`
+- Commit these changes, have them reviewed and merged to `main`
 
 #### Uploading to the WordPress plugin directory
 
