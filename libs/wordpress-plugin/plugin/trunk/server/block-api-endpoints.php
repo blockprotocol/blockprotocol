@@ -361,7 +361,7 @@ function create_block_protocol_entity(WP_REST_Request $request)
     return $results;
   }
 
-  $block_metadata = isset($params['$block_metadata']) ? $params['block_metadata'] : null;
+  $block_metadata = isset($params['block_metadata']) ? $params['block_metadata'] : null;
 
   if ($block_metadata) {
     block_protocol_page_data('new_block', [
