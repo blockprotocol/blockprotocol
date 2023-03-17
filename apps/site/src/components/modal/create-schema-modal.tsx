@@ -33,13 +33,6 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
   const router = useRouter();
   const { user } = useUser();
 
-  const handleSchemaTitleChange = (value: string) => {
-    // trim surrounding whitespace and remove most special characters
-    const formattedText = value.replace(/[^a-zA-Z0-9\-_ ()']/g, "");
-
-    setNewSchemaTitle(formattedText);
-  };
-
   const handleCreateSchema = useCallback(
     async (evt: FormEvent) => {
       evt.preventDefault();
@@ -150,7 +143,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
               if (apiErrorMessage) {
                 setApiErrorMessage(undefined);
               }
-              handleSchemaTitleChange(evt.target.value);
+              setNewSchemaTitle(evt.target.value);
             }}
             required
             error={displayError}
