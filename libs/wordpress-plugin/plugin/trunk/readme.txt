@@ -5,7 +5,7 @@ Tags: block protocol, blocks, gutenberg, gutenberg blocks, block, schema, countd
 Requires at least: 5.6.0
 Tested up to: 6.1.1
 Requires PHP: 7.4
-Stable tag: 0.0.3
+Stable tag: 0.0.4
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 
@@ -13,15 +13,16 @@ Access a growing collection of high-quality and powerful blocks with a one-time 
 
 == Description ==
 
-The [Block Protocol](https://blockprotocol.org) plugin gives you an ever-growing set of high-quality blocks to use in your WordPress site. 
+Install the [Block Protocol](https://blockprotocol.org) plugin to access an ever-growing library of high-quality blocks within WordPress. 
 
-Discover and use new blocks when you need them, directly from within the WordPress Gutenberg Editor. No more installing new plugins to get more blocks.
+Discover and use new blocks when you need them, at the point of insertion, directly from within the WordPress editor. No more installing new plugins to get more blocks.
 
-In addition to useful blocks like Callouts, Headings, Images, and Quotes, the Block Protocol plugin provides powerful, new blocks for services such as OpenAI, and Mapbox.
+- Blocks that provide access to external services including **OpenAI** and **Mapbox**, without needing to sign up for these separately
+- Structured data blocks with SEO benefits for your website, helping you rank more highly in Google and Bing (e.g. the [Address](https://blockprotocol.org/@hash/blocks/address) and [How-to](https://blockprotocol.org/@hash/blocks/how-to) blocks)
+- Interactive blocks such as the [drawing](https://blockprotocol.org/@tldraw/blocks/drawing) and [countdown timer](https://blockprotocol.org/@hash/blocks/timer) blocks
+- "Traditional" content management blocks such as [callouts](https://blockprotocol.org/@hash/blocks/callout), [tables](https://blockprotocol.org/@hash/blocks/table), headings, images, and quotes
 
-You can also build your own block for the Block Protocol and publish it instantly. 
-
-To get started building a block, [check out the documentation](https://blockprotocol.org/docs/developing-blocks).
+You can also build your own block for the Block Protocol without any PHP, and publish it instantly.  To build a block, [check out the developer docs](https://blockprotocol.org/docs/developing-blocks).
 
 == Installation ==
 
@@ -65,8 +66,7 @@ WordPress is one of these applications. [HASH](https://hash.ai), an all-in-one p
 
 = Can I create a block for the Block Protocol? =
 
-Absolutely. You can start coding your block in minutes and, once finished, publish your block instantly.
-[Check out the docs to get started](https://blockprotocol.org/docs/developing-blocks).
+Absolutely. You can start coding your block in minutes and, once finished, publish your block instantly. [Check out the docs to get started](https://blockprotocol.org/docs/developing-blocks).
 
 = How might it change? =
 
@@ -82,21 +82,15 @@ Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Disc
 
 == Changelog ==
 
-<!-- The latest release should be found here, and older ones moved to changelog.txt -->
+<!-- Only the latest release's entry should appear here – the full log should be in changelog.txt -->
 
-= 0.0.3 =
-* Add support for ChatGPT blocks
-* Notification when using unsupported database version
-* Fix rich text rendering
-* Icon for block category
-* Better error reporting
+= 0.0.4 =
+* Improved error handling, including more visible error messages
+* Add labels to custom block settings, fix 'found in post' for entities
 
 == Upgrade Notice ==
 
-= 0.0.3 =
-Upgrade for ChatGPT support and improved text rendering in Block Protocol blocks
+<!-- Upgrade notices describe the reason a user should upgrade. No more than 300 characters. -->
 
-<!--
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
--->
+= 0.0.4 =
+Upgrade for better custom block settings panel, and better error handling

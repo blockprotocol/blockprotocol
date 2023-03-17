@@ -26,8 +26,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   for (const block of blocks) {
     const entityId = (block as HTMLElement).dataset.entity;
+    const blockName = (block as HTMLElement).dataset.block_name;
+
     if (!entityId) {
-      throw new Error(`Block element did not have data-entity attribute set`);
+      // eslint-disable-next-line no-console -- log to help debug user issues (this should not happen)
+      console.error(
+        `Block element did not have entity attribute set for ${
+          blockName ?? "unknown"
+        } block`,
+      );
+      continue;
     }
 
     const entities = window.block_protocol_block_data.entities[entityId];
@@ -36,14 +44,14 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(
         `Could not render block: no entity with entityId '${entityId}' in window.block_protocl_data_entities`,
       );
-      return;
+      continue;
     }
 
     const sourceUrl = (block as HTMLElement).dataset.source;
     if (!sourceUrl) {
       // eslint-disable-next-line no-console -- log to help debug user issues (this should not happen)
       console.error("Block element did not have data-source attribute set");
-      return;
+      continue;
     }
 
     const sourceString =
@@ -55,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
 
-    const blockName = (block as HTMLElement).dataset.block_name;
     if (!blockName) {
       // eslint-disable-next-line no-console -- log to help debug user issues (this should not happen)
       console.error(`No block_name set for block`);
@@ -65,11 +72,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!rootEntity) {
       // eslint-disable-next-line no-console -- log to help debug user issues (this should not happen)
-      console.error("Root block entity not present in entities");
+      console.error(
+        `Root block entity not present in entities for entity ${entityId} in ${blockName} block`,
+      );
     }
 
     if (!blockName || !sourceString || !entities || !rootEntity) {
-      return;
+      continue;
     }
 
     const rootEntityRecordId = dbEntityToEntity(rootEntity).metadata.recordId;

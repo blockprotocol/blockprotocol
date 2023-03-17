@@ -27,6 +27,9 @@ export const generateDistBlockMetadata = async (extra) => {
     ? await fs.readJson(variantsJsonPath)
     : undefined;
 
+  const schema = blockprotocol.blockEntityType;
+  delete blockprotocol.blockEntityType;
+
   const blockMetadata = {
     name,
     version,
@@ -36,9 +39,9 @@ export const generateDistBlockMetadata = async (extra) => {
     license,
     externals: peerDependencies,
     variants,
+    schema,
     ...blockprotocol,
     ...extra,
-    schema: blockprotocol.blockEntityType,
   };
 
   return writeFormattedJson(
