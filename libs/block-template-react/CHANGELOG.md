@@ -1,5 +1,12 @@
 # block-template-react
 
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [[`1a9cacc9`](https://github.com/blockprotocol/blockprotocol/commit/1a9cacc9358ba6be44ab54e515c67a7a4531b105)]:
+  - block-scripts@0.2.2
+
 ## 0.3.1
 
 ### Patch Changes
