@@ -109,7 +109,7 @@ export const getEntity = async (
     hasRightEntity: { incoming: 0, outgoing: 0 },
   },
 ): Promise<{
-  entities: DbEntities;
+  entities?: DbEntities;
   depths: Required<GraphResolveDepths>;
 }> => {
   const {
@@ -145,9 +145,13 @@ export const getEntitySubgraph: GraphEmbedderMessageCallbacks["getEntity"] =
         ...graphResolveDepths,
       });
 
+      if (!dbEntities) {
+        throw new Error("could not find entity in database");
+      }
+
       const root = dbEntities.find((entity) => entity.entity_id === entityId);
       if (!root) {
-        throw new Error("Root not found in subgraph");
+        throw new Error("root not found in subgraph");
       }
 
       const rootEntityRecordId = dbEntityToEntity(root).metadata.recordId;
@@ -168,7 +172,9 @@ export const getEntitySubgraph: GraphEmbedderMessageCallbacks["getEntity"] =
       return {
         errors: [
           {
-            message: `Error when processing retrieval of entity ${entityId}: ${err}`,
+            message: `Error when fetching Block Protocol entity ${entityId}: ${
+              (err as Error).message
+            }`,
             code: "INTERNAL_ERROR",
           },
         ],

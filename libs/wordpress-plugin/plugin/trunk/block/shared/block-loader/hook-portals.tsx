@@ -27,7 +27,7 @@ const HookPortal = ({
     if (!loading.current && (!entity || entity.entity_id !== entityId)) {
       loading.current = true;
       void getEntity(entityId).then(({ entities }) => {
-        const foundEntity = entities.find(
+        const foundEntity = entities?.find(
           (entityOption) => entityOption.entity_id === entityId,
         );
         loading.current = false;
