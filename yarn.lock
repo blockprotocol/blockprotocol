@@ -2718,10 +2718,10 @@
     "@fortawesome/free-solid-svg-icons" "6.0.0"
     clsx "1.2.1"
 
-"@hashintel/type-editor@0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@hashintel/type-editor/-/type-editor-0.0.17.tgz#f9b04eb4aafce5eddcf925ad8df54bbd09e21443"
-  integrity sha512-uwQg0VFqctfSk7xl/LXDo2jsY1BTEYh1wQOD7Yj5CyOdApK4RFQFPFXvrBcp4fEgkkDysXwpDIXEZdouCWhjVg==
+"@hashintel/type-editor@0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@hashintel/type-editor/-/type-editor-0.0.18.tgz#55d1880a62a3489c0cc451dcabccd3fce08827c5"
+  integrity sha512-oWMEdPrhQhVywYtqrHmMdaALL5W+pWZv+s1uuvePslB4UMw/puGFZHxHokjLC/1tK5LcMUp0MMoaJcuqKtzRfQ==
   dependencies:
     "@blockprotocol/graph" "0.1.0-canary-20230227152050"
     "@blockprotocol/type-system" "0.1.0-canary-20230227152050"
