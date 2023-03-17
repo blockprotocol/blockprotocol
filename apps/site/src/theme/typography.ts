@@ -63,7 +63,7 @@ export const typography: ThemeOptions["typography"] = {
     fontFamily: HEADING_FONT_FAMILY,
     fontSize: "var(--step-0)",
     lineHeight: 1.1,
-    fontWeight: 700,
+    fontWeight: 600,
     color: customColors.gray[80],
   },
   bpSmallCaps: {
