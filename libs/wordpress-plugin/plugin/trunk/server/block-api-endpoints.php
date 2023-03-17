@@ -311,6 +311,14 @@ function create_block_protocol_entity(WP_REST_Request $request)
     return $results;
   }
 
+  if ($properties == "[]") {
+    // if sent an empty properties object, json_encode will convert it into an array
+    // we could JSON_FORCE_OBJECT json_encode but that would convert any empty arrays inside into objects
+    // @todo different parsing strategy that preserves the original JSON
+    $properties = "{}";
+  }
+
+
   $entity_id = generate_block_protocol_guidv4();
 
   $insertion_data = [
@@ -398,6 +406,13 @@ function update_block_protocol_entity(WP_REST_Request $request)
   if (!$encoded_properties) {
     $results['error'] = "You must provide 'properties' for an update";
     return $results;
+  }
+
+  if ($encoded_properties == "[]") {
+    // if sent an empty properties object, json_encode will convert it into an array
+    // we could JSON_FORCE_OBJECT json_encode but that would convert any empty arrays inside into objects
+    // @todo different parsing strategy that preserves the original JSON
+    $encoded_properties = "{}";
   }
 
   $update = [
