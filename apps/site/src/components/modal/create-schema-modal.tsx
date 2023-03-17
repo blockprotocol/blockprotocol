@@ -8,6 +8,7 @@ import {
   useCallback,
   useState,
 } from "react";
+import slugify from "slugify";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
@@ -97,7 +98,12 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       (newSchemaTitle === "" ? "Please enter a valid value" : undefined)
     : undefined;
 
-  const isSchemaTitleInvalid = !!apiErrorMessage || newSchemaTitle === "";
+  const isSchemaTitleInvalid =
+    !!apiErrorMessage ||
+    slugify(newSchemaTitle, {
+      lower: true,
+      strict: true,
+    }) === "";
 
   const displayError = touchedTitleInput && isSchemaTitleInvalid;
 
