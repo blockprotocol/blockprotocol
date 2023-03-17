@@ -146,7 +146,7 @@ export const generateDevWebpackConfig = async () => {
     plugins: [
       ...(baseWebpackConfig.plugins ?? []),
       new BlockAssetsPlugin(),
-      new Dotenv(),
+      new Dotenv({ silent: true }),
       new HtmlWebpackPlugin({
         filename: "index.html",
         template: path.resolve(
