@@ -1,5 +1,11 @@
 # block-scripts
 
+## 0.2.2
+
+### Patch Changes
+
+- [#1191](https://github.com/blockprotocol/blockprotocol/pull/1191) [`1a9cacc9`](https://github.com/blockprotocol/blockprotocol/commit/1a9cacc9358ba6be44ab54e515c67a7a4531b105) Thanks [@CiaranMn](https://github.com/CiaranMn)! - silence warning if no .env file present. don't include blockEntityType in block-metadata.json
+
 ## 0.2.1
 
 ### Patch Changes
