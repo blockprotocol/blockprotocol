@@ -1,5 +1,6 @@
 import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import { extractBaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import {
   EntityTypeEditorFormData,
   EntityTypeFormProvider,
@@ -7,7 +8,17 @@ import {
   getSchemaFromFormData,
   useEntityTypeForm,
 } from "@hashintel/type-editor";
-import { Box, Container, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Fade,
+  IconButton,
+  inputBaseClasses,
+  outlinedInputClasses,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { NextPage } from "next";
 import NextError from "next/error";
 import { useRouter } from "next/router";
@@ -17,15 +28,18 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { tw } from "twind";
 
-import { LinkIcon } from "../../../../components/icons";
+import { FontAwesomeIcon, LinkIcon } from "../../../../components/icons";
 import { Link } from "../../../../components/link";
+import { TextField } from "../../../../components/text-field";
 import { useUser } from "../../../../context/user-context";
 import { apiClient } from "../../../../lib/api-client";
 import { isLinkEntityType } from "../../../../util/type-system-util";
+import { generateOntologyUrl } from "../../../shared/schema";
 import { EntityTypeEditBar } from "./[...slug-maybe-version].page/entity-type-edit-bar";
 import { EntityTypeForm } from "./[...slug-maybe-version].page/entity-type-form";
 import { fetchEntityType } from "./[...slug-maybe-version].page/fetch-entity-type";
@@ -78,6 +92,18 @@ const EntityTypePage: NextPage = () => {
   }
 
   const { entityType, latestVersion } = entityTypeState ?? {};
+
+  const [description, setDescription] = useState("");
+  const [editingDescription, setEditingDescription] = useState(false);
+  const descriptionInputRef = useRef<HTMLInputElement | null>();
+
+  useEffect(() => {
+    const newDescription = entityType?.schema.description;
+    if (description !== newDescription) {
+      setDescription(newDescription);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entityType?.schema.description]);
 
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const copyEntityTypeId = useCallback<MouseEventHandler>(
@@ -251,6 +277,43 @@ const EntityTypePage: NextPage = () => {
 
   const entityTypeIsLink = isLinkEntityType(entityType);
 
+  console.log(entityType);
+
+  const updateEntityTypeDescription = async (newDescription: string) => {
+    if (!newDescription || description === entityType.schema.description) {
+      return;
+    }
+
+    const { versionedUrl } = generateOntologyUrl({
+      author: router.query.shortname as `@${string}`,
+      title,
+      kind: "entityType",
+      version: entityType.metadata.recordId.version + 1,
+    });
+
+    const { data: updatedData, error } = await apiClient.updateEntityType({
+      versionedUrl: entityType.schema.$id,
+      schema: {
+        ...entityType.schema,
+        $id: versionedUrl,
+        description: newDescription,
+      },
+    });
+
+    if (error || !updatedData) {
+      return {
+        errors: [
+          {
+            code: "INVALID_INPUT",
+            message: error?.message ?? "Could not update entity type",
+          },
+        ],
+      };
+    }
+
+    return { data: updatedData.entityType };
+  };
+
   return (
     <>
       <NextSeo title={`Block Protocol – ${shortname}/${title} Schema`} />
@@ -364,22 +427,57 @@ const EntityTypePage: NextPage = () => {
             </header>
 
             <Box component="main" sx={{ mt: 6 }}>
-              {entityType.schema.description ? (
-                <Box component="section" sx={{ mb: 6 }}>
-                  <Typography
-                    variant="bpHeading5"
-                    sx={{ mb: 2, fontWeight: 500 }}
-                  >
-                    Description
-                  </Typography>
-                  <Typography
-                    variant="bpBodyCopy"
+              <Box component="section" sx={{ mb: 6 }}>
+                <Typography
+                  variant="bpHeading5"
+                  sx={{ mb: 2, fontWeight: 500 }}
+                >
+                  Description
+                </Typography>
+                <Box>
+                  <TextField
+                    autoFocus
                     style={{ whiteSpace: "pre" }}
-                  >
-                    {entityType.schema.description}
-                  </Typography>
+                    value={description}
+                    InputProps={{ readOnly: !editingDescription }}
+                    inputRef={descriptionInputRef}
+                    onChange={(event) => {
+                      setDescription(event.target.value);
+                    }}
+                    onBlur={(event) => {
+                      setEditingDescription(false);
+                      void updateEntityTypeDescription(event.target.value);
+                    }}
+                    onKeyDown={({ code }) => {
+                      if (code === "Enter") {
+                        descriptionInputRef.current?.blur();
+                      }
+                    }}
+                    sx={{
+                      [`.${inputBaseClasses.input}`]: {
+                        p: 0,
+                      },
+                      [`.${outlinedInputClasses.notchedOutline}`]: {
+                        display: "none",
+                      },
+                    }}
+                  />
+
+                  <Fade in={!editingDescription}>
+                    <IconButton
+                      onClick={() => {
+                        setEditingDescription(true);
+                        descriptionInputRef.current?.focus();
+                      }}
+                      sx={{
+                        padding: 0.5,
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </IconButton>
+                  </Fade>
                 </Box>
-              ) : null}
+              </Box>
 
               <Box component="section">
                 <EntityTypeForm
