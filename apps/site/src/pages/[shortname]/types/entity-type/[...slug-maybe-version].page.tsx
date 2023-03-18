@@ -64,7 +64,7 @@ const EntityTypePage: NextPage = () => {
         Buffer.from(
           decodeURIComponent(router.query.draft.toString()),
           "base64",
-        ).toString("ascii"),
+        ).toString("utf8"),
       );
 
       // @todo add validation
