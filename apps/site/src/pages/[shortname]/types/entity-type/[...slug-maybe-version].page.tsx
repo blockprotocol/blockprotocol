@@ -13,6 +13,7 @@ import {
   Container,
   Fade,
   IconButton,
+  Input,
   inputBaseClasses,
   outlinedInputClasses,
   Stack,
@@ -31,15 +32,14 @@ import {
   useRef,
   useState,
 } from "react";
+import { useController } from "react-hook-form";
 import { tw } from "twind";
 
 import { FontAwesomeIcon, LinkIcon } from "../../../../components/icons";
 import { Link } from "../../../../components/link";
-import { TextField } from "../../../../components/text-field";
 import { useUser } from "../../../../context/user-context";
 import { apiClient } from "../../../../lib/api-client";
 import { isLinkEntityType } from "../../../../util/type-system-util";
-import { generateOntologyUrl } from "../../../shared/schema";
 import { EntityTypeEditBar } from "./[...slug-maybe-version].page/entity-type-edit-bar";
 import { EntityTypeForm } from "./[...slug-maybe-version].page/entity-type-form";
 import { fetchEntityType } from "./[...slug-maybe-version].page/fetch-entity-type";
@@ -93,17 +93,9 @@ const EntityTypePage: NextPage = () => {
 
   const { entityType, latestVersion } = entityTypeState ?? {};
 
-  const [description, setDescription] = useState("");
+  const [descriptionHovered, setDescriptionHovered] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   const descriptionInputRef = useRef<HTMLInputElement | null>();
-
-  useEffect(() => {
-    const newDescription = entityType?.schema.description;
-    if (description !== newDescription) {
-      setDescription(newDescription);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entityType?.schema.description]);
 
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const copyEntityTypeId = useCallback<MouseEventHandler>(
@@ -122,9 +114,14 @@ const EntityTypePage: NextPage = () => {
   };
 
   const formMethods = useEntityTypeForm<EntityTypeEditorFormData>({
-    defaultValues: { properties: [], links: [] },
+    defaultValues: { properties: [], links: [], description: "" },
   });
-  const { handleSubmit: wrapHandleSubmit, reset } = formMethods;
+  const { handleSubmit: wrapHandleSubmit, reset, control } = formMethods;
+
+  const descriptionController = useController({
+    control,
+    name: "description",
+  });
 
   // When loading or updating a type, set local and form state, and set the URL
   const setEntityType = useCallback(
@@ -147,6 +144,7 @@ const EntityTypePage: NextPage = () => {
 
     const nextSchema = {
       ...existingSchema,
+      description: newPartialSchema.description ?? existingSchema.description,
       links: newPartialSchema.links ?? existingSchema.links ?? {},
       properties:
         newPartialSchema.properties ?? existingSchema.properties ?? {},
@@ -277,43 +275,6 @@ const EntityTypePage: NextPage = () => {
 
   const entityTypeIsLink = isLinkEntityType(entityType);
 
-  console.log(entityType);
-
-  const updateEntityTypeDescription = async (newDescription: string) => {
-    if (!newDescription || description === entityType.schema.description) {
-      return;
-    }
-
-    const { versionedUrl } = generateOntologyUrl({
-      author: router.query.shortname as `@${string}`,
-      title,
-      kind: "entityType",
-      version: entityType.metadata.recordId.version + 1,
-    });
-
-    const { data: updatedData, error } = await apiClient.updateEntityType({
-      versionedUrl: entityType.schema.$id,
-      schema: {
-        ...entityType.schema,
-        $id: versionedUrl,
-        description: newDescription,
-      },
-    });
-
-    if (error || !updatedData) {
-      return {
-        errors: [
-          {
-            code: "INVALID_INPUT",
-            message: error?.message ?? "Could not update entity type",
-          },
-        ],
-      };
-    }
-
-    return { data: updatedData.entityType };
-  };
-
   return (
     <>
       <NextSeo title={`Block Protocol – ${shortname}/${title} Schema`} />
@@ -434,36 +395,54 @@ const EntityTypePage: NextPage = () => {
                 >
                   Description
                 </Typography>
-                <Box>
-                  <TextField
+                <Box
+                  display="flex"
+                  gap={1}
+                  onMouseEnter={() => setDescriptionHovered(true)}
+                  onMouseLeave={() => setDescriptionHovered(false)}
+                >
+                  {/* To be replaced with the Editable field once that goes in the blockprotocol's design system */}
+                  <Input
+                    {...descriptionController.field}
                     autoFocus
+                    multiline
+                    disableUnderline
                     style={{ whiteSpace: "pre" }}
-                    value={description}
-                    InputProps={{ readOnly: !editingDescription }}
+                    readOnly={!editingDescription}
                     inputRef={descriptionInputRef}
-                    onChange={(event) => {
-                      setDescription(event.target.value);
-                    }}
-                    onBlur={(event) => {
+                    onBlur={() => {
                       setEditingDescription(false);
-                      void updateEntityTypeDescription(event.target.value);
                     }}
-                    onKeyDown={({ code }) => {
-                      if (code === "Enter") {
+                    onKeyDown={({ shiftKey, code }) => {
+                      if (!shiftKey && code === "Enter") {
                         descriptionInputRef.current?.blur();
                       }
                     }}
+                    onFocus={(event) =>
+                      event.currentTarget.setSelectionRange(
+                        event.currentTarget.value.length,
+                        event.currentTarget.value.length,
+                      )
+                    }
                     sx={{
-                      [`.${inputBaseClasses.input}`]: {
-                        p: 0,
-                      },
+                      fontFamily: "Inter",
+                      width: 1,
+                      p: 0,
+                      [`.${inputBaseClasses.root}, .${inputBaseClasses.input}`]:
+                        {
+                          width: 1,
+                          p: 0,
+                          color: ({ palette }) => palette.gray[90],
+                          fontSize: 16,
+                          lineHeight: 1.7,
+                        },
                       [`.${outlinedInputClasses.notchedOutline}`]: {
                         display: "none",
                       },
                     }}
                   />
 
-                  <Fade in={!editingDescription}>
+                  <Fade in={!editingDescription && descriptionHovered}>
                     <IconButton
                       onClick={() => {
                         setEditingDescription(true);
