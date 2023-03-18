@@ -3,7 +3,7 @@ import {
   EntityTypeEditorFormData,
   useEntityTypeFormState,
 } from "@hashintel/type-editor";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Collapse, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -40,56 +40,54 @@ export const EntityTypeEditBar = ({
 
   const frozenSubmitting = useFrozenValue(isSubmitting);
 
-  if (!isDirty && !isDraft) {
-    return null;
-  }
-
   return (
-    <Box
-      sx={({ palette }) => ({
-        backgroundColor: palette.purple[60],
-        color: "white",
-        display: "flex",
-        alignItems: "center",
-        padding: "18px 30px",
-      })}
-    >
-      {isDraft ? (
-        <FontAwesomeIcon icon={faSmile} sx={{ fontSize: 14 }} />
-      ) : (
-        <PencilSimpleLineIcon />
-      )}
-      <Typography sx={{ ml: 1, color: "white" }}>
-        <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
-          Currently editing
-        </Box>{" "}
+    <Collapse in={isDirty || isDraft}>
+      <Box
+        sx={({ palette }) => ({
+          backgroundColor: palette.purple[60],
+          color: "white",
+          display: "flex",
+          alignItems: "center",
+          padding: "18px 30px",
+        })}
+      >
         {isDraft ? (
-          <>- this type has not yet been created</>
+          <FontAwesomeIcon icon={faSmile} sx={{ fontSize: 14 }} />
         ) : (
-          `Version ${frozenVersion} -> ${frozenVersion + 1}`
+          <PencilSimpleLineIcon />
         )}
-      </Typography>
-      <Stack spacing={1.25} sx={{ marginLeft: "auto" }} direction="row">
-        <Button
-          disabled={frozenSubmitting}
-          type="button"
-          variant="secondary"
-          size="small"
-          {...(isDraft
-            ? { href: `/${router.query.shortname}/all-types` }
-            : { onClick: () => reset() })}
-        >
-          Discard changes
-        </Button>
-        <Button
-          disabled={frozenSubmitting}
-          variant="primary"
-          size="small"
-          type="submit"
-        >
-          {isDraft ? <>Create</> : <>Publish update</>}
-        </Button>
-      </Stack>
-    </Box>
+        <Typography sx={{ ml: 1, color: "white" }}>
+          <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+            Currently editing
+          </Box>{" "}
+          {isDraft ? (
+            <>- this type has not yet been created</>
+          ) : (
+            `Version ${frozenVersion} -> ${frozenVersion + 1}`
+          )}
+        </Typography>
+        <Stack spacing={1.25} sx={{ marginLeft: "auto" }} direction="row">
+          <Button
+            disabled={frozenSubmitting}
+            type="button"
+            variant="secondary"
+            size="small"
+            {...(isDraft
+              ? { href: `/${router.query.shortname}/all-types` }
+              : { onClick: () => reset() })}
+          >
+            Discard changes
+          </Button>
+          <Button
+            disabled={frozenSubmitting}
+            variant="primary"
+            size="small"
+            type="submit"
+          >
+            {isDraft ? <>Create</> : <>Publish update</>}
+          </Button>
+        </Stack>
+      </Box>
+    </Collapse>
   );
 };
