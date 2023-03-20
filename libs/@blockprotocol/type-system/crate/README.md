@@ -9,7 +9,6 @@
 ## Requirements
 
 - [Rust](https://www.rust-lang.org/tools/install)
-- [cargo-make](https://github.com/sagiegurari/cargo-make#installation)
 
 ## Building the package
 
