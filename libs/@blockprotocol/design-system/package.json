@@ -23,15 +23,15 @@
   },
   "scripts": {
     "build-storybook": "storybook build",
-    "storybook": "storybook dev -p 6006",
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
-    "lint:tsc": "tsc --noEmit"
+    "lint:tsc": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006"
   },
+  "dependencies": {},
   "devDependencies": {
-    "@babel/preset-env": "7.20.2",
-    "@babel/preset-typescript": "7.18.6",
-    "eslint-plugin-storybook": "0.6.11",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.21.0",
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "@storybook/addon-essentials": "^7.0.0-beta.14",
@@ -41,14 +41,10 @@
     "@storybook/react": "^7.0.0-beta.14",
     "@storybook/react-webpack5": "^7.0.0-beta.14",
     "@storybook/testing-library": "^0.0.13",
+    "eslint-plugin-storybook": "0.6.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "storybook": "^7.0.0-beta.14",
     "typescript": "4.9.4"
-  },
-  "dependencies": {},
-  "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
   }
 }

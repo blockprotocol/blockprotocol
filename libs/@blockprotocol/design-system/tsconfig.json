@@ -1,7 +1,7 @@
 {
-    "extends": "@local/tsconfig/dom.json",
-    "compilerOptions": {
-        "outDir": "dist",
-    },
-    "include": ["src"]
+  "extends": "@local/tsconfig/dom.json",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": ["src"]
 }
