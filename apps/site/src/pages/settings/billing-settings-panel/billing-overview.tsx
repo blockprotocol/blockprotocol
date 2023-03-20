@@ -58,9 +58,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
       throw new Error("User is undefined");
     }
 
-    return user.stripeSubscriptionStatus === "active"
-      ? user.stripeSubscriptionTier ?? "free"
-      : "free";
+    return user.stripeSubscriptionTier;
   }, [user]);
 
   const { stripeSubscriptionStatus, stripeSubscriptionId } = useMemo(

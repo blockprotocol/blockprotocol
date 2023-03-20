@@ -46,7 +46,6 @@ import {
   isPaidSubscriptionTier,
   PaidSubscriptionTier,
   priceToHumanReadable,
-  SubscriptionTier,
   subscriptionTierToHumanReadable,
 } from "../../../shared/subscription-utils";
 import { paidSubscriptionFeatures } from "../../billing-settings-panel/free-or-hobby-subscription-tier-overview";
@@ -177,10 +176,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
   const [changePaymentMethodModalOpen, setChangePaymentMethodModalOpen] =
     useState<boolean>(false);
 
-  const currentSubscriptionTier: SubscriptionTier =
-    user.stripeSubscriptionStatus === "active"
-      ? user.stripeSubscriptionTier ?? "free"
-      : "free";
+  const { stripeSubscriptionTier: currentSubscriptionTier } = user;
 
   useEffect(() => {
     /**
@@ -258,6 +254,10 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
   }, [currentSubscriptionTier, upgradedSubscriptionTier, subscriptionId]);
 
   const handleUpgradedSubscription = useCallback(() => {
+    if (!upgradedSubscriptionTier) {
+      return;
+    }
+
     /**
      * The BP user in the database is updated by the stripe webhook in the
      * internal API. To reflect the updated state of the user before this
