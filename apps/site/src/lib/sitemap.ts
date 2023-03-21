@@ -27,6 +27,10 @@ export const getLegalSubPages = (): SiteMapPage[] =>
 export const generateSiteMap = (): SiteMap => ({
   pages: [
     {
+      title: "About",
+      href: "/about",
+    },
+    {
       title: "Hub",
       href: "/hub",
     },
