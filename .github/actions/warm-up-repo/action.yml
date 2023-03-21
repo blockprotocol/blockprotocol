@@ -15,6 +15,11 @@ runs:
       with:
         node-version: 16 ## aligned with Node version on Vercel
 
+    - name: Install Rust tools
+      uses: taiki-e/install-action@v2
+      with:
+        tool: wasm-pack@0.10.3
+
     - name: Cache Rust dependencies
       uses: Swatinem/rust-cache@v2
       with:
