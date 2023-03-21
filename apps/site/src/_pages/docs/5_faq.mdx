@@ -63,6 +63,8 @@ Implementing the Block Protocol means that an embedding application can easily a
 
 Once they are Block Protocol-compliant, applications can easily search for blocks which can visualize or edit any type of data, and add them without any further configuration.
 
+Blocks additionally make it easy to include structured data markup (JSON-LD) on pages, improving websites' search engine visibility and rankings.
+
 </FAQ>
 
 <FAQ question="How does the Block Protocol relate to HASH’s simulation efforts?">
@@ -232,7 +234,7 @@ We do not yet believe it necessary to specify block-application requests in Grap
 Yes, blocks can make requests to external APIs. They can do this in one of two ways:
 
 - **directly:** all of the code require to access an API can be contained within a block. This is not recommended in circumstances where a service requires an API key in order to access it, as it will be impossible to keep this key secret if a block (and for a block to remain usable) once the block is published to the Þ Hub.
-- **through the Þ Hub:** in addition to blocks and types, endpoints (APIs) can also be made accessible via the Þ Hub. A limited set of endpoints will be available as of 28th February 2023, including ones providing access to _Mapbox_ and _OpenAI_.
+- **through the Þ Hub:** in addition to blocks and types, endpoints (APIs) can also be made accessible via the Þ Hub. Currently available endpoints include _OpenAI_ and _Mapbox_. All Block Protocol users receive free credits for use with these services, and receive discounted access through Þ Hobby and Þ Pro subscriptions. Individual embedding applications can additionally override the Block Protocol API's handling of any available service, and choose to resolve these themselves, falling back to the Block Protocol's support for services or ignoring them entirely. Read more in the [Service module](https://blockprotocol.org/docs/spec/service-module) specification.
 
 Facilitating external API access via the Þ Hub is a new addition to the protocol, and intructions for making additional endpoints available will be added in due course. In the meantime, we're able to manually add endpoints on behalf of block developers. If there's an endpoint you'd like to use within a new or existing block, please [message us on Discord](https://blockprotocol.org/discord).
 
