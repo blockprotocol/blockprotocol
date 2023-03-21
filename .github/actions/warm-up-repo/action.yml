@@ -15,12 +15,6 @@ runs:
       with:
         node-version: 16 ## aligned with Node version on Vercel
 
-    - name: Install Cargo-Make
-      shell: bash
-      run: |
-        cargo install cargo-quickinstall
-        cargo quickinstall cargo-make --version 0.35.15
-
     - name: Cache Rust dependencies
       uses: Swatinem/rust-cache@v2
       with:

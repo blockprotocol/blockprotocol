@@ -8,6 +8,7 @@ import {
   useCallback,
   useState,
 } from "react";
+import slugify from "slugify";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
@@ -32,13 +33,6 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
   const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>(undefined);
   const router = useRouter();
   const { user } = useUser();
-
-  const handleSchemaTitleChange = (value: string) => {
-    // trim surrounding whitespace and remove most special characters
-    const formattedText = value.replace(/[^a-zA-Z0-9\-_ ()']/g, "");
-
-    setNewSchemaTitle(formattedText);
-  };
 
   const handleCreateSchema = useCallback(
     async (evt: FormEvent) => {
@@ -104,7 +98,12 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       (newSchemaTitle === "" ? "Please enter a valid value" : undefined)
     : undefined;
 
-  const isSchemaTitleInvalid = !!apiErrorMessage || newSchemaTitle === "";
+  const isSchemaTitleInvalid =
+    !!apiErrorMessage ||
+    slugify(newSchemaTitle, {
+      lower: true,
+      strict: true,
+    }) === "";
 
   const displayError = touchedTitleInput && isSchemaTitleInvalid;
 
@@ -150,7 +149,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
               if (apiErrorMessage) {
                 setApiErrorMessage(undefined);
               }
-              handleSchemaTitleChange(evt.target.value);
+              setNewSchemaTitle(evt.target.value);
             }}
             required
             error={displayError}

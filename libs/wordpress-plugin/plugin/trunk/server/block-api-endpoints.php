@@ -304,7 +304,7 @@ function create_block_protocol_entity(WP_REST_Request $request)
     return $results;
   }
 
-  $properties = json_encode($params['properties'], JSON_FORCE_OBJECT);
+  $properties = json_encode($params['properties']);
 
   if (!$properties) {
     $results['error'] = "You must provide 'properties' to create an entity with";
@@ -361,7 +361,7 @@ function create_block_protocol_entity(WP_REST_Request $request)
     return $results;
   }
 
-  $block_metadata = isset($params['$block_metadata']) ? $params['block_metadata'] : null;
+  $block_metadata = isset($params['block_metadata']) ? $params['block_metadata'] : null;
 
   if ($block_metadata) {
     block_protocol_page_data('new_block', [
@@ -393,7 +393,7 @@ function update_block_protocol_entity(WP_REST_Request $request)
   $left_to_right_order = isset($params['left_to_right_order']) ? $params['left_to_right_order'] : null;
   $right_to_left_order = isset($params['right_to_left_order']) ? $params['right_to_left_order'] : null;
 
-  $encoded_properties = json_encode($params['properties'], JSON_FORCE_OBJECT);
+  $encoded_properties = json_encode($params['properties']);
 
   if (!$encoded_properties) {
     $results['error'] = "You must provide 'properties' for an update";
