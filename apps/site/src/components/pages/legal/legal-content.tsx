@@ -4,12 +4,11 @@ import {
   Breadcrumbs,
   Collapse,
   Container,
-  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { FunctionComponent, ReactNode } from "react";
+import { FunctionComponent } from "react";
 
 import { SiteMapPage } from "../../../lib/sitemap";
 import { FontAwesomeIcon } from "../../icons";
@@ -17,8 +16,6 @@ import { Link } from "../../link";
 import { MdxPageContent } from "../../mdx/mdx-page-content";
 
 type LegalPageProps = {
-  title?: ReactNode;
-  subtitle?: ReactNode;
   content: MDXRemoteSerializeResult<Record<string, unknown>>;
   pages: SiteMapPage[];
   currentPage?: SiteMapPage | undefined;
@@ -41,8 +38,6 @@ const getParentPages = (
 };
 
 export const LegalContent: FunctionComponent<LegalPageProps> = ({
-  title,
-  subtitle,
   content,
   pages,
   currentPage,
@@ -64,27 +59,6 @@ export const LegalContent: FunctionComponent<LegalPageProps> = ({
           maxWidth: "100%",
         }}
       >
-        {title ? (
-          <Typography
-            variant="bpTitle"
-            sx={{
-              marginBottom: 2,
-            }}
-          >
-            {title}
-          </Typography>
-        ) : null}
-        {subtitle ? (
-          <Typography
-            variant="bpSubtitle"
-            maxWidth={750}
-            sx={{
-              marginBottom: 6,
-            }}
-          >
-            {subtitle}
-          </Typography>
-        ) : null}
         {parents ? (
           <Collapse in={md && !!parents && parents.length > 0}>
             <Breadcrumbs
