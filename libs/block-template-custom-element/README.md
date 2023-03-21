@@ -25,7 +25,7 @@ Once you have created the type representing the data your block needs, copy its 
 
 1.  Update the `blockprotocol` metadata object in package.json:
 
-- set `schema` to the URL of the entity type you created in the previous step
+- set `blockEntityType` to the URL of the entity type you created in the previous step
 - change the default `tagName` under `blockType` to the tag for your element
 - optionally update additional fields which will be used to identify and describe the block when published:
   - `displayName`: a friendly display name
@@ -35,7 +35,7 @@ Once you have created the type representing the data your block needs, copy its 
   - `name`: a slugified name for your block (which may differ to the package `name` in package.json)
     - this may either be in the format `slug` or `@namespace/slug` where `namespace` is your blockprotocol.org username
 
-1.  Run `yarn schema` to automatically generate TypeScript types from your block's entity type / `schema`
+1.  Run `yarn codegen` to automatically generate TypeScript types from your block's entity type (you can modify the `codegen` field to generate code for other types as well)
 
 ## Step four: implement your block's logic and UI
 
@@ -66,6 +66,22 @@ Please see [the Block Protocol docs](https://blockprotocol.org/docs/developing-b
 for a fuller explanation of querying, creating and updating entity data from your block.
 
 You can format your code using `yarn format` (or `npm run format`).
+
+If you want to use environment variables in development, add a `.env` file in this directory, and then you can access variables defined in it via `process.env.VARIABLE_NAME`. This is useful for providing a `blockProtocolApiKey` to `MockBlockDock` in `dev.tsx`.
+
+e.g. your `.env` file might look like this:
+
+```text
+BLOCK_PROTOCOL_API_KEY=super-secret
+```
+
+and `dev.tsx` like this:
+
+```typescript
+  return (
+    <MockBlockDock
+      blockProtocolApiKey={process.env.BLOCK_PROTOCOL_API_KEY}
+```
 
 ## Step five: publish your block
 

@@ -18,26 +18,6 @@ export interface SandboxedBlockProps {
   sandboxBaseUrl: string;
 }
 
-const generateBlockServicePermissionKey = (blockPath: string) =>
-  `allow-${blockPath}-service-usage`;
-
-const setServiceUsagePermission = (blockPath: string, allowed: boolean) => {
-  sessionStorage.setItem(
-    generateBlockServicePermissionKey(blockPath),
-    allowed.toString(),
-  );
-};
-
-const isServiceUsagePermittedByBlock = (blockPath: string) => {
-  const isAllowed = sessionStorage.getItem(
-    generateBlockServicePermissionKey(blockPath),
-  );
-  if (isAllowed === null) {
-    return undefined;
-  }
-  return isAllowed === "true";
-};
-
 const serviceModuleMessageTypeName = "serviceModule";
 
 type ServiceModuleMessageState = ExternalServiceMethodRequest & {
@@ -52,6 +32,9 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
 }) => {
   const loadedRef = useRef(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const [serviceUsageIsPermitted, setServiceUsageIsPermitted] =
+    useState<boolean>();
 
   const [serviceModuleMessage, setServiceModuleMessage] =
     useState<ServiceModuleMessageState | null>(null);
@@ -94,10 +77,6 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
       }
 
       if (message.data.type === serviceModuleMessageTypeName) {
-        const allowed = isServiceUsagePermittedByBlock(
-          metadata.pathWithNamespace,
-        );
-
         const { methodName, payload, providerName, requestId } = message.data;
 
         const process = async () => {
@@ -143,7 +122,7 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
           );
         };
 
-        if (allowed === undefined) {
+        if (serviceUsageIsPermitted === undefined) {
           setServiceModuleMessage({
             methodName,
             payload,
@@ -151,7 +130,7 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
             providerName,
             reject,
           });
-        } else if (allowed) {
+        } else if (serviceUsageIsPermitted) {
           void process();
         } else {
           reject();
@@ -164,7 +143,12 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
     return () => {
       window.removeEventListener("message", listener);
     };
-  }, [metadata.pathWithNamespace, postServiceModuleResponse, sandboxBaseUrl]);
+  }, [
+    metadata.pathWithNamespace,
+    postServiceModuleResponse,
+    sandboxBaseUrl,
+    serviceUsageIsPermitted,
+  ]);
 
   useEffect(() => {
     postBlockProps();
@@ -179,7 +163,7 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
     <>
       <ServiceModuleModal
         setServiceUsagePermission={(allowed: boolean) => {
-          setServiceUsagePermission(metadata.pathWithNamespace, allowed);
+          setServiceUsageIsPermitted(allowed);
           if (allowed) {
             void serviceModuleMessage?.process();
           } else {

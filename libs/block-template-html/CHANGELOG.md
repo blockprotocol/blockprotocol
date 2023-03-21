@@ -1,5 +1,30 @@
 # block-template-html
 
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [[`1a9cacc9`](https://github.com/blockprotocol/blockprotocol/commit/1a9cacc9358ba6be44ab54e515c67a7a4531b105)]:
+  - block-scripts@0.2.2
+
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - block-scripts@0.2.1
+
+## 0.2.2
+
+### Patch Changes
+
+- [#1161](https://github.com/blockprotocol/blockprotocol/pull/1161) [`dcfb45a4`](https://github.com/blockprotocol/blockprotocol/commit/dcfb45a4f1f3cbc47ff00a434e6eb52fef10c9b3) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Add latency simulation
+
+- [#1160](https://github.com/blockprotocol/blockprotocol/pull/1160) [`bbb00ce6`](https://github.com/blockprotocol/blockprotocol/commit/bbb00ce66c9175fecd9c017880f2cf7845b0a3d9) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Introduce `includeDefaultMockData` toggle on MockBlockDock
+
+- Updated dependencies [[`50ad5e72`](https://github.com/blockprotocol/blockprotocol/commit/50ad5e72d25d1b888e49dba1801920a2b1f3954f), [`9a98416d`](https://github.com/blockprotocol/blockprotocol/commit/9a98416df8756c26037a4559affd421f80f84547)]:
+  - block-scripts@0.2.0
+
 ## 0.2.1
 
 ### Patch Changes

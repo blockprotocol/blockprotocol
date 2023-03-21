@@ -5,9 +5,9 @@ import {
   Collapse,
   Divider,
   IconButton,
+  Skeleton,
+  Stack,
   styled,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import {
@@ -16,7 +16,7 @@ import {
   FunctionComponent,
   SetStateAction,
   useCallback,
-  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -26,10 +26,11 @@ import { theme as themeImport } from "../theme";
 import { parseHTML } from "../util/html-utils";
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
-import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar";
 import { generatePathWithoutParams } from "./shared";
 
 export const SIDEBAR_WIDTH = 300;
+
+const SIDEBAR_LINK_HEIGHT = 35;
 
 const SidebarLink = styled(Link)(({ theme }) => ({
   display: "block",
@@ -43,6 +44,7 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   fontSize: 15,
   paddingTop: 8,
   paddingBottom: 8,
+  minHeight: SIDEBAR_LINK_HEIGHT,
   wordBreak: "break-word",
 }));
 
@@ -299,6 +301,7 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
 type SidebarProps = {
   pages: SiteMapPage[];
   appendices?: SiteMapPage[];
+  isSsrSafe?: boolean;
 } & BoxProps;
 
 const findSectionPath = (
@@ -363,20 +366,44 @@ const getInitialOpenedPages = (params: {
   return [];
 };
 
+const useSsr = () => {
+  const [ssr, setSsr] = useState(true);
+
+  useLayoutEffect(() => {
+    setSsr(false);
+  }, []);
+  return ssr;
+};
+
+const useOpenedPages = (pages: SiteMapPage[], ssr: boolean) => {
+  const { asPath } = useRouter();
+  const [openedPages, setOpenedPages] = useState<string[]>([]);
+  const [prevPages, setPrevPages] = useState(pages);
+  const [prevAsPath, setPrevAsPath] = useState(asPath);
+  const [hasSetPages, setHasSetPages] = useState(false);
+  if (!ssr && (!hasSetPages || pages !== prevPages || asPath !== prevAsPath)) {
+    setPrevPages(pages);
+    setPrevAsPath(asPath);
+    setHasSetPages(true);
+    setOpenedPages((prev) => [
+      ...prev,
+      ...getInitialOpenedPages({ pages, asPath }).filter(
+        (href) => !prev.includes(href),
+      ),
+    ]);
+  }
+  return [openedPages, setOpenedPages] as const;
+};
+
 export const Sidebar: FunctionComponent<SidebarProps> = ({
   appendices,
   pages,
   sx = [],
+  isSsrSafe = true,
   ...boxProps
 }) => {
-  const theme = useTheme();
-  const { asPath } = useRouter();
-
-  const md = useMediaQuery(theme.breakpoints.up("md"));
-
-  const [openedPages, setOpenedPages] = useState<string[]>(
-    getInitialOpenedPages({ pages, asPath }),
-  );
+  const ssr = useSsr();
+  const [openedPages, setOpenedPages] = useOpenedPages(pages, ssr);
 
   const setSelectedAnchorElementTimeout = useRef<ReturnType<
     typeof setTimeout
@@ -388,7 +415,12 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
     }
 
     setSelectedAnchorElementTimeout.current = setTimeout(() => {
-      const parent = node.offsetParent as HTMLElement;
+      const parent = node.offsetParent as HTMLElement | undefined;
+
+      if (!parent) {
+        return;
+      }
+
       const min = parent.scrollTop;
       const max = min + parent.offsetHeight - 100;
       const pos = node.offsetTop;
@@ -399,107 +431,124 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
     }, 100);
   }, []);
 
-  useEffect(() => {
-    return () => {
-      if (setSelectedAnchorElementTimeout.current) {
-        clearTimeout(setSelectedAnchorElementTimeout.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    setOpenedPages((prev) => [
-      ...prev,
-      ...getInitialOpenedPages({ pages, asPath }).filter(
-        (href) => !prev.includes(href),
-      ),
-    ]);
-  }, [asPath, pages]);
-
-  const height = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
+  const renderSkeleton = ssr && !isSsrSafe;
 
   return (
     <Box
       {...boxProps}
       component="aside"
       position="sticky"
-      overflow="auto"
+      overflow={renderSkeleton ? "hidden" : "auto"}
       width={SIDEBAR_WIDTH}
-      top={`${height}px`}
-      height={`calc(100vh - ${height}px)`}
       sx={[
-        {
-          m: 1.5,
-          borderRightColor: theme.palette.gray[30],
+        (theme) => ({
           borderRightStyle: "solid",
           borderRightWidth: 1,
-        },
+
+          top: "var(--navbar-height)",
+          height: `calc(100vh - var(--navbar-height))`,
+          borderRightColor: theme.palette.gray[30],
+        }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          transition: theme.transitions.create([
-            "padding-top",
-            "padding-bottom",
-          ]),
-          wordBreak: "break-word",
-        }}
-      >
-        {pages.length > 1 ? (
-          pages.map((page) => (
-            <SidebarPage
-              key={page.href}
-              page={page}
-              setSelectedAnchorElement={setSelectedAnchorElement}
-              openedPages={openedPages}
-              setOpenedPages={setOpenedPages}
-            />
-          ))
-        ) : pages.length === 1 ? (
-          <>
-            {/* When the sidebar is only displaying one page, we can display its sub-sections and sub-pages directly */}
-            {pages[0]!.sections?.map((section, i) => (
-              <SidebarPageSection
-                key={section.anchor}
-                isSelectedByDefault={i === 0}
-                depth={0}
-                pageHref={pages[0]!.href}
-                section={section}
-                setSelectedAnchorElement={setSelectedAnchorElement}
-                openedPages={openedPages}
-                setOpenedPages={setOpenedPages}
-              />
+      {
+        // Docs need the full path (including hash) to work out if
+        // they're active. This doesn't work on the server, so we need to avoid
+        // rendering it on the server. We don't want a layout shift so we
+        // still render the parent element on the server.
+        renderSkeleton ? (
+          <Stack spacing={1} pt="4px" alignItems="flex-end">
+            {pages.map(({ sections }, idx) => (
+              <>
+                <Skeleton
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={idx}
+                  variant="rectangular"
+                  height={SIDEBAR_LINK_HEIGHT - 8}
+                  width="100%"
+                />
+
+                {idx === 0
+                  ? sections?.map((_, subIdx) => (
+                      <Skeleton
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={`${idx}-${subIdx}`}
+                        variant="rectangular"
+                        height={SIDEBAR_LINK_HEIGHT - 8}
+                        width="90%"
+                      />
+                    ))
+                  : null}
+              </>
             ))}
-            {pages[0]!.subPages?.map((subpage) => (
-              <SidebarPage
-                key={subpage.href}
-                depth={0}
-                page={subpage}
-                setSelectedAnchorElement={setSelectedAnchorElement}
-                openedPages={openedPages}
-                setOpenedPages={setOpenedPages}
-              />
-            ))}
-          </>
-        ) : null}
-        {appendices && appendices.length > 0 ? (
-          <>
-            <Divider sx={{ marginBottom: 2 }} />
-            {appendices.map((page) => (
-              <SidebarPage
-                key={page.href}
-                page={page}
-                setSelectedAnchorElement={setSelectedAnchorElement}
-                openedPages={openedPages}
-                setOpenedPages={setOpenedPages}
-              />
-            ))}
-          </>
-        ) : null}
-      </Box>
+          </Stack>
+        ) : (
+          <Box
+            sx={(theme) => ({
+              display: "flex",
+              flexDirection: "column",
+              transition: theme.transitions.create([
+                "padding-top",
+                "padding-bottom",
+              ]),
+              wordBreak: "break-word",
+            })}
+          >
+            {pages.length > 1 ? (
+              pages.map((page) => (
+                <SidebarPage
+                  key={page.href}
+                  page={page}
+                  setSelectedAnchorElement={setSelectedAnchorElement}
+                  openedPages={openedPages}
+                  setOpenedPages={setOpenedPages}
+                />
+              ))
+            ) : pages.length === 1 ? (
+              <>
+                {/* When the sidebar is only displaying one page, we can display its sub-sections and sub-pages directly */}
+                {pages[0]!.sections?.map((section, i) => (
+                  <SidebarPageSection
+                    key={section.anchor}
+                    isSelectedByDefault={i === 0}
+                    depth={0}
+                    pageHref={pages[0]!.href}
+                    section={section}
+                    setSelectedAnchorElement={setSelectedAnchorElement}
+                    openedPages={openedPages}
+                    setOpenedPages={setOpenedPages}
+                  />
+                ))}
+                {pages[0]!.subPages?.map((subpage) => (
+                  <SidebarPage
+                    key={subpage.href}
+                    depth={0}
+                    page={subpage}
+                    setSelectedAnchorElement={setSelectedAnchorElement}
+                    openedPages={openedPages}
+                    setOpenedPages={setOpenedPages}
+                  />
+                ))}
+              </>
+            ) : null}
+            {appendices && appendices.length > 0 ? (
+              <>
+                <Divider sx={{ marginBottom: 2 }} />
+                {appendices.map((page) => (
+                  <SidebarPage
+                    key={page.href}
+                    page={page}
+                    setSelectedAnchorElement={setSelectedAnchorElement}
+                    openedPages={openedPages}
+                    setOpenedPages={setOpenedPages}
+                  />
+                ))}
+              </>
+            ) : null}
+          </Box>
+        )
+      }
     </Box>
   );
 };

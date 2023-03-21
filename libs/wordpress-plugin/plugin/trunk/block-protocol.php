@@ -1,7 +1,7 @@
 <?php
 /**
  * @package blockprotocol
- * @version 0.0.3
+ * @version 0.0.4
  */
 /*
 Plugin Name: Block Protocol
@@ -9,14 +9,14 @@ Plugin URI: https://blockprotocol.org/wordpress
 Description: Access an open, growing ecosystem of high-quality and powerful blocks via the Block Protocol.
 Author: Block Protocol
 Author URI: https://blockprotocol.org/?utm_medium=organic&utm_source=wordpress_plugin-directory_blockprotocol-plugin_author-name
-Version: 0.0.3
+Version: 0.0.4
 Requires at least: 5.6.0
 Tested up to: 6.1.1
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 */
 
-const BLOCK_PROTOCOL_PLUGIN_VERISON = "0.0.3";
+const BLOCK_PROTOCOL_PLUGIN_VERISON = "0.0.4";
 
 if (is_readable(__DIR__ . '/vendor/autoload.php')) {
 	require __DIR__ . '/vendor/autoload.php';
@@ -94,8 +94,7 @@ function get_block_protocol_blocks()
 			'Content-Type' => 'application/json',
 			'X-Api-Key' => $api_key,
 			'Origin' => get_site_url(),
-		],
-		'timeout' => 10 // wait for potentially cold lambda warmup in development
+		]
 	];
 
 	$site_host = get_block_protocol_site_host();
@@ -249,10 +248,32 @@ add_action('admin_init', 'block_protocol_init');
 //    - enqueue block data for adding to the frontend
 // 3. enqueue script that registers each BP block as a variation of the plugin block
 function block_protocol_editor_assets() {
+	// DB is unsupported - bail
+  if (!block_protocol_is_database_supported()) {
+    return;
+  }
+
 	$response = get_block_protocol_blocks();
 	if (isset($response['errors'])) {
 		// user needs to set a valid API key – bail
 		return;
+	}
+
+	// Register and enqueue the sentry plugin if plugin analytics are enabled
+	// We want to ensure errors are caught early, so we enqueue this first.
+	if (!block_protocol_reporting_disabled()) {
+		wp_register_script(
+			'blockprotocol-sentry',
+			plugins_url('build/sentry.js', __FILE__),
+			[],
+			BLOCK_PROTOCOL_PLUGIN_VERISON
+		);
+		wp_add_inline_script(
+			'blockprotocol-sentry',
+			"block_protocol_sentry_config = " . json_encode(block_protocol_client_sentry_init_args()),
+			$position = 'before'
+		);
+		wp_enqueue_script('blockprotocol-sentry');
 	}
   
 	// this file has a list of the dependencies our FE block code uses, so we can include those too

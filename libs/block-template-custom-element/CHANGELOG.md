@@ -1,5 +1,42 @@
 # block-template-custom-element
 
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [[`1a9cacc9`](https://github.com/blockprotocol/blockprotocol/commit/1a9cacc9358ba6be44ab54e515c67a7a4531b105)]:
+  - block-scripts@0.2.2
+
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [[`2b771f30`](https://github.com/blockprotocol/blockprotocol/commit/2b771f30e88ae610a01cb024eab082b8c7bb9a8a)]:
+  - @blockprotocol/graph@0.2.1
+  - block-scripts@0.2.1
+  - mock-block-dock@0.1.3
+
+## 0.3.0
+
+### Minor Changes
+
+- [#1158](https://github.com/blockprotocol/blockprotocol/pull/1158) [`9a98416d`](https://github.com/blockprotocol/blockprotocol/commit/9a98416df8756c26037a4559affd421f80f84547) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Introduce an improved codegen utility with support for multiple files, better errors, type name overrides, and more.
+
+### Patch Changes
+
+- [#1157](https://github.com/blockprotocol/blockprotocol/pull/1157) [`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2) Thanks [@CiaranMn](https://github.com/CiaranMn)! - correct property key in example object
+
+- [#1170](https://github.com/blockprotocol/blockprotocol/pull/1170) [`50ad5e72`](https://github.com/blockprotocol/blockprotocol/commit/50ad5e72d25d1b888e49dba1801920a2b1f3954f) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add .env file support to block templates
+
+- [#1161](https://github.com/blockprotocol/blockprotocol/pull/1161) [`dcfb45a4`](https://github.com/blockprotocol/blockprotocol/commit/dcfb45a4f1f3cbc47ff00a434e6eb52fef10c9b3) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Add latency simulation
+
+- [#1160](https://github.com/blockprotocol/blockprotocol/pull/1160) [`bbb00ce6`](https://github.com/blockprotocol/blockprotocol/commit/bbb00ce66c9175fecd9c017880f2cf7845b0a3d9) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Introduce `includeDefaultMockData` toggle on MockBlockDock
+
+- Updated dependencies [[`50ad5e72`](https://github.com/blockprotocol/blockprotocol/commit/50ad5e72d25d1b888e49dba1801920a2b1f3954f), [`dcfb45a4`](https://github.com/blockprotocol/blockprotocol/commit/dcfb45a4f1f3cbc47ff00a434e6eb52fef10c9b3), [`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2), [`9a98416d`](https://github.com/blockprotocol/blockprotocol/commit/9a98416df8756c26037a4559affd421f80f84547), [`032352a9`](https://github.com/blockprotocol/blockprotocol/commit/032352a998d960f1c9a0527f8681173860585a83), [`bbb00ce6`](https://github.com/blockprotocol/blockprotocol/commit/bbb00ce66c9175fecd9c017880f2cf7845b0a3d9)]:
+  - block-scripts@0.2.0
+  - mock-block-dock@0.1.2
+  - @blockprotocol/graph@0.2.0
+
 ## 0.2.1
 
 ### Patch Changes

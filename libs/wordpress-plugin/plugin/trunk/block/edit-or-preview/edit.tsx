@@ -9,6 +9,7 @@ import { buildSubgraph } from "@blockprotocol/graph/stdlib";
 import { ServiceEmbedderMessageCallbacks } from "@blockprotocol/service";
 import { useBlockProps } from "@wordpress/block-editor";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 import {
   blockSubgraphResolveDepths,
@@ -24,6 +25,9 @@ import { BlockLoader } from "../shared/block-loader";
 import { CustomBlockControls } from "./edit/block-controls";
 import { LoadingImage } from "./edit/loading-image";
 import { constructServiceModuleCallbacks } from "./edit/service-callbacks";
+import { Toast, ToastProps } from "./edit/toast";
+import { CloseButton } from "./edit/toast/close-button";
+import { CrossIcon } from "./edit/toast/cross-icon";
 
 type BlockProtocolBlockAttributes = {
   author: string;
@@ -52,6 +56,24 @@ export const Edit = ({
   const [entitySubgraph, setEntitySubgraph] =
     useState<Subgraph<EntityRootType> | null>(null);
 
+  const displayToast = useCallback(
+    (toastProps: ToastProps, options?: Parameters<typeof toast>[1]) => {
+      toast(<Toast {...toastProps} type="error" />, {
+        autoClose: false,
+        closeButton: <CloseButton />,
+        closeOnClick: false,
+        draggable: true,
+        draggablePercent: 30,
+        containerId: entityId,
+        icon: <CrossIcon />,
+        position: toast.POSITION.BOTTOM_LEFT,
+        type: toast.TYPE.ERROR,
+        ...options,
+      });
+    },
+    [entityId],
+  );
+
   // this represents the latest versions of blocks from the Block Protocol API
   // the page may contain older versions of blocks, so do not rely on all blocks being here
   const blocks = window.block_protocol_data?.blocks;
@@ -79,27 +101,49 @@ export const Edit = ({
           sourceUrl,
           version: selectedBlock?.version ?? "unknown",
         },
-      }).then(({ entity }) => {
-        const { entity_id } = entity;
-        const subgraph = buildSubgraph(
-          {
-            entities: [dbEntityToEntity(entity)],
-            dataTypes: [],
-            entityTypes: [],
-            propertyTypes: [],
-          },
-          [
+      })
+        .then(({ entity }) => {
+          if (!entity) {
+            throw new Error("no entity returned from createEntity");
+          }
+          const { entity_id } = entity;
+          const subgraph = buildSubgraph(
             {
-              entityId: entity.entity_id,
-              editionId: new Date(entity.updated_at).toISOString(),
+              entities: [dbEntityToEntity(entity)],
+              dataTypes: [],
+              entityTypes: [],
+              propertyTypes: [],
             },
-          ],
-          blockSubgraphResolveDepths,
-        );
-        setEntitySubgraph(subgraph);
-        setEntityId(entity_id);
-        creating.current = false;
-      });
+            [
+              {
+                entityId: entity.entity_id,
+                editionId: new Date(entity.updated_at).toISOString(),
+              },
+            ],
+            blockSubgraphResolveDepths,
+          );
+          setEntitySubgraph(subgraph);
+          setEntityId(entity_id);
+          creating.current = false;
+        })
+        .catch((error) => {
+          displayToast({
+            content: (
+              <div>
+                Could not create Block Protocol entity
+                {error?.message ? `: ${error.message}` : "."}{" "}
+                <a
+                  href="https://blockprotocol.org/contact"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Get Help
+                </a>
+              </div>
+            ),
+            type: "error",
+          });
+        });
     } else if (
       !entitySubgraph ||
       entitySubgraph.roots[0]?.baseId !== entityId
@@ -111,12 +155,29 @@ export const Edit = ({
         },
       }).then(({ data }) => {
         if (!data) {
-          throw new Error("No data returned from getEntitySubgraph");
+          displayToast({
+            content: (
+              <div>
+                Could not find Block Protocol entity with id starting{" "}
+                <strong>{entityId.slice(0, 8)}</strong>.{" "}
+                <a
+                  href="https://blockprotocol.org/contact"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Get Help
+                </a>
+              </div>
+            ),
+            type: "error",
+          });
+          return;
         }
         setEntitySubgraph(data);
       });
     }
   }, [
+    displayToast,
     entitySubgraph,
     entityId,
     entityTypeId,
@@ -135,15 +196,34 @@ export const Edit = ({
     });
 
     if (!subgraph) {
-      throw new Error("No data returned from getEntitySubgraph");
+      displayToast({
+        content: (
+          <div>
+            Could not find Block Protocol entity with id starting{" "}
+            <strong>{entityId.slice(0, 8)}</strong>.{" "}
+            <a
+              href="https://blockprotocol.org/contact"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Get Help
+            </a>
+          </div>
+        ),
+        type: "error",
+      });
+      return;
     }
 
     setEntitySubgraph(subgraph);
-  }, [entityId]);
+  }, [displayToast, entityId]);
 
   const serviceCallbacks = useMemo<ServiceEmbedderMessageCallbacks>(
-    () => constructServiceModuleCallbacks(),
-    [],
+    () =>
+      constructServiceModuleCallbacks((toastProps) =>
+        displayToast(toastProps, { toastId: "billing" }),
+      ),
+    [displayToast],
   );
 
   const graphCallbacks = useMemo<
@@ -325,6 +405,7 @@ export const Edit = ({
   if (!entitySubgraph) {
     return (
       <div style={{ marginTop: 10 }}>
+        <ToastContainer enableMultiContainer containerId={entityId} />
         <LoadingImage height="8rem" />
       </div>
     );
@@ -332,6 +413,7 @@ export const Edit = ({
 
   return (
     <div {...blockProps} style={{ marginBottom: 30 }}>
+      <ToastContainer enableMultiContainer containerId={entityId} />
       <CustomBlockControls
         entityId={entityId}
         entityTypeId={entityTypeId as VersionedUrl} // @todo fix this in @blockprotocol/graph

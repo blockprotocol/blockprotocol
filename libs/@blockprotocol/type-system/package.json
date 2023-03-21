@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/type-system",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Definitions of types within the Block Protocol Type System",
   "homepage": "https://blockprotocol.org",
   "repository": {
@@ -47,7 +47,7 @@
   "scripts": {
     "build": "yarn clean && yarn build:wasm && yarn build:bundle",
     "build:bundle": "rollup -c --bundleConfigAsCjs",
-    "build:wasm": "cd crate && cargo make build-wasm-target",
+    "build:wasm": "cd crate && just build-wasm",
     "clean": "rimraf ./dist/",
     "compressed-size": "yarn build && find dist -iname '*.js' -exec npx terser@latest --compress --mangle --output {} -- {} \\;",
     "fix:eslint": "eslint --fix .",
