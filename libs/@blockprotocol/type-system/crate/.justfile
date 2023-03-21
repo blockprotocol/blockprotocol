@@ -11,6 +11,10 @@ cargo-profile := env_var_or_default('PROFILE', "dev")
   just --list --unsorted
   echo "For further information, run 'just --help'"
 
+
+install-tool tool version:
+  `{{tool}} --version | grep -q "{{version}}" || cargo install "{{tool}}" --version "{{version}}" --locked --force`
+
 [private]
 cargo command *arguments:
   cargo {{command}} --workspace --all-features {{arguments}}
@@ -32,7 +36,7 @@ build-host *arguments:
 
 # Builds the wasm targets of the workspace
 [private]
-build-wasm *arguments:
+build-wasm *arguments: (install-tool "wasm-pack" "0.10.3")
   # TODO: add profile
   # TODO: consider moving away from wasm-pack and using wasm-bindgen directly so we can use weak-refs
   #       https://github.com/iotaledger/identity.rs/pull/694
