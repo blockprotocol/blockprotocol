@@ -1,5 +1,13 @@
 import { faAsterisk, IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { Box, Stack, svgIconClasses, Typography } from "@mui/material";
+import {
+  Hidden,
+  Stack,
+  svgIconClasses,
+  Tab,
+  Tabs,
+  tabsClasses,
+  Typography,
+} from "@mui/material";
 import { ReactNode, useMemo, useState } from "react";
 
 import { HUB_SERVICES_ENABLED } from "../../../pages/hub.page";
@@ -27,14 +35,16 @@ const HubListBrowseType = ({
       component={Link}
       scroll={false}
       href={{ query: getHubBrowseQuery(type) }}
-      pl={1.5}
       sx={[
         (theme) => ({
+          px: 1.25,
+          height: 24,
           fontWeight: 500,
           color: theme.palette.gray[90],
           position: "relative",
           display: "flex",
           alignItems: "center",
+          lineHeight: 1.5,
           [`.${svgIconClasses.root}`]: {
             marginRight: 1,
             fontSize: 15,
@@ -56,6 +66,68 @@ const HubListBrowseType = ({
     </Typography>
   );
 };
+
+const HubListTabs = ({
+  activeIndex,
+  items,
+  onChange,
+  mobile = false,
+}: {
+  activeIndex: number;
+  items: BrowseItem[];
+  onChange: (index: number) => void;
+  mobile?: boolean;
+}) => (
+  <Tabs
+    orientation={mobile ? "horizontal" : "vertical"}
+    value={activeIndex}
+    sx={({ breakpoints }) => ({
+      display: "flex",
+      minHeight: 0,
+      [`.${tabsClasses.flexContainer}`]: {
+        gap: 1,
+      },
+      [`.${tabsClasses.indicator}`]: {
+        borderRadius: 2,
+        background: (theme) => theme.palette.purple[70],
+        height: "3px !important",
+        [breakpoints.up("sm")]: {
+          left: 0,
+          right: "unset",
+          height: "12px !important",
+          width: "3px !important",
+          marginY: 0.875,
+        },
+      },
+    })}
+  >
+    {items.map(({ icon, title, type }, index) => (
+      <Tab
+        key={type}
+        label={
+          <HubListBrowseType
+            active={index === activeIndex}
+            type={type}
+            onClick={() => {
+              onChange(index);
+            }}
+          >
+            <FontAwesomeIcon icon={icon} /> {title}
+          </HubListBrowseType>
+        }
+        sx={({ breakpoints }) => ({
+          width: "min-content",
+          minHeight: 0,
+          p: 0,
+          mr: 0,
+          [breakpoints.down("sm")]: {
+            mb: 1,
+          },
+        })}
+      />
+    ))}
+  </Tabs>
+);
 
 type BrowseItem = {
   icon: IconDefinition;
@@ -100,43 +172,34 @@ export const HubListBrowse = ({
       >
         Browse
       </Typography>
-      <Box sx={{ position: "relative" }}>
-        {browseItems.map(({ icon, title, type }, index) => (
-          <HubListBrowseType
-            active={index === activeTypeIndex}
-            key={type}
-            type={type}
-            onClick={() => {
+      <Stack
+        sx={{
+          position: "relative",
+        }}
+      >
+        <Hidden smDown>
+          <HubListTabs
+            activeIndex={activeTypeIndex}
+            items={browseItems}
+            onChange={(index) => {
               setOverriddenActiveTypeIndex(index);
               onBrowseClick();
             }}
-          >
-            <FontAwesomeIcon icon={icon} /> {title}
-          </HubListBrowseType>
-        ))}
-        <Box
-          sx={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            height: `calc(100% / ${browseItems.length})`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transform: `translateY(${100 * activeTypeIndex}%)`,
-            transition: (theme) => theme.transitions.create("transform"),
-          }}
-        >
-          <Box
-            sx={{
-              background: (theme) => theme.palette.purple[70],
-              height: 12,
-              width: 3,
-              borderRadius: "8px",
-            }}
           />
-        </Box>
-      </Box>
+        </Hidden>
+
+        <Hidden smUp>
+          <HubListTabs
+            activeIndex={activeTypeIndex}
+            items={browseItems}
+            onChange={(index) => {
+              setOverriddenActiveTypeIndex(index);
+              onBrowseClick();
+            }}
+            mobile
+          />
+        </Hidden>
+      </Stack>
     </Stack>
   );
 };

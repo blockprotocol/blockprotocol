@@ -221,17 +221,20 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
           <Grid container columnSpacing={6}>
             <Grid
               item
-              xs={3}
-              sx={(theme) => ({
-                borderRight: 1,
-                borderColor: theme.palette.gray[30],
+              xs={12}
+              sm={3}
+              sx={({ breakpoints, palette }) => ({
+                pb: { xs: 2, sm: 5 },
+                pt: 6.5,
+                [breakpoints.up("sm")]: {
+                  borderRight: 1,
+                  borderColor: palette.gray[30],
+                },
               })}
-              pt={6.5}
-              pb={5}
             >
               <HubListBrowse onBrowseClick={listenRouteChange} />
             </Grid>
-            <Grid item xs={9} pt={6.5} pb={6.5}>
+            <Grid item xs={12} sm={9} sx={{ pt: { xs: 2, sm: 6.5 }, pb: 6.5 }}>
               {routeChanging ? <HubBrowseHeaderLoading /> : <HubBrowseHeader />}
             </Grid>
           </Grid>
@@ -242,14 +245,19 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
           <Grid container columnSpacing={6}>
             <Grid
               item
-              xs={3}
-              sx={(theme) => ({
-                borderRight: 1,
-                borderColor: theme.palette.gray[30],
+              xs={12}
+              sm={3}
+              sx={({ breakpoints, palette }) => ({
+                display: "none",
+                [breakpoints.up("sm")]: {
+                  display: "block",
+                  borderRight: 1,
+                  borderColor: palette.gray[30],
+                },
               })}
               pt={6.5}
             />
-            <Grid item xs={9} pt={6.5} pb={9}>
+            <Grid item xs={12} sm={9} pt={6.5} pb={9}>
               {routeChanging ? (
                 <Stack gap={6}>
                   <HubItemLoading />
