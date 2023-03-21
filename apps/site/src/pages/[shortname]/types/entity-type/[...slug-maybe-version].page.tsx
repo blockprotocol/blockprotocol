@@ -105,7 +105,10 @@ const EntityTypePage: NextPage = () => {
     (stateToSet: EntityTypeState) => {
       setEntityTypeState(stateToSet);
       reset(getFormDataFromSchema(stateToSet.entityType.schema));
-      void router.push(stateToSet.entityType.schema.$id);
+
+      void router.replace(stateToSet.entityType.schema.$id, undefined, {
+        scroll: false,
+      });
     },
     [reset, router, setEntityTypeState],
   );
