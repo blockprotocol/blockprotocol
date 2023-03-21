@@ -128,8 +128,8 @@ export const WhyInstall = () => {
                 Get <strong>free access</strong> to powerful 3rd-party tools
                 such as those from Mapbox and OpenAI without needing to sign up
                 for your own account with them, or install additional WordPress
-                plugins&#65293;the <strong>Þ</strong>{" "} abstracts away the
-                need to interface with different providers
+                plugins&#65293;the <strong>Þ</strong> abstracts away the need to
+                interface with different providers
               </>
             }
           />
