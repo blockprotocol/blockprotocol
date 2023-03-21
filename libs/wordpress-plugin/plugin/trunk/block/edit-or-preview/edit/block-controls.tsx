@@ -39,10 +39,12 @@ const EntitySelectionRenderer = ({
     >
       <div style={{ fontSize: "12px" }}>{generateLabel(entity)}</div>
       <div style={{ fontSize: "11px" }}>
-        {"Found in: "}
-        {Object.values(entity.locations).map((location) => (
-          <span key={location.edit_link}>{location.title} </span>
-        ))}
+        {"Found in post: "}
+        {Object.values(entity.locations).length
+          ? Object.values(entity.locations).map((location) => (
+              <span key={location.edit_link}>{location.title} </span>
+            ))
+          : "none"}
       </div>
     </div>
   );
@@ -92,10 +94,14 @@ export const CustomBlockControls = ({
   const options = useMemo(
     () =>
       entities
-        .sort(
-          (a, b) =>
-            Object.keys(b.locations).length - Object.keys(a.locations).length,
-        )
+        .sort((a, b) => {
+          const differenceInPagesFoundIn =
+            Object.keys(b.locations).length - Object.keys(a.locations).length;
+          if (differenceInPagesFoundIn !== 0) {
+            return differenceInPagesFoundIn;
+          }
+          return generateLabel(a).localeCompare(generateLabel(b));
+        })
         .map((entity) => ({
           label: generateLabel(entity),
           value: entity.entity_id,
@@ -124,6 +130,10 @@ export const CustomBlockControls = ({
       </BlockControls>
       <InspectorControls>
         <PanelBody>
+          <p>
+            Have data from another Block Protocol block you want to swap into
+            this one? Choose a (compatible) entity here.
+          </p>
           <ComboboxControl
             // @ts-expect-error –– types are wrong, see https://developer.wordpress.org/block-editor/reference-guides/components/combobox-control/#__experimentalrenderitem
             __experimentalRenderItem={EntitySelectionRenderer}
@@ -135,12 +145,14 @@ export const CustomBlockControls = ({
           />
         </PanelBody>
         <PanelBody>
-          {shouldEditorBeHidden(entityTypeId) ? (
-            <p>Please use the controls in the block to update its data.</p>
-          ) : (
+          {shouldEditorBeHidden(entityTypeId) ? null : (
             <Suspense
               fallback={<LoadingImage height={CONTROLS_LOADING_IMAGE_HEIGHT} />}
             >
+              <p>
+                In addition to the block's own UI, you can edit the data sent to
+                it here.
+              </p>
               <EntityEditor
                 entityProperties={entityProperties}
                 entityTypeId={entityTypeId}

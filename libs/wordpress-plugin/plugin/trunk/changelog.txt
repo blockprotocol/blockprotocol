@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 0.0.4 =
+* Improved error handling, including more visible error messages
+* Add labels to custom block settings, fix 'found in post' for entities
+
 = 0.0.3 =
 * Add support for ChatGPT blocks
 * Notification when using unsupported database version

@@ -6,6 +6,7 @@ function get_block_protocol_entities_and_locations()
   $entities = get_all_block_protocol_entities();
 
   $posts = get_posts([
+    "numberposts" => -1,
     "post_type" => "any",
     "post_status" => ['publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash']
   ]);
