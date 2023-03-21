@@ -151,8 +151,6 @@ const EntityTypePage: NextPage = () => {
         entityType: responseData.entityType,
         latestVersion: responseData.entityType,
       });
-
-      void router.replace(responseData.entityType.schema.$id);
     } else {
       const { data: responseData, error: responseError } =
         await apiClient.updateEntityType({
