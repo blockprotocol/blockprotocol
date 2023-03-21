@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 
@@ -116,12 +116,12 @@ const HubItemLoading = () => (
   </Stack>
 );
 
-const AnimatedTypography = motion(Typography);
+const AnimatedTypography = m(Typography);
 
 const HubHeaderWrapper = ({ children }: { children: ReactNode }) => (
-  <motion.div variants={fadeInWrapper} initial="hidden" animate="show">
+  <m.div variants={fadeInWrapper} initial="hidden" animate="show">
     {children}
-  </motion.div>
+  </m.div>
 );
 
 const HubHeading = ({ children }: { children: ReactNode }) => (
@@ -260,7 +260,7 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
               ) : (
                 <Box
                   key={browseType}
-                  component={motion.div}
+                  component={m.div}
                   variants={fadeInWrapper}
                   initial="hidden"
                   animate="show"
@@ -271,9 +271,9 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
                   }}
                 >
                   {listing.map((item) => (
-                    <motion.div key={item.url} variants={fadeInChildren}>
+                    <m.div key={item.url} variants={fadeInChildren}>
                       <HubItem item={item} />
-                    </motion.div>
+                    </m.div>
                   ))}
                 </Box>
               )}

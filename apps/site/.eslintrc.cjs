@@ -30,6 +30,11 @@ module.exports = {
             message: "Please use FunctionComponent instead.",
           },
           {
+            name: "framer-motion",
+            importNames: ["motion"],
+            message: "Please use 'm' instead.",
+          },
+          {
             name: "@mui/material",
             importNames: ["Link"],
             message:

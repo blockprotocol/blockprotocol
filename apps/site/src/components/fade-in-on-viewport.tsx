@@ -1,5 +1,5 @@
 import { Box, BoxProps } from "@mui/material";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ReactNode } from "react";
 
 export const FadeInOnViewport = ({
@@ -11,7 +11,7 @@ export const FadeInOnViewport = ({
 }) => {
   return (
     <Box
-      component={motion.div}
+      component={m.div}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
