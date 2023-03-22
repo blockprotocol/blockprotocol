@@ -7,7 +7,7 @@ Many changes, including bug fixes and documentation improvements can be implemen
 Some changes though are "substantial", and we ask that these be put through a bit of a design process and produce a consensus approved by the Block Protocol Core Team.
 
 [Active RFCs](https://github.com/blockprotocol/blockprotocol/discussions/categories/rfc)
-[Proposed RFCs](https://github.com/blockprotocol/blockprotocol/pulls?q=is%3Aopen+is%3Apr+label%3A%22category%3A+rfc%22)
+[Proposed RFCs](https://github.com/blockprotocol/blockprotocol/pulls?q=is%3Aopen+is%3Apr+label%3A%22area%3A+rfcs%22)
 
 ## Table of Contents
 

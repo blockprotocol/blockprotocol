@@ -149,8 +149,9 @@ export const WhyInstall = () => {
               textAlign: "center",
             }}
           >
-            Download the free <BlockProtocolIcon gradient sx={{ mb: 0.5 }} />
-            WordPress plugin
+            {"Download the free "}
+            <BlockProtocolIcon gradient sx={{ mb: 0.5 }} />
+            {" WordPress plugin"}
           </Typography>
           <Box sx={{ maxWidth: 500, width: 1, mt: 5 }}>
             <EarlyAccessCTA />
