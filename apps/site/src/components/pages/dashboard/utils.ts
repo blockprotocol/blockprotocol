@@ -37,7 +37,7 @@ export const getDashboardSectionCards = (props: {
           "Read the quickstart guide and learn how to create and use blocks",
         link: {
           title: "Read the guide",
-          href: "/docs/developing-blocks",
+          href: "/docs/blocks/develop",
         },
       },
       {
@@ -70,7 +70,7 @@ export const getDashboardSectionCards = (props: {
       {
         title: "Create and manage API keys",
         description:
-          "Your API key will allow you to search for and blocks by name, author, or compatible data structure",
+          "Your API key will allow you to search and discover blocks by name, author, or compatible data structure",
         link: {
           title: "Manage keys",
           href: "/settings/api-keys",

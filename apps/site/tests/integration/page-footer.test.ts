@@ -56,7 +56,7 @@ test("page footer navigation works", async ({ page, browserName }) => {
   // Publish section
   await expect(page.locator("footer >> a:text-is('a block')")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks#publish",
+    "/docs/blocks/develop#publish",
   );
   // await expect(page.locator("footer >> a:text-is('a type')")).toHaveAttribute(
   //   "href",

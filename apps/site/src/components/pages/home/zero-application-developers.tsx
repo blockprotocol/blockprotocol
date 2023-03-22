@@ -96,25 +96,24 @@ export const ZeroApplicationDevelopers = () => {
           powerful blocks that enable them to do more within your application.
         </Typography>
 
-        <LinkButton
-          href="/docs/using-blocks"
-          variant="primary"
-          sx={{ color: theme.palette.common.white, whiteSpace: "nowrap" }}
-          startIcon={
-            <SolidSparklesIcon
-              sx={{
-                fontSize: 18,
-              }}
-            />
-          }
-        >
-          Learn more about embedding{" "}
-          <Box component="strong" sx={{ mx: 0.5 }}>
-            Þ
-          </Box>{" "}
-          blocks
-        </LinkButton>
-      </Container>
-    </FadeInOnViewport>
+      <LinkButton
+        href="/docs/blocks/environments#your-own-application"
+        variant="primary"
+        sx={{ color: theme.palette.common.white, whiteSpace: "nowrap" }}
+        startIcon={
+          <SolidSparklesIcon
+            sx={{
+              fontSize: 18,
+            }}
+          />
+        }
+      >
+        Learn more about embedding{" "}
+        <Box component="strong" sx={{ mx: 0.5 }}>
+          Þ
+        </Box>{" "}
+        blocks
+      </LinkButton>
+    </Container>
   );
 };
