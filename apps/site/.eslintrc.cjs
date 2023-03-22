@@ -32,7 +32,8 @@ module.exports = {
           {
             name: "framer-motion",
             importNames: ["motion"],
-            message: "Please use 'm' instead.",
+            message:
+              "Please use 'm' instead for 'framer-motion' to lazy-load correctly.",
           },
           {
             name: "@mui/material",
