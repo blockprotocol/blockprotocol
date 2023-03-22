@@ -74,6 +74,10 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
     [user],
   );
 
+  const subscriptionStatusIsActiveOrPastDue =
+    stripeSubscriptionStatus === "active" ||
+    stripeSubscriptionStatus === "past_due";
+
   const currentSubscriptionTierIsPaid = isPaidSubscriptionTier(
     currentSubscriptionTier,
   );
@@ -122,12 +126,12 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
         <Grid item md={6} sm={12} sx={{ position: "relative" }}>
           <Link
             href={
-              currentSubscriptionTierIsPaid
+              subscriptionStatusIsActiveOrPastDue
                 ? paymentMethodsPanelPageAsPath
                 : "#"
             }
             onClick={(event) => {
-              if (!currentSubscriptionTierIsPaid) {
+              if (!subscriptionStatusIsActiveOrPastDue) {
                 event.preventDefault();
                 /**
                  * @todo: figure out why calling `scrollIntoView` directly results
@@ -170,7 +174,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
               <Box display="flex" alignItems="center">
                 <Typography variant="bpBodyCopy">
                   <strong>
-                    {currentSubscriptionTierIsPaid
+                    {subscriptionStatusIsActiveOrPastDue
                       ? "Change payment method"
                       : "Upgrade to get more"}
                   </strong>
@@ -184,8 +188,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
                   }}
                 />
               </Box>
-              {/* @todo: implement "change payment" settings panel @see https://app.asana.com/0/0/1203781148500075/f */}
-              {currentSubscriptionTierIsPaid ? (
+              {subscriptionStatusIsActiveOrPastDue ? (
                 defaultSubscriptionPaymentMethod ? (
                   <PaymentMethod
                     paymentMethod={defaultSubscriptionPaymentMethod}
