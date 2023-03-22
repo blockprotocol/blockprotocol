@@ -29,12 +29,6 @@ test("dashboard page should contain key elements", async ({ page }) => {
   await expect(page.locator("text=Welcome back, Alice!")).toBeVisible();
 
   for (const [text, url] of [
-    [
-      "Publish a block",
-      process.env.NEXT_PUBLIC_NPM_PUBLISHING
-        ? "/blocks/publish"
-        : "/@alice/blocks",
-    ],
     ["Build a block", "/docs/blocks/develop"],
     ["Create a Type", "/@alice/all-types"],
     ["Create and manage API keys", "/settings/api-keys"],
