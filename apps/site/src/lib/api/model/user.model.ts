@@ -8,6 +8,7 @@ import type { Stripe } from "stripe";
 import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-login-code.api";
 import { getEntityTypes } from "../../../pages/api/types/entity-type/shared/db";
 import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
+import { SubscriptionTier } from "../../../pages/shared/subscription-utils";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api";
 import {
   FRONTEND_URL,
@@ -37,7 +38,7 @@ export type SerializedUser = {
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
-  stripeSubscriptionTier?: "hobby" | "pro";
+  stripeSubscriptionTier: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
 };
@@ -51,7 +52,7 @@ export type UserProperties = {
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
-  stripeSubscriptionTier?: "hobby" | "pro";
+  stripeSubscriptionTier?: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
 };
@@ -83,7 +84,7 @@ export class User {
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
-  stripeSubscriptionTier?: "hobby" | "pro";
+  stripeSubscriptionTier?: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
 
@@ -485,7 +486,7 @@ export class User {
       stripeCustomerId: this.stripeCustomerId,
       stripeSubscriptionId: this.stripeSubscriptionId,
       stripeSubscriptionStatus: this.stripeSubscriptionStatus,
-      stripeSubscriptionTier: this.stripeSubscriptionTier,
+      stripeSubscriptionTier: this.stripeSubscriptionTier ?? "free",
       canMakeApiServiceCalls: this.canMakeApiServiceCalls,
       usageLimitCents: this.usageLimitCents,
     };
