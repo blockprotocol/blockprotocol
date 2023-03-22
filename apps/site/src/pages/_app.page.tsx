@@ -6,6 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import * as Sentry from "@sentry/nextjs";
 import withTwindApp from "@twind/next/app";
+import { LazyMotion } from "framer-motion";
 import type { AppProps } from "next/app";
 import { Router, useRouter } from "next/router";
 import { DefaultSeo, DefaultSeoProps } from "next-seo";
@@ -28,6 +29,9 @@ import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
 import { ApiMeResponse } from "./api/me.api";
 import { NextPageWithLayout } from "./shared/next-types";
+
+const loadFramerFeatures = () =>
+  import("../util/framer-features").then((res) => res.default);
 
 NProgress.configure({ showSpinner: false });
 
@@ -181,19 +185,21 @@ const MyApp = ({
     ));
 
   return (
-    <UserContext.Provider value={userContextValue}>
-      <SiteMapContext.Provider value={siteMap}>
-        <CacheProvider value={emotionCache}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <SnackbarProvider maxSnack={3}>
-              <DefaultSeo {...defaultSeoConfig} />
-              {getLayout(<Component {...pageProps} />)}
-            </SnackbarProvider>
-          </ThemeProvider>
-        </CacheProvider>
-      </SiteMapContext.Provider>
-    </UserContext.Provider>
+    <LazyMotion features={loadFramerFeatures} strict>
+      <UserContext.Provider value={userContextValue}>
+        <SiteMapContext.Provider value={siteMap}>
+          <CacheProvider value={emotionCache}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <SnackbarProvider maxSnack={3}>
+                <DefaultSeo {...defaultSeoConfig} />
+                {getLayout(<Component {...pageProps} />)}
+              </SnackbarProvider>
+            </ThemeProvider>
+          </CacheProvider>
+        </SiteMapContext.Provider>
+      </UserContext.Provider>
+    </LazyMotion>
   );
 };
 
