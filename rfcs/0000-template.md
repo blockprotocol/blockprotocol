@@ -1,7 +1,7 @@
-- **Feature Name:** (fill me in with a unique ident such as `my-feature`, this should be used in the name of the file)
+- **Feature Name:** (fill me in with a unique slug such as `my-feature`, this should be used in the name of the file)
 - **Start Date:** (fill me in with today's date, YYYY-MM-DD)
 - **RFC PR:** [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/pull/0000)
-- **RFC Discussion:** [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000) (To be created **after** the RFC has been accepted and the PR is **merged**)
+- **RFC Discussion:** [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000) (to be created **after** the RFC has been accepted and the PR is **merged**)
 
 # Summary
 
@@ -19,15 +19,15 @@ Why are we doing this? What use cases does it support? What is the expected outc
 
 [guide-level-explanation]: #guide-level-explanation
 
-Explain the proposal as if it was already included in the protocol and you were teaching it to another Block Protocol implementor. That generally means:
+Explain the proposal as if it was already included in the protocol and you were teaching it to another Block Protocol implementer. That generally means:
 
 - Introducing new named concepts.
 - Explaining the feature largely in terms of examples.
-- Explaining how Block Protocol implementors and users should _think_ about the feature, and how it should impact the way they use the protocol. It should explain the impact as concretely as possible.
+- Explaining how Block Protocol implementers and users should _think_ about the feature, and how it should impact the way they use the protocol. It should explain the impact as concretely as possible.
 - If applicable, provide sample error messages, deprecation warnings, or migration guidance.
 - If applicable, describe the differences between teaching this to existing and new Block Protocol users.
 
-For implementation-oriented RFCs, this section should focus on how Block Protocol implementors should think about the change, and give examples of its concrete impact. For policy RFCs, this section should provide an example-driven introduction to the policy, and explain its impact in concrete terms.
+For implementation-oriented RFCs, this section should focus on how Block Protocol implementers should think about the change, and give examples of its concrete impact. For policy RFCs, this section should provide an example-driven introduction to the policy, and explain its impact in concrete terms.
 
 # Reference-level explanation
 
