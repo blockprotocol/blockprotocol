@@ -1054,46 +1054,47 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blockprotocol/core@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.1.0.tgz#e70ab111efd0836cfb55a8f3f1734da6f507a457"
-  integrity sha512-k5UZSMEFJWzZtKcpPewHVYgH02qXwBbutwTGsBDx1YQxbbQ4bKn0NXprn1PM0bwBcBkThq0E7ZGXGnPwSwJMfA==
+"@blockprotocol/core@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.1.1.tgz#8f3c5903744a632cb7357e3075a7e2140af33d5f"
+  integrity sha512-Cnm07CTIAn3E+JBcquRIcUUFIenFukEUDqPDnouNy7qDwffaW8immCBve9ljQ8kNnhTf6zXN5DVxyRT3vSiebQ==
   dependencies:
     es-module-lexer "^0.10.5"
     uuid "^8.3.2"
 
-"@blockprotocol/graph@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.1.0.tgz#003632303956070fadcc16d271c7e7f683c815db"
-  integrity sha512-FJKgMvRSpjP8bUwUxpxOG0YdDUmdZpR2W7oQl6znOPxdx/aZ4bgalqaxcPerL3c8rhmSbJEA5D4Lms2ItUTE2g==
+"@blockprotocol/graph@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.2.1.tgz#73893528d07f9500fdd9cdc7e62547e05774d92b"
+  integrity sha512-dG+2CK3qVpfizt6iltbnlaLcvmlrqQOR5nR+A/sZWjEBcPuOkM4tsf01Lb/wbkTQ9QQ/+eAK7KURVYVd5GoQ8w==
   dependencies:
-    "@blockprotocol/core" "0.1.0"
-    "@blockprotocol/type-system" "0.1.0"
+    "@blockprotocol/core" "0.1.1"
+    "@blockprotocol/type-system" "0.1.1"
     ajv "^8.11.2"
     ajv-formats "^2.1.1"
     json-schema-to-typescript "^11.0.2"
     lit "^2.4.1"
     node-fetch "^3.3.0"
+    typescript "4.9.4"
 
-"@blockprotocol/hook@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/hook/-/hook-0.1.0.tgz#ad15118949746dab80c2f594a5a238faee575abf"
-  integrity sha512-YBDnrEiFrlIAaKiKxt9zNk7iiZkYURaqy/LJkssPrBzECeHUraD9S92yGge8h2yPPwlN6avg1MGpUtozfEadhg==
+"@blockprotocol/hook@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/hook/-/hook-0.1.2.tgz#0c09379e26ddf0c9b10d31382a115fc4ed3ab539"
+  integrity sha512-sTqy/3ArgldLf/WvpiAx32W3yCaA6EJFjWldugIbNXkj2ol81OdDPJGuNgkiXfudWT/6klu23Wqyo678qOhCZg==
   dependencies:
-    "@blockprotocol/core" "0.1.0"
-    "@blockprotocol/graph" "0.1.0"
+    "@blockprotocol/core" "0.1.1"
+    "@blockprotocol/graph" "0.2.1"
 
-"@blockprotocol/service@0.1.1":
+"@blockprotocol/service@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/service/-/service-0.1.2.tgz#11fc1b15ec32b5cd50080e0fa1465f599ec1f27e"
+  integrity sha512-oMo1U+Mdb/xNmUL5hL9eTtVVkQaEWf5nbRDptOA6F27uIWsk8WnPo3errT9NFFvbHHTTVURwaLBjZgLr4qvFCw==
+  dependencies:
+    "@blockprotocol/core" "0.1.1"
+
+"@blockprotocol/type-system@0.1.1":
   version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/service/-/service-0.1.1.tgz#8513255b94af747e52cde70288d75cbfa2a53ffd"
-  integrity sha512-9N5A0adwLTKNDwy29/xnWzmWTyig5YyVBgBw9ydHazJZAlfZZWQfgsWGgOw3J8dSIaqTfv5U/LvvaUa4wxeL3g==
-  dependencies:
-    "@blockprotocol/core" "0.1.0"
-
-"@blockprotocol/type-system@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/type-system/-/type-system-0.1.0.tgz#951e3d4aa996440762a5207329e8e151176cd24f"
-  integrity sha512-Q8EDKrGRyPETasWTJy1EX0PM66WlLZUbLwFuib8Gk8sGHdUSNLDP54fCjBO/DKDTahN25qTX04KxFJsC32RxMw==
+  resolved "https://registry.yarnpkg.com/@blockprotocol/type-system/-/type-system-0.1.1.tgz#8c63fd642d25409e112e8660948825c07d83b672"
+  integrity sha512-ipG246HQh4qUfhSPGn4ydkLfrWV9yByi9SSPWOkxWMtZ19DlRd43+DkBXk+C6MC7CurdOTQbl+ftc/B32HaNAg==
 
 "@csstools/selector-specificity@^2.0.2":
   version "2.1.1"
@@ -10647,6 +10648,11 @@ typescript@4.8.4:
   version "4.8.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.8.4.tgz#c464abca159669597be5f96b8943500b238e60e6"
   integrity sha512-QCh+85mCy+h0IGff8r5XWzOVSbBO+KfeYrMQh7NJ58QujwcE22u+NUSmUxqF+un70P9GXKxa2HCNiTTMJknyjQ==
+
+typescript@4.9.4:
+  version "4.9.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.4.tgz#a2a3d2756c079abda241d75f149df9d561091e78"
+  integrity sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==
 
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"

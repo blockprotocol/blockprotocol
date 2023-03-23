@@ -3,6 +3,7 @@
   "name": "blockprotocol/block",
   "category": "blockprotocol",
   "icon": "schedule",
+  "apiVersion": 2,
   "description": "Block Protocol embedding application",
   "keywords": ["block", "bp", "embed"],
   "editorScript": "file:index.tsx",
