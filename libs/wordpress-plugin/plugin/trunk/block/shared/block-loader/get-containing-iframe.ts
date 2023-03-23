@@ -5,7 +5,7 @@
  * Note: the current check depends on 'editor' appearing in the iFrame's title, and is therefore fragile.
  *
  * The Pull Request explaining that WP core will only iFrame editors where all blocks are API v3+
- * https://github.com/WordPress/gutenberg/pull/48076
+ * @see https://github.com/WordPress/gutenberg/pull/48076
  *
  * The code loading the iFrame:
  * @see https://make.wordpress.org/core/2021/06/29/blocks-in-an-iframed-template-editor/
