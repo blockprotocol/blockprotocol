@@ -46,7 +46,6 @@ import {
   isPaidSubscriptionTier,
   PaidSubscriptionTier,
   priceToHumanReadable,
-  SubscriptionTier,
   subscriptionTierToHumanReadable,
 } from "../../../shared/subscription-utils";
 import { paidSubscriptionFeatures } from "../../billing-settings-panel/free-or-hobby-subscription-tier-overview";
@@ -109,7 +108,6 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
     [stringifiedSubscriptionTierPrices],
   );
 
-  const [subscriptionId, setSubscriptionId] = useState<string>();
   const [clientSecret, setClientSecret] = useState<string>();
   const [
     upgradeExistingPaidSubscriptionErrorMessage,
@@ -177,10 +175,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
   const [changePaymentMethodModalOpen, setChangePaymentMethodModalOpen] =
     useState<boolean>(false);
 
-  const currentSubscriptionTier: SubscriptionTier =
-    user.stripeSubscriptionStatus === "active"
-      ? user.stripeSubscriptionTier ?? "free"
-      : "free";
+  const { stripeSubscriptionTier: currentSubscriptionTier } = user;
 
   useEffect(() => {
     /**
@@ -212,22 +207,17 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
     }
   }, [router, currentSubscriptionTier]);
 
-  const isUpgradingExistingPaidSubscription = useMemo<boolean>(
-    () =>
-      !!upgradedSubscriptionTier &&
-      isPaidSubscriptionTier(currentSubscriptionTier) &&
-      currentSubscriptionTier !== upgradedSubscriptionTier,
-    [currentSubscriptionTier, upgradedSubscriptionTier],
-  );
+  const userHasActiveStripeSubscription =
+    user.stripeSubscriptionStatus === "active";
 
   useEffect(() => {
-    if (isUpgradingExistingPaidSubscription) {
+    if (userHasActiveStripeSubscription) {
       void fetchPaymentMethods();
       void fetchSubscription();
       void fetchTaxRate();
     }
   }, [
-    isUpgradingExistingPaidSubscription,
+    userHasActiveStripeSubscription,
     fetchPaymentMethods,
     fetchSubscription,
     fetchTaxRate,
@@ -245,19 +235,24 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
       subscriptionTier: params.tier,
     });
 
-    setSubscriptionId(data.subscriptionId);
     setClientSecret(data.clientSecret);
   };
 
   useEffect(() => {
-    if (upgradedSubscriptionTier && !subscriptionId) {
-      if (currentSubscriptionTier === "free") {
-        void createSubscription({ tier: upgradedSubscriptionTier });
-      }
+    if (upgradedSubscriptionTier && !userHasActiveStripeSubscription) {
+      void createSubscription({ tier: upgradedSubscriptionTier });
     }
-  }, [currentSubscriptionTier, upgradedSubscriptionTier, subscriptionId]);
+  }, [
+    currentSubscriptionTier,
+    upgradedSubscriptionTier,
+    userHasActiveStripeSubscription,
+  ]);
 
   const handleUpgradedSubscription = useCallback(() => {
+    if (!upgradedSubscriptionTier) {
+      return;
+    }
+
     /**
      * The BP user in the database is updated by the stripe webhook in the
      * internal API. To reflect the updated state of the user before this
@@ -333,7 +328,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
 
   return (
     <>
-      {isUpgradingExistingPaidSubscription && subscription && paymentMethods ? (
+      {userHasActiveStripeSubscription && subscription && paymentMethods ? (
         <ChangePaymentMethodModal
           subscription={subscription}
           refetchSubscription={fetchSubscription}
@@ -685,7 +680,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                     </Box>
                   </Box>
 
-                  {isUpgradingExistingPaidSubscription ? (
+                  {userHasActiveStripeSubscription ? (
                     <>
                       <UpgradeExistingPaidSubscriptionIntro
                         currentSubscriptionTier={
@@ -715,7 +710,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                     </>
                   ) : null}
                   <Box marginBottom={4}>
-                    {isUpgradingExistingPaidSubscription ? (
+                    {userHasActiveStripeSubscription ? (
                       upgradedSubscriptionTier ? (
                         <Button
                           fullWidth
