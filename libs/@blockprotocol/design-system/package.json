@@ -1,5 +1,6 @@
 {
   "name": "@blockprotocol/design-system",
+  "private": true,
   "version": "0.0.1",
   "description": "Implementation of the Block Protocol Design System",
   "keywords": [
