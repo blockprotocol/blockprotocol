@@ -119,10 +119,7 @@ const ApiKeys: AuthWallPageContent = () => {
               >
                 Keep them private to prevent other people from accessing your
                 account. <br />
-                <Link
-                  href="/docs/using-blocks#discovering-blocks"
-                  data-test-id="apiKeyLink"
-                >
+                <Link href="/docs#th-hub-and-api" data-test-id="apiKeyLink">
                   Learn More
                 </Link>
               </Typography>
