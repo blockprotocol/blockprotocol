@@ -1,7 +1,7 @@
 <?php
 /**
  * @package blockprotocol
- * @version 0.0.4
+ * @version 0.0.5
  */
 /*
 Plugin Name: Block Protocol
@@ -9,14 +9,14 @@ Plugin URI: https://blockprotocol.org/wordpress
 Description: Access an open, growing ecosystem of high-quality and powerful blocks via the Block Protocol.
 Author: Block Protocol
 Author URI: https://blockprotocol.org/?utm_medium=organic&utm_source=wordpress_plugin-directory_blockprotocol-plugin_author-name
-Version: 0.0.4
+Version: 0.0.5
 Requires at least: 5.6.0
 Tested up to: 6.1.1
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 */
 
-const BLOCK_PROTOCOL_PLUGIN_VERISON = "0.0.4";
+const BLOCK_PROTOCOL_PLUGIN_VERSION = "0.0.5";
 
 if (is_readable(__DIR__ . '/vendor/autoload.php')) {
 	require __DIR__ . '/vendor/autoload.php';
@@ -266,7 +266,7 @@ function block_protocol_editor_assets() {
 			'blockprotocol-sentry',
 			plugins_url('build/sentry.js', __FILE__),
 			[],
-			BLOCK_PROTOCOL_PLUGIN_VERISON
+			BLOCK_PROTOCOL_PLUGIN_VERSION
 		);
 		wp_add_inline_script(
 			'blockprotocol-sentry',
