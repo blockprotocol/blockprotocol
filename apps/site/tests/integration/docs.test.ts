@@ -95,11 +95,11 @@ test("Docs page should contain key elements and interactions should work", async
   );
 
   // confirm docs footer nav have correct links
-  await expect(page.locator("text=PreviousUsing Blocks >> a")).toBeVisible();
+  await expect(page.locator("text=PreviousFAQs >> a")).toBeVisible();
 
-  await expect(page.locator("text=PreviousUsing Blocks >> a")).toHaveAttribute(
+  await expect(page.locator("text=PreviousFAQs >> a")).toHaveAttribute(
     "href",
-    "/docs/using-blocks",
+    "/docs/faq",
   );
 
   await expect(page.locator("text=NextCore >> a")).toBeVisible();
