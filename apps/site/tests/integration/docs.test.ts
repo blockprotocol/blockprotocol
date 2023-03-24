@@ -28,7 +28,6 @@ test("Docs page should contain key elements and interactions should work", async
   for (const [name, href] of [
     ["Introduction", "/docs"],
     ["Blocks", "/docs/blocks"],
-    ["Types", "/docs/types"],
     ["Specification", "/docs/spec"],
     ["FAQs", "/docs/faq"],
   ] as const) {

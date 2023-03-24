@@ -41,14 +41,14 @@ export const getDashboardSectionCards = (props: {
         },
       },
       {
-        title: "Build a block",
+        title: "View your blocks",
         colorGradient:
           "linear-gradient(310.17deg, #FFB172 -167.67%, #9482FF 13.54%, #84E6FF 126.83%)",
         colorGradientOnHover:
           "linear-gradient(304.41deg, #FFB172 -167.57%, #9482FF -22.66%, #84E6FF 53.07%)",
         description: "Browse your blocks or publish a new one to the Þ Hub",
         link: {
-          title: "Build a block",
+          title: "View your blocks",
           href: `${props.profileLink}/blocks`,
         },
       },
