@@ -2,7 +2,7 @@
 
 ## Step one: copy this template
 
-See https://blockprotocol.org/docs/developing-blocks
+See https://blockprotocol.org/docs/blocks/develop
 
 **TL;DR:** Run `npx create-block-app@latest [your-block-name]`
 
@@ -15,7 +15,7 @@ A key part of the Block Protocol is the use of types to describe the data your b
 Your block should be associated with an “entity type” which will be used by embedding applications
 to understand what sorts of entities can be sent to it (e.g. what properties do they have?).
 
-You can create an entity type on [blockprotocol.org](https://blockprotocol.org) — see [the docs](https://blockprotocol.org/docs/developing-blocks) for a full guide.
+You can create an entity type on [blockprotocol.org](https://blockprotocol.org) — see [the docs](https://blockprotocol.org/docs/blocks/develop) for a full guide.
 
 Once you have created the type representing the data your block needs, copy its URL for use in the next step.
 
@@ -57,7 +57,7 @@ The template uses a helper hook `useEntitySubgraph` to extract the `blockEntity`
 
 This hook also returns `linkedEntities`, which are the links and target entities attached to the entity.
 
-Please see [the Block Protocol docs](https://blockprotocol.org/docs/developing-blocks)
+Please see [the Block Protocol docs](https://blockprotocol.org/docs/blocks/develop)
 for a fuller explanation of querying, creating and updating entity data from your block.
 
 Please see [the React docs](https://reactjs.org/docs/getting-started.html) for general help with writing React components.
@@ -82,7 +82,7 @@ and `dev.tsx` like this:
 
 ## Step five: publish your block
 
-Head over to [blockprotocol.org](https://blockprotocol.org/docs/developing-blocks#publish) to read instructions on publishing your block.
+Head over to [blockprotocol.org](https://blockprotocol.org/docs/blocks/develop#publish) to read instructions on publishing your block.
 
 ## External Dependencies
 

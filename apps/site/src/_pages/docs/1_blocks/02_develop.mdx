@@ -2,8 +2,6 @@
 
 ## Introduction
 
-Blocks are discrete components that allow users to view, explore, or edit data.
-
 The Block Protocol defines a standard for communication between blocks and the applications that embed them.
 
 The protocol is split into a core specification setting out _how_ applications and blocks communicate, and module specifications defining _what_ applications and blocks communicate.
@@ -223,7 +221,7 @@ You can create new entities using the `createEntity` method.
 
 New entities should be assigned starting `properties` and an `entityTypeId` (a URL pointing to their entity type).
 
-### Linking entities together
+#### Linking entities together
 
 Because links between entities are just a special kind of entity, you call `createEntity` to create them,
 specifying additional `linkData` to indicate which entities are on the 'left' and 'right' of the link.
@@ -318,7 +316,7 @@ However, it's also possible to query across all entities in the datastore.
 The `queryEntities` message allows you submit a query with a filter.
 You can use this to browse the available entities in order to display them, or create links between them.
 
-##### Example: Filtering entities by property value
+###### Example: Filtering entities by property value
 
 To retrieve the subgraph rooted at all entities with a property `https://blockprotocol.org/types/@blockprotocol/property-type/name/` with a value of `"Alice"` or `"Bob"`:
 
@@ -395,7 +393,7 @@ Note, that we could have provided a `graphResolveDepths` parameter similar to th
 
 More information on building filters can be found within the documentation of the [`queryEntities` message in the specification](https://blockprotocol.org/docs/spec/graph-module#message:queryEntities).
 
-### Going further with the graph module
+#### Going further with the graph module
 
 If you are using TypeScript, the types for methods available on `graphModule` (as defined in the `@blockprotocol/graph` package) should help you understand what methods are available and how they operate.
 
@@ -411,8 +409,7 @@ You now have a block package that you can provide to apps to use, by **publishin
 
 ## Publish
 
-Once you've built a block, you can add it to the [Hub](https://blockprotocol.org/hub), so that your block will have an instant online demo playground,
-and will be searchable via our block API.
+Once you've built a block, you can add it to the [Þ Hub](https://blockprotocol.org/hub). This provides you with an instant online public playground in which to demo your block, and allows other users of the Block Protocol to discover it, or embed it through any Þ application.
 
 To publish a block on the Hub take the following steps.
 
@@ -442,11 +439,11 @@ field in your `package.json` points to a public repository containing your code,
 
 Read more about verification in [the FAQ](https://blockprotocol.org/docs/faq#how-does-block-verification-work).
 
-### Changing the Hub preview
+### Improving your block's appearance on the Þ Hub
 
-- Take a screenshot of your block in action and replace `public/block-preview.png`
-- update the `description` in package.json
-- add an icon to the `public` folder and update `blockprotocol.icon` in `package.json`
+- **To update the preview image**: take a screenshot of your block in action and replace `public/block-preview.png`
+- **To modify the description:** update the `description` in package.json
+- **To change the icon:** add an icon to the `public` folder and update `blockprotocol.icon` in `package.json`
 - add a preview `image` to the `public` folder and update `blockprotocol.image` in `package.json`
 - update your block’s `README.md` – it will appear below your block on its hub page if you change it from the default
 - update the example properties object in `blockprotocol.examples` in `package.json`

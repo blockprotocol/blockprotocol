@@ -97,7 +97,7 @@ export const ZeroApplicationDevelopers = () => {
         </Typography>
 
         <LinkButton
-          href="/docs/using-blocks"
+          href="/docs/blocks/environments#your-own-application"
           variant="primary"
           sx={{ color: theme.palette.common.white, whiteSpace: "nowrap" }}
           startIcon={

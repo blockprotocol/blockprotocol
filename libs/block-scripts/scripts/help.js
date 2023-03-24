@@ -20,7 +20,7 @@ const script = async () => {
   console.log("");
   console.log(
     `See docs at ${chalk.underline(
-      "https://blockprotocol.org/docs/developing-blocks",
+      "https://blockprotocol.org/docs/blocks/develop",
     )}`,
   );
   console.log("");

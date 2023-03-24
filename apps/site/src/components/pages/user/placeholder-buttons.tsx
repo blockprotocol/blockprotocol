@@ -9,7 +9,7 @@ export const BuildBlockButton: FunctionComponent = () => {
   return (
     <LinkButton
       variant="secondary"
-      href="/docs/developing-blocks"
+      href="/docs/blocks/develop"
       sx={{ margin: 1 }}
       startIcon={<FontAwesomeIcon icon={faHammer} />}
     >
