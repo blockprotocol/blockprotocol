@@ -45,13 +45,13 @@ test("page footer navigation works", async ({ page, browserName }) => {
   // Discover section
   await expect(
     page.locator("footer >> a:text-is('Open-source blocks')"),
-  ).toHaveAttribute("href", "/hub");
+  ).toHaveAttribute("href", "/hub?type=blocks");
   await expect(
     page.locator("footer >> a:text-is('Semantic types')"),
-  ).toHaveAttribute("href", "/hub");
+  ).toHaveAttribute("href", "/hub?type=types");
   await expect(
     page.locator("footer >> a:text-is('API services')"),
-  ).toHaveAttribute("href", "/hub");
+  ).toHaveAttribute("href", "/hub?type=services");
 
   // Publish section
   await expect(page.locator("footer >> a:text-is('a block')")).toHaveAttribute(

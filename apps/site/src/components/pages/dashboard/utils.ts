@@ -41,19 +41,19 @@ export const getDashboardSectionCards = (props: {
         },
       },
       {
-        title: "My blocks",
+        title: "Build a block",
         colorGradient:
           "linear-gradient(310.17deg, #FFB172 -167.67%, #9482FF 13.54%, #84E6FF 126.83%)",
         colorGradientOnHover:
           "linear-gradient(304.41deg, #FFB172 -167.57%, #9482FF -22.66%, #84E6FF 53.07%)",
         description: "Browse your blocks or publish a new one to the Þ Hub",
         link: {
-          title: "My blocks",
+          title: "Build a block",
           href: `${props.profileLink}/blocks`,
         },
       },
       {
-        title: "My types",
+        title: "Create a Type",
         colorGradient:
           "linear-gradient(91.21deg, #FFB172 -84.62%, #9482FF 62.56%, #84E6FF 154.58%)",
         colorGradientOnHover:
@@ -61,7 +61,7 @@ export const getDashboardSectionCards = (props: {
         description:
           "Types are a formal way to describe data, links, properties and entities",
         link: {
-          title: "My types",
+          title: "Create a Type",
           href: `${props.profileLink}/all-types`,
         },
       },

@@ -36,7 +36,7 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(
     page.locator("text=Learn more about embedding Þ blocks"),
-  ).toHaveAttribute("href", "/docs/using-blocks");
+  ).toHaveAttribute("href", "/docs/blocks/environments#your-own-application");
 
   // Composable interfaces section
   await expect(page.locator("[data-testid='WordPress-button']")).toBeVisible();
