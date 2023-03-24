@@ -55,18 +55,18 @@ export const CustomElementLoader: FunctionComponent<
   if (iframeContainingBlock) {
     /**
      * If the block editor is iFramed, blocks are portalled into the iFrame – see docs on {@link getContainingIframe}
-     * Code is evaluated in one window and rendered into another, leading to some mismatches between globals
-     * One such mismatch is on the custom elements registry – 'customElements' below will refer to the top window registry,
-     * but the element needs to be available in the iFrame's own custom element registry (iframeContainingBlock.contentWindow.customElements)
+     * Code is evaluated in one window and rendered into another, leading to some mismatches between globals – see {@link parseBlockSource}
      *
-     * Current difficulties:
+     * This also breaks rendering of custom element blocks. e.g. Minesweeper
+     *
+     * Result of investigation so far:
      * 1. If the element is registered only in the top window's registry, the tag appears in the iFrame's DOM but with no content
-     * 2. If the element is registered only in the iFrame's registry, there is an "Illegal constructor" error (i.e. the element is not registered where it needs to be)
+     * 2. If the element is registered only in the iFrame's registry, there is an "Illegal constructor" error when trying to add it (the element is not registered where it needs to be)
      * 3. If the element is registered in both registries, this error: "Failed to construct 'CustomElement': The result must be in the same document"
-     *   -- this error possibly related to https://github.com/WICG/webcomponents/issues/907
+     *   -- @see https://chromium.googlesource.com/chromium/src/+/159d66f36734dab8cfd79c6ae788b94fca8a213a/third_party/WebKit/Source/core/dom/custom/CustomElementDefinition.cpp#54
      *
      * @todo see if there's a way to have the custom element registered and loaded in the iFrame without issue
-     *   this may partly involve overwriting 'customElements' in load-remote-block in the same way we do for 'document'
+     *   this may partly involve overwriting 'customElements' in load-remote-block in the same way we do for 'document' (though simply doing this doesn't fix it)
      */
     return (
       <p style={{ border: "1px solid red", padding: 20 }}>
