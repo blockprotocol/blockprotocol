@@ -2,17 +2,14 @@
   - "apps/site/**"
 
 "area: apps":
-  - "apps/**"
+  - ["apps/**", "!apps/site/src/_pages/**"]
+
+"area: copy":
+  - "apps/site/src/_pages/**"
 
 "area: dependencies":
   - "**/patches/**"
   - "**/yarn.lock"
-
-"area: docs":
-  - "apps/site/src/_pages/docs/**"
-
-"area: hub":
-  - "hub/**"
 
 "area: infra":
   - ".changeset/config.json"
