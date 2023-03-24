@@ -66,8 +66,8 @@ export const parseBlockSource = (
    * - within a block, globals will refer to those in the parent window (where the block is constructed), not iFrame it is rendered in
    * - styling libraries which work by appending styles to the head via globals are going to add styles to the parent document
    *   - e.g. webpack style-loader (for imported CSS files), or emotion
-   * - styles are therefore not present in the iFrame unless we overwrite the globals (they're in the parent's <head>)
-   * - event listeners in some libraries are also likely to be effected
+   * - styles are therefore not present in the iFrame unless we overwrite the globals (they'd be in the parent's <head>)
+   * - event listeners in some libraries are also likely to be affected
    *
    * We therefore check if the Gutenberg iFrame is present, and if so overwrite the value of key globals to those of the iFrame.
    */
