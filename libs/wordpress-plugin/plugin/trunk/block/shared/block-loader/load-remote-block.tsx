@@ -62,23 +62,38 @@ export const parseBlockSource = (
   const module = { exports };
 
   /**
-   * If the block has been portalled into an iFrame, we need to overwrite its document, because:
-   * - within a block, 'document' will refer to the _parent_ document, not the document of the iFrame it is rendered in
-   * - styling libraries which work by appending styles to document.head are going to add styles to the parent document
+   * If the block has been portalled into an iFrame, we need to overwrite its globals, because:
+   * - within a block, globals will refer to those in the parent window (where the block is constructed), not iFrame it is rendered in
+   * - styling libraries which work by appending styles to the head via globals are going to add styles to the parent document
    *   - e.g. webpack style-loader (for imported CSS files), or emotion
-   * - styles are therefore not present in the iFrame
+   * - styles are therefore not present in the iFrame unless we overwrite the globals (they're in the parent's <head>)
+   * - event listeners in some libraries are also likely to be effected
    *
-   * We therefore check if the Gutenberg iFrame is present, and if so overwrite the value of 'document' to the iFrame's document.
-   * Styles still fail to load on some blocks, e.g. TLDraw's styles in the 'drawing' block
-   * @todo investigate how TLDraw's styles are loaded and make them load
+   * We therefore check if the Gutenberg iFrame is present, and if so overwrite the value of key globals to those of the iFrame.
    */
   const iframe = getContainingIframe();
   const documentBlockRenderedInside = iframe?.contentDocument ?? document;
+  const windowBlockRenderedInside = iframe?.contentWindow ?? window;
 
   // eslint-disable-next-line no-new-func
-  const func = new Function("require", "module", "exports", "document", source);
+  const func = new Function(
+    "require",
+    "module",
+    "exports",
+    "document",
+    "window",
+    "globalThis",
+    source,
+  );
 
-  func(requires, module, exports, documentBlockRenderedInside);
+  func(
+    requires,
+    module,
+    exports,
+    documentBlockRenderedInside,
+    windowBlockRenderedInside,
+    windowBlockRenderedInside,
+  );
 
   const exported =
     module.exports.default ??
