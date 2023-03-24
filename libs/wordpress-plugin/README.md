@@ -66,7 +66,7 @@ Within `trunk` there are:
 - Choose the appropriate semver version number (e.g. `0.1.0`), and then make sure it is reflected in the following places in `plugin/trunk/`:
 
   - in the header in `block-protocol.php` (two places)
-  - the value for `BLOCK_PROTOCOL_PLUGIN_VERISON` in `block-protocol.php`
+  - the value for `BLOCK_PROTOCOL_PLUGIN_VERSION` in `block-protocol.php`
   - `Stable tag` in `readme.txt`
   - also update `version` in `package.json` (next to this README)
 
