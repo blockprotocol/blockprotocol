@@ -217,13 +217,13 @@ export const BANNERS: Banner[] = [
               >
                 Anyone can create blocks and contribute to this growing,
                 open-source registry of blocks. Read our{" "}
-                <Link href="/docs/developing-blocks">quickstart guide</Link> to
+                <Link href="/docs/blocks/develop">quickstart guide</Link> to
                 start building your own blocks.
               </Typography>
             </Box>
           </Box>
         }
-        buttonHref="/docs/developing-blocks"
+        buttonHref="/docs/blocks/develop"
         buttonText="Read the quickstart guide"
         buttonStartIcon={<BoltIcon />}
       />
@@ -253,7 +253,7 @@ export const BANNERS: Banner[] = [
                 </Typography>
               </Box>
             }
-            buttonHref="/docs/using-blocks"
+            buttonHref="/docs/blocks/environments"
             buttonText="Learn more"
             buttonEndIcon={<ArrowRightIcon />}
           />
@@ -277,7 +277,7 @@ export const BANNERS: Banner[] = [
                 </Typography>
               </Box>
             }
-            buttonHref="/docs/developing-blocks"
+            buttonHref="/docs/blocks/develop"
             buttonText="Read the quickstart guide"
             buttonStartIcon={<BoltIcon />}
           />
@@ -343,13 +343,13 @@ export const BANNERS: Banner[] = [
               >
                 Anyone can create blocks and contribute to this growing,
                 open-source registry of blocks. Read our{" "}
-                <Link href="/docs/developing-blocks">quickstart guide</Link> to
+                <Link href="/docs/blocks/develop">quickstart guide</Link> to
                 start building your own blocks.
               </Typography>
             </Box>
           </Box>
         }
-        buttonHref="/docs/developing-blocks"
+        buttonHref="/docs/blocks/develop"
         buttonText="Read the quickstart guide"
         buttonStartIcon={<BoltIcon />}
       />

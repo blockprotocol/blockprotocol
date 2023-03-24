@@ -49,7 +49,7 @@ In the future we intend to support non-web contexts more directly.
 
 Blocks built for the Block Protocol work inside of multiple embedding applications, with promised support in the future of even more. Creating a Þ block enables a developer to code a block _once_ and then use that same block in a variety of places, without having to make any application-specific affordances to ensure their block functions correctly or looks good.
 
-Anybody with web development experience can build a block to add functionality to an application that implements the Block Protocol. That means if you're the user of a protocol-supporting application such as WordPress or HASH, [developing a Þ block](https://blockprotocol.org/docs/developing-blocks) will enable you to extend that app's capabilities, and take your work with you to other Þ environments should you wish.
+Anybody with web development experience can build a block to add functionality to an application that implements the Block Protocol. That means if you're the user of a protocol-supporting application such as WordPress or HASH, [developing a Þ block](https://blockprotocol.org/docs/blocks/develop) will enable you to extend that app's capabilities, and take your work with you to other Þ environments should you wish.
 
 Blocks don't have to be open-sourced, but we strongly encourage publishing them to the [Þ Hub](https://blockprotocol.org/hub), sharing them with others. You may be motivated to do this by any of the factors that already result in thiriving open-source software ecosystems today: challenge, competition, fun, reputation, and the desire to contribute to and be part of a community.
 
@@ -93,7 +93,7 @@ Specific implementations of the Block Protocol in other applications may be kept
   
 <FAQ question="Where are blocks hosted and how are they discovered?">
 
-Blocks can be published for free [to the Þ Hub](https://blockprotocol.org/docs/developing-blocks#publishing). Publishing a block to the Þ Hub makes it discoverable to users browsing [blockprotocol.org](https://blockprotocol.org/hub), as well as embedding applications consuming the Þ API.
+Blocks can be published for free [to the Þ Hub](https://blockprotocol.org/docs/blocks/develop#publishing). Publishing a block to the Þ Hub makes it discoverable to users browsing [blockprotocol.org](https://blockprotocol.org/hub), as well as embedding applications consuming the Þ API.
 
 Through the Þ API, embedders can access the metadata and source code of blocks, listing blocks within their own application and serving them to users.
 
@@ -139,7 +139,7 @@ Similar to most programming language package managers, because anybody can publi
 
 Because those inserting blocks are often non-technical end users, this isn't always practical. As such, we recommend that embedders implement both sandboxing within their environments, and allow/deny lists.
 
-- **Sandboxing** will be covered in depth in our [guide for embedders](https://blockprotocol.org/docs/using-blocks).
+- **Sandboxing** will be covered in depth in our [guide for embedders](https://blockprotocol.org/docs/blocks/environments#other-environments).
 - **Allow/deny lists** can be used to resrict or control:
   - which blocks users are able to discover and insert within your environment
   - which blocks a user inserts are ultimately able to be run in either a sandboxed or unsandboxed fashion
@@ -245,6 +245,21 @@ Facilitating external API access via the Þ Hub is a new addition to the protoco
 The ability for Þ blocks to access external services while (optionally) authenticated as an individual user is a capability which we intend to introduce in the coming months. This will enable blocks to be developed that allow for a much wider range of use-cases to be addressed.
   
 **Example:** a block user has information synced to _Coda_ or _AirTable_ from multiple external locations. They want to display this data on their website, which uses WordPress. With the _Block Protocol for WordPress_ plugin, a user will in the future be able to use a _Coda_ or _AirTable_ block which allows them to select information contained within their external account, and insert this information onto their page or post in WordPress, which can then automatically keep itself in sync with the original source. This allows publishing from a wide variety of external sources.
+
+</FAQ>
+  
+<FAQ question="How does the Block Protocol enable access to paid external APIs?">
+  
+Paid external APIs can be accessed via the Block Protocol middleware, including from within Þ blocks.
+  
+**In applications that ask users to insert their own Þ API keys:** some Þ embedding applications ask users to input their own Þ API key. All Þ users receive a free usage allowance for most services on the Þ Hub, and Þ account holders can attach a payment method to [unlock additional access](https://blockprotocol.org/billing). Embedding applications such as [WordPress](https://blockprotocol.org/wordpress) leverage this by passing an application user's Þ API key along with their request for blocks/services.
+  
+**In applications that use their own Þ API key, and abstract the protocol away from users:** there are multiple ways in which Þ embedding applications can provide access to paid external services, including via the Þ middleware, without requiring users to input their own API keys. For example:
+  
+- self-handling requests: bilaterally integrating with an external service and intercepting the request before handling by the Þ middleware
+- attributing requests to users: in a future update, we will support programmatic generation of API keys (e.g. one per user, requested by the embedding application), associated with a single Þ account. Additionally, we intend to support affixing arbitrary metadata (including user IDs) to Þ API calls, which may provide an alternative means of attributing service usage to single application users, as well
+  
+These approaches all require handling rate-limiting, payments and service security internally, separately, which carries a higher development and maintenance burden, but unlocks support for billing models beyond simple "Pay As You Go".
 
 </FAQ>
 

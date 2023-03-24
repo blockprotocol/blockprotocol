@@ -133,7 +133,7 @@ export const SupportedApplications = () => {
 
               <Stack gap={2.5} flexDirection="row" justifyContent="center">
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#wordpress"
+                  href="/docs/blocks/environments#wordpress"
                   label="WordPress"
                   icon={
                     <WordPressIcon
@@ -147,7 +147,7 @@ export const SupportedApplications = () => {
                 />
 
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#hash"
+                  href="/docs/blocks/environments#hash"
                   label="HASH"
                   icon={
                     <HashIcon
@@ -187,7 +187,7 @@ export const SupportedApplications = () => {
 
               <Stack gap={2.5} flexDirection="row" justifyContent="center">
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#github-blocks"
+                  href="/docs/blocks/environments#github-blocks"
                   label="GitHub Blocks"
                   icon={
                     <GithubIcon
@@ -200,7 +200,7 @@ export const SupportedApplications = () => {
                 />
 
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#figma"
+                  href="/docs/blocks/environments#figma"
                   label="Figma"
                   icon={
                     <FontAwesomeIcon
@@ -213,7 +213,7 @@ export const SupportedApplications = () => {
                   }
                 />
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#other-environments"
+                  href="/docs/blocks/environments#other-environments"
                   label="Vote on what’s next"
                   icon={
                     <Grid2PlusIcon
@@ -312,7 +312,7 @@ export const SupportedApplications = () => {
 
               <Box>
                 <LinkButton
-                  href="/docs/developing-blocks"
+                  href="/docs/blocks/develop"
                   variant="primary"
                   sx={{ color: ({ palette }) => palette.common.white }}
                   startIcon={
@@ -417,7 +417,7 @@ export const SupportedApplications = () => {
 
               <Stack flexDirection="row" gap={2}>
                 <LinkButton
-                  href="/docs/using-blocks"
+                  href="/docs/blocks/environments"
                   variant="primary"
                   sx={{
                     color: ({ palette }) => palette.common.white,

@@ -20,11 +20,11 @@ const SUGGESTED_LINKS: SuggestedLink[] = [
   },
   {
     label: "Quick start guide to developing blocks",
-    href: "/docs/developing-blocks",
+    href: "/docs/blocks/develop",
   },
   {
-    label: "Embed blocks within your site or app",
-    href: "/docs/using-blocks",
+    label: "Use blocks within a Þ app",
+    href: "/docs/blocks/environments",
   },
   {
     label: "Frequently asked questions",

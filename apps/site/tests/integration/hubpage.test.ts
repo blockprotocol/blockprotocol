@@ -14,11 +14,11 @@ test.skip("Hub page should contain key elements", async ({ page }) => {
 
   await expect(
     footerCTALocator.locator('text="quickstart guide"'),
-  ).toHaveAttribute("href", "/docs/developing-blocks");
+  ).toHaveAttribute("href", "/docs/blocks/develop");
 
   await expect(
     footerCTALocator.locator('text="Read the quickstart guide"'),
-  ).toHaveAttribute("href", "/docs/developing-blocks");
+  ).toHaveAttribute("href", "/docs/blocks/develop");
 });
 
 test.skip("Block Card should contain key elements", async ({ page }) => {

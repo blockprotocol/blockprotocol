@@ -226,17 +226,19 @@ export const FreeTierSection: FunctionComponent<{
                 text: (
                   <>
                     <strong>Multi-app:</strong>{" "}
-                    <CustomLink href="/docs/using-blocks#wordpress">
+                    <CustomLink href="/docs/blocks/environments#wordpress">
                       WordPress
                     </CustomLink>
                     ,{" "}
-                    <CustomLink href="/docs/using-blocks#hash">HASH</CustomLink>{" "}
+                    <CustomLink href="/docs/blocks/environments#hash">
+                      HASH
+                    </CustomLink>{" "}
                     and (soon){" "}
-                    <CustomLink href="/docs/using-blocks#github-blocks">
+                    <CustomLink href="/docs/blocks/environments#github-blocks">
                       GitHub
                     </CustomLink>
                     /
-                    <CustomLink href="/docs/using-blocks#figma">
+                    <CustomLink href="/docs/blocks/environments#figma">
                       Figma
                     </CustomLink>
                   </>
