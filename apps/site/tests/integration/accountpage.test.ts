@@ -42,7 +42,7 @@ test("key elements should be present when user views their account page", async 
 
   await expect(page.locator("text=Build a block")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks",
+    "/docs/blocks/develop",
   );
 
   await expect(page.locator("text=Create an Entity Type")).toBeVisible();
@@ -62,7 +62,7 @@ test("key elements should be present when user views their account page", async 
 
   await expect(page.locator("text=Build a block")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks",
+    "/docs/blocks/develop",
   );
 
   // Schema tab tests

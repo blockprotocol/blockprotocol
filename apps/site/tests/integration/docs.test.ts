@@ -27,8 +27,7 @@ test("Docs page should contain key elements and interactions should work", async
 
   for (const [name, href] of [
     ["Introduction", "/docs"],
-    ["Developing Blocks", "/docs/developing-blocks"],
-    ["Using Blocks", "/docs/using-blocks"],
+    ["Blocks", "/docs/blocks"],
     ["Specification", "/docs/spec"],
     ["FAQs", "/docs/faq"],
   ] as const) {
@@ -96,11 +95,11 @@ test("Docs page should contain key elements and interactions should work", async
   );
 
   // confirm docs footer nav have correct links
-  await expect(page.locator("text=PreviousUsing Blocks >> a")).toBeVisible();
+  await expect(page.locator("text=PreviousFAQs >> a")).toBeVisible();
 
-  await expect(page.locator("text=PreviousUsing Blocks >> a")).toHaveAttribute(
+  await expect(page.locator("text=PreviousFAQs >> a")).toHaveAttribute(
     "href",
-    "/docs/using-blocks",
+    "/docs/faq",
   );
 
   await expect(page.locator("text=NextCore >> a")).toBeVisible();

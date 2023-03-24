@@ -12,6 +12,6 @@ For full usage, see `create-block-app --help`
 
 ## Writing blocks
 
-**[Guide to developing blocks](https://blockprotocol.org/docs/developing-blocks)**
+**[Guide to developing blocks](https://blockprotocol.org/docs/blocks/develop)**
 
 ![](https://blockprotocol.org/assets/bp_og_cover.png)
