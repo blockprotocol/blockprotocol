@@ -11,6 +11,7 @@ import Image from "next/legacy/image";
 import { ReactNode } from "react";
 
 import supportedApplicationsFullImage from "../../../../public/assets/new-home/supported-applications-full-min.webp";
+import { FadeInOnViewport } from "../../fade-in-on-viewport";
 import {
   FontAwesomeIcon,
   GithubIcon,
@@ -101,7 +102,7 @@ export const SupportedApplications = () => {
             maxWidth: { xs: "95%", md: "85%", lg: 1000 },
           }}
         >
-          <Box
+          <FadeInOnViewport
             sx={{
               display: "flex",
               flexDirection: { xs: "column", sm: "row" },
@@ -225,9 +226,9 @@ export const SupportedApplications = () => {
                 />
               </Stack>
             </Box>
-          </Box>
+          </FadeInOnViewport>
 
-          <Box
+          <FadeInOnViewport
             sx={{
               display: "flex",
               flexDirection: { xs: "column", lg: "row" },
@@ -453,7 +454,7 @@ export const SupportedApplications = () => {
                 </LinkButton>
               </Stack>
             </Box>
-          </Box>
+          </FadeInOnViewport>
         </Container>
       </Box>
       <Box

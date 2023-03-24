@@ -83,7 +83,9 @@ export const PaymentHistorySection: FunctionComponent<{
   const fetchInvoices = useCallback(async () => {
     const {
       data: { invoices: fetchedInvoices },
-    } = await internalApi.getInvoices();
+    } = await internalApi
+      .getInvoices()
+      .catch(() => ({ data: { invoices: [] } }));
 
     setPastInvoices(fetchedInvoices.sort((a, b) => b.created - a.created));
   }, [setPastInvoices]);

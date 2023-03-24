@@ -1,5 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
 
+import { FadeInOnViewport } from "../../fade-in-on-viewport";
 import { AtomSimpleIcon, CityIcon, WandMagicSparklesIcon } from "../../icons";
 import { IconSection } from "./icon-section";
 
@@ -57,21 +58,23 @@ export const WhyDevelop = () => {
             },
           })}
         >
-          <Typography
-            variant="bpLargeText"
-            sx={{ fontSize: "2rem", lineHeight: 1, fontWeight: 900, mb: 1 }}
-          >
-            Why develop Block Protocol blocks?
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: "2rem",
-              lineHeight: 1,
-              color: ({ palette }) => palette.gray[50],
-            }}
-          >
-            Developing <strong>Þ</strong> blocks has a number of benefits...
-          </Typography>
+          <FadeInOnViewport>
+            <Typography
+              variant="bpLargeText"
+              sx={{ fontSize: "2rem", lineHeight: 1, fontWeight: 900, mb: 1 }}
+            >
+              Why develop Block Protocol blocks?
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "2rem",
+                lineHeight: 1,
+                color: ({ palette }) => palette.gray[50],
+              }}
+            >
+              Developing <strong>Þ</strong> blocks has a number of benefits...
+            </Typography>
+          </FadeInOnViewport>
         </Box>
       </Box>
 
