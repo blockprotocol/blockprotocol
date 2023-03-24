@@ -1054,20 +1054,20 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blockprotocol/core@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.1.1.tgz#8f3c5903744a632cb7357e3075a7e2140af33d5f"
-  integrity sha512-Cnm07CTIAn3E+JBcquRIcUUFIenFukEUDqPDnouNy7qDwffaW8immCBve9ljQ8kNnhTf6zXN5DVxyRT3vSiebQ==
+"@blockprotocol/core@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.1.2.tgz#d8bd2c8e6a17cc588c3c690c61188d72beda5219"
+  integrity sha512-DZv0nxAnmmJxXuv2DxnSbJ4JKw5YpZt1o8Rf8WZ28SycIz+YyejIvHgJpXeYx28zWFBLyY0gMSZUjkjBKeJu0A==
   dependencies:
     es-module-lexer "^0.10.5"
     uuid "^8.3.2"
 
-"@blockprotocol/graph@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.2.1.tgz#73893528d07f9500fdd9cdc7e62547e05774d92b"
-  integrity sha512-dG+2CK3qVpfizt6iltbnlaLcvmlrqQOR5nR+A/sZWjEBcPuOkM4tsf01Lb/wbkTQ9QQ/+eAK7KURVYVd5GoQ8w==
+"@blockprotocol/graph@0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.2.2.tgz#5abeaa02fcff1fec320585671ab0c2d7dbd1b50d"
+  integrity sha512-vvMorB4fOI2QIQE4JWLCbBrqCSsc0D4arNVa8z8KeuZtWsJkWCBlOC7+3IIjpOH2k1fjK32U57OfvRjoN0mpNA==
   dependencies:
-    "@blockprotocol/core" "0.1.1"
+    "@blockprotocol/core" "0.1.2"
     "@blockprotocol/type-system" "0.1.1"
     ajv "^8.11.2"
     ajv-formats "^2.1.1"
@@ -1076,20 +1076,20 @@
     node-fetch "^3.3.0"
     typescript "4.9.4"
 
-"@blockprotocol/hook@0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/hook/-/hook-0.1.2.tgz#0c09379e26ddf0c9b10d31382a115fc4ed3ab539"
-  integrity sha512-sTqy/3ArgldLf/WvpiAx32W3yCaA6EJFjWldugIbNXkj2ol81OdDPJGuNgkiXfudWT/6klu23Wqyo678qOhCZg==
+"@blockprotocol/hook@0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/hook/-/hook-0.1.3.tgz#26df71fbfdd34cfb0ba4deebf2a4436a883ef4fb"
+  integrity sha512-ue0vglpwyhiW+9EB4F+K1TwEOJUv6jDBPQCdmQCY51QLEZI1S6A49mCAcaf/dFC5WkwyjwtA01Sgc6SLWM00IA==
   dependencies:
-    "@blockprotocol/core" "0.1.1"
-    "@blockprotocol/graph" "0.2.1"
+    "@blockprotocol/core" "0.1.2"
+    "@blockprotocol/graph" "0.2.2"
 
-"@blockprotocol/service@0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/service/-/service-0.1.2.tgz#11fc1b15ec32b5cd50080e0fa1465f599ec1f27e"
-  integrity sha512-oMo1U+Mdb/xNmUL5hL9eTtVVkQaEWf5nbRDptOA6F27uIWsk8WnPo3errT9NFFvbHHTTVURwaLBjZgLr4qvFCw==
+"@blockprotocol/service@0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/service/-/service-0.1.3.tgz#d3ab41b65ca807490e94bd946bfae727575696cc"
+  integrity sha512-APZEYr6cwCAfpABcBg3O4kTJkda7eZDsN7mjWahqXrDrIObVeI6mnnmVQH9lobvDLS/yOCXDUZOIeZPfzX8Zcg==
   dependencies:
-    "@blockprotocol/core" "0.1.1"
+    "@blockprotocol/core" "0.1.2"
 
 "@blockprotocol/type-system@0.1.1":
   version "0.1.1"
