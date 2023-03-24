@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
+import { FadeInOnViewport } from "../../fade-in-on-viewport";
 import { Snippet } from "../../snippet";
 
 const reactDummyCode = `export const App: BlockComponent<AppProps> = ({
@@ -66,7 +67,7 @@ const CodeBlock = () => {
 
 export const AnyFramework = () => {
   return (
-    <Box
+    <FadeInOnViewport
       sx={{
         py: { xs: 10, md: 12 },
         px: { xs: "1rem", lg: "0" },
@@ -154,6 +155,6 @@ export const AnyFramework = () => {
 
         <CodeBlock />
       </Box>
-    </Box>
+    </FadeInOnViewport>
   );
 };
