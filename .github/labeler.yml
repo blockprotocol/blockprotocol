@@ -47,7 +47,7 @@
 
 "area: libs > @Þ/design-system":
   - "libs/@blockprotocol/design-system/**"
-  
+
 "area: libs > @Þ/graph":
   - "libs/@blockprotocol/graph/**"
 
