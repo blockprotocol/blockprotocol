@@ -2,7 +2,8 @@
   - "apps/site/**"
 
 "area: apps":
-  - ["apps/**", "!apps/site/src/_pages/**"]
+  - "apps/**"
+  - "!apps/site/src/_pages/**"
 
 "area: copy":
   - "apps/site/src/_pages/**"
