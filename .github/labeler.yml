@@ -5,8 +5,8 @@
   - "apps/**"
   - "!apps/site/src/_pages/**"
 
-"area: copy":
-  - "apps/site/src/_pages/**"
+"area: blocks":
+  - "blocks/**"
 
 "area: dependencies":
   - "**/patches/**"
@@ -22,15 +22,27 @@
 "area: libs":
   - "libs/**"
 
-"area: rfcs":
+"area: user success":
+  - "apps/site/src/_pages/docs/**"
+  - "apps/site/src/_pages/spec/**"
+  - "apps/site/src/_pages/roadmap/**"
+  - "rfcs"
+
+"content: docs":
+  - "apps/site/src/_pages/docs/**"
+
+"content: rfcs":
   - "rfcs/**"
 
-"area: spec":
+"content: spec":
   - "apps/site/src/_pages/spec/**"
 
 "lib: @Þ/core":
   - "libs/@blockprotocol/core/**"
 
+"lib: @Þ/design-system":
+  - "libs/@blockprotocol/design-system/**"
+  
 "lib: @Þ/graph":
   - "libs/@blockprotocol/graph/**"
 
@@ -67,3 +79,7 @@
 
 "lib: wordpress-plugin":
   - "libs/wordpress-plugin/**"
+  
+"type: writing":
+  - "apps/site/src/_pages/**"
+
