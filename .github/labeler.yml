@@ -1,9 +1,9 @@
-"app: site":
-  - "apps/site/**"
-
 "area: apps":
   - "apps/**"
   - "!apps/site/src/_pages/**"
+
+"area: apps > site":
+  - "apps/site/**"
 
 "area: blocks":
   - "blocks/**"
@@ -14,6 +14,7 @@
 
 "area: infra":
   - ".changeset/config.json"
+  - ".config/**"
   - ".github/**"
   - ".husky/**"
   - "infra/**"
@@ -28,13 +29,13 @@
   - "apps/site/src/_pages/roadmap/**"
   - "rfcs"
 
-"content: docs":
+"area: user success > docs":
   - "apps/site/src/_pages/docs/**"
 
-"content: rfcs":
+"area: user success > rfcs":
   - "rfcs/**"
 
-"content: spec":
+"area: user success > spec":
   - "apps/site/src/_pages/spec/**"
 
 "lib: @Þ/core":
