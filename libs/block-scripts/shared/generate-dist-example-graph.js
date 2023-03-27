@@ -4,6 +4,8 @@ import fs from "fs-extra";
 
 import { blockDistDirPath, blockRootDirPath } from "./paths.js";
 
+/* @todo - Where do we validate these metadata files, should it be here? */
+
 /**
  * @param {Record<string, any>} assetsManifest
  * @param {string} assetsManifestPath
