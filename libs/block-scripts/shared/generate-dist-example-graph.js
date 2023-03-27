@@ -6,8 +6,12 @@ import { blockDistDirPath, blockRootDirPath } from "./paths.js";
 
 /**
  * @param {Record<string, any>} assetsManifest
+ * @param {string} assetsManifestPath
  */
-export const generateDistExampleGraph = async (assetsManifest) => {
+export const generateDistExampleGraph = async (
+  assetsManifest,
+  assetsManifestPath,
+) => {
   const exampleGraphScriptName = assetsManifest["example-graph.cjs"];
 
   const distExampleGraphPath = path.resolve(
@@ -44,9 +48,19 @@ export const generateDistExampleGraph = async (assetsManifest) => {
     }
     await fs.writeJson(distExampleGraphPath, exampleGraph);
 
-    /* @todo - we should probably remove it from the `assets-manifest.json as well */
     await fs.remove(sourceScriptExampleGraphPath);
+    // eslint-disable-next-line no-param-reassign
+    delete assetsManifest["example-graph.cjs"];
+
+    await fs.writeJson(assetsManifestPath, assetsManifest, { spaces: 2 });
+    return;
   } else if (await fs.pathExists(sourcePlainTextExampleGraphPath)) {
     await fs.copy(sourcePlainTextExampleGraphPath, distExampleGraphPath);
+    return;
   }
+
+  /* @todo - Should this be optional? */
+  throw new Error(
+    "No example graph found. Please supply either a `./src/example-graph.ts`, or an `./example-graph.json` file.",
+  );
 };

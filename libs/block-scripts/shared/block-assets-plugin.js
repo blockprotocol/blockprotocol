@@ -40,7 +40,7 @@ export class BlockAssetsPlugin {
       await Promise.all([
         generateDistBlockMetadata(metadataExtra),
         generateDistReadme(),
-        generateDistExampleGraph(assetsManifest),
+        generateDistExampleGraph(assetsManifest, assetsManifestFilePath),
       ]);
     });
   }
