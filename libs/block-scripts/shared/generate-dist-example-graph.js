@@ -45,7 +45,7 @@ export const generateDistExampleGraph = async (
 
     if (exampleGraph === undefined || !exampleGraph.entities) {
       throw new Error(
-        "The default export of the example-graph script must be a valid example graph, containing a top-level 'entities' property.",
+        "The default export of the example-graph script must be a valid example graph, containing top-level 'entities' and 'blockEntityRecordId' properties.",
       );
     }
     await fs.writeJson(distExampleGraphPath, exampleGraph);
