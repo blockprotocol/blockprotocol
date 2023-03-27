@@ -38,7 +38,7 @@ function block_protocol_entity_selection()
 }
 
 /**
- * Natively traverse a subgraph using a base where term. 
+ * Natively traverse a subgraph using a base where term.
  * This functions is meant to be as compatible as possible with various MySQL/MariaDB versions
  */
 function block_protocol_native_subgraph_query(
@@ -85,6 +85,12 @@ function block_protocol_native_subgraph_query(
 
       $visited[$node['entity_id']] = true;
 
+      // ensure that the depths are all ints
+      $node['has_left_incoming_depth'] = (int) $node['has_left_incoming_depth'];
+      $node['has_right_incoming_depth'] = (int) $node['has_right_incoming_depth'];
+      $node['has_left_outgoing_depth'] = (int) $node['has_left_outgoing_depth'];
+      $node['has_right_outgoing_depth'] = (int) $node['has_right_outgoing_depth'];
+
       // Add the node to the result list
       $subgraph[] = $node;
 
@@ -92,44 +98,88 @@ function block_protocol_native_subgraph_query(
 
       // Add nodes connected by incoming has_left links
       if ($node['has_left_incoming_depth'] < $has_left_incoming_depth) {
-          $sql = $wpdb->prepare("
-              SELECT *
-              FROM {$table}
-              WHERE left_entity_id = %d
-          ", $node['entity_id']);
+          $sql = $wpdb->prepare(
+            "SELECT
+              " . $selection . ",
+              %d + 1 as has_left_incoming_depth,
+              %d as has_right_incoming_depth,
+              %d as has_left_outgoing_depth,
+              %d as has_right_outgoing_depth
+            FROM {$table}
+            WHERE left_entity_id = %d
+            ",
+            $node['has_left_incoming_depth'],
+            $node['has_right_incoming_depth'],
+            $node["has_left_outgoing_depth"],
+            $node["has_right_outgoing_depth"],
+            $node['entity_id']
+          );
 
           $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
       }
 
       // Add nodes connected by incoming has_right links
       if ($node['has_right_incoming_depth'] < $has_right_incoming_depth) {
-          $sql = $wpdb->prepare("
-              SELECT *
-              FROM {$table}
-              WHERE right_entity_id = %d
-          ", $node['entity_id']);
+          $sql = $wpdb->prepare(
+            "SELECT
+              " . $selection . ",
+              %d as has_left_incoming_depth,
+              %d + 1 as has_right_incoming_depth,
+              %d as has_left_outgoing_depth,
+              %d as has_right_outgoing_depth
+            FROM {$table}
+            WHERE right_entity_id = %d
+            ",
+            $node['has_left_incoming_depth'],
+            $node['has_right_incoming_depth'],
+            $node["has_left_outgoing_depth"],
+            $node["has_right_outgoing_depth"],
+            $node['entity_id']
+          );
 
           $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
       }
 
       // Add nodes connected by outgoing has_left links
       if ($node['has_left_outgoing_depth'] < $has_left_outgoing_depth) {
-          $sql = $wpdb->prepare("
-              SELECT *
-              FROM {$table}
-              WHERE entity_id = %d
-          ", $node['left_entity_id']);
+          $sql = $wpdb->prepare(
+            "SELECT
+              " . $selection . ",
+              %d as has_left_incoming_depth,
+              %d as has_right_incoming_depth,
+              %d + 1 as has_left_outgoing_depth,
+              %d as has_right_outgoing_depth
+            FROM {$table}
+            WHERE entity_id = %d
+            ",
+            $node['has_left_incoming_depth'],
+            $node['has_right_incoming_depth'],
+            $node["has_left_outgoing_depth"],
+            $node["has_right_outgoing_depth"],
+            $node['left_entity_id']
+          );
 
           $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
       }
 
       // Add nodes connected by outgoing has_right links
       if ($node['has_right_outgoing_depth'] < $has_right_outgoing_depth) {
-          $sql = $wpdb->prepare("
-              SELECT *
-              FROM {$table}
-              WHERE entity_id = %d
-          ", $node['right_entity_id']);
+          $sql = $wpdb->prepare(
+            "SELECT
+              " . $selection . ",
+              %d as has_left_incoming_depth,
+              %d as has_right_incoming_depth,
+              %d as has_left_outgoing_depth,
+              %d + 1 as has_right_outgoing_depth
+            FROM {$table}
+            WHERE entity_id = %d
+            ",
+            $node['has_left_incoming_depth'],
+            $node['has_right_incoming_depth'],
+            $node["has_left_outgoing_depth"],
+            $node["has_right_outgoing_depth"],
+            $node['right_entity_id']
+          );
 
           $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
       }
@@ -139,29 +189,16 @@ function block_protocol_native_subgraph_query(
         $entity_id = $next_node['entity_id'];
 
         if (!($visited[$entity_id] ?? false)) {
-          $visited[$entity_id] = true;
-          $next_node['has_left_incoming_depth'] = $node['has_left_incoming_depth'];
-          $next_node['has_right_incoming_depth'] = $node['has_right_incoming_depth'];
-          $next_node['has_left_outgoing_depth'] = $node['has_left_outgoing_depth'];
-          $next_node['has_right_outgoing_depth'] = $node['has_right_outgoing_depth'];
-      
-          if ($next_node['left_entity_id'] == $node['entity_id']) {
-            $next_node['has_left_outgoing_depth']++;
-          }
-          if ($next_node['right_entity_id'] == $node['entity_id']) {
-            $next_node['has_right_outgoing_depth']++;
-          }
-          if ($next_node['left_entity_id'] == $node['left_entity_id']) {
-            $next_node['has_left_incoming_depth']++;
-          }
-          if ($next_node['right_entity_id'] == $node['right_entity_id']) {
-            $next_node['has_right_incoming_depth']++;
-          }
-      
           $queue[] = $next_node;
-          $subgraph[] = $next_node;
         }
       }
+  }
+
+  foreach($subgraph as &$element) {
+    unset($element["has_left_incoming_depth"]);
+    unset($element["has_right_incoming_depth"]);
+    unset($element["has_left_outgoing_depth"]);
+    unset($element["has_right_outgoing_depth"]);
   }
 
   return $subgraph;
@@ -218,8 +255,8 @@ function block_protocol_db_subgraph_query(
         has_right_incoming_depth,
         has_left_outgoing_depth,
         has_right_outgoing_depth
-    FROM {$table} e2 
-    JOIN linked_entities 
+    FROM {$table} e2
+    JOIN linked_entities
       ON e2.left_entity_id = linked_entities.entity_id
     WHERE has_left_incoming_depth < %d
 
@@ -242,8 +279,8 @@ function block_protocol_db_subgraph_query(
         has_right_incoming_depth + 1,
         has_left_outgoing_depth,
         has_right_outgoing_depth
-    FROM {$table} e2 
-    JOIN linked_entities 
+    FROM {$table} e2
+    JOIN linked_entities
       ON e2.right_entity_id = linked_entities.entity_id
     WHERE has_right_incoming_depth < %d
 
@@ -266,8 +303,8 @@ function block_protocol_db_subgraph_query(
         has_right_incoming_depth,
         has_left_outgoing_depth +1,
         has_right_outgoing_depth
-    FROM {$table} e2 
-    JOIN linked_entities 
+    FROM {$table} e2
+    JOIN linked_entities
       ON e2.entity_id = linked_entities.left_entity_id
     WHERE has_left_outgoing_depth < %d
 
@@ -290,8 +327,8 @@ function block_protocol_db_subgraph_query(
         has_right_incoming_depth,
         has_left_outgoing_depth,
         has_right_outgoing_depth + 1
-    FROM {$table} e2 
-    JOIN linked_entities 
+    FROM {$table} e2
+    JOIN linked_entities
       ON e2.entity_id = linked_entities.right_entity_id
     WHERE has_right_outgoing_depth < %d
   )
@@ -322,24 +359,21 @@ function get_block_protocol_subgraph(
   $mysql_recursive_cte_version = "8.0";
   $mariadb_recursive_cte_version = "10.2";
 
-  $subgraph = [];
-  if (block_protocol_database_at_version($mysql_recursive_cte_version, $mariadb_recursive_cte_version)) {
-    $subgraph = block_protocol_db_subgraph_query(
+  $action =
+    block_protocol_database_at_version(
+      $mysql_recursive_cte_version,
+      $mariadb_recursive_cte_version
+    )
+    ? "block_protocol_db_subgraph_query"
+    : "block_protocol_native_subgraph_query";
+
+  $subgraph = ($action)(
       $base_where_term,
       $has_left_incoming_depth,
       $has_right_incoming_depth,
       $has_left_outgoing_depth,
-      $has_right_outgoing_depth
-    );
-  } else {
-    $subgraph = block_protocol_native_subgraph_query(
-      $base_where_term,
-      $has_left_incoming_depth,
-      $has_right_incoming_depth,
-      $has_left_outgoing_depth,
-      $has_right_outgoing_depth
-    );
-  }
+      $has_right_outgoing_depth,
+  );
 
   block_protocol_maybe_capture_error($wpdb->last_error);
   return $subgraph;
