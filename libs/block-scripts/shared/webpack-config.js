@@ -48,11 +48,17 @@ const generateBaseWebpackConfig = async (mode) => {
         ],
         "block entry point",
       ),
+      ...((await fs.pathExists("./src/example-graph.ts"))
+        ? {
+            "example-graph": "./src/example-graph.ts",
+          }
+        : {}),
     },
     output: {
       publicPath: "",
       libraryTarget: "commonjs",
-      filename: mode === "production" ? "[name].[contenthash].js" : "[name].js",
+      filename:
+        mode === "production" ? "[name].[contenthash].cjs" : "[name].cjs",
     },
     externals: Object.fromEntries(
       Object.keys(peerDependencies ?? {}).map((key) => [key, key]),
