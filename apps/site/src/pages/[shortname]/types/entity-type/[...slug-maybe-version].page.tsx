@@ -459,7 +459,7 @@ const EntityTypePage: NextPage = () => {
                 </Box>
               </Box>
 
-              <Box component="section">
+              <Box component="section" sx={{ overflowX: "auto" }}>
                 <EntityTypeForm
                   author={shortname as `@${string}`}
                   entityType={entityType}
