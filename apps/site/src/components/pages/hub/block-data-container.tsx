@@ -1,6 +1,7 @@
 import { BlockVariant } from "@blockprotocol/core";
+import { Entity, EntityPropertiesObject } from "@blockprotocol/graph";
 import {
-  Entity,
+  Entity as EntityTemporal,
   EntityTemporalVersioningMetadata,
 } from "@blockprotocol/graph/temporal";
 import { VersionedUrl } from "@blockprotocol/type-system/slim";
@@ -30,6 +31,22 @@ import { BlockVariantsTabs } from "./block-data-container/block-variants-tabs";
 import { SandboxedBlockDemo } from "./block-data-container/sandboxed-block-demo";
 import { BlockExampleGraph, BlockSchema } from "./hub-utils";
 
+const intervalForAllTime =
+  (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {
+    return {
+      start: {
+        kind: "inclusive",
+        limit: new Date(0).toISOString(),
+      },
+      end: {
+        kind: "unbounded",
+      },
+    } as const;
+  };
+
+const stringifyProperties = (properties: EntityPropertiesObject) =>
+  JSON.stringify(properties, null, 2);
+
 type BlockDataContainerProps = {
   metadata: BlockMetadata;
   schema: BlockSchema;
@@ -53,13 +70,9 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   const [alertSnackBarOpen, setAlertSnackBarOpen] = useState(false);
   const [readonly, setReadonly] = useState(false);
 
-  const [text, setText] = useState("{}");
-  const [exampleEntityId, setExampleEntityId] = useState<string>(
-    `test-entity-${metadata.name}`,
-  );
-
   const previousBlockVariantsTab = useRef(-1);
-  const propertiesToRemove = useRef<string[]>([]);
+
+  const [propertiesText, setPropertiesText] = useState<string | null>(null);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -67,34 +80,110 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
 
   const prevPackage = useRef<string | undefined>(undefined);
 
+  const [entity, setEntity] = useState<Entity | EntityTemporal | null>(null);
+
   useEffect(() => {
-    if (prevPackage.current !== metadata?.pathWithNamespace) {
-      const example = {
-        ...metadata?.examples?.[0],
-        ...metadata?.variants?.[0]?.examples?.[0],
-        ...metadata?.variants?.[0]?.properties,
+    const interval = intervalForAllTime();
+
+    // Without a schema, or a full entity (provided within the `exampleGraph`) we're unable to infer what a correct
+    // entity looks like, and as such we can't continue
+    if (metadata.schema) {
+      // Create the boilerplate of an entity
+      const exampleEntity: Entity | EntityTemporal = {
+        properties: {},
+        metadata: {
+          recordId: {
+            entityId: `test-entity-${metadata.name}`,
+            editionId: interval.start.limit,
+          },
+          entityTypeId: metadata.schema as VersionedUrl,
+          temporalVersioning: {
+            transactionTime: interval,
+            decisionTime: interval,
+          },
+        },
       };
 
-      // reset data source input when switching blocks
-      if (example) {
-        if (typeof example.entityId === "string") {
-          setExampleEntityId(example.entityId);
-          if (example.properties && typeof example.properties === "object") {
-            setText(JSON.stringify(example.properties, undefined, 2));
-          }
+      let entityProperties: EntityPropertiesObject | undefined;
+
+      // Prefer the `variants` field if it exists
+      const selectedVariant = metadata.variants?.[blockVariantsTab];
+      if (selectedVariant) {
+        if (selectedVariant.examples) {
+          [entityProperties] = selectedVariant.examples;
         } else {
-          setText(JSON.stringify(example, undefined, 2));
-          setExampleEntityId(`test-entity-${metadata.name}`);
+          entityProperties = selectedVariant.properties;
         }
       } else {
-        setText("{}");
+        const examples = metadata.examples;
+        if (examples) {
+          [entityProperties] = examples;
+        }
       }
 
+      if (entityProperties) {
+        exampleEntity.properties = entityProperties;
+        setEntity(exampleEntity);
+        return;
+      }
+    }
+
+    if (exampleGraph) {
+      const exampleEntity = exampleGraph.entities.find(
+        (graphEntity) =>
+          graphEntity.metadata.recordId.entityId ===
+            exampleGraph.blockEntityRecordId.entityId &&
+          graphEntity.metadata.recordId.editionId ===
+            exampleGraph.blockEntityRecordId.editionId,
+      );
+
+      if (exampleEntity) {
+        setEntity(exampleEntity);
+      } else {
+        throw new Error(
+          `Unable to find an entity for block ${metadata.name} in the example graph`,
+        );
+      }
+    } else if (!metadata.variants && !metadata.examples) {
+      // The block hasn't supplied an example graph or a schema, so as long as there aren't any variants or examples
+      // we can pass it anything as the type should be unconstrained. We can't pass in a variant or an example as we
+      // don't know what the type should be.
+
+      /* @todo - ideally we'd generate this to ensure it stays compatible with the type */
+      const exampleThingEntity: Entity | EntityTemporal = {
+        properties: {
+          "https://blockprotocol.org/types/@blockprotocol/property-type/name/":
+            "World",
+        },
+        metadata: {
+          recordId: {
+            entityId: `test-entity-${metadata.name}`,
+            editionId: interval.start.limit,
+          },
+          entityTypeId:
+            "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
+          temporalVersioning: {
+            transactionTime: interval,
+            decisionTime: interval,
+          },
+        },
+      };
+
+      setEntity(exampleThingEntity);
+    } else {
+      throw new Error(
+        `Unable to create a new entity for block ${metadata.name} from its \`examples\` or \`variants\` as it doesn't have an associated schema`,
+      );
+    }
+  }, [blockVariantsTab, exampleGraph, metadata]);
+
+  useEffect(() => {
+    if (prevPackage.current !== metadata?.pathWithNamespace) {
       setBlockVariantsTab(0);
 
       prevPackage.current = metadata.pathWithNamespace;
     }
-  }, [metadata]);
+  }, [exampleGraph, metadata]);
 
   useEffect(() => {
     const blockVariant: BlockVariant | undefined =
@@ -102,94 +191,97 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
 
     if (blockVariant && previousBlockVariantsTab.current !== blockVariantsTab) {
       try {
-        const parsedText = JSON.parse(text);
+        const parsedProperties = propertiesText
+          ? JSON.parse(propertiesText)
+          : null;
 
-        for (const propertyToRemove of propertiesToRemove.current) {
-          delete parsedText[propertyToRemove];
-        }
+        setEntity((prevEntity) => {
+          if (prevEntity && parsedProperties) {
+            if (stringifyProperties(prevEntity.properties) === propertiesText) {
+              return prevEntity;
+            } else {
+              return {
+                ...prevEntity,
+                properties: parsedProperties,
+              };
+            }
+          }
 
-        const nextText = {
-          ...parsedText,
-          ...metadata?.examples?.[0],
-          ...blockVariant.examples?.[0],
-          ...blockVariant.properties,
-        };
-
-        setText(JSON.stringify(nextText, undefined, 2));
+          return null;
+        });
         previousBlockVariantsTab.current = blockVariantsTab;
       } catch (err) {
         setAlertSnackBarOpen(true);
         setBlockVariantsTab(previousBlockVariantsTab.current);
       }
     }
+  }, [blockVariantsTab, metadata, propertiesText]);
 
-    return () => {
-      const previousBlockVariant: BlockVariant | undefined =
-        metadata?.variants?.[blockVariantsTab];
+  // If the entity is changed, update the text input of the properties
+  useEffect(() => {
+    if (entity) {
+      setPropertiesText(stringifyProperties(entity.properties));
+    }
+  }, [entity, setPropertiesText]);
 
-      if (previousBlockVariant) {
-        propertiesToRemove.current = Object.keys({
-          ...previousBlockVariant.properties,
-          ...previousBlockVariant.examples?.[0],
+  // If the text of the properties is updated, try and update the entity
+  useEffect(() => {
+    if (propertiesText) {
+      try {
+        const parsedProperties = JSON.parse(propertiesText);
+
+        setEntity((prevEntity) => {
+          if (prevEntity) {
+            if (stringifyProperties(prevEntity.properties) === propertiesText) {
+              return prevEntity;
+            } else {
+              return {
+                ...prevEntity,
+                properties: parsedProperties,
+              };
+            }
+          }
+
+          return null;
         });
+      } catch (err) {
+        /* @todo - what's the correct way to handle errors here */
+        setAlertSnackBarOpen(true);
       }
-    };
-  }, [blockVariantsTab, metadata?.examples, metadata?.variants, text]);
+    }
+  }, [propertiesText, entity]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<
-    [{ blockEntity: Entity; readonly: boolean } | undefined, string[]]
+    [
+      { blockEntity: Entity | EntityTemporal; readonly: boolean } | undefined,
+      string[],
+    ]
   >(() => {
-    const intervalForAllTime =
-      (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {
-        return {
-          start: {
-            kind: "inclusive",
-            limit: new Date(0).toISOString(),
-          },
-          end: {
-            kind: "unbounded",
-          },
-        } as const;
-      };
+    if (!entity) {
+      /* @todo - we need should handle this case and display a loading skeleton or error message */
+      return [undefined, []];
+    } else {
+      // const errorsToEat = ["uploadFile", "getEmbedBlock"];
 
-    const result: { blockEntity: Entity; readonly: boolean } = {
-      blockEntity: {
-        metadata: {
-          entityTypeId: metadata.schema as VersionedUrl,
-          recordId: {
-            entityId: exampleEntityId,
-            editionId: new Date(0).toISOString(),
-          },
-          temporalVersioning: {
-            transactionTime: intervalForAllTime(),
-            decisionTime: intervalForAllTime(),
-          },
+      const errorMessages: string[] = [];
+      // @todo-0.3 validating this requires fetching the entire schema for the block
+      // const errorMessages = validator
+      //   .validate(result.properties, schema ?? {})
+      //   .errors.map((err) => `ValidationError: ${err.stack}`)
+      //   .filter(
+      //     (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),
+      //   );
+
+      return [
+        {
+          blockEntity: entity,
+          readonly,
         },
-        properties: {},
-      },
-      readonly,
-    };
-
-    try {
-      Object.assign(result.blockEntity.properties, JSON.parse(text));
-    } catch (err) {
-      return [result, [(err as Error).message]];
+        errorMessages,
+      ];
     }
-
-    // const errorsToEat = ["uploadFile", "getEmbedBlock"];
-
-    const errorMessages: string[] = [];
-    // @todo-0.3 validating this requires fetching the entire schema for the block
-    // const errorMessages = validator
-    //   .validate(result.properties, schema ?? {})
-    //   .errors.map((err) => `ValidationError: ${err.stack}`)
-    //   .filter(
-    //     (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),
-    //   );
-
-    return [result, errorMessages];
-  }, [exampleEntityId, metadata.schema, text, readonly]);
+  }, [entity, readonly]);
 
   return (
     <>
@@ -330,8 +422,8 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
           >
             <BlockDataTabPanels
               blockDataTab={blockDataTab}
-              text={text}
-              setText={setText}
+              text={propertiesText ?? "{}"}
+              setText={setPropertiesText}
               schema={schema}
               exampleGraph={exampleGraph}
             />
@@ -358,8 +450,8 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
                     setBlockDataTab={setBlockDataTab}
                     schema={schema}
                     exampleGraph={exampleGraph}
-                    text={text}
-                    setText={setText}
+                    text={propertiesText ?? "{}"}
+                    setText={setPropertiesText}
                   />
                 </>
               )}

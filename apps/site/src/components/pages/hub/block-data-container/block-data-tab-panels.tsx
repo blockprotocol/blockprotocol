@@ -2,7 +2,7 @@ import { Box, BoxProps, styled } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { Snippet } from "../../../snippet";
-import { BlockSchema } from "../hub-utils";
+import { BlockExampleGraph, BlockSchema } from "../hub-utils";
 import { JsonEditor } from "./block-data-tab-panels/json-editor";
 import { TabPanel } from "./block-data-tab-panels/tab-panel";
 
@@ -10,7 +10,7 @@ type BlockDataTabPanelProps = {
   modalOpen?: boolean;
   blockDataTab: number;
   schema: BlockSchema;
-  exampleGraph: any;
+  exampleGraph: BlockExampleGraph | null;
   text: string;
   setText: (newValue: string) => void;
 };
