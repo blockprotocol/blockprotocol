@@ -184,7 +184,7 @@ function block_protocol_native_subgraph_query(
       $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
     }
 
-    // Add the next nodes to the queue with updated depth values
+    // Add the next nodes to the queue
     foreach ($next_nodes as $next_node)  {
       $entity_id = $next_node['entity_id'];
 
@@ -361,6 +361,7 @@ function get_block_protocol_subgraph(
   // See https://mariadb.com/kb/en/mariadb-1022-release-notes/#notable-changes
   $mariadb_recursive_cte_version = "10.2.2";
 
+  // Dynamically choose how to execute the query based on the database version
   $action =
     block_protocol_database_at_version(
       $mysql_recursive_cte_version,
