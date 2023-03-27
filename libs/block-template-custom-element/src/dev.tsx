@@ -2,25 +2,10 @@ import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
 import packageJson from "../package.json";
+import { blockEntity, exampleGraph } from "./example-graph";
 import ElementClass from "./index";
-import { BlockEntity } from "./types/generated/block-entity";
 
 const node = document.getElementById("app");
-
-const testEntity: BlockEntity = {
-  metadata: {
-    recordId: {
-      entityId: "test-entity",
-      editionId: new Date().toISOString(),
-    },
-    entityTypeId:
-      "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
-  },
-  properties: {
-    "https://blockprotocol.org/@blockprotocol/types/property-type/name/":
-      "World",
-  },
-} as const;
 
 /**
  * This is an embedding application for local development and debugging.
@@ -49,11 +34,11 @@ const DevApp = () => {
           tagName,
         },
       }}
-      blockEntityRecordId={testEntity.metadata.recordId}
+      blockEntityRecordId={blockEntity.metadata.recordId}
       blockInfo={packageJson.blockprotocol}
       debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
       initialData={{
-        initialEntities: [testEntity],
+        initialEntities: exampleGraph.entities,
       }}
       includeDefaultMockData // this seeds the datastore with sample entities and links, remove this to start with just the contents of `initialData`
       simulateDatastoreLatency={{
