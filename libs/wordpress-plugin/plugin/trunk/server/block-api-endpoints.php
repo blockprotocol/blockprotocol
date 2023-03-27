@@ -55,18 +55,18 @@ function block_protocol_native_subgraph_query(
   $subgraph = [];
   $queue = [];
 
-
   // Initial query using the base where term
   $selection = block_protocol_entity_selection();
   $sql = $wpdb->prepare("
     SELECT
-        " . $selection . ",
-        0 as has_left_incoming_depth,
-        0 as has_right_incoming_depth,
-        0 as has_left_outgoing_depth,
-        0 as has_right_outgoing_depth
+      " . $selection . ",
+      0 as has_left_incoming_depth,
+      0 as has_right_incoming_depth,
+      0 as has_left_outgoing_depth,
+      0 as has_right_outgoing_depth
     FROM {$table}
-    " . $base_where_term);
+    " . $base_where_term
+  );
 
   // Initialize the queue with the starting nodes
   $queue = $wpdb->get_results($sql, ARRAY_A);
@@ -75,123 +75,123 @@ function block_protocol_native_subgraph_query(
 
   // Loop while the queue is not empty
   while (!empty($queue)) {
-      // Dequeue the next node
-      $node = array_shift($queue);
+    // Dequeue the next node
+    $node = array_shift($queue);
 
-      // Skip nodes that have already been visited
-      if ($visited[$node['entity_id']] ?? false) {
-          continue;
+    // Skip nodes that have already been visited
+    if ($visited[$node['entity_id']] ?? false) {
+        continue;
+    }
+
+    $visited[$node['entity_id']] = true;
+
+    // ensure that the depths are all ints
+    $node['has_left_incoming_depth'] = (int) $node['has_left_incoming_depth'];
+    $node['has_right_incoming_depth'] = (int) $node['has_right_incoming_depth'];
+    $node['has_left_outgoing_depth'] = (int) $node['has_left_outgoing_depth'];
+    $node['has_right_outgoing_depth'] = (int) $node['has_right_outgoing_depth'];
+
+    // Add the node to the result list
+    $subgraph[] = $node;
+
+    $next_nodes = [];
+
+    // Add nodes connected by incoming has_left links
+    if ($node['has_left_incoming_depth'] < $has_left_incoming_depth) {
+      $sql = $wpdb->prepare(
+        "SELECT
+          " . $selection . ",
+          %d + 1 as has_left_incoming_depth,
+          %d as has_right_incoming_depth,
+          %d as has_left_outgoing_depth,
+          %d as has_right_outgoing_depth
+        FROM {$table}
+        WHERE left_entity_id = %d
+        ",
+        $node['has_left_incoming_depth'],
+        $node['has_right_incoming_depth'],
+        $node["has_left_outgoing_depth"],
+        $node["has_right_outgoing_depth"],
+        $node['entity_id']
+      );
+
+      $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
+    }
+
+    // Add nodes connected by incoming has_right links
+    if ($node['has_right_incoming_depth'] < $has_right_incoming_depth) {
+      $sql = $wpdb->prepare(
+        "SELECT
+          " . $selection . ",
+          %d as has_left_incoming_depth,
+          %d + 1 as has_right_incoming_depth,
+          %d as has_left_outgoing_depth,
+          %d as has_right_outgoing_depth
+        FROM {$table}
+        WHERE right_entity_id = %d
+        ",
+        $node['has_left_incoming_depth'],
+        $node['has_right_incoming_depth'],
+        $node["has_left_outgoing_depth"],
+        $node["has_right_outgoing_depth"],
+        $node['entity_id']
+      );
+
+      $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
+    }
+
+    // Add nodes connected by outgoing has_left links
+    if ($node['has_left_outgoing_depth'] < $has_left_outgoing_depth) {
+      $sql = $wpdb->prepare(
+        "SELECT
+          " . $selection . ",
+          %d as has_left_incoming_depth,
+          %d as has_right_incoming_depth,
+          %d + 1 as has_left_outgoing_depth,
+          %d as has_right_outgoing_depth
+        FROM {$table}
+        WHERE entity_id = %d
+        ",
+        $node['has_left_incoming_depth'],
+        $node['has_right_incoming_depth'],
+        $node["has_left_outgoing_depth"],
+        $node["has_right_outgoing_depth"],
+        $node['left_entity_id']
+      );
+
+      $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
+    }
+
+    // Add nodes connected by outgoing has_right links
+    if ($node['has_right_outgoing_depth'] < $has_right_outgoing_depth) {
+      $sql = $wpdb->prepare(
+        "SELECT
+          " . $selection . ",
+          %d as has_left_incoming_depth,
+          %d as has_right_incoming_depth,
+          %d as has_left_outgoing_depth,
+          %d + 1 as has_right_outgoing_depth
+        FROM {$table}
+        WHERE entity_id = %d
+        ",
+        $node['has_left_incoming_depth'],
+        $node['has_right_incoming_depth'],
+        $node["has_left_outgoing_depth"],
+        $node["has_right_outgoing_depth"],
+        $node['right_entity_id']
+      );
+
+      $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
+    }
+
+    // Add the next nodes to the queue with updated depth values
+    foreach ($next_nodes as $next_node)  {
+      $entity_id = $next_node['entity_id'];
+
+      if (!($visited[$entity_id] ?? false)) {
+        $queue[] = $next_node;
       }
-
-      $visited[$node['entity_id']] = true;
-
-      // ensure that the depths are all ints
-      $node['has_left_incoming_depth'] = (int) $node['has_left_incoming_depth'];
-      $node['has_right_incoming_depth'] = (int) $node['has_right_incoming_depth'];
-      $node['has_left_outgoing_depth'] = (int) $node['has_left_outgoing_depth'];
-      $node['has_right_outgoing_depth'] = (int) $node['has_right_outgoing_depth'];
-
-      // Add the node to the result list
-      $subgraph[] = $node;
-
-      $next_nodes = [];
-
-      // Add nodes connected by incoming has_left links
-      if ($node['has_left_incoming_depth'] < $has_left_incoming_depth) {
-          $sql = $wpdb->prepare(
-            "SELECT
-              " . $selection . ",
-              %d + 1 as has_left_incoming_depth,
-              %d as has_right_incoming_depth,
-              %d as has_left_outgoing_depth,
-              %d as has_right_outgoing_depth
-            FROM {$table}
-            WHERE left_entity_id = %d
-            ",
-            $node['has_left_incoming_depth'],
-            $node['has_right_incoming_depth'],
-            $node["has_left_outgoing_depth"],
-            $node["has_right_outgoing_depth"],
-            $node['entity_id']
-          );
-
-          $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
-      }
-
-      // Add nodes connected by incoming has_right links
-      if ($node['has_right_incoming_depth'] < $has_right_incoming_depth) {
-          $sql = $wpdb->prepare(
-            "SELECT
-              " . $selection . ",
-              %d as has_left_incoming_depth,
-              %d + 1 as has_right_incoming_depth,
-              %d as has_left_outgoing_depth,
-              %d as has_right_outgoing_depth
-            FROM {$table}
-            WHERE right_entity_id = %d
-            ",
-            $node['has_left_incoming_depth'],
-            $node['has_right_incoming_depth'],
-            $node["has_left_outgoing_depth"],
-            $node["has_right_outgoing_depth"],
-            $node['entity_id']
-          );
-
-          $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
-      }
-
-      // Add nodes connected by outgoing has_left links
-      if ($node['has_left_outgoing_depth'] < $has_left_outgoing_depth) {
-          $sql = $wpdb->prepare(
-            "SELECT
-              " . $selection . ",
-              %d as has_left_incoming_depth,
-              %d as has_right_incoming_depth,
-              %d + 1 as has_left_outgoing_depth,
-              %d as has_right_outgoing_depth
-            FROM {$table}
-            WHERE entity_id = %d
-            ",
-            $node['has_left_incoming_depth'],
-            $node['has_right_incoming_depth'],
-            $node["has_left_outgoing_depth"],
-            $node["has_right_outgoing_depth"],
-            $node['left_entity_id']
-          );
-
-          $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
-      }
-
-      // Add nodes connected by outgoing has_right links
-      if ($node['has_right_outgoing_depth'] < $has_right_outgoing_depth) {
-          $sql = $wpdb->prepare(
-            "SELECT
-              " . $selection . ",
-              %d as has_left_incoming_depth,
-              %d as has_right_incoming_depth,
-              %d as has_left_outgoing_depth,
-              %d + 1 as has_right_outgoing_depth
-            FROM {$table}
-            WHERE entity_id = %d
-            ",
-            $node['has_left_incoming_depth'],
-            $node['has_right_incoming_depth'],
-            $node["has_left_outgoing_depth"],
-            $node["has_right_outgoing_depth"],
-            $node['right_entity_id']
-          );
-
-          $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
-      }
-
-      // Add the next nodes to the queue with updated depth values
-      foreach ($next_nodes as $next_node)  {
-        $entity_id = $next_node['entity_id'];
-
-        if (!($visited[$entity_id] ?? false)) {
-          $queue[] = $next_node;
-        }
-      }
+    }
   }
 
   foreach($subgraph as &$element) {
