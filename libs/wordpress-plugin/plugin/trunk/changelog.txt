@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 0.0.5 =
+* Handle blocks being inside an iFrame in editor view (fixes incompatibility with Gutenberg plugin)
+
 = 0.0.4 =
 * Improved error handling, including more visible error messages
 * Add labels to custom block settings, fix 'found in post' for entities

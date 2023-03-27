@@ -1,5 +1,14 @@
 # block-scripts
 
+## 0.2.3
+
+### Patch Changes
+
+- [#1108](https://github.com/blockprotocol/blockprotocol/pull/1108) [`e3d889a1`](https://github.com/blockprotocol/blockprotocol/commit/e3d889a156851831c1fa851244d0abe19edfbf6d) Thanks [@nonparibus](https://github.com/nonparibus)! - update links to docs
+
+- Updated dependencies []:
+  - @blockprotocol/graph@0.2.2
+
 ## 0.2.2
 
 ### Patch Changes

@@ -37,7 +37,12 @@ export class CoreEmbedderHandler extends CoreHandler {
     if (!event.target) {
       throw new Error("Could not update element from event – no event.target.");
     }
-    if (!(event.target instanceof HTMLElement)) {
+    const containingWindow = (event.target as Element).ownerDocument
+      .defaultView;
+    if (
+      !containingWindow ||
+      !(event.target instanceof containingWindow.HTMLElement)
+    ) {
       throw new Error(
         "'blockprotocolmessage' event must be sent from an HTMLElement.",
       );

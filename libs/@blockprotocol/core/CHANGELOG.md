@@ -1,5 +1,11 @@
 # @blockprotocol/core
 
+## 0.1.2
+
+### Patch Changes
+
+- [#1212](https://github.com/blockprotocol/blockprotocol/pull/1212) [`58d8f99c`](https://github.com/blockprotocol/blockprotocol/commit/58d8f99c0dac48a857c67d4c5dbda9a01afd108b) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Make instanceof check safe across iFrames
+
 ## 0.1.1
 
 ### Patch Changes
