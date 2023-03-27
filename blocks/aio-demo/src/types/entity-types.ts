@@ -16,6 +16,7 @@ export type {
 } from "./generated/shared";
 
 export const entityTypeIds = {
+  thing: "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
   person: "https://blockprotocol.org/@examples/types/entity-type/person/v/1",
   company: "https://blockprotocol.org/@examples/types/entity-type/company/v/1",
   employedBy:
