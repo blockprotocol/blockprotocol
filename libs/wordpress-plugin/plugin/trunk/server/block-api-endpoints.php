@@ -356,8 +356,10 @@ function get_block_protocol_subgraph(
 )
 {
   global $wpdb;
+  // See https://dev.mysql.com/doc/refman/8.0/en/mysql-nutshell.html
   $mysql_recursive_cte_version = "8.0";
-  $mariadb_recursive_cte_version = "10.2";
+  // See https://mariadb.com/kb/en/mariadb-1022-release-notes/#notable-changes
+  $mariadb_recursive_cte_version = "10.2.2";
 
   $action =
     block_protocol_database_at_version(
@@ -368,11 +370,11 @@ function get_block_protocol_subgraph(
     : "block_protocol_native_subgraph_query";
 
   $subgraph = ($action)(
-      $base_where_term,
-      $has_left_incoming_depth,
-      $has_right_incoming_depth,
-      $has_left_outgoing_depth,
-      $has_right_outgoing_depth,
+    $base_where_term,
+    $has_left_incoming_depth,
+    $has_right_incoming_depth,
+    $has_left_outgoing_depth,
+    $has_right_outgoing_depth,
   );
 
   block_protocol_maybe_capture_error($wpdb->last_error);
