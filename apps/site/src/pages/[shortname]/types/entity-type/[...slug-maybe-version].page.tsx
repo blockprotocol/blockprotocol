@@ -29,10 +29,8 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
-import { useController } from "react-hook-form";
 import { tw } from "twind";
 
 import { FontAwesomeIcon, LinkIcon } from "../../../../components/icons";
@@ -95,7 +93,6 @@ const EntityTypePage: NextPage = () => {
 
   const [descriptionHovered, setDescriptionHovered] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
-  const descriptionInputRef = useRef<HTMLInputElement | null>();
 
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const copyEntityTypeId = useCallback<MouseEventHandler>(
@@ -116,12 +113,12 @@ const EntityTypePage: NextPage = () => {
   const formMethods = useEntityTypeForm<EntityTypeEditorFormData>({
     defaultValues: { properties: [], links: [], description: "" },
   });
-  const { handleSubmit: wrapHandleSubmit, reset, control } = formMethods;
-
-  const descriptionController = useController({
-    control,
-    name: "description",
-  });
+  const {
+    handleSubmit: wrapHandleSubmit,
+    reset,
+    register,
+    setFocus,
+  } = formMethods;
 
   // When loading or updating a type, set local and form state, and set the URL
   const setEntityType = useCallback(
@@ -276,6 +273,9 @@ const EntityTypePage: NextPage = () => {
 
   const entityTypeIsLink = isLinkEntityType(entityType);
 
+  const { ref: descriptionInputRef, ...descriptionInputProps } =
+    register("description");
+
   return (
     <>
       <NextSeo title={`Block Protocol – ${shortname}/${title} Schema`} />
@@ -404,27 +404,28 @@ const EntityTypePage: NextPage = () => {
                 >
                   {/* To be replaced with the Editable field once that goes in the blockprotocol's design system */}
                   <Input
-                    {...descriptionController.field}
+                    {...descriptionInputProps}
                     autoFocus
                     multiline
                     disableUnderline
                     style={{ whiteSpace: "pre" }}
                     readOnly={!editingDescription}
                     inputRef={descriptionInputRef}
-                    onBlur={() => {
+                    onBlur={(evt) => {
                       setEditingDescription(false);
+                      return descriptionInputProps.onBlur(evt);
                     }}
-                    onKeyDown={({ shiftKey, code }) => {
+                    onKeyDown={({ shiftKey, code, currentTarget }) => {
                       if (!shiftKey && code === "Enter") {
-                        descriptionInputRef.current?.blur();
+                        currentTarget.blur();
                       }
                     }}
-                    onFocus={(event) =>
+                    onFocus={(event) => {
                       event.currentTarget.setSelectionRange(
                         event.currentTarget.value.length,
                         event.currentTarget.value.length,
-                      )
-                    }
+                      );
+                    }}
                     sx={{
                       fontFamily: "Inter",
                       width: 1,
@@ -447,7 +448,7 @@ const EntityTypePage: NextPage = () => {
                     <IconButton
                       onClick={() => {
                         setEditingDescription(true);
-                        descriptionInputRef.current?.focus();
+                        setFocus("description");
                       }}
                       sx={{
                         padding: 0.5,
