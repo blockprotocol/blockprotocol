@@ -1,6 +1,9 @@
 <?php
 
+// The following minimum versions are the minimum versions that support the JSON data type.
+// see https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-json
 const BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION = "5.7.8";
+// See https://mariadb.com/kb/en/mariadb-1027-release-notes/
 const BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION = "10.2.7";
 
 function block_protocol_database_at_version(string $mysql_version, string $mariadb_version)
