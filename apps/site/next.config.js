@@ -20,7 +20,7 @@ const nextConfig = {
     autoInstrumentServerFunctions: false,
     hideSourceMaps: false,
   },
-  transpilePackages: ["internal-api-repo"],
+  transpilePackages: ["internal-api-repo", "@hashintel/design-system"],
 
   // We call linters in GitHub Actions for all pull requests. By not linting
   // again during `next build`, we save CI minutes and unlock more feedback.
