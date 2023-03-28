@@ -23,6 +23,7 @@ import {
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { theme as themeImport } from "../theme";
+import { COPY_FONT_FAMILY } from "../theme/typography";
 import { parseHTML } from "../util/html-utils";
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
@@ -219,6 +220,7 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
           isSelected ? (theme) => theme.palette.purple[100] : "transparent"
         }
         pr={1}
+        fontFamily={COPY_FONT_FAMILY}
       >
         <SidebarLink
           ref={(ref) => {

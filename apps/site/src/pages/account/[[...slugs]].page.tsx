@@ -68,11 +68,8 @@ const Account: AuthWallPageContent = () => {
       <TopNavigationTabs />
 
       <PageContainer>
-        <Typography
-          variant="h1"
-          sx={{ fontSize: 44, fontWeight: 400, marginBottom: 4 }}
-        >
-          Account Settings
+        <Typography variant="bpHeading2" sx={{ fontSize: 44, marginBottom: 4 }}>
+          My Account
         </Typography>
         <Box display="flex">
           <Sidebar
