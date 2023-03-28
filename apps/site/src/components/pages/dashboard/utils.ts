@@ -1,6 +1,5 @@
 import { faKey, faUserPen } from "@fortawesome/free-solid-svg-icons";
 
-import { isBillingFeatureFlagEnabled } from "../../../lib/config";
 import { SolidSparklesIcon } from "../../icons/solid-sparkles-icon";
 import { DashboardCardProps } from "./dashboard-card/dashboard-card";
 
@@ -9,15 +8,10 @@ export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
     tabTitle: "Dashboard",
     tabHref: "/dashboard",
   },
-  isBillingFeatureFlagEnabled
-    ? {
-        tabTitle: "Settings",
-        tabHref: "/settings",
-      }
-    : {
-        tabTitle: "API Keys",
-        tabHref: "/settings/api-keys",
-      },
+  {
+    tabTitle: "My Account",
+    tabHref: "/settings/api-keys",
+  },
 ];
 
 export type DashboardSection = "create" | "manage" | "explore";

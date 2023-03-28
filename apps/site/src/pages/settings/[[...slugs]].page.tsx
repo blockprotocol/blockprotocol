@@ -10,21 +10,23 @@ import {
 } from "../../components/pages/auth-wall";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
+import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { ApiKeysSettingsPanel } from "./api-keys-settings-panel";
 import { BillingSettingsPanel } from "./billing-settings-panel/billing-settings-panel";
 
 const settingsPanels = [
-  {
-    title: "Billing",
-    slug: "billing",
-    panel: <BillingSettingsPanel />,
-  },
+  ...(isBillingFeatureFlagEnabled
+    ? [
+        {
+          title: "Billing",
+          slug: "billing",
+          panel: <BillingSettingsPanel />,
+        },
+      ]
+    : []),
   {
     title: "API Keys",
-    /**
-     * @todo: rename this to `api-keys` when the billing page can be deleted.
-     */
-    slug: "api-keys-panel",
+    slug: "api-keys",
     panel: <ApiKeysSettingsPanel />,
   },
 ] as const;
