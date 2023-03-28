@@ -16,10 +16,10 @@ function block_protocol_database_at_version(string $mysql_version, string $maria
 
   if (strpos($db_server_info, 'MariaDB') != false) {
     // site is using MariaDB
-    return strnatcmp($db_version, $mariadb_version) > 0;
+    return strnatcmp($db_version, $mariadb_version) >= 0;
   } else {
     // site is using MySQL
-    return strnatcmp($db_version, $mysql_version) > 0;
+    return strnatcmp($db_version, $mysql_version) >= 0;
   }
 }
 
