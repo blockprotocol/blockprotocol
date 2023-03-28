@@ -70,9 +70,9 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   const [alertSnackBarOpen, setAlertSnackBarOpen] = useState(false);
   const [readonly, setReadonly] = useState(false);
 
-  const previousBlockVariantsTab = useRef(-1);
-
   const [propertiesText, setPropertiesText] = useState<string | null>(null);
+
+  const [errors, setErrors] = useState<string[]>([]);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -185,38 +185,6 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
     }
   }, [exampleGraph, metadata]);
 
-  useEffect(() => {
-    const blockVariant: BlockVariant | undefined =
-      metadata?.variants?.[blockVariantsTab];
-
-    if (blockVariant && previousBlockVariantsTab.current !== blockVariantsTab) {
-      try {
-        const parsedProperties = propertiesText
-          ? JSON.parse(propertiesText)
-          : null;
-
-        setEntity((prevEntity) => {
-          if (prevEntity && parsedProperties) {
-            if (stringifyProperties(prevEntity.properties) === propertiesText) {
-              return prevEntity;
-            } else {
-              return {
-                ...prevEntity,
-                properties: parsedProperties,
-              };
-            }
-          }
-
-          return null;
-        });
-        previousBlockVariantsTab.current = blockVariantsTab;
-      } catch (err) {
-        setAlertSnackBarOpen(true);
-        setBlockVariantsTab(previousBlockVariantsTab.current);
-      }
-    }
-  }, [blockVariantsTab, metadata, propertiesText]);
-
   // If the entity is changed, update the text input of the properties
   useEffect(() => {
     if (entity) {
@@ -244,27 +212,26 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
 
           return null;
         });
+
+        setErrors([]);
       } catch (err) {
-        /* @todo - what's the correct way to handle errors here */
+        setErrors([(err as Error).message]);
         setAlertSnackBarOpen(true);
       }
     }
-  }, [propertiesText, entity]);
+  }, [propertiesText]);
 
-  /** used to recompute props and errors on dep changes (caching has no benefit here) */
-  const [props, errors] = useMemo<
-    [
-      { blockEntity: Entity | EntityTemporal; readonly: boolean } | undefined,
-      string[],
-    ]
+  /** used to recompute props on dep changes (caching has no benefit here) */
+  const props = useMemo<
+    { blockEntity: Entity | EntityTemporal; readonly: boolean } | undefined
   >(() => {
     if (!entity) {
       /* @todo - we need should handle this case and display a loading skeleton or error message */
-      return [undefined, []];
+      return undefined;
     } else {
       // const errorsToEat = ["uploadFile", "getEmbedBlock"];
 
-      const errorMessages: string[] = [];
+      // const errorMessages: string[] = [];
       // @todo-0.3 validating this requires fetching the entire schema for the block
       // const errorMessages = validator
       //   .validate(result.properties, schema ?? {})
@@ -272,14 +239,12 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
       //   .filter(
       //     (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),
       //   );
+      // setErrors(errorMessages);
 
-      return [
-        {
-          blockEntity: entity,
-          readonly,
-        },
-        errorMessages,
-      ];
+      return {
+        blockEntity: entity,
+        readonly,
+      };
     }
   }, [entity, readonly]);
 
