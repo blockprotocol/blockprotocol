@@ -61,7 +61,7 @@ type SidebarPageSectionProps = {
 const highlightSection = (isSectionSelected: boolean) => ({
   borderLeft: `3px solid ${
     isSectionSelected ? themeImport.palette.purple[700] : "transparent"
-  }`,
+  } !important`,
 });
 
 const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
