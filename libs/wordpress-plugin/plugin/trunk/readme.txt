@@ -5,7 +5,7 @@ Tags: block protocol, blocks, gutenberg, gutenberg blocks, block, schema, countd
 Requires at least: 5.6.0
 Tested up to: 6.1.1
 Requires PHP: 7.4
-Stable tag: 0.0.5
+Stable tag: 0.0.6
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 
@@ -84,12 +84,12 @@ Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Disc
 
 <!-- Only the latest release's entry should appear here – the full log should be in changelog.txt -->
 
-= 0.0.5 =
-* Handle blocks being inside an iFrame in editor view (fixes incompatibility with Gutenberg plugin)
+= 0.0.6 =
+* Support older versions of MySQL (Minimum version is now 5.7.8 down from 8.0)
 
 == Upgrade Notice ==
 
 <!-- Upgrade notices describe the reason a user should upgrade. No more than 300 characters. -->
 
-= 0.0.5 =
-Upgrade for compatibility with the Gutenberg plugin
+= 0.0.6 =
+Upgrade for support for older versions of MySQL (new minimum 5.7.8)
