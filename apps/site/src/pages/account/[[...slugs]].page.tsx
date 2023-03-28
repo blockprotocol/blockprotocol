@@ -14,7 +14,7 @@ import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { ApiKeysSettingsPanel } from "./api-keys-settings-panel";
 import { BillingSettingsPanel } from "./billing-settings-panel/billing-settings-panel";
 
-const settingsPanels = [
+const accountPanels = [
   ...(isBillingFeatureFlagEnabled
     ? [
         {
@@ -26,22 +26,22 @@ const settingsPanels = [
     : []),
   {
     title: "API Keys",
-    slug: "api-keys",
+    slug: "api",
     panel: <ApiKeysSettingsPanel />,
   },
 ] as const;
 
 const sidebarMaxWidth = 150;
 
-const Settings: AuthWallPageContent = () => {
+const Account: AuthWallPageContent = () => {
   const router = useRouter();
 
   useLayoutEffect(() => {
     /**
-     * @todo: remove this redirect when there is a panel with route "/settings"
+     * @todo: remove this redirect when there is a panel with route "/account"
      */
-    if (router.asPath === "/settings") {
-      void router.push("/settings/billing");
+    if (router.asPath === "/account") {
+      void router.push("/account/billing");
     }
   }, [router]);
 
@@ -55,7 +55,7 @@ const Settings: AuthWallPageContent = () => {
 
       const currentSettingsPageSlug = query.slugs.join("/");
 
-      return settingsPanels.find(({ slug }) =>
+      return accountPanels.find(({ slug }) =>
         currentSettingsPageSlug.startsWith(slug),
       );
     }
@@ -85,9 +85,9 @@ const Settings: AuthWallPageContent = () => {
               m: 1.5,
               marginLeft: 0,
             }}
-            pages={settingsPanels.map(({ title, slug }) => ({
+            pages={accountPanels.map(({ title, slug }) => ({
               title,
-              href: `/settings/${slug}`,
+              href: `/account/${slug}`,
             }))}
           />
           <Paper sx={{ flexGrow: 1, padding: 6, marginBottom: 6 }}>
@@ -99,4 +99,4 @@ const Settings: AuthWallPageContent = () => {
   );
 };
 
-export default withAuthWall(Settings);
+export default withAuthWall(Account);

@@ -40,7 +40,7 @@ const isKnownStripeCardBrand = (brand: string): brand is KnownStripeCardBrand =>
     brand as KnownStripeCardBrand,
   );
 
-export const cardDetailsPanelPageAsPath = "/settings/billing/payment-method";
+export const cardDetailsPanelPageAsPath = "/account/billing/payment-method";
 
 export const CardDetailsPanelPage: FunctionComponent = () => {
   const router = useRouter();

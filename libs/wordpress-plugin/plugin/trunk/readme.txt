@@ -28,7 +28,7 @@ You can also build your own block for the Block Protocol without any PHP, and pu
 
 **1.** Activate the plugin from the Plugins Setting page
 
-**2.** Visit https://blockprotocol.org to create an account and generate an API key: https://blockprotocol.org/settings/api-keys
+**2.** Visit https://blockprotocol.org to create an account and generate an API key: https://blockprotocol.org/account/api
 
 **3.** Click 'Block Protocol' in the WordPress sidebar, enter your API key, and save – if there's no warning message, it's working
 

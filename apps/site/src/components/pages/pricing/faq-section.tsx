@@ -86,7 +86,7 @@ const FAQ_QUESTIONS = [
       <DescriptionTypography>
         While logged in to the <i>Hobby</i> account you wish to upgrade, you can
         upgrade at any time by navigating to your{" "}
-        <CustomLink href="/settings/billing">Account Billing</CustomLink> page
+        <CustomLink href="/account/billing">Account Billing</CustomLink> page
         and clicking the “Upgrade” button under the “Plans” section.
         <br />
         <br /> If you experience any difficulty with this, please{" "}
@@ -137,7 +137,7 @@ const FAQ_QUESTIONS = [
       <DescriptionTypography>
         Yes! Provided you already have a payment method associated with your
         account you can navigate to your{" "}
-        <CustomLink href="/settings/billing">Account Billing</CustomLink> page
+        <CustomLink href="/account/billing">Account Billing</CustomLink> page
         and click “Change payment method” in the top-right of the main section.
         If you see a message that says “Upgrade to get more” instead, you can
         add a payment method by first upgrading your account to <i>Hobby</i> or{" "}
@@ -150,7 +150,7 @@ const FAQ_QUESTIONS = [
     description: (
       <DescriptionTypography>
         Yes. This will soon be possible from the{" "}
-        <CustomLink href="/settings/billing">Account Billing</CustomLink> page.
+        <CustomLink href="/account/billing">Account Billing</CustomLink> page.
         In the meantime, please{" "}
         <CustomLink href="/contact">contact us</CustomLink>.
       </DescriptionTypography>
@@ -161,7 +161,7 @@ const FAQ_QUESTIONS = [
     description: (
       <DescriptionTypography>
         Yes, please navigate to your{" "}
-        <CustomLink href="/settings/billing">Account Billing</CustomLink> page
+        <CustomLink href="/account/billing">Account Billing</CustomLink> page
         and scroll down to the “Payment History” section. If you cannot see
         this, please <CustomLink href="/contact">contact us</CustomLink> for a
         manually-issued receipt.

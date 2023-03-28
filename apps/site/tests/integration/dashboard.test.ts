@@ -31,7 +31,7 @@ test("dashboard page should contain key elements", async ({ page }) => {
   for (const [text, url] of [
     ["Build a block", "/docs/blocks/develop"],
     ["Create a Type", "/@alice/all-types"],
-    ["Create and manage API keys", "/settings/api-keys"],
+    ["Create and manage API keys", "/account/api"],
     ["View your public profile", "/@alice"],
     ["Browse blocks for inspiration", "/hub"],
   ] as const) {
@@ -46,7 +46,7 @@ test("dashboard page should contain key elements", async ({ page }) => {
   }
 
   await page.locator('[aria-label="settings-tabs"] >> text=API Keys').click();
-  await expect(page).toHaveURL("/settings/api-keys");
+  await expect(page).toHaveURL("/account/api");
 
   await page.locator('[aria-label="settings-tabs"] >> text=Dashboard').click();
   await expect(page).toHaveURL("/dashboard");

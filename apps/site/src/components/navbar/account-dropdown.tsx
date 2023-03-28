@@ -109,7 +109,7 @@ export const AccountDropdown: FunctionComponent = () => {
               </Typography>
             </ListItemButton>
           </Link>
-          <Link href="/settings/api-keys" onClick={() => setOpen(false)}>
+          <Link href="/account/api" onClick={() => setOpen(false)}>
             <ListItemButton sx={{ padding: (theme) => theme.spacing(1, 2) }}>
               <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
                 Account Settings
@@ -127,7 +127,7 @@ export const AccountDropdown: FunctionComponent = () => {
           {isBillingFeatureFlagEnabled &&
           user.stripeSubscriptionTier !== "pro" ? (
             <ListItemButton
-              href="/settings/billing"
+              href="/account/billing"
               sx={{
                 position: "relative",
                 flexDirection: "column",

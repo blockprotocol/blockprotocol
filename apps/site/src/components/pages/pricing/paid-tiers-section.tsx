@@ -809,7 +809,7 @@ export const PaidTiersSection: FunctionComponent<{
               <Box>
                 <CustomLinkButton
                   href={{
-                    pathname: "/settings/billing/upgrade",
+                    pathname: "/account/billing/upgrade",
                     query: { tier: "hobby" },
                   }}
                   endIcon={
@@ -947,7 +947,7 @@ export const PaidTiersSection: FunctionComponent<{
             >
               <CustomLinkButton
                 href={{
-                  pathname: "/settings/billing/upgrade",
+                  pathname: "/account/billing/upgrade",
                   query: { tier: "hobby" },
                 }}
                 endIcon={
@@ -1079,7 +1079,7 @@ export const PaidTiersSection: FunctionComponent<{
                   <CustomLinkButton
                     pink
                     href={{
-                      pathname: "/settings/billing/upgrade",
+                      pathname: "/account/billing/upgrade",
                       query: { tier: "pro" },
                     }}
                     endIcon={
@@ -1160,7 +1160,7 @@ export const PaidTiersSection: FunctionComponent<{
               <CustomLinkButton
                 pink
                 href={{
-                  pathname: "/settings/billing/upgrade",
+                  pathname: "/account/billing/upgrade",
                   query: { tier: "pro" },
                 }}
                 endIcon={

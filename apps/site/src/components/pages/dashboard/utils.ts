@@ -10,7 +10,7 @@ export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
   },
   {
     tabTitle: "My Account",
-    tabHref: "/settings/api-keys",
+    tabHref: "/account/api",
   },
 ];
 
@@ -67,7 +67,7 @@ export const getDashboardSectionCards = (props: {
           "Your API key will allow you to search and discover blocks by name, author, or compatible data structure",
         link: {
           title: "Manage keys",
-          href: "/settings/api-keys",
+          href: "/account/api",
         },
         icon: faKey,
         variant: "secondary",

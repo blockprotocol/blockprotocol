@@ -183,7 +183,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
      * their account further, so they are redirected to the "billing" page.
      */
     if (currentSubscriptionTier === "pro") {
-      void router.push("/settings/billing");
+      void router.push("/account/billing");
     }
   });
 
@@ -272,7 +272,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
       };
     });
 
-    void router.push("/settings/billing");
+    void router.push("/account/billing");
   }, [setUser, router, upgradedSubscriptionTier]);
 
   const upgradeSubscription = async (params: {
