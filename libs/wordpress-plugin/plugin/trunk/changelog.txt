@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 0.0.6 =
+* Support older versions of MySQL (Minimum version is now 5.7.8 down from 8.0)
+
 = 0.0.5 =
 * Handle blocks being inside an iFrame in editor view (fixes incompatibility with Gutenberg plugin)
 

@@ -5,7 +5,7 @@ Tags: block protocol, blocks, gutenberg, gutenberg blocks, block, schema, countd
 Requires at least: 5.6.0
 Tested up to: 6.1.1
 Requires PHP: 7.4
-Stable tag: 0.0.5
+Stable tag: 0.0.6
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 
@@ -36,9 +36,9 @@ You can also build your own block for the Block Protocol without any PHP, and pu
 
 **5.** If you want to add your own block to the plugin, visit https://blockprotocol.org/docs/developing-blocks
 
-Note that you must be using at least MySQL 8. To check please navigate to `Admin -> Tools -> Site Health -> Info -> Database`.
-The previous versions of MySQL (5.6 and 5.7) respectively reach(ed) end of life in February 2021 and October 2023. 
-You should upgrade to MySQL 8 now to continue to receive security updates, as well as to use the Block Protocol within WordPress.
+Note that you must be using at least MySQL 5.7.8. To check please navigate to `Admin -> Tools -> Site Health -> Info -> Database`.
+MySQL 5.6 and 5.7 respectively reach(ed) end of life in February 2021 and October 2023. 
+You should upgrade to MySQL 8 now to continue to receive security updates, as well as to get the best Block Protocol experience within WordPress.
 
 When you install or use the _Block Protocol for WordPress_ plugin, we don’t send any data to any third-party analytics services. 
 However, we do collect the domain name of the website that the plugin has been activated on, and limited aggregate information 
@@ -84,12 +84,12 @@ Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Disc
 
 <!-- Only the latest release's entry should appear here – the full log should be in changelog.txt -->
 
-= 0.0.5 =
-* Handle blocks being inside an iFrame in editor view (fixes incompatibility with Gutenberg plugin)
+= 0.0.6 =
+* Support older versions of MySQL (Minimum version is now 5.7.8 down from 8.0)
 
 == Upgrade Notice ==
 
 <!-- Upgrade notices describe the reason a user should upgrade. No more than 300 characters. -->
 
-= 0.0.5 =
-Upgrade for compatibility with the Gutenberg plugin
+= 0.0.6 =
+Upgrade for support for older versions of MySQL (new minimum 5.7.8)
