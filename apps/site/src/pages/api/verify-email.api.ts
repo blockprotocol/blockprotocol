@@ -48,7 +48,7 @@ export default createBaseHandler<
 
     const emailVerificationCode = await user.getVerificationCode(db, {
       verificationCodeId,
-      variant: "email",
+      variant: ["email", "linkWordpress"],
     });
 
     if (!emailVerificationCode) {

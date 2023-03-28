@@ -5,16 +5,24 @@ import { rword } from "rword";
 import { formatErrors } from "../../../util/api";
 import { User } from "./user.model";
 
-export type VerificationCodeVariant = "login" | "email";
+export type VerificationCodeVariant = "login" | "email" | "linkWordpress";
+
+export type VerificationCodePropertiesVariant =
+  | {
+      variant: Exclude<VerificationCodeVariant, "linkWordpress">;
+    }
+  | {
+      variant: "linkWordpress";
+      wordpressInstanceUrl: string;
+    };
 
 export type VerificationCodeProperties = {
   user: DBRef;
-  variant: VerificationCodeVariant;
   code: string;
   numberOfAttempts: number;
   used: boolean;
   createdAt: Date;
-};
+} & VerificationCodePropertiesVariant;
 
 export type VerificationCodeDocument = WithId<VerificationCodeProperties>;
 
@@ -79,16 +87,17 @@ export class VerificationCode {
 
   static async create(
     db: Db,
-    params: { user: User; variant: VerificationCodeVariant },
+    params: { user: User } & VerificationCodePropertiesVariant,
   ) {
-    const { user, variant } = params;
+    const { user, ...variantParams } = params;
+
     const properties: VerificationCodeProperties = {
       used: false,
       user: user.toRef(),
-      variant,
       numberOfAttempts: 0,
       code: VerificationCode.generateCode(),
       createdAt: new Date(),
+      ...variantParams,
     };
 
     const { insertedId: _id } = await db

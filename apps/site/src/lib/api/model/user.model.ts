@@ -23,6 +23,7 @@ import { ApiKey } from "./api-key.model";
 import {
   VerificationCode,
   VerificationCodeDocument,
+  VerificationCodePropertiesVariant,
   VerificationCodeVariant,
 } from "./verification-code.model";
 
@@ -55,6 +56,8 @@ export type UserProperties = {
   stripeSubscriptionTier?: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
+  wordpressInstanceUrls?: string[];
+  referrer?: "wordpress" | "blockprotocol";
 };
 
 export type UserAvatarProperties = {
@@ -230,15 +233,21 @@ export class User {
 
   static async create(
     db: Db,
-    params: {
+    {
+      wordpressInstanceUrl,
+      ...params
+    }: {
       email: string;
       hasVerifiedEmail: boolean;
+      referrer: NonNullable<UserProperties["referrer"]>;
       preferredName?: string;
       shortname?: string;
+      wordpressInstanceUrl?: string;
     },
   ): Promise<User> {
     const userProperties: UserProperties = {
       ...params,
+      wordpressInstanceUrls: wordpressInstanceUrl ? [wordpressInstanceUrl] : [],
     };
 
     const { insertedId } = await db
@@ -304,12 +313,10 @@ export class User {
 
   async createVerificationCode(
     db: Db,
-    params: { variant: VerificationCodeVariant },
+    params: VerificationCodePropertiesVariant,
   ): Promise<VerificationCode> {
-    const { variant } = params;
-
     const verificationCode = await VerificationCode.create(db, {
-      variant,
+      ...params,
       user: this,
     });
 
@@ -318,7 +325,10 @@ export class User {
 
   async getVerificationCode(
     db: Db,
-    params: { verificationCodeId: string; variant: VerificationCodeVariant },
+    params: {
+      verificationCodeId: string;
+      variant: VerificationCodeVariant | VerificationCodeVariant[];
+    },
   ): Promise<VerificationCode | null> {
     const { verificationCodeId, variant } = params;
 
@@ -326,7 +336,7 @@ export class User {
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .findOne({
         user: this.toRef(),
-        variant,
+        variant: Array.isArray(variant) ? { $in: variant } : variant,
         _id: new ObjectId(verificationCodeId),
       });
 
@@ -438,6 +448,49 @@ export class User {
         html: dedent`
           <p>To verify your email address, copy and paste your verification code or <a href="${magicLink}">click here</a>.</p>
           <code>${emailVerificationCode.code}</code>
+        `,
+      });
+    }
+
+    return emailVerificationCode;
+  }
+
+  async sendEmailVerificationCodeForWordpress(
+    db: Db,
+    wordpressInstanceUrl: string,
+  ): Promise<VerificationCode> {
+    const emailVerificationCode = await this.createVerificationCode(db, {
+      variant: "linkWordpress",
+      wordpressInstanceUrl,
+    });
+
+    const magicLinkQueryParams: ApiVerifyEmailRequestBody & {
+      email: string;
+    } = {
+      email: this.email,
+      userId: this.id,
+      verificationCodeId: emailVerificationCode.id,
+      code: emailVerificationCode.code,
+    };
+
+    const magicLink = `${FRONTEND_URL}/signup?${new URLSearchParams(
+      magicLinkQueryParams,
+    ).toString()}`;
+
+    // Doesn't make sense to include the code itself as they won't be on the
+    // page to enter the code, as this will be triggered by the Wordpress
+    // backend
+    if (shouldUseDummyEmailService) {
+      await sendDummyEmail([
+        `Magic Link to activate Wordpress plugin: ${magicLink}`,
+      ]);
+    } else {
+      await sendMail({
+        to: this.email,
+        subject: "Activate your Block Protocol Wordpress plugin",
+        html: dedent`
+          <p>To finish creating your Block Protocol account, and to link it to your Wordpress instance, <a href="${magicLink}">click here</a>.</p>
+          <p><em>Alternatively, you copy the URL and paste it into your browser: ${magicLink}</em></p>
         `,
       });
     }
