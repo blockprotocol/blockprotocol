@@ -10,6 +10,7 @@ import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode } from "react";
 
 import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";
+import { FadeInOnViewport } from "./fade-in-on-viewport";
 import { ArrowRightIcon, BoltIcon } from "./icons";
 import { Link as LinkComponent, LinkProps } from "./link";
 import { LinkButton } from "./link-button";
@@ -84,10 +85,6 @@ const BannerCard: FunctionComponent<BannerCardProps> = ({
         transition: (theme) => theme.transitions.create("padding"),
         padding: { xs: 4, md: 6 },
         height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignItems: "flex-start",
         position: "relative",
         overflow: "hidden",
         "&::before": {
@@ -110,22 +107,39 @@ const BannerCard: FunctionComponent<BannerCardProps> = ({
       ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >
-    <Box display="flex" mb={fullHeight ? 0 : 2} width={fullWidth ? 1 : "auto"}>
-      {contents}
-    </Box>
-    {buttonHref ? (
-      <LinkButton
-        href={buttonHref}
+    <FadeInOnViewport
+      sx={{
+        width: fullWidth ? 1 : "auto",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+      }}
+    >
+      <Box
         sx={{
-          textTransform: "none",
+          width: 1,
+          display: "flex",
+          mb: fullHeight ? 0 : 2,
         }}
-        variant="primary"
-        startIcon={buttonStartIcon}
-        endIcon={buttonEndIcon}
       >
-        {buttonText}
-      </LinkButton>
-    ) : null}
+        {contents}
+      </Box>
+      {buttonHref ? (
+        <LinkButton
+          href={buttonHref}
+          sx={{
+            textTransform: "none",
+          }}
+          variant="primary"
+          startIcon={buttonStartIcon}
+          endIcon={buttonEndIcon}
+        >
+          {buttonText}
+        </LinkButton>
+      ) : null}
+    </FadeInOnViewport>
   </Paper>
 );
 
@@ -203,13 +217,13 @@ export const BANNERS: Banner[] = [
               >
                 Anyone can create blocks and contribute to this growing,
                 open-source registry of blocks. Read our{" "}
-                <Link href="/docs/developing-blocks">quickstart guide</Link> to
+                <Link href="/docs/blocks/develop">quickstart guide</Link> to
                 start building your own blocks.
               </Typography>
             </Box>
           </Box>
         }
-        buttonHref="/docs/developing-blocks"
+        buttonHref="/docs/blocks/develop"
         buttonText="Read the quickstart guide"
         buttonStartIcon={<BoltIcon />}
       />
@@ -239,7 +253,7 @@ export const BANNERS: Banner[] = [
                 </Typography>
               </Box>
             }
-            buttonHref="/docs/using-blocks"
+            buttonHref="/docs/blocks/environments"
             buttonText="Learn more"
             buttonEndIcon={<ArrowRightIcon />}
           />
@@ -263,7 +277,7 @@ export const BANNERS: Banner[] = [
                 </Typography>
               </Box>
             }
-            buttonHref="/docs/developing-blocks"
+            buttonHref="/docs/blocks/develop"
             buttonText="Read the quickstart guide"
             buttonStartIcon={<BoltIcon />}
           />
@@ -329,13 +343,13 @@ export const BANNERS: Banner[] = [
               >
                 Anyone can create blocks and contribute to this growing,
                 open-source registry of blocks. Read our{" "}
-                <Link href="/docs/developing-blocks">quickstart guide</Link> to
+                <Link href="/docs/blocks/develop">quickstart guide</Link> to
                 start building your own blocks.
               </Typography>
             </Box>
           </Box>
         }
-        buttonHref="/docs/developing-blocks"
+        buttonHref="/docs/blocks/develop"
         buttonText="Read the quickstart guide"
         buttonStartIcon={<BoltIcon />}
       />

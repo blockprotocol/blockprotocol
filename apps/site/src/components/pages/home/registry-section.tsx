@@ -12,6 +12,7 @@ import { FunctionComponent } from "react";
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { isBillingFeatureFlagEnabled } from "../../../lib/config";
 import { BlocksSlider } from "../../blocks-slider";
+import { FadeInOnViewport } from "../../fade-in-on-viewport";
 import { BlockProtocolIcon } from "../../icons";
 import { MapboxIcon } from "../../icons/mapbox-icon";
 import { OpenAiIcon } from "../../icons/open-ai-icon";
@@ -61,7 +62,7 @@ const BrowseBlocksSection = ({ isMobile = false }) => {
           <strong>Anyone can publish a block.</strong>{" "}
           {isMobile ? <br /> : null}If you can’t see one you want,{" "}
           <Link
-            href="/docs/developing-blocks"
+            href="/docs/blocks/develop"
             sx={{
               color: ({ palette }) => `${palette.purple[700]} !important`,
             }}
@@ -86,7 +87,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <Box
+    <FadeInOnViewport
       sx={{
         py: { xs: 4, lg: 12 },
         px: { xs: "1rem", lg: 0 },
@@ -194,6 +195,6 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
           <BrowseBlocksSection isMobile={isMobile} />
         </Box>
       ) : null}
-    </Box>
+    </FadeInOnViewport>
   );
 };

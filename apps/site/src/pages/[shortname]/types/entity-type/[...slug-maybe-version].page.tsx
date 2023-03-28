@@ -105,7 +105,10 @@ const EntityTypePage: NextPage = () => {
     (stateToSet: EntityTypeState) => {
       setEntityTypeState(stateToSet);
       reset(getFormDataFromSchema(stateToSet.entityType.schema));
-      void router.push(stateToSet.entityType.schema.$id);
+
+      void router.replace(stateToSet.entityType.schema.$id, undefined, {
+        scroll: false,
+      });
     },
     [reset, router, setEntityTypeState],
   );
@@ -151,8 +154,6 @@ const EntityTypePage: NextPage = () => {
         entityType: responseData.entityType,
         latestVersion: responseData.entityType,
       });
-
-      void router.replace(responseData.entityType.schema.$id);
     } else {
       const { data: responseData, error: responseError } =
         await apiClient.updateEntityType({
@@ -381,7 +382,7 @@ const EntityTypePage: NextPage = () => {
                 </Box>
               ) : null}
 
-              <Box component="section">
+              <Box component="section" sx={{ overflowX: "auto" }}>
                 <EntityTypeForm
                   author={shortname as `@${string}`}
                   entityType={entityType}

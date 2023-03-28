@@ -1,5 +1,7 @@
 import { Box, Typography } from "@mui/material";
 
+import { FadeInOnViewport } from "../../fade-in-on-viewport";
+
 export const WhatAreBlocks = () => {
   return (
     <Box
@@ -23,7 +25,7 @@ export const WhatAreBlocks = () => {
           overflow: "hidden",
         }}
       >
-        <Box
+        <FadeInOnViewport
           sx={{
             background: ({ palette }) => palette.common.white,
             boxShadow: "inset 0px 2px 5px rgba(0, 0, 0, 0.04)",
@@ -182,11 +184,11 @@ export const WhatAreBlocks = () => {
                 "0px 1px 0.629px 0px rgba(175, 155, 193, 0.081), 0px 4.237px 8.10px 0px rgba(175, 155, 193, 0.123), 0px 8px 20px 0px rgba(175, 155, 193, 0.083)",
             }}
           />
-        </Box>
+        </FadeInOnViewport>
       </Box>
 
       {/* Second section */}
-      <Box
+      <FadeInOnViewport
         sx={{
           maxWidth: "900px",
           margin: { xs: "5rem auto 3rem", md: "6rem auto" },
@@ -262,7 +264,7 @@ export const WhatAreBlocks = () => {
             }}
           />
         </Box>
-      </Box>
+      </FadeInOnViewport>
     </Box>
   );
 };

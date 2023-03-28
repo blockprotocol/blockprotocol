@@ -1,0 +1,32 @@
+# Services
+
+## Introduction
+
+Providers may offer third-party **services**, external to the Block Protocol, which blocks can reach out to and utilize, to provide additional or improved functionality.
+
+An example service is the **OpenAI ChatGPT** API, also known as _GPT-3.5 Turbo_.
+
+The Block Protocol defines a standardized way for blocks to access external services. If an embedding application directly integrates with that service, it can take over handling of the request. If it does not, the block will fall back to processing the request via the Block Protocol itself, which supports a number of different services. These include many of _OpenAI_ and _Mapbox_'s public current public APIs.
+
+## Available services
+
+All supported services will soon be listed on the [Þ Hub](https://blockprotocol.org/hub), allowing for easier discovery.
+
+- Block users will be able to browse supported services, and the blocks which utilize them, allowing for easy-access to blocks which make use of novel new APIs.
+- Block developers will be able to browse available services which they can integrate into their blocks, and easily access documentation for them in one place.
+
+## Add or request a service
+
+If you want to access a particular service in the block, reach out on [Discord](https://blockprotocol.org/discord) to check it doesn't already exist, or [contact us](https://blockprotocol.org/contact) to request it be added. We'd love to learn more about your use case!
+
+## Limitations
+
+A number of limitations apply to the use of services in blocks.
+
+### Rate-limiting
+
+Most services are rate-limited, to varying degrees. Block Protocol **API key** and **user account** rate limits will be published soon. **Service** (e.g. GPT-3.5 Turbo) and where applicable **provider** (e.g. OpenAI) rate limits will be listed on the relevant service listing pages once live.
+
+### Terms of service
+
+By attempting to access services via blocks, you agree to adhere to the original provider's _terms of service_, as outlined in the Block Protocol [Terms for Additional Products and Features](https://blockprotocol.org/legal/terms/products).
