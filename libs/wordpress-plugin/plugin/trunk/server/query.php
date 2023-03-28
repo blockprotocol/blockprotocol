@@ -53,7 +53,7 @@ function block_protocol_encode_filter_value($value)
   } elseif (is_string($value)) {
     return "'{$value}'";
   } else {
-    return json_encode($value);
+    return block_protocol_json_encode($value);
   }
 }
 
