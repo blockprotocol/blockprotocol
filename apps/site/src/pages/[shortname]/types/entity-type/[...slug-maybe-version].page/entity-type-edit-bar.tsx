@@ -64,17 +64,13 @@ export const EntityTypeEditBar = ({
             py: "18px",
           }}
         >
-          {isDraft ? (
-            <FontAwesomeIcon icon={faSmile} sx={{ fontSize: 14 }} />
-          ) : (
-            <PencilSimpleLineIcon />
-          )}
+          <PencilSimpleLineIcon sx={{ height: 16, width: 16 }} />
           <Typography sx={{ ml: 1, color: "white" }}>
-            <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+            <Box component="span" sx={{ fontWeight: "bold" }}>
               Currently editing
             </Box>{" "}
             {isDraft ? (
-              <>- this type has not yet been created</>
+              <>– this type has not yet been created</>
             ) : (
               `Version ${frozenVersion} -> ${frozenVersion + 1}`
             )}
