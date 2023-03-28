@@ -462,15 +462,17 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
             }}
             onClose={() => setAlertSnackBarOpen(false)}
           >
-            <Alert
-              description={
-                <>
-                  Please fix the errors in <b>Block Properties</b> before
-                  proceeding.
-                </>
-              }
-              type="warning"
-            />
+            <div>
+              <Alert
+                description={
+                  <>
+                    Please fix the errors in <b>Block Properties</b> before
+                    proceeding.
+                  </>
+                }
+                type="warning"
+              />
+            </div>
           </Snackbar>
         </Box>
       </Box>
