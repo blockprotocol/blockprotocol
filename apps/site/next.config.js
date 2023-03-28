@@ -148,6 +148,11 @@ const nextConfig = {
         destination: "/docs/blocks#your-own-application",
         permanent: true,
       },
+      {
+        source: "/settings/:slug*",
+        destination: "/account/:slug*",
+        permanent: true,
+      },
     ];
   },
 
