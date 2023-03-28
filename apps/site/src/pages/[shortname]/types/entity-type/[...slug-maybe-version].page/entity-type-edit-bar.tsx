@@ -1,4 +1,3 @@
-import { faSmile } from "@fortawesome/free-regular-svg-icons";
 import {
   EntityTypeEditorFormData,
   useEntityTypeFormState,
@@ -9,7 +8,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { Button } from "../../../../../components/button";
-import { FontAwesomeIcon } from "../../../../../components/icons";
 import { PencilSimpleLineIcon } from "../../../../../components/icons/pencil-simple-line";
 
 const useFrozenValue = <T extends any>(value: T): T => {
