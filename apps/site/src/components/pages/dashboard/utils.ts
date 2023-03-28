@@ -10,7 +10,7 @@ export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
   },
   {
     tabTitle: "My Account",
-    tabHref: "/account/api",
+    tabHref: "/account",
   },
 ];
 

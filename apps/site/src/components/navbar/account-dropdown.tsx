@@ -109,7 +109,7 @@ export const AccountDropdown: FunctionComponent = () => {
               </Typography>
             </ListItemButton>
           </Link>
-          <Link href="/account/api" onClick={() => setOpen(false)}>
+          <Link href="/account" onClick={() => setOpen(false)}>
             <ListItemButton sx={{ padding: (theme) => theme.spacing(1, 2) }}>
               <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
                 Account Settings
