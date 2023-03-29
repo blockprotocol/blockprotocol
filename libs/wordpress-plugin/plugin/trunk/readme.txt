@@ -37,7 +37,7 @@ You can also build your own block for the Block Protocol without any PHP, and pu
 **5.** If you want to add your own block to the plugin, visit https://blockprotocol.org/docs/developing-blocks
 
 Note that you must be using at least MySQL 5.7.8 or MariaDB 10.2.7. To check please navigate to `Admin -> Tools -> Site Health -> Info -> Database`.
-MySQL 5.6 and 5.7 respectively reach(ed) end of life in February 2021 and October 2023. 
+**MySQL 5.6** and **5.7** reach(ed) end of life in February 2021 and October 2023; and **MariaDB 10.2** and **10.3** in May 2022 and May 2023, respectively.
 You should upgrade to MySQL 8 (or MariaDB 10.11) now to continue to receive security updates, as well as to get the best Block Protocol experience within WordPress.
 
 When you install or use the _Block Protocol for WordPress_ plugin, we don’t send any data to any third-party analytics services. 
