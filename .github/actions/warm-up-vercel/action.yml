@@ -1,0 +1,32 @@
+name: Warm-up Vercel Lambdas
+description: Calls key Vercel Lambda functions to warm them up
+
+inputs:
+  deployment-base-url:
+    description: "The base URL of the deployment to warm up (or 'https://blockprotocol.org' for production)"
+    required: true
+
+runs:
+  using: composite
+
+  steps:
+    ## Vercel uses AWS Lambda. When we call getStaticProps in fallback mode or getServerSideProps,
+    ## a cold Lambda function may take 5-15 seconds to execute. This pipeline warms up Lambda
+    ## containers for new deployments and keeps them up by fetching affected URLs every 10 minutes.
+    ## Context: https://github.com/orgs/vercel/discussions/496
+    - name: Fetch URLs that use AWS Lambda
+      shell: bash
+      run: |
+        cat << EOF > curl-format.txt
+          %{url_effective}\n
+            Status code: %{response_code}\n
+            Time: %{time_total}\n
+          \n
+        EOF
+
+        for PATHNAME in "/@hash" "/@hash/blocks/divider/sandboxed-demo" "/api/me" "/api/blocks" "/@blockprotocol/types/entity-type/thing/v/2"; do
+          npx retry-cli@0.6.0 -- curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
+        done
+      env:
+        BASE_URL: ${{ inputs.deployment-base-url }}
+        NODE_OPTIONS: --no-deprecation ## https://github.com/tirsen/retry-cli/issues/7

@@ -1,0 +1,19 @@
+name: Scheduled production API warm-up
+
+on:
+  schedule:
+    - cron: "*/10 * * * *" ## Every 10 minutes
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  warm_up_production_api:
+    name: Warm up production API
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: ./.github/actions/warm-up-vercel
+        with:
+          deployment-base-url: "https://blockprotocol.org"
