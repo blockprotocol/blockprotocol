@@ -14,7 +14,6 @@ export type ApiLoginWithLoginCodeResponse = {
   user: SerializedUser;
 };
 
-// @todo should this error if user hasn't been verified yet?
 export default createBaseHandler<
   ApiLoginWithLoginCodeRequestBody,
   ApiLoginWithLoginCodeResponse
@@ -40,6 +39,16 @@ export default createBaseHandler<
       return res.status(404).json(
         formatErrors({
           msg: "Could not find user with the provided id",
+          value: userId,
+        }),
+      );
+    }
+
+    if (!user.hasVerifiedEmail) {
+      return res.status(400).json(
+        formatErrors({
+          msg: "User's email has not been verified yet",
+          param: "userId",
           value: userId,
         }),
       );

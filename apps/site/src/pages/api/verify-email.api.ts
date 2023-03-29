@@ -14,7 +14,6 @@ export type ApiVerifyEmailResponse = {
   user: SerializedUser;
 };
 
-// @todo should this error if the user is already verified?
 export default createBaseHandler<
   ApiVerifyEmailRequestBody,
   ApiVerifyEmailResponse
@@ -39,6 +38,16 @@ export default createBaseHandler<
       return res.status(404).json(
         formatErrors({
           msg: "Could not find user with the provided id",
+          param: "userId",
+          value: userId,
+        }),
+      );
+    }
+
+    if (user.hasVerifiedEmail) {
+      return res.status(400).json(
+        formatErrors({
+          msg: "User has already been verified",
           param: "userId",
           value: userId,
         }),
