@@ -14,6 +14,7 @@ export type ApiSignupResponse = {
   verificationCodeId: string;
 };
 
+// @todo don't add wordpress instance until you click on the link
 export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
   .use(bodyValidator("email").isEmail().toLowerCase())
   .use(
@@ -33,38 +34,36 @@ export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
     const { db, body } = req;
     const { email, wordpressInstanceUrl } = body;
 
-    const existingVerifiedUser = await User.getByEmail(db, {
+    let user = await User.getByEmail(db, {
       email,
       hasVerifiedEmail: true,
     });
 
-    if (existingVerifiedUser) {
-      // Email may be verified but shortname not entered yet, meaning can't generate API key.
-      throw new Error("@todo implement existing user flow");
-    }
+    if (user) {
+      user = await user.addWordpressInstanceUrl(db, wordpressInstanceUrl);
+    } else {
+      user = await User.getByEmail(db, {
+        email,
+        hasVerifiedEmail: false,
+      });
 
-    let existingNonVerifiedUser = await User.getByEmail(db, {
-      email,
-      hasVerifiedEmail: false,
-    });
-
-    if (existingNonVerifiedUser) {
-      existingNonVerifiedUser =
-        await existingNonVerifiedUser.addWordpressInstanceUrl(
+      if (user) {
+        user = await user.addWordpressInstanceUrl(
           db,
           wordpressInstanceUrl,
           true,
         );
+      }
     }
 
-    const user =
-      existingNonVerifiedUser ??
-      (await User.create(db, {
+    if (!user) {
+      user = await User.create(db, {
         email,
         hasVerifiedEmail: false,
         referrer: "wordpress",
         wordpressInstanceUrl,
-      }));
+      });
+    }
 
     if (await user.hasExceededEmailVerificationRateLimit(db)) {
       return res.status(403).json(

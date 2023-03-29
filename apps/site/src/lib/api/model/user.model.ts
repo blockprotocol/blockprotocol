@@ -425,7 +425,6 @@ export class User {
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .count({
         user: this.toRef(),
-        variant: "login",
         createdAt: {
           $gt: new Date(
             new Date().getTime() -
@@ -481,6 +480,10 @@ export class User {
     db: Db,
     wordpressInstanceUrl: string,
   ): Promise<VerificationCode> {
+    if (this.hasVerifiedEmail) {
+      throw new Error("@todo handle login verification");
+    }
+
     const emailVerificationCode = await this.createVerificationCode(db, {
       variant: "linkWordpress",
       wordpressInstanceUrl,
