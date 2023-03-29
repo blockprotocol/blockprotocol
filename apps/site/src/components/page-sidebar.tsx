@@ -60,11 +60,18 @@ type SidebarPageSectionProps = {
   setOpenedPages: Dispatch<SetStateAction<string[]>>;
 };
 
-const highlightSection = (isSectionSelected: boolean) => ({
-  borderLeft: `3px solid ${
+const highlightSection = (isSectionSelected: boolean) => {
+  const borderLeft = `3px solid ${
     isSectionSelected ? themeImport.palette.purple[700] : "transparent"
-  } !important`,
-});
+  }`;
+
+  return {
+    borderLeft,
+    ":focus-visible": {
+      borderLeft,
+    },
+  };
+};
 
 const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
   depth = 1,
