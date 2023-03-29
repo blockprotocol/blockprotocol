@@ -13,6 +13,7 @@ import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigati
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { ApiKeysSettingsPanel } from "./api-keys-settings-panel";
 import { BillingSettingsPanel } from "./billing-settings-panel/billing-settings-panel";
+import { UsagePanel } from "./usage-panel";
 
 const accountPanels = [
   ...(isBillingFeatureFlagEnabled
@@ -24,6 +25,11 @@ const accountPanels = [
         },
       ]
     : []),
+  {
+    title: "Usage",
+    slug: "usage",
+    panel: <UsagePanel />,
+  },
   {
     title: "API Keys",
     slug: "api",
