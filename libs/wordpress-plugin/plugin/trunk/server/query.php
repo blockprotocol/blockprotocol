@@ -51,7 +51,7 @@ function block_protocol_encode_filter_value($value)
   if (is_int($value)) {
     return "{$value}";
   } elseif (is_string($value)) {
-    return "'{$value}'";
+    return "\"{$value}\"";
   } else {
     return block_protocol_json_encode($value);
   }
