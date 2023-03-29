@@ -10,7 +10,7 @@ concurrency:
 jobs:
   e2e_tests:
     name: E2E tests
-    if: github.event.deployment_status.state == 'success'
+    if: github.event.deployment_status.state == 'success' && endsWith(github.event.deployment_status.environment, 'blockprotocol')
     runs-on: ubuntu-20.04
     timeout-minutes: 60
 
