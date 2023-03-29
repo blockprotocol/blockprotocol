@@ -47,6 +47,7 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   paddingBottom: 8,
   minHeight: SIDEBAR_LINK_HEIGHT,
   wordBreak: "break-word",
+  width: "100%",
 }));
 
 type SidebarPageSectionProps = {
