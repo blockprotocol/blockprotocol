@@ -14,7 +14,6 @@ export type ApiSignupResponse = {
   verificationCodeId: string;
 };
 
-// @todo don't add wordpress instance until you click on the link
 export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
   .use(bodyValidator("email").isEmail().toLowerCase())
   .use(
