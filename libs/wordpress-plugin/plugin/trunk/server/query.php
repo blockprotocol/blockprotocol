@@ -71,25 +71,42 @@ function block_protocol_extract_filter_value($filter, $raw = false)
   return block_protocol_encode_filter_value($filter_value);
 }
 
-function block_protocol_build_string_filter($filter_value, $json_path, $operator, &$sql_fragment, &$values)
+/**
+ * This function will return a SQL string that casts text to JSON. 
+ * Note that this is function is "unsafe" and shouldn't have any direct user data passed into it.
+ */
+function block_protocol_db_json_unsafe_cast(string $value, bool $is_maria_db)
+{
+  if($is_maria_db) {
+    return "JSON_COMPACT({$value})";
+  } else {
+    return "CAST({$value} AS JSON)";
+  }
+}
+
+function block_protocol_build_string_filter($filter_value, $json_path, $operator, &$sql_fragment, &$values, bool $is_maria_db)
 {
   global $wpdb;
   $escaped_filter_value = $wpdb->esc_like($filter_value);
 
   if ($operator === "CONTAINS_SEGMENT") {
-    $sql_fragment = "JSON_SEARCH(properties, 'one', %s, NULL, %s) IS NOT NULL";
+    $sql_fragment = block_protocol_db_json_unsafe_cast("JSON_SEARCH(properties, 'one', %s, NULL, %s)", $is_maria_db) 
+                    . " IS NOT NULL";
     $values[] = '%' . $escaped_filter_value . '%';
     $values[] = $json_path;
   } elseif ($operator === "DOES_NOT_CONTAIN_SEGMENT") {
-    $sql_fragment = "JSON_SEARCH(properties, 'one', '%%%s%%', NULL, %s) IS NULL";
+    $sql_fragment = block_protocol_db_json_unsafe_cast("JSON_SEARCH(properties, 'one', '%%%s%%', NULL, %s)", $is_maria_db)
+                    . " IS NULL";
     $values[] = $escaped_filter_value;
     $values[] = $json_path;
   } elseif ($operator === "STARTS_WITH") {
-    $sql_fragment = "JSON_SEARCH(properties, 'one', %s, NULL, %s) IS NOT NULL";
+    $sql_fragment = block_protocol_db_json_unsafe_cast("JSON_SEARCH(properties, 'one', %s, NULL, %s)", $is_maria_db)
+                    . " IS NOT NULL";
     $values[] = $escaped_filter_value . '%';
     $values[] = $json_path;
   } elseif ($operator === "ENDS_WITH") {
-    $sql_fragment = "JSON_SEARCH(properties, 'one', %s, NULL, %s) IS NOT NULL";
+    $sql_fragment = block_protocol_db_json_unsafe_cast("JSON_SEARCH(properties, 'one', %s, NULL, %s)", $is_maria_db)
+                    . " IS NOT NULL";
     $values[] = '%' . $escaped_filter_value;
     $values[] = $json_path;
   } else {
@@ -97,16 +114,16 @@ function block_protocol_build_string_filter($filter_value, $json_path, $operator
   }
 }
 
-function block_protocol_build_array_filter($raw_filter_value, $json_path, $operator, &$sql_fragment, &$values)
+function block_protocol_build_array_filter($raw_filter_value, $json_path, $operator, &$sql_fragment, &$values, bool $is_maria_db)
 {
   $encoded_value = block_protocol_encode_filter_value($raw_filter_value);
 
   if ($operator === "CONTAINS_SEGMENT") {
-    $sql_fragment = "JSON_CONTAINS(JSON_EXTRACT(properties, %s), CAST(%s AS JSON))";
+    $sql_fragment = "JSON_CONTAINS(JSON_EXTRACT(properties, %s), %s)";
     $values[] = $json_path;
     $values[] = $encoded_value;
   } elseif ($operator === "DOES_NOT_CONTAIN_SEGMENT") {
-    $sql_fragment = "NOT JSON_CONTAINS(JSON_EXTRACT(properties, %s), CAST(%s AS JSON))";
+    $sql_fragment = "NOT JSON_CONTAINS(JSON_EXTRACT(properties, %s), %s)";
     $values[] = $json_path;
     $values[] = $encoded_value;
   } elseif ($operator === "STARTS_WITH") {
@@ -115,17 +132,21 @@ function block_protocol_build_array_filter($raw_filter_value, $json_path, $opera
     // finally we check that the nth element in the db array is equal to the last (nth) element in the filter value
     $filter_value_count = count($raw_filter_value);
     if ($filter_value_count >= 1) {
-      $sql_fragment = "JSON_EXTRACT(properties, CONCAT(%s, '[0]')) = CAST(%s AS JSON)";
+      $sql_fragment = block_protocol_db_json_unsafe_cast("JSON_EXTRACT(properties, CONCAT(%s, '[0]'))", $is_maria_db) 
+                      . " = "
+                      . block_protocol_db_json_unsafe_cast("%s", $is_maria_db);
       $values[] = $json_path;
       $values[] = $raw_filter_value[0];
 
       if ($filter_value_count > 1) {
-        $sql_fragment .= " AND JSON_CONTAINS(JSON_EXTRACT(properties, %s), CAST(%s as JSON))";
+        $sql_fragment .= " AND JSON_CONTAINS(JSON_EXTRACT(properties, %s), %s)";
         $values[] = $json_path;
         $values[] = $encoded_value;
 
         $last_idx = $filter_value_count - 1;
-        $sql_fragment .= " AND JSON_EXTRACT(properties, CONCAT(%s, '[%d]')) = CAST(%s AS JSON)";
+        $sql_fragment .= block_protocol_db_json_unsafe_cast(" AND JSON_EXTRACT(properties, CONCAT(%s, '[%d]'))", $is_maria_db)
+                         . " = "
+                         . block_protocol_db_json_unsafe_cast("%s", $is_maria_db);
         $values[] = $json_path;
         $values[] = $last_idx;
         $values[] = $raw_filter_value[$last_idx];
@@ -136,17 +157,22 @@ function block_protocol_build_array_filter($raw_filter_value, $json_path, $opera
     $filter_value_count = count($raw_filter_value);
     if ($filter_value_count >= 1) {
       $last_idx = $filter_value_count - 1;
-      $sql_fragment = "JSON_EXTRACT(properties, CONCAT(%s, '[', JSON_LENGTH(JSON_EXTRACT(properties, %s)) - 1, ']')) = CAST(%s AS JSON)";
+      $sql_fragment = block_protocol_db_json_unsafe_cast("JSON_EXTRACT(properties, CONCAT(%s, '[', JSON_LENGTH(JSON_EXTRACT(properties, %s)) - 1, ']'))", $is_maria_db)
+                      . " = "
+                      .  block_protocol_db_json_unsafe_cast("%s", $is_maria_db);
       $values[] = $json_path;
       $values[] = $json_path;
       $values[] = $raw_filter_value[$last_idx];
 
       if ($filter_value_count > 1) {
-        $sql_fragment .= " AND JSON_CONTAINS(JSON_EXTRACT(properties, %s), CAST(%s as JSON))";
+        $sql_fragment .= " AND JSON_CONTAINS(JSON_EXTRACT(properties, %s), %s)";
         $values[] = $json_path;
         $values[] = $encoded_value;
 
-        $sql_fragment .= " AND JSON_EXTRACT(properties, CONCAT(%s, '[', JSON_LENGTH(JSON_EXTRACT(properties, %s)) - %d, ']')) = CAST(%s AS JSON)";
+        $sql_fragment .= " AND "
+                         . block_protocol_db_json_unsafe_cast("JSON_EXTRACT(properties, CONCAT(%s, '[', JSON_LENGTH(JSON_EXTRACT(properties, %s)) - %d, ']'))", $is_maria_db)
+                         . " = "
+                         .  block_protocol_db_json_unsafe_cast("%s", $is_maria_db);
         $values[] = $json_path;
         $values[] = $json_path;
         $values[] = $filter_value_count;
@@ -167,7 +193,7 @@ user input to prevent any form of SQL injeciton.
 We get around this by using placeholders for prepared statements in place of any
 kind of user value, and collect a list of values to be used in the prepared statement.
 */
-function block_protocol_query_entities($multi_filter, $multi_sort)
+function block_protocol_query_entities(array $multi_filter, array $multi_sort, bool $is_maria_db)
 {
   $multi_filter_operator = isset($multi_filter['operator']) ? $multi_filter['operator'] : [];
   $multi_filters = isset($multi_filter['filters']) ? $multi_filter['filters'] : [];
@@ -207,12 +233,16 @@ function block_protocol_query_entities($multi_filter, $multi_sort)
       $filter_values[] = $json_path;
     } elseif ($operator === "EQUALS") {
       $filter_value = block_protocol_extract_filter_value($subfilter);
-      $sql_fragment = "JSON_EXTRACT(properties, %s) = CAST(%s AS JSON)";
+      $sql_fragment = block_protocol_db_json_unsafe_cast("JSON_EXTRACT(properties, %s)", $is_maria_db)
+                      . " = "
+                      . block_protocol_db_json_unsafe_cast("%s", $is_maria_db);
       $filter_values[] = $json_path;
       $filter_values[] = $filter_value;
     } elseif ($operator === "DOES_NOT_EQUAL") {
       $filter_value = block_protocol_extract_filter_value($subfilter);
-      $sql_fragment = "JSON_EXTRACT(properties, %s) != CAST(%s AS JSON)";
+      $sql_fragment = block_protocol_db_json_unsafe_cast("JSON_EXTRACT(properties, %s)", $is_maria_db)
+                      . " != "
+                      . block_protocol_db_json_unsafe_cast("%s", $is_maria_db);
       $filter_values[] = $json_path;
       $filter_values[] = $filter_value;
     } elseif ($filter_value = block_protocol_extract_filter_value($subfilter, $raw = true)) {
@@ -256,9 +286,10 @@ function block_protocol_query_entities($multi_filter, $multi_sort)
   $where_clause = empty($filter_placeholders) ? "" : "WHERE " . implode(" {$operator} ", $filter_placeholders);
   $sort_clause = empty($sort_placeholders) ? "" : "ORDER BY " . implode(", ", $sort_placeholders);
 
+  $selection = block_protocol_entity_selection();
   $table = get_block_protocol_table_name();
   return array(
-    'sql' => "SELECT * FROM {$table} {$where_clause} {$sort_clause}",
+    'sql' => "SELECT {$selection} FROM {$table} {$where_clause} {$sort_clause}",
     'values' => array_merge($filter_values, $sort_values),
   );
 }

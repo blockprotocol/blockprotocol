@@ -423,8 +423,11 @@ function query_block_protocol_entities(WP_REST_Request $request)
   $multi_filter = $params["operation"]["multiFilter"] ?? [];
   $multi_sort = $params["operation"]["multiSort"] ?? [];
 
+  $db_server_info = $wpdb->db_server_info();
+  $is_maria_db = strpos($db_server_info, 'MariaDB') != false;
+
   try {
-    $query = block_protocol_query_entities($multi_filter, $multi_sort);
+    $query = block_protocol_query_entities($multi_filter, $multi_sort, $is_maria_db);
   } catch (InvalidArgumentException $e) {
     return ["error" => $e->getMessage()];
   }
