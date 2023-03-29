@@ -24,7 +24,7 @@ runs:
           \n
         EOF
 
-        for PATHNAME in "/@hash" "/@hash/blocks/divider/sandboxed-demo" "/api/me" "/api/blocks" "/@blockprotocol/types/entity-type/thing/v/2"; do
+        for PATHNAME in "/" "/hub" "/@hash" "/@hash/blocks/divider/sandboxed-demo" "/api/me" "/api/blocks" "/@blockprotocol/types/entity-type/thing/v/2"; do
           npx retry-cli@0.6.0 -- curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
         done
       env:
