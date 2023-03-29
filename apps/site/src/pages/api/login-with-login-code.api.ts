@@ -14,6 +14,7 @@ export type ApiLoginWithLoginCodeResponse = {
   user: SerializedUser;
 };
 
+// @todo should this error if user hasn't been verified yet?
 export default createBaseHandler<
   ApiLoginWithLoginCodeRequestBody,
   ApiLoginWithLoginCodeResponse
@@ -48,7 +49,7 @@ export default createBaseHandler<
 
     const loginCode = await user.getVerificationCode(db, {
       verificationCodeId,
-      variant: "login",
+      variant: ["login", "linkWordpress"],
     });
 
     if (!loginCode) {
@@ -71,6 +72,25 @@ export default createBaseHandler<
             param: "code",
             value: code,
           }),
+        );
+      }
+
+      if (loginCode.variant === "linkWordpress") {
+        const { wordpressInstanceUrl } = loginCode;
+        if (!wordpressInstanceUrl) {
+          return res.status(500).json(
+            formatErrors({
+              msg: "Internal error. Please try again.",
+              param: "code",
+              value: code,
+            }),
+          );
+        }
+
+        await user.addWordpressInstanceUrlAndVerify(
+          db,
+          wordpressInstanceUrl,
+          !user.hasVerifiedEmail,
         );
       }
 

@@ -59,11 +59,10 @@ export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
       );
     }
 
-    const { id: verificationCodeId } =
-      await user.sendEmailVerificationCodeForWordpress(
-        db,
-        wordpressInstanceUrl,
-      );
+    const { id: verificationCodeId } = await user.sendLinkWordpressCode(
+      db,
+      wordpressInstanceUrl,
+    );
 
     res.status(200).json({ userId: user.id, verificationCodeId });
   });

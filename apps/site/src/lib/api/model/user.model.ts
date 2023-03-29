@@ -477,20 +477,19 @@ export class User {
     return emailVerificationCode;
   }
 
-  async sendEmailVerificationCodeForWordpress(
+  async sendLinkWordpressCode(
     db: Db,
     wordpressInstanceUrl: string,
   ): Promise<VerificationCode> {
-    if (this.hasVerifiedEmail) {
-      throw new Error("@todo handle login verification");
-    }
-
     const emailVerificationCode = await this.createVerificationCode(db, {
       variant: "linkWordpress",
       wordpressInstanceUrl,
     });
 
-    const magicLinkQueryParams: ApiVerifyEmailRequestBody & {
+    const magicLinkQueryParams: (
+      | ApiVerifyEmailRequestBody
+      | ApiLoginWithLoginCodeRequestBody
+    ) & {
       email: string;
     } = {
       email: this.email,
@@ -499,7 +498,9 @@ export class User {
       code: emailVerificationCode.code,
     };
 
-    const magicLink = `${FRONTEND_URL}/signup?${new URLSearchParams(
+    const path = this.hasVerifiedEmail ? "login" : "signup";
+
+    const magicLink = `${FRONTEND_URL}/${path}?${new URLSearchParams(
       magicLinkQueryParams,
     ).toString()}`;
 
@@ -515,7 +516,11 @@ export class User {
         to: this.email,
         subject: "Activate your Block Protocol Wordpress plugin",
         html: dedent`
-          <p>To finish creating your Block Protocol account, and to link it to your Wordpress instance, <a href="${magicLink}">click here</a>.</p>
+          <p>To ${
+            this.hasVerifiedEmail
+              ? "login to your Block Protocol account"
+              : "finish creating your Block Protocol account"
+          }, and to link it to your Wordpress instance, <a href="${magicLink}">click here</a>.</p>
           <p><em>Alternatively, you copy the URL and paste it into your browser: ${magicLink}</em></p>
         `,
       });
