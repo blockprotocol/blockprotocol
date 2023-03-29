@@ -311,7 +311,7 @@ export class User {
     return this;
   }
 
-  async addWordpressInstanceUrl(
+  async addWordpressInstanceUrlAndVerify(
     db: Db,
     wordpressInstanceUrl: string,
     updateReferrer = false,
@@ -326,6 +326,7 @@ export class User {
             ],
           }),
       ...(updateReferrer ? { referrer: "wordpress" } : {}),
+      hasVerifiedEmail: true,
     });
   }
 

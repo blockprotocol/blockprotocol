@@ -34,36 +34,22 @@ export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
     const { db, body } = req;
     const { email, wordpressInstanceUrl } = body;
 
-    let user = await User.getByEmail(db, {
-      email,
-      hasVerifiedEmail: true,
-    });
-
-    if (user) {
-      user = await user.addWordpressInstanceUrl(db, wordpressInstanceUrl);
-    } else {
-      user = await User.getByEmail(db, {
+    // We don't set referrer or instanceUrl for existing users until verification for security
+    const user =
+      (await User.getByEmail(db, {
+        email,
+        hasVerifiedEmail: true,
+      })) ??
+      (await User.getByEmail(db, {
         email,
         hasVerifiedEmail: false,
-      });
-
-      if (user) {
-        user = await user.addWordpressInstanceUrl(
-          db,
-          wordpressInstanceUrl,
-          true,
-        );
-      }
-    }
-
-    if (!user) {
-      user = await User.create(db, {
+      })) ??
+      (await User.create(db, {
         email,
         hasVerifiedEmail: false,
         referrer: "wordpress",
         wordpressInstanceUrl,
-      });
-    }
+      }));
 
     if (await user.hasExceededEmailVerificationRateLimit(db)) {
       return res.status(403).json(

@@ -7,22 +7,21 @@ import { User } from "./user.model";
 
 export type VerificationCodeVariant = "login" | "email" | "linkWordpress";
 
-export type VerificationCodePropertiesVariant =
-  | {
-      variant: Exclude<VerificationCodeVariant, "linkWordpress">;
-    }
-  | {
-      variant: "linkWordpress";
-      wordpressInstanceUrl: string;
-    };
-
 export type VerificationCodeProperties = {
   user: DBRef;
   code: string;
   numberOfAttempts: number;
   used: boolean;
   createdAt: Date;
-} & VerificationCodePropertiesVariant;
+  variant: VerificationCodeVariant;
+  wordpressInstanceUrl?: string;
+};
+
+// @note not using a discriminated union to match class properties, where that isn't possible
+export type VerificationCodePropertiesVariant = Pick<
+  VerificationCodeProperties,
+  "variant" | "wordpressInstanceUrl"
+>;
 
 export type VerificationCodeDocument = WithId<VerificationCodeProperties>;
 
@@ -44,6 +43,8 @@ export class VerificationCode {
   used: boolean;
 
   createdAt: Date;
+
+  wordpressInstanceUrl?: string;
 
   static COLLECTION_NAME = "bp-verification-codes";
 
@@ -68,6 +69,7 @@ export class VerificationCode {
     numberOfAttempts,
     used,
     createdAt,
+    wordpressInstanceUrl,
   }: VerificationCodeConstructorArgs) {
     this.id = id;
     this.variant = variant;
@@ -76,6 +78,7 @@ export class VerificationCode {
     this.numberOfAttempts = numberOfAttempts;
     this.used = used;
     this.createdAt = createdAt;
+    this.wordpressInstanceUrl = wordpressInstanceUrl;
   }
 
   static fromDocument({ _id, ...remainingDocument }: VerificationCodeDocument) {

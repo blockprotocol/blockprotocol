@@ -14,6 +14,7 @@ export type ApiVerifyEmailResponse = {
   user: SerializedUser;
 };
 
+// @todo should this error if the user is already verified?
 export default createBaseHandler<
   ApiVerifyEmailRequestBody,
   ApiVerifyEmailResponse
@@ -78,7 +79,26 @@ export default createBaseHandler<
         );
       }
 
-      await user.update(db, { hasVerifiedEmail: true });
+      if (emailVerificationCode.variant === "linkWordpress") {
+        const { wordpressInstanceUrl } = emailVerificationCode;
+        if (!wordpressInstanceUrl) {
+          return res.status(500).json(
+            formatErrors({
+              msg: "Internal error. Please try again.",
+              param: "code",
+              value: code,
+            }),
+          );
+        }
+
+        await user.addWordpressInstanceUrlAndVerify(
+          db,
+          wordpressInstanceUrl,
+          !user.hasVerifiedEmail,
+        );
+      } else {
+        await user.update(db, { hasVerifiedEmail: true });
+      }
 
       req.login(user, () =>
         res.status(200).json({ user: user.serialize(true) }),
