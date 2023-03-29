@@ -29,9 +29,8 @@ test("dashboard page should contain key elements", async ({ page }) => {
   await expect(page.locator("text=Welcome back, Alice!")).toBeVisible();
 
   for (const [text, url] of [
-    ["Build a block", "/docs/developing-blocks"],
-    ["My blocks", "/@alice/blocks"],
-    ["My types", "/@alice/all-types"],
+    ["Build a block", "/docs/blocks/develop"],
+    ["Create a Type", "/@alice/all-types"],
     ["Create and manage API keys", "/settings/api-keys"],
     ["View your public profile", "/@alice"],
     ["Browse blocks for inspiration", "/hub"],

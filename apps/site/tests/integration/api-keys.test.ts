@@ -34,7 +34,7 @@ test("API key page should generate a valid key", async ({
   ).toBeVisible();
   await expect(page.locator("data-test-id=apiKeyLink").first()).toHaveAttribute(
     "href",
-    "/docs/using-blocks#discovering-blocks",
+    "/docs#th-hub-and-api",
   );
   await expect(tableWithKeys).not.toBeVisible();
 

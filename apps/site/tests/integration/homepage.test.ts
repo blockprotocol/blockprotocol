@@ -36,7 +36,7 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(
     page.locator("text=Learn more about embedding Þ blocks"),
-  ).toHaveAttribute("href", "/docs/using-blocks");
+  ).toHaveAttribute("href", "/docs/blocks/environments#your-own-application");
 
   // Composable interfaces section
   await expect(page.locator("[data-testid='WordPress-button']")).toBeVisible();
@@ -77,12 +77,12 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(page.locator("text=Build a block")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks",
+    "/docs/blocks/develop",
   );
 
   await expect(page.locator("text=Browse apps")).toHaveAttribute(
     "href",
-    "/docs/using-blocks",
+    "/docs/blocks/environments",
   );
 
   await expect(page.locator("text=Browse blocks")).toHaveAttribute(
@@ -107,7 +107,7 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(page.locator("text=build it!")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks",
+    "/docs/blocks/develop",
   );
 
   // Block slider

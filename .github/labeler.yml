@@ -1,21 +1,20 @@
-"app: site":
-  - "apps/site/**"
-
 "area: apps":
   - "apps/**"
+  - "!apps/site/src/_pages/**"
+
+"area: apps > site":
+  - "apps/site/**"
+
+"area: blocks":
+  - "blocks/**"
 
 "area: dependencies":
   - "**/patches/**"
   - "**/yarn.lock"
 
-"area: docs":
-  - "apps/site/src/_pages/docs/**"
-
-"area: hub":
-  - "hub/**"
-
 "area: infra":
   - ".changeset/config.json"
+  - ".config/**"
   - ".github/**"
   - ".husky/**"
   - "infra/**"
@@ -24,48 +23,70 @@
 "area: libs":
   - "libs/**"
 
-"area: rfcs":
+"area: tests":
+  - "**/*.test.ts"
+  - "**/tests/**"
+
+"area: user success":
+  - "apps/site/src/_pages/docs/**"
+  - "apps/site/src/_pages/spec/**"
+  - "apps/site/src/_pages/roadmap/**"
+  - "rfcs"
+
+"area: user success > docs":
+  - "apps/site/src/_pages/docs/**"
+
+"area: user success > rfcs":
   - "rfcs/**"
 
-"area: spec":
+"area: user success > spec":
   - "apps/site/src/_pages/spec/**"
 
-"lib: @Þ/core":
+"area: libs > @Þ/core":
   - "libs/@blockprotocol/core/**"
 
-"lib: @Þ/graph":
+"area: libs > @Þ/design-system":
+  - "libs/@blockprotocol/design-system/**"
+
+"area: libs > @Þ/graph":
   - "libs/@blockprotocol/graph/**"
 
-"lib: @Þ/hook":
+"area: libs > @Þ/hook":
   - "libs/@blockprotocol/hook/**"
 
-"lib: @Þ/type-system":
+"area: libs > @Þ/type-system":
   - "libs/@blockprotocol/type-system-node/**"
   - "libs/@blockprotocol/type-system-web/**"
 
-"lib: @local/*":
+"area: libs > @local/*":
   - "libs/@local/**"
 
-"lib: block-scripts":
+"area: libs > block-scripts":
   - "libs/block-scripts/**"
 
-"lib: block-template-custom-element":
+"area: libs > block-template-custom-element":
   - "libs/block-template-custom-element/**"
 
-"lib: block-template-html":
+"area: libs > block-template-html":
   - "libs/block-template-html/**"
 
-"lib: block-template-react":
+"area: libs > block-template-react":
   - "libs/block-template-react/**"
 
-"lib: blockprotocol":
+"area: libs > blockprotocol":
   - "libs/blockprotocol/**"
 
-"lib: create-block-app":
+"area: libs > create-block-app":
   - "libs/create-block-app/**"
 
-"lib: mock-block-dock":
+"area: libs > mock-block-dock":
   - "libs/mock-block-dock/**"
 
-"lib: wordpress-plugin":
+"area: libs > wordpress-plugin":
   - "libs/wordpress-plugin/**"
+
+"type: frontend":
+  - "libs/@blockprotocol/design-system/**"
+
+"type: writing":
+  - "apps/site/src/_pages/**"

@@ -2,41 +2,39 @@
 
 ## Overview
 
-The Block Protocol (**Þ**) is an open standard for building block-based interfaces. It enables applications to make their interfaces extensible with interoperable components: blocks.
+The Block Protocol (**Þ**) is an open standard that defines how frontend components called **blocks** can be built and used.
 
-The following pages provide a practical introduction for those:
+Block developers can build blocks that work in any application, without knowing anything about the environment in which they'll end up.
 
-- [using blocks](https://blockprotocol.org/docs/using-blocks) within applications that support the Block Protocol
-- [building blocks](https://blockprotocol.org/docs/developing-blocks) and publishing them to the [Þ Hub](https://blockprotocol.org/hub)
-- [building block-based applications](https://blockprotocol.org/docs/using-blocks#other-environments) that leverage the Block Protocol
+Likewise, applications can make their interfaces infinitely extensible without any special knowledge of the blocks that people might develop.
 
-If you have any questions, [please open or contribute to a discussion](https://github.com/blockprotocol/blockprotocol/discussions). You can also [chat to us on Discord](https://blockprotocol.org/discord).
+In one sense, you can think of the Block Protocol as a plugin framework **for the whole web**. Þ blocks are supported in a number of environments today, including the world's most-used content management system,[WordPress](https://blockprotocol.org/docs/blocks/environments#wordpress).
 
-## What is a block?
+## Getting started
 
-**Blocks** are the basic units we use to build pages on the modern web. They are rectangular sections that contain a set of features and functions. They are sometimes also called _components_ or _widgets_.
+The following pages provide a practical introduction for:
 
-Each block has a **type** that determines the kind of data it can display and edit. You're probably familiar with the most common block types such as _paragraph_, _header_, _image_, _list_, and _table_. Some block types have more advanced interactive features such as filtering, search, and sorting.
+- users hoping to [use blocks](https://blockprotocol.org/docs/blocks/environments) within applications that support the Block Protocol
+- developers who want to [build blocks](https://blockprotocol.org/docs/blocks/develop) and publish them to the [Þ Hub](https://blockprotocol.org/hub)
+- developers working on applications considering [implementing the protocol](https://blockprotocol.org/docs/blocks/environments#other-environments)
 
-There are an infinite number of possible block types. One goal of the Block Protocol is to encourage developers to build and share brand new types of blocks that haven't been seen before, and for applications to offer users far more blocks than any one team could imagine or build.
+## Key concepts
 
-Blocks can be added to webpages using plain HTML and/or JavaScript. Some modern content management systems (eg. WordPress, Squarespace) and applications (eg. Notion, Coda) allow you to add blocks to a page using a visual interface. With these block-based editors you can usually rearrange the order of blocks on a page using drag and drop. Blocks can be stacked on top of one another, arranged in columns, or embedded inside other blocks.
+We additionally explain core concepts in the Block Protocol, including:
 
-From a developer perspective, blocks encapsulate a set of specific functionality. Building a block is no different to writing a React, Vue, or [Web Component](https://en.wikipedia.org/wiki/Web_Components) – in fact, these are all ways you might implement a block. They are reusable elements that expect certain data to be passed to them (what we refer to as a block’s ‘schema’). For example, an image block might only accept an image URL in its `src` property, not a number.
+- [Blocks](https://blockprotocol.org/docs/blocks): what they actually are, and what makes Þ blocks special
+- [Types](https://blockprotocol.org/docs/types): an overview, how to get started using them, and how they enable next-level modeling of structured content and data
+- [Services](https://blockprotocol.org/docs/services): how external APIs and information are usable within blocks
 
-## What is a Þ block?
+If you have any questions, [please open or contribute to a discussion](https://github.com/blockprotocol/blockprotocol/discussions) on GitHub, or [chat to us on Discord](https://blockprotocol.org/discord).
 
-Any block can become a Þ block by meeting the requirements defined in the specification. These requirements define what data a block can accept and how they're allowed to interact with that data. This standardized approach makes it possible to use and embed Þ blocks across any different kind of web application, provided it supports the protocol.
+## Þ Hub & API
 
-Þ blocks can read and write data to the applications they're embedded inside without any extra setup or custom integrations (as long as both the block and embedding application adhere to the specification).
+[Blocks](https://blockprotocol.org/docs/blocks) and [types](https://blockprotocol.org/docs/types) can be published and discovered on the [Þ Hub](https://blockprotocol.org/hub), an open-source registry that anybody can use. There are two ways to access it:
 
-The Block Protocol is free to use, and any application can enable the use of Þ blocks by following the [requirements for embedders](https://blockprotocol.org/docs/using-blocks).
+1.  **in-browser** by navigating to [`blockprotocol.org/hub`](https://blockprotocol.org/hub): no account is required to browse and test blocks
+1.  **programmatically** from within other applications: either a user or an embedding application can create a free API key in order to query blocks from the Þ Hub via its API
 
-## What is the Þ Hub?
+The Þ Hub exists because interoperability without discoverability is of limited use.\*\* The Þ Hub provides a single persistent, reliable, and open-source point of reference for the discovery of new Þ-compatible content. Creators only need to publish once, while embedding applications can easily discover new blocks, types and services, making them instantly available to their own users.
 
-Blocks and types can be published and discovered on the [Þ Hub](https://blockprotocol.org/hub), an open-source registry that anybody can use. There are two ways to access it:
-
-- **in-browser** by navigating to [`blockprotocol.org/hub`](https://blockprotocol.org/hub): no account is required to browse and test blocks
-- **programmatically** from within other applications: either a user or an embedding application must create a free API key in order to query blocks from the Þ Hub via its API
-
-The Þ Hub provides a single persistent, reliable, and open-source point of reference for the discovery of new content. This means creators only need to publish once, while embedding applications can easily discover new blocks, types and endpoints, making them instantly available to their own users.
+In addition to blocks and types, we intend to list currently supported [services](https://blockprotocol.org/docs/services) on the Þ Hub soon, and will support directly self-listing new services at a later date.

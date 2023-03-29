@@ -66,7 +66,7 @@ Within `trunk` there are:
 - Choose the appropriate semver version number (e.g. `0.1.0`), and then make sure it is reflected in the following places in `plugin/trunk/`:
 
   - in the header in `block-protocol.php` (two places)
-  - the value for `BLOCK_PROTOCOL_PLUGIN_VERISON` in `block-protocol.php`
+  - the value for `BLOCK_PROTOCOL_PLUGIN_VERSION` in `block-protocol.php`
   - `Stable tag` in `readme.txt`
   - also update `version` in `package.json` (next to this README)
 
@@ -108,7 +108,7 @@ Within `trunk` there are:
 
 - **WordPress:** you must be running at least WordPress 5.6 (due to Composer autoload)
 - **PHP 7.4 or later:** your server must be running at least PHP 7.4. PHP 8.0 and 8.1 are also supported.
-- **MySQL 8 _or_ MariaDB 10.2.7+:** your database must be using at least MySQL 8 (due to use of recursive CTE queries). Be aware, the previous version of MySQL (5.6 and 5.7) respectively reach(ed) end of life in February 2021 and October 2023. You should upgrade to MySQL 8 now to continue to receive security updates, as well as to use the Block Protocol within WordPress. As for MariaDB, although the plugin would work with an old version, we strongly recommend using the newest version available to you.
+- **MySQL 5.7.8+ _or_ MariaDB 10.2.7+:** your database must be using at least MySQL 5.7.8. Be aware, MySQL 5.6 and 5.7 respectively reach(ed) end of life in February 2021 and October 2023. You should upgrade to MySQL 8 now to continue to receive security updates, as well as to get the best Block Protocol experience within WordPress. As for MariaDB, although the plugin would work with an older version, we strongly recommend using the newest version available to you.
 - **HTTPS:** your webhost must support HTTPS in order for the Block Protocol to properly function.
 
 To check what your WordPress instance supports, please navigate to `Admin -> Tools -> Site Health -> Info` and then click into either `Server` (for PHP) or `Database` (for MySQL/MariaDB).

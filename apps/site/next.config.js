@@ -70,8 +70,23 @@ const nextConfig = {
       },
       {
         source: "/docs/publishing-blocks",
-        destination: "/docs/developing-blocks#publish",
+        destination: "/docs/blocks#publish",
         permanent: true,
+      },
+      {
+        source: "/docs/working-with-services",
+        destination: "/docs/services",
+        permanent: false,
+      },
+      {
+        source: "/docs/developing-blocks",
+        destination: "/docs/blocks/develop",
+        permanent: false,
+      },
+      {
+        source: "/docs/using-blocks",
+        destination: "/docs/blocks/environments",
+        permanent: false,
       },
       {
         source: "/spec/:slug*",
@@ -125,12 +140,12 @@ const nextConfig = {
       },
       {
         source: "/docs/spec/rfcs_and_roadmap",
-        destination: "/docs/spec/roadmap",
+        destination: "/docs/roadmap",
         permanent: true,
       },
       {
         source: "/docs/embedding-blocks",
-        destination: "/docs/using-blocks",
+        destination: "/docs/blocks#your-own-application",
         permanent: true,
       },
     ];

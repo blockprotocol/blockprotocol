@@ -62,7 +62,7 @@ const BrowseBlocksSection = ({ isMobile = false }) => {
           <strong>Anyone can publish a block.</strong>{" "}
           {isMobile ? <br /> : null}If you can’t see one you want,{" "}
           <Link
-            href="/docs/developing-blocks"
+            href="/docs/blocks/develop"
             sx={{
               color: ({ palette }) => `${palette.purple[700]} !important`,
             }}
