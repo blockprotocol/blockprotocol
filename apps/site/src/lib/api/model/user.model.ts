@@ -90,6 +90,8 @@ export class User {
   stripeSubscriptionTier?: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
+  wordpressInstanceUrls?: string[];
+  referrer: UserProperties["referrer"];
 
   static COLLECTION_NAME = "bp-users";
 
@@ -119,6 +121,8 @@ export class User {
     this.stripeSubscriptionTier = args.stripeSubscriptionTier;
     this.canMakeApiServiceCalls = args.canMakeApiServiceCalls;
     this.usageLimitCents = args.usageLimitCents;
+    this.wordpressInstanceUrls = args.wordpressInstanceUrls;
+    this.referrer = args.referrer;
   }
 
   private static isShortnameReserved(shortname: string): boolean {
@@ -305,6 +309,24 @@ export class User {
     merge(this, updatedProperties);
 
     return this;
+  }
+
+  async addWordpressInstanceUrl(
+    db: Db,
+    wordpressInstanceUrl: string,
+    updateReferrer = false,
+  ) {
+    return await this.update(db, {
+      ...(this.wordpressInstanceUrls?.includes(wordpressInstanceUrl)
+        ? {}
+        : {
+            wordpressInstanceUrls: [
+              ...(this.wordpressInstanceUrls ?? []),
+              wordpressInstanceUrl,
+            ],
+          }),
+      ...(updateReferrer ? { referrer: "wordpress" } : {}),
+    });
   }
 
   isSignedUp(): boolean {

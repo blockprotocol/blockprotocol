@@ -14,7 +14,6 @@ export type ApiSignupResponse = {
   verificationCodeId: string;
 };
 
-// @todo reduce duplication
 export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
   .use(bodyValidator("email").isEmail().toLowerCase())
   .use(
@@ -34,19 +33,32 @@ export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
     const { db, body } = req;
     const { email, wordpressInstanceUrl } = body;
 
-    const existingUser = await User.getByEmail(db, {
+    const existingVerifiedUser = await User.getByEmail(db, {
       email,
       hasVerifiedEmail: true,
     });
 
-    if (existingUser) {
+    if (existingVerifiedUser) {
       // Email may be verified but shortname not entered yet, meaning can't generate API key.
       throw new Error("@todo implement existing user flow");
     }
 
-    // @todo what if user exists but with different wordpressInstanceUrl or referrer, but hasn't been verified? – need to update user
+    let existingNonVerifiedUser = await User.getByEmail(db, {
+      email,
+      hasVerifiedEmail: false,
+    });
+
+    if (existingNonVerifiedUser) {
+      existingNonVerifiedUser =
+        await existingNonVerifiedUser.addWordpressInstanceUrl(
+          db,
+          wordpressInstanceUrl,
+          true,
+        );
+    }
+
     const user =
-      (await User.getByEmail(db, { email, hasVerifiedEmail: false })) ||
+      existingNonVerifiedUser ??
       (await User.create(db, {
         email,
         hasVerifiedEmail: false,
