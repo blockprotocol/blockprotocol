@@ -28,9 +28,9 @@ import { FontAwesomeIcon } from "../../../../components/icons";
 import { Link } from "../../../../components/link";
 import { Modal } from "../../../../components/modal/modal";
 import { internalApi } from "../../../../lib/internal-api-client";
-import { AddPaymentMethod } from "../../billing-settings-panel/add-payment-method-form";
-import { cardDetailsPanelPageAsPath } from "../../billing-settings-panel/card-details-panel-page";
-import { PaymentMethod } from "../../billing-settings-panel/payment-method";
+import { AddPaymentMethod } from "../../billing-panel/add-payment-method-form";
+import { cardDetailsPanelPageAsPath } from "../../billing-panel/card-details-panel-page";
+import { PaymentMethod } from "../../billing-panel/payment-method";
 
 type ChangePaymentMethodModalProps = {
   subscription: Stripe.Subscription;

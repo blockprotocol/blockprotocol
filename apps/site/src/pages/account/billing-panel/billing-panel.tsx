@@ -104,7 +104,7 @@ const getBreadcrumbsOfPanelPage = (params: {
   return [];
 };
 
-export const BillingSettingsPanel: FunctionComponent = () => {
+export const BillingPanel: FunctionComponent = () => {
   const router = useRouter();
 
   const [subscriptionTierPrices, setSubscriptionTierPrices] =

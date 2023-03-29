@@ -24,9 +24,9 @@ import {
   numberOfOpenaiHobbyLanguageTokens,
   numberOfThousandOpenaiHobbyWords,
   numberOfThousandOpenaiProWords,
-} from "../../../pages/account/billing-settings-panel/external-service-free-allowance";
-import { SubscriptionFeatureList } from "../../../pages/account/billing-settings-panel/subscription-feature-list";
-import { SubscriptionFeature } from "../../../pages/account/billing-settings-panel/subscription-feature-list-item";
+} from "../../../pages/account/billing-panel/external-service-free-allowance";
+import { SubscriptionFeatureList } from "../../../pages/account/billing-panel/subscription-feature-list";
+import { SubscriptionFeature } from "../../../pages/account/billing-panel/subscription-feature-list-item";
 import {
   PaidSubscriptionTier,
   priceToHumanReadable,

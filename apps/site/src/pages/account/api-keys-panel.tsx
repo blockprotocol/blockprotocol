@@ -11,7 +11,7 @@ import { DateTimeCell } from "../../components/table-cells";
 import { UserFacingApiKeyProperties } from "../../lib/api/model/api-key.model";
 import { apiClient } from "../../lib/api-client";
 
-export const ApiKeysSettingsPanel: FunctionComponent = () => {
+export const ApiKeysPanel: FunctionComponent = () => {
   const [activeApiKeys, setActiveApiKeys] = useState<
     UserFacingApiKeyProperties[]
   >([]);

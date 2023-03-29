@@ -11,8 +11,8 @@ import {
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
-import { ApiKeysSettingsPanel } from "./api-keys-settings-panel";
-import { BillingSettingsPanel } from "./billing-settings-panel/billing-settings-panel";
+import { ApiKeysPanel } from "./api-keys-panel";
+import { BillingPanel } from "./billing-panel/billing-panel";
 
 const accountPanels = [
   ...(isBillingFeatureFlagEnabled
@@ -20,14 +20,14 @@ const accountPanels = [
         {
           title: "Billing",
           slug: "billing",
-          panel: <BillingSettingsPanel />,
+          panel: <BillingPanel />,
         },
       ]
     : []),
   {
     title: "API Keys",
     slug: "api",
-    panel: <ApiKeysSettingsPanel />,
+    panel: <ApiKeysPanel />,
   },
 ] as const;
 

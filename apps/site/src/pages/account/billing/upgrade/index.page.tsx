@@ -48,9 +48,9 @@ import {
   priceToHumanReadable,
   subscriptionTierToHumanReadable,
 } from "../../../shared/subscription-utils";
-import { paidSubscriptionFeatures } from "../../billing-settings-panel/free-or-hobby-subscription-tier-overview";
-import { proSubscriptionFeatures } from "../../billing-settings-panel/pro-subscription-tier-overview";
-import { SubscriptionFeatureListItem } from "../../billing-settings-panel/subscription-feature-list-item";
+import { paidSubscriptionFeatures } from "../../billing-panel/free-or-hobby-subscription-tier-overview";
+import { proSubscriptionFeatures } from "../../billing-panel/pro-subscription-tier-overview";
+import { SubscriptionFeatureListItem } from "../../billing-panel/subscription-feature-list-item";
 import { ChangePaymentMethodModal } from "./change-payment-method-modal";
 import { CreateSubscriptionCheckoutForm } from "./create-subscription-form";
 import { UpgradeExistingPaidSubscriptionIntro } from "./upgrade-existing-paid-subscription-intro";
