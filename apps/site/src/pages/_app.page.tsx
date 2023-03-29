@@ -1,6 +1,5 @@
 import "../styles/nprogress.css";
 import "../styles/prism.css";
-import "../styles/table-component.css";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
