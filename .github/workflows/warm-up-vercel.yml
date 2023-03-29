@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - uses: actions/checkout@v3
+
       - uses: ./.github/actions/warm-up-vercel
         with:
           deployment-base-url: "https://blockprotocol.org"

@@ -15,11 +15,11 @@ jobs:
     timeout-minutes: 60
 
     steps:
+      - uses: actions/checkout@v3
+
       - uses: ./.github/actions/warm-up-vercel
         with:
           deployment-base-url: ${{ !contains(github.event.deployment_status.environment, 'production') && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
-
-      - uses: actions/checkout@v3
 
       - uses: ./.github/actions/warm-up-repo
         with:
