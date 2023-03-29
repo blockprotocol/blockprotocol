@@ -45,8 +45,8 @@ test("dashboard page should contain key elements", async ({ page }) => {
     expect(await card.getAttribute("href")).toEqual(url);
   }
 
-  await page.locator('[aria-label="settings-tabs"] >> text=API Keys').click();
-  await expect(page).toHaveURL("/account/api");
+  await page.locator('[aria-label="settings-tabs"] >> text=My Account').click();
+  await expect(page).toHaveURL("/account");
 
   await page.locator('[aria-label="settings-tabs"] >> text=Dashboard').click();
   await expect(page).toHaveURL("/dashboard");
