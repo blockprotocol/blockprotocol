@@ -87,14 +87,16 @@ export default createBaseHandler<
           );
         }
 
+        await loginCode.setToUsed(db);
+
         await user.addWordpressInstanceUrlAndVerify(
           db,
           wordpressInstanceUrl,
           !user.hasVerifiedEmail,
         );
+      } else {
+        await loginCode.setToUsed(db);
       }
-
-      await loginCode.setToUsed(db);
 
       req.login(user, () =>
         res.status(200).json({
