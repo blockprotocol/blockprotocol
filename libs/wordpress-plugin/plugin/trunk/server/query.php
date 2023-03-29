@@ -144,7 +144,8 @@ function block_protocol_build_array_filter($raw_filter_value, $json_path, $opera
         $values[] = $encoded_value;
 
         $last_idx = $filter_value_count - 1;
-        $sql_fragment .= block_protocol_db_json_unsafe_cast(" AND JSON_EXTRACT(properties, CONCAT(%s, '[%d]'))", $is_maria_db)
+        $sql_fragment .= " AND "
+                         . block_protocol_db_json_unsafe_cast("JSON_EXTRACT(properties, CONCAT(%s, '[%d]'))", $is_maria_db)
                          . " = "
                          . block_protocol_db_json_unsafe_cast("%s", $is_maria_db);
         $values[] = $json_path;
@@ -247,9 +248,9 @@ function block_protocol_query_entities(array $multi_filter, array $multi_sort, b
       $filter_values[] = $filter_value;
     } elseif ($filter_value = block_protocol_extract_filter_value($subfilter, $raw = true)) {
       if (is_array($filter_value)) {
-        block_protocol_build_array_filter($filter_value, $json_path, $operator, $sql_fragment, $filter_values);
+        block_protocol_build_array_filter($filter_value, $json_path, $operator, $sql_fragment, $filter_values, $is_maria_db);
       } elseif (is_string($filter_value)) {
-        block_protocol_build_string_filter($filter_value, $json_path, $operator, $sql_fragment, $filter_values);
+        block_protocol_build_string_filter($filter_value, $json_path, $operator, $sql_fragment, $filter_values, $is_maria_db);
       } else {
         // Unsatisfiable filter, make sure we return nothing
         $sql_fragment = "1 == 0";
