@@ -11,7 +11,7 @@ Author: Block Protocol
 Author URI: https://blockprotocol.org/?utm_medium=organic&utm_source=wordpress_plugin-directory_blockprotocol-plugin_author-name
 Version: 0.0.7
 Requires at least: 5.6.0
-Tested up to: 6.1.1
+Tested up to: 6.2
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 */

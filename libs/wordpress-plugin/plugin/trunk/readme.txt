@@ -3,7 +3,7 @@ Contributors: ciaranmn,nonparibus,asahash,spolsky
 Donate link: https://github.com/sponsors/blockprotocol
 Tags: block protocol, blocks, gutenberg, gutenberg blocks, block, schema, countdown block, timer block, person block, code block, drawing block, shuffle block
 Requires at least: 5.6.0
-Tested up to: 6.1.1
+Tested up to: 6.2
 Requires PHP: 7.4
 Stable tag: 0.0.7
 License: AGPL-3.0
