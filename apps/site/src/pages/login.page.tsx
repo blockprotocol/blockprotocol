@@ -109,7 +109,7 @@ const LoginPage: NextPage = () => {
     if (router.isReady && user && !verificationCodeToCheck) {
       redirectRef.current();
     }
-  }, [user, verificationCodeToCheck]);
+  }, [router.isReady, user, verificationCodeToCheck]);
 
   const handleLogin = useCallback(
     (loggedInUser: SerializedUser, nextRedirectPath?: string) => {
