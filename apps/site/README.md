@@ -265,18 +265,39 @@ Retrieves the user object of the currently logged in user.
 Retrieves metadata on the API keys associated with the authenticated user.
 
 - Request Response:
-  - `apiKeys`: metadata on API keys (the key itself is only visible at the point of generation)
+  - `apiKeys`: metadata on all the user's API keys (the keys themselves are only visible at the point of generation)
 
 #### `POST /api/me/generate-api-key` [requires cookie authentication]
 
-Generates a new API key for the authenticated user, and revokes any others.
+Generates a new API key for the authenticated user.
 
 - Request Body:
 
-  - `displayName`: a display name for the API key
+  - `displayName`: a display name for the API key>
 
 - Request Response:
   - `apiKey`: the key itself, a string.
+
+#### `POST /api/me/revoke-api-key` [requires cookie authentication]
+
+Revokes a given API key for the authenticated user.
+
+- Request Body:
+
+  - `publicId`: the public ID portion of the API key to revoke.
+
+- Request Response: Empty
+
+#### `POST /api/me/update-api-key` [requires cookie authentication]
+
+Update a given API key for the authenticated user.
+
+- Request Body:
+
+  - `publicId`: the public ID portion of the API key to update.
+  - `displayName`: the new `displayName` that should be present on the API key.
+
+- Request Response: Empty
 
 #### `POST /api/logout` [requires cookie authentication]
 
