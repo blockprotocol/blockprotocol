@@ -20,7 +20,7 @@ import { ProSubscriptionTierOverview } from "./pro-subscription-tier-overview";
 import { TaxIdSection } from "./tax-id-section";
 import { UsageLimitSection } from "./usage-limit-section";
 
-export const billingOverviewPanelPageAsPath = "/settings/billing";
+export const billingOverviewPanelPageAsPath = "/account/billing";
 
 export const BillingOverviewPanelPage: FunctionComponent = () => {
   const { user, refetch } = useUser();
