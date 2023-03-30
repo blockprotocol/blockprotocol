@@ -1,5 +1,6 @@
 import { Edit } from "./edit-or-preview/edit";
 import { Preview } from "./edit-or-preview/preview";
+import { generateTheme } from "./shared/generate-theme";
 
 type BlockProtocolBlockAttributes = {
   author: string;
@@ -25,6 +26,8 @@ export const EditOrPreview = ({ attributes, setAttributes }: EditProps) => {
   const blocks = window.block_protocol_data?.blocks;
 
   const { preview, sourceUrl } = attributes;
+
+  const theme = generateTheme();
 
   const selectedBlock = blocks?.find((block) => block.source === sourceUrl);
 
