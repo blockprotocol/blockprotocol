@@ -53,13 +53,13 @@ const LoginPage: NextPage = () => {
 
   const [email, setEmail] = useState<string>();
   const [redirectPath, setRedirectPath] = useState<string>();
-  const [initialVerificationCode, setInitialVerificationCode] =
+  const [verificationCodeToCheck, setVerificationCodeToCheck] =
     useState<string>();
   const [verificationCodeInfo, setVerificationCodeInfo] = useState<
     VerificationCodeInfo | undefined
   >();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (Object.values(parsedQuery).filter((value) => !!value).length > 0) {
       if (parsedQuery.email) {
         setEmail(parsedQuery.email);
@@ -72,7 +72,7 @@ const LoginPage: NextPage = () => {
 
       if (parsedQuery.email && userId && verificationCodeId && code) {
         setVerificationCodeInfo({ userId, verificationCodeId });
-        setInitialVerificationCode(code);
+        setVerificationCodeToCheck(code);
         setCurrentScreen("VerificationCode");
       }
 
@@ -103,10 +103,13 @@ const LoginPage: NextPage = () => {
   }, [router, redirectPath]);
 
   useEffect(() => {
-    if (user) {
+    // We may not have parsed the query yet, so it may be too soon to redirect,
+    // and we don't want to redirect before checking the verification code as
+    // it may be a link to wordpress one
+    if (router.isReady && user && !verificationCodeToCheck) {
       redirectRef.current();
     }
-  }, [user]);
+  }, [user, verificationCodeToCheck]);
 
   const handleLogin = useCallback(
     (loggedInUser: SerializedUser, nextRedirectPath?: string) => {
@@ -116,6 +119,7 @@ const LoginPage: NextPage = () => {
       if (nextRedirectPath) {
         setRedirectPath(nextRedirectPath);
       }
+      setVerificationCodeToCheck(undefined);
       setUser(loggedInUser);
     },
     [setUser],
@@ -195,7 +199,7 @@ const LoginPage: NextPage = () => {
                     verificationCodeId,
                   });
                 }}
-                initialVerificationCode={initialVerificationCode}
+                initialVerificationCode={verificationCodeToCheck}
                 onSubmit={handleLogin}
                 onChangeEmail={() => setCurrentScreen("Email")}
                 resend={apiClient.sendLoginCode}
