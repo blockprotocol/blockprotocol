@@ -9,19 +9,15 @@ import { ApiKeyRenderer } from "./api-key-renderer";
 
 type GenerateApiModalProps = {
   close: () => void;
-  keyNameToRegenerate?: string;
   refetchKeyList: () => void;
 };
 
 export const GenerateApiModal: FunctionComponent<GenerateApiModalProps> = ({
   close,
-  keyNameToRegenerate,
   refetchKeyList,
 }) => {
   const [apiKey, setApiKey] = useState<string>("");
-  const [keyName, setKeyName] = useState(keyNameToRegenerate || "");
-
-  const regenerate = !!keyNameToRegenerate;
+  const [keyName, setKeyName] = useState("");
 
   const createKey = (event: FormEvent) => {
     event.preventDefault();
@@ -37,12 +33,7 @@ export const GenerateApiModal: FunctionComponent<GenerateApiModalProps> = ({
   return (
     <Modal open onClose={close}>
       {apiKey ? (
-        <ApiKeyRenderer
-          keyName={keyName}
-          apiKey={apiKey}
-          closeModal={close}
-          regenerate={regenerate}
-        />
+        <ApiKeyRenderer keyName={keyName} apiKey={apiKey} closeModal={close} />
       ) : (
         <Box sx={{ textAlign: "center" }}>
           <Box
@@ -68,46 +59,34 @@ export const GenerateApiModal: FunctionComponent<GenerateApiModalProps> = ({
               marginBottom: 2,
             }}
           >
-            {regenerate ? "Regenerate" : "Generate"} Key
+            Generate Key
           </Typography>
           <Typography sx={{ marginBottom: 1.5 }}>
-            {regenerate ? (
-              <>
-                Regenerating the <b>{keyName}</b> key will invalidate it. <br />
-                This could break any application that relies on it. <br />
-                <b>Are you sure you want to regenerate it?</b>
-              </>
-            ) : (
-              <>
-                <p>Name your key.</p>
-                Key names usually describe where they’re used, <br />
-                such as “Production”.
-              </>
-            )}
+            <p>Name your key.</p>
+            Key names usually describe where they’re used, <br />
+            such as “Production”.
           </Typography>
 
           <form onSubmit={createKey}>
-            {regenerate ? null : (
-              <Box
-                value={keyName}
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  setKeyName(event.target.value);
-                }}
-                component="input"
-                sx={(theme) => ({
-                  background: "#FFFFFF",
-                  border: `1px solid ${theme.palette.gray[30]}`,
-                  width: "100%",
-                  boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
-                  borderRadius: "6px",
-                  marginBottom: 2,
-                })}
-                py={1}
-                px={2}
-                placeholder="Key Name"
-                required
-              />
-            )}
+            <Box
+              value={keyName}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                setKeyName(event.target.value);
+              }}
+              component="input"
+              sx={(theme) => ({
+                background: "#FFFFFF",
+                border: `1px solid ${theme.palette.gray[30]}`,
+                width: "100%",
+                boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
+                borderRadius: "6px",
+                marginBottom: 2,
+              })}
+              py={1}
+              px={2}
+              placeholder="Key Name"
+              required
+            />
 
             <Box
               sx={{
@@ -117,13 +96,13 @@ export const GenerateApiModal: FunctionComponent<GenerateApiModalProps> = ({
               }}
             >
               <Button
-                color={regenerate ? "warning" : "purple"}
+                color="purple"
                 type="submit"
                 variant="tertiary"
                 sx={{ marginBottom: 1 }}
                 squared
               >
-                {regenerate ? "Regenerate Key" : "Create Key"}
+                Create Key
               </Button>
 
               <Button

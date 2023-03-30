@@ -3,7 +3,6 @@ import { NextSeo } from "next-seo";
 import { FunctionComponent, useEffect, useMemo, useState } from "react";
 
 import { Button } from "../../components/button";
-import { WarningIcon } from "../../components/icons";
 import { Link } from "../../components/link";
 import { GenerateApiModal } from "../../components/pages/dashboard/generate-api-modal";
 import { Table, TableRows } from "../../components/table";
@@ -18,7 +17,6 @@ export const ApiKeysPanel: FunctionComponent = () => {
 
   const [generateKeyStatus, setGenerateStatus] = useState<{
     showModal: boolean;
-    keyToRegenerate?: UserFacingApiKeyProperties | undefined;
   }>({
     showModal: false,
   });
@@ -54,12 +52,10 @@ export const ApiKeysPanel: FunctionComponent = () => {
 
     [activeApiKeys],
   );
-  const activeKey = activeApiKeys[0];
 
   const closeGenerateModal = () => {
     setGenerateStatus({
       showModal: false,
-      keyToRegenerate: undefined,
     });
   };
 
@@ -100,11 +96,10 @@ export const ApiKeysPanel: FunctionComponent = () => {
 
       <Box sx={{ paddingTop: 2 }}>
         <Button
-          color={activeKey ? "warning" : "gray"}
+          color="gray"
           onClick={() =>
             setGenerateStatus({
               showModal: true,
-              keyToRegenerate: activeKey,
             })
           }
           sx={{
@@ -115,24 +110,12 @@ export const ApiKeysPanel: FunctionComponent = () => {
           }}
           variant="tertiary"
         >
-          {activeKey ? (
-            <>
-              <WarningIcon
-                width="auto"
-                height="1em"
-                sx={{ fontSize: "1em", marginRight: 1 }}
-              />{" "}
-              Regenerate API Key
-            </>
-          ) : (
-            <>Create new key</>
-          )}
+          Create new key
         </Button>
 
         {generateKeyStatus.showModal ? (
           <GenerateApiModal
             close={closeGenerateModal}
-            keyNameToRegenerate={generateKeyStatus.keyToRegenerate?.displayName}
             refetchKeyList={fetchAndSetApiKeys}
           />
         ) : null}

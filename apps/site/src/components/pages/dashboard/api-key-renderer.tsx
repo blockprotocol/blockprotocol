@@ -6,7 +6,6 @@ import { ApiKeyGeneratedIcon, CopyIcon } from "../../icons";
 
 type ApiKeyRendererProps = {
   apiKey: string;
-  regenerate?: boolean;
   closeModal: () => void;
   keyName: string;
 };
@@ -14,7 +13,6 @@ type ApiKeyRendererProps = {
 export const ApiKeyRenderer: FunctionComponent<ApiKeyRendererProps> = ({
   apiKey,
   closeModal,
-  regenerate,
   keyName,
 }) => {
   const [copied, setCopied] = useState(false);
@@ -48,17 +46,11 @@ export const ApiKeyRenderer: FunctionComponent<ApiKeyRendererProps> = ({
           marginBottom: 2,
         }}
       >
-        Key {regenerate ? "regenerated" : "generated"}
+        Key generated
       </Typography>
       <Typography sx={{ marginBottom: 2 }}>
-        Your key {keyName} has been {regenerate ? "regenerated" : "generated"}.
+        Your key {keyName} has been generated.
         <br />
-        {regenerate ? (
-          <strong>
-            The previous key will no longer work.
-            <br />
-          </strong>
-        ) : null}
         Here is your new key - make a note of it, <br />
         we can't show it to you again!
       </Typography>
