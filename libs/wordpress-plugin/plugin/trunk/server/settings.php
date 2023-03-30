@@ -119,8 +119,8 @@ function block_protocol_section_api_key_intro($args)
 {
     ?>
     <p id="<?php echo esc_attr($args['id']); ?>"> Generate your Block Protocol API key at <a
-            href="https://blockprotocol.org/settings/api-keys"
-            target="_blank">https://blockprotocol.org/settings/api-keys</a></p>
+            href="https://blockprotocol.org/account/api"
+            target="_blank">https://blockprotocol.org/account/api</a></p>
     <?php
 }
 
