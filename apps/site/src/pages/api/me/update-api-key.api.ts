@@ -37,7 +37,7 @@ export default createAuthenticatedHandler<
     if (!revoked) {
       return res.status(400).json(
         formatErrors({
-          msg: "Could not revoke the API key. It may have already been revoked.",
+          msg: "Could not update the API key. Perhaps it doesn't exist.",
           value: publicId,
         }),
       );
