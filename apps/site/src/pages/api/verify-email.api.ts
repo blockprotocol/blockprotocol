@@ -101,11 +101,10 @@ export default createBaseHandler<
         }
 
         await emailVerificationCode.setToUsed(db);
-        await user.addWordpressInstanceUrlAndVerify(
-          db,
+        await user.addWordpressInstanceUrlAndVerify(db, {
           wordpressInstanceUrl,
-          !user.hasVerifiedEmail,
-        );
+          updateReferrer: true,
+        });
       } else {
         await emailVerificationCode.setToUsed(db);
         await user.update(db, { hasVerifiedEmail: true });

@@ -98,11 +98,10 @@ export default createBaseHandler<
 
         await loginCode.setToUsed(db);
 
-        await user.addWordpressInstanceUrlAndVerify(
-          db,
+        await user.addWordpressInstanceUrlAndVerify(db, {
           wordpressInstanceUrl,
-          !user.hasVerifiedEmail,
-        );
+          updateReferrer: false,
+        });
       } else {
         await loginCode.setToUsed(db);
       }

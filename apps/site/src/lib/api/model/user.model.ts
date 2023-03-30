@@ -319,8 +319,13 @@ export class User {
 
   async addWordpressInstanceUrlAndVerify(
     db: Db,
-    wordpressInstanceUrl: string,
-    updateReferrer = false,
+    {
+      wordpressInstanceUrl,
+      updateReferrer,
+    }: {
+      wordpressInstanceUrl: string;
+      updateReferrer: boolean;
+    },
   ) {
     return await this.update(db, {
       ...(this.wordpressInstanceUrls?.includes(wordpressInstanceUrl)
