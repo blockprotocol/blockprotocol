@@ -37,11 +37,7 @@ export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
     const user =
       (await User.getByEmail(db, {
         email,
-        hasVerifiedEmail: true,
-      })) ??
-      (await User.getByEmail(db, {
-        email,
-        hasVerifiedEmail: false,
+        verifiedAndNonVerified: true,
       })) ??
       (await User.create(db, {
         email,

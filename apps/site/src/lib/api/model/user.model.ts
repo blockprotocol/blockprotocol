@@ -211,13 +211,19 @@ export class User {
 
   static async getByEmail(
     db: Db,
-    params: { email: string; hasVerifiedEmail: boolean },
+    params: { email: string } & (
+      | { hasVerifiedEmail: boolean; verifiedAndNonVerified?: undefined }
+      | { hasVerifiedEmail?: undefined; verifiedAndNonVerified: true }
+    ),
   ): Promise<User | null> {
-    const { email, hasVerifiedEmail } = params;
+    const { email, hasVerifiedEmail, verifiedAndNonVerified } = params;
 
     const userDocument = await db
       .collection<UserDocument>(User.COLLECTION_NAME)
-      .findOne({ email, hasVerifiedEmail });
+      .findOne({
+        email,
+        ...(verifiedAndNonVerified ? {} : { hasVerifiedEmail }),
+      });
 
     return userDocument ? User.fromDocument(userDocument) : null;
   }
