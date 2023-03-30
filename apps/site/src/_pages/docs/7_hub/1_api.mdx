@@ -1,0 +1,63 @@
+# API
+
+The Block Protocol (**Þ**) API is used exclusively to interface with the Þ Hub.
+
+This allows for users to programmatically both **query** and **use** blocks, types and services, as well as securely **authenticate** themselves with external services.
+
+## About API Keys
+
+### Obtaining a key
+
+To use the Þ API, you must first [register for an account](https://blockprotocol.org/signup).
+
+Once [logged in](https://blockprotocol.org/login), navigate to the [Account > API Keys](https://blockprotocol.org/account/api) page to create a new key.
+
+### How keys work
+
+Þ API keys can be attached to any programmatic request to access the Þ Hub, and serve as a means of authenticating your identity. As such, your full API key should be kept secret, like a password. Anybody with access to your full key can effectively access your account.
+
+Þ API keys look something like this: `b10ck5.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY`
+
+They are split into three parts:
+
+1.  the 'protocol identifier' (`b10ck5`), which is the same for all API keys.
+2.  the 'public portion' of your key (`X` above, which contains 32 characters). You can think of this as your 'username', which doesn't necessarily need to remain secret.
+3.  the 'private portion' of your key (`Y` above, which contains 36 characters). This is essentially your 'password', and it should remain secret and known only to you at all times.
+
+If you believe the private portion of your key has become known to any unauthorized party, or has accidentally been made public (for example included in a code snippet uploaded to a website like GitHub) you should immediately revoke your key. You can revoke a key from the [Account > API Keys](https://blockprotocol.org/account/api) page.
+
+Once an API key has been generated, it cannot be redisplayed. As such, you should consider generating a new key whenever you require one, or storing keys securely in an encrypted password manager upon generation.
+
+### Using your key
+
+#### To connect existing applications
+
+Most Block Protocol users will only ever generate a key for the purpose of connecting another application to the Block Protocol. For example, a user of the [Block Protocol for WordPress](https://blockprotocol.org/wordpress) might generate a key to enable access to the Block Protocol on their website.
+
+#### To develop new applications
+
+_Full API documentation will be published soon._
+
+##### Searching for blocks
+
+The `/api/blocks` route allows you to list and filter blocks.
+
+For example, to retrieve a list of all blocks:
+
+```javascript
+fetch("https://blockprotocol.org/api/blocks", {
+  headers: {
+    "content-type": "application/json",
+    "x-api-key": "YOUR_API_KEY",
+  },
+})
+  .then((resp) => resp.json())
+  .then(console.log);
+```
+
+The following query parameters are available. All are optional, and may be combined to narrow results by a combination of filters:
+
+- `author`: search for blocks with a matching author.
+- `license`: search for blocks with a matching license.
+- `name`: search for blocks with a matching name.
+- `q`: search for blocks with a matching name or author.
