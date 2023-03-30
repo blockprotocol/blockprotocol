@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
+import { ApiKey } from "../../../lib/api/model/api-key.model";
 import { formatErrors } from "../../../util/api";
 
 export type ApiRevokeApiKeyBody = {
@@ -25,7 +26,10 @@ export default createAuthenticatedHandler<
 
     const { publicId } = req.body;
 
-    const revoked = await user.revokeApiKey(db, { publicId });
+    const revoked = await ApiKey.revokeByUser(db, {
+      publicId,
+      user,
+    });
 
     if (!revoked) {
       return res.status(400).json(

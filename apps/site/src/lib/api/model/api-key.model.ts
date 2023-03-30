@@ -206,9 +206,14 @@ export class ApiKey {
     return apiKey;
   }
 
-  static async revokeForUser(
+  static async updateByUser(
     db: Db,
-    params: { publicId: string; user: User },
+    params: {
+      publicId: string;
+      user: User;
+      displayName?: string;
+      revokedAt?: Date;
+    },
   ): Promise<boolean> {
     const response = await db
       .collection<ApiKeyDocument>(ApiKey.COLLECTION_NAME)
@@ -218,10 +223,25 @@ export class ApiKey {
           publicId: params.publicId,
           revokedAt: { $eq: null },
         },
-        { $set: { revokedAt: new Date() } },
+        {
+          $set: {
+            ...(params.displayName ? { displayName: params.displayName } : {}),
+            ...(params.revokedAt ? { revokedAt: params.revokedAt } : {}),
+          },
+        },
       );
 
     return response.modifiedCount === 1;
+  }
+
+  static async revokeByUser(
+    db: Db,
+    params: {
+      publicId: string;
+      user: User;
+    },
+  ): Promise<boolean> {
+    return await ApiKey.updateByUser(db, { ...params, revokedAt: new Date() });
   }
 
   isRevoked() {
