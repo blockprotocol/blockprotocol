@@ -273,7 +273,7 @@ Generates a new API key for the authenticated user.
 
 - Request Body:
 
-  - `displayName`: a display name for the API key>
+  - `displayName`: a display name for the API key.
 
 - Request Response:
   - `apiKey`: the key itself, a string.
