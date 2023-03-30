@@ -50,7 +50,7 @@ export const EntityTypeEditBar = ({
         color: "white",
         position: "sticky",
         top: "var(--navbar-height)",
-        zIndex: zIndex.appBar - 1,
+        zIndex: zIndex.drawer + 2,
         boxShadow: shadows[1],
       })}
     >
