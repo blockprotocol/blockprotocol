@@ -1,7 +1,7 @@
 <?php
 /**
  * @package blockprotocol
- * @version 0.0.6
+ * @version 0.0.7
  */
 /*
 Plugin Name: Block Protocol
@@ -9,14 +9,14 @@ Plugin URI: https://blockprotocol.org/wordpress
 Description: Access an open, growing ecosystem of high-quality and powerful blocks via the Block Protocol.
 Author: Block Protocol
 Author URI: https://blockprotocol.org/?utm_medium=organic&utm_source=wordpress_plugin-directory_blockprotocol-plugin_author-name
-Version: 0.0.6
+Version: 0.0.7
 Requires at least: 5.6.0
 Tested up to: 6.1.1
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 */
 
-const BLOCK_PROTOCOL_PLUGIN_VERSION = "0.0.6";
+const BLOCK_PROTOCOL_PLUGIN_VERSION = "0.0.7";
 
 if (is_readable(__DIR__ . '/vendor/autoload.php')) {
 	require __DIR__ . '/vendor/autoload.php';
