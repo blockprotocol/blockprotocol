@@ -66,6 +66,22 @@
     "image": "public/block-preview.png",
     "name": "block-template-react",
     "protocol": "0.3",
+    "requirements": {
+      "graph": {
+        "version": "0.3",
+        "messages": {
+          "updateEntity": {
+            "data": {
+              "entityTypeId": [
+                {
+                  "blockEntity": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
     "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
     "codegen": {
       "outputFolder": "src/types/generated",
