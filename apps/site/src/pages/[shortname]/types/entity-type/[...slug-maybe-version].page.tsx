@@ -460,12 +460,17 @@ const EntityTypePage: NextPage = () => {
                 </Box>
               </Box>
 
-              <Box component="section" sx={{ overflowX: "auto" }}>
-                <EntityTypeForm
-                  author={shortname as `@${string}`}
-                  entityType={entityType}
-                  readonly={!userCanEdit}
-                />
+              <Box
+                component="section"
+                sx={[!userCanEdit && { overflowX: "auto" }]}
+              >
+                <Box sx={[!userCanEdit && { minWidth: "max-content" }]}>
+                  <EntityTypeForm
+                    author={shortname as `@${string}`}
+                    entityType={entityType}
+                    readonly={!userCanEdit}
+                  />
+                </Box>
               </Box>
             </Box>
           </Container>

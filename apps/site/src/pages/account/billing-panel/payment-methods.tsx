@@ -34,8 +34,7 @@ import { useBillingPageContext } from "./billing-page-context";
 import { cardDetailsPanelPageAsPath } from "./card-details-panel-page";
 import { PaymentMethod } from "./payment-method";
 
-export const paymentMethodsPanelPageAsPath =
-  "/settings/billing/payment-methods";
+export const paymentMethodsPanelPageAsPath = "/account/billing/payment-methods";
 
 const PaymentMethodMenu: FunctionComponent<{
   paymentMethod: Stripe.PaymentMethod;
