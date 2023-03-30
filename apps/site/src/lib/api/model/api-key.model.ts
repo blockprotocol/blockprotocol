@@ -206,13 +206,22 @@ export class ApiKey {
     return apiKey;
   }
 
-  static async revoke(db: Db, params: { publicId: string }): Promise<void> {
-    await db
+  static async revokeForUser(
+    db: Db,
+    params: { publicId: string; user: User },
+  ): Promise<boolean> {
+    const response = await db
       .collection<ApiKeyDocument>(ApiKey.COLLECTION_NAME)
-      .updateMany(
-        { publicId: params.publicId, revokedAt: { $eq: null } },
+      .updateOne(
+        {
+          user: params.user.toRef(),
+          publicId: params.publicId,
+          revokedAt: { $eq: null },
+        },
         { $set: { revokedAt: new Date() } },
       );
+
+    return response.modifiedCount === 1;
   }
 
   isRevoked() {

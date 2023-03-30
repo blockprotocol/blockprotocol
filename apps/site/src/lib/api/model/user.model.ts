@@ -451,6 +451,12 @@ export class User {
     return await ApiKey.create(db, { displayName, user: this });
   }
 
+  async revokeApiKey(db: Db, params: { publicId: string }) {
+    const { publicId } = params;
+
+    return await ApiKey.revokeForUser(db, { publicId, user: this });
+  }
+
   async apiKeys(db: Db) {
     return await ApiKey.getByUser(db, { user: this });
   }
