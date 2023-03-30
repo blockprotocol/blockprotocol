@@ -2,7 +2,14 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Fade, Paper } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { Button } from "../components/button";
 import { FontAwesomeIcon } from "../components/icons";
@@ -89,7 +96,7 @@ const LoginPage: NextPage = () => {
   // variables inside handleLogin dependencies saves us from triggering multiple API calls.
   const redirectRef = useRef<() => void>(() => {});
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     redirectRef.current = () => {
       void router.push({ pathname: redirectPath ?? "/dashboard" });
     };
@@ -102,12 +109,14 @@ const LoginPage: NextPage = () => {
   }, [user]);
 
   const handleLogin = useCallback(
-    (loggedInUser: SerializedUser) => {
+    (loggedInUser: SerializedUser, nextRedirectPath?: string) => {
       if (!loggedInUser.isSignedUp) {
         /** @todo: redirect to signup page if user hasn't completed signup */
       }
+      if (nextRedirectPath) {
+        setRedirectPath(nextRedirectPath);
+      }
       setUser(loggedInUser);
-      redirectRef.current();
     },
     [setUser],
   );

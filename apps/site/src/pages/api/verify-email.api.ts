@@ -12,6 +12,7 @@ export type ApiVerifyEmailRequestBody = {
 
 export type ApiVerifyEmailResponse = {
   user: SerializedUser;
+  redirectPath?: string;
 };
 
 export default createBaseHandler<
@@ -111,7 +112,14 @@ export default createBaseHandler<
       }
 
       req.login(user, () =>
-        res.status(200).json({ user: user.serialize(true) }),
+        res
+          .status(200)
+          .json({
+            user: user.serialize(true),
+            ...(emailVerificationCode.variant === "linkWordpress"
+              ? { redirectPath: "/dashboard?link-wordpress" }
+              : {}),
+          }),
       );
     }
   });

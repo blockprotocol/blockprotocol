@@ -31,7 +31,7 @@ type VerificationCodeScreenProps = {
   email: string;
   initialVerificationCode?: string;
   setVerificationCodeId: (verificationCodeId: string) => void;
-  onSubmit: (user: SerializedUser) => void;
+  onSubmit: (user: SerializedUser, redirectPath?: string) => void;
   onChangeEmail: () => void;
   resend: (params: { email: string }) => Promise<{
     data?: { userId: string; verificationCodeId: string };
@@ -42,7 +42,7 @@ type VerificationCodeScreenProps = {
     verificationCodeId: string;
     code: string;
   }) => Promise<{
-    data?: { user: SerializedUser };
+    data?: { user: SerializedUser; redirectPath?: string };
     error?: ApiClientError;
   }>;
 };
@@ -130,7 +130,7 @@ export const VerificationCodeScreen: FunctionComponent<
         if (error) {
           setApiSubmittedErrorMessage(error.message);
         } else if (data) {
-          onSubmit(data.user);
+          onSubmit(data.user, data.redirectPath);
         }
       }
     },

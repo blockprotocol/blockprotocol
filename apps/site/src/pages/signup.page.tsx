@@ -90,7 +90,7 @@ const SignupPage: NextPage = () => {
   useEffect(() => {
     if (user && user !== "loading") {
       if (user.isSignedUp) {
-        void router.push({ pathname: redirectPath ?? "/dashboard" });
+        void router.push(redirectPath ?? "/dashboard");
       } else if (currentScreen !== "CompleteSignup") {
         setEmail(user.email);
         setCurrentScreen("CompleteSignup");
@@ -110,7 +110,13 @@ const SignupPage: NextPage = () => {
     setCurrentScreen("VerificationCode");
   };
 
-  const handleVerificationCodeSubmitted = (loggedInUser: SerializedUser) => {
+  const handleVerificationCodeSubmitted = (
+    loggedInUser: SerializedUser,
+    nextRedirectPath?: string,
+  ) => {
+    if (nextRedirectPath) {
+      setRedirectPath(nextRedirectPath);
+    }
     setUser(loggedInUser);
   };
 

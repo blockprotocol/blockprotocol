@@ -12,6 +12,7 @@ export type ApiLoginWithLoginCodeRequestBody = {
 
 export type ApiLoginWithLoginCodeResponse = {
   user: SerializedUser;
+  redirectPath?: string;
 };
 
 export default createBaseHandler<
@@ -109,6 +110,9 @@ export default createBaseHandler<
       req.login(user, () =>
         res.status(200).json({
           user: user.serialize(true),
+          ...(loginCode.variant === "linkWordpress"
+            ? { redirectPath: "/dashboard?link-wordpress" }
+            : {}),
         }),
       );
     }
