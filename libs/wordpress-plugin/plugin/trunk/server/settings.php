@@ -351,7 +351,7 @@ function block_protocol_options_page_html()
     <td style='max-width: 600px;background: #f6f7f7; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);'><pre style='white-space:pre-wrap;word-break:break-word;'>%s</pre></td>
     <td style='background: #f6f7f7; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);'>%s</td>
 </tr>",
-                            esc_html(json_encode([
+                            esc_html(block_protocol_json_encode([
                                 "entityId" => $entity["entity_id"],
                                 "entityTypeId" => $entity["entity_type_id"],
                                 "properties" => json_decode($entity["properties"])
