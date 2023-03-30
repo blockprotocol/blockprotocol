@@ -211,7 +211,9 @@ export class User {
 
   static async getByEmail(
     db: Db,
-    params: { email: string } & (
+    params: {
+      email: string;
+    } & ( // hasVerifiedEmail should be required for safety, unless an explicit flag of verifiedAndNonVerified true is passed. This union achieves that
       | { hasVerifiedEmail: boolean; verifiedAndNonVerified?: undefined }
       | { hasVerifiedEmail?: undefined; verifiedAndNonVerified: true }
     ),
