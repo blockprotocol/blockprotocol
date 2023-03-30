@@ -206,11 +206,11 @@ export class ApiKey {
     return apiKey;
   }
 
-  static async revokeAll(db: Db, params: { user: User }): Promise<void> {
+  static async revoke(db: Db, params: { publicId: string }): Promise<void> {
     await db
       .collection<ApiKeyDocument>(ApiKey.COLLECTION_NAME)
       .updateMany(
-        { user: params.user.toRef(), revokedAt: { $eq: null } },
+        { publicId: params.publicId, revokedAt: { $eq: null } },
         { $set: { revokedAt: new Date() } },
       );
   }
