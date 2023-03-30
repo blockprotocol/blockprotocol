@@ -17,7 +17,7 @@ export type VerificationCodeProperties = {
   wordpressInstanceUrl?: string;
 };
 
-// @note not using a discriminated union to match class properties, where that isn't possible
+// @note we can't use a discriminated union here because it's used to set the properties of VerificationCode, which can't have discriminated unions
 export type VerificationCodePropertiesVariant = Pick<
   VerificationCodeProperties,
   "variant" | "wordpressInstanceUrl"
