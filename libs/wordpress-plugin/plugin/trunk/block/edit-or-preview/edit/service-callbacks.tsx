@@ -7,7 +7,7 @@ import { ToastProps } from "./toast";
 type ServiceFunction =
   ServiceEmbedderMessageCallbacks[keyof ServiceEmbedderMessageCallbacks];
 
-const billingUrl = "https://blockprotocol.org/settings/billing";
+const billingUrl = "https://blockprotocol.org/account/billing";
 
 type DisplayToastFunction = (toastProps: ToastProps) => void;
 

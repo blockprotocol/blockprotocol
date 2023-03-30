@@ -1,4 +1,3 @@
-import { faSmile } from "@fortawesome/free-regular-svg-icons";
 import {
   EntityTypeEditorFormData,
   useEntityTypeFormState,
@@ -9,7 +8,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { Button } from "../../../../../components/button";
-import { FontAwesomeIcon } from "../../../../../components/icons";
 import { PencilSimpleLineIcon } from "../../../../../components/icons/pencil-simple-line";
 
 const useFrozenValue = <T extends any>(value: T): T => {
@@ -52,7 +50,7 @@ export const EntityTypeEditBar = ({
         color: "white",
         position: "sticky",
         top: "var(--navbar-height)",
-        zIndex: zIndex.appBar - 1,
+        zIndex: zIndex.drawer + 2,
         boxShadow: shadows[1],
       })}
     >
@@ -64,17 +62,13 @@ export const EntityTypeEditBar = ({
             py: "18px",
           }}
         >
-          {isDraft ? (
-            <FontAwesomeIcon icon={faSmile} sx={{ fontSize: 14 }} />
-          ) : (
-            <PencilSimpleLineIcon />
-          )}
+          <PencilSimpleLineIcon sx={{ height: 16, width: 16 }} />
           <Typography sx={{ ml: 1, color: "white" }}>
-            <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+            <Box component="span" sx={{ fontWeight: "bold" }}>
               Currently editing
             </Box>{" "}
             {isDraft ? (
-              <>- this type has not yet been created</>
+              <>– this type has not yet been created</>
             ) : (
               `Version ${frozenVersion} -> ${frozenVersion + 1}`
             )}

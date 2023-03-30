@@ -10,36 +10,38 @@ import {
 } from "../../components/pages/auth-wall";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
-import { ApiKeysSettingsPanel } from "./api-keys-settings-panel";
-import { BillingSettingsPanel } from "./billing-settings-panel/billing-settings-panel";
+import { isBillingFeatureFlagEnabled } from "../../lib/config";
+import { ApiKeysPanel } from "./api-keys-panel";
+import { BillingPanel } from "./billing-panel/billing-panel";
 
-const settingsPanels = [
-  {
-    title: "Billing",
-    slug: "billing",
-    panel: <BillingSettingsPanel />,
-  },
+const accountPanels = [
+  ...(isBillingFeatureFlagEnabled
+    ? [
+        {
+          title: "Billing",
+          slug: "billing",
+          panel: <BillingPanel />,
+        },
+      ]
+    : []),
   {
     title: "API Keys",
-    /**
-     * @todo: rename this to `api-keys` when the billing page can be deleted.
-     */
-    slug: "api-keys-panel",
-    panel: <ApiKeysSettingsPanel />,
+    slug: "api",
+    panel: <ApiKeysPanel />,
   },
 ] as const;
 
 const sidebarMaxWidth = 150;
 
-const Settings: AuthWallPageContent = () => {
+const Account: AuthWallPageContent = () => {
   const router = useRouter();
 
   useLayoutEffect(() => {
     /**
-     * @todo: remove this redirect when there is a panel with route "/settings"
+     * @todo: remove this redirect when there is a panel with route "/account"
      */
-    if (router.asPath === "/settings") {
-      void router.push("/settings/billing");
+    if (router.asPath === "/account") {
+      void router.push("/account/billing");
     }
   }, [router]);
 
@@ -53,7 +55,7 @@ const Settings: AuthWallPageContent = () => {
 
       const currentSettingsPageSlug = query.slugs.join("/");
 
-      return settingsPanels.find(({ slug }) =>
+      return accountPanels.find(({ slug }) =>
         currentSettingsPageSlug.startsWith(slug),
       );
     }
@@ -66,11 +68,8 @@ const Settings: AuthWallPageContent = () => {
       <TopNavigationTabs />
 
       <PageContainer>
-        <Typography
-          variant="h1"
-          sx={{ fontSize: 44, fontWeight: 400, marginBottom: 4 }}
-        >
-          Account Settings
+        <Typography variant="bpHeading2" sx={{ fontSize: 44, marginBottom: 4 }}>
+          My Account
         </Typography>
         <Box display="flex">
           <Sidebar
@@ -83,9 +82,9 @@ const Settings: AuthWallPageContent = () => {
               m: 1.5,
               marginLeft: 0,
             }}
-            pages={settingsPanels.map(({ title, slug }) => ({
+            pages={accountPanels.map(({ title, slug }) => ({
               title,
-              href: `/settings/${slug}`,
+              href: `/account/${slug}`,
             }))}
           />
           <Paper sx={{ flexGrow: 1, padding: 6, marginBottom: 6 }}>
@@ -97,4 +96,4 @@ const Settings: AuthWallPageContent = () => {
   );
 };
 
-export default withAuthWall(Settings);
+export default withAuthWall(Account);
