@@ -1,5 +1,25 @@
 # API
 
-The Block Protocol API is used exclusively to interface with the Þ Hub.
+The Block Protocol (**Þ**) API is used exclusively to interface with the Þ Hub.
 
-This allows for users to programmatically both **query for** and **use** blocks, types and services, as well as securely **authenticate** themselves with external services.
+This allows for users to programmatically both **query** and **use** blocks, types and services, as well as securely **authenticate** themselves with external services.
+
+## Using the API
+
+To use the Þ API, you must first [register for an account](https://blockprotocol.org/signup).
+
+Once [logged in](https://blockprotocol.org/login), navigate to the [Account > API Keys](https://blockprotocol.org/account/api) page to create a new key.
+
+## About API Keys
+
+Þ API keys can be attached to any programmatic request to access the Þ Hub, and serve as a means of authenticating your identity. As such, your full API key should be kept secret, like a password. Anybody with access to your full key can effectively access your account.
+
+Þ API keys look something like this: `b10ck5.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY`
+
+They are split into three parts:
+
+1. the 'protocol identifier' (`b10ck5`), which is the same for all API keys.
+2. the 'public portion' of your key (`X` above, which contains 32 characters). You can think of this as your 'username', which doesn't necessarily need to remain secret.
+3. the 'private portion' of your key (`Y` above, which contains 36 characters). This is essentially your 'password'.
+
+If you believe the private portion of your key has become known to any unauthorized party, or has accidentally been made public (for example included in a code snippet uploaded to a website like GitHub) you should immediately revoke your key. You can revoke a key from the [Account > API Keys](https://blockprotocol.org/account/api) page.
