@@ -11,7 +11,7 @@ import { DateTimeCell } from "../../components/table-cells";
 import { UserFacingApiKeyProperties } from "../../lib/api/model/api-key.model";
 import { apiClient } from "../../lib/api-client";
 
-export const ApiKeysSettingsPanel: FunctionComponent = () => {
+export const ApiKeysPanel: FunctionComponent = () => {
   const [activeApiKeys, setActiveApiKeys] = useState<
     UserFacingApiKeyProperties[]
   >([]);
@@ -86,10 +86,7 @@ export const ApiKeysSettingsPanel: FunctionComponent = () => {
         >
           Keep them private to prevent other people from accessing your account.{" "}
           <br />
-          <Link
-            href="/docs/embedding-blocks#discovering-blocks"
-            data-test-id="apiKeyLink"
-          >
+          <Link href="/docs#th-hub-and-api" data-test-id="apiKeyLink">
             Learn More
           </Link>
         </Typography>

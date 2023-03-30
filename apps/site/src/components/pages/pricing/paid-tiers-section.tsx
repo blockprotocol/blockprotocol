@@ -24,9 +24,9 @@ import {
   numberOfOpenaiHobbyLanguageTokens,
   numberOfThousandOpenaiHobbyWords,
   numberOfThousandOpenaiProWords,
-} from "../../../pages/settings/billing-settings-panel/external-service-free-allowance";
-import { SubscriptionFeatureList } from "../../../pages/settings/billing-settings-panel/subscription-feature-list";
-import { SubscriptionFeature } from "../../../pages/settings/billing-settings-panel/subscription-feature-list-item";
+} from "../../../pages/account/billing-panel/external-service-free-allowance";
+import { SubscriptionFeatureList } from "../../../pages/account/billing-panel/subscription-feature-list";
+import { SubscriptionFeature } from "../../../pages/account/billing-panel/subscription-feature-list-item";
 import {
   PaidSubscriptionTier,
   priceToHumanReadable,
@@ -809,7 +809,7 @@ export const PaidTiersSection: FunctionComponent<{
               <Box>
                 <CustomLinkButton
                   href={{
-                    pathname: "/settings/billing/upgrade",
+                    pathname: "/account/billing/upgrade",
                     query: { tier: "hobby" },
                   }}
                   endIcon={
@@ -947,7 +947,7 @@ export const PaidTiersSection: FunctionComponent<{
             >
               <CustomLinkButton
                 href={{
-                  pathname: "/settings/billing/upgrade",
+                  pathname: "/account/billing/upgrade",
                   query: { tier: "hobby" },
                 }}
                 endIcon={
@@ -1079,7 +1079,7 @@ export const PaidTiersSection: FunctionComponent<{
                   <CustomLinkButton
                     pink
                     href={{
-                      pathname: "/settings/billing/upgrade",
+                      pathname: "/account/billing/upgrade",
                       query: { tier: "pro" },
                     }}
                     endIcon={
@@ -1160,7 +1160,7 @@ export const PaidTiersSection: FunctionComponent<{
               <CustomLinkButton
                 pink
                 href={{
-                  pathname: "/settings/billing/upgrade",
+                  pathname: "/account/billing/upgrade",
                   query: { tier: "pro" },
                 }}
                 endIcon={
