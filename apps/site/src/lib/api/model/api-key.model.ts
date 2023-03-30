@@ -195,7 +195,12 @@ export class ApiKey {
       privateId,
       salt: apiKey.salt,
     });
-    if (providedKeyHash !== apiKey.hashedString) {
+    if (
+      !crypto.timingSafeEqual(
+        Buffer.from(providedKeyHash),
+        Buffer.from(apiKey.hashedString),
+      )
+    ) {
       throw new Error(INVALID_KEY_ERROR_MSG);
     } else if (apiKey.isRevoked()) {
       throw new Error("API key has been revoked.");
