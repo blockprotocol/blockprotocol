@@ -1,15 +1,35 @@
 import { faAdd, faClipboard } from "@fortawesome/free-solid-svg-icons";
 import { Box, Stack, Typography, typographyClasses } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
+import { apiClient } from "../../../lib/api-client";
 import { Button } from "../../button";
 import { FontAwesomeIcon } from "../../icons";
 import { Link } from "../../link";
 
 const defaultApiKey =
   "b10ck5.9faa5da6664f7229999439d5433d4ac2.c549e923-c3b6-451f-baba-20b391e6033d";
+
 export const DashboardWordpressSection = () => {
   const [apiKey, setApiKey] = useState<string | null>(null);
+  const [generating, setGenerating] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const copiedTimeout = useRef<null | ReturnType<typeof setTimeout>>(null);
+
+  const copyKey = (keyToCopy: string) => {
+    void navigator.clipboard.writeText(keyToCopy);
+
+    setCopied(true);
+
+    if (copiedTimeout.current) {
+      clearTimeout(copiedTimeout.current);
+    }
+
+    copiedTimeout.current = setTimeout(() => {
+      setCopied(false);
+    }, 3_000);
+  };
 
   return (
     <>
@@ -60,19 +80,23 @@ export const DashboardWordpressSection = () => {
             direction="row"
             alignItems="center"
             sx={(theme) => ({
-              p: 2,
+              py: 1,
+              px: 2,
               backgroundColor: theme.palette.gray[10],
               borderRadius: 1.5,
               mb: 3,
               border: 1,
               borderColor: theme.palette.gray[20],
               maxWidth: "max-content",
+              minHeight: 56,
             })}
             gap={3}
           >
             <Typography
               sx={(theme) => ({
                 color: theme.palette.gray[70],
+                minWidth: "76ch",
+                cursor: "pointer",
                 ...(apiKey
                   ? {}
                   : {
@@ -80,34 +104,61 @@ export const DashboardWordpressSection = () => {
                       filter: "blur(6px)",
                     }),
               })}
+              onClick={(evt) => {
+                evt.preventDefault();
+                const selection = window.getSelection();
+                if (selection) {
+                  const range = document.createRange();
+                  range.selectNodeContents(evt.currentTarget);
+                  selection.removeAllRanges();
+                  selection.addRange(range);
+                }
+              }}
             >
               {apiKey ?? defaultApiKey}
             </Typography>
-            {apiKey ? (
-              <Button
-                variant="tertiary"
-                color="gray"
-                squared
-                startIcon={<FontAwesomeIcon icon={faClipboard} />}
-                onClick={() => {
-                  void navigator.clipboard.writeText(apiKey);
-                }}
-              >
-                Copy to clipboard
-              </Button>
-            ) : (
-              <Button
-                variant="tertiary"
-                color="gray"
-                squared
-                startIcon={<FontAwesomeIcon icon={faAdd} />}
-                onClick={() => {
-                  setApiKey(defaultApiKey);
-                }}
-              >
-                Generate API Key
-              </Button>
-            )}
+            <Stack direction="row" justifyContent="flex-end" minWidth="172px">
+              {apiKey ? (
+                <Button
+                  variant="tertiary"
+                  color="gray"
+                  squared
+                  startIcon={<FontAwesomeIcon icon={faClipboard} />}
+                  onClick={() => copyKey(apiKey)}
+                  disabled={copied}
+                  size="small"
+                >
+                  {copied ? "Copied" : "Copy to clipboard"}
+                </Button>
+              ) : (
+                <Button
+                  variant="tertiary"
+                  color="gray"
+                  squared
+                  startIcon={<FontAwesomeIcon icon={faAdd} />}
+                  loading={generating}
+                  size="small"
+                  onClick={() => {
+                    if (generating) {
+                      return;
+                    }
+
+                    setGenerating(true);
+                    void apiClient
+                      .generateApiKey({ displayName: "Wordpress" })
+                      .then(({ data }) => {
+                        setGenerating(false);
+                        if (data) {
+                          setApiKey(data.apiKey);
+                          copyKey(data.apiKey);
+                        }
+                      });
+                  }}
+                >
+                  Generate API Key
+                </Button>
+              )}
+            </Stack>
           </Stack>
           <Typography mb={2} fontWeight={700}>
             You won’t be able to see this key again. Save it some where secure,
