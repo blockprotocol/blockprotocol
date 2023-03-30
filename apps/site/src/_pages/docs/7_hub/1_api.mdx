@@ -4,13 +4,15 @@ The Block Protocol (**Þ**) API is used exclusively to interface with the Þ Hub
 
 This allows for users to programmatically both **query** and **use** blocks, types and services, as well as securely **authenticate** themselves with external services.
 
-## Using the API
+## About API Keys
+
+### Obtaining a key
 
 To use the Þ API, you must first [register for an account](https://blockprotocol.org/signup).
 
 Once [logged in](https://blockprotocol.org/login), navigate to the [Account > API Keys](https://blockprotocol.org/account/api) page to create a new key.
 
-## About API Keys
+### How keys work
 
 Þ API keys can be attached to any programmatic request to access the Þ Hub, and serve as a means of authenticating your identity. As such, your full API key should be kept secret, like a password. Anybody with access to your full key can effectively access your account.
 
@@ -26,7 +28,17 @@ If you believe the private portion of your key has become known to any unauthori
 
 Once an API key has been generated, it cannot be redisplayed. As such, you should consider generating a new key whenever you require one, or storing keys securely in an encrypted password manager upon generation.
 
-## Searching for blocks
+### Using your key
+
+#### To connect existing applications
+
+Most Block Protocol users will only ever generate a key for the purpose of connecting another application to the Block Protocol. For example, a user of the [Block Protocol for WordPress](https://blockprotocol.org/wordpress) might generate a key to enable access to the Block Protocol on their website.
+
+#### To develop new applications
+
+_Full API documentation will be published soon._
+
+##### Searching for blocks
 
 The `/api/blocks` route allows you to list and filter blocks.
 
