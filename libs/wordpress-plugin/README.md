@@ -113,8 +113,6 @@ Within `trunk` there are:
 
 To check what your WordPress instance supports, please navigate to `Admin -> Tools -> Site Health -> Info` and then click into either `Server` (for PHP) or `Database` (for MySQL/MariaDB).
 
-> Note that MariaDB is not fully supported by the plugin, and some features may not work as expected (blocks that make entity queries). This shouldn't get in the way of using the plugin, but it would degrade the experience somewhat. We recommend using MySQL 8+ if possible.
-
 ## Dependencies
 
 We manage third-party PHP dependencies through [`composer`](https://getcomposer.org/). To prepare dependencies, run `composer install -d plugin` from the root of the repository. These dependencies are _not_ checked into the repository, so you'll need to run this command before bundling the plugin.

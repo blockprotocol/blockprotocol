@@ -436,7 +436,11 @@ export const getOutgoingLinkAndTargetEntities = <
           ) ??
           []; /** @todo - Are we comfortable hiding the `undefined` value here with an empty array? */
 
-        if (rightEntityRevisions.length !== 1) {
+        if (rightEntityRevisions.length === 0) {
+          throw new Error(
+            `No right entity found for the link entity with ID: ${linkEntity.metadata.recordId.entityId}`,
+          );
+        } else if (rightEntityRevisions.length > 1) {
           throw new Error(
             `Querying a Subgraph without support for temporal versioning but there wasn't a unique revision for the right entity of the link entity with ID: ${linkEntity.metadata.recordId.entityId}`,
           );
