@@ -126,7 +126,7 @@ const Account: AuthWallPageContent = () => {
               }))}
             />
           )}
-          <Paper sx={{ flexGrow: 1, padding: 6, marginBottom: 6 }}>
+          <Paper sx={{ flexGrow: 1, p: isMobile ? 3 : 6, mb: 6 }}>
             {currentPanel?.panel}
           </Paper>
         </Box>
