@@ -26,12 +26,12 @@ export default createAuthenticatedHandler<
 
     const { publicId } = req.body;
 
-    const revoked = await ApiKey.revokeByUser(db, {
+    const { found, revoked } = await ApiKey.revokeByUser(db, {
       publicId,
       user,
     });
 
-    if (!revoked) {
+    if (!found || !revoked) {
       return res.status(400).json(
         formatErrors({
           msg: "Could not revoke the API key. It may have already been revoked.",

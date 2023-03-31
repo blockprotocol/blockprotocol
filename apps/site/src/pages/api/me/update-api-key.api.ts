@@ -28,13 +28,13 @@ export default createAuthenticatedHandler<
 
     const { publicId, displayName } = req.body;
 
-    const revoked = await ApiKey.updateByUser(db, {
+    const { found } = await ApiKey.updateByUser(db, {
       publicId,
       user,
       displayName,
     });
 
-    if (!revoked) {
+    if (!found) {
       return res.status(400).json(
         formatErrors({
           msg: "Could not update the API key. Perhaps it doesn't exist.",
@@ -42,6 +42,7 @@ export default createAuthenticatedHandler<
         }),
       );
     }
+    // If it was found but not updated, the operation was a no-op.
 
     res.status(200).json({});
   });

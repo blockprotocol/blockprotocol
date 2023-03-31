@@ -219,24 +219,31 @@ export class ApiKey {
       displayName?: string;
       revokedAt?: Date;
     },
-  ): Promise<boolean> {
+  ): Promise<{ found: boolean; updated: boolean }> {
     const response = await db
       .collection<ApiKeyDocument>(ApiKey.COLLECTION_NAME)
       .updateOne(
         {
           user: params.user.toRef(),
           publicId: params.publicId,
-          revokedAt: { $eq: null },
+          // Only allow revoking if the key is not already revoked.
+          // We filter for unrevoked keys in case the `revokedAt` param is provided.
+          ...(params.revokedAt ? { revokedAt: { $eq: null } } : {}),
         },
         {
           $set: {
+            // Only set the fields that are provided as explicit `undefined`
+            // could be used to unset fields by accident.
             ...(params.displayName ? { displayName: params.displayName } : {}),
             ...(params.revokedAt ? { revokedAt: params.revokedAt } : {}),
           },
         },
       );
 
-    return response.modifiedCount === 1;
+    return {
+      found: response.matchedCount === 1,
+      updated: response.modifiedCount === 1,
+    };
   }
 
   static async revokeByUser(
@@ -245,8 +252,12 @@ export class ApiKey {
       publicId: string;
       user: User;
     },
-  ): Promise<boolean> {
-    return await ApiKey.updateByUser(db, { ...params, revokedAt: new Date() });
+  ) {
+    const result = await ApiKey.updateByUser(db, {
+      ...params,
+      revokedAt: new Date(),
+    });
+    return { found: result.found, revoked: result.updated };
   }
 
   isRevoked() {
