@@ -102,7 +102,7 @@ function block_protocol_migrate()
 
   $migrations = block_protocol_migrations();
 
-  // Apply new migrations sequentially, stopping early if a migration fails.
+  // Apply new migrations sequentially, skipping already-applied ones.
   foreach ($migrations as $index => $migration) {
     // Fetch the saved version at each iteration as it should be changing
     $saved_version = (int) get_site_option('block_protocol_db_migration_version');
