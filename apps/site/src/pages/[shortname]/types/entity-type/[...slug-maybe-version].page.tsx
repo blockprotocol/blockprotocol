@@ -1,5 +1,6 @@
 import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import { extractBaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import {
   EntityTypeEditorFormData,
   EntityTypeFormProvider,
@@ -7,7 +8,18 @@ import {
   getSchemaFromFormData,
   useEntityTypeForm,
 } from "@hashintel/type-editor";
-import { Box, Container, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Fade,
+  IconButton,
+  Input,
+  inputBaseClasses,
+  outlinedInputClasses,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { NextPage } from "next";
 import NextError from "next/error";
 import { useRouter } from "next/router";
@@ -21,7 +33,7 @@ import {
 } from "react";
 import { tw } from "twind";
 
-import { LinkIcon } from "../../../../components/icons";
+import { FontAwesomeIcon, LinkIcon } from "../../../../components/icons";
 import { Link } from "../../../../components/link";
 import { useUser } from "../../../../context/user-context";
 import { apiClient } from "../../../../lib/api-client";
@@ -79,6 +91,9 @@ const EntityTypePage: NextPage = () => {
 
   const { entityType, latestVersion } = entityTypeState ?? {};
 
+  const [descriptionHovered, setDescriptionHovered] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
+
   const [hasCopied, setHasCopied] = useState<boolean>(false);
   const copyEntityTypeId = useCallback<MouseEventHandler>(
     (event) => {
@@ -96,9 +111,14 @@ const EntityTypePage: NextPage = () => {
   };
 
   const formMethods = useEntityTypeForm<EntityTypeEditorFormData>({
-    defaultValues: { properties: [], links: [] },
+    defaultValues: { properties: [], links: [], description: "" },
   });
-  const { handleSubmit: wrapHandleSubmit, reset } = formMethods;
+  const {
+    handleSubmit: wrapHandleSubmit,
+    reset,
+    register,
+    setFocus,
+  } = formMethods;
 
   // When loading or updating a type, set local and form state, and set the URL
   const setEntityType = useCallback(
@@ -124,6 +144,7 @@ const EntityTypePage: NextPage = () => {
 
     const nextSchema = {
       ...existingSchema,
+      description: newPartialSchema.description ?? existingSchema.description,
       links: newPartialSchema.links ?? existingSchema.links ?? {},
       properties:
         newPartialSchema.properties ?? existingSchema.properties ?? {},
@@ -252,6 +273,9 @@ const EntityTypePage: NextPage = () => {
 
   const entityTypeIsLink = isLinkEntityType(entityType);
 
+  const { ref: descriptionInputRef, ...descriptionInputProps } =
+    register("description");
+
   return (
     <>
       <NextSeo title={`Block Protocol – ${shortname}/${title} Schema`} />
@@ -365,29 +389,88 @@ const EntityTypePage: NextPage = () => {
             </header>
 
             <Box component="main" sx={{ mt: 6 }}>
-              {entityType.schema.description ? (
-                <Box component="section" sx={{ mb: 6 }}>
-                  <Typography
-                    variant="bpHeading5"
-                    sx={{ mb: 2, fontWeight: 500 }}
-                  >
-                    Description
-                  </Typography>
-                  <Typography
-                    variant="bpBodyCopy"
+              <Box component="section" sx={{ mb: 6 }}>
+                <Typography
+                  variant="bpHeading5"
+                  sx={{ mb: 2, fontWeight: 500 }}
+                >
+                  Description
+                </Typography>
+                <Box
+                  display="flex"
+                  gap={1}
+                  onMouseEnter={() => setDescriptionHovered(true)}
+                  onMouseLeave={() => setDescriptionHovered(false)}
+                >
+                  {/* To be replaced with the Editable field once that goes in the blockprotocol's design system */}
+                  <Input
+                    {...descriptionInputProps}
+                    autoFocus
+                    multiline
+                    disableUnderline
                     style={{ whiteSpace: "pre" }}
-                  >
-                    {entityType.schema.description}
-                  </Typography>
-                </Box>
-              ) : null}
+                    readOnly={!editingDescription}
+                    inputRef={descriptionInputRef}
+                    onBlur={(evt) => {
+                      setEditingDescription(false);
+                      return descriptionInputProps.onBlur(evt);
+                    }}
+                    onKeyDown={({ shiftKey, code, currentTarget }) => {
+                      if (!shiftKey && code === "Enter") {
+                        currentTarget.blur();
+                      }
+                    }}
+                    onFocus={(event) => {
+                      event.currentTarget.setSelectionRange(
+                        event.currentTarget.value.length,
+                        event.currentTarget.value.length,
+                      );
+                    }}
+                    sx={{
+                      fontFamily: "Inter",
+                      width: 1,
+                      p: 0,
+                      [`.${inputBaseClasses.root}, .${inputBaseClasses.input}`]:
+                        {
+                          width: 1,
+                          p: 0,
+                          color: ({ palette }) => palette.gray[90],
+                          fontSize: 16,
+                          lineHeight: 1.7,
+                        },
+                      [`.${outlinedInputClasses.notchedOutline}`]: {
+                        display: "none",
+                      },
+                    }}
+                  />
 
-              <Box component="section" sx={{ overflowX: "auto" }}>
-                <EntityTypeForm
-                  author={shortname as `@${string}`}
-                  entityType={entityType}
-                  readonly={!userCanEdit}
-                />
+                  <Fade in={!editingDescription && descriptionHovered}>
+                    <IconButton
+                      onClick={() => {
+                        setEditingDescription(true);
+                        setFocus("description");
+                      }}
+                      sx={{
+                        padding: 0.5,
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </IconButton>
+                  </Fade>
+                </Box>
+              </Box>
+
+              <Box
+                component="section"
+                sx={[!userCanEdit && { overflowX: "auto" }]}
+              >
+                <Box sx={[!userCanEdit && { minWidth: "max-content" }]}>
+                  <EntityTypeForm
+                    author={shortname as `@${string}`}
+                    entityType={entityType}
+                    readonly={!userCanEdit}
+                  />
+                </Box>
               </Box>
             </Box>
           </Container>

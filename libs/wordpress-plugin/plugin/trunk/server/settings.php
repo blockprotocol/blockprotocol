@@ -119,8 +119,8 @@ function block_protocol_section_api_key_intro($args)
 {
     ?>
     <p id="<?php echo esc_attr($args['id']); ?>"> Generate your Block Protocol API key at <a
-            href="https://blockprotocol.org/settings/api-keys"
-            target="_blank">https://blockprotocol.org/settings/api-keys</a></p>
+            href="https://blockprotocol.org/account/api"
+            target="_blank">https://blockprotocol.org/account/api</a></p>
     <?php
 }
 
@@ -351,7 +351,7 @@ function block_protocol_options_page_html()
     <td style='max-width: 600px;background: #f6f7f7; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);'><pre style='white-space:pre-wrap;word-break:break-word;'>%s</pre></td>
     <td style='background: #f6f7f7; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);'>%s</td>
 </tr>",
-                            esc_html(json_encode([
+                            esc_html(block_protocol_json_encode([
                                 "entityId" => $entity["entity_id"],
                                 "entityTypeId" => $entity["entity_type_id"],
                                 "properties" => json_decode($entity["properties"])

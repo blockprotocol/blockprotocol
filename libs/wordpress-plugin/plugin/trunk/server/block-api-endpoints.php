@@ -409,6 +409,10 @@ function get_all_block_protocol_entities()
   return $entities;
 }
 
+function block_protocol_json_encode(array $value)
+{
+  return json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+}
 
 function query_block_protocol_entities(WP_REST_Request $request)
 {
@@ -419,8 +423,11 @@ function query_block_protocol_entities(WP_REST_Request $request)
   $multi_filter = $params["operation"]["multiFilter"] ?? [];
   $multi_sort = $params["operation"]["multiSort"] ?? [];
 
+  $db_server_info = $wpdb->db_server_info();
+  $is_maria_db = strpos($db_server_info, 'MariaDB') != false;
+
   try {
-    $query = block_protocol_query_entities($multi_filter, $multi_sort);
+    $query = block_protocol_query_entities($multi_filter, $multi_sort, $is_maria_db);
   } catch (InvalidArgumentException $e) {
     return ["error" => $e->getMessage()];
   }
@@ -516,7 +523,7 @@ function create_block_protocol_entity(WP_REST_Request $request)
     return $results;
   }
 
-  $properties = json_encode($params['properties']);
+  $properties = block_protocol_json_encode($params['properties']);
 
   if (!$properties) {
     $results['error'] = "You must provide 'properties' to create an entity with";
@@ -613,7 +620,7 @@ function update_block_protocol_entity(WP_REST_Request $request)
   $left_to_right_order = isset($params['left_to_right_order']) ? $params['left_to_right_order'] : null;
   $right_to_left_order = isset($params['right_to_left_order']) ? $params['right_to_left_order'] : null;
 
-  $encoded_properties = json_encode($params['properties']);
+  $encoded_properties = block_protocol_json_encode($params['properties']);
 
   if (!$encoded_properties) {
     $results['error'] = "You must provide 'properties' for an update";
@@ -795,7 +802,7 @@ function upload_block_protocol_file(WP_REST_Request $request)
     'updated_at' => current_time('mysql', 1),
     'created_by_id' => $user_id,
     'updated_by_id' => $user_id,
-    'properties' => json_encode([
+    'properties' => block_protocol_json_encode([
       'https://blockprotocol.org/@blockprotocol/types/property-type/description/' => $description,
       'https://blockprotocol.org/@blockprotocol/types/property-type/file-name/' => $filename,
       'https://blockprotocol.org/@blockprotocol/types/property-type/file-size/' => $metadata['filesize'],
@@ -839,7 +846,7 @@ function call_block_protocol_service(WP_REST_Request $request)
 
   $url = $site_host . "/api/external-service-method";
 
-  $body = json_encode([
+  $body = block_protocol_json_encode([
     'providerName' => $provider_name,
     'methodName' => $method_name,
     'payload' => $data,

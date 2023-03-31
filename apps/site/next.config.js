@@ -20,7 +20,11 @@ const nextConfig = {
     autoInstrumentServerFunctions: false,
     hideSourceMaps: false,
   },
-  transpilePackages: ["internal-api-repo"],
+  transpilePackages: [
+    "internal-api-repo",
+    "@hashintel/design-system",
+    "@hashintel/type-editor",
+  ],
 
   // We call linters in GitHub Actions for all pull requests. By not linting
   // again during `next build`, we save CI minutes and unlock more feedback.
@@ -146,6 +150,11 @@ const nextConfig = {
       {
         source: "/docs/embedding-blocks",
         destination: "/docs/blocks#your-own-application",
+        permanent: true,
+      },
+      {
+        source: "/settings/:slug*",
+        destination: "/account/:slug*",
         permanent: true,
       },
     ];
