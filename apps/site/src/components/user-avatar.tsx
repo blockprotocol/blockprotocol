@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Avatar, AvatarProps, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { SerializedUser } from "../lib/api/model/user.model";
@@ -6,39 +6,44 @@ import { SerializedUser } from "../lib/api/model/user.model";
 interface UserAvatarProps {
   user: SerializedUser;
   size?: number;
+  sx?: AvatarProps["sx"];
 }
+
+const getInitial = (name?: string) => {
+  if (name?.[0]) {
+    return name[0].toUpperCase();
+  }
+  return "U";
+};
 
 export const UserAvatar: FunctionComponent<UserAvatarProps> = ({
   user,
   size = 32,
+  sx = [],
 }) => {
-  const { preferredName } = user || {};
+  const { preferredName, userAvatarUrl } = user || {};
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      sx={{
-        minWidth: size,
-        minHeight: size,
-        borderRadius: "50%",
-        backgroundColor: ({ palette }) => palette.gray[20],
-        borderWidth: 1,
-        borderStyle: "solid",
-        borderColor: ({ palette }) => palette.gray[30],
-      }}
-    >
-      <Box
-        component="span"
-        sx={{
-          color: ({ palette }) => palette.gray[70],
+    <Avatar
+      src={userAvatarUrl}
+      sx={[
+        {
+          width: size,
+          height: size,
+          backgroundColor: "gray.20",
+          border: "1px solid",
+          borderColor: "gray.30",
+          color: "gray.70",
           fontSize: size / 2,
-          lineHeight: `${size}px`,
-        }}
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
+      <Typography
+        sx={{ color: "inherit", fontSize: "inherit", fontWeight: "inherit" }}
       >
-        {preferredName?.charAt(0).toUpperCase()}
-      </Box>
-    </Box>
+        {getInitial(preferredName)}
+      </Typography>
+    </Avatar>
   );
 };
