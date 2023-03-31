@@ -69,6 +69,10 @@ import {
   ApiPropertyTypeUpdateRequest,
   ApiPropertyTypeUpdateResponse,
 } from "../pages/api/types/property-type/update.api";
+import {
+  ApiUpdateUserPreferredNameRequestBody,
+  ApiUpdateUserPreferredNameResponse,
+} from "../pages/api/update-user-preferred-name.api";
 import { ApiUploadUserAvatarResponse } from "../pages/api/upload-user-avatar.api";
 import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
 import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
@@ -290,4 +294,11 @@ export const apiClient = {
     ),
   removeUserAvatar: () =>
     apiClient.get<RemoveUserAvatarResponse>("remove-user-avatar"),
+  updateUserPreferredName: (
+    requestData: ApiUpdateUserPreferredNameRequestBody,
+  ) =>
+    apiClient.post<
+      ApiUpdateUserPreferredNameRequestBody,
+      ApiUpdateUserPreferredNameResponse
+    >("update-user-preferred-name", requestData),
 };

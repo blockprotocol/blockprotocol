@@ -164,7 +164,15 @@ export const GeneralPanel: FunctionComponent = () => {
                 helperText="Your name is visible on your public profile"
                 value={user.preferredName}
                 onChange={(event) => {
-                  setUser({ ...user, preferredName: event.target.value });
+                  setUser({
+                    ...user,
+                    preferredName: event.target.value.trim(),
+                  });
+                }}
+                onBlur={async () => {
+                  void apiClient.updateUserPreferredName({
+                    preferredName: user.preferredName ?? "",
+                  });
                 }}
               />
               <TextField
@@ -202,6 +210,7 @@ export const GeneralPanel: FunctionComponent = () => {
                         opacity: displayRemoveAvatarConfirmation ? 1 : 0,
                         position: "absolute",
                         inset: 0,
+                        borderRadius: "50%",
                         zIndex: 1,
                         background:
                           "linear-gradient(0deg, rgba(218, 42, 84, 0.33), rgba(218, 42, 84, 0.33))",
