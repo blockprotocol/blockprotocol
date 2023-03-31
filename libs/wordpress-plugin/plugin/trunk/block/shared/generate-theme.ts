@@ -54,6 +54,7 @@ export type StyleObject = {
 };
 
 export const generateTheme = () => {
+  // for full list @see https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-json/#settings
   const userPalette = useSetting("color.palette.custom");
   const themePalette = useSetting("color.palette.theme");
   const defaultPalette = useSetting("color.palette.default");
@@ -61,14 +62,18 @@ export const generateTheme = () => {
   const themeGradientPalette = useSetting("color.gradients.theme");
   const defaultGradientPalette = useSetting("color.gradients.default");
 
+  const fontSizes = useSetting("typography.fontSizes");
+  const blockLevelFontFamilies = useSetting("typography.fontFamilies");
+
+  const coreBlockSettings = useSetting("blocks");
+  console.log({ coreBlockSettings });
+
+  // these are all booleans
   const areCustomSolidsEnabled = useSetting("color.custom");
   const areCustomGradientsEnabled = useSetting("color.customGradient");
   const isBackgroundEnabled = useSetting("color.background");
   const isLinkEnabled = useSetting("color.link");
   const isTextEnabled = useSetting("color.text");
-
-  const fontSizes = useSetting("typography.fontSizes");
-  const blockLevelFontFamilies = useSetting("typography.fontFamilies");
   const hasFontStyles = useSetting("typography.fontStyle");
   const hasFontWeights = useSetting("typography.fontWeight");
   const hasLetterSpacing = useSetting("typography.letterSpacing");

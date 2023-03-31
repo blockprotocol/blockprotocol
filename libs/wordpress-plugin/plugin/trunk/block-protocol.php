@@ -294,6 +294,7 @@ function block_protocol_editor_assets() {
 	$data['blocks'] = $blocks;
 	$data['plugin_url'] = plugin_dir_url(__FILE__);
 	$data['entities'] = get_block_protocol_entities_and_locations();
+	$data['theme'] = json_decode(file_get_contents(get_stylesheet_directory() . '/theme.json'), true, 512, JSON_THROW_ON_ERROR);
 	wp_add_inline_script('blockprotocol-script', "block_protocol_data = " . json_encode($data));
 
 	// register and enqueue the script that registers a variation of our block for each BP block available
