@@ -34,7 +34,9 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
   const router = useRouter();
   const { user } = useUser();
 
-  const isMac = navigator.platform.toUpperCase().includes("MAC");
+  const isMac =
+    typeof window !== "undefined" &&
+    navigator.platform.toUpperCase().includes("MAC");
 
   const handleCreateSchema = useCallback(
     async (evt: FormEvent) => {
