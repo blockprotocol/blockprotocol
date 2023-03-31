@@ -1,10 +1,14 @@
 <?php
 
-const BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION = "8.0.0";
+// The following minimum versions are the minimum versions that support the JSON data type.
+// see https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-json
+const BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION = "5.7.8";
+// See https://mariadb.com/kb/en/mariadb-1027-release-notes/
 const BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION = "10.2.7";
 
-function block_protocol_is_database_supported()
+function block_protocol_database_at_version(string $mysql_version, string $mariadb_version)
 {
+
   global $wpdb;
   
   $db_version = $wpdb->db_version();
@@ -12,11 +16,19 @@ function block_protocol_is_database_supported()
 
   if (strpos($db_server_info, 'MariaDB') != false) {
     // site is using MariaDB
-    return $db_version >= BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION;
+    return strnatcmp($db_version, $mariadb_version) >= 0;
   } else {
     // site is using MySQL
-    return $db_version >= BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION;
+    return strnatcmp($db_version, $mysql_version) >= 0;
   }
+}
+
+function block_protocol_is_database_supported()
+{
+  return block_protocol_database_at_version(
+    BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION,
+    BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION
+  );
 }
 
 function block_protocol_migration_1()
@@ -54,6 +66,15 @@ function block_protocol_migration_1()
   block_protocol_maybe_capture_error($wpdb->last_error);
 }
 
+function block_protocol_set_migration_version_to(int $migration_version)
+{
+  global $wpdb;
+
+  if (!$wpdb->last_error){
+    update_site_option('block_protocol_db_migration_version', $migration_version);
+  }
+}
+
 function block_protocol_migrate()
 {
   $saved_version = (int) get_site_option('block_protocol_db_migration_version');
@@ -65,7 +86,7 @@ function block_protocol_migrate()
 
   if ($saved_version < 2) {
     block_protocol_migration_1();
-    update_site_option('block_protocol_db_migration_version', 2);
+    block_protocol_set_migration_version_to(2);
   }
 
   // future migrations go here

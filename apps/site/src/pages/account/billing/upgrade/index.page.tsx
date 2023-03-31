@@ -48,9 +48,9 @@ import {
   priceToHumanReadable,
   subscriptionTierToHumanReadable,
 } from "../../../shared/subscription-utils";
-import { paidSubscriptionFeatures } from "../../billing-settings-panel/free-or-hobby-subscription-tier-overview";
-import { proSubscriptionFeatures } from "../../billing-settings-panel/pro-subscription-tier-overview";
-import { SubscriptionFeatureListItem } from "../../billing-settings-panel/subscription-feature-list-item";
+import { paidSubscriptionFeatures } from "../../billing-panel/free-or-hobby-subscription-tier-overview";
+import { proSubscriptionFeatures } from "../../billing-panel/pro-subscription-tier-overview";
+import { SubscriptionFeatureListItem } from "../../billing-panel/subscription-feature-list-item";
 import { ChangePaymentMethodModal } from "./change-payment-method-modal";
 import { CreateSubscriptionCheckoutForm } from "./create-subscription-form";
 import { UpgradeExistingPaidSubscriptionIntro } from "./upgrade-existing-paid-subscription-intro";
@@ -183,7 +183,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
      * their account further, so they are redirected to the "billing" page.
      */
     if (currentSubscriptionTier === "pro") {
-      void router.push("/settings/billing");
+      void router.push("/account/billing");
     }
   });
 
@@ -272,7 +272,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
       };
     });
 
-    void router.push("/settings/billing");
+    void router.push("/account/billing");
   }, [setUser, router, upgradedSubscriptionTier]);
 
   const upgradeSubscription = async (params: {

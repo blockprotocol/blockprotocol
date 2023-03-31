@@ -680,7 +680,7 @@ We have a Hub of blocks available at [https://blockprotocol.org/hub](https://blo
 #### In your browser
 
 - Sign up for an account at https://blockprotocol.org if you haven’t already
-- Create an API key and copy it: https://blockprotocol.org/settings/api-keys
+- Create an API key and copy it: https://blockprotocol.org/account/api
 
 #### In your terminal
 

@@ -86,7 +86,7 @@ export const CreateSubscriptionCheckoutForm: FunctionComponent<{
         payment_method: {
           card: stripeCardElement,
         },
-        return_url: `${FRONTEND_URL}/settings/billing`,
+        return_url: `${FRONTEND_URL}/account/billing`,
       });
 
       setIsProcessingPayment(false);

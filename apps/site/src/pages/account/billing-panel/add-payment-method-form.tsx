@@ -65,7 +65,7 @@ const AddPaymentMethodForm: FunctionComponent<{
         clientSecret,
         {
           payment_method: { card: stripeCardElement },
-          return_url: `${FRONTEND_URL}/settings/billing/payment-methods`,
+          return_url: `${FRONTEND_URL}/account/billing/payment-methods`,
         },
       );
 

@@ -1,15 +1,13 @@
-import { faSmile } from "@fortawesome/free-regular-svg-icons";
 import {
   EntityTypeEditorFormData,
   useEntityTypeFormState,
 } from "@hashintel/type-editor";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Collapse, Stack, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { Button } from "../../../../../components/button";
-import { FontAwesomeIcon } from "../../../../../components/icons";
 import { PencilSimpleLineIcon } from "../../../../../components/icons/pencil-simple-line";
 
 const useFrozenValue = <T extends any>(value: T): T => {
@@ -41,67 +39,61 @@ export const EntityTypeEditBar = ({
 
   const frozenSubmitting = useFrozenValue(isSubmitting);
 
-  if (!isDirty && !isDraft) {
-    return null;
-  }
-
   return (
-    <Box
-      sx={({ palette, zIndex, shadows }) => ({
-        backgroundColor: palette.purple[60],
-        color: "white",
-        position: "sticky",
-        top: "var(--navbar-height)",
-        zIndex: zIndex.appBar - 1,
-        boxShadow: shadows[1],
-      })}
-    >
-      <Container>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            py: "18px",
-          }}
-        >
-          {isDraft ? (
-            <FontAwesomeIcon icon={faSmile} sx={{ fontSize: 14 }} />
-          ) : (
-            <PencilSimpleLineIcon />
-          )}
-          <Typography sx={{ ml: 1, color: "white" }}>
-            <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
-              Currently editing
-            </Box>{" "}
-            {isDraft ? (
-              <>- this type has not yet been created</>
-            ) : (
-              `Version ${frozenVersion} -> ${frozenVersion + 1}`
-            )}
-          </Typography>
-          <Stack spacing={1.25} sx={{ marginLeft: "auto" }} direction="row">
-            <Button
-              disabled={frozenSubmitting}
-              type="button"
-              variant="secondary"
-              size="small"
-              {...(isDraft
-                ? { href: `/${router.query.shortname}/all-types` }
-                : { onClick: () => reset() })}
-            >
-              Discard changes
-            </Button>
-            <Button
-              disabled={frozenSubmitting}
-              variant="primary"
-              size="small"
-              type="submit"
-            >
-              {isDraft ? <>Create</> : <>Publish update</>}
-            </Button>
-          </Stack>
-        </Box>
-      </Container>
-    </Box>
+    <Collapse in={isDirty || isDraft}>
+      <Box
+        sx={({ palette, zIndex, shadows }) => ({
+          backgroundColor: palette.purple[60],
+          color: "white",
+          position: "sticky",
+          top: "var(--navbar-height)",
+          zIndex: zIndex.drawer + 2,
+          boxShadow: shadows[1],
+        })}
+      >
+        <Container>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              py: "18px",
+            }}
+          >
+            <PencilSimpleLineIcon sx={{ height: 16, width: 16 }} />
+            <Typography sx={{ ml: 1, color: "white" }}>
+              <Box component="span" sx={{ fontWeight: "bold" }}>
+                Currently editing
+              </Box>{" "}
+              {isDraft ? (
+                <>– this type has not yet been created</>
+              ) : (
+                `Version ${frozenVersion} -> ${frozenVersion + 1}`
+              )}
+            </Typography>
+            <Stack spacing={1.25} sx={{ marginLeft: "auto" }} direction="row">
+              <Button
+                disabled={frozenSubmitting}
+                type="button"
+                variant="secondary"
+                size="small"
+                {...(isDraft
+                  ? { href: `/${router.query.shortname}/all-types` }
+                  : { onClick: () => reset() })}
+              >
+                Discard changes
+              </Button>
+              <Button
+                disabled={frozenSubmitting}
+                variant="primary"
+                size="small"
+                type="submit"
+              >
+                {isDraft ? <>Create</> : <>Publish update</>}
+              </Button>
+            </Stack>
+          </Box>
+        </Container>
+      </Box>
+    </Collapse>
   );
 };

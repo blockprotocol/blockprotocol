@@ -369,7 +369,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           </Typography>
           <CustomLinkButton
             href={{
-              pathname: "/settings/billing/upgrade",
+              pathname: "/account/billing/upgrade",
               query: { tier: "hobby" },
             }}
             variant="primary"
@@ -461,7 +461,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           >
             <CustomLinkButton
               href={{
-                pathname: "/settings/billing/upgrade",
+                pathname: "/account/billing/upgrade",
                 query: { tier: "hobby" },
               }}
               size="small"
@@ -561,7 +561,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           </Typography>
           <LinkButton
             href={{
-              pathname: "/settings/billing/upgrade",
+              pathname: "/account/billing/upgrade",
               query: { tier: "pro" },
             }}
             size="small"
@@ -635,7 +635,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           >
             <LinkButton
               href={{
-                pathname: "/settings/billing/upgrade",
+                pathname: "/account/billing/upgrade",
                 query: { tier: "pro" },
               }}
               size="small"
