@@ -37,7 +37,7 @@ const MiscellaneousTopic = ({
           maxWidth: "unset",
           mb: 1.25,
           color: "gray.70",
-          fontSize: 15,
+          fontSize: 14,
         }}
       >
         {description}
@@ -72,7 +72,7 @@ const AvatarButton = (props: ButtonProps) => {
 };
 
 export const GeneralPanel: FunctionComponent = () => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -104,6 +104,10 @@ export const GeneralPanel: FunctionComponent = () => {
                 placeholder="e.g. John"
                 label="First or preferred name"
                 helperText="Your name is visible on your public profile"
+                value={user.preferredName}
+                onChange={(event) => {
+                  setUser({ ...user, preferredName: event.target.value });
+                }}
               />
               <TextField
                 disabled
@@ -115,7 +119,11 @@ export const GeneralPanel: FunctionComponent = () => {
             </Stack>
 
             <Box flex={1}>
-              <Typography>Avatar</Typography>
+              <Typography
+                sx={{ color: "gray.80", fontSize: 15, fontWeight: 500 }}
+              >
+                Avatar
+              </Typography>
               <Stack direction={isMobile ? "column" : "row"}>
                 <Avatar
                   src={user.userAvatarUrl}

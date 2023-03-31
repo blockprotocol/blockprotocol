@@ -15,14 +15,29 @@ export const PanelSection = ({
   return (
     <div>
       <Box
-        sx={{
+        sx={(theme) => ({
           display: "flex",
           alignItems: "flex-end",
           mb: 2,
-        }}
+          [theme.breakpoints.down("md")]: {
+            mb: 4,
+          },
+        })}
       >
         <Box sx={{ flex: 1 }}>
-          <Typography variant="bpHeading2" sx={{ fontSize: 28, mb: 1 }}>
+          <Typography
+            variant="bpHeading2"
+            sx={(theme) => ({
+              fontSize: 28,
+              color: "gray.90",
+              mb: 1,
+              [theme.breakpoints.down("md")]: {
+                pb: 1.5,
+                borderBottom: "1px solid",
+                borderBottomColor: "gray.30",
+              },
+            })}
+          >
             {title}
           </Typography>
           <Typography
