@@ -12,8 +12,62 @@ import {
 } from "./main.js";
 import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib.js";
 
+type ColorOptions = {
+  light: string;
+  main: string;
+  dark: string;
+};
+
+type TypographyOptions = {
+  fontFamily?: string;
+  fontSize?: string;
+  lineHeight?: string;
+  textDecoration?: string;
+  textTransform?: string;
+};
+
+export type BlockProtocolThemeObject = {
+  colors: {
+    // from https://mui.com/material-ui/customization/palette/
+    primary: ColorOptions;
+    secondary: ColorOptions;
+    error: ColorOptions;
+    warning: ColorOptions;
+    info: ColorOptions;
+    success: ColorOptions;
+
+    // from https://primer.style/design/foundations/color
+    background: {
+      main: string;
+      inset: string;
+      subtle: string;
+      emphasis: string;
+    };
+    foreground: {
+      main: string;
+      muted: string;
+      subtle: string;
+      onEmphasis: string;
+    };
+    border: {
+      main: string;
+      muted: string;
+    };
+  };
+  typography: TypographyOptions & {
+    h1: TypographyOptions;
+    h2: TypographyOptions;
+    h3: TypographyOptions;
+    h4: TypographyOptions;
+    h5: TypographyOptions;
+    h6: TypographyOptions;
+  };
+};
+
 export type BlockComponent<RootEntity extends Entity = Entity> =
-  FunctionComponent<BlockGraphProperties<RootEntity>>;
+  FunctionComponent<
+    BlockGraphProperties<RootEntity> & { theme: BlockProtocolThemeObject }
+  >;
 
 /**
  * Create a GraphBlockHandler instance, using a reference to an element in the block.

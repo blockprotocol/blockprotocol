@@ -56,7 +56,7 @@
     "blockType": {
       "entryPoint": "react"
     },
-    "displayName": "Template",
+    "displayName": "Theme Prototype",
     "examples": [
       {
         "https://blockprotocol.org/@blockprotocol/types/property-type/name/": "World"

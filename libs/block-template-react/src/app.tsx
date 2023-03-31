@@ -43,6 +43,7 @@ export const App: BlockComponent<BlockEntity> = ({
      */
     blockEntitySubgraph,
   },
+  theme,
 }) => {
   /**
    * These two lines establish communication with the embedding application.
@@ -84,6 +85,10 @@ export const App: BlockComponent<BlockEntity> = ({
         e.g. by calling <code>updateEntity</code>.
       </p>
       <button
+        style={{
+          background: theme?.colors?.primary.main,
+          color: theme?.colors?.foreground.main,
+        }}
         onClick={() =>
           /**
            * This is an example of using the graph module to send a message to the embedding application

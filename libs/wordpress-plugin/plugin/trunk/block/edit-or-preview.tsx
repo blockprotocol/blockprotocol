@@ -27,8 +27,6 @@ export const EditOrPreview = ({ attributes, setAttributes }: EditProps) => {
 
   const { preview, sourceUrl } = attributes;
 
-  const theme = generateTheme();
-
   const selectedBlock = blocks?.find((block) => block.source === sourceUrl);
 
   if (preview) {

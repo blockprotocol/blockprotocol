@@ -1,6 +1,7 @@
 import { useModuleConstructor } from "@blockprotocol/core/react";
 import { FunctionComponent, RefObject, useMemo } from "react";
 
+import { BlockProtocolThemeObject } from "../temporal/react";
 import {
   BlockGraphProperties,
   Entity,
@@ -13,7 +14,9 @@ import {
 import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib.js";
 
 export type BlockComponent<RootEntity extends Entity = Entity> =
-  FunctionComponent<BlockGraphProperties<RootEntity>>;
+  FunctionComponent<
+    BlockGraphProperties<RootEntity> & { theme: BlockProtocolThemeObject }
+  >;
 
 /**
  * Create a GraphBlockHandler instance, using a reference to an element in the block.

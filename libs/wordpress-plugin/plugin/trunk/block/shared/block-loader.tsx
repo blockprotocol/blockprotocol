@@ -16,6 +16,7 @@ import { BlockRenderer } from "./block-loader/block-renderer";
 import { HookPortals } from "./block-loader/hook-portals";
 import { parseBlockSource } from "./block-loader/load-remote-block";
 import { useRemoteBlock } from "./block-loader/use-remote-block";
+import { generateTheme } from "./generate-theme";
 
 type BlockLoaderProps =
   | {
@@ -168,6 +169,19 @@ export const BlockLoader = ({
     callbacks: "service" in callbacks ? callbacks.service : {},
   });
 
+  const theme =
+    blockWrapperRef.current && generateTheme(blockWrapperRef.current);
+
+  console.log({ theme });
+
+  const blockProperties = useMemo(
+    () => ({
+      ...graphProperties,
+      theme,
+    }),
+    [graphProperties, theme],
+  );
+
   if (loading) {
     return <LoadingImage height="8rem" />;
   }
@@ -192,7 +206,7 @@ export const BlockLoader = ({
         <BlockRenderer
           blockName={blockName}
           blockSource={blockSource}
-          properties={graphProperties}
+          properties={blockProperties}
           sourceUrl={sourceUrl}
         />
       ) : null}
