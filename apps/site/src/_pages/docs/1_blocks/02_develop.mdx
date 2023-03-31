@@ -408,13 +408,13 @@ These will automatically be included in the `block-metadata.json` produced after
 
 In addition to the above, updating the `example-graph` (either `./src/example-graph.ts` or `./example-graph.json` depending on approach) is a great way to help users understand how to use your block, and how it functions. Many environments (such as the [Þ Hub](https://blockprotocol.org/hub)) will insert this data when users are viewing blocks.
 
-You now have a block package that you can provide to apps to use, by **publishing it on the Hub**.
+You now have a block package that you can provide to apps to use, by **publishing it on the [Þ Hub](https://blockprotocol.org/hub)**.
 
 ## Publish
 
 Once you've built a block, you can add it to the [Þ Hub](https://blockprotocol.org/hub). This provides you with an instant online public playground in which to demo your block, and allows other users of the Block Protocol to discover it, or embed it through any Þ application.
 
-To publish a block on the Hub take the following steps.
+To publish a block on the [Þ Hub](https://blockprotocol.org/hub) take the following steps.
 
 ### Pre-requisite: obtain an API Key
 
@@ -427,7 +427,7 @@ To publish a block on the Hub take the following steps.
 - run `npx blockprotocol@latest publish` to generate a `.blockprotocolrc` file when prompted
 - Replace the placeholder key in that file with your API key
 - now run `npx blockprotocol@latest publish` again
-- See your block on the Hub!
+- See your block on the [Þ Hub](https://blockprotocol.org/hub)!
 
 ### Updating your block
 
@@ -448,5 +448,5 @@ Read more about verification in [the FAQ](https://blockprotocol.org/docs/faq#how
 - **To modify the description:** update the `description` in package.json
 - **To change the icon:** add an icon to the `public` folder and update `blockprotocol.icon` in `package.json`
 - add a preview `image` to the `public` folder and update `blockprotocol.image` in `package.json`
-- update your block’s `README.md` – it will appear below your block on its Hub page if you change it from the default
-- update the `example-graph` (either `./src/example-graph.ts` or `./example-graph.json` depending on approach) to update the data the block has available to it when a user loads it on the Hub
+- update your block’s `README.md` – it will appear below your block on its [Þ Hub](https://blockprotocol.org/hub) page if you change it from the default
+- update the `example-graph` (either `./src/example-graph.ts` or `./example-graph.json` depending on approach) to update the data the block has available to it when a user loads it on the [Þ Hub](https://blockprotocol.org/hub)
