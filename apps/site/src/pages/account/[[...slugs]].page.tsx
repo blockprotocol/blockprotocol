@@ -13,8 +13,14 @@ import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigati
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { ApiKeysPanel } from "./api-keys-panel";
 import { BillingPanel } from "./billing-panel/billing-panel";
+import { GeneralPanel } from "./general-panel";
 
 const accountPanels = [
+  {
+    title: "General",
+    slug: "general",
+    panel: <GeneralPanel />,
+  },
   ...(isBillingFeatureFlagEnabled
     ? [
         {
@@ -35,15 +41,6 @@ const sidebarMaxWidth = 150;
 
 const Account: AuthWallPageContent = () => {
   const router = useRouter();
-
-  useLayoutEffect(() => {
-    /**
-     * @todo: remove this redirect when there is a panel with route "/account"
-     */
-    if (router.asPath === "/account") {
-      void router.push("/account/billing");
-    }
-  }, [router]);
 
   const currentSettingsPanel = useMemo(() => {
     if (router.isReady) {
