@@ -36,7 +36,7 @@ function block_protocol_migration_1()
   global $wpdb;
   $charset_collate = $wpdb->get_charset_collate();
 
-  $sql = "CREATE TABLE `{$wpdb->prefix}block_protocol_entities` (
+  $sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}block_protocol_entities` (
     -- common data across all entities
     entity_id char(36) NOT NULL,
     entity_type_id text NOT NULL,
@@ -64,6 +64,14 @@ function block_protocol_migration_1()
 
   dbDelta($sql);
   block_protocol_maybe_capture_error($wpdb->last_error);
+}
+
+function block_protocol_migration_2()
+{
+  // This migration is solely to try to recreate the database in older installations
+  // that may have a unmigrated DB but a migration_version of `2`.
+  // This only works because we have `IF NOT EXISTS` in the first migration.
+  block_protocol_migration_1();
 }
 
 function block_protocol_set_migration_version_to(int $migration_version)
