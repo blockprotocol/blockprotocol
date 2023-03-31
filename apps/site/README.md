@@ -286,7 +286,7 @@ Revokes a given API key for the authenticated user.
 
   - `publicId`: the public ID portion of the API key to revoke.
 
-- Request Response: Empty
+- Request Response: `SUCCESS`
 
 #### `POST /api/me/update-api-key` [requires cookie authentication]
 
@@ -297,7 +297,7 @@ Update a given API key for the authenticated user.
   - `publicId`: the public ID portion of the API key to update.
   - `displayName`: the new `displayName` that should be present on the API key.
 
-- Request Response: Empty
+- Request Response: `SUCCESS`
 
 #### `POST /api/logout` [requires cookie authentication]
 

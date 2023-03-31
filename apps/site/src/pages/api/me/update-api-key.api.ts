@@ -10,7 +10,7 @@ export type ApiUpdateApiKeyBody = {
   displayName: string;
 };
 
-export type ApiUpdateApiKeyResponse = {};
+export type ApiUpdateApiKeyResponse = "SUCCESS";
 
 export default createAuthenticatedHandler<
   ApiUpdateApiKeyBody,
@@ -44,5 +44,5 @@ export default createAuthenticatedHandler<
     }
     // If it was found but not updated, the operation was a no-op.
 
-    res.status(200).json({});
+    res.status(200).json("SUCCESS");
   });

@@ -9,7 +9,7 @@ export type ApiRevokeApiKeyBody = {
   publicId: string;
 };
 
-export type ApiRevokeApiKeyResponse = {};
+export type ApiRevokeApiKeyResponse = "SUCCESS";
 
 export default createAuthenticatedHandler<
   ApiRevokeApiKeyBody,
@@ -40,5 +40,5 @@ export default createAuthenticatedHandler<
       );
     }
 
-    res.status(200).json({});
+    res.status(200).json("SUCCESS");
   });
