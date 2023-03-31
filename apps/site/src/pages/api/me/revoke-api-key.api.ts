@@ -14,7 +14,7 @@ export type ApiRevokeApiKeyResponse = {};
 export default createAuthenticatedHandler<
   ApiRevokeApiKeyBody,
   ApiRevokeApiKeyResponse
->(false)
+>()
   .use(bodyValidator("publicId").isString().notEmpty())
   .post(async (req, res) => {
     const errors = validationResult(req);

@@ -15,7 +15,7 @@ export type ApiGenerateApiKeyResponse = {
 export default createAuthenticatedHandler<
   ApiGenerateApiKeyBody,
   ApiGenerateApiKeyResponse
->(false)
+>()
   .use(bodyValidator("displayName").isString().notEmpty())
   .post(async (req, res) => {
     const errors = validationResult(req);

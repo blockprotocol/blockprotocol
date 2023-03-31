@@ -15,7 +15,7 @@ export type ApiUpdateApiKeyResponse = {};
 export default createAuthenticatedHandler<
   ApiUpdateApiKeyBody,
   ApiUpdateApiKeyResponse
->(false)
+>()
   .use(bodyValidator("publicId").isString().notEmpty())
   .use(bodyValidator("displayName").isString().notEmpty())
   .post(async (req, res) => {
