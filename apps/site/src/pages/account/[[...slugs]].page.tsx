@@ -21,7 +21,7 @@ import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigati
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { ApiKeysPanel } from "./api-keys-panel";
 import { BillingPanel } from "./billing-panel/billing-panel";
-import { GeneralPanel } from "./general-panel";
+import { GeneralPanel } from "./general-panel/general-panel";
 
 type AccountPanel = {
   title: string;

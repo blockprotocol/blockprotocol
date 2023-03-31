@@ -287,8 +287,8 @@ export const apiClient = {
       "set-usage-limit",
       requestData,
     ),
-  uploadUserAvatar: (requestData: {}) =>
-    apiClient.post<unknown, ApiUploadUserAvatarResponse>(
+  uploadUserAvatar: (requestData: FormData) =>
+    apiClient.post<FormData, ApiUploadUserAvatarResponse>(
       "upload-user-avatar",
       requestData,
     ),

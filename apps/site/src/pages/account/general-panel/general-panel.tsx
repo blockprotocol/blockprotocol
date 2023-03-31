@@ -1,95 +1,22 @@
-import {
-  faFaceLaugh,
-  faTrash,
-  faUpload,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  Avatar,
-  Box,
-  Card,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { NextSeo } from "next-seo";
 import { ChangeEvent, FunctionComponent, useRef, useState } from "react";
 
-import { Button, ButtonProps } from "../../components/button";
-import { FontAwesomeIcon } from "../../components/icons";
-import { Link } from "../../components/link";
-import { PanelSection } from "../../components/pages/account/panel-section";
-import { TextField } from "../../components/text-field";
-import { useUser } from "../../context/user-context";
-import { apiClient } from "../../lib/api-client";
-
-const MiscellaneousTopic = ({
-  description,
-  buttonTitle,
-  buttonHref,
-}: {
-  description: string;
-  buttonTitle: string;
-  buttonHref: string;
-}) => {
-  return (
-    <Box>
-      <Typography
-        sx={{
-          maxWidth: "unset",
-          mb: 1.25,
-          color: "gray.70",
-          fontSize: 14,
-        }}
-      >
-        {description}
-      </Typography>
-      <Button
-        href={buttonHref}
-        squared
-        variant="tertiary"
-        size="small"
-        color="gray"
-      >
-        {buttonTitle}
-      </Button>
-    </Box>
-  );
-};
-
-const AvatarButton = (props: ButtonProps) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  return (
-    <Button
-      squared
-      variant="tertiary"
-      size={isMobile ? "medium" : "small"}
-      color="gray"
-      fullWidth={isMobile}
-      {...props}
-    />
-  );
-};
-
-const getFormDataBodyWithFile = (file?: File) => {
-  const body = new FormData();
-
-  if (file) {
-    const blob =
-      file instanceof File
-        ? file
-        : new Blob([JSON.stringify(file)], { type: "application/json" });
-    body.append("image", blob);
-  }
-
-  return body;
-};
+import { FontAwesomeIcon } from "../../../components/icons";
+import { Link } from "../../../components/link";
+import { PanelSection } from "../../../components/pages/account/panel-section";
+import { TextField } from "../../../components/text-field";
+import { useUser } from "../../../context/user-context";
+import { apiClient } from "../../../lib/api-client";
+import { AvatarButton } from "./avatar-button";
+import { AvatarWithOverlay } from "./avatar-with-overlay";
+import { ConfirmRemoveAvatarCard } from "./confirm-remove-avatar-card";
+import { MiscellaneousTopic } from "./miscellaneous-topic";
 
 export const GeneralPanel: FunctionComponent = () => {
   const { user, setUser } = useUser();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -101,32 +28,29 @@ export const GeneralPanel: FunctionComponent = () => {
     return null;
   }
 
-  const hasAvatar = !!user.userAvatarUrl;
-
   const clickOnInput = () => {
-    inputRef.current?.click();
+    fileInputRef.current?.click();
   };
 
   const handleOnAvatarChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (!inputRef.current) {
-      return;
-    }
-
     const file = event.target.files?.[0];
-
     if (!file) {
       return;
     }
 
-    const body = getFormDataBodyWithFile(file);
-    // clear input selection after body is created
-    inputRef.current.value = "";
+    const formData = new FormData();
+    formData.append("image", file);
 
     /** @todo handle error & loading state */
-    const res = await apiClient.uploadUserAvatar(body);
+    const res = await apiClient.uploadUserAvatar(formData);
 
     if (res.data) {
       setUser({ ...user, userAvatarUrl: res.data.avatarUrl });
+    }
+
+    // clear file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -140,6 +64,8 @@ export const GeneralPanel: FunctionComponent = () => {
 
     setDisplayRemoveAvatarConfirmation(false);
   };
+
+  const hasAvatar = !!user.userAvatarUrl;
 
   return (
     <>
@@ -191,38 +117,10 @@ export const GeneralPanel: FunctionComponent = () => {
                 Avatar
               </Typography>
               <Stack direction={isMobile ? "column" : "row"}>
-                <Avatar
+                <AvatarWithOverlay
                   src={user.userAvatarUrl}
-                  sx={[
-                    {
-                      width: 150,
-                      height: 150,
-                      backgroundColor: "gray.10",
-                      border: "1px solid",
-                      borderColor: "gray.30",
-                      position: "relative",
-                      alignSelf: "center",
-                      margin: 2,
-
-                      "&:after": {
-                        content: '""',
-                        transition: theme.transitions.create("opacity"),
-                        opacity: displayRemoveAvatarConfirmation ? 1 : 0,
-                        position: "absolute",
-                        inset: 0,
-                        borderRadius: "50%",
-                        zIndex: 1,
-                        background:
-                          "linear-gradient(0deg, rgba(218, 42, 84, 0.33), rgba(218, 42, 84, 0.33))",
-                      },
-                    },
-                  ]}
-                >
-                  <FontAwesomeIcon
-                    icon={faFaceLaugh}
-                    sx={{ color: "gray.40", fontSize: 80 }}
-                  />
-                </Avatar>
+                  showDangerOverlay={displayRemoveAvatarConfirmation}
+                />
 
                 <Stack
                   sx={{
@@ -233,44 +131,10 @@ export const GeneralPanel: FunctionComponent = () => {
                   }}
                 >
                   {displayRemoveAvatarConfirmation ? (
-                    <Card
-                      sx={{
-                        p: 2,
-                        border: "1px solid",
-                        borderColor: "gray.20",
-                        alignSelf: "center",
-                        width: "100%",
-                      }}
-                      elevation={2}
-                    >
-                      <Typography
-                        sx={{ mb: 1.5, fontSize: 14, color: "gray.80" }}
-                      >
-                        Are you sure you want to delete your current profile
-                        picture?
-                      </Typography>
-                      <Stack gap={1} direction="row">
-                        <Button
-                          size="small"
-                          color="danger"
-                          squared
-                          onClick={removeAvatar}
-                        >
-                          Delete
-                        </Button>
-                        <Button
-                          size="small"
-                          color="gray"
-                          squared
-                          variant="tertiary"
-                          onClick={() =>
-                            setDisplayRemoveAvatarConfirmation(false)
-                          }
-                        >
-                          Cancel
-                        </Button>
-                      </Stack>
-                    </Card>
+                    <ConfirmRemoveAvatarCard
+                      onCancel={() => setDisplayRemoveAvatarConfirmation(false)}
+                      onConfirm={removeAvatar}
+                    />
                   ) : (
                     <>
                       <AvatarButton
@@ -281,7 +145,7 @@ export const GeneralPanel: FunctionComponent = () => {
                       </AvatarButton>
                       <input
                         hidden
-                        ref={inputRef}
+                        ref={fileInputRef}
                         accept="image/*"
                         type="file"
                         onChange={handleOnAvatarChange}
