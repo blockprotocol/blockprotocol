@@ -6,13 +6,14 @@ import {
 import {
   Avatar,
   Box,
+  Card,
   Stack,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { NextSeo } from "next-seo";
-import { FunctionComponent } from "react";
+import { ChangeEvent, FunctionComponent, useRef, useState } from "react";
 
 import { Button, ButtonProps } from "../../components/button";
 import { FontAwesomeIcon } from "../../components/icons";
@@ -20,6 +21,7 @@ import { Link } from "../../components/link";
 import { PanelSection } from "../../components/pages/account/panel-section";
 import { TextField } from "../../components/text-field";
 import { useUser } from "../../context/user-context";
+import { apiClient } from "../../lib/api-client";
 
 const MiscellaneousTopic = ({
   description,
@@ -71,17 +73,73 @@ const AvatarButton = (props: ButtonProps) => {
   );
 };
 
+const getFormDataBodyWithFile = (file?: File) => {
+  const body = new FormData();
+
+  if (file) {
+    const blob =
+      file instanceof File
+        ? file
+        : new Blob([JSON.stringify(file)], { type: "application/json" });
+    body.append("image", blob);
+  }
+
+  return body;
+};
+
 export const GeneralPanel: FunctionComponent = () => {
   const { user, setUser } = useUser();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [displayRemoveAvatarConfirmation, setDisplayRemoveAvatarConfirmation] =
+    useState(false);
 
   if (!user || user === "loading") {
     return null;
   }
 
   const hasAvatar = !!user.userAvatarUrl;
+
+  const clickOnInput = () => {
+    inputRef.current?.click();
+  };
+
+  const handleOnAvatarChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    if (!inputRef.current) {
+      return;
+    }
+
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const body = getFormDataBodyWithFile(file);
+    // clear input selection after body is created
+    inputRef.current.value = "";
+
+    /** @todo handle error & loading state */
+    const res = await apiClient.uploadUserAvatar(body);
+
+    if (res.data) {
+      setUser({ ...user, userAvatarUrl: res.data.avatarUrl });
+    }
+  };
+
+  const removeAvatar = async () => {
+    /** @todo handle error & loading state */
+    const res = await apiClient.removeUserAvatar();
+
+    if (res.data) {
+      setUser({ ...user, userAvatarUrl: undefined });
+    }
+
+    setDisplayRemoveAvatarConfirmation(false);
+  };
 
   return (
     <>
@@ -127,21 +185,36 @@ export const GeneralPanel: FunctionComponent = () => {
               <Stack direction={isMobile ? "column" : "row"}>
                 <Avatar
                   src={user.userAvatarUrl}
-                  sx={{
-                    margin: 2,
-                    width: 150,
-                    height: 150,
-                    backgroundColor: "gray.10",
-                    border: "1px solid",
-                    borderColor: "gray.30",
-                    alignSelf: "center",
-                  }}
+                  sx={[
+                    {
+                      width: 150,
+                      height: 150,
+                      backgroundColor: "gray.10",
+                      border: "1px solid",
+                      borderColor: "gray.30",
+                      position: "relative",
+                      alignSelf: "center",
+                      margin: 2,
+
+                      "&:after": {
+                        content: '""',
+                        transition: theme.transitions.create("opacity"),
+                        opacity: displayRemoveAvatarConfirmation ? 1 : 0,
+                        position: "absolute",
+                        inset: 0,
+                        zIndex: 1,
+                        background:
+                          "linear-gradient(0deg, rgba(218, 42, 84, 0.33), rgba(218, 42, 84, 0.33))",
+                      },
+                    },
+                  ]}
                 >
                   <FontAwesomeIcon
                     icon={faFaceLaugh}
                     sx={{ color: "gray.40", fontSize: 80 }}
                   />
                 </Avatar>
+
                 <Stack
                   sx={{
                     alignItems: "flex-start",
@@ -150,15 +223,72 @@ export const GeneralPanel: FunctionComponent = () => {
                     alignSelf: isMobile ? "stretch" : "center",
                   }}
                 >
-                  <AvatarButton startIcon={<FontAwesomeIcon icon={faUpload} />}>
-                    Upload {hasAvatar ? "new" : "an"} avatar
-                  </AvatarButton>
-                  {hasAvatar && (
-                    <AvatarButton
-                      startIcon={<FontAwesomeIcon icon={faTrash} />}
+                  {displayRemoveAvatarConfirmation ? (
+                    <Card
+                      sx={{
+                        p: 2,
+                        border: "1px solid",
+                        borderColor: "gray.20",
+                        alignSelf: "center",
+                        width: "100%",
+                      }}
+                      elevation={2}
                     >
-                      Delete picture
-                    </AvatarButton>
+                      <Typography
+                        sx={{ mb: 1.5, fontSize: 14, color: "gray.80" }}
+                      >
+                        Are you sure you want to delete your current profile
+                        picture?
+                      </Typography>
+                      <Stack gap={1} direction="row">
+                        <Button
+                          size="small"
+                          color="danger"
+                          squared
+                          onClick={removeAvatar}
+                        >
+                          Delete
+                        </Button>
+                        <Button
+                          size="small"
+                          color="gray"
+                          squared
+                          variant="tertiary"
+                          onClick={() =>
+                            setDisplayRemoveAvatarConfirmation(false)
+                          }
+                        >
+                          Cancel
+                        </Button>
+                      </Stack>
+                    </Card>
+                  ) : (
+                    <>
+                      <AvatarButton
+                        onClick={clickOnInput}
+                        startIcon={<FontAwesomeIcon icon={faUpload} />}
+                      >
+                        Upload {hasAvatar ? "new" : "an"} avatar
+                      </AvatarButton>
+                      <input
+                        hidden
+                        ref={inputRef}
+                        accept="image/*"
+                        type="file"
+                        onChange={handleOnAvatarChange}
+                      />
+
+                      {hasAvatar && (
+                        <AvatarButton
+                          startIcon={<FontAwesomeIcon icon={faTrash} />}
+                          onClick={() =>
+                            setDisplayRemoveAvatarConfirmation(true)
+                          }
+                        >
+                          Delete picture
+                        </AvatarButton>
+                      )}
+                    </>
                   )}
                 </Stack>
               </Stack>
@@ -175,6 +305,7 @@ export const GeneralPanel: FunctionComponent = () => {
             fullWidth
             label="Email address (cannot be changed))"
             value={user.email}
+            sx={[!isMobile && { maxWidth: "50%" }]}
           />
         </PanelSection>
 

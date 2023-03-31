@@ -12,7 +12,7 @@ import { resolveS3ResourceKey } from "../../lib/s3";
 import { uploadFileBufferToS3 } from "../../lib/s3-file-uploads";
 import { formatErrors } from "../../util/api";
 
-type Response = {
+export type ApiUploadUserAvatarResponse = {
   avatarUrl: string;
 };
 
@@ -53,7 +53,7 @@ async function validateImage(mime: string, buffer: Buffer) {
 
 export default createAuthenticatedHandler<
   AuthenticatedApiRequest & MultipartExtensions<"image", null>,
-  Response
+  ApiUploadUserAvatarResponse
 >()
   .use(
     multipartUploads({

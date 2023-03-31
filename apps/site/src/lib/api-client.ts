@@ -20,6 +20,7 @@ import {
   ApiGenerateApiKeyBody,
   ApiGenerateApiKeyResponse,
 } from "../pages/api/me/generate-api-key.api";
+import { RemoveUserAvatarResponse } from "../pages/api/remove-user-avatar.api";
 import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
@@ -68,6 +69,7 @@ import {
   ApiPropertyTypeUpdateRequest,
   ApiPropertyTypeUpdateResponse,
 } from "../pages/api/types/property-type/update.api";
+import { ApiUploadUserAvatarResponse } from "../pages/api/upload-user-avatar.api";
 import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
 import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
 import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/entity-type/index.api";
@@ -281,4 +283,11 @@ export const apiClient = {
       "set-usage-limit",
       requestData,
     ),
+  uploadUserAvatar: (requestData: {}) =>
+    apiClient.post<unknown, ApiUploadUserAvatarResponse>(
+      "upload-user-avatar",
+      requestData,
+    ),
+  removeUserAvatar: () =>
+    apiClient.get<RemoveUserAvatarResponse>("remove-user-avatar"),
 };
