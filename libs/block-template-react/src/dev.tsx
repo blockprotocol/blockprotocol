@@ -2,7 +2,7 @@ import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
 import packageJson from "../package.json";
-import { blockEntity, exampleGraph } from "./example-graph";
+import { exampleGraph } from "./example-graph";
 import Component from "./index";
 
 const node = document.getElementById("app");
@@ -22,7 +22,7 @@ const DevApp = () => {
   return (
     <MockBlockDock
       blockDefinition={{ ReactComponent: Component }}
-      blockEntityRecordId={blockEntity.metadata.recordId}
+      blockEntityRecordId={exampleGraph.blockEntityRecordId}
       blockInfo={packageJson.blockprotocol}
       debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
       initialData={{
