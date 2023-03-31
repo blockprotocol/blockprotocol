@@ -157,6 +157,11 @@ const nextConfig = {
         destination: "/account/:slug*",
         permanent: true,
       },
+      {
+        source: "/account",
+        destination: "/account/general",
+        permanent: true,
+      },
     ];
   },
 
