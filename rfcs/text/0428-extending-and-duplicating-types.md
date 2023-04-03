@@ -978,6 +978,9 @@ While various implementations likely will want to implement checking for the sim
 
 - We haven't specified how projecting/selecting properties of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact properties of a subtype to provide a valid supertype instance in embedding applications.
   - This may be especially difficult if a property type is defined as being an array of `oneOf` a given set of property type objects. Detecting which sub-schema applies to a given array element when accounting for dropped properties, **may** be a very difficult task.
+- Type extension might prove to have strange side-effects when considering link types which extend from one another.
+  - Say `Person` defines `Knows` and `Has Friend` links. If `Has Friend` extends `Knows`, then technically any `Has Friend` instance is also a `Knows` instance, and would need to satisfy the link constraints set on both. This has implications for `minItems` and `maxItems`, as well as for link destinations. If `Person` says it only `Knows` other `Person` entities, but `Has Friend` links to both `Person` and `Pet` entities, then a `Has Friend` link to a `Pet` entity would break the constraint set for `Knows`.
+  - Say `Person` defines `Knows` and `Has Friend` links, and that those links are **ordered**. At the moment, the order of a link is defined in a given direction (e.g. left to right) and has a single value. That would presently imply that the order of the `Knows` link _within the `Knows` links list_ would have to be the same as the order of the `Has Friend` link _within the `Has Friend` links list_.
 
 # Future possibilities
 
