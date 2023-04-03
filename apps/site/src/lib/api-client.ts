@@ -21,6 +21,14 @@ import {
   ApiGenerateApiKeyResponse,
 } from "../pages/api/me/generate-api-key.api";
 import {
+  ApiRevokeApiKeyBody,
+  ApiRevokeApiKeyResponse,
+} from "../pages/api/me/revoke-api-key.api";
+import {
+  ApiUpdateApiKeyBody,
+  ApiUpdateApiKeyResponse,
+} from "../pages/api/me/update-api-key.api";
+import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
 } from "../pages/api/send-login-code.api";
@@ -171,6 +179,16 @@ export const apiClient = {
   generateApiKey: (requestData: ApiGenerateApiKeyBody) =>
     apiClient.post<ApiGenerateApiKeyBody, ApiGenerateApiKeyResponse>(
       "me/generate-api-key",
+      requestData,
+    ),
+  revokeApiKey: (requestData: ApiRevokeApiKeyBody) =>
+    apiClient.post<ApiRevokeApiKeyBody, ApiRevokeApiKeyResponse>(
+      "me/revoke-api-key",
+      requestData,
+    ),
+  updateApiKey: (requestData: ApiUpdateApiKeyBody) =>
+    apiClient.post<ApiUpdateApiKeyBody, ApiUpdateApiKeyResponse>(
+      "me/update-api-key",
       requestData,
     ),
   getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/api-keys"),

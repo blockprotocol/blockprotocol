@@ -86,7 +86,7 @@ export const ApiKeysPanel: FunctionComponent = () => {
         >
           Keep them private to prevent other people from accessing your account.{" "}
           <br />
-          <Link href="/docs#th-hub-and-api" data-test-id="apiKeyLink">
+          <Link href="/docs/hub/api" data-test-id="apiKeyLink">
             Learn More
           </Link>
         </Typography>
@@ -132,7 +132,7 @@ export const ApiKeysPanel: FunctionComponent = () => {
         {generateKeyStatus.showModal ? (
           <GenerateApiModal
             close={closeGenerateModal}
-            keyNameToRegenerate={generateKeyStatus.keyToRegenerate?.displayName}
+            keyToRegenerate={generateKeyStatus.keyToRegenerate}
             refetchKeyList={fetchAndSetApiKeys}
           />
         ) : null}
