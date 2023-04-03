@@ -9,7 +9,7 @@ export const setWordpressInstanceUrlSession = (
   }
 
   // @note must be compatible with use-session-storage-state
-  if (wordpressInstanceUrlSessionKey) {
+  if (wordpressInstanceUrl) {
     window.sessionStorage.setItem(
       wordpressInstanceUrlSessionKey,
       JSON.stringify(wordpressInstanceUrl),
