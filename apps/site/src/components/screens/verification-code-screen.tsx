@@ -13,6 +13,7 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { SerializedUser } from "../../lib/api/model/user.model";
 import { ApiClientError } from "../../lib/api-client";
+import { setWordpressInstanceUrlSession } from "../../lib/wordpress-instance-url-session";
 import { Button } from "../button";
 import {
   isVerificationCodeFormatted,
@@ -42,7 +43,11 @@ type VerificationCodeScreenProps = {
     verificationCodeId: string;
     code: string;
   }) => Promise<{
-    data?: { user: SerializedUser; redirectPath?: string };
+    data?: {
+      user: SerializedUser;
+      redirectPath?: string;
+      wordpressInstanceUrl?: string;
+    };
     error?: ApiClientError;
   }>;
 };
@@ -130,6 +135,7 @@ export const VerificationCodeScreen: FunctionComponent<
         if (error) {
           setApiSubmittedErrorMessage(error.message);
         } else if (data) {
+          setWordpressInstanceUrlSession(data.wordpressInstanceUrl);
           onSubmit(data.user, data.redirectPath);
         }
       }

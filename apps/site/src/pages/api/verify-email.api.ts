@@ -13,6 +13,7 @@ export type ApiVerifyEmailRequestBody = {
 export type ApiVerifyEmailResponse = {
   user: SerializedUser;
   redirectPath?: string;
+  wordpressInstanceUrl?: string;
 };
 
 export default createBaseHandler<
@@ -116,9 +117,9 @@ export default createBaseHandler<
           user: user.serialize(true),
           ...(emailVerificationCode.variant === "linkWordpress"
             ? {
-                redirectPath: `/dashboard?link-wordpress=${encodeURIComponent(
-                  emailVerificationCode.wordpressInstanceUrl!,
-                )}`,
+                redirectPath: "/dashboard",
+                wordpressInstanceUrl:
+                  emailVerificationCode.wordpressInstanceUrl,
               }
             : {}),
         }),

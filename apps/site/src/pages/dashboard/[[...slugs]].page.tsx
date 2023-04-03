@@ -1,7 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
-import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
-import { useLayoutEffect, useState } from "react";
+import useSessionStorageState from "use-session-storage-state";
 
 import {
   AuthWallPageContent,
@@ -17,24 +16,14 @@ import {
   DashboardSection,
   getDashboardSectionCards,
 } from "../../components/pages/dashboard/utils";
-import { sanitizeUrl } from "../../lib/sanitize-url";
+import { wordpressInstanceUrlSessionKey } from "../../lib/wordpress-instance-url-session";
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
-  const router = useRouter();
   const { preferredName: userName, shortname } = user ?? {};
-  const [wordpressInstanceUrl, setWordpressInstanceUrl] = useState<
-    string | null
-  >(null);
 
-  useLayoutEffect(() => {
-    const queryWordpressInstanceUrl =
-      router.query["link-wordpress"]?.toString();
-
-    if (queryWordpressInstanceUrl) {
-      setWordpressInstanceUrl(sanitizeUrl(queryWordpressInstanceUrl));
-      void router.replace(router.pathname, undefined, { shallow: true });
-    }
-  }, [router]);
+  const [wordpressInstanceUrl] = useSessionStorageState<string>(
+    wordpressInstanceUrlSessionKey,
+  );
 
   const dashboardCards = getDashboardSectionCards({
     profileLink: `/@${shortname}`,
@@ -74,7 +63,7 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
           >
             Welcome, {userName}!
           </Typography>
-          {wordpressInstanceUrl !== null ? (
+          {typeof wordpressInstanceUrl === "string" ? (
             <DashboardWordpressSection
               wordpressInstanceUrl={wordpressInstanceUrl}
             />

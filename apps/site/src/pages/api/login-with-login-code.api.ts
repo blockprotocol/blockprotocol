@@ -13,6 +13,7 @@ export type ApiLoginWithLoginCodeRequestBody = {
 export type ApiLoginWithLoginCodeResponse = {
   user: SerializedUser;
   redirectPath?: string;
+  wordpressInstanceUrl?: string;
 };
 
 export default createBaseHandler<
@@ -112,9 +113,8 @@ export default createBaseHandler<
           user: user.serialize(true),
           ...(loginCode.variant === "linkWordpress"
             ? {
-                redirectPath: `/dashboard?link-wordpress=${encodeURIComponent(
-                  loginCode.wordpressInstanceUrl!,
-                )}`,
+                redirectPath: "/dashboard",
+                wordpressInstanceUrl: loginCode.wordpressInstanceUrl,
               }
             : {}),
         }),

@@ -17512,6 +17512,11 @@ use-resize-observer@^9.1.0:
   dependencies:
     "@juggle/resize-observer" "^3.3.1"
 
+use-session-storage-state@18.1.1:
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/use-session-storage-state/-/use-session-storage-state-18.1.1.tgz#6c0927072232501e5b835720991aab8d0db04ab9"
+  integrity sha512-smeznwdz+7ClDng/9eDLt4Dh8Af8jRR1BqW0Ps6E998S/GZ8INoL73Qf0vb6UbvAAIs60FGstnyLmGz2AKEeWQ==
+
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
