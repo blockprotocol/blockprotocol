@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
-import useSessionStorageState from "use-session-storage-state";
+import { useLayoutEffect, useState } from "react";
 
 import {
   AuthWallPageContent,
@@ -16,14 +16,18 @@ import {
   DashboardSection,
   getDashboardSectionCards,
 } from "../../components/pages/dashboard/utils";
-import { wordpressInstanceUrlSessionKey } from "../../lib/wordpress-instance-url-session";
+import { getWordpressInstanceUrlSessionOnce } from "../../lib/wordpress-instance-url-session";
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName, shortname } = user ?? {};
 
-  const [wordpressInstanceUrl] = useSessionStorageState<string>(
-    wordpressInstanceUrlSessionKey,
-  );
+  const [wordpressInstanceUrl, setWordpressInstanceUrl] = useState<
+    string | null
+  >(null);
+
+  useLayoutEffect(() => {
+    setWordpressInstanceUrl(getWordpressInstanceUrlSessionOnce());
+  }, []);
 
   const dashboardCards = getDashboardSectionCards({
     profileLink: `/@${shortname}`,

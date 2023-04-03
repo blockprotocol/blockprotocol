@@ -8,13 +8,24 @@ export const setWordpressInstanceUrlSession = (
     throw new Error("Cannot call setWordpressInstanceUrlSession on server");
   }
 
-  // @note must be compatible with use-session-storage-state
   if (wordpressInstanceUrl) {
     window.sessionStorage.setItem(
       wordpressInstanceUrlSessionKey,
-      JSON.stringify(wordpressInstanceUrl),
+      wordpressInstanceUrl,
     );
   } else {
     window.sessionStorage.removeItem(wordpressInstanceUrlSessionKey);
   }
+};
+
+export const getWordpressInstanceUrlSessionOnce = () => {
+  if (typeof window === "undefined") {
+    throw new Error("Cannot call getWordpressInstanceUrlSessionOnce on server");
+  }
+
+  const value = window.sessionStorage.getItem(wordpressInstanceUrlSessionKey);
+
+  window.sessionStorage.removeItem(wordpressInstanceUrlSessionKey);
+
+  return value;
 };
