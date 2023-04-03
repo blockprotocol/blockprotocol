@@ -1,15 +1,12 @@
-import "../styles/nprogress.css";
-import "../styles/prism.css";
-
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import * as Sentry from "@sentry/nextjs";
 import withTwindApp from "@twind/next/app";
 import { LazyMotion } from "framer-motion";
+import { DefaultSeo, DefaultSeoProps } from "next-seo";
 import type { AppProps } from "next/app";
 import { Router, useRouter } from "next/router";
-import { DefaultSeo, DefaultSeoProps } from "next-seo";
 import { SnackbarProvider } from "notistack";
 import NProgress from "nprogress";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -20,11 +17,14 @@ import twindConfig from "../../twind.config.cjs";
 import { PageLayout } from "../components/page-layout";
 import SiteMapContext from "../context/site-map-context";
 import {
+  signOut,
   UserContext,
   UserContextValue,
   UserState,
 } from "../context/user-context";
 import { apiClient } from "../lib/api-client";
+import "../styles/nprogress.css";
+import "../styles/prism.css";
 import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
 import { ApiMeResponse } from "./api/me.api";
@@ -115,10 +115,7 @@ const MyApp = ({
     }
 
     if ("guest" in data) {
-      Sentry.configureScope((scope) => {
-        scope.clear();
-      });
-      setUser(undefined);
+      signOut(setUser);
     } else {
       Sentry.configureScope((scope) => {
         scope.setUser({ id: data.user.id });

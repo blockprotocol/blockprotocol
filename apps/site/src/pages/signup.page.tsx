@@ -16,7 +16,7 @@ import {
   VerificationCodeInfo,
   VerificationCodeScreen,
 } from "../components/screens/verification-code-screen";
-import { useUser } from "../context/user-context";
+import { signOut, useUser } from "../context/user-context";
 import { SerializedUser } from "../lib/api/model/user.model";
 import { apiClient } from "../lib/api-client";
 import { ApiVerifyEmailRequestBody } from "./api/verify-email.api";
@@ -63,6 +63,7 @@ const SignupPage: NextPage = () => {
   const [verificationCodeInfo, setVerificationCodeInfo] = useState<
     VerificationCodeInfo | undefined
   >();
+  const [checkedQueryParams, setCheckedQueryParams] = useState(false);
 
   useEffect(() => {
     if (Object.values(parsedQuery).filter((value) => !!value).length > 0) {
@@ -85,18 +86,35 @@ const SignupPage: NextPage = () => {
         shallow: true,
       });
     }
+
+    if (router.isReady) {
+      setCheckedQueryParams(true);
+    }
   }, [parsedQuery, router]);
 
   useEffect(() => {
-    if (user && user !== "loading") {
-      if (user.isSignedUp) {
-        void router.push(redirectPath ?? "/dashboard");
-      } else if (currentScreen !== "CompleteSignup") {
-        setEmail(user.email);
-        setCurrentScreen("CompleteSignup");
+    if (checkedQueryParams && user && user !== "loading") {
+      if (!email || user.email === email) {
+        if (user.isSignedUp) {
+          void router.push(redirectPath ?? "/dashboard");
+        } else if (currentScreen !== "CompleteSignup") {
+          setEmail(user.email);
+          setCurrentScreen("CompleteSignup");
+        }
+      } else {
+        // We may already be logged in, but this is a verification code for a new account, so let's log out
+        signOut(setUser);
       }
     }
-  }, [user, router, currentScreen, redirectPath]);
+  }, [
+    user,
+    router,
+    currentScreen,
+    redirectPath,
+    checkedQueryParams,
+    email,
+    setUser,
+  ]);
 
   const displayInfoSidebar =
     currentScreen === "Email" || currentScreen === "VerificationCode";

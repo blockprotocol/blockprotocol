@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
 import { SerializedUser } from "../lib/api/model/user.model";
@@ -17,3 +18,10 @@ export const UserContext = createContext<UserContextValue>({
 });
 
 export const useUser = () => useContext(UserContext);
+
+export const signOut = (setUser: Dispatch<SetStateAction<UserState>>) => {
+  Sentry.configureScope((scope) => {
+    scope.clear();
+  });
+  setUser(undefined);
+};
