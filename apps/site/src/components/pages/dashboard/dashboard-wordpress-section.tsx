@@ -36,6 +36,23 @@ export const DashboardWordpressSection = ({
     }, 3_000);
   };
 
+  const generateApiKey = () => {
+    if (generating) {
+      return;
+    }
+
+    setGenerating(true);
+    void apiClient
+      .generateApiKey({ displayName: "Wordpress" })
+      .then(({ data }) => {
+        setGenerating(false);
+        if (data) {
+          setApiKey(data.apiKey);
+          copyKey(data.apiKey);
+        }
+      });
+  };
+
   return (
     <>
       <Typography
@@ -101,8 +118,24 @@ export const DashboardWordpressSection = ({
               borderColor: theme.palette.gray[20],
               maxWidth: "max-content",
               minHeight: 56,
+
+              ...(apiKey
+                ? {}
+                : {
+                    cursor: "pointer",
+                    userSelect: "none",
+                  }),
             })}
             gap={3}
+            onClick={
+              apiKey
+                ? undefined
+                : (evt) => {
+                    evt.preventDefault();
+
+                    generateApiKey();
+                  }
+            }
           >
             <Typography
               sx={(theme) => ({
@@ -158,22 +191,7 @@ export const DashboardWordpressSection = ({
                   startIcon={<FontAwesomeIcon icon={faEye} />}
                   loading={generating}
                   size="small"
-                  onClick={() => {
-                    if (generating) {
-                      return;
-                    }
-
-                    setGenerating(true);
-                    void apiClient
-                      .generateApiKey({ displayName: "Wordpress" })
-                      .then(({ data }) => {
-                        setGenerating(false);
-                        if (data) {
-                          setApiKey(data.apiKey);
-                          copyKey(data.apiKey);
-                        }
-                      });
-                  }}
+                  onClick={generateApiKey}
                 >
                   Reveal API Key
                 </Button>
