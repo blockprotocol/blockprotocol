@@ -4,17 +4,7 @@ import {
   JsonObject,
 } from "@blockprotocol/core";
 import hostedGitInfo from "hosted-git-info";
-import sanitize from "sanitize-html";
-
-const sanitizeUrl = (url: string) => {
-  const results = sanitize(`<a href="${url}" />`, {
-    allowedAttributes: {
-      a: ["href"],
-    },
-    allowedSchemes: ["http", "https"],
-  });
-  return results.split('"')?.[1] || "";
-};
+import { sanitizeUrl } from "./sanitize-url";
 
 /**
  * This is the expanded block metadata that is served via the API

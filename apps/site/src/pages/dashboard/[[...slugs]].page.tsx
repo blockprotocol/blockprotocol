@@ -17,6 +17,7 @@ import {
   DashboardSection,
   getDashboardSectionCards,
 } from "../../components/pages/dashboard/utils";
+import { sanitizeUrl } from "../../lib/sanitize-url";
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
       router.query["link-wordpress"]?.toString();
 
     if (queryWordpressInstanceUrl) {
-      setWordpressInstanceUrl(queryWordpressInstanceUrl);
+      setWordpressInstanceUrl(sanitizeUrl(queryWordpressInstanceUrl));
       void router.replace(router.pathname, undefined, { shallow: true });
     }
   }, [router]);
