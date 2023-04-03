@@ -32,7 +32,6 @@
   "additionalProperties": false,
   "$defs": {
     "propertyValues": {
-      "$id": "propertyValues",
       "title": "propertyValues",
       "description": "The definition of potential property values, either references to data types, objects made up of more property types, or an array where the items are defined from a set of other property values definitions.",
       "oneOf": [
@@ -48,9 +47,9 @@
             },
             "properties": {
               "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type-object"
-            },
-            "minimumProperties": 1
+            }
           },
+          "minProperties": 1,
           "required": ["type", "properties"]
         },
         {
