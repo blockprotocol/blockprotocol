@@ -7,16 +7,69 @@ require_once __DIR__ . "/util.php";
  */
 
 /**
+ * Call the blockprotocol API to trigger a link-wordpress email
+ *
+ * @todo show notification to check email
+ */
+function block_protocol_api_do_link_wordpress()
+{
+    $options = get_option('block_protocol_options');
+    $email = $options["block_protocol_field_api_email"];
+
+    if (!$email || $options["block_protocol_field_api_email_verification_id"]) {
+        return;
+    }
+
+    $base = get_block_protocol_site_host();
+    $url = "{$base}/api/link-wordpress";
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $headers = [
+        'Accept: application/json',
+        'Content-Type: application/json',
+    ];
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    $data = [
+        'email' => $email,
+        // @todo need to handle this on the other end
+        'wordpressInstanceUrl' => get_site_url()
+    ];
+    $str = json_encode($data, JSON_PRETTY_PRINT);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $str);
+    $respStr = curl_exec($curl);
+    curl_close($curl);
+    $respJson = json_decode($respStr, true);
+
+    // @todo handle output in this flow
+    if ($respJson["verificationCodeId"]) {
+        update_option("block_protocol_options", array_merge($options, [
+            'block_protocol_field_api_email_verification_id' => $respJson["verificationCodeId"]
+        ]));
+        echo "Updated";
+        exit();
+    } else {
+        echo "Internal error";
+        exit();
+    }
+}
+
+/**
  * custom option and settings
  */
 function block_protocol_settings_init()
 {
+    block_protocol_api_do_link_wordpress();
+
     // Get the value of the setting we've registered with register_setting()
     $options = get_option('block_protocol_options');
 
     // Register a new setting for "block_protocol" page.
     register_setting('block_protocol', 'block_protocol_options', [
         'default' => [
+            'block_protocol_field_api_email' => '',
+            'block_protocol_field_api_email_verification_id' => '',
             'block_protocol_field_api_key' => '',
             'block_protocol_field_allow_unverified' => "off",
             'block_protocol_field_plugin_usage' => "on",
@@ -27,26 +80,38 @@ function block_protocol_settings_init()
 
     // ------- Settings related to the BP API key --------- //
 
-    add_settings_section(
-        'block_protocol_section_api_key',
-        __('blockprotocol.org API Key', 'block_protocol'),
-        'block_protocol_section_api_key_intro',
-        'block_protocol'
-    );
+    if (!$options["block_protocol_field_api_key"]) {
+        add_settings_section(
+            'block_protocol_section_api_account',
+            __('blockprotocol.org Account', 'block_protocol'),
+            'block_protocol_section_api_key_intro',
+            'block_protocol'
+        );
 
-    add_settings_field(
-        'block_protocol_field_api_key',
-        __('Key', 'block_protocol'),
-        'block_protocol_field_api_key_renderer',
-        'block_protocol',
-        'block_protocol_section_api_key',
-        [
-            'label_for' => 'block_protocol_field_api_key',
-            'class' => 'block_protocol_row',
-        ]
-    );
+        add_settings_field(
+            'block_protocol_field_api_email',
+            __('Email', 'block_protocol'),
+            'block_protocol_field_api_email_renderer',
+            'block_protocol',
+            'block_protocol_section_api_account',
+            [
+                'label_for' => 'block_protocol_field_api_email',
+                'class' => 'block_protocol_row',
+            ]
+        );
 
-    if ($options && $options["api_key"]) {
+        add_settings_field(
+            'block_protocol_field_api_key',
+            __('Key', 'block_protocol'),
+            'block_protocol_field_api_key_renderer',
+            'block_protocol',
+            'block_protocol_section_api_account',
+            [
+                'label_for' => 'block_protocol_field_api_key',
+                'class' => 'block_protocol_row',
+            ]
+        );
+    } else {
         // ------- Settings related to permitted blocks --------- //
 
         add_settings_section(
@@ -118,7 +183,7 @@ add_action('admin_init', 'block_protocol_settings_init');
 /**
  * Intro to the API key section
  *
- * @param array $args  The settings array, defining title, id, callback.
+ * @param array $args The settings array, defining title, id, callback.
  */
 function block_protocol_section_api_key_intro($args)
 {
@@ -139,6 +204,25 @@ function block_protocol_section_api_key_intro($args)
  *
  * @param array $args
  */
+
+function block_protocol_field_api_email_renderer($args)
+{
+    // Get the value of the setting we've registered with register_setting()
+    $options = get_option('block_protocol_options');
+    $value = $options[$args['label_for']];
+    $email_exists = isset($value);
+    ?>
+    <input id="<?php echo esc_attr($args['label_for']); ?>"
+           name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]"
+           style="width: 620px; max-width: 100%;"
+           type="email"
+        <?php echo $email_exists ? 'disabled' : ''; ?>
+           value="<?php echo $email_exists ? (esc_attr($value)) : (''); ?>"></input>
+    <?php if ($email_exists): ?>
+    <p>Email sent. Check your <strong><?= $value ?></strong> inbox. Make a mistake? <a href="#">Click here to enter another email address</a></p>
+<?php endif;
+}
+
 function block_protocol_field_api_key_renderer($args)
 {
     // Get the value of the setting we've registered with register_setting()
@@ -327,7 +411,7 @@ function block_protocol_options_page_html()
             submit_button('Save Settings');
             ?>
         </form>
-        <?php if (get_option("block_protocol-options")["api_key"]): ?>
+        <?php if (get_option("block_protocol_options")["block_protocol_field_api_key"]): // @todo handle removing API key ?>
             <h2>Entities</h2>
             <p>The entities created and edited by Block Protocol blocks</p>
             <div style="max-height:800px;border:1px solid rgba(0,0,0,0.2);display:inline-block;">
