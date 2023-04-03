@@ -96,24 +96,29 @@ export const DashboardWordpressSection = () => {
               sx={(theme) => ({
                 color: theme.palette.gray[70],
                 minWidth: "76ch",
-                cursor: "pointer",
                 ...(apiKey
-                  ? {}
+                  ? {
+                      cursor: "pointer",
+                    }
                   : {
                       userSelect: "none",
                       filter: "blur(6px)",
                     }),
               })}
-              onClick={(evt) => {
-                evt.preventDefault();
-                const selection = window.getSelection();
-                if (selection) {
-                  const range = document.createRange();
-                  range.selectNodeContents(evt.currentTarget);
-                  selection.removeAllRanges();
-                  selection.addRange(range);
-                }
-              }}
+              onClick={
+                apiKey
+                  ? (evt) => {
+                      evt.preventDefault();
+                      const selection = window.getSelection();
+                      if (selection) {
+                        const range = document.createRange();
+                        range.selectNodeContents(evt.currentTarget);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                      }
+                    }
+                  : undefined
+              }
             >
               {apiKey ?? defaultApiKey}
             </Typography>
