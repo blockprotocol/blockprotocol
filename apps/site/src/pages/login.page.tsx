@@ -105,7 +105,7 @@ const LoginPage: NextPage = () => {
 
   useLayoutEffect(() => {
     redirectRef.current = () => {
-      void router.push(redirectPath ?? "/dashboard");
+      void router.push({ pathname: redirectPath ?? "/dashboard" });
     };
   }, [router, redirectPath]);
 

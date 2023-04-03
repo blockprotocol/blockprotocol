@@ -96,7 +96,7 @@ const SignupPage: NextPage = () => {
     if (checkedQueryParams && user && user !== "loading") {
       if (!email || user.email === email) {
         if (user.isSignedUp) {
-          void router.push(redirectPath ?? "/dashboard");
+          void router.push({ pathname: redirectPath ?? "/dashboard" });
         } else if (currentScreen !== "CompleteSignup") {
           setEmail(user.email);
           setCurrentScreen("CompleteSignup");
