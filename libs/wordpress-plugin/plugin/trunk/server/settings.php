@@ -6,6 +6,21 @@ require_once __DIR__ . "/util.php";
  * these functions could be run multiple times; this would result in a fatal error.
  */
 
+// @todo check nonce
+function block_protocol_remove_key()
+{
+    $options = get_option('block_protocol_options');
+    $next_options = array_merge($options, [
+        "block_protocol_field_api_email" => "",
+        "block_protocol_field_api_key" => "",
+        "block_protocol_field_api_email_verification_id" => "",
+    ]);
+    update_option("block_protocol_options", $next_options);
+    wp_redirect( admin_url( 'admin.php?page=block_protocol' ));
+}
+
+add_action('admin_post_block_protocol_remove_key', 'block_protocol_remove_key');
+
 /**
  * Call the blockprotocol API to trigger a link-wordpress email
  *
@@ -18,6 +33,7 @@ function block_protocol_api_do_link_wordpress()
     $options = get_option('block_protocol_options');
     $email = $options["block_protocol_field_api_email"];
 
+    // @todo don't trigger if key exists
     if (!$email || $options["block_protocol_field_api_email_verification_id"]) {
         return;
     }
@@ -224,7 +240,7 @@ function block_protocol_field_api_email_renderer($args)
     // Get the value of the setting we've registered with register_setting()
     $options = get_option('block_protocol_options');
     $value = $options[$args['label_for']];
-    $email_exists = isset($value);
+    $email_exists = !!$value;
     ?>
     <input id="<?php echo esc_attr($args['label_for']); ?>"
            name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]"
@@ -260,7 +276,7 @@ function block_protocol_field_api_key_exists_renderer($args)
            type="text"
            disabled
            value="<?php echo isset($options[$args['label_for']]) ? (esc_attr($options[$args['label_for']])) : (''); ?>" /><br />
-    <a href="#">Detach keys from this website</a> | <a target="_blank" rel="noopener noreferrer" href="<?=get_block_protocol_site_host()?>/account/api">Manage or create API keys</a>
+    <a href="<?= admin_url('admin-post.php?action=block_protocol_remove_key') ?>">Detach keys from this website</a> | <a target="_blank" rel="noopener noreferrer" href="<?=get_block_protocol_site_host()?>/account/api">Manage or create API keys</a>
     <?php
 }
 
