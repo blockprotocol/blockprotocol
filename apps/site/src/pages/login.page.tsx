@@ -58,6 +58,7 @@ const LoginPage: NextPage = () => {
   const [verificationCodeInfo, setVerificationCodeInfo] = useState<
     VerificationCodeInfo | undefined
   >();
+  const [checkedQueryParams, setCheckedQueryParams] = useState(false);
 
   useLayoutEffect(() => {
     if (Object.values(parsedQuery).filter((value) => !!value).length > 0) {
@@ -79,6 +80,12 @@ const LoginPage: NextPage = () => {
       void router.replace({ pathname: router.pathname }, undefined, {
         shallow: true,
       });
+    }
+
+    // Cannot use router.isReady in a later effect to check if there's a verification code
+    // because that effect may run before the state is set by this effect
+    if (router.isReady) {
+      setCheckedQueryParams(true);
     }
   }, [parsedQuery, router]);
 
@@ -106,10 +113,10 @@ const LoginPage: NextPage = () => {
     // We may not have parsed the query yet, so it may be too soon to redirect,
     // and we don't want to redirect before checking the verification code as
     // it may be a link to wordpress one
-    if (router.isReady && user && !verificationCodeToCheck) {
+    if (checkedQueryParams && user && !verificationCodeToCheck) {
       redirectRef.current();
     }
-  }, [router.isReady, user, verificationCodeToCheck]);
+  }, [checkedQueryParams, user, verificationCodeToCheck]);
 
   const handleLogin = useCallback(
     (loggedInUser: SerializedUser, nextRedirectPath?: string) => {
