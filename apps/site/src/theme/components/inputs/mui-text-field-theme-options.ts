@@ -1,6 +1,6 @@
-import { Components } from "@mui/material";
+import { Components, Theme } from "@mui/material";
 
-export const MuiTextFieldThemeOptions: Components["MuiTextField"] = {
+export const MuiTextFieldThemeOptions: Components<Theme>["MuiTextField"] = {
   defaultProps: {
     InputLabelProps: {
       disableAnimation: true,
