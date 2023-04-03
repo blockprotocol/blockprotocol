@@ -16,7 +16,7 @@ function block_protocol_remove_key()
         "block_protocol_field_api_email_verification_id" => "",
     ]);
     update_option("block_protocol_options", $next_options);
-    wp_redirect( admin_url( 'admin.php?page=block_protocol' ));
+    exit(wp_redirect( admin_url( 'admin.php?page=block_protocol' )));
 }
 
 add_action('admin_post_block_protocol_remove_key', 'block_protocol_remove_key');
@@ -65,8 +65,7 @@ function block_protocol_api_do_link_wordpress()
         update_option("block_protocol_options", array_merge($options, [
             'block_protocol_field_api_email_verification_id' => $respJson["verificationCodeId"]
         ]));
-        echo "Updated";
-        exit();
+        exit(wp_redirect( admin_url( 'admin.php?page=block_protocol' )));
     } else {
         echo "Internal error";
         exit();
@@ -249,7 +248,7 @@ function block_protocol_field_api_email_renderer($args)
         <?php echo $email_exists ? 'disabled' : ''; ?>
            value="<?php echo $email_exists ? (esc_attr($value)) : (''); ?>"></input>
     <?php if ($email_exists): ?>
-    <p>Email sent. Check your <strong><?= $value ?></strong> inbox. Make a mistake? <a href="#">Click here to enter another email address</a></p>
+    <p>Email sent. Check your <strong><?= $value ?></strong> inbox. Make a mistake? <a href="<?= admin_url('admin-post.php?action=block_protocol_remove_key') ?>">Click here to enter another email address</a></p>
 <?php endif;
 }
 
@@ -455,9 +454,10 @@ function block_protocol_options_page_html()
             // (sections are registered for "block_protocol", each field is registered to a specific section)
             do_settings_sections('block_protocol');
             // output save settings button
-            if ($apiKey) {
+            // @todo do input specific buttons
+//            if (!$apiKey) {
                 submit_button('Save Settings');
-            }
+//            }
             ?>
         </form>
         <?php if ($apiKey): ?>
