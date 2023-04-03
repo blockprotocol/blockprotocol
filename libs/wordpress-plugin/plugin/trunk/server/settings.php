@@ -10,6 +10,8 @@ require_once __DIR__ . "/util.php";
  * Call the blockprotocol API to trigger a link-wordpress email
  *
  * @todo show notification to check email
+ * @todo move to admin_post action
+ * @todo replace with wp_remote_post
  */
 function block_protocol_api_do_link_wordpress()
 {
@@ -252,7 +254,14 @@ function block_protocol_field_api_key_exists_renderer($args)
 {
     // Get the value of the setting we've registered with register_setting()
     $options = get_option('block_protocol_options');
-    echo $options[$args['label_for']];
+    ?>
+    <input id="<?php echo esc_attr($args['label_for']); ?>"
+           name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]" style="width: 620px; max-width: 100%;"
+           type="text"
+           disabled
+           value="<?php echo isset($options[$args['label_for']]) ? (esc_attr($options[$args['label_for']])) : (''); ?>" /><br />
+    <a href="#">Detach keys from this website</a> | <a target="_blank" rel="noopener noreferrer" href="<?=get_block_protocol_site_host()?>/account/api">Manage or create API keys</a>
+    <?php
 }
 
 /**
