@@ -1,4 +1,5 @@
-import { faAdd, faClipboard } from "@fortawesome/free-solid-svg-icons";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faClipboard } from "@fortawesome/free-regular-svg-icons";
 import { Box, Stack, Typography, typographyClasses } from "@mui/material";
 import { useRef, useState } from "react";
 
