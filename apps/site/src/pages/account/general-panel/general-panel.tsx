@@ -6,6 +6,7 @@ import { ChangeEvent, FunctionComponent, useRef, useState } from "react";
 import { FontAwesomeIcon } from "../../../components/icons";
 import { Link } from "../../../components/link";
 import { PanelSection } from "../../../components/pages/account/panel-section";
+import { SaveOnBlurTextField } from "../../../components/save-on-blur-text-field";
 import { TextField } from "../../../components/text-field";
 import { useUser } from "../../../context/user-context";
 import { apiClient } from "../../../lib/api-client";
@@ -55,7 +56,6 @@ export const GeneralPanel: FunctionComponent = () => {
   };
 
   const removeAvatar = async () => {
-    /** @todo handle error & loading state */
     const res = await apiClient.removeUserAvatar();
 
     if (res.data) {
@@ -83,7 +83,7 @@ export const GeneralPanel: FunctionComponent = () => {
         >
           <Stack direction={isMobile ? "column" : "row"} gap={4.5}>
             <Stack flex={1} gap={3}>
-              <TextField
+              <SaveOnBlurTextField
                 fullWidth
                 placeholder="e.g. John"
                 label="First or preferred name"
@@ -95,10 +95,9 @@ export const GeneralPanel: FunctionComponent = () => {
                     preferredName: event.target.value.trim(),
                   });
                 }}
-                onBlur={async () => {
-                  void apiClient.updateUserPreferredName({
-                    preferredName: user.preferredName ?? "",
-                  });
+                onSave={async (preferredName) => {
+                  /** @todo handle error state */
+                  await apiClient.updateUserPreferredName({ preferredName });
                 }}
               />
               <TextField
