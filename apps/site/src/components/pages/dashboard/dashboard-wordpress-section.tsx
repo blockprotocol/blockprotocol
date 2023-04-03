@@ -78,11 +78,7 @@ export const DashboardWordpressSection = ({
               Click or tap
             </Box>{" "}
             to copy the key below to your clipboard, then head back to your{" "}
-            <Link
-              href={wordpressInstanceUrl}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
+            <Link href={wordpressInstanceUrl} rel="noopener" target="_blank">
               WordPress dashboard
             </Link>{" "}
             to paste it in.
