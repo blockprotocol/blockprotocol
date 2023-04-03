@@ -26,8 +26,10 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
   >(null);
 
   useLayoutEffect(() => {
-    setWordpressInstanceUrl(getWordpressInstanceUrlSessionOnce());
-  }, []);
+    if (!wordpressInstanceUrl) {
+      setWordpressInstanceUrl(getWordpressInstanceUrlSessionOnce());
+    }
+  }, [wordpressInstanceUrl]);
 
   const dashboardCards = getDashboardSectionCards({
     profileLink: `/@${shortname}`,
