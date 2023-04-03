@@ -1,9 +1,9 @@
-import { faClipboard } from "@fortawesome/free-regular-svg-icons";
-import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faClipboard, faEye } from "@fortawesome/free-regular-svg-icons";
 import { Box, Stack, Typography, typographyClasses } from "@mui/material";
 import { useRef, useState } from "react";
 
 import { apiClient } from "../../../lib/api-client";
+import { CODE_FONT_FAMILY } from "../../../theme/typography";
 import { Button } from "../../button";
 import { FontAwesomeIcon } from "../../icons";
 import { Link } from "../../link";
@@ -106,15 +106,18 @@ export const DashboardWordpressSection = ({
           >
             <Typography
               sx={(theme) => ({
-                color: theme.palette.gray[70],
                 minWidth: "76ch",
+                fontFamily: CODE_FONT_FAMILY,
                 ...(apiKey
                   ? {
                       cursor: "pointer",
+                      color: theme.palette.gray[70],
                     }
                   : {
                       userSelect: "none",
+                      pointerEvents: "none",
                       filter: "blur(6px)",
+                      color: theme.palette.purple[70],
                     }),
               })}
               onClick={
@@ -152,7 +155,7 @@ export const DashboardWordpressSection = ({
                   variant="tertiary"
                   color="gray"
                   squared
-                  startIcon={<FontAwesomeIcon icon={faAdd} />}
+                  startIcon={<FontAwesomeIcon icon={faEye} />}
                   loading={generating}
                   size="small"
                   onClick={() => {
@@ -172,7 +175,7 @@ export const DashboardWordpressSection = ({
                       });
                   }}
                 >
-                  Generate API Key
+                  Reveal API Key
                 </Button>
               )}
             </Stack>
