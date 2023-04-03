@@ -132,7 +132,7 @@ export const ApiKeysPanel: FunctionComponent = () => {
         {generateKeyStatus.showModal ? (
           <GenerateApiModal
             close={closeGenerateModal}
-            keyNameToRegenerate={generateKeyStatus.keyToRegenerate?.displayName}
+            keyToRegenerate={generateKeyStatus.keyToRegenerate}
             refetchKeyList={fetchAndSetApiKeys}
           />
         ) : null}

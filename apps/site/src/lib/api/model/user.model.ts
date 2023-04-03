@@ -448,9 +448,6 @@ export class User {
   async generateApiKey(db: Db, params: { displayName: string }) {
     const { displayName } = params;
 
-    /* @todo allow users to have multiple API keys - remove this once implemented */
-    await ApiKey.revokeAll(db, { user: this });
-
     return await ApiKey.create(db, { displayName, user: this });
   }
 
