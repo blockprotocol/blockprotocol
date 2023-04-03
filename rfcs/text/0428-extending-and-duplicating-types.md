@@ -795,16 +795,18 @@ The proposed design attempts to make a trade-off between the following:
 - when _not_ opting to try and avoid unsatisfiable schemas
 - optimizing for trivial assumptions to be made regarding the compatibility of a supertype and subtype
 
+As such, this section outlines a number of considerations or compromises which have been made within the design.
+
 ## Implicitly adding `unevaluatedProperties`
 
-A proposed way to deal with conditional `unevaluatedProperties` is to use custom `$defs` definitions for open and closed variations of entity types.
+An alternative way to achieve the same semantic behaviour as with the implicit `unevaluatedProperties` is to use custom `$defs` definitions for open and closed variations of entity types.
 
 **Open by default schema**:
 
 ```json
 {
   "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
-  "$id": "https://example.com/schema",
+  "$id": "https://example.com/schema/v/1",
 
   // ... schema contents  ...
 
@@ -818,14 +820,14 @@ A proposed way to deal with conditional `unevaluatedProperties` is to use custom
 }
 ```
 
-Here, referencing `https://example.com/schema` in a `$ref` will result in an _open schema_ that _does not_ specify `{ "unevaluatedProperties": false }`. Referencing `https://example.com/schema#closed` results in retrieving a _closed schema_ that _does_ specify `{ "unevaluatedProperties": false }`.
+Here, referencing `https://example.com/schema/v/1` in a `$ref` will result in an _open schema_ that _does not_ specify `{ "unevaluatedProperties": false }`. Referencing `https://example.com/schema/v/1#closed` results in retrieving a _closed schema_ that _does_ specify `{ "unevaluatedProperties": false }`.
 
 **Closed by default schema**:
 
 ```json
 {
   "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
-  "$id": "https://example.com/schema",
+  "$id": "https://example.com/schema/v/1",
   "$ref": "#open",
   "unevaluatedProperties": false,
 
@@ -838,7 +840,7 @@ Here, referencing `https://example.com/schema` in a `$ref` will result in an _op
 }
 ```
 
-Here, referencing `https://example.com/schema` in a `$ref` will result in a _closed schema_ that _does_ specify `{ "unevaluatedProperties": false }`. Referencing `https://example.com/schema#open` results in retrieving an _open schema_ that _does not_ specify `{ "unevaluatedProperties": false }`.
+Here, referencing `https://example.com/schema/v/1` in a `$ref` will result in a _closed schema_ that _does_ specify `{ "unevaluatedProperties": false }`. Referencing `https://example.com/schema/v/1#open` results in retrieving an _open schema_ that _does not_ specify `{ "unevaluatedProperties": false }`.
 
 (Thanks Jason Desrosiers for the suggestions!)
 
@@ -848,110 +850,30 @@ Generally, this RFC opts to forego this design to avoid the major breaking chang
 
 ## Detecting cycles
 
-[//]: # "TODO: rework the contents below to explain why we are not doing this"
+A potential complication of the proposed extension mechanism is that it allows for cycles to be created between types. This is not necessarily a problem for the type system in itself, but rather implementations.
 
-> 💭 Because of how versioning is specified in the [versioning RFC](./0408-versioning-types.md), entity types cannot create proper dependency cycles. The dependency cycles explained below are not about the literal type hierarchy, but rather about indirection and obfuscation of types and potential incompatibilities that can be introduced. Cycles across type versions can still result in valid types because the types are immutable and that we are dealing with composition.
+Cyclical dependencies can cause numerous issues when it comes to update logic, validation, consistency guarantees, traversal of the type tree, and more. As such, there was consideration about disallowing cyclic dependencies within the system as a conservative initial standpoint.
+
+Enforcing this constraint would perhaps be more complicated than allowing them in the first place, a cycle could happen over a very large number of types, and if implementations rely on the specification prohibiting them, then they may not be written to appropriately detect and handle external types which do not correctly abide by that restriction of the specification.
 
 An extension cycle happens when a part of an inheritance tree revisits a base URL it has already seen. As a contrived example, an entity type `Country` could be the supertype of `Region`, which in turn could be a supertype of the same `Country` entity type.
 
-First entity type version of `Country` without supertype:
-
-```json
-{
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
-  "kind": "entityType",
-  "$id": "https://blockprotocol.org/@alice/entity-type/country/v/1",
-  "type": "object",
-  "title": "Country",
-  "properties": {
-    "https://blockprotocol.org/@alice/property-type/name/": {
-      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
-    }
-  },
-  "required": ["https://blockprotocol.org/@alice/property-type/name/"]
-}
-```
-
-Entity type `Region` with `Country` as a supertype
-
-```json
-{
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
-  "kind": "entityType",
-  "$id": "https://blockprotocol.org/@alice/entity-type/region/v/1",
-  "type": "object",
-  "title": "Region",
-  "allOf": [
-    { "$ref": "https://blockprotocol.org/@alice/entity-type/country/v/1" }
-  ],
-  "properties": {
-    "https://blockprotocol.org/@alice/property-type/blurb/": {
-      "$ref": "https://blockprotocol.org/@alice/property-type/blurb/v/1"
-    }
-  },
-  "required": ["https://blockprotocol.org/@alice/property-type/blurb/"]
-}
-```
-
-The second, cyclic version of the `Country` entity type
-
-```json
-{
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
-  "kind": "entityType",
-  // Because of versioning, we cannot change this version to /v/1 and create a "proper" cycle.
-  "$id": "https://blockprotocol.org/@alice/entity-type/country/v/2",
-  "type": "object",
-  "title": "Country",
-  "allOf": [
-    { "$ref": "https://blockprotocol.org/@alice/entity-type/region/v/1" }
-  ],
-  "properties": {
-    "https://blockprotocol.org/@alice/property-type/name/": {
-      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
-    },
-    "https://blockprotocol.org/@alice/property-type/location/": {
-      "$ref": "https://blockprotocol.org/@alice/property-type/location/v/1"
-    }
-  },
-  "required": ["https://blockprotocol.org/@alice/property-type/name/"]
-}
-```
-
-This sort of type hierarchy should _not_ be encouraged within the type extension system, as the circular dependencies make types difficult to reason about. While the type hierarchy might be completely valid (as it would be in this case), we should safeguard users from making redundant type structures that look like the above.
-
-In this specific contrived example, creating a new entity type based on `Region` instead of a new version of `Country` might even encode semantic meaning better than re-defining `Country`.
+It is important to note that aside from difficulties in implementations, the actual semantics of a type with a cyclical inheritance tree are well defined. As the types largely follow JSON schema semantics, constraints are composed and never overridden. Any finite cycle of types would result in a finite set of constraints, and upon detecting a cycle, an implementation can safely finish traversal once establishing the comprehensive set of constraints (therefore avoiding an infinite loop).
 
 ## Disallowing unsatisfiable schemas
 
-[//]: # "TODO: rework the contents below to explain why we are not doing this"
+Another uncomfortable side-effect of the extension mechanism is that it gives more routes through which an 'unsatisfiable type' can be created. An _unsatisfiable_ type is a type where it is impossible to create data that satisfies the constraints of the type.
 
-As such, we say that a type can extend multiple supertypes **if and only if** the supertypes can coexist. For supertypes to be able to coexist, their properties should either be disjoint, or overlap in a compatible manner.
+This can happen through a combination of constraints which overlap or contradict one another, where a simple example is saying a property must be both a number and an array.
 
-**An example of _disjoint_ properties**:
+Prior to this proposal, the primitives over which the type system are built were limited enough to avoid being able to define conflicting constraints. However, with the introduction of type extension, it will be possible to combine two schemas which express a constraint over the same thing, and there is no guarantee that those constraints will be compatible.
 
-- Supertype `Person` contains required properties `name` and `age`
-- Supertype `Superhero` contains the property `superpower`
+### Worked Examples
 
-In this example, there is no overlap between properties, so an `Employee` type could have `Person` and `Superhero` as supertypes
+Take the following supertypes of `Employee`, where:
 
-```txt
-              (supertypes)
-superpower◄────Superhero──┐
-                          │
-      name◄┐              │
-           ├───Person─────Employee (subtype)
-       age◄┘              │
-                          │
-occupation◄───────────────┘
-```
-
-**An example of _compatible_, overlapping properties**:
-
-- Supertype `Person` contains the required properties `name` and `age`
-- Supertype `Superhero` contains the required properties `superpower` and `name`
-
-In this example, `name` overlaps as a required property in both supertypes. Compatibility of overlapping properties is defined in the [versioning RFC's definition of "compatible"](./0408-versioning-types.md#determining-type-compatibility).
+- Supertype `Person` defines the properties `name` and `age`
+- Supertype `Superhero` defines the properties `superpower` and `name`
 
 ```txt
               (supertypes)
@@ -962,54 +884,85 @@ superpower◄────Superhero──┐
        age◄────Person─────Employee (subtype)
                           │
 occupation◄───────────────┘
-
-
 ```
 
-**An example of _incompatible_, overlapping properties**:
+We now analyze the implications of various scenarios where `Person` and `Superhero` define constraints on the `name` property (we shall ignore the other properties for simplicity).
 
-- Supertype `Person` contains the required properties `name` and `age`
-- Supertype `Superhero` contains the required property `superpower` and an _array_ of `name`s
+#### Equal and overlapping constraints
 
-In this example, the array of `name`s on the `Superhero` type would not be compatible with the required `name` property of `Person`, which means that the two types cannot be supertypes together.
+Say that both `Person` and `Superhero` define that `name` is **required**. This results in two (duplicative) constraints of a required `name`.
 
-### Multiple supertypes
+An entity instance containing a `name` would satisfy both of these constraints.:
 
-As described in the [Guide-level explanation](#multiple-supertypes), when extending multiple entity types, they must be able to coexist in a "compatible manner", which means that the entity types' `properties` and `links` comply with the following:
+```json5
+{
+  "name": "John Doe",
+  ... // superpower, age, occupation
+}
+```
 
-- For each property (base URL on the top level of `properties`) that exists in multiple entity types:
+And as expected, an entity instance _not_ containing a `name` would not satisfy either of these constraints.:
 
-  - all entity types refer to the same versioned URL of the property type **or** compatible versions of the property type (through the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) definition of 'compatible')
-  - none of the entity types define the property type as an array **or** all define the property type as an array with compatible cardinality constraints.
+```json5
+{
+  ... // superpower, age, occupation
+  // ERROR: missing required property 'name'
+}
+```
 
-- For each link (versioned URL on the top level of `links`) that exists in multiple entity types:
+#### Unequal but compatible overlapping constraints:
 
-  - none of the entity types define the link as an array **or** all define the link as an array with compatible cardinality constraints (and same `order` value).
+Instead, say that `Person` defines that `name` is **required**, and `Superhero` defines that `name` is **optional**.
 
-**Compatible cardinality constraints** can be defined as follows:
+When applied simultaneously, these constraints are _equivalent_ to a single constraint of a **required** `name`.
 
-For a subtype with many supertypes describing the same array cardinality constraint, all cardinality constraints must overlap.
-In the case the subtype does not constrain the given array cardinality, the supertypes will impose an implicit constraint on the subtype with the overlap shared by all supertypes.
+Same as above, an entity instance containing a `name` would satisfy both of these constraints.:
 
-To illustrate what this means, given we have a subtype `C` that extends supertypes `A` and `B`, the following two examples can be given:
+```json5
+{
+  "name": "John Doe",
+  ... // superpower, age, occupation
+}
+```
 
-1.  Example of multiple cardinality constraints on property `x` without subtype constraint on the property
+And as expected, an entity instance _not_ containing a `name` would not satisfy either of these constraints.:
 
-    - Supertype `A` has constraint `x: [0, 3]`
-    - Supertype `B` has constraint `x: [-1, 2]`
-    - Here the subtype `C` does not define a cardinality constraint on property `x`.
+```json5
+{
+  ... // superpower, age, occupation
+  // ERROR: missing required property 'name'
+}
+```
 
-      This imposes an implicit constraint `x: [0, 2]` on the subtype `C` as it extends both `A` and `C`.
-      The above constraints are considered valid, as an overlapping constraint can be found.
+In practice, this combination could be _statically analyzed_ and resolved to a single satisfiable constraint. The interaction of an **optional** definition with a **required** definition is known, and the **stronger** constraint of **required** would be the one that contains the other. Unfortunately, such static analysis is not as simple in the general case, especially when constraints that are intended to be added in the future (see the [Non-Primitive Data Types RFC](https://github.com/blockprotocol/blockprotocol/pull/355)) are taken into consideration. Checking the compatibility of two regexes, for example, is a very difficult task.
 
-1.  Example of multiple cardinality constraints on property `x` with subtype constraint on the property
+#### Unequal and incompatible overlapping constraints:
 
-    - Supertype `A` has constraint `x: [0, 3]`
-    - Supertype `B` has constraint `x: [-1, 2]`
-    - Subtype `C` has constraint `x: [0, 1]`
+Finally, say that `Person` defines that `name` is a _string_ and is **required**, and `Superhero` defines that `name` is _an array of strings_ and is **required**.
 
-    - Here subtype `C` imposes its own constraint on `x` which is within the overlapping constraints given by `A` and `B` on `x`.
-      The above constraints are also considered valid.
+When applied simultaneously, these constraints are _incompatible_ and result in an unsatisfiable type. Let us try and create an instance that satisfies it. First we try and create one with a string `name`:
+
+```json5
+{
+  name: "John Doe", // ERROR: expected string array, got string
+  ... // superpower, age, occupation
+}
+```
+
+And then we instead try and create one with an array of `name`s:
+
+```json5
+{
+  name: ["John Doe"], // ERROR: expected string, got string array
+  ... // superpower, age, occupation
+}
+```
+
+### An uncomfortable compromise
+
+As alluded to above, checking compatibility of any two given schemas is quite possibly an NP-Hard problem. Even if it is generally solvable, it is likely a task that is complicated enough that it would be an exceptionally high barrier to entry for potential implementers to overcome.
+
+While various implementations likely will want to implement checking for the simpler cases (disallowing a property from being two disjoint types for example), we opt not to encode such restrictions within the type system, and **implementations should not assume that an arbitrary type is satisfiable**.
 
 # Prior art
 
@@ -1024,12 +977,12 @@ To illustrate what this means, given we have a subtype `C` that extends supertyp
 [unresolved-questions]: #unresolved-questions
 
 - We haven't specified how projecting/selecting properties of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact properties of a subtype to provide a valid supertype instance in embedding applications.
-- The current argument for not allowing cyclic type hierarchies mostly build on a feeling that type hierarchies shouldn't be too indirect/obfuscated, but there could be stronger arguments for allowing/disallowing it.
-- The decision to have type substitution between subtype and supertype does mean the extended types are restrictive in that they do not allow for removing/changing existing properties. Without a way to transform data between types (mappings), allowing overrides is not possible while keeping compatibility.
+  - This may be especially difficult if a property type is defined as being an array of `oneOf` a given set of property type objects. Detecting which sub-schema applies to a given array element when accounting for dropped properties, **may** be a very difficult task.
 
 # Future possibilities
 
 [future-possibilities]: #future-possibilities
 
-- The conservative way type extension is introduced in this RFC allows for future work in the "data mapping" space to apply to type inheritance as well. Being able to map between entity types could enable a shared mapping for otherwise incompatible entity types.
-- Implementations of the upcoming "Structure-based Queries" RFC could benefit from some of the ground-work set out by this RFC, as the selection/projection of supertypes could be the basis of structure-based queries.
+The extension mechanism described in this proposal is very powerful for being able to cheaply determine compatibility of different types. It is fairly limited in that way however, and the Block Protocol vision aligns with a much more flexible system whereby blocks can express requirements for subsets of types.
+
+The system likely needs to be extended with a concept of "mappings", whereby transformations between types and properties can be defined. This would also help to provide more flexibility when _duplicating_ types.
