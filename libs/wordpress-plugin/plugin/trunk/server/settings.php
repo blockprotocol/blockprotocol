@@ -292,6 +292,9 @@ function block_protocol_field_api_key_exists_renderer($args)
     ?>
         <input type="hidden" name="block_protocol_options[block_protocol_field_api_email]" value="<?= esc_attr($options["block_protocol_field_api_email"]) ?>" />
         <p>This WordPress instance is linked to <strong><?= htmlentities($options["block_protocol_field_api_email"]); ?></strong> Block Protocol account. The public portion of the API key linked to this account is shown below.</p>
+    <?php
+    // @todo don't do this – see https://hashintel.slack.com/archives/C02LG39FJAU/p1680544602069229
+    ?>
     <input
            name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]"
            type="hidden"
