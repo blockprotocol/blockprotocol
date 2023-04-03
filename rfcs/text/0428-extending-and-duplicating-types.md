@@ -76,7 +76,7 @@ Building off the earlier example, take an `Employee` instance which looks as fol
 {
   "name": "Charles",
   "age": 35,
-  "occupation": "Merchant"
+  "occupation/": "Merchant"
 }
 ```
 
@@ -118,54 +118,7 @@ This is consistent with the behavior of JSON schema semantics, whereby all rules
 ## Multiple supertypes
 
 Constraining type extension to allow extending one type would be a pretty major limitation for how expressive the system is.
-As such, this proposal includes the specification of how to extend multiple types (this is generally referred to _multiple inheritance_).
-
-As such, we say that a type can extend multiple supertypes **if and only if** the supertypes can coexist. For supertypes to be able to coexist, their properties should either be disjoint, or overlap in a compatible manner.
-
-**An example of _disjoint_ properties**:
-
-- Supertype `Person` contains required properties `name` and `age`
-- Supertype `Superhero` contains the property `superpower`
-
-In this example, there is no overlap between properties, so an `Employee` type could have `Person` and `Superhero` as supertypes
-
-```txt
-              (supertypes)
-superpower◄────Superhero──┐
-                          │
-      name◄┐              │
-           ├───Person─────Employee (subtype)
-       age◄┘              │
-                          │
-occupation◄───────────────┘
-```
-
-**An example of _compatible_, overlapping properties**:
-
-- Supertype `Person` contains the required properties `name` and `age`
-- Supertype `Superhero` contains the required properties `superpower` and `name`
-
-In this example, `name` overlaps as a required property in both supertypes. Compatibility of overlapping properties is defined in the [versioning RFC's definition of "compatible"](./0408-versioning-types.md#determining-type-compatibility).
-
-```txt
-              (supertypes)
-superpower◄────Superhero──┐
-               │          │
-      name◄────┤          │
-               │          │
-       age◄────Person─────Employee (subtype)
-                          │
-occupation◄───────────────┘
-
-
-```
-
-**An example of _incompatible_, overlapping properties**:
-
-- Supertype `Person` contains the required properties `name` and `age`
-- Supertype `Superhero` contains the required property `superpower` and an _array_ of `name`s
-
-In this example, the array of `name`s on the `Superhero` type would not be compatible with the required `name` property of `Person`, which means that the two types cannot be supertypes together.
+As such, the extension mechanism described above can applied to combine/re-use the constraints from multiple supertypes (this is generally referred to _multiple inheritance_).
 
 ## The `additionalProperties` problem
 
@@ -181,13 +134,10 @@ We propose slight modifications to how `{ "additionalProperties": true }` and `{
 
 Concrete examples of the issues that arise with `additionalProperties` and `unevaluatedProperties` are shown in the [Reference-level explanation](#problems-with-additionalproperties-and-unevaluatedproperties).
 
-## Defining extended entity types
+## JSON Schema Syntax for Entity Type Extension
 
 Extended types will be defined with conventional JSON Schema syntax: the `allOf` keyword. An entity type can extend another entity type by adding a versioned URL reference to the root-level `allOf` array.
 A [_versioned_ URL](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0408-versioning-types.md#type-uris) (as opposed to a base URL) is used so that subtypes aren't implicitly modified (and potentially invalidated) when the supertype is updated.
-
-As extended types can extend other extended types we also make the conservative decision to disallow cycles within the type hierarchy for now.
-Although it is unclear if allowing it would definitely cause problems, cycles can make reasoning about type hierarchies difficult, and changing the decision later on would be a non-breaking change.
 
 ## Defining entity type duplication
 
@@ -250,7 +200,11 @@ In the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1) t
 
 > The update messages of both the current and new systems make use of partial schemas, merging the schema given in the message contents with the existing Entity Type. This may or may not be the desired semantics of updating, and could lead to undesired behavior. In that case, the semantics can be changed to treat updates as a complete replacement. This is to be decided and can be considered out of scope for this RFC as it touches on inheritance/forking concepts.
 
-As the new Block Protocol type system doesn't require a delta-based storage approach for its schemas, it's unclear what the advantages of partial schemas for update requests are. We propose that we should treat type updates as complete replacements, so implementation is much more straightforward for embedding applications. Partial schema updates also add some level of indirection, and that may obfuscate error sources and error reasons. Therefore, updates to types must be complete replacements rather than partial schema updates.
+As the new Block Protocol type system doesn't require a delta-based storage approach for its schemas, it's unclear what the advantages of partial schemas for update requests are.
+
+Furthermore, resolving the intentions of the existing definition for the message is problematic, as it's impossible to know whether the omission of a property should be interpreted as _removing_ that property, or leaving it in place.
+
+We propose that we should treat type updates as complete replacements, so implementation is much more straightforward for embedding applications. Partial schema updates also add some level of indirection, and that may obfuscate error sources and error reasons. Therefore, updates to types must be complete replacements rather than partial schema updates.
 
 # Reference-level explanation
 
@@ -258,13 +212,13 @@ As the new Block Protocol type system doesn't require a delta-based storage appr
 
 ## Defining extended entity types
 
-In the Block Protocol, we will allow type extension through the `allOf` JSON Schema keyword which specifies an array of schemas that will have to validate together.
+In the Block Protocol, we will allow type extension through the `allOf` JSON Schema keyword which applies all constraints from the sub-schemas within the `allOf` array..
 
 We'll add the following fields to the existing Entity Type meta schema definition:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "type": "object",
   ...,
   "properties": {
@@ -276,7 +230,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
         "properties": {
           "$ref": {
             "$comment": "Valid reference to an existing Entity Type version",
-            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/versioned-url"
           },
           "additionalProperties": false
         }
@@ -294,22 +248,22 @@ Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
   "title": "Person",
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/age": {
+    "https://blockprotocol.org/@alice/property-type/age/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
     }
   },
   "required": [
-    "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/age"
+    "https://blockprotocol.org/@alice/property-type/name/",
+    "https://blockprotocol.org/@alice/property-type/age/"
   ]
 }
 ```
@@ -318,7 +272,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -327,24 +281,24 @@ and a _subtype_ `Employee`:
     { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/1" }
   ],
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/occupation": {
+    "https://blockprotocol.org/@alice/property-type/occupation/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
     }
   },
-  "required": ["https://blockprotocol.org/@alice/property-type/occupation"]
+  "required": ["https://blockprotocol.org/@alice/property-type/occupation/"]
 }
 ```
 
-The two types do not share any top-level defined constraints on properties or links, which establishes compatibility. It is possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
-For example, we may have the following `Employee` instance:
+It is possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
+For example, we may have the following (simplified) `Employee` instance:
 
 ```json
 {
   "entityId": 111,
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": "Charles",
-    "https://blockprotocol.org/@alice/property-type/age": 35,
-    "https://blockprotocol.org/@alice/property-type/occupation": "Merchant"
+    "https://blockprotocol.org/@alice/property-type/name/": "Charles",
+    "https://blockprotocol.org/@alice/property-type/age/": 35,
+    "https://blockprotocol.org/@alice/property-type/occupation/": "Merchant"
   }
 }
 ```
@@ -355,36 +309,36 @@ which can be coerced into the following `Person` instance:
 {
   "entityId": 111,
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": "Charles",
-    "https://blockprotocol.org/@alice/property-type/age": 35
+    "https://blockprotocol.org/@alice/property-type/name/": "Charles",
+    "https://blockprotocol.org/@alice/property-type/age/": 35
   }
 }
 ```
 
 Notice how we are keeping the same `entityId` for this entity instance, but simply coercing the entity instance by selecting the properties of interest for the given type.
 
-**An example of _compatible_, overlapping properties**:
+**An example of _satisfiable_ overlapping constraints**:
 
 Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
   "type": "object",
   "title": "Person",
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/age": {
+    "https://blockprotocol.org/@alice/property-type/age/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
     }
   },
   "required": [
-    "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/age"
+    "https://blockprotocol.org/@alice/property-type/name/",
+    "https://blockprotocol.org/@alice/property-type/age/"
   ]
 }
 ```
@@ -393,7 +347,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/2",
   "type": "object",
@@ -402,30 +356,31 @@ and a _subtype_ `Employee`:
     { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }
   ],
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/occupation": {
+    "https://blockprotocol.org/@alice/property-type/occupation/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
     }
   },
   "required": [
-    "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/occupation"
+    "https://blockprotocol.org/@alice/property-type/name/",
+    "https://blockprotocol.org/@alice/property-type/occupation/"
   ]
 }
 ```
 
-The two types do share the `name` property, but the property definitions are compatible (even using the same version). It's possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible. Checking compatibility is described in the [Reference-level explanation](#multiple-supertypes---checking-compatibility).
+The two types share the `name` property, but the constraints for each property are identical. It's possible to coerce an instance of `Employee` into an instance of `Person` as any value that satisfies the constraints of `name` on `Employee` will satisfy the constraints of `name` on `Person`.
+
 For example, we may have the following `Employee` instance:
 
 ```json
 {
   "entityId": 112,
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": "Charles",
-    "https://blockprotocol.org/@alice/property-type/age": 35,
-    "https://blockprotocol.org/@alice/property-type/occupation": "Merchant"
+    "https://blockprotocol.org/@alice/property-type/name/": "Charles",
+    "https://blockprotocol.org/@alice/property-type/age/": 35,
+    "https://blockprotocol.org/@alice/property-type/occupation/": "Merchant"
   }
 }
 ```
@@ -436,32 +391,32 @@ which can be coerced into the following `Person` instance:
 {
   "entityId": 112,
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": "Charles",
-    "https://blockprotocol.org/@alice/property-type/age": 35
+    "https://blockprotocol.org/@alice/property-type/name/": "Charles",
+    "https://blockprotocol.org/@alice/property-type/age/": 35
   }
 }
 ```
 
-**Another example of _compatible_, overlapping properties**:
+**Another example of _compatible_, overlapping constraints**:
 
 Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/3",
   "type": "object",
   "title": "Person",
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/age": {
+    "https://blockprotocol.org/@alice/property-type/age/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
     }
   },
-  "required": ["https://blockprotocol.org/@alice/property-type/age"]
+  "required": ["https://blockprotocol.org/@alice/property-type/age/"]
 }
 ```
 
@@ -469,7 +424,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/3",
   "type": "object",
@@ -478,16 +433,17 @@ and a _subtype_ `Employee`:
     { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/3" }
   ],
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     }
   },
-  "required": ["https://blockprotocol.org/@alice/property-type/name"]
+  "required": ["https://blockprotocol.org/@alice/property-type/name/"]
 }
 ```
 
 In this example, `Person` has an optional `name` property and `Employee` defines `name` as required.
-These are still compatible as it's possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
+
+Any instance of `Employee` will have a `name` property, which will always satisfy the constraints of `name` on `Person`, as being required is a _stronger_ constraint than being optional, and all other constraints (imposed by the property type) are equal.
 
 ### Problems with `additionalProperties` and `unevaluatedProperties`
 
@@ -497,7 +453,7 @@ As such, entity types are intended to comprehensively describe data within entit
 In JSON schema this is generally achieved by setting `additionalProperties: false`, or `unevaluatedProperties: false`.
 Unfortunately, this causes problems when you start composing schemas (e.g. with entity type inheritance)
 
-If supertypes themselves specify one of these `{ "unevaluatedProperties": false }`, they are not able to be part of an `allOf` validator, as they will error out as soon as they see properties that are not part of the supertype itself.
+If supertypes themselves specify one of these `{ "unevaluatedProperties": false }`, they are not able to be part of an `allOf` validator, as they will error as soon as they see properties that are not part of the root schema itself.
 When composing schemas that all contain `{ "unevaluatedProperties": false }`, each schema will disallow any other properties which they do not define. Using the following JSON Schema as an example:
 
 ```json
@@ -539,31 +495,31 @@ The required behavior is that `unevaluatedProperties` should only apply to a "fl
 
 ### Defining an implicit `unevaluatedProperties`
 
-We're already implicitly defining `{ "additionalProperties": false }` in the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) for all schemas, this RFC will piggyback on that, and change the existing, implicit `additionalProperties` usage to `unevaluatedProperties` change the conditions in which it is implied.
+We're already implicitly defining `{ "additionalProperties": false }` in the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) for all schemas, this RFC will piggyback on that, and change the existing, implicit `additionalProperties` usage to `unevaluatedProperties` as well as refine the conditions under which it is implied.
 
-Instead of applying it to every schema for an entity type, we suggest the constraint is implied at the top-level when validating data against a specific entity type.
+Instead of implicitly inserting it into every schema for an entity type, we suggest the constraint is implied at the root level schema when validating data against a specific entity type.
 In other words, if you have a type `Employee` which extends `Person`, when you validate an entity of type `Employee` against the `Employee` type, the implicit `unevaluatedProperties` constraint will be implicitly inserted once, in the top-level of the `Employee` schema, and _not_ in the `Person` schema.
 
 Concretely, this means that for a free-standing type that doesn't extend any other type such as this `Person` type:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
   "type": "object",
   "title": "Person",
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/age": {
+    "https://blockprotocol.org/@alice/property-type/age/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
     }
   },
   "required": [
-    "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/age"
+    "https://blockprotocol.org/@alice/property-type/name/",
+    "https://blockprotocol.org/@alice/property-type/age/"
   ]
 }
 ```
@@ -574,7 +530,7 @@ In the case of the `Employee` type:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/2",
   "type": "object",
@@ -583,31 +539,31 @@ In the case of the `Employee` type:
     { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }
   ],
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/occupation": {
+    "https://blockprotocol.org/@alice/property-type/occupation/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
     }
   },
   "required": [
-    "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/occupation"
+    "https://blockprotocol.org/@alice/property-type/name/",
+    "https://blockprotocol.org/@alice/property-type/occupation/"
   ]
 }
 ```
 
-the resolved schema residing at `{ "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }` would _not_ have `{ "unevaluatedProperties": false }` set at time of validation, whereas the top-level entity type itself would have `{ "unevaluatedProperties": false }` set at time of validation.
+with respect to JSON schema validation semantics, _at time of validation_ the resolved schema residing at `{ "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }` would _not_ have `{ "unevaluatedProperties": false }`, whereas the top-level entity type itself _would_ have `{ "unevaluatedProperties": false }` set at time of validation.
 
 ### Liskov substitution principle
 
-Subtypes in the system can be used in place of the supertypes that they extend, similarly to what is expected in the Liskov substitution principle. Although our entity types do not contain behavior, the semantic meaning of individual properties on an entity type is captured on the property type definitions they refer to, which enables the ability to use the subtype in place of its supertype(s) "without altering any of the desirable properties of that program" [[source](https://en.wikipedia.org/wiki/Liskov_substitution_principle#Principle)].
+Subtypes in the system can be used in place of the supertypes that they extend, similarly to what is expected in the [Liskov substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle). Although our entity types do not contain behavior, the semantic meaning of individual properties on an entity type is captured on the property type definitions they refer to, which enables the ability to use the subtype in place of its supertype(s) "without altering any of the desirable properties of that program" [[source](https://en.wikipedia.org/wiki/Liskov_substitution_principle#Principle)].
 
 ## Defining entity type duplication
 
-The Block Protocol meta schemas don't need to change to support type duplication as we're copying types and giving them a new identifier.
+The Block Protocol meta schemas don't need to change to support type duplication as the mechanism isn't expressed within the system. Instead, we copy the contents of types and create new, completely distinct, types.
 
-When duplicating a type, the new type will have an entirely different URL and potentially a new `title`. The new type can be modified without any restrictions.
+As such, when duplicating a type, the new type will have an entirely different URL and potentially a new `title`.
 
 As outlined in the [Guide-level explanation](#duplication-strategy), there may be different locations where type duplication can take effect. To maximize reusability, embedding applications should maximize supertype reuse and only duplicate parts of type hierarchies that are necessary to resolve property changes.
 
@@ -617,22 +573,22 @@ Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
   "title": "Person",
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/age": {
+    "https://blockprotocol.org/@alice/property-type/age/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
     }
   },
   "required": [
-    "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/age"
+    "https://blockprotocol.org/@alice/property-type/name/",
+    "https://blockprotocol.org/@alice/property-type/age/"
   ]
 }
 ```
@@ -641,7 +597,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -650,11 +606,11 @@ and a _subtype_ `Employee`:
     { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }
   ],
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/occupation": {
+    "https://blockprotocol.org/@alice/property-type/occupation/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
     }
   },
-  "required": ["https://blockprotocol.org/@alice/property-type/occupation"]
+  "required": ["https://blockprotocol.org/@alice/property-type/occupation/"]
 }
 ```
 
@@ -662,7 +618,7 @@ a user, Bob, wishes to use Alice's `Employee` entity type but must change the `o
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@bob/entity-type/employee/v/1",
   "type": "object",
@@ -671,11 +627,11 @@ a user, Bob, wishes to use Alice's `Employee` entity type but must change the `o
     { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }
   ],
   "properties": {
-    "https://blockprotocol.org/@bob/property-type/tenure": {
+    "https://blockprotocol.org/@bob/property-type/tenure/": {
       "$ref": "https://blockprotocol.org/@bob/property-type/tenure/v/1"
     }
   },
-  "required": ["https://blockprotocol.org/@bob/property-type/tenure"]
+  "required": ["https://blockprotocol.org/@bob/property-type/tenure/"]
 }
 ```
 
@@ -687,63 +643,214 @@ The original, conceptually expanded `Employee` entity type:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
   "title": "Employee",
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/age": {
+    "https://blockprotocol.org/@alice/property-type/age/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/occupation": {
+    "https://blockprotocol.org/@alice/property-type/occupation/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
     }
   },
   "required": [
-    "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@alice/property-type/age",
-    "https://blockprotocol.org/@alice/property-type/occupation"
+    "https://blockprotocol.org/@alice/property-type/name/",
+    "https://blockprotocol.org/@alice/property-type/age/",
+    "https://blockprotocol.org/@alice/property-type/occupation/"
   ]
 }
 ```
 
-This expanded entity is equivalent to the original `Employee` entity type, but without any extended type declaration. If Bob wanted to change the `age` property to `tenure`, that would be possible by duplicating this intermediate representation of `Employee` as follows:
+This expanded entity type is equivalent to the original `Employee` entity type, but without any extended type declaration. If Bob wanted to change the `age` property to `tenure`, that would be possible by duplicating this intermediate representation of `Employee` as follows:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@bob/entity-type/employee/v/1",
   "type": "object",
   "title": "Employee",
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@bob/property-type/tenure": {
+    "https://blockprotocol.org/@bob/property-type/tenure/": {
       "$ref": "https://blockprotocol.org/@bob/property-type/tenure/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/occupation": {
+    "https://blockprotocol.org/@alice/property-type/occupation/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
     }
   },
   "required": [
-    "https://blockprotocol.org/@alice/property-type/name",
-    "https://blockprotocol.org/@bob/property-type/tenure",
-    "https://blockprotocol.org/@alice/property-type/occupation"
+    "https://blockprotocol.org/@alice/property-type/name/",
+    "https://blockprotocol.org/@bob/property-type/tenure/",
+    "https://blockprotocol.org/@alice/property-type/occupation/"
   ]
 }
 ```
 
 As the intermediate expanded entity type does not declare any supertypes, we are unable to trivially substitute this version of Bob's `Employee` in place of `Person`.
 
+## Block Protocol implications
+
+As [mentioned above](#addressing-previous-considerations), we want to make use of complete schemas for updates instead of partial schemas. In practice for the Block Protocol, this makes it so the following update request using a partial schema:
+
+```json
+{
+  // Old, partial updateEntityType message
+  "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
+  "schema": {
+    // The properties here are partially applied to the original Entity Type.
+    "properties": {
+      "https://blockprotocol.org/@alice/property-type/birth-date/": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/birth-date/v/1"
+      }
+    }
+  }
+}
+```
+
+must instead use a complete schema (absent of an `$id`)
+
+```json
+{
+  // New, complete updateEntityType message
+  "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
+  "schema": {
+    "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+    "type": "object",
+    "kind": "entityType",
+    "title": "Person",
+    "properties": {
+      "https://blockprotocol.org/@alice/property-type/name/": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+      },
+      "https://blockprotocol.org/@alice/property-type/email/": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/email/v/1"
+      },
+      "https://blockprotocol.org/@alice/property-type/phone-number/": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/phone-number/v/1"
+      },
+      // The update is inlined in the existing schema
+      "https://blockprotocol.org/@alice/property-type/birth-date/": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/birth-date/v/1"
+      }
+    }
+  }
+}
+```
+
+given that the original schema was created as follows
+
+```json
+{
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
+  "type": "object",
+  "kind": "entityType",
+  "title": "Person",
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/email/": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/email/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/phone-number/": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/phone-number/v/1"
+    }
+  }
+}
+```
+
+The above change applies to these Block Protocol operations (`updateEntityType` having already been implemented, and the others proposed in accepted RFCs):
+
+- `updateEntityType`
+- `updatePropertyType`
+
+which must all make use of complete schemas (absent of `$id`) in place of partial ones. These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1).
+
+# Drawbacks
+
+[drawbacks]: #drawbacks
+
+- Handling the additional properties found on a subtype, when wanting to use it in place of a supertype, requires more work for the implementation, especially when considering entity validation and JSON schema semantics.
+- There will be more avenues for users to define unsatisfiable schemas.
+- Resolving types becomes more complicated and requires even more traversal across distinct records, with considerations for cyclic dependencies
+
+# Rationale and alternatives
+
+[rationale-and-alternatives]: #rationale-and-alternatives
+
+The proposed design attempts to make a trade-off between the following:
+
+- The expressiveness of the type system, allowing for greater re-use and expression of hierarchies between types
+- Implementation complexity, especially:
+- when _not_ opting to try and avoid unsatisfiable schemas
+- optimizing for trivial assumptions to be made regarding the compatibility of a supertype and subtype
+
+## Implicitly adding `unevaluatedProperties`
+
+A proposed way to deal with conditional `unevaluatedProperties` is to use custom `$defs` definitions for open and closed variations of entity types.
+
+**Open by default schema**:
+
+```json
+{
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$id": "https://example.com/schema",
+
+  // ... schema contents  ...
+
+  "$defs": {
+    "closed": {
+      "$anchor": "closed",
+      "$ref": "#",
+      "unevaluatedProperties": false
+    }
+  }
+}
+```
+
+Here, referencing `https://example.com/schema` in a `$ref` will result in an _open schema_ that _does not_ specify `{ "unevaluatedProperties": false }`. Referencing `https://example.com/schema#closed` results in retrieving a _closed schema_ that _does_ specify `{ "unevaluatedProperties": false }`.
+
+**Closed by default schema**:
+
+```json
+{
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$id": "https://example.com/schema",
+  "$ref": "#open",
+  "unevaluatedProperties": false,
+
+  "$defs": {
+    "schema": {
+      "$anchor": "open"
+      // ... schema contents ...
+    }
+  }
+}
+```
+
+Here, referencing `https://example.com/schema` in a `$ref` will result in a _closed schema_ that _does_ specify `{ "unevaluatedProperties": false }`. Referencing `https://example.com/schema#open` results in retrieving an _open schema_ that _does not_ specify `{ "unevaluatedProperties": false }`.
+
+(Thanks Jason Desrosiers for the suggestions!)
+
+Using the above setup would mean that we need to specify `#open` at the end of type URLs when URLs appear in `allOf`. We would also need to serve type schemas with one of the above structures, such that they conform with JSON Schema. Although this does add some ceremony around extending types, we would end up with a type extension system that would conform to JSON Schema without implicitness or redefining keyword semantics.
+
+Generally, this RFC opts to forego this design to avoid the major breaking changes it would introduce to current formats of types and accepted URLs. 'Implicitly' adding a constraint about additional properties is not an uncommon practice for JSON validators, and is a fairly easy step to implement when trying to validate entity properties against a given entity type.
+
 ## Detecting cycles
 
-> 💭 Because of how verisoning is specified in the [versioning RFC](./0408-versioning-types.md), entity types cannot create proper dependency cyles. The dependency cycles explained below are not about the literal type hierarchy, but rather about indirection and obfuscation of types and potential incompatabiliites that can be introduced. Cycles across type versions can still result in valid types because the types are immutable and that we are dealing with composition.
+[//]: # "TODO: rework the contents below to explain why we are not doing this"
+
+> 💭 Because of how versioning is specified in the [versioning RFC](./0408-versioning-types.md), entity types cannot create proper dependency cycles. The dependency cycles explained below are not about the literal type hierarchy, but rather about indirection and obfuscation of types and potential incompatibilities that can be introduced. Cycles across type versions can still result in valid types because the types are immutable and that we are dealing with composition.
 
 An extension cycle happens when a part of an inheritance tree revisits a base URL it has already seen. As a contrived example, an entity type `Country` could be the supertype of `Region`, which in turn could be a supertype of the same `Country` entity type.
 
@@ -751,17 +858,17 @@ First entity type version of `Country` without supertype:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/country/v/1",
   "type": "object",
   "title": "Country",
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     }
   },
-  "required": ["https://blockprotocol.org/@alice/property-type/name"]
+  "required": ["https://blockprotocol.org/@alice/property-type/name/"]
 }
 ```
 
@@ -769,7 +876,7 @@ Entity type `Region` with `Country` as a supertype
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/region/v/1",
   "type": "object",
@@ -778,11 +885,11 @@ Entity type `Region` with `Country` as a supertype
     { "$ref": "https://blockprotocol.org/@alice/entity-type/country/v/1" }
   ],
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/blurb": {
+    "https://blockprotocol.org/@alice/property-type/blurb/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/blurb/v/1"
     }
   },
-  "required": ["https://blockprotocol.org/@alice/property-type/blurb"]
+  "required": ["https://blockprotocol.org/@alice/property-type/blurb/"]
 }
 ```
 
@@ -790,7 +897,7 @@ The second, cyclic version of the `Country` entity type
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   // Because of versioning, we cannot change this version to /v/1 and create a "proper" cycle.
   "$id": "https://blockprotocol.org/@alice/entity-type/country/v/2",
@@ -800,14 +907,14 @@ The second, cyclic version of the `Country` entity type
     { "$ref": "https://blockprotocol.org/@alice/entity-type/region/v/1" }
   ],
   "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
+    "https://blockprotocol.org/@alice/property-type/name/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
     },
-    "https://blockprotocol.org/@alice/property-type/location": {
+    "https://blockprotocol.org/@alice/property-type/location/": {
       "$ref": "https://blockprotocol.org/@alice/property-type/location/v/1"
     }
   },
-  "required": ["https://blockprotocol.org/@alice/property-type/name"]
+  "required": ["https://blockprotocol.org/@alice/property-type/name/"]
 }
 ```
 
@@ -815,7 +922,58 @@ This sort of type hierarchy should _not_ be encouraged within the type extension
 
 In this specific contrived example, creating a new entity type based on `Region` instead of a new version of `Country` might even encode semantic meaning better than re-defining `Country`.
 
-## Multiple supertypes - checking compatibility
+## Disallowing unsatisfiable schemas
+
+[//]: # "TODO: rework the contents below to explain why we are not doing this"
+
+As such, we say that a type can extend multiple supertypes **if and only if** the supertypes can coexist. For supertypes to be able to coexist, their properties should either be disjoint, or overlap in a compatible manner.
+
+**An example of _disjoint_ properties**:
+
+- Supertype `Person` contains required properties `name` and `age`
+- Supertype `Superhero` contains the property `superpower`
+
+In this example, there is no overlap between properties, so an `Employee` type could have `Person` and `Superhero` as supertypes
+
+```txt
+              (supertypes)
+superpower◄────Superhero──┐
+                          │
+      name◄┐              │
+           ├───Person─────Employee (subtype)
+       age◄┘              │
+                          │
+occupation◄───────────────┘
+```
+
+**An example of _compatible_, overlapping properties**:
+
+- Supertype `Person` contains the required properties `name` and `age`
+- Supertype `Superhero` contains the required properties `superpower` and `name`
+
+In this example, `name` overlaps as a required property in both supertypes. Compatibility of overlapping properties is defined in the [versioning RFC's definition of "compatible"](./0408-versioning-types.md#determining-type-compatibility).
+
+```txt
+              (supertypes)
+superpower◄────Superhero──┐
+               │          │
+      name◄────┤          │
+               │          │
+       age◄────Person─────Employee (subtype)
+                          │
+occupation◄───────────────┘
+
+
+```
+
+**An example of _incompatible_, overlapping properties**:
+
+- Supertype `Person` contains the required properties `name` and `age`
+- Supertype `Superhero` contains the required property `superpower` and an _array_ of `name`s
+
+In this example, the array of `name`s on the `Superhero` type would not be compatible with the required `name` property of `Person`, which means that the two types cannot be supertypes together.
+
+### Multiple supertypes
 
 As described in the [Guide-level explanation](#multiple-supertypes), when extending multiple entity types, they must be able to coexist in a "compatible manner", which means that the entity types' `properties` and `links` comply with the following:
 
@@ -852,153 +1010,6 @@ To illustrate what this means, given we have a subtype `C` that extends supertyp
 
     - Here subtype `C` imposes its own constraint on `x` which is within the overlapping constraints given by `A` and `B` on `x`.
       The above constraints are also considered valid.
-
-## Block Protocol implications
-
-As [mentioned above](#addressing-previous-considerations), we want to make use of complete schemas for updates instead of partial schemas. In practice for the Block Protocol, this makes it so the following update request using a partial schema:
-
-```json
-{
-  // Old, partial updateEntityType message
-  "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
-  "schema": {
-    // The properties here are partially applied to the original Entity Type.
-    "properties": {
-      "https://blockprotocol.org/@alice/property-type/birth-date": {
-        "$ref": "https://blockprotocol.org/@alice/property-type/birth-date/v/1"
-      }
-    }
-  }
-}
-```
-
-must instead use a complete schema
-
-```json
-{
-  // New, complete updateEntityType message
-  "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
-  "schema": {
-    "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
-    "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
-    "type": "object",
-    "kind": "entityType",
-    "title": "Person",
-    "properties": {
-      "https://blockprotocol.org/@alice/property-type/name/": {
-        "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
-      },
-      "https://blockprotocol.org/@alice/property-type/email": {
-        "$ref": "https://blockprotocol.org/@alice/property-type/email/v/1"
-      },
-      "https://blockprotocol.org/@alice/property-type/phone-number": {
-        "$ref": "https://blockprotocol.org/@alice/property-type/phone-number/v/1"
-      },
-      // The update is inlined in the existing schema
-      "https://blockprotocol.org/@alice/property-type/birth-date": {
-        "$ref": "https://blockprotocol.org/@alice/property-type/birth-date/v/1"
-      }
-    }
-  }
-}
-```
-
-given that the original schema was created as follows
-
-```json
-{
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
-  "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
-  "type": "object",
-  "kind": "entityType",
-  "title": "Person",
-  "properties": {
-    "https://blockprotocol.org/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
-    },
-    "https://blockprotocol.org/@alice/property-type/email": {
-      "$ref": "https://blockprotocol.org/@alice/property-type/email/v/1"
-    },
-    "https://blockprotocol.org/@alice/property-type/phone-number": {
-      "$ref": "https://blockprotocol.org/@alice/property-type/phone-number/v/1"
-    }
-  }
-}
-```
-
-The above change applies to these Block Protocol operations (`updateEntityType` having already been implemented, and the others proposed in accepted RFCs):
-
-- `updateEntityType`
-- `updatePropertyType`
-
-which must all make use of complete schemas in place of partial ones. These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1).
-
-The `queryEntities` operation may need to change its behavior slightly. When calling `queryEntities` for a specific entity type, entities that are returned might be of that entity type or subtypes of it when allowing extended types. This is because the entities of the subtype can be coerced to the requested entity type.
-
-# Drawbacks
-
-[drawbacks]: #drawbacks
-
-- The way this proposal adds type extension means that embedding application must be able to handle subtype entities that contain more properties than the supertype
-- This drifts further away from JSON Schema by introducing a different meaning to the `unevaluatedProperties` keyword and using it implicitly for our schemas.
-- The way compatibility is defined could result in newer versions of supertypes becoming incompatible over time. This is not unique to extending types and can be an "issue" in many parts of the type system as different versions of property types become incompatible.
-
-# Rationale and alternatives
-
-[rationale-and-alternatives]: #rationale-and-alternatives
-
-The general rationale for this way of handling extended types (which we may also call type inheritance) is that we want to keep supertypes and subtypes compatible with one another. Constraining the way type inheritance works makes it so that we can implicitly have "same as" relations across type inheritance trees. It also allows extending multiple supertypes which can lead to more expressive domain models. Furthermore, the proposed additions empower users to reuse publicly-available types in places where they would need to add properties to fit their domain.
-
-## Problems and alternatives
-
-### Alternative through open/closed schemas
-
-A proposed way to deal with conditional `unevaluatedProperties` is to use custom `$defs` definitions for open and closed variations of entity types.
-
-**Open by default schema**:
-
-```json
-{
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
-  "$id": "https://example.com/schema",
-
-  // ... schema contents  ...
-
-  "$defs": {
-    "closed": {
-      "$anchor": "closed",
-      "$ref": "#",
-      "unevaluatedProperties": false
-    }
-  }
-}
-```
-
-Here, referencing `https://example.com/schema` in a `$ref` will result in an _open schema_ that _does not_ specify `{ "unevaluatedProperties": false }`. Referencing `https://example.com/schema#closed` results in retrieving a _closed schema_ that _does_ specify `{ "unevaluatedProperties": false }`.
-
-**Closed by default schema**:
-
-```json
-{
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
-  "$id": "https://example.com/schema",
-  "$ref": "#open",
-  "unevaluatedProperties": false,
-
-  "$defs": {
-    "schema": {
-      "$anchor": "open"
-      // ... schema contents ...
-    }
-  }
-}
-```
-
-Here, referencing `https://example.com/schema` in a `$ref` will result in a _closed schema_ that _does_ specify `{ "unevaluatedProperties": false }`. Referencing `https://example.com/schema#open` results in retrieving an _open schema_ that _does not_ specify `{ "unevaluatedProperties": false }`.
-
-(Thanks Jason Desrosiers for the suggestions!)
-
-Using the above setup would mean that we need to specify `#open` at the end of type URLs when URLs appear in `allOf`. We would also need to serve type schemas with one of the above structures, such that they conform with JSON Schema. Although this does add some ceremony around extending types, we would end up with a type extension system that would conform to JSON Schema without implicitness or redefining keyword semantics.
 
 # Prior art
 
