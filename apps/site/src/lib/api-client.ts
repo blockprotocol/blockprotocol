@@ -20,7 +20,6 @@ import {
   ApiGenerateApiKeyBody,
   ApiGenerateApiKeyResponse,
 } from "../pages/api/me/generate-api-key.api";
-import { RemoveUserAvatarResponse } from "../pages/api/remove-user-avatar.api";
 import {
   ApiRevokeApiKeyBody,
   ApiRevokeApiKeyResponse,
@@ -29,6 +28,7 @@ import {
   ApiUpdateApiKeyBody,
   ApiUpdateApiKeyResponse,
 } from "../pages/api/me/update-api-key.api";
+import { RemoveUserAvatarResponse } from "../pages/api/remove-user-avatar.api";
 import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
