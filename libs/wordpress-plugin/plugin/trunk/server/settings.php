@@ -245,10 +245,9 @@ function block_protocol_field_api_email_renderer($args)
            name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]"
            style="width: 620px; max-width: 100%;"
            type="email"
-        <?php echo $email_exists ? 'disabled' : ''; ?>
            value="<?php echo $email_exists ? (esc_attr($value)) : (''); ?>"></input>
     <?php if ($email_exists): ?>
-    <p>Email sent. Check your <strong><?= $value ?></strong> inbox. Make a mistake? <a href="<?= admin_url('admin-post.php?action=block_protocol_remove_key') ?>">Click here to enter another email address</a></p>
+    <p>Email sent. Check your <strong><?= $value ?></strong> inbox. Make a mistake? <a href="<?= admin_url('admin-post.php?action=block_protocol_remove_key'); ?>">Click here to enter another email address</a></p>
 <?php endif;
 }
 
@@ -269,12 +268,17 @@ function block_protocol_field_api_key_exists_renderer($args)
 {
     // Get the value of the setting we've registered with register_setting()
     $options = get_option('block_protocol_options');
+    $apiKey = $options[$args['label_for']];
+    $public = explode(".", $apiKey)[1];
+
     ?>
+        <input type="hidden" name="block_protocol_options[block_protocol_field_api_email" value="<?= esc_attr($options["block_protocol_field_api_email"]) ?>" />
+        <p>This WordPress instance is linked to <strong><?= htmlentities($options["block_protocol_field_api_email"]); ?></strong> Block Protocol account. The public portion of the API key linked to this account is shown below.</p>
     <input id="<?php echo esc_attr($args['label_for']); ?>"
            name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]" style="width: 620px; max-width: 100%;"
            type="text"
            disabled
-           value="<?php echo isset($options[$args['label_for']]) ? (esc_attr($options[$args['label_for']])) : (''); ?>" /><br />
+           value="<?= esc_attr($public); ?>" /><br />
     <a href="<?= admin_url('admin-post.php?action=block_protocol_remove_key') ?>">Detach keys from this website</a> | <a target="_blank" rel="noopener noreferrer" href="<?=get_block_protocol_site_host()?>/account/api">Manage or create API keys</a>
     <?php
 }
@@ -427,7 +431,8 @@ function block_protocol_options_page_html()
         return;
     }
 
-    $apiKey = get_option("block_protocol_options")["block_protocol_field_api_key"];
+    $options = get_option("block_protocol_options");
+    $apiKey = $options["block_protocol_field_api_key"];
 
     // add error/update messages
 
