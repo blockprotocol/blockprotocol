@@ -111,7 +111,11 @@ export default createBaseHandler<
         res.status(200).json({
           user: user.serialize(true),
           ...(loginCode.variant === "linkWordpress"
-            ? { redirectPath: "/dashboard?link-wordpress" }
+            ? {
+                redirectPath: `/dashboard?link-wordpress=${encodeURIComponent(
+                  loginCode.wordpressInstanceUrl!,
+                )}`,
+              }
             : {}),
         }),
       );

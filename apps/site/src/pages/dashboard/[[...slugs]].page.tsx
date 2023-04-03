@@ -21,11 +21,16 @@ import {
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const router = useRouter();
   const { preferredName: userName, shortname } = user ?? {};
-  const [linkWordpress, setLinkWordpress] = useState(false);
+  const [wordpressInstanceUrl, setWordpressInstanceUrl] = useState<
+    string | null
+  >(null);
 
   useLayoutEffect(() => {
-    if ("link-wordpress" in router.query) {
-      setLinkWordpress(true);
+    const queryWordpressInstanceUrl =
+      router.query["link-wordpress"]?.toString();
+
+    if (queryWordpressInstanceUrl) {
+      setWordpressInstanceUrl(queryWordpressInstanceUrl);
       void router.replace(router.pathname, undefined, { shallow: true });
     }
   }, [router]);
@@ -68,7 +73,11 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
           >
             Welcome, {userName}!
           </Typography>
-          {linkWordpress ? <DashboardWordpressSection /> : null}
+          {wordpressInstanceUrl !== null ? (
+            <DashboardWordpressSection
+              wordpressInstanceUrl={wordpressInstanceUrl}
+            />
+          ) : null}
         </Container>
       </Box>
 

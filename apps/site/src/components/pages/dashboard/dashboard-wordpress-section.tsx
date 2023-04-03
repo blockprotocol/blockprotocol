@@ -10,7 +10,11 @@ import { Link } from "../../link";
 const defaultApiKey =
   "b10ck5.9faa5da6664f7229999439d5433d4ac2.c549e923-c3b6-451f-baba-20b391e6033d";
 
-export const DashboardWordpressSection = () => {
+export const DashboardWordpressSection = ({
+  wordpressInstanceUrl,
+}: {
+  wordpressInstanceUrl: string;
+}) => {
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -74,7 +78,14 @@ export const DashboardWordpressSection = () => {
               Click or tap
             </Box>{" "}
             to copy the key below to your clipboard, then head back to your{" "}
-            <Link href="#">WordPress dashboard</Link> to paste it in.
+            <Link
+              href={wordpressInstanceUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              WordPress dashboard
+            </Link>{" "}
+            to paste it in.
           </Typography>
           <Stack
             direction="row"
