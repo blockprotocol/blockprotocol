@@ -11,8 +11,8 @@ import { useUser } from "../../../context/user-context";
 import { apiClient } from "../../../lib/api-client";
 import { AvatarButton } from "./avatar-button";
 import { AvatarWithOverlay } from "./avatar-with-overlay";
-import { ConfirmRemoveAvatarCard } from "./confirm-remove-avatar-card";
 import { MiscellaneousTopic } from "./miscellaneous-topic";
+import { RemoveAvatarConfirmation } from "./remove-avatar-confirmation";
 
 export const GeneralPanel: FunctionComponent = () => {
   const { user, setUser } = useUser();
@@ -131,7 +131,7 @@ export const GeneralPanel: FunctionComponent = () => {
                   }}
                 >
                   {displayRemoveAvatarConfirmation ? (
-                    <ConfirmRemoveAvatarCard
+                    <RemoveAvatarConfirmation
                       onCancel={() => setDisplayRemoveAvatarConfirmation(false)}
                       onConfirm={removeAvatar}
                     />

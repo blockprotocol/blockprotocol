@@ -2,7 +2,7 @@ import { Card, Stack, Typography } from "@mui/material";
 
 import { Button } from "../../../components/button";
 
-export const ConfirmRemoveAvatarCard = ({
+export const RemoveAvatarConfirmation = ({
   onCancel,
   onConfirm,
 }: {
