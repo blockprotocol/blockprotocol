@@ -79,14 +79,14 @@ function block_protocol_settings_init()
 
 
     // ------- Settings related to the BP API key --------- //
+    add_settings_section(
+        'block_protocol_section_api_account',
+        __('blockprotocol.org Account', 'block_protocol'),
+        'block_protocol_section_api_key_intro',
+        'block_protocol'
+    );
 
     if (!$options["block_protocol_field_api_key"]) {
-        add_settings_section(
-            'block_protocol_section_api_account',
-            __('blockprotocol.org Account', 'block_protocol'),
-            'block_protocol_section_api_key_intro',
-            'block_protocol'
-        );
 
         add_settings_field(
             'block_protocol_field_api_email',
@@ -113,6 +113,18 @@ function block_protocol_settings_init()
         );
     } else {
         // ------- Settings related to permitted blocks --------- //
+
+        add_settings_field(
+            'block_protocol_field_api_key',
+            __('Key', 'block_protocol'),
+            'block_protocol_field_api_key_exists_renderer',
+            'block_protocol',
+            'block_protocol_section_api_account',
+            [
+                'label_for' => 'block_protocol_field_api_key',
+                'class' => 'block_protocol_row',
+            ]
+        );
 
         add_settings_section(
             'block_protocol_section_permitted_blocks',
@@ -233,6 +245,14 @@ function block_protocol_field_api_key_renderer($args)
         type="password"
         value="<?php echo isset($options[$args['label_for']]) ? (esc_attr($options[$args['label_for']])) : (''); ?>"></input>
     <?php
+}
+
+
+function block_protocol_field_api_key_exists_renderer($args)
+{
+    // Get the value of the setting we've registered with register_setting()
+    $options = get_option('block_protocol_options');
+    echo $options[$args['label_for']];
 }
 
 /**
@@ -383,6 +403,8 @@ function block_protocol_options_page_html()
         return;
     }
 
+    $apiKey = get_option("block_protocol_options")["block_protocol_field_api_key"];
+
     // add error/update messages
 
     // check if the user have submitted the settings
@@ -408,10 +430,12 @@ function block_protocol_options_page_html()
             // (sections are registered for "block_protocol", each field is registered to a specific section)
             do_settings_sections('block_protocol');
             // output save settings button
-            submit_button('Save Settings');
+            if ($apiKey) {
+                submit_button('Save Settings');
+            }
             ?>
         </form>
-        <?php if (get_option("block_protocol_options")["block_protocol_field_api_key"]): // @todo handle removing API key ?>
+        <?php if ($apiKey): ?>
             <h2>Entities</h2>
             <p>The entities created and edited by Block Protocol blocks</p>
             <div style="max-height:800px;border:1px solid rgba(0,0,0,0.2);display:inline-block;">
