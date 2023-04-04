@@ -1,81 +1,43 @@
-import {
-  faArrowRight,
-  IconDefinition,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
 import { HTMLProps, PropsWithChildren, ReactNode } from "react";
+import { faArrowUpRight } from "./fa-arrow-up-right";
 
 import { FontAwesomeIcon } from "./font-awesome-icon";
-import styles from "./react-promo.module.scss";
-import blockTrioImage from "./images/block-trio.png";
 import aiImage from "./images/ai.png";
+import blockTrioImage from "./images/block-trio.png";
 import blocksImage from "./images/blocks.png";
-
-const faArrowUpRight: IconDefinition = {
-  icon: [
-    384,
-    512,
-    [],
-    "e09f",
-    "M352 128c0-17.7-14.3-32-32-32L96 96c-17.7 0-32 14.3-32 32s14.3 32 32 32l146.7 0L41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L288 205.3 288 352c0 17.7 14.3 32 32 32s32-14.3 32-32l0-224z",
-  ],
-  prefix: "fas",
-  iconName: "arrow-up-right",
-};
+import styles from "./react-promo.module.scss";
 
 export const PromoCard = ({ children }: PropsWithChildren) => {
   return <div className={styles.PromoCard}>{children}</div>;
 };
 
-export const PromoBigTitle = ({ children }: PropsWithChildren) => {
-  return (
-    <h3
-      style={{
-        fontFamily: '"colfax-web"',
-        fontStyle: "italic",
-        fontWeight: 700,
-        fontSize: 42,
-        lineHeight: 1,
-        letterSpacing: "-0.03em",
-        marginBottom: 20,
-        marginTop: 0,
-      }}
-    >
-      {children}
-    </h3>
-  );
-};
-
-export const PromoPurpleText = ({ children }: PropsWithChildren) => (
-  <span
-    style={{
-      color: "#6048E5",
-    }}
-  >
-    {children}
-  </span>
+const PromoCardHeader = ({ children }: PropsWithChildren) => (
+  <div className={styles.PromoCardHeader}>{children}</div>
 );
 
-export const PromoSmallTitle = ({ children }: PropsWithChildren) => {
-  return (
-    <p
-      style={{
-        fontFamily: '"colfax-web"',
-        fontStyle: "normal",
-        fontWeight: "500",
-        fontSize: 14,
-        lineHeight: 1.3,
-        letterSpacing: "0.05em",
-        textTransform: "uppercase",
-        color: "#0E1114",
-        marginBottom: 4,
-        marginTop: 0,
-      }}
-    >
-      {children}
-    </p>
-  );
+const PromoCardSmallTitle = ({ children }: PropsWithChildren) => {
+  return <p className={styles.PromoCardSmallTitle}>{children}</p>;
 };
+
+const PromoCardBigTitle = ({ children }: PropsWithChildren) => {
+  return <h3 className={styles.PromoCardBigTitle}>{children}</h3>;
+};
+
+const PromoCardItems = ({
+  className,
+  children,
+  ...props
+}: HTMLProps<HTMLDivElement>) => (
+  <div {...props} className={clsx(styles.PromoCardItems, className)}>
+    {children}
+  </div>
+);
+
+const PromoCardContent = ({ children }: PropsWithChildren) => (
+  <div className={styles.PromoCardContent}>{children}</div>
+);
 
 const PromoList = ({ children }: PropsWithChildren) => {
   return <ul className={styles.PromoList}>{children}</ul>;
@@ -125,21 +87,8 @@ const PromoInfoImage = ({
   );
 };
 
-const PromoCardItems = ({
-  className,
-  children,
-  ...props
-}: HTMLProps<HTMLDivElement>) => (
-  <div {...props} className={clsx(styles.PromoCardItems, className)}>
-    {children}
-  </div>
-);
-
-const PromoCardContent = ({ children }: PropsWithChildren) => (
-  <div className={styles.PromoCardContent}>{children}</div>
-);
-const PromoCardHeader = ({ children }: PropsWithChildren) => (
-  <div className={styles.PromoCardHeader}>{children}</div>
+const PromoCardPurpleText = ({ children }: PropsWithChildren) => (
+  <span className={styles.PromoCardPurpleText}>{children}</span>
 );
 
 export const ReactPromo = () => {
@@ -148,10 +97,10 @@ export const ReactPromo = () => {
       <h2 className={styles.PromoHeading}>You can look forward to...</h2>
       <PromoCard>
         <PromoCardHeader>
-          <PromoSmallTitle>Next Generation</PromoSmallTitle>
-          <PromoBigTitle>
-            <PromoPurpleText>AI Blocks</PromoPurpleText>
-          </PromoBigTitle>
+          <PromoCardSmallTitle>Next Generation</PromoCardSmallTitle>
+          <PromoCardBigTitle>
+            <PromoCardPurpleText>AI Blocks</PromoCardPurpleText>
+          </PromoCardBigTitle>
         </PromoCardHeader>
         <PromoCardItems>
           <PromoCardContent>
@@ -179,8 +128,8 @@ export const ReactPromo = () => {
               </PromoListItem>
               <PromoListItem>
                 <strong>
-                  <PromoPurpleText>Free credits</PromoPurpleText> for all models
-                  and providers
+                  <PromoCardPurpleText>Free credits</PromoCardPurpleText> for
+                  all models and providers
                 </strong>
               </PromoListItem>
             </PromoList>
@@ -189,10 +138,11 @@ export const ReactPromo = () => {
       </PromoCard>
       <PromoCard>
         <PromoCardHeader>
-          <PromoSmallTitle>Level up your SEO</PromoSmallTitle>
-          <PromoBigTitle>
-            <PromoPurpleText>Structured data</PromoPurpleText> in WordPress
-          </PromoBigTitle>
+          <PromoCardSmallTitle>Level up your SEO</PromoCardSmallTitle>
+          <PromoCardBigTitle>
+            <PromoCardPurpleText>Structured data</PromoCardPurpleText> in
+            WordPress
+          </PromoCardBigTitle>
         </PromoCardHeader>
         <PromoCardItems>
           <PromoInfoImage src={blockTrioImage} width={331} />
@@ -230,11 +180,11 @@ export const ReactPromo = () => {
       </PromoCard>
       <PromoCard>
         <PromoCardHeader>
-          <PromoSmallTitle>Supercharge Your Website</PromoSmallTitle>
-          <PromoBigTitle>
-            <PromoPurpleText>Powerful API services</PromoPurpleText> without
-            fuss
-          </PromoBigTitle>
+          <PromoCardSmallTitle>Supercharge Your Website</PromoCardSmallTitle>
+          <PromoCardBigTitle>
+            <PromoCardPurpleText>Powerful API services</PromoCardPurpleText>{" "}
+            without fuss
+          </PromoCardBigTitle>
         </PromoCardHeader>
         <PromoCardItems
           className={clsx(
@@ -273,11 +223,11 @@ export const ReactPromo = () => {
           <PromoInfoImage src={blocksImage} width={328} />
           <PromoCardContent>
             <PromoCardHeader>
-              <PromoSmallTitle>Tons more benefits</PromoSmallTitle>
-              <PromoBigTitle>
-                <PromoPurpleText>Instant access</PromoPurpleText> to an infinite
-                ecosystem
-              </PromoBigTitle>
+              <PromoCardSmallTitle>Tons more benefits</PromoCardSmallTitle>
+              <PromoCardBigTitle>
+                <PromoCardPurpleText>Instant access</PromoCardPurpleText> to an
+                infinite ecosystem
+              </PromoCardBigTitle>
             </PromoCardHeader>
             <PromoList>
               <PromoListItem>
