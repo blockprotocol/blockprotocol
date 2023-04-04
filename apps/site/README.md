@@ -316,6 +316,24 @@ Uploads a user avatar and apply it to logged in profile page.
 - Response Body:
   - `avatarUrl`: Url pointing to the newly uploaded user avatar.
 
+#### `GET /api/remove-user-avatar` [requires cookie authentication]
+
+Removes current avatar of the user.
+
+- Request Response: `SUCCESS`
+
+#### `POST /api/update-user-preferred-name` [requires cookie authentication]
+
+Updates preferred name of the authenticated user.
+
+- Request Body:
+
+  - `preferredName`: the preferred name of the user associated with the BP account
+
+- Request Response:
+
+  - `user`: the updated BP user
+
 #### `POST /api/blocks/create`
 
 Creates and mirrors a block published to npm. Only permitted if `process.env.NEXT_PUBLIC_NPM_PUBLISHING` is truthy
