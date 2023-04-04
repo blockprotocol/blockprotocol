@@ -3,10 +3,11 @@ import {
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
-import { PropsWithChildren, ReactNode } from "react";
+import { HTMLProps, PropsWithChildren, ReactNode } from "react";
 
 import { FontAwesomeIcon } from "./font-awesome-icon";
 import styles from "./react-promo.module.scss";
+import blockTrio from "./images/block-trio.png";
 
 const faArrowUpRight: IconDefinition = {
   icon: [
@@ -21,18 +22,7 @@ const faArrowUpRight: IconDefinition = {
 };
 
 export const PromoCard = ({ children }: PropsWithChildren) => {
-  return (
-    <div
-      style={{
-        padding: "30px 40px",
-        background: "#FFFFFF",
-        border: "1px solid #DDE7F0",
-        borderRadius: "8px",
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <div className={styles.PromoCard}>{children}</div>;
 };
 
 export const PromoBigTitle = ({ children }: PropsWithChildren) => {
@@ -47,6 +37,8 @@ export const PromoBigTitle = ({ children }: PropsWithChildren) => {
         letterSpacing: "-0.03em",
         marginBottom: 20,
         marginTop: 0,
+        paddingLeft: "var(--promo-x-padding)",
+        paddingRight: "var(--promo-x-padding)",
       }}
     >
       {children}
@@ -77,7 +69,9 @@ export const PromoSmallTitle = ({ children }: PropsWithChildren) => {
         textTransform: "uppercase",
         color: "#0E1114",
         marginBottom: 4,
-        marginTop: 0,
+        paddingLeft: "var(--promo-x-padding)",
+        paddingRight: "var(--promo-x-padding)",
+        marginTop: "var(--promo-y-padding)",
       }}
     >
       {children}
@@ -117,6 +111,32 @@ const PromoInfoText = ({ children }: PropsWithChildren) => (
   <span className={styles.PromoInfoText}>{children}</span>
 );
 
+const PromoInfoImage = ({
+  src,
+  alt,
+  width,
+}: {
+  src: string;
+  alt?: string;
+  width: number;
+}) => {
+  return (
+    <div style={{ width }} className={styles.PromoInfoImage}>
+      <img src={src} alt={alt} />
+    </div>
+  );
+};
+
+const PromoCardItems = ({
+  className,
+  children,
+  ...props
+}: HTMLProps<HTMLDivElement>) => (
+  <div {...props} className={clsx(styles.PromoCardItems, className)}>
+    {children}
+  </div>
+);
+
 export const ReactPromo = () => {
   return (
     <div className={styles.PromoStack}>
@@ -126,92 +146,100 @@ export const ReactPromo = () => {
         <PromoBigTitle>
           <PromoPurpleText>AI Blocks</PromoPurpleText>
         </PromoBigTitle>
-        <PromoList>
-          <PromoListItem>
-            The best <strong>AI text</strong> generation, style, tone, grammar
-            and editing blocks for WordPress
-          </PromoListItem>
-          <PromoListItem>
-            Powerful <strong>AI image generation</strong> blocks let you
-            illustrate posts in seconds
-          </PromoListItem>
-          <PromoListItem>
-            Advanced <strong>AI image editing</strong> blocks let you remove
-            watermarks from photos, or remove/replace the backgrounds of product
-            photos in WooCommerce
-          </PromoListItem>
-          <PromoListItem>
-            Best-in-class <strong>AI chat</strong> block lets you persist chats,
-            publish them on your website, fork prior conversations with history
-            intact, set the AI’s response style and more
-          </PromoListItem>
-          <PromoListItem>
-            Switch between AI models and providers at will
-          </PromoListItem>
-          <PromoListItem>
-            <strong>
-              <PromoPurpleText>Free credits</PromoPurpleText> for all models and
-              providers
-            </strong>
-          </PromoListItem>
-        </PromoList>
+        <PromoCardItems>
+          <PromoList>
+            <PromoListItem>
+              The best <strong>AI text</strong> generation, style, tone, grammar
+              and editing blocks for WordPress
+            </PromoListItem>
+            <PromoListItem>
+              Powerful <strong>AI image generation</strong> blocks let you
+              illustrate posts in seconds
+            </PromoListItem>
+            <PromoListItem>
+              Advanced <strong>AI image editing</strong> blocks let you remove
+              watermarks from photos, or remove/replace the backgrounds of
+              product photos in WooCommerce
+            </PromoListItem>
+            <PromoListItem>
+              Best-in-class <strong>AI chat</strong> block lets you persist
+              chats, publish them on your website, fork prior conversations with
+              history intact, set the AI’s response style and more
+            </PromoListItem>
+            <PromoListItem>
+              Switch between AI models and providers at will
+            </PromoListItem>
+            <PromoListItem>
+              <strong>
+                <PromoPurpleText>Free credits</PromoPurpleText> for all models
+                and providers
+              </strong>
+            </PromoListItem>
+          </PromoList>
+        </PromoCardItems>
       </PromoCard>
       <PromoCard>
         <PromoSmallTitle>Level up your SEO</PromoSmallTitle>
         <PromoBigTitle>
           <PromoPurpleText>Structured data</PromoPurpleText> in WordPress
         </PromoBigTitle>
-        <PromoList>
-          <PromoListItem>
-            <strong>
-              Turn WordPress into a powerful{" "}
-              {/* eslint-disable-next-line react/jsx-no-target-blank */}
-              <a href="https://blockprotocol.org" target="_blank">
-                entity graph
-              </a>{" "}
-              and unlock a whole range of new functionality.
-            </strong>{" "}
-            Go beyond Custom Post Types and Advanced Custom Fields with a graph
-            of entities, all with their own properties and connected by links
-          </PromoListItem>
-          <PromoListItem comingSoon="Coming Soon">
-            <strong>Improve your search rankings</strong> by leveraging
-            structured data (SEO) blocks that take context from their
-            surroundings and dynamically generating whole-page JSON-LD based on
-            related information{" "}
-            <PromoInfoText>
-              (e.g. offers in WooCommerce, or tickets for an event)
-            </PromoInfoText>
-          </PromoListItem>
-          <PromoListItem comingSoon="Planned">
-            Use WordPress as an app builder, not just as a site editor and CMS
-          </PromoListItem>
-        </PromoList>
+        <PromoCardItems>
+          <PromoInfoImage src={blockTrio} width={331} />
+          <PromoList>
+            <PromoListItem>
+              <strong>
+                Turn WordPress into a powerful{" "}
+                {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                <a href="https://blockprotocol.org" target="_blank">
+                  entity graph
+                </a>{" "}
+                and unlock a whole range of new functionality.
+              </strong>{" "}
+              Go beyond Custom Post Types and Advanced Custom Fields with a
+              graph of entities, all with their own properties and connected by
+              links
+            </PromoListItem>
+            <PromoListItem comingSoon="Coming Soon">
+              <strong>Improve your search rankings</strong> by leveraging
+              structured data (SEO) blocks that take context from their
+              surroundings and dynamically generating whole-page JSON-LD based
+              on related information{" "}
+              <PromoInfoText>
+                (e.g. offers in WooCommerce, or tickets for an event)
+              </PromoInfoText>
+            </PromoListItem>
+            <PromoListItem comingSoon="Planned">
+              Use WordPress as an app builder, not just as a site editor and CMS
+            </PromoListItem>
+          </PromoList>
+        </PromoCardItems>
       </PromoCard>
       <PromoCard>
         <PromoSmallTitle>Supercharge Your Website</PromoSmallTitle>
         <PromoBigTitle>
           <PromoPurpleText>Powerful API services</PromoPurpleText> without fuss
         </PromoBigTitle>
-        <PromoList>
-          <PromoListItem>
-            Access OpenAI, Mapbox, and other powerful APIs{" "}
-            <strong>directly within WordPress, with zero extra steps</strong>
-          </PromoListItem>
-          <PromoListItem>
-            No need to share card details, obtain your own API key, or even set
-            up an account with any provider directly.{" "}
-            <strong>Everything is handled by the Block Protocol.</strong>
-          </PromoListItem>
-          <PromoListItem>
-            Generous free allowances with all providers let you try out blocks
-            and use them in WordPress
-          </PromoListItem>
-          <PromoListItem comingSoon="Coming Soon">
-            <strong>Sync data from external apps into WordPress</strong> through
-            authenticated external service blocks.
-          </PromoListItem>
-        </PromoList>
+        <PromoCardItems className={styles.PromoCardItemsNoPaddingRight}>
+          <PromoList>
+            <PromoListItem>
+              Access OpenAI, Mapbox, and other powerful APIs{" "}
+              <strong>directly within WordPress, with zero extra steps</strong>
+            </PromoListItem>
+            <PromoListItem>
+              No need to share card details, obtain your own API key, or even
+              set up an account with any provider directly.{" "}
+              <strong>Everything is handled by the Block Protocol.</strong>
+            </PromoListItem>
+            <PromoListItem>
+              Generous free allowances with all providers let you try out blocks
+              and use them in WordPress
+            </PromoListItem>
+            <PromoListItem comingSoon="Coming Soon">
+              <strong>Sync data from external apps into WordPress</strong>{" "}
+              through authenticated external service blocks.
+            </PromoListItem>
+          </PromoList>
+        </PromoCardItems>
       </PromoCard>
       <PromoCard>
         <PromoSmallTitle>Tons more benefits</PromoSmallTitle>
@@ -219,24 +247,28 @@ export const ReactPromo = () => {
           <PromoPurpleText>Instant access</PromoPurpleText> to an infinite
           ecosystem
         </PromoBigTitle>
-        <PromoList>
-          <PromoListItem>
-            The Block Protocol is an open-source ecosystem of blocks that
-            anybody can contribute to
-          </PromoListItem>
-          <PromoListItem>
-            New blocks are instantly available within WordPress to Block
-            Protocol users without having to update the plugin, or install
-            additional plugins{" "}
-            <PromoInfoText>(as is required for Gutenberg blocks)</PromoInfoText>
-          </PromoListItem>
-          <PromoListItem>
-            <strong>
-              Use Block Protocol blocks in any Þ-enabled environment
-            </strong>
-            , not just WordPress
-          </PromoListItem>
-        </PromoList>
+        <PromoCardItems>
+          <PromoList>
+            <PromoListItem>
+              The Block Protocol is an open-source ecosystem of blocks that
+              anybody can contribute to
+            </PromoListItem>
+            <PromoListItem>
+              New blocks are instantly available within WordPress to Block
+              Protocol users without having to update the plugin, or install
+              additional plugins{" "}
+              <PromoInfoText>
+                (as is required for Gutenberg blocks)
+              </PromoInfoText>
+            </PromoListItem>
+            <PromoListItem>
+              <strong>
+                Use Block Protocol blocks in any Þ-enabled environment
+              </strong>
+              , not just WordPress
+            </PromoListItem>
+          </PromoList>
+        </PromoCardItems>
       </PromoCard>
     </div>
   );
