@@ -30,7 +30,7 @@ test("dashboard page should contain key elements", async ({ page }) => {
 
   for (const [text, url] of [
     ["Build a block", "/docs/blocks/develop"],
-    ["Create a Type", "/@alice/all-types"],
+    ["Create a Type", "/@alice/types"],
     ["Create and manage API keys", "/account/api"],
     ["View your public profile", "/@alice"],
     ["Browse blocks for inspiration", "/hub"],
