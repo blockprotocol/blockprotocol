@@ -162,6 +162,11 @@ const nextConfig = {
         destination: "/account/general",
         permanent: true,
       },
+      {
+        source: "/:shortname/all-types",
+        destination: "/:shortname/types",
+        permanent: true,
+      },
     ];
   },
 

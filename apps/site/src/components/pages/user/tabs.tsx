@@ -18,8 +18,8 @@ export const TABS = [
   },
   {
     title: "Types",
-    value: "all-types",
-    slug: "all-types",
+    value: "types",
+    slug: "types",
     testId: "profile-page-schemas-tab",
   },
 ] as const;
