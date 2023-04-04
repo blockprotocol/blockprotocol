@@ -99,14 +99,14 @@ function block_protocol_options_page_activate_html()
         <h2 class="BPActivateHeading" style="margin-bottom: 18px;">
             <?= __('Finish activating the Block Protocol plugin', 'block_protocol'); ?>
         </h2>
-        <p style="margin-bottom:0;">
+        <p class="BPActivatePara" style="margin-bottom:0;">
             <?= __('Because the Block Protocol provides free credits and access to an array of external services such as OpenAI and Mapbox which ordinarily cost money, we need to verify your email address in order to continue.', 'block_protocol'); ?>
         </p>
         <form action="<?= admin_url('admin-post.php') ?>" method="POST">
             <?php wp_nonce_field('block_protocol_link_by_email'); ?>
             <input type="hidden" name="action"
                    value="block_protocol_link_by_email">
-            <p style="margin-top:28px;margin-bottom:8px;">
+            <p class="BPActivatePara" style="margin-top:28px;margin-bottom:8px;">
                 <label for="block_protocol_field_email"><strong><?= __('Enter your email address below.', 'block_protocol'); ?></strong> <?= __('You will need to click a link to confirm your authenticity.', 'block_protocol'); ?></label>
             </p>
             <input type="email" name="email" id="block_protocol_field_email"
@@ -115,13 +115,13 @@ function block_protocol_options_page_activate_html()
             />
             <?php block_protocol_activate_submit_button(__('Continue with email', 'block-protocol'), $email_exists ? 'disabled' : '') ?>
             <?php if ($passedEmailInvalid): ?>
-                <p style="margin-top:8px;margin-bottom:0px;"
+                <p class="BPActivatePara" style="margin-top:8px;margin-bottom:0px;"
                    class="BPActivateError">
                     <span class="BPActivateErrorRed"><?= __('Email address invalid.', 'block_protocol'); ?></span>
                     <?= __('Please try entering it again.', 'block_protocol'); ?>
                 </p>
             <?php elseif ($email_exists): ?>
-                <p style="margin-top:8px;margin-bottom:0px;">
+                <p class="BPActivatePara" style="margin-top:8px;margin-bottom:0px;">
 
                     <?= sprintf(__('Check your %s inbox. Make a mistake?', 'block_protocol'), '<strong>' . htmlentities($email) . '</strong>'); ?>
                     <a href="<?= wp_nonce_url(admin_url('admin-post.php?action=block_protocol_remove_key'), 'block_protocol_remove_key'); ?>">
@@ -134,7 +134,7 @@ function block_protocol_options_page_activate_html()
             <?php wp_nonce_field('block_protocol_link_by_api_key'); ?>
             <input type="hidden" name="action"
                    value="block_protocol_link_by_api_key">
-            <p style="margin-top:28px;margin-bottom:8px;">
+            <p class="BPActivatePara" style="margin-top:28px;margin-bottom:8px;">
                 <label for="block_protocol_field_api_key"><strong>
                         <?php if ($email_exists): ?>
                             <?= __('Now enter a Block Protocol (Þ) API key below:', 'block_protocol'); ?>
@@ -150,7 +150,7 @@ function block_protocol_options_page_activate_html()
                 <?= $email_exists ? 'autofocus' : '' ?>
             >
             <?php block_protocol_activate_submit_button(__('Continue with key', 'block_protocol')) ?>
-            <p style="margin-top:8px;margin-bottom:0;">
+            <p class="BPActivatePara" style="margin-top:8px;margin-bottom:0;">
                 <?= sprintf(__('Block Protocol users can access or create an API key at any time from %s', 'block_protocol'), "<a href='" . get_block_protocol_site_host() . "/account/api'>blockprotocol.org/account/api</a>"); ?>
             </p>
         </form>

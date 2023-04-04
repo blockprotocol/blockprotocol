@@ -80,3 +80,7 @@
     vertical-align: -0.125em;
     margin-left: 8px;
 }
+
+.BPActivatePara {
+    max-width: 828px;
+}
