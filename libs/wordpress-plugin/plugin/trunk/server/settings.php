@@ -339,7 +339,8 @@ function block_protocol_field_hidden_renderer($field)
     <?php
 }
 
-function block_protocol_options_page_settings_html() {
+function block_protocol_options_page_settings_html()
+{
     ?>
     <form action="options.php" method="post" style="margin-top:30px;">
         <?php
@@ -356,54 +357,54 @@ function block_protocol_options_page_settings_html() {
         submit_button('Save Settings');
         ?>
     </form>
-        <h2>Entities</h2>
-        <p>The entities created and edited by Block Protocol blocks</p>
-        <div style="max-height:800px;border:1px solid rgba(0,0,0,0.2);display:inline-block;">
-            <table
-                    style="border-spacing:0;border-collapse:collapse;max-height:600px;overflow-y:scroll;display:inline-block;">
-                <thead>
-                <tr>
-                    <th
-                            style="background: white; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);top:0;position:sticky;top:-1px;">
-                        Properties</th>
-                    <th
-                            style="background: white; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);top:0;position:sticky;">
-                        Found in pages
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                $entities_with_locations = get_block_protocol_entities_and_locations();
+    <h2>Entities</h2>
+    <p>The entities created and edited by Block Protocol blocks</p>
+    <div style="max-height:800px;border:1px solid rgba(0,0,0,0.2);display:inline-block;">
+        <table
+                style="border-spacing:0;border-collapse:collapse;max-height:600px;overflow-y:scroll;display:inline-block;">
+            <thead>
+            <tr>
+                <th
+                        style="background: white; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);top:0;position:sticky;top:-1px;">
+                    Properties</th>
+                <th
+                        style="background: white; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);top:0;position:sticky;">
+                    Found in pages
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $entities_with_locations = get_block_protocol_entities_and_locations();
 
-                foreach ($entities_with_locations as $entity) {
+            foreach ($entities_with_locations as $entity) {
 
 
-                    echo sprintf(
-                        "
+                echo sprintf(
+                    "
     <tr>
         <td style='max-width: 600px;background: #f6f7f7; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);'><pre style='white-space:pre-wrap;word-break:break-word;'>%s</pre></td>
         <td style='background: #f6f7f7; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);'>%s</td>
     </tr>",
-                        esc_html(block_protocol_json_encode([
-                            "entityId" => $entity["entity_id"],
-                            "entityTypeId" => $entity["entity_type_id"],
-                            "properties" => json_decode($entity["properties"])
-                        ], JSON_PRETTY_PRINT)),
-                        join(",", array_map(function ($location) {
-                            return sprintf(
-                                "<div><a href='%s'>%s</a><div>",
-                                esc_url($location["edit_link"]),
-                                esc_html($location["title"])
-                            );
-                        }, $entity["locations"]))
-                    );
-                }
-                ?>
-                </tbody>
-            </table>
-        </div>
-        <?php
+                    esc_html(block_protocol_json_encode([
+                        "entityId" => $entity["entity_id"],
+                        "entityTypeId" => $entity["entity_type_id"],
+                        "properties" => json_decode($entity["properties"])
+                    ], JSON_PRETTY_PRINT)),
+                    join(",", array_map(function ($location) {
+                        return sprintf(
+                            "<div><a href='%s'>%s</a><div>",
+                            esc_url($location["edit_link"]),
+                            esc_html($location["title"])
+                        );
+                    }, $entity["locations"]))
+                );
+            }
+            ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
 }
 
 
