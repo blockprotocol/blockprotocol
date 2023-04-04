@@ -74,8 +74,6 @@ function block_protocol_settings_init()
         'block_protocol'
     );
 
-    // ------- Settings related to permitted blocks --------- //
-
     add_settings_field(
         'block_protocol_field_api_key',
         __('Key', 'block_protocol'),
@@ -87,6 +85,8 @@ function block_protocol_settings_init()
             'class' => 'block_protocol_row',
         ]
     );
+
+    // ------- Settings related to permitted blocks --------- //
 
     add_settings_section(
         'block_protocol_section_permitted_blocks',
@@ -156,13 +156,22 @@ add_action('admin_init', 'block_protocol_settings_init');
 /**
  * Intro to the API key section
  *
- * @param array $args The settings array, defining title, id, callback.
+ * @param array $args  The settings array, defining title, id, callback.
  */
 function block_protocol_section_api_key_intro($args)
 {
 }
 
-
+/**
+ * block_protocol_field_api_key field callback function.
+ *
+ * WordPress has magic interaction with the following keys: label_for, class.
+ * - the "label_for" key value is used for the "for" attribute of the <label>.
+ * - the "class" key value is used for the "class" attribute of the <tr> containing the field.
+ * Note: you can add custom key value pairs to be used inside your callbacks.
+ *
+ * @param array $args
+ */
 function block_protocol_field_api_key_renderer($args)
 {
     // Get the value of the setting we've registered with register_setting()
@@ -318,12 +327,28 @@ function block_protocol_options_page()
  */
 add_action('admin_menu', 'block_protocol_options_page');
 
+function block_protocol_field_hidden_renderer($field)
+{
+    $options = get_option('block_protocol_options');
+    
+    ?>
+    <input
+            name="block_protocol_options[<?= esc_attr($field); ?>]"
+            type="hidden"
+            value="<?php echo isset($options[$field]) ? (esc_attr($options[$field])) : (''); ?>"></input>
+    <?php
+}
+
 function block_protocol_options_page_settings_html() {
     ?>
     <form action="options.php" method="post" style="margin-top:30px;">
         <?php
         // output security fields for the registered setting "block_protocol"
         settings_fields('block_protocol');
+        block_protocol_field_hidden_renderer("block_protocol_field_api_email");
+        // @todo – don't do this, see https://hashintel.slack.com/archives/C02LG39FJAU/p1680544602069229
+        block_protocol_field_hidden_renderer("block_protocol_field_api_key");
+        block_protocol_field_hidden_renderer("block_protocol_field_api_email_verification_id");
         // output setting sections and their fields
         // (sections are registered for "block_protocol", each field is registered to a specific section)
         do_settings_sections('block_protocol');
