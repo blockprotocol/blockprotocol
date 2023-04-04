@@ -1,5 +1,5 @@
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 import { FontAwesomeIcon } from "./font-awesome-icon";
 import styles from "./react-promo.module.scss";
 
@@ -81,6 +81,10 @@ const PromoListItem = ({ children }: PropsWithChildren) => {
   );
 };
 
+const PromoInfoText = ({ children }: PropsWithChildren) => (
+  <span className={styles.PromoInfoText}>{children}</span>
+);
+
 export const ReactPromo = () => {
   return (
     <div className={styles.PromoStack}>
@@ -127,16 +131,21 @@ export const ReactPromo = () => {
         </PromoBigTitle>
         <PromoList>
           <PromoListItem>
-            Turn WordPress into a powerful entity graph and unlock a whole range
-            of new functionality. Go beyond Custom Post Types and Advanced
-            Custom Fields with a graph of entities, all with their own
-            properties and connected by links
+            <strong>
+              Turn WordPress into a powerful entity graph and unlock a whole
+              range of new functionality.
+            </strong>{" "}
+            Go beyond Custom Post Types and Advanced Custom Fields with a graph
+            of entities, all with their own properties and connected by links
           </PromoListItem>
           <PromoListItem>
-            Improve your search rankings by leveraging structured data (SEO)
-            blocks that take context from their surroundings and dynamically
-            generating whole-page JSON-LD based on related information (e.g.
-            offers in WooCommerce, or tickets for an event)
+            <strong>Improve your search rankings</strong> by leveraging
+            structured data (SEO) blocks that take context from their
+            surroundings and dynamically generating whole-page JSON-LD based on
+            related information{" "}
+            <PromoInfoText>
+              (e.g. offers in WooCommerce, or tickets for an event)
+            </PromoInfoText>
           </PromoListItem>
           <PromoListItem>
             Use WordPress as an app builder, not just as a site editor and CMS
@@ -150,21 +159,21 @@ export const ReactPromo = () => {
         </PromoBigTitle>
         <PromoList>
           <PromoListItem>
-            Access OpenAI, Mapbox, and other powerful APIs directly within
-            WordPress, with zero extra steps
+            Access OpenAI, Mapbox, and other powerful APIs{" "}
+            <strong>directly within WordPress, with zero extra steps</strong>
           </PromoListItem>
           <PromoListItem>
             No need to share card details, obtain your own API key, or even set
-            up an account with any provider directly. Everything is handled by
-            the Block Protocol.
+            up an account with any provider directly.{" "}
+            <strong>Everything is handled by the Block Protocol.</strong>
           </PromoListItem>
           <PromoListItem>
             Generous free allowances with all providers let you try out blocks
             and use them in WordPress
           </PromoListItem>
           <PromoListItem>
-            Sync data from external apps into WordPress through authenticated
-            external service blocks.
+            <strong>Sync data from external apps into WordPress</strong> through
+            authenticated external service blocks.
           </PromoListItem>
         </PromoList>
       </PromoCard>
@@ -182,11 +191,14 @@ export const ReactPromo = () => {
           <PromoListItem>
             New blocks are instantly available within WordPress to Block
             Protocol users without having to update the plugin, or install
-            additional plugins (as is required for Gutenberg blocks)
+            additional plugins{" "}
+            <PromoInfoText>(as is required for Gutenberg blocks)</PromoInfoText>
           </PromoListItem>
           <PromoListItem>
-            Use Block Protocol blocks in any Þ-enabled environment, not just
-            WordPress
+            <strong>
+              Use Block Protocol blocks in any Þ-enabled environment
+            </strong>
+            , not just WordPress
           </PromoListItem>
         </PromoList>
       </PromoCard>
