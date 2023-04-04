@@ -1,6 +1,9 @@
+import { lazy } from "react";
 import { createRoot } from "react-dom/client";
 
-import { ReactPromo } from "./react-promo";
+const ReactPromo = lazy(() =>
+  import("./react-promo").then((mod) => ({ default: mod.ReactPromo })),
+);
 
 document.addEventListener("DOMContentLoaded", () => {
   const root = document.getElementById("blockprotocol-settings-react-promo");
