@@ -129,7 +129,7 @@ export const ReactPromo = () => {
               <PromoListItem>
                 <strong>
                   <PromoCardPurpleText>Free credits</PromoCardPurpleText> for
-                  all models and providers
+                  all providers
                 </strong>
               </PromoListItem>
             </PromoList>
