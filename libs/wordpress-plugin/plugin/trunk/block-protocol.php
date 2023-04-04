@@ -75,6 +75,7 @@ function is_block_protocol_block_permitted($block)
 	return true;
 }
 
+
 // Get blocks from the Block Protocol API
 function get_block_protocol_blocks()
 {
@@ -84,6 +85,7 @@ function get_block_protocol_blocks()
 
 	if (!isset($options['block_protocol_field_api_key']) || strlen($options['block_protocol_field_api_key']) < 1) {
 		$return['errors'][0] = [];
+        $return['errors'][0]['code'] = 'MISSING_API_KEY';
 		$return['errors'][0]['msg'] = 'You need to set an API key in order to use the plugin – select Block Protocol from the left sidebar';
 		return $return;
 	}
@@ -132,15 +134,22 @@ function get_block_protocol_blocks()
 	return array_values($filtered_blocks);
 }
 
+$isBlockProtocolAdmin = $pagenow == 'admin.php' && ('block_protocol' === $_GET['page']);
+
 // Test connection to the BP API and show a message with status if any error
 function check_block_protocol_connection()
 {
+    global $isBlockProtocolAdmin;
 	$response = get_block_protocol_blocks();
 
 	if (isset($response['errors'])) {
 		$errors = $response['errors'];
 		$error = $errors[0];
 		$message = $error['msg'];
+
+        if ($error['code'] === "MISSING_API_KEY" && $isBlockProtocolAdmin) {
+            return;
+        }
 
 		?>
 		<div class="notice notice-error is-dismissible">
@@ -177,8 +186,8 @@ function block_protocol_database_unsupported()
 }
 
 global $pagenow;
-if ($pagenow == 'index.php' || $pagenow == 'plugins.php' || ($pagenow == 'admin.php' && ('block_protocol' === $_GET['page']))) {
-	add_action('admin_notices', 'check_block_protocol_connection');
+if ($pagenow == 'index.php' || $pagenow == 'plugins.php' || ($isBlockProtocolAdmin)) {
+    add_action('admin_notices', 'check_block_protocol_connection');
 	add_action('admin_notices', 'block_protocol_database_unsupported');
 }
 
