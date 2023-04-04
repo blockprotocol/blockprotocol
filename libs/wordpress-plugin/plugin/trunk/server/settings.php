@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/util.php";
+require_once __DIR__ . "/activate.php";
 
 /**
  * @internal never define functions inside callbacks.
@@ -31,71 +32,20 @@ add_action("admin_enqueue_scripts", "block_protocol_settings_enqueue_assets");
 // @todo check nonce
 function block_protocol_remove_key()
 {
-    $options = get_option('block_protocol_options');
-    $next_options = array_merge($options, [
+    update_option("block_protocol_options", [
         "block_protocol_field_api_email" => "",
         "block_protocol_field_api_key" => "",
         "block_protocol_field_api_email_verification_id" => "",
     ]);
-    update_option("block_protocol_options", $next_options);
     exit(wp_redirect( admin_url( 'admin.php?page=block_protocol' )));
 }
 
 add_action('admin_post_block_protocol_remove_key', 'block_protocol_remove_key');
 
-/**
- * Call the blockprotocol API to trigger a link-wordpress email
- *
- * @todo show notification to check email
- * @todo move to admin_post action
- * @todo replace with wp_remote_post
- */
-function block_protocol_api_do_link_wordpress()
-{
-    $options = get_option('block_protocol_options');
 
-    if (!$options) {
-        return;
-    }
-
-    $email = $options["block_protocol_field_api_email"];
-
-    if ($options["block_protocol_field_api_key"] || !$email || $options["block_protocol_field_api_email_verification_id"]) {
-        return;
-    }
-
-    $base = get_block_protocol_site_host();
-    $url = "{$base}/api/link-wordpress";
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    $headers = [
-        'Accept: application/json',
-        'Content-Type: application/json',
-    ];
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    $data = [
-        'email' => $email,
-        // @todo need to handle this on the other end
-        'wordpressInstanceUrl' => get_site_url()
-    ];
-    $str = json_encode($data, JSON_PRETTY_PRINT);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $str);
-    $respStr = curl_exec($curl);
-    curl_close($curl);
-    $respJson = json_decode($respStr, true);
-
-    // @todo handle output in this flow
-    if ($respJson["verificationCodeId"]) {
-        update_option("block_protocol_options", array_merge($options, [
-            'block_protocol_field_api_email_verification_id' => $respJson["verificationCodeId"]
-        ]));
-        exit(wp_redirect( admin_url( 'admin.php?page=block_protocol' )));
-    } else {
-        echo "Internal error";
-        exit();
-    }
+// This ensures you don't need to pass every field when doing an update
+function block_protocol_options_sanitize_callback($value) {
+    return array_merge(get_option('block_protocol_options'), $value);
 }
 
 /**
@@ -103,8 +53,6 @@ function block_protocol_api_do_link_wordpress()
  */
 function block_protocol_settings_init()
 {
-    block_protocol_api_do_link_wordpress();
-
     // Get the value of the setting we've registered with register_setting()
     $options = get_option('block_protocol_options');
 
@@ -118,6 +66,7 @@ function block_protocol_settings_init()
             'block_protocol_field_plugin_usage' => "on",
             'block_protocol_field_author_allow_list' => [],
         ],
+        'sanitize_callback' => 'block_protocol_options_sanitize_callback'
     ]);
 
 
@@ -130,19 +79,6 @@ function block_protocol_settings_init()
     );
 
     if (!$options || !$options["block_protocol_field_api_key"]) {
-
-        add_settings_field(
-            'block_protocol_field_api_email',
-            __('Email', 'block_protocol'),
-            'block_protocol_field_api_email_renderer',
-            'block_protocol',
-            'block_protocol_section_api_account',
-            [
-                'label_for' => 'block_protocol_field_api_email',
-                'class' => 'block_protocol_row',
-            ]
-        );
-
         add_settings_field(
             'block_protocol_field_api_key',
             __('Key', 'block_protocol'),
@@ -267,15 +203,7 @@ function block_protocol_field_api_email_renderer($args)
     $value = $options ? $options[$args['label_for']] : null;
     $email_exists = !!$value;
     ?>
-    <input
-           name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]"
-           type="hidden"
-           value="<?php echo $email_exists ? (esc_attr($value)) : (''); ?>" />
     <?php if ($email_exists): ?>
-    <input
-           name="block_protocol_options[block_protocol_field_api_email_verification_id]"
-           type="hidden"
-           value="<?php echo esc_attr($options["block_protocol_field_api_email_verification_id"]); ?>" />
     <input id="<?php echo esc_attr($args['label_for']); ?>"
            style="width: 620px; max-width: 100%;"
            type="email"
@@ -308,19 +236,9 @@ function block_protocol_field_api_key_exists_renderer($args)
 {
     // Get the value of the setting we've registered with register_setting()
     $options = get_option('block_protocol_options');
-    $apiKey = $options[$args['label_for']];
-    $public = explode(".", $apiKey)[1];
-
+    $public = explode(".", $options[$args['label_for']])[1];
     ?>
-        <input type="hidden" name="block_protocol_options[block_protocol_field_api_email]" value="<?= esc_attr($options["block_protocol_field_api_email"]) ?>" />
-        <p>This WordPress instance is linked to <strong><?= htmlentities($options["block_protocol_field_api_email"]); ?></strong> Block Protocol account. The public portion of the API key linked to this account is shown below.</p>
-    <?php
-    // @todo don't do this – see https://hashintel.slack.com/archives/C02LG39FJAU/p1680544602069229
-    ?>
-    <input
-           name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]"
-           type="hidden"
-           value="<?= esc_attr($apiKey); ?>" />
+    <p>This WordPress instance is linked to <strong><?= htmlentities($options["block_protocol_field_api_email"]); ?></strong> Block Protocol account. The public portion of the API key linked to this account is shown below.</p>
     <input id="<?php echo esc_attr($args['label_for']); ?>"
            type="text"
            style="width: 620px; max-width: 100%;"
@@ -532,12 +450,6 @@ function block_protocol_options_page_settings_html() {
         <?php
 }
 
-function block_protocol_options_page_activate_html()
-{
-?>
-    <div id="blockprotocol-settings-react-promo"></div>
-<?php
-}
 
 /**
  * Top level menu callback function
