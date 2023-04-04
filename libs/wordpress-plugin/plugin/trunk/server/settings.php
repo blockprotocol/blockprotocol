@@ -24,7 +24,6 @@ function block_protocol_settings_enqueue_assets($hook) {
         $asset_file['version']
     );
     wp_enqueue_script('block_protocol_settings');
-    wp_enqueue_style('block_protocol_settings_style', plugins_url('../build/settings.css', __FILE__), [], $asset_file['version']);
 }
 
 add_action("admin_enqueue_scripts", "block_protocol_settings_enqueue_assets");
