@@ -6,6 +6,18 @@ require_once __DIR__ . "/util.php";
  * these functions could be run multiple times; this would result in a fatal error.
  */
 
+
+function block_protocol_settings_enqueue_scripts($hook) {
+    if ($hook !== "toplevel_page_block_protocol") {
+        return;
+    }
+
+    wp_enqueue_script('block_protocol_settings', plugins_url('../build/settings.js', __FILE__), ['react', 'react-dom'],
+        BLOCK_PROTOCOL_PLUGIN_VERSION);
+}
+
+add_action("admin_enqueue_scripts", "block_protocol_settings_enqueue_scripts");
+
 // @todo check nonce
 function block_protocol_remove_key()
 {
@@ -539,7 +551,7 @@ function block_protocol_options_page_html()
                     </tbody>
                 </table>
             <?php else: ?>
-                @todo React promo
+                <div id="blockprotocol-settings-react-promo"></div>
             <?php endif; ?>
         </div>
     </div>
