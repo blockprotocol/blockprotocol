@@ -25,6 +25,16 @@
 
 - ...
 
+## 🔍 Has this modified a publishable library?
+
+<!-- AT LEAST ONE box must be checked. Do not delete this section! see libs/README.md for info on publishing -->
+
+This PR:
+
+- [ ] modifies an **npm**-publishable library and **I have added a changeset file(s)**
+- [ ] does not modify any publishable libraries
+- [ ] I am unsure / need advice
+
 ## 📜 Does this require a change to the docs?
 
 <!-- If this adds a user facing feature or modifies how an existing feature is used, it likely needs a docs change. -->
