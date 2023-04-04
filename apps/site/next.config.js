@@ -104,7 +104,7 @@ const nextConfig = {
       },
       {
         source: "/spec/block-types",
-        destination: "/spec/core",
+        destination: "/spec/core#types-of-block",
         permanent: true,
       },
       {
