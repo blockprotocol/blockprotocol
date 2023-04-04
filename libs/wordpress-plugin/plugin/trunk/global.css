@@ -59,10 +59,35 @@
     color: #DF3449;
 }
 
+.BPActivateInput {
+    box-sizing: border-box;
+    padding: 16px 8px;
+    width: 444px;
+    height: 40px;
+    background: #FFFFFF;
+    border: 1px solid #8D8F94;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 24px;
+    margin-right: 8px;
+}
+
+.BPActivateInput:disabled {
+    background: #DDE7F0;
+    border-color: #C1CFDE;
+    color: #64778C;
+}
+
+.BPActivateInput::placeholder {
+    color: #64778C;
+}
+
 .BPActivateButton {
     cursor: pointer;
     color: white;
-    border: none;
     background: #3A6FAC;
     border-radius: 6px;
     padding: 10px 12px;
@@ -71,6 +96,15 @@
     font-weight: 500;
     font-size: 13px;
     line-height: 150%;
+    height: 40px;
+    border: 1px solid #3A6FAC;
+}
+
+.BPActivateButton:disabled {
+    background: #DDE7F0;
+    border-color: #C1CFDE;
+    color: #64778C;
+    cursor: default;
 }
 
 .BPActivateButtonSvg {
@@ -81,6 +115,10 @@
     margin-left: 8px;
 }
 
+.BPActivateButton:disabled .BPActivateButtonSvg {
+    color: #91A5BA;
+}
+
 .BPActivatePara {
-    max-width: 828px;
+    max-width: 624px;
 }

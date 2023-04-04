@@ -72,17 +72,19 @@ function block_protocol_link_by_api_key()
 
 add_action('admin_post_block_protocol_link_by_api_key', 'block_protocol_link_by_api_key');
 
-function block_protocol_activate_submit_button($label, $extra_html = '')
+
+function block_protocol_activate_submit_button($label, $extra_html = '', $icon = 'arrow')
 {
+    $icons = [
+        'arrow' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="BPActivateButtonSvg"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>',
+        'tick' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="BPActivateButtonSvg"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>'
+    ];
+
     ?>
     <button type="submit" name="submit"
             class="BPActivateButton" <?= $extra_html ?>>
         <?= $label ?>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-             class="BPActivateButtonSvg">
-            <!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-            <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
-        </svg>
+        <?= $icons[$icon]; ?>
     </button>
     <?php
 }
@@ -106,23 +108,28 @@ function block_protocol_options_page_activate_html()
             <?php wp_nonce_field('block_protocol_link_by_email'); ?>
             <input type="hidden" name="action"
                    value="block_protocol_link_by_email">
-            <p class="BPActivatePara" style="margin-top:28px;margin-bottom:8px;">
-                <label for="block_protocol_field_email"><strong><?= __('Enter your email address below.', 'block_protocol'); ?></strong> <?= __('You will need to click a link to confirm your authenticity.', 'block_protocol'); ?></label>
+            <p class="BPActivatePara"
+               style="margin-top:28px;margin-bottom:8px;">
+                <label for="block_protocol_field_email"><strong><?= __('Enter your email address below.', 'block_protocol'); ?></strong> <?= __('You will need to click a link to confirm your authenticity.', 'block_protocol'); ?>
+                </label>
             </p>
             <input type="email" name="email" id="block_protocol_field_email"
+                   placeholder="e.g. name@example.com"
+                   class="BPActivateInput"
                    value="<?= esc_attr($passedEmail ?? $email ?? '') ?>"
                 <?= $email_exists ? 'disabled' : 'autofocus' ?>
             />
-            <?php block_protocol_activate_submit_button(__('Continue with email', 'block-protocol'), $email_exists ? 'disabled' : '') ?>
+            <?php block_protocol_activate_submit_button(__($email_exists ? 'Email sent' : 'Continue with email', 'block-protocol'), $email_exists ? 'disabled' : '', 'tick') ?>
             <?php if ($passedEmailInvalid): ?>
-                <p class="BPActivatePara" style="margin-top:8px;margin-bottom:0px;"
+                <p class="BPActivatePara"
+                   style="margin-top:8px;margin-bottom:0px;"
                    class="BPActivateError">
                     <span class="BPActivateErrorRed"><?= __('Email address invalid.', 'block_protocol'); ?></span>
                     <?= __('Please try entering it again.', 'block_protocol'); ?>
                 </p>
             <?php elseif ($email_exists): ?>
-                <p class="BPActivatePara" style="margin-top:8px;margin-bottom:0px;">
-
+                <p class="BPActivatePara"
+                   style="margin-top:8px;margin-bottom:0px;">
                     <?= sprintf(__('Check your %s inbox. Make a mistake?', 'block_protocol'), '<strong>' . htmlentities($email) . '</strong>'); ?>
                     <a href="<?= wp_nonce_url(admin_url('admin-post.php?action=block_protocol_remove_key'), 'block_protocol_remove_key'); ?>">
                         <?= __('Click here to enter another email address', 'block_protocol'); ?>
@@ -134,7 +141,8 @@ function block_protocol_options_page_activate_html()
             <?php wp_nonce_field('block_protocol_link_by_api_key'); ?>
             <input type="hidden" name="action"
                    value="block_protocol_link_by_api_key">
-            <p class="BPActivatePara" style="margin-top:28px;margin-bottom:8px;">
+            <p class="BPActivatePara"
+               style="margin-top:28px;margin-bottom:8px;">
                 <label for="block_protocol_field_api_key"><strong>
                         <?php if ($email_exists): ?>
                             <?= __('Now enter a Block Protocol (Þ) API key below:', 'block_protocol'); ?>
@@ -143,10 +151,11 @@ function block_protocol_options_page_activate_html()
                         <?php endif; ?>
                     </strong></label>
             </p>
-            <input id="block_protocol_field_api_key"
+            <input class="BPActivateInput" id="block_protocol_field_api_key"
                    name="key"
                    type="password"
                    data-1p-ignore
+                   placeholder="e.g. b10ck5.9faa5da6664f7229999439d5433d4ac2.c549e92..."
                 <?= $email_exists ? 'autofocus' : '' ?>
             >
             <?php block_protocol_activate_submit_button(__('Continue with key', 'block_protocol')) ?>
