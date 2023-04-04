@@ -51,7 +51,6 @@ export const FontAwesomeIcon = forwardRef<
       viewBox={`0 0 ${width} ${height}`}
       {...otherProps}
       style={{
-        color: "currentColor",
         fill: "currentColor",
         width: "1em",
         height: "1em",

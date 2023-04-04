@@ -75,16 +75,7 @@ const PromoList = ({ children }: PropsWithChildren) => {
 const PromoListItem = ({ children }: PropsWithChildren) => {
   return (
     <li className={styles.PromoListItem}>
-      <FontAwesomeIcon
-        icon={faArrowRight}
-        style={{
-          color: "#91A5BA",
-          fontSize: 16,
-          marginRight: 14,
-          position: "relative",
-          top: 2,
-        }}
-      />
+      <FontAwesomeIcon icon={faArrowRight} />
       {children}
     </li>
   );

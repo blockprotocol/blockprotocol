@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+
 import { ReactPromo } from "./react-promo";
 
 document.addEventListener("DOMContentLoaded", () => {
