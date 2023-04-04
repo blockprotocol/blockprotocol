@@ -8,6 +8,12 @@ require_once __DIR__ . "/activate.php";
  */
 
 
+function block_protocol_update_options($next) {
+    $options = get_option('block_protocol_options');
+    update_option("block_protocol_options", array_merge(is_array($options) ? $options : [], $next));
+}
+
+
 function block_protocol_settings_enqueue_assets($hook) {
     if ($hook !== "toplevel_page_block_protocol") {
         return;
@@ -32,30 +38,22 @@ add_action("admin_enqueue_scripts", "block_protocol_settings_enqueue_assets");
 function block_protocol_remove_key()
 {
     check_admin_referer("block_protocol_remove_key");
-    update_option("block_protocol_options", [
-        "block_protocol_field_api_email" => "",
-        "block_protocol_field_api_key" => "",
-        "block_protocol_field_api_email_verification_id" => "",
-    ]);
-    exit(wp_redirect( admin_url( 'admin.php?page=block_protocol' )));
+    block_protocol_update_options([
+            "block_protocol_field_api_email" => "",
+            "block_protocol_field_api_key" => "",
+            "block_protocol_field_api_email_verification_id" => "",
+        ]
+    );
+    exit(wp_redirect(admin_url('admin.php?page=block_protocol')));
 }
 
 add_action('admin_post_block_protocol_remove_key', 'block_protocol_remove_key');
-
-
-// This ensures you don't need to pass every field when doing an update
-function block_protocol_options_sanitize_callback($value) {
-    return array_merge(get_option('block_protocol_options'), $value);
-}
 
 /**
  * custom option and settings
  */
 function block_protocol_settings_init()
 {
-    // Get the value of the setting we've registered with register_setting()
-    $options = get_option('block_protocol_options');
-
     // Register a new setting for "block_protocol" page.
     register_setting('block_protocol', 'block_protocol_options', [
         'default' => [
@@ -65,10 +63,8 @@ function block_protocol_settings_init()
             'block_protocol_field_allow_unverified' => "off",
             'block_protocol_field_plugin_usage' => "on",
             'block_protocol_field_author_allow_list' => [],
-        ],
-        'sanitize_callback' => 'block_protocol_options_sanitize_callback'
+        ]
     ]);
-
 
     // ------- Settings related to the BP API key --------- //
     add_settings_section(
@@ -78,91 +74,77 @@ function block_protocol_settings_init()
         'block_protocol'
     );
 
-    if (!$options || !$options["block_protocol_field_api_key"]) {
-        add_settings_field(
-            'block_protocol_field_api_key',
-            __('Key', 'block_protocol'),
-            'block_protocol_field_api_key_renderer',
-            'block_protocol',
-            'block_protocol_section_api_account',
-            [
-                'label_for' => 'block_protocol_field_api_key',
-                'class' => 'block_protocol_row',
-            ]
-        );
-    } else {
-        // ------- Settings related to permitted blocks --------- //
+    // ------- Settings related to permitted blocks --------- //
 
-        add_settings_field(
-            'block_protocol_field_api_key',
-            __('Key', 'block_protocol'),
-            'block_protocol_field_api_key_exists_renderer',
-            'block_protocol',
-            'block_protocol_section_api_account',
-            [
-                'label_for' => 'block_protocol_field_api_key',
-                'class' => 'block_protocol_row',
-            ]
-        );
+    add_settings_field(
+        'block_protocol_field_api_key',
+        __('Key', 'block_protocol'),
+        'block_protocol_field_api_key_renderer',
+        'block_protocol',
+        'block_protocol_section_api_account',
+        [
+            'label_for' => 'block_protocol_field_api_key',
+            'class' => 'block_protocol_row',
+        ]
+    );
 
-        add_settings_section(
-            'block_protocol_section_permitted_blocks',
-            __('Permitted blocks', 'block_protocol'),
-            'block_protocol_section_permitted_blocks_intro',
-            'block_protocol'
-        );
+    add_settings_section(
+        'block_protocol_section_permitted_blocks',
+        __('Permitted blocks', 'block_protocol'),
+        'block_protocol_section_permitted_blocks_intro',
+        'block_protocol'
+    );
 
-        add_settings_field(
-            'block_protocol_field_allow_unverified',
-            __('Allow unverified blocks', 'block_protocol'),
-            'block_protocol_field_allow_unverified_renderer',
-            'block_protocol',
-            'block_protocol_section_permitted_blocks',
-            [
-                'label_for' => 'block_protocol_field_allow_unverified',
-                'class' => 'block_protocol_row',
-            ]
-        );
+    add_settings_field(
+        'block_protocol_field_allow_unverified',
+        __('Allow unverified blocks', 'block_protocol'),
+        'block_protocol_field_allow_unverified_renderer',
+        'block_protocol',
+        'block_protocol_section_permitted_blocks',
+        [
+            'label_for' => 'block_protocol_field_allow_unverified',
+            'class' => 'block_protocol_row',
+        ]
+    );
 
-        add_settings_section(
-            'block_protocol_section_permitted_blocks_author_allow_list',
-            '',
-            'block_protocol_section_permitted_blocks_author_allow_list_intro',
-            'block_protocol'
-        );
-        add_settings_field(
-            'block_protocol_field_author_allow_list',
-            __('Trust block publishers', 'block_protocol'),
-            'block_protocol_field_author_allow_list_renderer',
-            'block_protocol',
-            'block_protocol_section_permitted_blocks_author_allow_list',
-            [
-                'label_for' => 'block_protocol_field_author_allow_list',
-                'class' => 'block_protocol_row',
-            ]
-        );
+    add_settings_section(
+        'block_protocol_section_permitted_blocks_author_allow_list',
+        '',
+        'block_protocol_section_permitted_blocks_author_allow_list_intro',
+        'block_protocol'
+    );
+    add_settings_field(
+        'block_protocol_field_author_allow_list',
+        __('Trust block publishers', 'block_protocol'),
+        'block_protocol_field_author_allow_list_renderer',
+        'block_protocol',
+        'block_protocol_section_permitted_blocks_author_allow_list',
+        [
+            'label_for' => 'block_protocol_field_author_allow_list',
+            'class' => 'block_protocol_row',
+        ]
+    );
 
-        // ------- Settings related to plugin usage --------- //
+    // ------- Settings related to plugin usage --------- //
 
-        add_settings_section(
-            'block_protocol_section_plugin_usage',
-            __('Crash reporting and telemetry', 'block_protocol'),
-            'block_protocol_section_plugin_usage_intro',
-            'block_protocol'
-        );
+    add_settings_section(
+        'block_protocol_section_plugin_usage',
+        __('Crash reporting and telemetry', 'block_protocol'),
+        'block_protocol_section_plugin_usage_intro',
+        'block_protocol'
+    );
 
-        add_settings_field(
-            'block_protocol_field_plugin_usage',
-            __('Enable reporting', 'block_protocol'),
-            'block_protocol_field_plugin_usage_renderer',
-            'block_protocol',
-            'block_protocol_section_plugin_usage',
-            [
-                'label_for' => 'block_protocol_field_plugin_usage',
-                'class' => 'block_protocol_row',
-            ]
-        );
-    }
+    add_settings_field(
+        'block_protocol_field_plugin_usage',
+        __('Enable reporting', 'block_protocol'),
+        'block_protocol_field_plugin_usage_renderer',
+        'block_protocol',
+        'block_protocol_section_plugin_usage',
+        [
+            'label_for' => 'block_protocol_field_plugin_usage',
+            'class' => 'block_protocol_row',
+        ]
+    );
 }
 
 /**
@@ -178,61 +160,10 @@ add_action('admin_init', 'block_protocol_settings_init');
  */
 function block_protocol_section_api_key_intro($args)
 {
-    ?>
-    <p id="<?php echo esc_attr($args['id']); ?>"> Generate your Block Protocol API key at <a
-            href="https://blockprotocol.org/account/api"
-            target="_blank">https://blockprotocol.org/account/api</a></p>
-    <?php
 }
 
-/**
- * block_protocol_field_api_key field callback function.
- *
- * WordPress has magic interaction with the following keys: label_for, class.
- * - the "label_for" key value is used for the "for" attribute of the <label>.
- * - the "class" key value is used for the "class" attribute of the <tr> containing the field.
- * Note: you can add custom key value pairs to be used inside your callbacks.
- *
- * @param array $args
- */
-
-function block_protocol_field_api_email_renderer($args)
-{
-    // Get the value of the setting we've registered with register_setting()
-    $options = get_option('block_protocol_options');
-    $value = $options ? $options[$args['label_for']] : null;
-    $email_exists = !!$value;
-    ?>
-    <?php if ($email_exists): ?>
-    <input id="<?php echo esc_attr($args['label_for']); ?>"
-           style="width: 620px; max-width: 100%;"
-           type="email"
-           <?= $email_exists ? "disabled" : "" ?>
-           value="<?php echo $email_exists ? (esc_attr($value)) : (''); ?>" />
-    <p>Email sent. Check your <strong><?= $value ?></strong> inbox. Make a mistake? <a href="<?= admin_url('admin-post.php?action=block_protocol_remove_key'); ?>">Click here to enter another email address</a></p>
-<?php else: ?>
-    <input  id="<?php echo esc_attr($args['label_for']); ?>"
-            name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]"
-            style="width: 620px; max-width: 100%;"
-            type="email"
-            value="<?php echo $email_exists ? (esc_attr($value)) : (''); ?>" />
-<?php endif;
-}
 
 function block_protocol_field_api_key_renderer($args)
-{
-    // Get the value of the setting we've registered with register_setting()
-    $options = get_option('block_protocol_options');
-    ?>
-    <input id="<?php echo esc_attr($args['label_for']); ?>"
-        name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]" style="width: 620px; max-width: 100%;"
-        type="password"
-        value="<?php echo isset($options[$args['label_for']]) ? (esc_attr($options[$args['label_for']])) : (''); ?>"></input>
-    <?php
-}
-
-
-function block_protocol_field_api_key_exists_renderer($args)
 {
     // Get the value of the setting we've registered with register_setting()
     $options = get_option('block_protocol_options');

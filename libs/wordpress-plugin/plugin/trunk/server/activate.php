@@ -13,12 +13,6 @@ function block_protocol_link_by_email()
     }
 
     $email = $_POST["email"];
-    $options = get_option('block_protocol_options');
-
-    if (!$options) {
-        exit(wp_redirect($url));
-    }
-
     $base = get_block_protocol_site_host();
     $apiUrl = "{$base}/api/link-wordpress";
     $headers = [
@@ -39,14 +33,12 @@ function block_protocol_link_by_email()
     $respJson = json_decode($respStr, true);
 
     if ($respJson["verificationCodeId"]) {
-        update_option("block_protocol_options", [
+        block_protocol_update_options([
             'block_protocol_field_api_email' => $email,
-            'block_protocol_field_api_email_verification_id' => $respJson["verificationCodeId"]
+            'block_protocol_field_api_email_verification_id' => $respJson["verificationCodeId"],
+            'block_protocol_field_api_key' => ''
         ]);
-        exit(wp_redirect($url));
-    }
-
-    if (isset($respJson["errors"]) && isset($respJson["errors"][0]) && isset($respJson["errors"][0]["param"])) {
+    } else if (isset($respJson["errors"]) && isset($respJson["errors"][0]) && isset($respJson["errors"][0]["param"])) {
         $url .= "&" . http_build_query([
                 "invalid_field" => $respJson["errors"][0]["param"],
                 "invalid_field_value" => $respJson["errors"][0]["value"] ?? ""
@@ -59,6 +51,25 @@ function block_protocol_link_by_email()
 }
 
 add_action('admin_post_block_protocol_link_by_email', 'block_protocol_link_by_email');
+
+function block_protocol_link_by_api_key()
+{
+    check_admin_referer("block_protocol_link_by_api_key");
+
+    $url = admin_url('admin.php?page=block_protocol');
+
+    if (isset($_POST["key"]) && $_POST["key"]) {
+        $key = $_POST["key"];
+
+        block_protocol_update_options([
+            'block_protocol_field_api_key' => $key
+        ]);
+    }
+
+    exit(wp_redirect($url));
+}
+
+add_action('admin_post_block_protocol_link_by_api_key', 'block_protocol_link_by_api_key');
 
 function block_protocol_activate_submit_button($label, $extra_html = "")
 {
@@ -121,8 +132,10 @@ function block_protocol_options_page_activate_html()
                         here to enter another email address</a></p>
             <?php endif; ?>
         </form>
-        <form action="options.php" method="POST">
-            <?php settings_fields('block_protocol'); ?>
+        <form action="<?= admin_url('admin-post.php') ?>" method="POST">
+            <?php wp_nonce_field("block_protocol_link_by_api_key"); ?>
+            <input type="hidden" name="action"
+                   value="block_protocol_link_by_api_key">
             <p style="margin-top:28px;margin-bottom:8px;">
                 <label for="block_protocol_field_api_key"><strong>
                         <?php if ($email_exists): ?>
@@ -133,7 +146,7 @@ function block_protocol_options_page_activate_html()
                     </strong></label>
             </p>
             <input id="block_protocol_field_api_key"
-                   name="block_protocol_options[block_protocol_field_api_key]"
+                   name="key"
                    type="password"
                    data-1p-ignore
                 <?= $email_exists ? "autofocus" : "" ?>
