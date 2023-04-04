@@ -12,6 +12,7 @@ function block_protocol_settings_enqueue_scripts($hook) {
         return;
     }
 
+    wp_enqueue_style('block_protocol_typekit', 'https://use.typekit.net/muv5tib.css');
     wp_enqueue_script('block_protocol_settings', plugins_url('../build/settings.js', __FILE__), ['react', 'react-dom'],
         BLOCK_PROTOCOL_PLUGIN_VERSION);
 }
