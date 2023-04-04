@@ -1,7 +1,9 @@
 {
-  "extends": "@local/tsconfig/dom.json",
+  "extends": "@local/tsconfig/legacy-base-tsconfig-to-refactor.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "noEmit": true
   },
-  "include": ["src"]
+  "include": ["assets.d.ts", "theme-override.d.ts", "./src/"]
 }

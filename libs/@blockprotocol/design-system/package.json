@@ -46,5 +46,9 @@
     "react-dom": "18.2.0",
     "storybook": "^7.0.0-beta.14",
     "typescript": "4.9.4"
+  },
+  "peerDependencies": {
+    "@hashintel/design-system": "0.0.6",
+    "@mui/material": "5.11.8"
   }
 }
