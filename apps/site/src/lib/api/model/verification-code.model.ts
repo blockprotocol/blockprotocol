@@ -7,6 +7,11 @@ import { User } from "./user.model";
 
 export type VerificationCodeVariant = "login" | "email" | "linkWordpress";
 
+export type VerificationCodeWordPressUrls = {
+  settings: string;
+  instance: string;
+};
+
 export type VerificationCodeProperties = {
   user: DBRef;
   code: string;
@@ -14,13 +19,13 @@ export type VerificationCodeProperties = {
   used: boolean;
   createdAt: Date;
   variant: VerificationCodeVariant;
-  wordpressInstanceUrl?: string;
+  wordPressUrls?: VerificationCodeWordPressUrls;
 };
 
 // @note we can't use a discriminated union here because it's used to set the properties of VerificationCode, which can't have discriminated unions
 export type VerificationCodePropertiesVariant = Pick<
   VerificationCodeProperties,
-  "variant" | "wordpressInstanceUrl"
+  "variant" | "wordPressUrls"
 >;
 
 export type VerificationCodeDocument = WithId<VerificationCodeProperties>;
@@ -44,7 +49,7 @@ export class VerificationCode {
 
   createdAt: Date;
 
-  wordpressInstanceUrl?: string;
+  wordPressUrls?: VerificationCodeWordPressUrls;
 
   static COLLECTION_NAME = "bp-verification-codes";
 
@@ -69,7 +74,7 @@ export class VerificationCode {
     numberOfAttempts,
     used,
     createdAt,
-    wordpressInstanceUrl,
+    wordPressUrls,
   }: VerificationCodeConstructorArgs) {
     this.id = id;
     this.variant = variant;
@@ -78,7 +83,7 @@ export class VerificationCode {
     this.numberOfAttempts = numberOfAttempts;
     this.used = used;
     this.createdAt = createdAt;
-    this.wordpressInstanceUrl = wordpressInstanceUrl;
+    this.wordPressUrls = wordPressUrls;
   }
 
   static fromDocument({ _id, ...remainingDocument }: VerificationCodeDocument) {

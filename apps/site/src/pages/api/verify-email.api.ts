@@ -13,7 +13,7 @@ export type ApiVerifyEmailRequestBody = {
 export type ApiVerifyEmailResponse = {
   user: SerializedUser;
   redirectPath?: string;
-  wordpressInstanceUrl?: string;
+  wordpressSettingsUrl?: string;
 };
 
 export default createBaseHandler<
@@ -91,7 +91,8 @@ export default createBaseHandler<
       }
 
       if (emailVerificationCode.variant === "linkWordpress") {
-        const { wordpressInstanceUrl } = emailVerificationCode;
+        const wordpressInstanceUrl =
+          emailVerificationCode?.wordPressUrls?.instance;
         if (!wordpressInstanceUrl) {
           return res.status(500).json(
             formatErrors({
@@ -118,8 +119,8 @@ export default createBaseHandler<
           ...(emailVerificationCode.variant === "linkWordpress"
             ? {
                 redirectPath: "/dashboard",
-                wordpressInstanceUrl:
-                  emailVerificationCode.wordpressInstanceUrl,
+                wordpressSettingsUrl:
+                  emailVerificationCode.wordPressUrls?.settings,
               }
             : {}),
         }),

@@ -13,7 +13,7 @@ export type ApiLoginWithLoginCodeRequestBody = {
 export type ApiLoginWithLoginCodeResponse = {
   user: SerializedUser;
   redirectPath?: string;
-  wordpressInstanceUrl?: string;
+  wordpressSettingsUrl?: string;
 };
 
 export default createBaseHandler<
@@ -87,7 +87,7 @@ export default createBaseHandler<
       }
 
       if (loginCode.variant === "linkWordpress") {
-        const { wordpressInstanceUrl } = loginCode;
+        const wordpressInstanceUrl = loginCode.wordPressUrls?.instance;
         if (!wordpressInstanceUrl) {
           return res.status(500).json(
             formatErrors({
@@ -114,7 +114,7 @@ export default createBaseHandler<
           ...(loginCode.variant === "linkWordpress"
             ? {
                 redirectPath: "/dashboard",
-                wordpressInstanceUrl: loginCode.wordpressInstanceUrl,
+                wordpressSettingsUrl: loginCode.wordPressUrls?.settings,
               }
             : {}),
         }),

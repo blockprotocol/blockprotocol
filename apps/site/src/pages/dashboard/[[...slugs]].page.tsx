@@ -16,20 +16,22 @@ import {
   DashboardSection,
   getDashboardSectionCards,
 } from "../../components/pages/dashboard/utils";
-import { getWordpressInstanceUrlSessionOnce } from "../../lib/wordpress-instance-url-session";
+import { getWordpressSettingsUrlSessionOnce } from "../../lib/wordpress-settings-url-session";
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName, shortname } = user ?? {};
 
-  const [wordpressInstanceUrl, setWordpressInstanceUrl] = useState<
+  const [wordpressSettingsUrl, setWordpressSettingsUrl] = useState<
     string | null
   >(null);
 
   useLayoutEffect(() => {
-    if (!wordpressInstanceUrl) {
-      setWordpressInstanceUrl(getWordpressInstanceUrlSessionOnce());
+    const nextSettingsUrl = getWordpressSettingsUrlSessionOnce();
+
+    if (nextSettingsUrl) {
+      setWordpressSettingsUrl(nextSettingsUrl);
     }
-  }, [wordpressInstanceUrl]);
+  }, []);
 
   const dashboardCards = getDashboardSectionCards({
     profileLink: `/@${shortname}`,
@@ -69,9 +71,9 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
           >
             Welcome, {userName}!
           </Typography>
-          {typeof wordpressInstanceUrl === "string" ? (
+          {typeof wordpressSettingsUrl === "string" ? (
             <DashboardWordpressSection
-              wordpressInstanceUrl={wordpressInstanceUrl}
+              wordpressSettingsUrl={wordpressSettingsUrl}
             />
           ) : null}
         </Container>
