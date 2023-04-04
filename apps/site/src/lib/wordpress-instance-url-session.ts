@@ -8,13 +8,15 @@ export const setWordpressInstanceUrlSession = (
     throw new Error("Cannot call setWordpressInstanceUrlSession on server");
   }
 
-  if (wordpressInstanceUrl) {
-    window.sessionStorage.setItem(
-      wordpressInstanceUrlSessionKey,
-      wordpressInstanceUrl,
-    );
-  } else {
-    window.sessionStorage.removeItem(wordpressInstanceUrlSessionKey);
+  try {
+    if (wordpressInstanceUrl) {
+      window.sessionStorage.setItem(
+        wordpressInstanceUrlSessionKey,
+        wordpressInstanceUrl,
+      );
+    } else {
+      window.sessionStorage.removeItem(wordpressInstanceUrlSessionKey);
+    }
   }
 };
 
@@ -23,9 +25,13 @@ export const getWordpressInstanceUrlSessionOnce = () => {
     throw new Error("Cannot call getWordpressInstanceUrlSessionOnce on server");
   }
 
-  const value = window.sessionStorage.getItem(wordpressInstanceUrlSessionKey);
+  try {
+    const value = window.sessionStorage.getItem(wordpressInstanceUrlSessionKey);
 
-  window.sessionStorage.removeItem(wordpressInstanceUrlSessionKey);
+    window.sessionStorage.removeItem(wordpressInstanceUrlSessionKey);
 
-  return value;
+    return value;
+  }
+
+  return null;
 };
