@@ -1,68 +1,62 @@
 <?php
 /**
  * Call the blockprotocol API to trigger a link-wordpress email
- *
- * @todo show notification to check email
- * @todo replace with wp_remote_post
  */
 function block_protocol_link_by_email()
 {
     check_admin_referer("block_protocol_link_by_email");
 
+    $url = admin_url('admin.php?page=block_protocol');
+
     if (!isset($_POST["email"]) || !$_POST["email"]) {
-        exit(wp_redirect(admin_url('admin.php?page=block_protocol')));
+        exit(wp_redirect($url));
     }
 
     $email = $_POST["email"];
     $options = get_option('block_protocol_options');
 
     if (!$options) {
-        exit(wp_redirect(admin_url('admin.php?page=block_protocol')));
+        exit(wp_redirect($url));
     }
 
     $base = get_block_protocol_site_host();
     $url = "{$base}/api/link-wordpress";
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     $headers = [
-        'Accept: application/json',
-        'Content-Type: application/json',
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
     ];
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     $data = [
         'email' => $email,
         // @todo need to handle this on the other end
         'wordpressInstanceUrl' => get_site_url()
     ];
-    $str = json_encode($data, JSON_PRETTY_PRINT);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $str);
-    $respStr = curl_exec($curl);
-    curl_close($curl);
+
+    $respStr = wp_remote_post($url, [
+        'method' => 'POST',
+        'headers' => $headers,
+        'body' => json_encode($data)
+    ])["body"];
+
     $respJson = json_decode($respStr, true);
 
-    // @todo handle output in this flow
     if ($respJson["verificationCodeId"]) {
         update_option("block_protocol_options", [
             'block_protocol_field_api_email' => $email,
             'block_protocol_field_api_email_verification_id' => $respJson["verificationCodeId"]
         ]);
-        exit(wp_redirect(admin_url('admin.php?page=block_protocol')));
-    } else {
-        $url = admin_url('admin.php?page=block_protocol');
-
-        if (isset($respJson["errors"]) && isset($respJson["errors"][0]) && isset($respJson["errors"][0]["param"])) {
-            $url .= "&" . http_build_query([
-                    "invalid_field" => $respJson["errors"][0]["param"],
-                    "invalid_field_value" => $respJson["errors"][0]["value"] ?? ""
-                ]);
-        } else {
-            $url .= "&unknown_error=true";
-        }
-
         exit(wp_redirect($url));
     }
+
+    if (isset($respJson["errors"]) && isset($respJson["errors"][0]) && isset($respJson["errors"][0]["param"])) {
+        $url .= "&" . http_build_query([
+                "invalid_field" => $respJson["errors"][0]["param"],
+                "invalid_field_value" => $respJson["errors"][0]["value"] ?? ""
+            ]);
+    } else {
+        $url .= "&unknown_error=true";
+    }
+
+    exit(wp_redirect($url));
 }
 
 add_action('admin_post_block_protocol_link_by_email', 'block_protocol_link_by_email');
@@ -101,7 +95,7 @@ function block_protocol_options_page_activate_html()
             money, we need to verify your email address in order to continue.
         </p>
         <form action="<?= admin_url('admin-post.php') ?>" method="POST">
-            <?php wp_nonce_field( "block_protocol_link_by_email"); ?>
+            <?php wp_nonce_field("block_protocol_link_by_email"); ?>
             <input type="hidden" name="action"
                    value="block_protocol_link_by_email">
             <p style="margin-top:28px;margin-bottom:8px;">
