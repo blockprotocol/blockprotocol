@@ -17,6 +17,8 @@ export const setWordpressInstanceUrlSession = (
     } else {
       window.sessionStorage.removeItem(wordpressInstanceUrlSessionKey);
     }
+  } catch (_) {
+    // sessionStorage is disabled, do nothing…
   }
 };
 
@@ -31,7 +33,7 @@ export const getWordpressInstanceUrlSessionOnce = () => {
     window.sessionStorage.removeItem(wordpressInstanceUrlSessionKey);
 
     return value;
+  } catch {
+    return null;
   }
-
-  return null;
 };
