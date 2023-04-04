@@ -94,7 +94,7 @@ const PromoCardPurpleText = ({ children }: PropsWithChildren) => (
 export const ReactPromo = () => {
   return (
     <div className={styles.PromoStack}>
-      <h2 className={styles.PromoHeading}>You can look forward to...</h2>
+      <h2 className="BPActivateHeading">You can look forward to...</h2>
       <PromoCard>
         <PromoCardHeader>
           <PromoCardSmallTitle>Next Generation</PromoCardSmallTitle>

@@ -57,23 +57,75 @@ function block_protocol_link_by_email()
 
 add_action('admin_post_block_protocol_link_by_email', 'block_protocol_link_by_email');
 
+function block_protocol_activate_submit_button($label, $extra_html = "")
+{
+    ?>
+    <button type="submit" name="submit" style="color: white; appearance: none; border: none; background: #3A6FAC; border-radius: 6px; padding: 10px 12px; font-family: 'Inter', sans-serif;
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 150%;" <?= $extra_html ?>>
+        <?= $label ?>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+             style="fill: currentColor; width: 1em; height: 1em; vertical-align: -0.125em; margin-left: 8px;">
+            <!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+            <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+        </svg>
+    </button>
+    <?php
+}
+
 function block_protocol_options_page_activate_html()
 {
     $options = get_option("block_protocol_options");
     $email = $options["block_protocol_field_api_email"];
+    $email_exists = !!$email;
     ?>
+    <div style="margin-bottom:34px"></div>
+    <h2 class="BPActivateHeading" style="margin-bottom: 18px;">Finish activating the Block Protocol plugin</h2>
+    <p style="margin-bottom:0;">
+        Because the Block Protocol provides free credits and access to an array of external services such as OpenAI and Mapbox which ordinarily cost money, we need to verify your email address in order to continue.
+    </p>
     <form action="<?= admin_url('admin-post.php') ?>" method="POST">
         <input type="hidden" name="action" value="block_protocol_link_by_email">
-        <input type="email" name="email"
-               value="<?= isset($email) ? esc_attr($email) : '' ?>"/>
-        <input type="submit"/>
+        <p style="margin-top:28px;margin-bottom:8px;">
+            <label for="block_protocol_field_email"><strong>Enter your email
+                    address below.</strong> You will need to click a link to
+                confirm your authenticity.</label>
+        </p>
+        <input type="email" name="email" id="block_protocol_field_email"
+               value="<?= isset($email) ? esc_attr($email) : '' ?>"
+            <?= $email_exists ? "disabled" : "" ?>
+        />
+        <?php block_protocol_activate_submit_button("Continue with email", $email_exists ? 'disabled' : '') ?>
+        <?php if ($email_exists): ?>
+            <p style="margin-top:8px;margin-bottom:0px;">Check your <strong><?= htmlentities($email) ?></strong> inbox.
+                Make a mistake? <a
+                        href="<?= admin_url('admin-post.php?action=block_protocol_remove_key'); ?>">Click
+                    here to enter another email address</a></p>
+        <?php endif; ?>
     </form>
     <form action="options.php" method="POST">
         <?php settings_fields('block_protocol'); ?>
+        <p style="margin-top:28px;margin-bottom:8px;">
+            <label for="block_protocol_field_api_key"><strong>
+                    <?php if ($email_exists): ?>
+                        Now enter a Block Protocol (Þ) API key below:
+                    <?php else: ?>
+                        Alternatively, enter a Block Protocol (Þ) API key below.
+                    <?php endif; ?>
+                </strong></label>
+        </p>
         <input id="block_protocol_field_api_key"
                name="block_protocol_options[block_protocol_field_api_key]"
-               style="width: 620px; max-width: 100%;" type="password" value="">
-        <?php submit_button('Save Settings'); ?>
+               type="password">
+        <?php block_protocol_activate_submit_button("Continue with key") ?>
+        <p style="margin-top:8px;margin-bottom:0;">
+            Block Protocol users can access or create an API key at any time
+            from
+            <a href="<?= get_block_protocol_site_host() ?>/settings/api-keys"
+               target="_blank">blockprotocol.org/settings/api-keys</a>
+        </p>
     </form>
     <div id="blockprotocol-settings-react-promo"></div>
     <?php

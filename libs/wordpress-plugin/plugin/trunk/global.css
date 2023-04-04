@@ -23,3 +23,12 @@
     font-weight: 700;
     src: url("./fonts/inter-bold.ttf") format("trueType");
 }
+.BPActivateHeading {
+    font-family: 'Helvetica', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 16px;
+    color: black;
+    margin: 0;
+}
