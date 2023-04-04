@@ -29,9 +29,9 @@ function block_protocol_settings_enqueue_assets($hook) {
 
 add_action("admin_enqueue_scripts", "block_protocol_settings_enqueue_assets");
 
-// @todo check nonce
 function block_protocol_remove_key()
 {
+    check_admin_referer("block_protocol_remove_key");
     update_option("block_protocol_options", [
         "block_protocol_field_api_email" => "",
         "block_protocol_field_api_key" => "",
@@ -245,7 +245,7 @@ function block_protocol_field_api_key_exists_renderer($args)
            disabled
            value="<?= esc_attr($public); ?>" />
     <br />
-    <a href="<?= admin_url('admin-post.php?action=block_protocol_remove_key') ?>">Detach keys from this website</a> | <a target="_blank" rel="noopener noreferrer" href="<?=get_block_protocol_site_host()?>/account/api">Manage or create API keys</a>
+    <a href="<?= wp_nonce_url(admin_url('admin-post.php?action=block_protocol_remove_key'), 'block_protocol_remove_key') ?>">Detach keys from this website</a> | <a target="_blank" rel="noopener noreferrer" href="<?=get_block_protocol_site_host()?>/account/api">Manage or create API keys</a>
     <?php
 }
 

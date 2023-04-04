@@ -3,12 +3,12 @@
  * Call the blockprotocol API to trigger a link-wordpress email
  *
  * @todo show notification to check email
- * @todo move to admin_post action
  * @todo replace with wp_remote_post
- * @todo check nonce
  */
 function block_protocol_link_by_email()
 {
+    check_admin_referer("block_protocol_link_by_email");
+
     if (!isset($_POST["email"]) || !$_POST["email"]) {
         exit(wp_redirect(admin_url('admin.php?page=block_protocol')));
     }
@@ -101,6 +101,7 @@ function block_protocol_options_page_activate_html()
             money, we need to verify your email address in order to continue.
         </p>
         <form action="<?= admin_url('admin-post.php') ?>" method="POST">
+            <?php wp_nonce_field( "block_protocol_link_by_email"); ?>
             <input type="hidden" name="action"
                    value="block_protocol_link_by_email">
             <p style="margin-top:28px;margin-bottom:8px;">
@@ -123,7 +124,7 @@ function block_protocol_options_page_activate_html()
                 <p style="margin-top:8px;margin-bottom:0px;">Check your
                     <strong><?= htmlentities($email) ?></strong> inbox.
                     Make a mistake? <a
-                            href="<?= admin_url('admin-post.php?action=block_protocol_remove_key'); ?>">Click
+                            href="<?= wp_nonce_url(admin_url('admin-post.php?action=block_protocol_remove_key'), "block_protocol_remove_key"); ?>">Click
                         here to enter another email address</a></p>
             <?php endif; ?>
         </form>
