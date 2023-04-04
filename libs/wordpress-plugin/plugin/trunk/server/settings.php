@@ -13,6 +13,7 @@ function block_protocol_settings_enqueue_assets($hook) {
     }
 
     wp_enqueue_style('block_protocol_typekit', 'https://use.typekit.net/muv5tib.css');
+    wp_enqueue_style('block_protocol_fonts', plugins_url('../fonts/fonts.css', __FILE__));
 
     $asset_file = include(plugin_dir_path(__FILE__) . '../build/settings.asset.php');
 
