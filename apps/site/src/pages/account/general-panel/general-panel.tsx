@@ -1,7 +1,20 @@
 import { faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Stack,
+  styled,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { NextSeo } from "next-seo";
-import { ChangeEvent, FunctionComponent, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  DragEvent,
+  FunctionComponent,
+  useRef,
+  useState,
+} from "react";
 
 import { FontAwesomeIcon } from "../../../components/icons";
 import { Link } from "../../../components/link";
@@ -11,9 +24,16 @@ import { TextField } from "../../../components/text-field";
 import { useUser } from "../../../context/user-context";
 import { apiClient } from "../../../lib/api-client";
 import { AvatarButton } from "./avatar-button";
+import { AvatarDropzoneInfo } from "./avatar-dropzone-info";
 import { AvatarWithOverlay } from "./avatar-with-overlay";
 import { MiscellaneousTopic } from "./miscellaneous-topic";
 import { RemoveAvatarConfirmation } from "./remove-avatar-confirmation";
+
+const DragOverlay = styled("div")({
+  inset: 0,
+  position: "absolute",
+  opacity: 0,
+});
 
 export const GeneralPanel: FunctionComponent = () => {
   const { user, setUser } = useUser();
@@ -25,6 +45,8 @@ export const GeneralPanel: FunctionComponent = () => {
   const [displayRemoveAvatarConfirmation, setDisplayRemoveAvatarConfirmation] =
     useState(false);
 
+  const [isDragging, setDragging] = useState(false);
+
   if (!user || user === "loading") {
     return null;
   }
@@ -33,12 +55,7 @@ export const GeneralPanel: FunctionComponent = () => {
     fileInputRef.current?.click();
   };
 
-  const handleOnAvatarChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) {
-      return;
-    }
-
+  const uploadAvatarImage = async (file: File) => {
     const formData = new FormData();
     formData.append("image", file);
 
@@ -48,6 +65,17 @@ export const GeneralPanel: FunctionComponent = () => {
     if (res.data) {
       setUser({ ...user, userAvatarUrl: res.data.avatarUrl });
     }
+  };
+
+  const handleFileInputChange = async (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    void uploadAvatarImage(file);
 
     // clear file input
     if (fileInputRef.current) {
@@ -65,13 +93,38 @@ export const GeneralPanel: FunctionComponent = () => {
     setDisplayRemoveAvatarConfirmation(false);
   };
 
+  const handleDrag = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    setDragging(true);
+
+    if (event.type === "dragenter" || event.type === "dragover") {
+      setDragging(true);
+    } else if (event.type === "dragleave") {
+      setDragging(false);
+    }
+  };
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setDragging(false);
+    setDisplayRemoveAvatarConfirmation(false);
+
+    const file = event.dataTransfer?.files[0];
+
+    if (file) {
+      void uploadAvatarImage(file);
+    }
+  };
+
   const hasAvatar = !!user.userAvatarUrl;
 
   return (
     <>
       <NextSeo title="Block Protocol – General Settings" />
-
-      <Stack gap={5.25}>
+      <Stack gap={5.25} onDragEnter={handleDrag} sx={{ position: "relative" }}>
         <PanelSection
           title="Public profile"
           description={
@@ -118,7 +171,15 @@ export const GeneralPanel: FunctionComponent = () => {
               <Stack direction={isMobile ? "column" : "row"}>
                 <AvatarWithOverlay
                   src={user.userAvatarUrl}
-                  showDangerOverlay={displayRemoveAvatarConfirmation}
+                  mode={
+                    isDragging
+                      ? "drop"
+                      : displayRemoveAvatarConfirmation
+                      ? "danger"
+                      : "idle"
+                  }
+                  onDragOver={handleDrag}
+                  onDrop={handleDrop}
                 />
 
                 <Stack
@@ -129,7 +190,9 @@ export const GeneralPanel: FunctionComponent = () => {
                     alignSelf: isMobile ? "stretch" : "center",
                   }}
                 >
-                  {displayRemoveAvatarConfirmation ? (
+                  {isDragging ? (
+                    <AvatarDropzoneInfo isReplacing={!!user.userAvatarUrl} />
+                  ) : displayRemoveAvatarConfirmation ? (
                     <RemoveAvatarConfirmation
                       onCancel={() => setDisplayRemoveAvatarConfirmation(false)}
                       onConfirm={removeAvatar}
@@ -147,7 +210,7 @@ export const GeneralPanel: FunctionComponent = () => {
                         ref={fileInputRef}
                         accept="image/*"
                         type="file"
-                        onChange={handleOnAvatarChange}
+                        onChange={handleFileInputChange}
                       />
 
                       {hasAvatar && (
@@ -196,6 +259,18 @@ export const GeneralPanel: FunctionComponent = () => {
             />
           </Stack>
         </PanelSection>
+
+        {isDragging && (
+          <DragOverlay
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={(event) => {
+              event.preventDefault();
+              setDragging(false);
+            }}
+          />
+        )}
       </Stack>
     </>
   );
