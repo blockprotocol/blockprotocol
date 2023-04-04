@@ -330,7 +330,6 @@ add_action('admin_menu', 'block_protocol_options_page');
 function block_protocol_field_hidden_renderer($field)
 {
     $options = get_option('block_protocol_options');
-    
     ?>
     <input
             name="block_protocol_options[<?= esc_attr($field); ?>]"
