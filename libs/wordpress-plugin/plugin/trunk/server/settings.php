@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . "/util.php";
-require_once __DIR__ . "/activate.php";
+require_once __DIR__ . '/util.php';
+require_once __DIR__ . '/activate.php';
 
 /**
  * @internal never define functions inside callbacks.
@@ -10,12 +10,12 @@ require_once __DIR__ . "/activate.php";
 
 function block_protocol_update_options($next) {
     $options = get_option('block_protocol_options');
-    update_option("block_protocol_options", array_merge(is_array($options) ? $options : [], $next));
+    update_option('block_protocol_options', array_merge(is_array($options) ? $options : [], $next));
 }
 
 
 function block_protocol_settings_enqueue_assets($hook) {
-    if ($hook !== "toplevel_page_block_protocol") {
+    if ($hook !== 'toplevel_page_block_protocol') {
         return;
     }
 
@@ -33,15 +33,15 @@ function block_protocol_settings_enqueue_assets($hook) {
     wp_enqueue_script('block_protocol_settings');
 }
 
-add_action("admin_enqueue_scripts", "block_protocol_settings_enqueue_assets");
+add_action('admin_enqueue_scripts', 'block_protocol_settings_enqueue_assets');
 
 function block_protocol_remove_key()
 {
-    check_admin_referer("block_protocol_remove_key");
+    check_admin_referer('block_protocol_remove_key');
     block_protocol_update_options([
-            "block_protocol_field_api_email" => "",
-            "block_protocol_field_api_key" => "",
-            "block_protocol_field_api_email_verification_id" => "",
+            'block_protocol_field_api_email' => '',
+            'block_protocol_field_api_key' => '',
+            'block_protocol_field_api_email_verification_id' => '',
         ]
     );
     exit(wp_redirect(admin_url('admin.php?page=block_protocol')));
@@ -60,8 +60,8 @@ function block_protocol_settings_init()
             'block_protocol_field_api_email' => '',
             'block_protocol_field_api_email_verification_id' => '',
             'block_protocol_field_api_key' => '',
-            'block_protocol_field_allow_unverified' => "off",
-            'block_protocol_field_plugin_usage' => "on",
+            'block_protocol_field_allow_unverified' => 'off',
+            'block_protocol_field_plugin_usage' => 'on',
             'block_protocol_field_author_allow_list' => [],
         ]
     ]);
@@ -176,10 +176,10 @@ function block_protocol_field_api_key_renderer($args)
 {
     // Get the value of the setting we've registered with register_setting()
     $options = get_option('block_protocol_options');
-    $public = explode(".", $options[$args['label_for']])[1];
+    $public = explode('.', $options[$args['label_for']])[1];
     ?>
     <p>
-        <?= sprintf(__('This WordPress instance is linked to <strong>%s</strong> Block Protocol account. The public portion of the API key linked to this account is shown below.', 'block_protocol'), htmlentities($options["block_protocol_field_api_email"])); ?>
+        <?= sprintf(__('This WordPress instance is linked to <strong>%s</strong> Block Protocol account. The public portion of the API key linked to this account is shown below.', 'block_protocol'), htmlentities($options['block_protocol_field_api_email'])); ?>
     </p>
     <input id="<?php echo esc_attr($args['label_for']); ?>"
            type="text"
@@ -219,7 +219,7 @@ function block_protocol_field_allow_unverified_renderer($args)
     ?>
     <input id="<?php echo esc_attr($args['label_for']); ?>"
         name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]" type="checkbox" <?php
-           checked(($options[$args['label_for']] ?? "off") == "on") ?>>
+           checked(($options[$args['label_for']] ?? 'off') == 'on') ?>>
     </input>
     <?php
 }
@@ -301,7 +301,7 @@ function block_protocol_field_plugin_usage_renderer($args)
     ?>
     <input id="<?php echo esc_attr($args['label_for']); ?>"
         name="block_protocol_options[<?php echo esc_attr($args['label_for']); ?>]" type="checkbox" <?php
-           checked(($options[$args['label_for']] ?? "off") == "on") ?>>
+           checked(($options[$args['label_for']] ?? 'off') == 'on') ?>>
     </input>
     <?php
 }
@@ -311,7 +311,7 @@ function block_protocol_field_plugin_usage_renderer($args)
  */
 function block_protocol_options_page()
 {
-    $icon_url = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTExLjUzNDUgNC42SDguNTE4NTdWMy4wNTcxNEM4LjUxODU3IDIuNTExNTUgOC4zMDY3NCAxLjk4ODMxIDcuOTI5NjggMS42MDI1M0M3LjU1MjYyIDEuMjE2NzQgNy4wNDEyMSAxIDYuNTA3OTYgMUg1VjE2Ljk0MjlDNSAxNy40ODg0IDUuMjExODMgMTguMDExNyA1LjU4ODg5IDE4LjM5NzVDNS45NjU5NiAxOC43ODMzIDYuNDc3MzcgMTkgNy4wMTA2MSAxOUg4LjUxODU3VjE1LjRIMTEuNTM0NUMxMi44OTg4IDE1LjM0NzIgMTQuMTkgMTQuNzU1NiAxNS4xMzY5IDEzLjc0OTRDMTYuMDgzOSAxMi43NDMyIDE2LjYxMjkgMTEuNDAwNyAxNi42MTI5IDEwLjAwMzlDMTYuNjEyOSA4LjYwNzAyIDE2LjA4MzkgNy4yNjQ1MyAxNS4xMzY5IDYuMjU4MzJDMTQuMTkgNS4yNTIxMiAxMi44OTg4IDQuNjYwNSAxMS41MzQ1IDQuNjA3NzFWNC42Wk0xMS41MzQ1IDExLjhIOC41MTg1N1Y4LjJIMTEuNTM0NUMxMi41Mzk4IDguMiAxMy4yMzA5IDkuMDEzODYgMTMuMjMwOSAxMEMxMy4yMzA5IDEwLjk4NjEgMTIuNTM5OCAxMS43OTYxIDExLjUzNDUgMTEuNzk2MVYxMS44WiIgZmlsbD0iIzk1OUFBMCIvPgo8L3N2Zz4K";
+    $icon_url = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTExLjUzNDUgNC42SDguNTE4NTdWMy4wNTcxNEM4LjUxODU3IDIuNTExNTUgOC4zMDY3NCAxLjk4ODMxIDcuOTI5NjggMS42MDI1M0M3LjU1MjYyIDEuMjE2NzQgNy4wNDEyMSAxIDYuNTA3OTYgMUg1VjE2Ljk0MjlDNSAxNy40ODg0IDUuMjExODMgMTguMDExNyA1LjU4ODg5IDE4LjM5NzVDNS45NjU5NiAxOC43ODMzIDYuNDc3MzcgMTkgNy4wMTA2MSAxOUg4LjUxODU3VjE1LjRIMTEuNTM0NUMxMi44OTg4IDE1LjM0NzIgMTQuMTkgMTQuNzU1NiAxNS4xMzY5IDEzLjc0OTRDMTYuMDgzOSAxMi43NDMyIDE2LjYxMjkgMTEuNDAwNyAxNi42MTI5IDEwLjAwMzlDMTYuNjEyOSA4LjYwNzAyIDE2LjA4MzkgNy4yNjQ1MyAxNS4xMzY5IDYuMjU4MzJDMTQuMTkgNS4yNTIxMiAxMi44OTg4IDQuNjYwNSAxMS41MzQ1IDQuNjA3NzFWNC42Wk0xMS41MzQ1IDExLjhIOC41MTg1N1Y4LjJIMTEuNTM0NUMxMi41Mzk4IDguMiAxMy4yMzA5IDkuMDEzODYgMTMuMjMwOSAxMEMxMy4yMzA5IDEwLjk4NjEgMTIuNTM5OCAxMS43OTYxIDExLjUzNDUgMTEuNzk2MVYxMS44WiIgZmlsbD0iIzk1OUFBMCIvPgo8L3N2Zz4K';
 
     add_menu_page(
         'Block Protocol',
@@ -347,10 +347,10 @@ function block_protocol_options_page_settings_html()
         <?php
         // output security fields for the registered setting "block_protocol"
         settings_fields('block_protocol');
-        block_protocol_field_hidden_renderer("block_protocol_field_api_email");
+        block_protocol_field_hidden_renderer('block_protocol_field_api_email');
         // @todo – don't do this, see https://hashintel.slack.com/archives/C02LG39FJAU/p1680544602069229
-        block_protocol_field_hidden_renderer("block_protocol_field_api_key");
-        block_protocol_field_hidden_renderer("block_protocol_field_api_email_verification_id");
+        block_protocol_field_hidden_renderer('block_protocol_field_api_key');
+        block_protocol_field_hidden_renderer('block_protocol_field_api_email_verification_id');
         // output setting sections and their fields
         // (sections are registered for "block_protocol", each field is registered to a specific section)
         do_settings_sections('block_protocol');
@@ -389,17 +389,17 @@ function block_protocol_options_page_settings_html()
         <td style='background: #f6f7f7; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);'>%s</td>
     </tr>",
                     esc_html(block_protocol_json_encode([
-                        "entityId" => $entity["entity_id"],
-                        "entityTypeId" => $entity["entity_type_id"],
-                        "properties" => json_decode($entity["properties"])
+                        'entityId' => $entity['entity_id'],
+                        'entityTypeId' => $entity['entity_type_id'],
+                        'properties' => json_decode($entity['properties'])
                     ], JSON_PRETTY_PRINT)),
-                    join(",", array_map(function ($location) {
+                    join(',', array_map(function ($location) {
                         return sprintf(
                             "<div><a href='%s'>%s</a><div>",
-                            esc_url($location["edit_link"]),
-                            esc_html($location["title"])
+                            esc_url($location['edit_link']),
+                            esc_html($location['title'])
                         );
-                    }, $entity["locations"]))
+                    }, $entity['locations']))
                 );
             }
             ?>
@@ -420,8 +420,8 @@ function block_protocol_options_page_html()
         return;
     }
 
-    $options = get_option("block_protocol_options");
-    $apiKey = $options ? $options["block_protocol_field_api_key"] : null;
+    $options = get_option('block_protocol_options');
+    $apiKey = $options ? $options['block_protocol_field_api_key'] : null;
 
     // add error/update messages
 
