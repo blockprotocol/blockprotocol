@@ -20,7 +20,7 @@ function block_protocol_link_by_email()
     }
 
     $base = get_block_protocol_site_host();
-    $url = "{$base}/api/link-wordpress";
+    $apiUrl = "{$base}/api/link-wordpress";
     $headers = [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
@@ -30,7 +30,7 @@ function block_protocol_link_by_email()
         'wordpressInstanceUrl' => get_site_url()
     ];
 
-    $respStr = wp_remote_post($url, [
+    $respStr = wp_remote_post($apiUrl, [
         'method' => 'POST',
         'headers' => $headers,
         'body' => json_encode($data)
