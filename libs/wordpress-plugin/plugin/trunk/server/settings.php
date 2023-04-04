@@ -551,10 +551,10 @@ function block_protocol_options_page_html()
                         ?>
                     </tbody>
                 </table>
-            <?php else: ?>
+            </div>
+                <?php else: ?>
                 <div id="blockprotocol-settings-react-promo"></div>
             <?php endif; ?>
-        </div>
     </div>
     <?php
 }
