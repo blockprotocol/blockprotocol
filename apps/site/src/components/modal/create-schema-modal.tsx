@@ -34,6 +34,10 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
   const router = useRouter();
   const { user } = useUser();
 
+  const isMac =
+    typeof window !== "undefined" &&
+    navigator.platform.toUpperCase().includes("MAC");
+
   const handleCreateSchema = useCallback(
     async (evt: FormEvent) => {
       evt.preventDefault();
@@ -163,6 +167,16 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
             onChange={(evt) => setNewDescription(evt.target.value)}
             multiline
             required
+            maxRows={8}
+            onKeyDown={(evt) => {
+              const { metaKey, ctrlKey, code } = evt;
+              if (
+                ((isMac && metaKey) || (!isMac && ctrlKey)) &&
+                code === "Enter"
+              ) {
+                void handleCreateSchema(evt);
+              }
+            }}
           />
 
           <Button
