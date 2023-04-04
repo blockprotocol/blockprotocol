@@ -41,6 +41,27 @@
   strong {
     font-weight: 700;
   }
+
+  a {
+    font-family: Inter;
+    text-decoration: none;
+    color: #6048E5;
+  }
+}
+
+.PromoListItemComingSoon {
+  svg {
+    color: #6F59EC;
+  }
+}
+
+.PromoListItemComingSoonText {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 140%;
+  text-transform: uppercase;
+  color: #6F59EC;
 }
 
 .PromoInfoText { color: #758AA1; }

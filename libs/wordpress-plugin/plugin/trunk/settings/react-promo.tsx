@@ -1,7 +1,24 @@
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  IconDefinition,
+} from "@fortawesome/free-solid-svg-icons";
+import clsx from "clsx";
 import { PropsWithChildren, ReactNode } from "react";
+
 import { FontAwesomeIcon } from "./font-awesome-icon";
 import styles from "./react-promo.module.scss";
+
+const faArrowUpRight: IconDefinition = {
+  icon: [
+    384,
+    512,
+    [],
+    "e09f",
+    "M352 128c0-17.7-14.3-32-32-32L96 96c-17.7 0-32 14.3-32 32s14.3 32 32 32l146.7 0L41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L288 205.3 288 352c0 17.7 14.3 32 32 32s32-14.3 32-32l0-224z",
+  ],
+  prefix: "fas",
+  iconName: "arrow-up-right",
+};
 
 export const PromoCard = ({ children }: PropsWithChildren) => {
   return (
@@ -72,10 +89,25 @@ const PromoList = ({ children }: PropsWithChildren) => {
   return <ul className={styles.PromoList}>{children}</ul>;
 };
 
-const PromoListItem = ({ children }: PropsWithChildren) => {
+const PromoListItem = ({
+  children,
+  comingSoon = null,
+}: PropsWithChildren<{ comingSoon?: ReactNode }>) => {
   return (
-    <li className={styles.PromoListItem}>
-      <FontAwesomeIcon icon={faArrowRight} />
+    <li
+      className={clsx(
+        styles.PromoListItem,
+        comingSoon && styles.PromoListItemComingSoon,
+      )}
+    >
+      {comingSoon ? (
+        <>
+          <FontAwesomeIcon icon={faArrowUpRight} />
+          <div className={styles.PromoListItemComingSoonText}>{comingSoon}</div>
+        </>
+      ) : (
+        <FontAwesomeIcon icon={faArrowRight} />
+      )}
       {children}
     </li>
   );
@@ -132,13 +164,17 @@ export const ReactPromo = () => {
         <PromoList>
           <PromoListItem>
             <strong>
-              Turn WordPress into a powerful entity graph and unlock a whole
-              range of new functionality.
+              Turn WordPress into a powerful{" "}
+              {/* eslint-disable-next-line react/jsx-no-target-blank */}
+              <a href="https://blockprotocol.org" target="_blank">
+                entity graph
+              </a>{" "}
+              and unlock a whole range of new functionality.
             </strong>{" "}
             Go beyond Custom Post Types and Advanced Custom Fields with a graph
             of entities, all with their own properties and connected by links
           </PromoListItem>
-          <PromoListItem>
+          <PromoListItem comingSoon="Coming Soon">
             <strong>Improve your search rankings</strong> by leveraging
             structured data (SEO) blocks that take context from their
             surroundings and dynamically generating whole-page JSON-LD based on
@@ -147,7 +183,7 @@ export const ReactPromo = () => {
               (e.g. offers in WooCommerce, or tickets for an event)
             </PromoInfoText>
           </PromoListItem>
-          <PromoListItem>
+          <PromoListItem comingSoon="Planned">
             Use WordPress as an app builder, not just as a site editor and CMS
           </PromoListItem>
         </PromoList>
@@ -171,7 +207,7 @@ export const ReactPromo = () => {
             Generous free allowances with all providers let you try out blocks
             and use them in WordPress
           </PromoListItem>
-          <PromoListItem>
+          <PromoListItem comingSoon="Coming Soon">
             <strong>Sync data from external apps into WordPress</strong> through
             authenticated external service blocks.
           </PromoListItem>

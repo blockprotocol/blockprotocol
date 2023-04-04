@@ -54,6 +54,7 @@
     "@wordpress/data": "8.5.0",
     "@wordpress/scripts": "25.5.0",
     "buffer": "6.0.3",
+    "clsx": "1.2.1",
     "lodash.debounce": "4.0.8",
     "patch-package": "6.5.1",
     "react-toastify": "9.1.1",
