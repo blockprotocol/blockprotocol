@@ -188,7 +188,7 @@ function block_protocol_field_api_key_renderer($args)
            disabled
            value="<?= esc_attr($public); ?>" />
     <br />
-    <a href="<?= wp_nonce_url(admin_url('admin-post.php?action=block_protocol_remove_key'), 'block_protocol_remove_key') ?>"><?= __('Detach keys from this website', 'block_protocol'); ?></a> | <a target="_blank" rel="noopener noreferrer" href="<?=get_block_protocol_site_host()?>/account/api"><?= __('Manage or create API keys', 'block_protocol'); ?></a>
+    <a style="color:black" href="<?= wp_nonce_url(admin_url('admin-post.php?action=block_protocol_remove_key'), 'block_protocol_remove_key') ?>"><?= __('Detach keys from this website', 'block_protocol'); ?></a> | <a target="_blank" rel="noopener noreferrer" href="<?=get_block_protocol_site_host()?>/account/api"><?= __('Manage or create API keys', 'block_protocol'); ?></a>
     <?php
 }
 
