@@ -1,3 +1,33 @@
-.promoList {
+.PromoStack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 
+.PromoHeading {
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 16px;
+  color: black;
+  margin: 0;
+}
+
+.PromoList {
+  margin: 0;
+}
+
+.PromoListItem {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.4;
+  color: black;
+  margin-bottom: 12px;
+
+  strong {
+    font-weight: 700;
+  }
 }
