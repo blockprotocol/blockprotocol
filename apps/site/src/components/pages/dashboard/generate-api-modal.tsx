@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { ChangeEvent, FormEvent, FunctionComponent, useState } from "react";
 
+import { UserFacingApiKeyProperties } from "../../../lib/api/model/api-key.model";
 import { apiClient } from "../../../lib/api-client";
 import { Button } from "../../button";
 import { WarningIcon } from "../../icons";
@@ -9,29 +10,36 @@ import { ApiKeyRenderer } from "./api-key-renderer";
 
 type GenerateApiModalProps = {
   close: () => void;
-  keyNameToRegenerate?: string;
+  keyToRegenerate?: UserFacingApiKeyProperties;
   refetchKeyList: () => void;
 };
 
 export const GenerateApiModal: FunctionComponent<GenerateApiModalProps> = ({
   close,
-  keyNameToRegenerate,
+  keyToRegenerate,
   refetchKeyList,
 }) => {
   const [apiKey, setApiKey] = useState<string>("");
-  const [keyName, setKeyName] = useState(keyNameToRegenerate || "");
+  const [keyName, setKeyName] = useState(keyToRegenerate?.displayName || "");
 
-  const regenerate = !!keyNameToRegenerate;
+  const regenerate = !!keyToRegenerate;
 
   const createKey = (event: FormEvent) => {
     event.preventDefault();
     /** @todo handle errors and show the user a msg */
-    void apiClient.generateApiKey({ displayName: keyName }).then(({ data }) => {
-      if (data) {
-        setApiKey(data.apiKey);
+    void (async () => {
+      if (keyToRegenerate?.publicId) {
+        await apiClient.revokeApiKey({ publicId: keyToRegenerate.publicId });
       }
-      refetchKeyList();
-    });
+      await apiClient
+        .generateApiKey({ displayName: keyName })
+        .then(({ data }) => {
+          if (data) {
+            setApiKey(data.apiKey);
+          }
+          refetchKeyList();
+        });
+    })();
   };
 
   return (

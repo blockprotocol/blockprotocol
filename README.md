@@ -116,7 +116,7 @@ Please feel free to fork the repo in order to create a pull request:
 1.  Push to the branch (`git push origin feature/AmazingFeature`)
 1.  Open a pull request targeting this repo
 
-If you’re looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues].
+If you’re looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues]. See [CONTRIBUTING](/.github/CONTRIBUTING.md) for more information.
 
 ## [![a](/.github/assets/gh_icon_license_20px-base.svg)][gh-license] &nbsp; License
 
@@ -124,7 +124,7 @@ The vast majority of this repository is dual-licensed under the Apache 2.0 and M
 
 ## [![a](/.github/assets/gh_icon_security_20px-base.svg)][gh-security] &nbsp; Security
 
-Please see [SECURITY](SECURITY.md) for instructions around reporting issues, and details of which package versions we actively support.
+Please see [SECURITY](/.github/SECURITY.md) for instructions around reporting issues, and details of which package versions we actively support.
 
 ## [![a](/.github/assets/gh_icon_contact_20px-base.svg)][gh-contact] &nbsp; Contact
 
