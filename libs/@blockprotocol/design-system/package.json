@@ -22,10 +22,13 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
+  "main": "src/main.ts",
+  "types": "src/main.ts",
   "scripts": {
+    "build": "yarn clean && tsc --skipLibCheck --project tsconfig.build.json",
     "build-storybook": "storybook build",
-    "fix:eslint": "eslint --fix .",
-    "lint:eslint": "eslint --report-unused-disable-directives .",
+    "clean": "rimraf ./dist/",
+    "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/prepublish.ts",
     "storybook": "storybook dev -p 6006"
   },
   "dependencies": {},
@@ -42,13 +45,13 @@
     "@storybook/react-webpack5": "^7.0.0-beta.14",
     "@storybook/testing-library": "^0.0.13",
     "eslint-plugin-storybook": "0.6.11",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
     "storybook": "^7.0.0-beta.14",
     "typescript": "4.9.4"
   },
   "peerDependencies": {
-    "@hashintel/design-system": "0.0.6",
-    "@mui/material": "5.11.8"
+    "@mui/material": "5.11.8",
+    "@mui/system": "5.11.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

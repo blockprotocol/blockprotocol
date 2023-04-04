@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "jsx": "react-jsx",
+    "noEmit": false,
+    "target": "es2020",
+    "outDir": "dist"
+  },
+  "include": ["theme-override.d.ts", "./src/"]
+}
