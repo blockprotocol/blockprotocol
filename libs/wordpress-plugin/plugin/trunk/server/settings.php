@@ -7,17 +7,25 @@ require_once __DIR__ . "/util.php";
  */
 
 
-function block_protocol_settings_enqueue_scripts($hook) {
+function block_protocol_settings_enqueue_assets($hook) {
     if ($hook !== "toplevel_page_block_protocol") {
         return;
     }
 
     wp_enqueue_style('block_protocol_typekit', 'https://use.typekit.net/muv5tib.css');
-    wp_enqueue_script('block_protocol_settings', plugins_url('../build/settings.js', __FILE__), ['react', 'react-dom'],
-        BLOCK_PROTOCOL_PLUGIN_VERSION);
+
+    $asset_file = include(plugin_dir_path(__FILE__) . '../build/settings.asset.php');
+
+    wp_register_script(
+        'block_protocol_settings',
+        plugins_url('../build/settings.js', __FILE__),
+        $asset_file['dependencies'],
+        $asset_file['version']
+    );
+    wp_enqueue_script('block_protocol_settings');
 }
 
-add_action("admin_enqueue_scripts", "block_protocol_settings_enqueue_scripts");
+add_action("admin_enqueue_scripts", "block_protocol_settings_enqueue_assets");
 
 // @todo check nonce
 function block_protocol_remove_key()
