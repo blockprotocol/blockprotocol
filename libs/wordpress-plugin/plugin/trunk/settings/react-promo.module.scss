@@ -27,7 +27,6 @@
 
 .PromoList {
   margin: 0;
-  padding-bottom: var(--promo-y-padding);
 }
 
 .PromoListItem {
@@ -37,9 +36,13 @@
   font-size: 15px;
   line-height: 1.4;
   color: black;
-  margin-bottom: 12px;
   padding-left: 28px;
   position: relative;
+  margin-bottom: 0;
+
+  &:not(:last-of-type) {
+    margin-bottom: 12px;
+  }
 
   svg {
     color: #91a5ba;
@@ -82,10 +85,6 @@
   align-items: center;
   flex-shrink: 0;
 
-  @media screen and (max-width: 800px) {
-    order: -1;
-  }
-
   img {
     height: auto;
     width: 100%;
@@ -107,10 +106,27 @@
   padding: 0 var(--promo-x-padding);
 }
 
+.PromoCardItemsSmallGap {
+  gap: 36px;
+}
+
 .PromoCardItemsNoPaddingRight {
   padding-right: 0;
 }
 
 .PromoCardItemsNoPaddingLeft {
   padding-left: 0;
+}
+
+.PromoCardHeader {
+  padding: var(--promo-y-padding) var(--promo-x-padding) 0;
+
+  .PromoCardItems & {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.PromoCardContent {
+  padding-bottom: var(--promo-y-padding);
 }
