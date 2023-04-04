@@ -1,10 +1,11 @@
 .PromoCard {
   --promo-y-padding: 30px;
   --promo-x-padding: 40px;
-  background: rgb(255, 255, 255);
+  background: white;
   border: 1px solid rgb(221, 231, 240);
   border-radius: 8px;
   max-width: 826px;
+  overflow: hidden;
 }
 
 .PromoStack {
@@ -81,9 +82,21 @@
   align-items: center;
   flex-shrink: 0;
 
+  @media screen and (max-width: 800px) {
+    order: -1;
+  }
+
   img {
     height: auto;
     width: 100%;
+  }
+
+  .PromoCardItemsNoPaddingRight & {
+    align-items: flex-end;
+  }
+
+  .PromoCardItemsNoPaddingLeft & {
+    align-items: flex-start;
   }
 }
 
@@ -92,12 +105,6 @@
   align-items: stretch;
   gap: 51px;
   padding: 0 var(--promo-x-padding);
-
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-  }
 }
 
 .PromoCardItemsNoPaddingRight {

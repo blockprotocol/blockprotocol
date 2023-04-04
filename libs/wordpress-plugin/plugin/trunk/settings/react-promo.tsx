@@ -7,7 +7,9 @@ import { HTMLProps, PropsWithChildren, ReactNode } from "react";
 
 import { FontAwesomeIcon } from "./font-awesome-icon";
 import styles from "./react-promo.module.scss";
-import blockTrio from "./images/block-trio.png";
+import blockTrioImage from "./images/block-trio.png";
+import aiImage from "./images/ai.png";
+import blocksImage from "./images/blocks.png";
 
 const faArrowUpRight: IconDefinition = {
   icon: [
@@ -184,7 +186,7 @@ export const ReactPromo = () => {
           <PromoPurpleText>Structured data</PromoPurpleText> in WordPress
         </PromoBigTitle>
         <PromoCardItems>
-          <PromoInfoImage src={blockTrio} width={331} />
+          <PromoInfoImage src={blockTrioImage} width={331} />
           <PromoList>
             <PromoListItem>
               <strong>
@@ -239,35 +241,39 @@ export const ReactPromo = () => {
               through authenticated external service blocks.
             </PromoListItem>
           </PromoList>
+          <PromoInfoImage src={aiImage} width={459} />
         </PromoCardItems>
       </PromoCard>
       <PromoCard>
-        <PromoSmallTitle>Tons more benefits</PromoSmallTitle>
-        <PromoBigTitle>
-          <PromoPurpleText>Instant access</PromoPurpleText> to an infinite
-          ecosystem
-        </PromoBigTitle>
-        <PromoCardItems>
-          <PromoList>
-            <PromoListItem>
-              The Block Protocol is an open-source ecosystem of blocks that
-              anybody can contribute to
-            </PromoListItem>
-            <PromoListItem>
-              New blocks are instantly available within WordPress to Block
-              Protocol users without having to update the plugin, or install
-              additional plugins{" "}
-              <PromoInfoText>
-                (as is required for Gutenberg blocks)
-              </PromoInfoText>
-            </PromoListItem>
-            <PromoListItem>
-              <strong>
-                Use Block Protocol blocks in any Þ-enabled environment
-              </strong>
-              , not just WordPress
-            </PromoListItem>
-          </PromoList>
+        <PromoCardItems className={styles.PromoCardItemsNoPaddingLeft}>
+          <PromoInfoImage src={blocksImage} width={328} />
+          <div>
+            <PromoSmallTitle>Tons more benefits</PromoSmallTitle>
+            <PromoBigTitle>
+              <PromoPurpleText>Instant access</PromoPurpleText> to an infinite
+              ecosystem
+            </PromoBigTitle>
+            <PromoList>
+              <PromoListItem>
+                The Block Protocol is an open-source ecosystem of blocks that
+                anybody can contribute to
+              </PromoListItem>
+              <PromoListItem>
+                New blocks are instantly available within WordPress to Block
+                Protocol users without having to update the plugin, or install
+                additional plugins{" "}
+                <PromoInfoText>
+                  (as is required for Gutenberg blocks)
+                </PromoInfoText>
+              </PromoListItem>
+              <PromoListItem>
+                <strong>
+                  Use Block Protocol blocks in any Þ-enabled environment
+                </strong>
+                , not just WordPress
+              </PromoListItem>
+            </PromoList>
+          </div>
         </PromoCardItems>
       </PromoCard>
     </div>
