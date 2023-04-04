@@ -199,7 +199,7 @@ export const DashboardWordpressSection = ({
             </Stack>
           </Stack>
           <Typography mb={2} fontWeight={700}>
-            You won’t be able to see this key again. Save it some where secure,
+            You won’t be able to see this key again. Save it somewhere secure,
             and keep it secret.
           </Typography>
           <Typography>
