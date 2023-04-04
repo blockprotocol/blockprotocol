@@ -366,7 +366,8 @@ function block_protocol_options_page_settings_html()
             <tr>
                 <th
                         style="background: white; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);top:0;position:sticky;top:-1px;">
-                    Properties</th>
+                    Properties
+                </th>
                 <th
                         style="background: white; padding: 5px 15px;border: 1px solid rgba(0,0,0,0.2);top:0;position:sticky;">
                     Found in pages
