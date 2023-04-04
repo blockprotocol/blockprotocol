@@ -27,7 +27,6 @@ function block_protocol_link_by_email()
     ];
     $data = [
         'email' => $email,
-        // @todo need to handle this on the other end
         'wordpressInstanceUrl' => get_site_url()
     ];
 
