@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "../../icons";
 import { Link } from "../../link";
 
 const defaultApiKey =
-  "b10ck5.9faa5da6664f7229999439d5433d4ac2.c549e923-c3b6-451f-baba-20b391e6033d";
+  "b10ck5.00000000000000000000000000000000.00000000-0000-0000-0000-000000000000";
 
 export const DashboardWordpressSection = ({
   wordpressInstanceUrl,
