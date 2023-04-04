@@ -178,14 +178,16 @@ function block_protocol_field_api_key_renderer($args)
     $options = get_option('block_protocol_options');
     $public = explode(".", $options[$args['label_for']])[1];
     ?>
-    <p>This WordPress instance is linked to <strong><?= htmlentities($options["block_protocol_field_api_email"]); ?></strong> Block Protocol account. The public portion of the API key linked to this account is shown below.</p>
+    <p>
+        <?= sprintf(__('This WordPress instance is linked to <strong>%s</strong> Block Protocol account. The public portion of the API key linked to this account is shown below.', 'block_protocol'), htmlentities($options["block_protocol_field_api_email"])); ?>
+    </p>
     <input id="<?php echo esc_attr($args['label_for']); ?>"
            type="text"
            style="width: 620px; max-width: 100%;"
            disabled
            value="<?= esc_attr($public); ?>" />
     <br />
-    <a href="<?= wp_nonce_url(admin_url('admin-post.php?action=block_protocol_remove_key'), 'block_protocol_remove_key') ?>">Detach keys from this website</a> | <a target="_blank" rel="noopener noreferrer" href="<?=get_block_protocol_site_host()?>/account/api">Manage or create API keys</a>
+    <a href="<?= wp_nonce_url(admin_url('admin-post.php?action=block_protocol_remove_key'), 'block_protocol_remove_key') ?>"><?= __('Detach keys from this website', 'block_protocol'); ?></a> | <a target="_blank" rel="noopener noreferrer" href="<?=get_block_protocol_site_host()?>/account/api"><?= __('Manage or create API keys', 'block_protocol'); ?></a>
     <?php
 }
 
@@ -439,7 +441,7 @@ function block_protocol_options_page_html()
             <?php echo esc_html(get_admin_page_title()); ?>
         </h1>
         <?php
-        $apiKey ? block_protocol_options_page_settings_html() :block_protocol_options_page_activate_html();
+        $apiKey ? block_protocol_options_page_settings_html() : block_protocol_options_page_activate_html();
         ?>
     </div>
     <?php
