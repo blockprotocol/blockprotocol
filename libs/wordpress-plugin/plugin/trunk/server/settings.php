@@ -20,7 +20,7 @@ function block_protocol_settings_enqueue_assets($hook) {
     }
 
     wp_enqueue_style('block_protocol_typekit', 'https://use.typekit.net/muv5tib.css');
-    wp_enqueue_style('block_protocol_fonts', plugins_url('../global.css', __FILE__));
+    wp_enqueue_style('block_protocol_global', plugins_url('../global.css', __FILE__));
 
     $asset_file = include(plugin_dir_path(__FILE__) . '../build/settings.asset.php');
 
@@ -178,12 +178,13 @@ function block_protocol_field_api_key_renderer($args)
     $options = get_option('block_protocol_options');
     $public = explode('.', $options[$args['label_for']])[1];
     ?>
-    <p>
+    <p style="max-width:570px;">
         <?= sprintf(__('This WordPress instance is linked to <strong>%s</strong> Block Protocol account. The public portion of the API key linked to this account is shown below.', 'block_protocol'), htmlentities($options['block_protocol_field_api_email'])); ?>
     </p>
     <input id="<?php echo esc_attr($args['label_for']); ?>"
            type="text"
-           style="width: 620px; max-width: 100%;"
+           class="BPSettingsInput"
+           style="margin:12px 0"
            disabled
            value="<?= esc_attr($public); ?>" />
     <br />

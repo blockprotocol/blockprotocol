@@ -76,13 +76,13 @@ add_action('admin_post_block_protocol_link_by_api_key', 'block_protocol_link_by_
 function block_protocol_activate_submit_button($label, $extra_html = '', $icon = 'arrow')
 {
     $icons = [
-        'arrow' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="BPActivateButtonSvg"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>',
-        'tick' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="BPActivateButtonSvg"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>'
+        'arrow' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="BPSettingsButtonSvg"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>',
+        'tick' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="BPSettingsButtonSvg"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>'
     ];
 
     ?>
     <button type="submit" name="submit"
-            class="BPActivateButton" <?= $extra_html ?>>
+            class="BPSettingsButton" <?= $extra_html ?>>
         <?= $label ?>
         <?= $icons[$icon]; ?>
     </button>
@@ -115,7 +115,7 @@ function block_protocol_options_page_activate_html()
             </p>
             <input type="email" name="email" id="block_protocol_field_email"
                    placeholder="e.g. name@example.com"
-                   class="BPActivateInput"
+                   class="BPSettingsInput"
                    value="<?= esc_attr($passedEmail ?? $email ?? '') ?>"
                 <?= $email_exists ? 'disabled' : 'autofocus' ?>
             />
@@ -151,7 +151,7 @@ function block_protocol_options_page_activate_html()
                         <?php endif; ?>
                     </strong></label>
             </p>
-            <input class="BPActivateInput" id="block_protocol_field_api_key"
+            <input class="BPSettingsInput" id="block_protocol_field_api_key"
                    name="key"
                    type="password"
                    data-1p-ignore

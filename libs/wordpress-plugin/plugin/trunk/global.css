@@ -28,6 +28,67 @@
     src: url("./fonts/inter-bold.ttf") format("trueType");
 }
 
+
+.BPSettingsInput {
+    box-sizing: border-box;
+    padding: 16px 8px;
+    width: 444px;
+    height: 40px;
+    background: #FFFFFF;
+    border: 1px solid #8D8F94;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 24px;
+    margin-right: 8px;
+}
+
+.BPSettingsInput:disabled {
+    background: #DDE7F0;
+    border-color: #C1CFDE;
+    color: #64778C;
+}
+
+.BPSettingsInput::placeholder {
+    color: #64778C;
+}
+
+.BPSettingsButton {
+    cursor: pointer;
+    color: white;
+    background: #3A6FAC;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 150%;
+    height: 40px;
+    border: 1px solid #3A6FAC;
+}
+
+.BPSettingsButton:disabled {
+    background: #DDE7F0;
+    border-color: #C1CFDE;
+    color: #64778C;
+    cursor: default;
+}
+
+.BPSettingsButtonSvg {
+    fill: currentColor;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    margin-left: 8px;
+}
+
+.BPSettingsButton:disabled .BPSettingsButtonSvg {
+    color: #91A5BA;
+}
+
 .BPActivate {
     margin-top: 34px;
     font-family: 'Helvetica', sans-serif;
@@ -57,66 +118,6 @@
 
 .BPActivateErrorRed {
     color: #DF3449;
-}
-
-.BPActivateInput {
-    box-sizing: border-box;
-    padding: 16px 8px;
-    width: 444px;
-    height: 40px;
-    background: #FFFFFF;
-    border: 1px solid #8D8F94;
-    border-radius: 6px;
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 24px;
-    margin-right: 8px;
-}
-
-.BPActivateInput:disabled {
-    background: #DDE7F0;
-    border-color: #C1CFDE;
-    color: #64778C;
-}
-
-.BPActivateInput::placeholder {
-    color: #64778C;
-}
-
-.BPActivateButton {
-    cursor: pointer;
-    color: white;
-    background: #3A6FAC;
-    border-radius: 6px;
-    padding: 10px 12px;
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 150%;
-    height: 40px;
-    border: 1px solid #3A6FAC;
-}
-
-.BPActivateButton:disabled {
-    background: #DDE7F0;
-    border-color: #C1CFDE;
-    color: #64778C;
-    cursor: default;
-}
-
-.BPActivateButtonSvg {
-    fill: currentColor;
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.125em;
-    margin-left: 8px;
-}
-
-.BPActivateButton:disabled .BPActivateButtonSvg {
-    color: #91A5BA;
 }
 
 .BPActivatePara {
