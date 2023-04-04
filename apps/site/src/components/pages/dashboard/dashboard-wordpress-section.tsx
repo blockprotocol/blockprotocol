@@ -43,7 +43,7 @@ export const DashboardWordpressSection = ({
 
     setGenerating(true);
     void apiClient
-      .generateApiKey({ displayName: "Wordpress" })
+      .generateApiKey({ displayName: "WordPress" })
       .then(({ data }) => {
         setGenerating(false);
         if (data) {
