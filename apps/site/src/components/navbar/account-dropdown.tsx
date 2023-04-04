@@ -9,7 +9,7 @@ import Image from "next/legacy/image";
 import { FunctionComponent, useRef, useState } from "react";
 
 import proTierBackground from "../../../public/assets/pricing/pro-tier-background.svg";
-import { signOut, useUser } from "../../context/user-context";
+import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { Button } from "../button";
@@ -20,7 +20,7 @@ import { Link } from "../link";
 import { UserAvatar } from "../user-avatar";
 
 export const AccountDropdown: FunctionComponent = () => {
-  const { user, setUser } = useUser();
+  const { user, signOut } = useUser();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -37,7 +37,7 @@ export const AccountDropdown: FunctionComponent = () => {
   const handleLogout = async () => {
     await apiClient.post("logout");
 
-    signOut(setUser);
+    signOut();
   };
 
   if (user === "loading" || !user) {

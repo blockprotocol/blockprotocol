@@ -16,9 +16,9 @@ import {
   VerificationCodeInfo,
   VerificationCodeScreen,
 } from "../components/screens/verification-code-screen";
-import { signOut, useUser } from "../context/user-context";
-import { SerializedUser } from "../lib/api/model/user.model";
+import { useUser } from "../context/user-context";
 import { apiClient } from "../lib/api-client";
+import { SerializedUser } from "../lib/api/model/user.model";
 import { ApiVerifyEmailRequestBody } from "./api/verify-email.api";
 
 const SIGNUP_PAGE_SCREENS = [
@@ -52,7 +52,7 @@ const SignupPage: NextPage = () => {
     };
   }, [router]);
 
-  const { user, setUser } = useUser();
+  const { user, setUser, signOut } = useUser();
   const [currentScreen, setCurrentScreen] = useState<SignupPageScreen>("Email");
 
   const [email, setEmail] = useState<string>();
@@ -103,7 +103,7 @@ const SignupPage: NextPage = () => {
         }
       } else {
         // We may already be logged in, but this is a verification code for a new account, so let's log out
-        signOut(setUser);
+        signOut();
       }
     }
   }, [
@@ -114,6 +114,7 @@ const SignupPage: NextPage = () => {
     checkedQueryParams,
     email,
     setUser,
+    signOut,
   ]);
 
   const displayInfoSidebar =
