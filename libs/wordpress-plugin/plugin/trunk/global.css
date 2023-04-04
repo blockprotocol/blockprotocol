@@ -3,26 +3,40 @@
     font-weight: 300;
     src: url("./fonts/inter-light.ttf") format("trueType");
 }
+
 @font-face {
     font-family: "Inter";
     font-weight: 400;
     src: url("./fonts/inter-regular.ttf") format("trueType");
 }
+
 @font-face {
     font-family: "Inter";
     font-weight: 500;
     src: url("./fonts/inter-medium.ttf") format("trueType");
 }
+
 @font-face {
     font-family: "Inter";
     font-weight: 600;
     src: url("./fonts/inter-semibold.ttf") format("trueType");
 }
+
 @font-face {
     font-family: "Inter";
     font-weight: 700;
     src: url("./fonts/inter-bold.ttf") format("trueType");
 }
+
+.BPActivate {
+    margin-top: 34px;
+    font-family: 'Helvetica', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+}
+
 .BPActivateHeading {
     font-family: 'Helvetica', sans-serif;
     font-style: normal;
@@ -31,4 +45,16 @@
     line-height: 16px;
     color: black;
     margin: 0;
+}
+
+.BPActivateError {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 16px;
+    text-transform: uppercase;
+}
+
+.BPActivateErrorRed {
+    color: #DF3449;
 }
