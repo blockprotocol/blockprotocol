@@ -4,18 +4,21 @@ import { createBaseHandler } from "../../lib/api/handler/base-handler";
 import { User } from "../../lib/api/model/user.model";
 import { formatErrors } from "../../util/api";
 
-export type ApiSignupRequestBody = {
+type ApiLinkWordPressRequestBody = {
   email: string;
   wordpressInstanceUrl: string;
   wordpressSettingsUrl: string;
 };
 
-export type ApiSignupResponse = {
+type ApiLinkWordPressResponse = {
   userId: string;
   verificationCodeId: string;
 };
 
-export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
+export default createBaseHandler<
+  ApiLinkWordPressRequestBody,
+  ApiLinkWordPressResponse
+>()
   .use(bodyValidator("email").isEmail().toLowerCase())
   .use(
     bodyValidator("wordpressInstanceUrl").isURL({
