@@ -1,5 +1,3 @@
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { faPen, FontAwesomeIcon } from "@hashintel/design-system";
 import {
   Box,
   Fade,
@@ -12,6 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { PenIcon, PenToSquareIcon } from "./main";
 
 export const EditableField = ({
   editIconFontSize,
@@ -124,12 +123,7 @@ export const EditableField = ({
                   component="span"
                   sx={{ display: "inline-flex", verticalAlign: "middle" }}
                 >
-                  <FontAwesomeIcon
-                    icon={{ icon: faPen }}
-                    sx={{
-                      fontSize: `inherit !important`,
-                    }}
-                  />
+                  <PenIcon sx={{ fontSize: "inherit" }} />
                 </Box>
               </>
             )}
@@ -196,15 +190,8 @@ export const EditableField = ({
               padding: 0.5,
             }}
           >
-            <FontAwesomeIcon
-              icon={{ icon: faPenToSquare.icon }}
-              sx={{
-                ...(editIconFontSize
-                  ? {
-                      fontSize: `${editIconFontSize}px !important`,
-                    }
-                  : {}),
-              }}
+            <PenToSquareIcon
+              sx={{ fontSize: `${editIconFontSize}px !important` }}
             />
           </IconButton>
         </Fade>
