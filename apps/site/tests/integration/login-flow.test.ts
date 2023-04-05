@@ -89,7 +89,7 @@ test("login works for an existing user (via verification code)", async ({
   for (const [name, href] of [
     ["Dashboard", "/dashboard"],
     ["Your Profile", "/@alice"],
-    ["Account Settings", "/account"],
+    ["Account Settings", "/account/general"],
   ] as const) {
     const item = accountDropdownPopover.locator(`a:has-text("${name}")`);
     await expect(item).toBeVisible();
