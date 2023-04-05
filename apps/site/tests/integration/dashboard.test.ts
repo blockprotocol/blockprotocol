@@ -46,7 +46,7 @@ test("dashboard page should contain key elements", async ({ page }) => {
   }
 
   await page.locator('[aria-label="settings-tabs"] >> text=My Account').click();
-  await expect(page).toHaveURL("/account");
+  await expect(page).toHaveURL("/account/general");
 
   await page.locator('[aria-label="settings-tabs"] >> text=Dashboard').click();
   await expect(page).toHaveURL("/dashboard");

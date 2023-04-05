@@ -1,7 +1,15 @@
-import { Box, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  MenuItem,
+  Paper,
+  Select,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
-import { useLayoutEffect, useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 
 import { Sidebar } from "../../components/page-sidebar";
 import {
@@ -13,8 +21,20 @@ import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigati
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { ApiKeysPanel } from "./api-keys-panel";
 import { BillingPanel } from "./billing-panel/billing-panel";
+import { GeneralPanel } from "./general-panel/general-panel";
 
-const accountPanels = [
+type AccountPanel = {
+  title: string;
+  slug: string;
+  panel: ReactNode;
+};
+
+const accountPanels: AccountPanel[] = [
+  {
+    title: "General",
+    slug: "general",
+    panel: <GeneralPanel />,
+  },
   ...(isBillingFeatureFlagEnabled
     ? [
         {
@@ -29,28 +49,22 @@ const accountPanels = [
     slug: "api",
     panel: <ApiKeysPanel />,
   },
-] as const;
+];
 
 const sidebarMaxWidth = 150;
 
 const Account: AuthWallPageContent = () => {
   const router = useRouter();
 
-  useLayoutEffect(() => {
-    /**
-     * @todo: remove this redirect when there is a panel with route "/account"
-     */
-    if (router.asPath === "/account") {
-      void router.push("/account/billing");
-    }
-  }, [router]);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const currentSettingsPanel = useMemo(() => {
+  const currentPanel = useMemo(() => {
     if (router.isReady) {
       const { query } = router;
 
       if (!query.slugs || typeof query.slugs === "string") {
-        return undefined;
+        return accountPanels[0];
       }
 
       const currentSettingsPageSlug = query.slugs.join("/");
@@ -71,24 +85,49 @@ const Account: AuthWallPageContent = () => {
         <Typography variant="bpHeading2" sx={{ fontSize: 44, marginBottom: 4 }}>
           My Account
         </Typography>
-        <Box display="flex">
-          <Sidebar
+
+        {isMobile && (
+          <Select
             sx={{
-              height: "unset",
-              minWidth: 125,
-              maxWidth: sidebarMaxWidth,
-              background: "transparent",
-              borderRightWidth: 0,
-              m: 1.5,
-              marginLeft: 0,
+              width: "100%",
+              mb: 2,
+              background: "white",
+              boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
+              height: 40,
             }}
-            pages={accountPanels.map(({ title, slug }) => ({
-              title,
-              href: `/account/${slug}`,
-            }))}
-          />
-          <Paper sx={{ flexGrow: 1, padding: 6, marginBottom: 6 }}>
-            {currentSettingsPanel?.panel}
+            value={currentPanel?.slug}
+            onChange={(event) => {
+              void router.push(`/account/${event.target.value}`);
+            }}
+          >
+            {accountPanels.map(({ title, slug }) => (
+              <MenuItem key={slug} value={slug}>
+                {title}
+              </MenuItem>
+            ))}
+          </Select>
+        )}
+
+        <Box display="flex">
+          {!isMobile && (
+            <Sidebar
+              sx={{
+                height: "unset",
+                minWidth: 125,
+                maxWidth: sidebarMaxWidth,
+                background: "transparent",
+                borderRightWidth: 0,
+                m: 1.5,
+                marginLeft: 0,
+              }}
+              pages={accountPanels.map(({ title, slug }) => ({
+                title,
+                href: `/account/${slug}`,
+              }))}
+            />
+          )}
+          <Paper sx={{ flexGrow: 1, p: isMobile ? 3 : 6, mb: 6 }}>
+            {currentPanel?.panel}
           </Paper>
         </Box>
       </PageContainer>

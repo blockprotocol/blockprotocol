@@ -158,6 +158,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/account",
+        destination: "/account/general",
+        permanent: true,
+      },
+      {
         source: "/:shortname/all-types",
         destination: "/:shortname/types",
         permanent: true,

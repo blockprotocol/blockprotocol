@@ -3,16 +3,16 @@ import mimeType from "mime-types";
 import {
   AuthenticatedApiRequest,
   createAuthenticatedHandler,
-} from "../../lib/api/handler/authenticated-handler";
+} from "../../../lib/api/handler/authenticated-handler";
 import {
   MultipartExtensions,
   multipartUploads,
-} from "../../lib/api/middleware/multipart-uploads.middleware";
-import { resolveS3ResourceKey } from "../../lib/s3";
-import { uploadFileBufferToS3 } from "../../lib/s3-file-uploads";
-import { formatErrors } from "../../util/api";
+} from "../../../lib/api/middleware/multipart-uploads.middleware";
+import { resolveS3ResourceKey } from "../../../lib/s3";
+import { uploadFileBufferToS3 } from "../../../lib/s3-file-uploads";
+import { formatErrors } from "../../../util/api";
 
-type Response = {
+export type ApiUploadAvatarResponse = {
   avatarUrl: string;
 };
 
@@ -53,7 +53,7 @@ async function validateImage(mime: string, buffer: Buffer) {
 
 export default createAuthenticatedHandler<
   AuthenticatedApiRequest & MultipartExtensions<"image", null>,
-  Response
+  ApiUploadAvatarResponse
 >()
   .use(
     multipartUploads({
