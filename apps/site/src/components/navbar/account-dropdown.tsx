@@ -20,7 +20,7 @@ import { Link } from "../link";
 import { UserAvatar } from "../user-avatar";
 
 export const AccountDropdown: FunctionComponent = () => {
-  const { user, setUser } = useUser();
+  const { user, signOut } = useUser();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -37,7 +37,7 @@ export const AccountDropdown: FunctionComponent = () => {
   const handleLogout = async () => {
     await apiClient.post("logout");
 
-    setUser(undefined);
+    signOut();
   };
 
   if (user === "loading" || !user) {

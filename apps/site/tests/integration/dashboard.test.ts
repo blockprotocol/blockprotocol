@@ -26,7 +26,7 @@ test("dashboard page should contain key elements", async ({ page }) => {
   await login({ page });
   await page.goto("/dashboard");
 
-  await expect(page.locator("text=Welcome back, Alice!")).toBeVisible();
+  await expect(page.locator("text=Welcome, Alice!")).toBeVisible();
 
   for (const [text, url] of [
     ["Build a block", "/docs/blocks/develop"],
