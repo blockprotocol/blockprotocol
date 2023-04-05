@@ -17,8 +17,8 @@ import {
   VerificationCodeScreen,
 } from "../components/screens/verification-code-screen";
 import { useUser } from "../context/user-context";
-import { apiClient } from "../lib/api-client";
 import { SerializedUser } from "../lib/api/model/user.model";
+import { apiClient } from "../lib/api-client";
 import { ApiVerifyEmailRequestBody } from "./api/verify-email.api";
 
 const SIGNUP_PAGE_SCREENS = [

@@ -1,8 +1,6 @@
-import * as Sentry from "@sentry/nextjs";
 import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
 import { SerializedUser } from "../lib/api/model/user.model";
-import { setWordpressSettingsUrlSession } from "../lib/wordpress-settings-url-session";
 
 export type UserState = SerializedUser | "loading" | undefined;
 
