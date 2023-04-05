@@ -43,7 +43,7 @@ services:
     security_opt:
       - no-new-privileges:true
     environment:
-      BLOCK_PROTOCOL_SITE_HOST: http://localhost:3000
+      BLOCK_PROTOCOL_SITE_HOST: https://blockprotocol.org
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
