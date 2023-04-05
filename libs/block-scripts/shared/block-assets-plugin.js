@@ -19,7 +19,7 @@ export class BlockAssetsPlugin {
         "assets-manifest.json",
       );
 
-      const defaultManifest = { "main.cjs": "main.cjs" };
+      const defaultManifest = { "main.js": "main.js" };
 
       const assetsManifest = (await fs.pathExists(assetsManifestFilePath))
         ? await fs.readJson(assetsManifestFilePath).catch(() => {
@@ -29,7 +29,7 @@ export class BlockAssetsPlugin {
         : defaultManifest;
 
       /** @type Record<string, string> */
-      const metadataExtra = { source: assetsManifest["main.cjs"] };
+      const metadataExtra = { source: assetsManifest["main.js"] };
 
       if (stats.compilation.options.mode === "development") {
         metadataExtra.devReloadEndpoint = `ws://localhost:${await getPort(

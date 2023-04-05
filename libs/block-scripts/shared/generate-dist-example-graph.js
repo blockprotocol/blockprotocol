@@ -14,7 +14,7 @@ export const generateDistExampleGraph = async (
   assetsManifest,
   assetsManifestPath,
 ) => {
-  const exampleGraphScriptName = assetsManifest["example-graph.cjs"];
+  const exampleGraphScriptName = assetsManifest["example-graph.js"];
 
   const distExampleGraphPath = path.resolve(
     blockDistDirPath,
@@ -52,7 +52,7 @@ export const generateDistExampleGraph = async (
 
     await fs.remove(sourceScriptExampleGraphPath);
     // eslint-disable-next-line no-param-reassign
-    delete assetsManifest["example-graph.cjs"];
+    delete assetsManifest["example-graph.js"];
 
     await fs.writeJson(assetsManifestPath, assetsManifest, { spaces: 2 });
     return;

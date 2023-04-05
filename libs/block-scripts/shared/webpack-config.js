@@ -57,8 +57,7 @@ const generateBaseWebpackConfig = async (mode) => {
     output: {
       publicPath: "",
       libraryTarget: "commonjs",
-      filename:
-        mode === "production" ? "[name].[contenthash].cjs" : "[name].cjs",
+      filename: mode === "production" ? "[name].[contenthash].js" : "[name].js",
     },
     externals: Object.fromEntries(
       Object.keys(peerDependencies ?? {}).map((key) => [key, key]),
