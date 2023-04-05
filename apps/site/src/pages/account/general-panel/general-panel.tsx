@@ -26,7 +26,7 @@ import { apiClient } from "../../../lib/api-client";
 import { AvatarButton } from "./avatar-button";
 import { AvatarDropzoneInfo } from "./avatar-dropzone-info";
 import { AvatarWithOverlay } from "./avatar-with-overlay";
-import { MiscellaneousTopic } from "./miscellaneous-topic";
+import { LinkButtonWithIntroText } from "./link-button-with-intro-text";
 import { RemoveAvatarConfirmation } from "./remove-avatar-confirmation";
 
 const DragOverlay = styled("div")({
@@ -46,6 +46,7 @@ export const GeneralPanel: FunctionComponent = () => {
     useState(false);
 
   const [isDragging, setDragging] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
   if (!user || user === "loading") {
     return null;
@@ -56,14 +57,19 @@ export const GeneralPanel: FunctionComponent = () => {
   };
 
   const uploadAvatarImage = async (file: File) => {
-    const formData = new FormData();
-    formData.append("image", file);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
 
-    /** @todo handle error & loading state */
-    const res = await apiClient.uploadUserAvatar(formData);
+      /** @todo handle error state */
+      setIsUploadingAvatar(true);
+      const res = await apiClient.uploadAvatar(formData);
 
-    if (res.data) {
-      setUser({ ...user, userAvatarUrl: res.data.avatarUrl });
+      if (res.data) {
+        setUser({ ...user, userAvatarUrl: res.data.avatarUrl });
+      }
+    } finally {
+      setIsUploadingAvatar(false);
     }
   };
 
@@ -84,7 +90,7 @@ export const GeneralPanel: FunctionComponent = () => {
   };
 
   const removeAvatar = async () => {
-    const res = await apiClient.removeUserAvatar();
+    const res = await apiClient.removeAvatar();
 
     if (res.data) {
       setUser({ ...user, userAvatarUrl: undefined });
@@ -150,7 +156,7 @@ export const GeneralPanel: FunctionComponent = () => {
                 }}
                 onSave={async (preferredName) => {
                   /** @todo handle error state */
-                  await apiClient.updateUserPreferredName({ preferredName });
+                  await apiClient.updatePreferredName({ preferredName });
                 }}
               />
               <TextField
@@ -202,6 +208,7 @@ export const GeneralPanel: FunctionComponent = () => {
                       <AvatarButton
                         onClick={clickOnInput}
                         startIcon={<FontAwesomeIcon icon={faUpload} />}
+                        loading={isUploadingAvatar}
                       >
                         Upload {hasAvatar ? "new" : "an"} avatar
                       </AvatarButton>
@@ -238,7 +245,7 @@ export const GeneralPanel: FunctionComponent = () => {
           <TextField
             disabled
             fullWidth
-            label="Email address (cannot be changed))"
+            label="Email address (cannot be changed)"
             value={user.email}
             sx={[!isMobile && { maxWidth: "50%" }]}
           />
@@ -246,13 +253,13 @@ export const GeneralPanel: FunctionComponent = () => {
 
         <PanelSection title="Miscellaneous">
           <Stack gap={2}>
-            <MiscellaneousTopic
+            <LinkButtonWithIntroText
               description="If you would like to request a copy of the data we hold associated
               with your account, click the button below."
               buttonTitle="Request account data"
               buttonHref="/contact"
             />
-            <MiscellaneousTopic
+            <LinkButtonWithIntroText
               description="If you would like to delete your account, click the button below."
               buttonTitle="Permanently delete data"
               buttonHref="/contact"

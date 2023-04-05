@@ -40,13 +40,12 @@ export const SaveOnBlurTextField = ({
 
     try {
       setIsLoading(true);
-      setSavedAtLeastOnce(true);
 
       await onSave(newValue);
+      setSavedAtLeastOnce(true);
 
       setLastSavedVal(newValue);
-      setIsLoading(false);
-    } catch (error) {
+    } finally {
       setIsLoading(false);
     }
   };

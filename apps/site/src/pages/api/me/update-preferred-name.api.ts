@@ -1,23 +1,23 @@
 import { body as bodyValidator, validationResult } from "express-validator";
 
-import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-handler";
-import { SerializedUser } from "../../lib/api/model/user.model";
-import { formatErrors } from "../../util/api";
+import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
+import { SerializedUser } from "../../../lib/api/model/user.model";
+import { formatErrors } from "../../../util/api";
 
-export type ApiUpdateUserPreferredNameRequestBody = {
+export type ApiUpdatePreferredNameRequestBody = {
   preferredName: string;
 };
 
-export type ApiUpdateUserPreferredNameResponse = {
+export type ApiUpdatePreferredNameResponse = {
   user: SerializedUser;
 };
 
 export default createAuthenticatedHandler<
-  ApiUpdateUserPreferredNameRequestBody,
-  ApiUpdateUserPreferredNameResponse
+  ApiUpdatePreferredNameRequestBody,
+  ApiUpdatePreferredNameResponse
 >()
   .use(bodyValidator("preferredName").isString().notEmpty())
-  .post(async (req, res) => {
+  .put(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json(formatErrors(...errors.array()));

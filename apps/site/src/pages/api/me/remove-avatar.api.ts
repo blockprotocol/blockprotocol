@@ -1,12 +1,12 @@
-import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-handler";
-import { formatErrors } from "../../util/api";
+import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
+import { formatErrors } from "../../../util/api";
 
-export type RemoveUserAvatarResponse = "SUCCESS";
+export type RemoveAvatarResponse = "SUCCESS";
 
 export default createAuthenticatedHandler<
   unknown,
-  RemoveUserAvatarResponse
->().get(async (req, res) => {
+  RemoveAvatarResponse
+>().delete(async (req, res) => {
   const { user, db } = req;
 
   try {

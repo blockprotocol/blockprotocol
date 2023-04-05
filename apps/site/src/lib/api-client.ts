@@ -20,6 +20,7 @@ import {
   ApiGenerateApiKeyBody,
   ApiGenerateApiKeyResponse,
 } from "../pages/api/me/generate-api-key.api";
+import { RemoveAvatarResponse } from "../pages/api/me/remove-avatar.api";
 import {
   ApiRevokeApiKeyBody,
   ApiRevokeApiKeyResponse,
@@ -28,7 +29,11 @@ import {
   ApiUpdateApiKeyBody,
   ApiUpdateApiKeyResponse,
 } from "../pages/api/me/update-api-key.api";
-import { RemoveUserAvatarResponse } from "../pages/api/remove-user-avatar.api";
+import {
+  ApiUpdatePreferredNameRequestBody,
+  ApiUpdatePreferredNameResponse,
+} from "../pages/api/me/update-preferred-name.api";
+import { ApiUploadAvatarResponse } from "../pages/api/me/upload-avatar.api";
 import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
@@ -77,11 +82,6 @@ import {
   ApiPropertyTypeUpdateRequest,
   ApiPropertyTypeUpdateResponse,
 } from "../pages/api/types/property-type/update.api";
-import {
-  ApiUpdateUserPreferredNameRequestBody,
-  ApiUpdateUserPreferredNameResponse,
-} from "../pages/api/update-user-preferred-name.api";
-import { ApiUploadUserAvatarResponse } from "../pages/api/upload-user-avatar.api";
 import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
 import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
 import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/entity-type/index.api";
@@ -139,6 +139,18 @@ const get = <ResponseData = any, RequestParams = any>(
     .then(({ data }) => ({ data }))
     .catch(handleAxiosError);
 
+const deleteMethod = <ResponseData = any, RequestParams = any>(
+  url: string,
+  config: AxiosRequestConfig<RequestParams> = {},
+): Promise<{
+  data?: ResponseData;
+  error?: ApiClientError;
+}> =>
+  axiosClient
+    .delete<ResponseData>(url, config)
+    .then(({ data }) => ({ data }))
+    .catch(handleAxiosError);
+
 const post = <RequestData = any, ResponseData = any>(
   url: string,
   requestData?: RequestData,
@@ -177,6 +189,7 @@ export const apiClient = {
   get,
   post,
   put,
+  delete: deleteMethod,
   externalServiceMethod: (requestData: ExternalServiceMethodRequest) =>
     apiClient.post<
       ExternalServiceMethodRequest,
@@ -198,6 +211,18 @@ export const apiClient = {
       requestData,
     ),
   getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/api-keys"),
+  uploadAvatar: (requestData: FormData) =>
+    apiClient.post<FormData, ApiUploadAvatarResponse>(
+      "me/upload-avatar",
+      requestData,
+    ),
+  removeAvatar: () =>
+    apiClient.delete<RemoveAvatarResponse>("me/remove-avatar"),
+  updatePreferredName: (requestData: ApiUpdatePreferredNameRequestBody) =>
+    apiClient.put<
+      ApiUpdatePreferredNameRequestBody,
+      ApiUpdatePreferredNameResponse
+    >("me/update-preferred-name", requestData),
   getUser: ({ shortname }: { shortname: string }) =>
     apiClient.get<ApiUserByShortnameResponse>(`users/${shortname}`),
   getUserBlocks: ({ shortname }: { shortname: string }) =>
@@ -305,18 +330,4 @@ export const apiClient = {
       "set-usage-limit",
       requestData,
     ),
-  uploadUserAvatar: (requestData: FormData) =>
-    apiClient.post<FormData, ApiUploadUserAvatarResponse>(
-      "upload-user-avatar",
-      requestData,
-    ),
-  removeUserAvatar: () =>
-    apiClient.get<RemoveUserAvatarResponse>("remove-user-avatar"),
-  updateUserPreferredName: (
-    requestData: ApiUpdateUserPreferredNameRequestBody,
-  ) =>
-    apiClient.post<
-      ApiUpdateUserPreferredNameRequestBody,
-      ApiUpdateUserPreferredNameResponse
-    >("update-user-preferred-name", requestData),
 };

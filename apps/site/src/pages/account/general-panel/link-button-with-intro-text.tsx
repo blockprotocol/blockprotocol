@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 
 import { Button } from "../../../components/button";
 
-export const MiscellaneousTopic = ({
+export const LinkButtonWithIntroText = ({
   description,
   buttonTitle,
   buttonHref,
