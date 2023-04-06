@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from "@hashintel/design-system";
 import { Link, LinkProps } from "@mui/material";
 import { FunctionComponent } from "react";
 import { CircleQuestionIcon } from "./icons/circle-question";

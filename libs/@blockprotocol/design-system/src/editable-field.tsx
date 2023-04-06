@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { PenIcon, PenToSquareIcon } from "./main";
+import { PenIcon, PenToSquareIcon } from "./icons/icons";
 
 export const EditableField = ({
   editIconFontSize,
