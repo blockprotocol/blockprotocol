@@ -13,7 +13,7 @@ export type ApiVerifyEmailRequestBody = {
 export type ApiVerifyEmailResponse = {
   user: SerializedUser;
   redirectPath?: string;
-  wordPressSettingsUrl?: string;
+  wordpressSettingsUrl?: string;
 };
 
 export default createBaseHandler<
@@ -91,9 +91,9 @@ export default createBaseHandler<
       }
 
       if (emailVerificationCode.variant === "linkWordPress") {
-        const wordPressInstanceUrl =
-          emailVerificationCode?.wordPressUrls?.instance;
-        if (!wordPressInstanceUrl) {
+        const wordpressInstanceUrl =
+          emailVerificationCode?.wordpressUrls?.instance;
+        if (!wordpressInstanceUrl) {
           return res.status(500).json(
             formatErrors({
               msg: "Internal error. Please try again.",
@@ -105,7 +105,7 @@ export default createBaseHandler<
 
         await emailVerificationCode.setToUsed(db);
         await user.addWordPressInstanceUrlAndVerify(db, {
-          wordPressInstanceUrl: wordPressInstanceUrl,
+          wordpressInstanceUrl: wordpressInstanceUrl,
           updateReferrer: true,
         });
       } else {
@@ -119,8 +119,8 @@ export default createBaseHandler<
           ...(emailVerificationCode.variant === "linkWordPress"
             ? {
                 redirectPath: "/dashboard",
-                wordPressSettingsUrl:
-                  emailVerificationCode.wordPressUrls?.settings,
+                wordpressSettingsUrl:
+                  emailVerificationCode.wordpressUrls?.settings,
               }
             : {}),
         }),

@@ -12,9 +12,9 @@ const defaultApiKey =
   "b10ck5.00000000000000000000000000000000.00000000-0000-0000-0000-000000000000";
 
 export const DashboardWordPressSection = ({
-  wordPressSettingsUrl,
+  wordpressSettingsUrl,
 }: {
-  wordPressSettingsUrl: string;
+  wordpressSettingsUrl: string;
 }) => {
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
@@ -96,7 +96,7 @@ export const DashboardWordPressSection = ({
             </Box>{" "}
             to copy the key below to your clipboard, then head back to your{" "}
             <Link
-              href={wordPressSettingsUrl}
+              href={wordpressSettingsUrl}
               rel="noopener noreferrer"
               target="_blank"
             >

@@ -57,7 +57,7 @@ export type UserProperties = {
   stripeSubscriptionTier?: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
-  wordPressInstanceUrls?: string[];
+  wordpressInstanceUrls?: string[];
   referrer?: "WordPress" | "Block Protocol";
 };
 
@@ -91,7 +91,7 @@ export class User {
   stripeSubscriptionTier?: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
-  wordPressInstanceUrls?: string[];
+  wordpressInstanceUrls?: string[];
   referrer: UserProperties["referrer"];
 
   static COLLECTION_NAME = "bp-users";
@@ -122,7 +122,7 @@ export class User {
     this.stripeSubscriptionTier = args.stripeSubscriptionTier;
     this.canMakeApiServiceCalls = args.canMakeApiServiceCalls;
     this.usageLimitCents = args.usageLimitCents;
-    this.wordPressInstanceUrls = args.wordPressInstanceUrls;
+    this.wordpressInstanceUrls = args.wordpressInstanceUrls;
     this.referrer = args.referrer;
   }
 
@@ -247,7 +247,7 @@ export class User {
   static async create(
     db: Db,
     {
-      wordPressInstanceUrl,
+      wordpressInstanceUrl,
       ...params
     }: {
       email: string;
@@ -255,12 +255,12 @@ export class User {
       referrer: NonNullable<UserProperties["referrer"]>;
       preferredName?: string;
       shortname?: string;
-      wordPressInstanceUrl?: string;
+      wordpressInstanceUrl?: string;
     },
   ): Promise<User> {
     const userProperties: UserProperties = {
       ...params,
-      wordPressInstanceUrls: wordPressInstanceUrl ? [wordPressInstanceUrl] : [],
+      wordpressInstanceUrls: wordpressInstanceUrl ? [wordpressInstanceUrl] : [],
     };
 
     const { insertedId } = await db
@@ -323,20 +323,20 @@ export class User {
   async addWordPressInstanceUrlAndVerify(
     db: Db,
     {
-      wordPressInstanceUrl,
+      wordpressInstanceUrl,
       updateReferrer,
     }: {
-      wordPressInstanceUrl: string;
+      wordpressInstanceUrl: string;
       updateReferrer: boolean;
     },
   ) {
     return await this.update(db, {
-      ...(this.wordPressInstanceUrls?.includes(wordPressInstanceUrl)
+      ...(this.wordpressInstanceUrls?.includes(wordpressInstanceUrl)
         ? {}
         : {
-            wordPressInstanceUrls: [
-              ...(this.wordPressInstanceUrls ?? []),
-              wordPressInstanceUrl,
+            wordpressInstanceUrls: [
+              ...(this.wordpressInstanceUrls ?? []),
+              wordpressInstanceUrl,
             ],
           }),
       ...(updateReferrer ? { referrer: "WordPress" } : {}),
@@ -493,11 +493,11 @@ export class User {
 
   async sendLinkWordPressCode(
     db: Db,
-    wordPressUrls: VerificationCodeWordPressUrls,
+    wordpressUrls: VerificationCodeWordPressUrls,
   ): Promise<VerificationCode> {
     const emailVerificationCode = await this.createVerificationCode(db, {
       variant: "linkWordPress",
-      wordPressUrls,
+      wordpressUrls,
     });
 
     const magicLinkQueryParams: (

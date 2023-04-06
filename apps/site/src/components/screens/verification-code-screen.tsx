@@ -46,7 +46,7 @@ type VerificationCodeScreenProps = {
     data?: {
       user: SerializedUser;
       redirectPath?: string;
-      wordPressSettingsUrl?: string;
+      wordpressSettingsUrl?: string;
     };
     error?: ApiClientError;
   }>;
@@ -135,7 +135,7 @@ export const VerificationCodeScreen: FunctionComponent<
         if (error) {
           setApiSubmittedErrorMessage(error.message);
         } else if (data) {
-          setWordPressSettingsUrlSession(data.wordPressSettingsUrl);
+          setWordPressSettingsUrlSession(data.wordpressSettingsUrl);
           onSubmit(data.user, data.redirectPath);
         }
       }

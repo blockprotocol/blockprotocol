@@ -6,8 +6,8 @@ import { formatErrors } from "../../util/api";
 
 type ApiLinkWordPressRequestBody = {
   email: string;
-  wordPressInstanceUrl: string;
-  wordPressSettingsUrl: string;
+  wordpressInstanceUrl: string;
+  wordpressSettingsUrl: string;
 };
 
 type ApiLinkWordPressResponse = {
@@ -21,7 +21,7 @@ export default createBaseHandler<
 >()
   .use(bodyValidator("email").isEmail().toLowerCase())
   .use(
-    bodyValidator("wordPressInstanceUrl").isURL({
+    bodyValidator("wordpressInstanceUrl").isURL({
       protocols: ["http", "https"],
       require_protocol: true,
       require_tld: process.env.NODE_ENV === "production",
@@ -30,7 +30,7 @@ export default createBaseHandler<
     }),
   )
   .use(
-    bodyValidator("wordPressSettingsUrl").isURL({
+    bodyValidator("wordpressSettingsUrl").isURL({
       protocols: ["http", "https"],
       require_protocol: true,
       require_tld: process.env.NODE_ENV === "production",
@@ -45,7 +45,7 @@ export default createBaseHandler<
     }
 
     const { db, body } = req;
-    const { email, wordPressInstanceUrl, wordPressSettingsUrl } = body;
+    const { email, wordpressInstanceUrl, wordpressSettingsUrl } = body;
 
     // We don't set referrer or instanceUrl for existing users until verification for security
     const user =
@@ -57,7 +57,7 @@ export default createBaseHandler<
         email,
         hasVerifiedEmail: false,
         referrer: "WordPress",
-        wordPressInstanceUrl,
+        wordpressInstanceUrl,
       }));
 
     if (await user.hasExceededEmailVerificationRateLimit(db)) {
@@ -69,8 +69,8 @@ export default createBaseHandler<
     }
 
     const { id: verificationCodeId } = await user.sendLinkWordPressCode(db, {
-      instance: wordPressInstanceUrl,
-      settings: wordPressSettingsUrl,
+      instance: wordpressInstanceUrl,
+      settings: wordpressSettingsUrl,
     });
 
     res.status(200).json({ userId: user.id, verificationCodeId });

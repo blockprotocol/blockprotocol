@@ -21,7 +21,7 @@ import { getWordPressSettingsUrlSessionOnce } from "../../lib/wordpress-settings
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName, shortname } = user ?? {};
 
-  const [wordPressSettingsUrl, setWordPressSettingsUrl] = useState<
+  const [wordpressSettingsUrl, setWordPressSettingsUrl] = useState<
     string | null
   >(null);
 
@@ -71,9 +71,9 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
           >
             Welcome, {userName}!
           </Typography>
-          {typeof wordPressSettingsUrl === "string" ? (
+          {typeof wordpressSettingsUrl === "string" ? (
             <DashboardWordPressSection
-              wordPressSettingsUrl={wordPressSettingsUrl}
+              wordpressSettingsUrl={wordpressSettingsUrl}
             />
           ) : null}
         </Container>

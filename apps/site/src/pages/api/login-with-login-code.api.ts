@@ -13,7 +13,7 @@ export type ApiLoginWithLoginCodeRequestBody = {
 export type ApiLoginWithLoginCodeResponse = {
   user: SerializedUser;
   redirectPath?: string;
-  wordPressSettingsUrl?: string;
+  wordpressSettingsUrl?: string;
 };
 
 export default createBaseHandler<
@@ -87,8 +87,8 @@ export default createBaseHandler<
       }
 
       if (loginCode.variant === "linkWordPress") {
-        const wordPressInstanceUrl = loginCode.wordPressUrls?.instance;
-        if (!wordPressInstanceUrl) {
+        const wordpressInstanceUrl = loginCode.wordpressUrls?.instance;
+        if (!wordpressInstanceUrl) {
           return res.status(500).json(
             formatErrors({
               msg: "Internal error. Please try again.",
@@ -101,7 +101,7 @@ export default createBaseHandler<
         await loginCode.setToUsed(db);
 
         await user.addWordPressInstanceUrlAndVerify(db, {
-          wordPressInstanceUrl: wordPressInstanceUrl,
+          wordpressInstanceUrl: wordpressInstanceUrl,
           updateReferrer: false,
         });
       } else {
@@ -114,7 +114,7 @@ export default createBaseHandler<
           ...(loginCode.variant === "linkWordPress"
             ? {
                 redirectPath: "/dashboard",
-                wordPressSettingsUrl: loginCode.wordPressUrls?.settings,
+                wordpressSettingsUrl: loginCode.wordpressUrls?.settings,
               }
             : {}),
         }),

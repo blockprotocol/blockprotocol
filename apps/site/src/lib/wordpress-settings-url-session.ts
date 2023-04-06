@@ -1,21 +1,21 @@
-export const wordPressSettingsUrlSessionKey =
-  "blockprotocol.dashboard.wordPressSettingsUrl";
+export const wordpressSettingsUrlSessionKey =
+  "blockprotocol.dashboard.wordpressSettingsUrl";
 
 export const setWordPressSettingsUrlSession = (
-  wordPressSettingsUrl: string | null | undefined,
+  wordpressSettingsUrl: string | null | undefined,
 ) => {
   if (typeof window === "undefined") {
     throw new Error("Cannot call setWordPressSettingsUrlSession on server");
   }
 
   try {
-    if (wordPressSettingsUrl) {
+    if (wordpressSettingsUrl) {
       window.sessionStorage.setItem(
-        wordPressSettingsUrlSessionKey,
-        wordPressSettingsUrl,
+        wordpressSettingsUrlSessionKey,
+        wordpressSettingsUrl,
       );
     } else {
-      window.sessionStorage.removeItem(wordPressSettingsUrlSessionKey);
+      window.sessionStorage.removeItem(wordpressSettingsUrlSessionKey);
     }
   } catch (_) {
     // sessionStorage is disabled, do nothing…
@@ -28,9 +28,9 @@ export const getWordPressSettingsUrlSessionOnce = () => {
   }
 
   try {
-    const value = window.sessionStorage.getItem(wordPressSettingsUrlSessionKey);
+    const value = window.sessionStorage.getItem(wordpressSettingsUrlSessionKey);
 
-    window.sessionStorage.removeItem(wordPressSettingsUrlSessionKey);
+    window.sessionStorage.removeItem(wordpressSettingsUrlSessionKey);
 
     return value;
   } catch {
