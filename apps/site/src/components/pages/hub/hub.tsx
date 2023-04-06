@@ -48,7 +48,7 @@ const HubItem = ({
         <Box component="img" sx={{ width: 24, minWidth: 24 }} src={image} />
       </Link>
     ) : null}
-    <Stack spacing={0.75} minWidth={0}>
+    <Stack spacing={0.75}>
       <Typography
         component={Link}
         href={url}
