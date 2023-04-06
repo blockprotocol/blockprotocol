@@ -1,33 +1,73 @@
 @font-face {
     font-family: "Inter";
     font-weight: 300;
-    src: url("./fonts/inter-light.ttf") format("trueType");
+    src: url("../fonts/inter-light.ttf") format("trueType");
 }
 
 @font-face {
     font-family: "Inter";
     font-weight: 400;
-    src: url("./fonts/inter-regular.ttf") format("trueType");
+    src: url("../fonts/inter-regular.ttf") format("trueType");
 }
 
 @font-face {
     font-family: "Inter";
     font-weight: 500;
-    src: url("./fonts/inter-medium.ttf") format("trueType");
+    src: url("../fonts/inter-medium.ttf") format("trueType");
 }
 
 @font-face {
     font-family: "Inter";
     font-weight: 600;
-    src: url("./fonts/inter-semibold.ttf") format("trueType");
+    src: url("../fonts/inter-semibold.ttf") format("trueType");
 }
 
 @font-face {
     font-family: "Inter";
     font-weight: 700;
-    src: url("./fonts/inter-bold.ttf") format("trueType");
+    src: url("../fonts/inter-bold.ttf") format("trueType");
 }
 
+.BPSettingsBanner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 24px;
+    gap: 2px;
+    margin-bottom: 34px;
+    background: #F4F3FF;
+    border: 1px solid #D9D6FE;
+    border-radius: 6px;
+    color: #4732BA;
+    font-family: Inter, sans-serif;
+}
+
+.BPSettingsBannerHeading {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.7;
+    margin: 0;
+    color: inherit;
+}
+
+.BPSettingsBannerHeading svg {
+    fill: currentColor;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #AD9EFF;
+    margin-right: 10px;
+}
+
+.BPSettingsBanner p {
+    font-size: 13px;
+    line-height: 150%;
+    margin: 0;
+}
 
 .BPSettingsInput {
     box-sizing: border-box;
@@ -96,6 +136,7 @@
     font-weight: 400;
     font-size: 13px;
     line-height: 16px;
+    max-width: 826px;
 }
 
 .BPActivateHeading {
