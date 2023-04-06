@@ -28,18 +28,26 @@
     src: url("../fonts/inter-bold.ttf") format("trueType");
 }
 
+svg.fa {
+    fill: currentColor;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+}
+
 .BPSettingsBanner {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 16px 24px;
     gap: 2px;
-    margin-bottom: 34px;
+    margin: 34px 0;
     background: #F4F3FF;
     border: 1px solid #D9D6FE;
     border-radius: 6px;
     color: #4732BA;
     font-family: Inter, sans-serif;
+    max-width: 826px;
 }
 
 .BPSettingsBannerHeading {
@@ -52,10 +60,6 @@
 }
 
 .BPSettingsBannerHeading svg {
-    fill: currentColor;
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.125em;
     font-weight: 400;
     font-size: 15px;
     line-height: 1.7;
@@ -67,6 +71,54 @@
     font-size: 13px;
     line-height: 150%;
     margin: 0;
+}
+
+p.BPSettingsBannerInstructionsPara {
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.BPSettingsBannerInstructionsHeader {
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1.7;
+    text-transform: uppercase;
+    margin: 12px 0 10px;
+}
+
+.BPSettingsBannerInstructions li {
+    display: flex;
+    font-size: 13px;
+    align-items: center;
+}
+
+.BPSettingsBannerInstructions li:not(:last-of-type) {
+    margin-bottom: 14px;
+}
+
+.BPSettingsBannerInstructions li .fa {
+    margin-left: 4px;
+}
+
+.BPSettingsBannerInstructionsInsert {
+    width: 32px;
+    height: 32px;
+    display: block;
+    margin-left: 12px;
+}
+
+.BPSettingsBannerInstructionsBadge {
+    width: 18px;
+    height: 18px;
+    background: #E4DDFD;
+    border-radius: 18px;
+    font-family: 'Helvetica', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    color: #4732BA;
+    text-align: center;
+    line-height: 18px;
+    margin-right: 8px;
 }
 
 .BPSettingsInput {
@@ -118,10 +170,6 @@
 }
 
 .BPSettingsButtonSvg {
-    fill: currentColor;
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.125em;
     margin-left: 8px;
 }
 
@@ -130,13 +178,11 @@
 }
 
 .BPActivate {
-    margin-top: 34px;
     font-family: 'Helvetica', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 13px;
     line-height: 16px;
-    max-width: 826px;
 }
 
 .BPActivateHeading {

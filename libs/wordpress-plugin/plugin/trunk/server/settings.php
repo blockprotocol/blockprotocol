@@ -343,6 +343,29 @@ function block_protocol_field_hidden_renderer($field)
 
 function block_protocol_options_page_settings_html()
 {
+    if ($_GET['activated'] === 'true') {
+        ?>
+        <div class="BPSettingsBanner">
+            <p class="BPSettingsBannerInstructionsPara"><strong>Success!</strong> You now have access to <strong>Þ</strong> blocks on this website.</p>
+            <div class="BPSettingsBannerInstructions">
+                <h4 class="BPSettingsBannerInstructionsHeader">Instructions</h4>
+                <ul>
+                    <li>
+                        <div class="BPSettingsBannerInstructionsBadge">1</div>
+                        Head to a new post or page, and click the blue “Toggle block inserter” button in the top-left that looks like this
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="fa"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="BPSettingsBannerInstructionsInsert"><g fill="none" fill-rule="evenodd"><rect fill="#007CBA" width="32" height="32" rx="2"/><path fill="#FFF" d="M15 15h-5v2h5v5h2v-5h5v-2h-5v-5h-2z"/></g></svg>
+                    </li>
+                    <li>
+                        <div class="BPSettingsBannerInstructionsBadge">2</div>
+                        Under the “Blocks” tab, choose any block from the “Block Protocol” section
+                    </li>
+                </ul>
+            </div>
+        </div>
+            <?php
+    }
+
     ?>
     <form action="options.php" method="post" style="margin-top:30px;">
         <?php
