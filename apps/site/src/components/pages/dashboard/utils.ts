@@ -10,7 +10,7 @@ export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
   },
   {
     tabTitle: "My Account",
-    tabHref: "/account",
+    tabHref: "/account/general",
   },
 ];
 
@@ -56,7 +56,7 @@ export const getDashboardSectionCards = (props: {
           "Types are a formal way to describe data, links, properties and entities",
         link: {
           title: "Create a Type",
-          href: `${props.profileLink}/all-types`,
+          href: `${props.profileLink}/types`,
         },
       },
     ],

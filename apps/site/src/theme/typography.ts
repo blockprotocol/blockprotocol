@@ -14,6 +14,7 @@ export const CODE_FONT_FAMILY = `"JetBrains Mono", Monaco, monospace`;
 
 export const typography: ThemeOptions["typography"] = {
   fontSize: 16,
+  fontFamily: COPY_FONT_FAMILY,
   bpTitle: {
     fontFamily: HEADING_FONT_FAMILY,
     fontSize: "var(--step-6)",
