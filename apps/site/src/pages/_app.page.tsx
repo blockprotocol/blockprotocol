@@ -25,7 +25,7 @@ import {
   UserState,
 } from "../context/user-context";
 import { apiClient } from "../lib/api-client";
-import { setWordPressSettingsUrlSession } from "../lib/wordpress-settings-url-session";
+import { setWordPressSettingsUrlSession } from "../lib/word-press-settings-url-session";
 import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
 import { ApiMeResponse } from "./api/me.api";

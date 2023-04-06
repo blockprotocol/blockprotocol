@@ -13,7 +13,7 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { SerializedUser } from "../../lib/api/model/user.model";
 import { ApiClientError } from "../../lib/api-client";
-import { setWordPressSettingsUrlSession } from "../../lib/wordpress-settings-url-session";
+import { setWordPressSettingsUrlSession } from "../../lib/word-press-settings-url-session";
 import { Button } from "../button";
 import {
   isVerificationCodeFormatted,

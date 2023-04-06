@@ -16,7 +16,7 @@ import {
   DashboardSection,
   getDashboardSectionCards,
 } from "../../components/pages/dashboard/utils";
-import { getWordPressSettingsUrlSessionOnce } from "../../lib/wordpress-settings-url-session";
+import { getWordPressSettingsUrlSessionOnce } from "../../lib/word-press-settings-url-session";
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName, shortname } = user ?? {};
