@@ -101,7 +101,7 @@ export default createBaseHandler<
         await loginCode.setToUsed(db);
 
         await user.addWordPressInstanceUrlAndVerify(db, {
-          wordpressInstanceUrl: wordpressInstanceUrl,
+          wordpressInstanceUrl,
           updateReferrer: false,
         });
       } else {
