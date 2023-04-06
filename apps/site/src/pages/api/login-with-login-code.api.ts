@@ -13,7 +13,7 @@ export type ApiLoginWithLoginCodeRequestBody = {
 export type ApiLoginWithLoginCodeResponse = {
   user: SerializedUser;
   redirectPath?: string;
-  wordpressSettingsUrl?: string;
+  wordPressSettingsUrl?: string;
 };
 
 export default createBaseHandler<
@@ -60,7 +60,7 @@ export default createBaseHandler<
 
     const loginCode = await user.getVerificationCode(db, {
       verificationCodeId,
-      variant: ["login", "linkWordpress"],
+      variant: ["login", "linkWordPress"],
     });
 
     if (!loginCode) {
@@ -86,9 +86,9 @@ export default createBaseHandler<
         );
       }
 
-      if (loginCode.variant === "linkWordpress") {
-        const wordpressInstanceUrl = loginCode.wordPressUrls?.instance;
-        if (!wordpressInstanceUrl) {
+      if (loginCode.variant === "linkWordPress") {
+        const wordPressInstanceUrl = loginCode.wordPressUrls?.instance;
+        if (!wordPressInstanceUrl) {
           return res.status(500).json(
             formatErrors({
               msg: "Internal error. Please try again.",
@@ -100,8 +100,8 @@ export default createBaseHandler<
 
         await loginCode.setToUsed(db);
 
-        await user.addWordpressInstanceUrlAndVerify(db, {
-          wordpressInstanceUrl,
+        await user.addWordPressInstanceUrlAndVerify(db, {
+          wordPressInstanceUrl: wordPressInstanceUrl,
           updateReferrer: false,
         });
       } else {
@@ -111,10 +111,10 @@ export default createBaseHandler<
       req.login(user, () =>
         res.status(200).json({
           user: user.serialize(true),
-          ...(loginCode.variant === "linkWordpress"
+          ...(loginCode.variant === "linkWordPress"
             ? {
                 redirectPath: "/dashboard",
-                wordpressSettingsUrl: loginCode.wordPressUrls?.settings,
+                wordPressSettingsUrl: loginCode.wordPressUrls?.settings,
               }
             : {}),
         }),

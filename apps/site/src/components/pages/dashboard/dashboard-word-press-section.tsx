@@ -11,10 +11,10 @@ import { Link } from "../../link";
 const defaultApiKey =
   "b10ck5.00000000000000000000000000000000.00000000-0000-0000-0000-000000000000";
 
-export const DashboardWordpressSection = ({
-  wordpressSettingsUrl,
+export const DashboardWordPressSection = ({
+  wordPressSettingsUrl,
 }: {
-  wordpressSettingsUrl: string;
+  wordPressSettingsUrl: string;
 }) => {
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
@@ -91,13 +91,12 @@ export const DashboardWordpressSection = ({
           }}
         >
           <Typography mb={3}>
-            {/** @todo link wordpress */}
             <Box component="span" fontWeight={700}>
               Click or tap
             </Box>{" "}
             to copy the key below to your clipboard, then head back to your{" "}
             <Link
-              href={wordpressSettingsUrl}
+              href={wordPressSettingsUrl}
               rel="noopener noreferrer"
               target="_blank"
             >

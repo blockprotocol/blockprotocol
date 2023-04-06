@@ -57,8 +57,8 @@ export type UserProperties = {
   stripeSubscriptionTier?: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
-  wordpressInstanceUrls?: string[];
-  referrer?: "wordpress" | "blockprotocol";
+  wordPressInstanceUrls?: string[];
+  referrer?: "WordPress" | "Block Protocol";
 };
 
 export type UserAvatarProperties = {
@@ -91,7 +91,7 @@ export class User {
   stripeSubscriptionTier?: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
-  wordpressInstanceUrls?: string[];
+  wordPressInstanceUrls?: string[];
   referrer: UserProperties["referrer"];
 
   static COLLECTION_NAME = "bp-users";
@@ -122,7 +122,7 @@ export class User {
     this.stripeSubscriptionTier = args.stripeSubscriptionTier;
     this.canMakeApiServiceCalls = args.canMakeApiServiceCalls;
     this.usageLimitCents = args.usageLimitCents;
-    this.wordpressInstanceUrls = args.wordpressInstanceUrls;
+    this.wordPressInstanceUrls = args.wordPressInstanceUrls;
     this.referrer = args.referrer;
   }
 
@@ -247,7 +247,7 @@ export class User {
   static async create(
     db: Db,
     {
-      wordpressInstanceUrl,
+      wordPressInstanceUrl,
       ...params
     }: {
       email: string;
@@ -255,12 +255,12 @@ export class User {
       referrer: NonNullable<UserProperties["referrer"]>;
       preferredName?: string;
       shortname?: string;
-      wordpressInstanceUrl?: string;
+      wordPressInstanceUrl?: string;
     },
   ): Promise<User> {
     const userProperties: UserProperties = {
       ...params,
-      wordpressInstanceUrls: wordpressInstanceUrl ? [wordpressInstanceUrl] : [],
+      wordPressInstanceUrls: wordPressInstanceUrl ? [wordPressInstanceUrl] : [],
     };
 
     const { insertedId } = await db
@@ -320,26 +320,26 @@ export class User {
     return this;
   }
 
-  async addWordpressInstanceUrlAndVerify(
+  async addWordPressInstanceUrlAndVerify(
     db: Db,
     {
-      wordpressInstanceUrl,
+      wordPressInstanceUrl,
       updateReferrer,
     }: {
-      wordpressInstanceUrl: string;
+      wordPressInstanceUrl: string;
       updateReferrer: boolean;
     },
   ) {
     return await this.update(db, {
-      ...(this.wordpressInstanceUrls?.includes(wordpressInstanceUrl)
+      ...(this.wordPressInstanceUrls?.includes(wordPressInstanceUrl)
         ? {}
         : {
-            wordpressInstanceUrls: [
-              ...(this.wordpressInstanceUrls ?? []),
-              wordpressInstanceUrl,
+            wordPressInstanceUrls: [
+              ...(this.wordPressInstanceUrls ?? []),
+              wordPressInstanceUrl,
             ],
           }),
-      ...(updateReferrer ? { referrer: "wordpress" } : {}),
+      ...(updateReferrer ? { referrer: "WordPress" } : {}),
       hasVerifiedEmail: true,
     });
   }
@@ -491,12 +491,12 @@ export class User {
     return emailVerificationCode;
   }
 
-  async sendLinkWordpressCode(
+  async sendLinkWordPressCode(
     db: Db,
     wordPressUrls: VerificationCodeWordPressUrls,
   ): Promise<VerificationCode> {
     const emailVerificationCode = await this.createVerificationCode(db, {
-      variant: "linkWordpress",
+      variant: "linkWordPress",
       wordPressUrls,
     });
 
@@ -519,22 +519,22 @@ export class User {
     ).toString()}`;
 
     // Doesn't make sense to include the code itself as they won't be on the
-    // page to enter the code, as this will be triggered by the Wordpress
+    // page to enter the code, as this will be triggered by the WordPress
     // backend
     if (shouldUseDummyEmailService) {
       await sendDummyEmail([
-        `Magic Link to activate Wordpress plugin: ${magicLink}`,
+        `Magic Link to activate WordPress plugin: ${magicLink}`,
       ]);
     } else {
       await sendMail({
         to: this.email,
-        subject: "Activate your Block Protocol Wordpress plugin",
+        subject: "Activate your Block Protocol WordPress plugin",
         html: dedent`
           <p>To ${
             this.hasVerifiedEmail
               ? "login to your Block Protocol account"
               : "finish creating your Block Protocol account"
-          }, and to link it to your Wordpress instance, <a href="${magicLink}">click here</a>.</p>
+          }, and to link it to your WordPress instance, <a href="${magicLink}">click here</a>.</p>
           <p><em>Alternatively, you copy the URL and paste it into your browser: ${magicLink}</em></p>
         `,
       });

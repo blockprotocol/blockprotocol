@@ -25,7 +25,7 @@ import {
   UserState,
 } from "../context/user-context";
 import { apiClient } from "../lib/api-client";
-import { setWordpressSettingsUrlSession } from "../lib/wordpress-settings-url-session";
+import { setWordPressSettingsUrlSession } from "../lib/wordpress-settings-url-session";
 import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
 import { ApiMeResponse } from "./api/me.api";
@@ -97,7 +97,7 @@ const MyApp = ({
     Sentry.configureScope((scope) => {
       scope.clear();
     });
-    setWordpressSettingsUrlSession(null);
+    setWordPressSettingsUrlSession(null);
     setUser(undefined);
   }, []);
 

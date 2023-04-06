@@ -6,8 +6,8 @@ import { formatErrors } from "../../util/api";
 
 type ApiLinkWordPressRequestBody = {
   email: string;
-  wordpressInstanceUrl: string;
-  wordpressSettingsUrl: string;
+  wordPressInstanceUrl: string;
+  wordPressSettingsUrl: string;
 };
 
 type ApiLinkWordPressResponse = {
@@ -21,7 +21,7 @@ export default createBaseHandler<
 >()
   .use(bodyValidator("email").isEmail().toLowerCase())
   .use(
-    bodyValidator("wordpressInstanceUrl").isURL({
+    bodyValidator("wordPressInstanceUrl").isURL({
       protocols: ["http", "https"],
       require_protocol: true,
       require_tld: process.env.NODE_ENV === "production",
@@ -30,7 +30,7 @@ export default createBaseHandler<
     }),
   )
   .use(
-    bodyValidator("wordpressSettingsUrl").isURL({
+    bodyValidator("wordPressSettingsUrl").isURL({
       protocols: ["http", "https"],
       require_protocol: true,
       require_tld: process.env.NODE_ENV === "production",
@@ -45,7 +45,7 @@ export default createBaseHandler<
     }
 
     const { db, body } = req;
-    const { email, wordpressInstanceUrl, wordpressSettingsUrl } = body;
+    const { email, wordPressInstanceUrl, wordPressSettingsUrl } = body;
 
     // We don't set referrer or instanceUrl for existing users until verification for security
     const user =
@@ -56,8 +56,8 @@ export default createBaseHandler<
       (await User.create(db, {
         email,
         hasVerifiedEmail: false,
-        referrer: "wordpress",
-        wordpressInstanceUrl,
+        referrer: "WordPress",
+        wordPressInstanceUrl,
       }));
 
     if (await user.hasExceededEmailVerificationRateLimit(db)) {
@@ -68,9 +68,9 @@ export default createBaseHandler<
       );
     }
 
-    const { id: verificationCodeId } = await user.sendLinkWordpressCode(db, {
-      instance: wordpressInstanceUrl,
-      settings: wordpressSettingsUrl,
+    const { id: verificationCodeId } = await user.sendLinkWordPressCode(db, {
+      instance: wordPressInstanceUrl,
+      settings: wordPressSettingsUrl,
     });
 
     res.status(200).json({ userId: user.id, verificationCodeId });

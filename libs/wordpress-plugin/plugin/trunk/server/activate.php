@@ -21,8 +21,8 @@ function block_protocol_link_by_email()
     ];
     $data = [
         'email' => $email,
-        'wordpressInstanceUrl' => get_site_url(),
-        'wordpressSettingsUrl' => $url,
+        'wordPressInstanceUrl' => get_site_url(),
+        'wordPressSettingsUrl' => $url,
     ];
 
     $respStr = wp_remote_post($apiUrl, [

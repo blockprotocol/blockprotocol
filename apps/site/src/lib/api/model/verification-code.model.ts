@@ -5,7 +5,7 @@ import { rword } from "rword";
 import { formatErrors } from "../../../util/api";
 import { User } from "./user.model";
 
-export type VerificationCodeVariant = "login" | "email" | "linkWordpress";
+export type VerificationCodeVariant = "login" | "email" | "linkWordPress";
 
 export type VerificationCodeWordPressUrls = {
   settings: string;

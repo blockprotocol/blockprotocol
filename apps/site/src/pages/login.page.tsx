@@ -112,7 +112,7 @@ const LoginPage: NextPage = () => {
   useEffect(() => {
     // We may not have parsed the query yet, so it may be too soon to redirect,
     // and we don't want to redirect before checking the verification code as
-    // it may be a link to wordpress one
+    // it may be a link to WordPress one
     if (checkedQueryParams && user && !verificationCodeToCheck) {
       redirectRef.current();
     }
