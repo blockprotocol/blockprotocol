@@ -310,6 +310,9 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
         ":active": activeStyles,
         "&.Mui-disabled": disabledStyles,
         ":focus-visible:after": focusVisibleAfterStyles,
+        ".bp-btn-loading": {
+          color: baseStyles.color,
+        },
       };
     },
     endIcon: {
