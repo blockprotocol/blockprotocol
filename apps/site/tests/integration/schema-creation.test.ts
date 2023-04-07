@@ -12,7 +12,7 @@ test("user should be able to create an Entity Type", async ({ page }) => {
 
   await login({ page });
 
-  await page.goto(`/@alice/all-types`);
+  await page.goto(`/@alice/types`);
 
   const existingSchemaName = "Testing";
   const newSchemaName = "Testing2";

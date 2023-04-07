@@ -18,6 +18,18 @@ export const MuiOutlinedInputThemeOptions: Components<Theme>["MuiOutlinedInput"]
             borderColor: theme.palette.purple[600],
           },
         },
+        "&.Mui-disabled": {
+          backgroundColor: theme.palette.gray[10],
+
+          ".MuiOutlinedInput-input": {
+            color: theme.palette.gray[70],
+            "-webkit-text-fill-color": theme.palette.gray[70],
+          },
+
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.gray[30],
+          },
+        },
         "&.Mui-error": {
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: theme.palette.red[600],
