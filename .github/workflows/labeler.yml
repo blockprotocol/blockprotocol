@@ -4,7 +4,7 @@ on:
 
 jobs:
   triage:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: kachkaev/labeler@305cfeb74cfa5c4878bf6418b4815a4106f2e345
