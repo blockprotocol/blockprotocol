@@ -1,4 +1,4 @@
-import { getAllPages } from "../util/mdx-utils";
+import { getAllPages, getPage, getRoadmapPages } from "../util/mdx-utils";
 
 export type SiteMapPageSection = {
   title: string;
@@ -21,6 +21,15 @@ export type SiteMap = {
 export const getDocumentationSubPages = (): SiteMapPage[] =>
   getAllPages({ pathToDirectory: "docs" });
 
+export const getSpecPage = (): SiteMapPage => ({
+  ...getPage({ pathToDirectory: "spec", fileName: "00_index.mdx" }),
+  subPages: getAllPages({ pathToDirectory: "spec", filterIndexPage: true }),
+});
+
+export const getRoadmapPage = (): SiteMapPage => ({
+  ...getRoadmapPages({ pathToDirectory: "roadmap", fileName: "00_index.mdx" }),
+});
+
 export const getLegalSubPages = (): SiteMapPage[] =>
   getAllPages({ pathToDirectory: "legal" });
 
@@ -37,7 +46,11 @@ export const generateSiteMap = (): SiteMap => ({
     {
       title: "Docs",
       href: "/docs",
-      subPages: getDocumentationSubPages(),
+      subPages: [
+        ...getDocumentationSubPages(),
+        getSpecPage(),
+        getRoadmapPage(),
+      ],
     },
     {
       title: "Legal",

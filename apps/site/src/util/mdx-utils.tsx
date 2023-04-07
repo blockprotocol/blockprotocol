@@ -272,3 +272,108 @@ export const getAllPages = (params: {
     });
   });
 };
+
+export const getRoadmapPages = (params: {
+  pathToDirectory: string;
+  fileName: string;
+}): SiteMapPage => {
+  const { pathToDirectory, fileName } = params;
+
+  const markdownFilePath = `src/_pages/${pathToDirectory}/${fileName}`;
+  const source = fs.readFileSync(path.join(process.cwd(), markdownFilePath));
+
+  const { content } = matter(source);
+
+  const ast = parseAST(content);
+
+  const headings = getHeadingsFromParent(ast);
+
+  const h1 = headings.find(({ depth }) => depth === 1);
+
+  const title = h1 ? getVisibleText(h1) : "Unknown";
+
+  const name = parseNameFromFileName(fileName);
+
+  return {
+    title,
+    href: `/${pathToDirectory.replace(/\d+_/g, "")}${
+      name === "index" ? "" : `/${slugify(name, { lower: true })}`
+    }`,
+    markdownFilePath,
+    sections: headings
+      .reduce<SiteMapPageSection[]>((prev, currentHeading) => {
+        const newSection = {
+          title: getVisibleText(currentHeading),
+          anchor: slugify(getFullText(currentHeading), {
+            lower: true,
+          }),
+          subSections: [],
+        };
+
+        if (currentHeading.depth === 2) {
+          return [...prev, newSection];
+        } else if (currentHeading.depth === 3) {
+          return prev.length > 0
+            ? [
+                ...prev.slice(0, -1),
+                {
+                  ...prev[prev.length - 1]!,
+                  subSections: [
+                    ...(prev[prev.length - 1]!.subSections || []),
+                    newSection,
+                  ],
+                },
+              ]
+            : prev;
+        }
+        return prev;
+      }, [])
+      .filter((heading) => heading.anchor !== "proposed-changes"),
+    subPages: headings
+      .filter((heading) => {
+        return (
+          slugify(getFullText(heading), {
+            lower: true,
+          }) === "proposed-changes"
+        );
+      })
+      .map((heading) => {
+        return {
+          title: getVisibleText(heading),
+          href: `/${pathToDirectory.replace(/\d+_/g, "")}${
+            name === "index" ? "" : `/${slugify(name, { lower: true })}`
+          }#${slugify(getFullText(heading), {
+            lower: true,
+          })}`,
+          markdownFilePath,
+          subPages: headings
+            .filter((currentHeading) => currentHeading.depth === 3)
+            .map((currentHeading) => {
+              const thisPath = pathToDirectory.replace(/\d+_/g, "");
+
+              const slug = slugify(getFullText(currentHeading), {
+                lower: true,
+              });
+
+              return {
+                title: getVisibleText(currentHeading),
+                href: `/${thisPath}${
+                  name === "index" ? "" : `/${slugify(name, { lower: true })}`
+                }#${slug}`,
+                markdownFilePath,
+                subPages:
+                  slug === "rfcs"
+                    ? getAllPages({
+                        pathToDirectory: `roadmap`,
+                        filterIndexPage: true,
+                      }).map((page) => ({
+                        ...page,
+                        title: page.href.replace(`/${thisPath}/`, ""),
+                      }))
+                    : [],
+              };
+            }),
+        };
+      }),
+  };
+};
