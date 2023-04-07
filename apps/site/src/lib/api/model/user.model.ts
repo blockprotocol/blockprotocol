@@ -25,6 +25,7 @@ import {
   VerificationCodeDocument,
   VerificationCodePropertiesVariant,
   VerificationCodeVariant,
+  VerificationCodeWordPressUrls,
 } from "./verification-code.model";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
@@ -492,11 +493,11 @@ export class User {
 
   async sendLinkWordpressCode(
     db: Db,
-    wordpressInstanceUrl: string,
+    wordPressUrls: VerificationCodeWordPressUrls,
   ): Promise<VerificationCode> {
     const emailVerificationCode = await this.createVerificationCode(db, {
       variant: "linkWordpress",
-      wordpressInstanceUrl,
+      wordPressUrls,
     });
 
     const magicLinkQueryParams: (

@@ -20,6 +20,7 @@ import {
   ApiGenerateApiKeyBody,
   ApiGenerateApiKeyResponse,
 } from "../pages/api/me/generate-api-key.api";
+import { RemoveAvatarResponse } from "../pages/api/me/remove-avatar.api";
 import {
   ApiRevokeApiKeyBody,
   ApiRevokeApiKeyResponse,
@@ -28,6 +29,11 @@ import {
   ApiUpdateApiKeyBody,
   ApiUpdateApiKeyResponse,
 } from "../pages/api/me/update-api-key.api";
+import {
+  ApiUpdatePreferredNameRequestBody,
+  ApiUpdatePreferredNameResponse,
+} from "../pages/api/me/update-preferred-name.api";
+import { ApiUploadAvatarResponse } from "../pages/api/me/upload-avatar.api";
 import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
@@ -133,6 +139,18 @@ const get = <ResponseData = any, RequestParams = any>(
     .then(({ data }) => ({ data }))
     .catch(handleAxiosError);
 
+const deleteMethod = <ResponseData = any, RequestParams = any>(
+  url: string,
+  config: AxiosRequestConfig<RequestParams> = {},
+): Promise<{
+  data?: ResponseData;
+  error?: ApiClientError;
+}> =>
+  axiosClient
+    .delete<ResponseData>(url, config)
+    .then(({ data }) => ({ data }))
+    .catch(handleAxiosError);
+
 const post = <RequestData = any, ResponseData = any>(
   url: string,
   requestData?: RequestData,
@@ -171,6 +189,7 @@ export const apiClient = {
   get,
   post,
   put,
+  delete: deleteMethod,
   externalServiceMethod: (requestData: ExternalServiceMethodRequest) =>
     apiClient.post<
       ExternalServiceMethodRequest,
@@ -192,6 +211,18 @@ export const apiClient = {
       requestData,
     ),
   getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/api-keys"),
+  uploadAvatar: (requestData: FormData) =>
+    apiClient.post<FormData, ApiUploadAvatarResponse>(
+      "me/upload-avatar",
+      requestData,
+    ),
+  removeAvatar: () =>
+    apiClient.delete<RemoveAvatarResponse>("me/remove-avatar"),
+  updatePreferredName: (requestData: ApiUpdatePreferredNameRequestBody) =>
+    apiClient.put<
+      ApiUpdatePreferredNameRequestBody,
+      ApiUpdatePreferredNameResponse
+    >("me/update-preferred-name", requestData),
   getUser: ({ shortname }: { shortname: string }) =>
     apiClient.get<ApiUserByShortnameResponse>(`users/${shortname}`),
   getUserBlocks: ({ shortname }: { shortname: string }) =>
