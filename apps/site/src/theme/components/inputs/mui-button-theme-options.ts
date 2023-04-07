@@ -218,8 +218,8 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
             color: theme.palette.gray[40],
           },
           ...(size === "small" && {
-            paddingTop: `calc(${theme.spacing(0.5)} - 1px)`,
-            paddingBottom: `calc(${theme.spacing(0.5)} - 1px)`,
+            paddingTop: `calc(${theme.spacing(0.75)} - 1px)`,
+            paddingBottom: `calc(${theme.spacing(0.75)} - 1px)`,
             paddingLeft: `calc(${theme.spacing(1.5)} - 1px)`,
             paddingRight: `calc(${theme.spacing(1.5)} - 1px)`,
           }),
