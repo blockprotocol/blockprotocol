@@ -25,9 +25,7 @@ To record a change for publication:
 
 1.  From the root of the repository, run `yarn changeset`
 1.  Select the package(s) affected by this change (space to select, enter to move to the next step)
-
-- Do not worry about selecting packages which depend on changed packages – Changesets will handle bumping them
-
+  - Do not worry about selecting packages which depend on changed packages – Changesets will handle bumping them
 1.  Select the semver increment
 1.  Describe the change
 1.  Commit the created changeset file
