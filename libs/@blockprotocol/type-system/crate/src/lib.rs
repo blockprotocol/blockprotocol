@@ -1,5 +1,6 @@
 #![feature(lint_reasons)]
 #![feature(extern_types)]
+#![feature(once_cell)]
 // This is a nuisance for wasm_bindgen which requires pub functions
 #![cfg_attr(not(target_arch = "wasm32"), warn(unreachable_pub))]
 #![warn(
