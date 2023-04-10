@@ -10,11 +10,11 @@ import { ColoredCard } from "./colored-card";
 interface RevokeApiKeyCardProps {
   onClose: () => void;
   onRevoke: () => Promise<void>;
-  name: string;
+  displayName: string;
 }
 
 export const RevokeApiKeyCard = ({
-  name,
+  displayName,
   onClose,
   onRevoke,
 }: RevokeApiKeyCardProps) => {
@@ -41,7 +41,7 @@ export const RevokeApiKeyCard = ({
         />
         You are about to revoke{" "}
         <Box component="span" color="red.80">
-          {name}
+          {displayName}
         </Box>
       </Typography>
 

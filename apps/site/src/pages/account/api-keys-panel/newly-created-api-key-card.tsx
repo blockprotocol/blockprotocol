@@ -1,13 +1,19 @@
-import { Box, Typography } from "@mui/material";
+import { Box, BoxProps, Typography } from "@mui/material";
 
 import { CODE_FONT_FAMILY } from "../../../theme/typography";
 import { CopyToClipboardButton } from "./copy-to-clipboard-button";
 
-export const NewlyCreatedApiKeyCard = ({ apiKey }: { apiKey: string }) => {
+export const NewlyCreatedApiKeyCard = ({
+  apiKey,
+  sx = [],
+}: {
+  apiKey: string;
+  sx?: BoxProps["sx"];
+}) => {
   const [part1, part2, part3] = apiKey.split(".");
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={[{ width: "100%" }, ...(Array.isArray(sx) ? sx : [sx])]}>
       <Box
         sx={{
           px: 2.75,

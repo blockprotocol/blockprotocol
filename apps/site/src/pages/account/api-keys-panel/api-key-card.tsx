@@ -13,7 +13,7 @@ interface ApiKeyCardProps {
   inputLabel: string;
   defaultValue?: string;
   showDiscardButton?: boolean;
-  onSubmit: (name: string) => Promise<void>;
+  onSubmit: (displayName: string) => Promise<void>;
   submitTitle: string;
 }
 

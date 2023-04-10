@@ -19,7 +19,7 @@ import {
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
-import { ApiKeysPanel } from "./api-keys-panel";
+import { ApiKeysPanel } from "./api-keys-panel/api-keys-panel";
 import { BillingPanel } from "./billing-panel/billing-panel";
 import { GeneralPanel } from "./general-panel/general-panel";
 

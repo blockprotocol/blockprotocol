@@ -1,10 +1,13 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { format, formatDistanceToNowStrict, isSameDay } from "date-fns";
-import { ReactNode, useMemo } from "react";
+import { ReactNode } from "react";
 
 import { Button } from "../../../components/button";
-import { UserFacingApiKeyProperties } from "../../../lib/api/model/api-key.model";
 import { CODE_FONT_FAMILY } from "../../../theme/typography";
+import { ApiKeyCard } from "./api-key-card";
+import { ApiKeyItemProps, NewIndicator } from "./api-key-table-row";
+import { NewlyCreatedApiKeyCard } from "./newly-created-api-key-card";
+import { RevokeApiKeyCard } from "./revoke-api-key-card";
+import { formatDateRelativeAndExact } from "./utils";
 
 const Field = ({
   label,
@@ -38,22 +41,7 @@ const Field = ({
 };
 
 const DateField = ({ label, date }: { label: string; date?: Date | null }) => {
-  const formattedDates = useMemo<{ relative: string; exact: string }>(() => {
-    if (!date) {
-      return { relative: "Never", exact: "" };
-    }
-
-    const sameDay = isSameDay(date, Date.now());
-
-    return {
-      relative: formatDistanceToNowStrict(date, {
-        addSuffix: true,
-      }),
-      exact: sameDay
-        ? `${format(date, "kk:mm")} today`
-        : format(date, "MMMM d yyyy"),
-    };
-  }, [date]);
+  const formattedDates = formatDateRelativeAndExact(date);
 
   return (
     <Field
@@ -87,41 +75,101 @@ const ActionButton = ({
 };
 
 export const MobileApiKeyItem = ({
-  apiKey,
-  onRename,
-  onRevoke,
-}: {
-  apiKey: UserFacingApiKeyProperties;
-  onRename: () => void;
-  onRevoke: () => void;
-}) => {
-  const { createdAt, lastUsedAt, publicId, displayName } = apiKey;
+  apiKey: { displayName, publicId, createdAt, lastUsedAt },
+  newlyCreatedKeyId,
+  renameApiKey,
+  revokeApiKey,
+  keyAction,
+  setKeyActionStatus,
+}: ApiKeyItemProps) => {
+  const dismissKeyAction = () => setKeyActionStatus(undefined);
+
+  const isNewlyCreated =
+    newlyCreatedKeyId && newlyCreatedKeyId.includes(publicId);
+
+  if (keyAction === "rename") {
+    return (
+      <ApiKeyCard
+        onClose={dismissKeyAction}
+        defaultValue={displayName}
+        showDiscardButton
+        submitTitle="Rename key"
+        inputLabel="Rename your key"
+        onSubmit={async (newDisplayName) =>
+          renameApiKey(publicId, newDisplayName)
+        }
+      />
+    );
+  }
+
+  if (keyAction === "revoke") {
+    return (
+      <RevokeApiKeyCard
+        onClose={dismissKeyAction}
+        displayName={displayName}
+        onRevoke={async () => revokeApiKey(publicId)}
+      />
+    );
+  }
 
   return (
     <Box sx={{ width: "100%" }}>
       <Stack gap={2}>
-        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>
+        <Typography
+          sx={{
+            fontSize: 16,
+            fontWeight: 500,
+            display: "flex",
+            alignItems: "center",
+            gap: 1.5,
+          }}
+        >
           {displayName}
+          {isNewlyCreated && <NewIndicator />}
         </Typography>
 
-        <Field
-          label="Api key public ID"
-          value={
-            <Typography sx={{ fontFamily: CODE_FONT_FAMILY, fontSize: 16 }}>
-              {publicId}
-            </Typography>
-          }
-        />
-
-        <DateField label="Last used" date={lastUsedAt} />
-        <DateField label="Created" date={createdAt} />
+        {isNewlyCreated ? (
+          <Field
+            label="Full api key"
+            value={
+              <NewlyCreatedApiKeyCard
+                apiKey={newlyCreatedKeyId}
+                sx={{ mt: 0.5 }}
+              />
+            }
+          />
+        ) : (
+          <>
+            <Field
+              label="Api key public ID"
+              value={
+                <Typography sx={{ fontFamily: CODE_FONT_FAMILY, fontSize: 16 }}>
+                  {publicId}
+                </Typography>
+              }
+            />
+            <DateField label="Last used" date={lastUsedAt} />
+            <DateField label="Created" date={createdAt} />
+          </>
+        )}
 
         <Field
           label="Actions"
           value={
             <Stack direction="row" gap={2} width="100%" mt={0.5}>
-              <ActionButton onClick={onRename} title="Rename" />
-              <ActionButton onClick={onRevoke} title="Revoke" danger />
+              <ActionButton
+                onClick={() =>
+                  setKeyActionStatus({ publicId, action: "rename" })
+                }
+                title="Rename"
+              />
+              <ActionButton
+                onClick={() =>
+                  setKeyActionStatus({ publicId, action: "revoke" })
+                }
+                title="Revoke"
+                danger
+              />
             </Stack>
           }
         />
