@@ -5,16 +5,28 @@ import { rword } from "rword";
 import { formatErrors } from "../../../util/api";
 import { User } from "./user.model";
 
-export type VerificationCodeVariant = "login" | "email";
+export type VerificationCodeVariant = "login" | "email" | "linkWordpress";
+
+export type VerificationCodeWordPressUrls = {
+  settings: string;
+  instance: string;
+};
 
 export type VerificationCodeProperties = {
   user: DBRef;
-  variant: VerificationCodeVariant;
   code: string;
   numberOfAttempts: number;
   used: boolean;
   createdAt: Date;
+  variant: VerificationCodeVariant;
+  wordPressUrls?: VerificationCodeWordPressUrls;
 };
+
+// @note we can't use a discriminated union here because it's used to set the properties of VerificationCode, which can't have discriminated unions
+export type VerificationCodePropertiesVariant = Pick<
+  VerificationCodeProperties,
+  "variant" | "wordPressUrls"
+>;
 
 export type VerificationCodeDocument = WithId<VerificationCodeProperties>;
 
@@ -36,6 +48,8 @@ export class VerificationCode {
   used: boolean;
 
   createdAt: Date;
+
+  wordPressUrls?: VerificationCodeWordPressUrls;
 
   static COLLECTION_NAME = "bp-verification-codes";
 
@@ -60,6 +74,7 @@ export class VerificationCode {
     numberOfAttempts,
     used,
     createdAt,
+    wordPressUrls,
   }: VerificationCodeConstructorArgs) {
     this.id = id;
     this.variant = variant;
@@ -68,6 +83,7 @@ export class VerificationCode {
     this.numberOfAttempts = numberOfAttempts;
     this.used = used;
     this.createdAt = createdAt;
+    this.wordPressUrls = wordPressUrls;
   }
 
   static fromDocument({ _id, ...remainingDocument }: VerificationCodeDocument) {
@@ -79,16 +95,17 @@ export class VerificationCode {
 
   static async create(
     db: Db,
-    params: { user: User; variant: VerificationCodeVariant },
+    params: { user: User } & VerificationCodePropertiesVariant,
   ) {
-    const { user, variant } = params;
+    const { user, ...variantParams } = params;
+
     const properties: VerificationCodeProperties = {
       used: false,
       user: user.toRef(),
-      variant,
       numberOfAttempts: 0,
       code: VerificationCode.generateCode(),
       createdAt: new Date(),
+      ...variantParams,
     };
 
     const { insertedId: _id } = await db

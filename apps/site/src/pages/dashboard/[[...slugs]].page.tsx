@@ -1,5 +1,6 @@
-import { Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
+import { useLayoutEffect, useState } from "react";
 
 import {
   AuthWallPageContent,
@@ -8,15 +9,29 @@ import {
 import { DashboardCard } from "../../components/pages/dashboard/dashboard-card/dashboard-card";
 import { DashboardSectionGrid } from "../../components/pages/dashboard/dashboard-section-grid";
 import { DashboardSectionTitle } from "../../components/pages/dashboard/dashboard-section-title";
+import { DashboardWordpressSection } from "../../components/pages/dashboard/dashboard-wordpress-section";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 import {
   DashboardSection,
   getDashboardSectionCards,
 } from "../../components/pages/dashboard/utils";
+import { getWordpressSettingsUrlSessionOnce } from "../../lib/wordpress-settings-url-session";
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName, shortname } = user ?? {};
+
+  const [wordpressSettingsUrl, setWordpressSettingsUrl] = useState<
+    string | null
+  >(null);
+
+  useLayoutEffect(() => {
+    const nextSettingsUrl = getWordpressSettingsUrlSessionOnce();
+
+    if (nextSettingsUrl) {
+      setWordpressSettingsUrl(nextSettingsUrl);
+    }
+  }, []);
 
   const dashboardCards = getDashboardSectionCards({
     profileLink: `/@${shortname}`,
@@ -33,12 +48,41 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
 
       <TopNavigationTabs />
 
-      <PageContainer sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        <Typography variant="bpHeading2" mb={-2}>
-          Welcome back, {userName}!
-        </Typography>
+      <Box
+        sx={{
+          background: "linear-gradient(180deg, #F8F8F8 0%, #FFFFFF 100%)",
+        }}
+      >
+        <Container
+          sx={{
+            paddingTop: {
+              xs: 4,
+              md: 8,
+            },
+            paddingBottom: {
+              xs: 5,
+              md: 9,
+            },
+          }}
+        >
+          <Typography
+            variant="bpHeading2"
+            color={(theme) => theme.palette.black}
+          >
+            Welcome, {userName}!
+          </Typography>
+          {typeof wordpressSettingsUrl === "string" ? (
+            <DashboardWordpressSection
+              wordpressSettingsUrl={wordpressSettingsUrl}
+            />
+          ) : null}
+        </Container>
+      </Box>
 
-        <DashboardSectionTitle mb={-1}>Create</DashboardSectionTitle>
+      <PageContainer sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        <DashboardSectionTitle mb={-1} mt={0} pt={0}>
+          Create
+        </DashboardSectionTitle>
 
         <DashboardSectionGrid
           gridTemplateColumns={{

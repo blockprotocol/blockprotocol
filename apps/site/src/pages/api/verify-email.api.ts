@@ -12,6 +12,8 @@ export type ApiVerifyEmailRequestBody = {
 
 export type ApiVerifyEmailResponse = {
   user: SerializedUser;
+  redirectPath?: string;
+  wordpressSettingsUrl?: string;
 };
 
 export default createBaseHandler<
@@ -44,11 +46,21 @@ export default createBaseHandler<
       );
     }
 
+    if (user.hasVerifiedEmail) {
+      return res.status(400).json(
+        formatErrors({
+          msg: "User has already been verified",
+          param: "userId",
+          value: userId,
+        }),
+      );
+    }
+
     const { verificationCodeId, code } = body;
 
     const emailVerificationCode = await user.getVerificationCode(db, {
       verificationCodeId,
-      variant: "email",
+      variant: ["email", "linkWordpress"],
     });
 
     if (!emailVerificationCode) {
@@ -78,10 +90,40 @@ export default createBaseHandler<
         );
       }
 
-      await user.update(db, { hasVerifiedEmail: true });
+      if (emailVerificationCode.variant === "linkWordpress") {
+        const wordpressInstanceUrl =
+          emailVerificationCode?.wordPressUrls?.instance;
+        if (!wordpressInstanceUrl) {
+          return res.status(500).json(
+            formatErrors({
+              msg: "Internal error. Please try again.",
+              param: "code",
+              value: code,
+            }),
+          );
+        }
+
+        await emailVerificationCode.setToUsed(db);
+        await user.addWordpressInstanceUrlAndVerify(db, {
+          wordpressInstanceUrl,
+          updateReferrer: true,
+        });
+      } else {
+        await emailVerificationCode.setToUsed(db);
+        await user.update(db, { hasVerifiedEmail: true });
+      }
 
       req.login(user, () =>
-        res.status(200).json({ user: user.serialize(true) }),
+        res.status(200).json({
+          user: user.serialize(true),
+          ...(emailVerificationCode.variant === "linkWordpress"
+            ? {
+                redirectPath: "/dashboard",
+                wordpressSettingsUrl:
+                  emailVerificationCode.wordPressUrls?.settings,
+              }
+            : {}),
+        }),
       );
     }
   });
