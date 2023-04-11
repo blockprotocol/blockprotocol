@@ -13,18 +13,14 @@ import { Button } from "../../../components/button";
 import { FontAwesomeIcon } from "../../../components/icons";
 import { Link } from "../../../components/link";
 import { PanelSection } from "../../../components/pages/account/panel-section";
-import { UserFacingApiKeyProperties } from "../../../lib/api/model/api-key.model";
 import { apiClient } from "../../../lib/api-client";
-import {
-  ApiKeysContext,
-  ApiKeysContextValue,
-  KeyActionStatus,
-} from "./api-keys-context";
+import { ApiKeysContext } from "./api-keys-context";
 import { ApiKeysEmptyState } from "./api-keys-empty-state";
 import { ApiKeysList } from "./api-keys-list";
+import { ApiKeyProps, ApiKeysContextValue, KeyActionStatus } from "./types";
 
 export const ApiKeysPanel: FunctionComponent = () => {
-  const [apiKeys, setApiKeys] = useState<UserFacingApiKeyProperties[]>([]);
+  const [apiKeys, setApiKeys] = useState<ApiKeyProps[]>([]);
   const [keyActionStatus, setKeyActionStatus] = useState<KeyActionStatus>();
   const [isCreatingNewKey, setIsCreatingNewKey] = useState(false);
   const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);

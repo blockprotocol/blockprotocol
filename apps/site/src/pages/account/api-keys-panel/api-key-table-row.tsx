@@ -1,12 +1,12 @@
 import { Box, TableCell, TableRow, Typography } from "@mui/material";
-import { ReactElement, useMemo } from "react";
+import { useMemo } from "react";
 
 import { SparklesSolidIcon } from "../../../components/icons/sparkles-solid-icon";
-import { UserFacingApiKeyProperties } from "../../../lib/api/model/api-key.model";
 import { CODE_FONT_FAMILY } from "../../../theme/typography";
 import { ApiKeyTableRowActions } from "./api-key-table-row-actions";
-import { KeyAction, useApiKeys } from "./api-keys-context";
+import { useApiKeys } from "./api-keys-context";
 import { NewlyCreatedApiKeyCard } from "./newly-created-api-key-card";
+import { ApiKeyItemProps } from "./types";
 import { formatDateRelativeAndExact } from "./utils";
 
 const MaskedPublicId = ({ publicId }: { publicId: string }) => {
@@ -51,14 +51,6 @@ export const NewIndicator = () => {
     </Typography>
   );
 };
-
-export interface ApiKeyItemProps {
-  renameApiKeyCard: ReactElement;
-  revokeApiKeyCard: ReactElement;
-  matchingNewlyCreatedKey?: string;
-  apiKey: UserFacingApiKeyProperties;
-  keyAction?: KeyAction;
-}
 
 export const ApiKeyTableRow = ({
   apiKey: { displayName, publicId, createdAt, lastUsedAt },

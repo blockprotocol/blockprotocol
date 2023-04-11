@@ -11,13 +11,13 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { UserFacingApiKeyProperties } from "../../../lib/api/model/api-key.model";
 import { apiClient } from "../../../lib/api-client";
 import { ApiKeyCard } from "./api-key-card";
-import { ApiKeyItemProps, ApiKeyTableRow } from "./api-key-table-row";
+import { ApiKeyTableRow } from "./api-key-table-row";
 import { useApiKeys } from "./api-keys-context";
 import { MobileApiKeyItem } from "./mobile-api-key-item";
 import { RevokeApiKeyCard } from "./revoke-api-key-card";
+import { ApiKeyItemProps, ApiKeyProps } from "./types";
 
 export const ApiKeysList = () => {
   const theme = useTheme();
@@ -75,9 +75,7 @@ export const ApiKeysList = () => {
     />
   );
 
-  const generateApiKeyItemProps = (
-    data: UserFacingApiKeyProperties,
-  ): ApiKeyItemProps => {
+  const generateApiKeyItemProps = (data: ApiKeyProps): ApiKeyItemProps => {
     const dismissKeyAction = () => setKeyActionStatus(undefined);
 
     const { displayName, publicId } = data;

@@ -3,9 +3,10 @@ import { ReactNode } from "react";
 
 import { Button } from "../../../components/button";
 import { CODE_FONT_FAMILY } from "../../../theme/typography";
-import { ApiKeyItemProps, NewIndicator } from "./api-key-table-row";
+import { NewIndicator } from "./api-key-table-row";
 import { useApiKeys } from "./api-keys-context";
 import { NewlyCreatedApiKeyCard } from "./newly-created-api-key-card";
+import { ApiKeyItemProps } from "./types";
 import { formatDateRelativeAndExact } from "./utils";
 
 const Field = ({
