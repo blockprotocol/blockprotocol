@@ -6,12 +6,11 @@ export const FontAwesomeIconPath: FunctionComponent<{
   svgPathData: IconPathData;
   fill?: string;
 }> = ({ svgPathData, fill }) => {
-  return (
-    // eslint-disable-next-line react/jsx-no-useless-fragment
+  return typeof svgPathData === "string" ? (
+    <path d={svgPathData} style={{ ...(fill ? { fill } : {}) }} />
+  ) : (
     <>
-      {typeof svgPathData === "string" ? (
-        <path d={svgPathData} style={{ ...(fill ? { fill } : {}) }} />
-      ) : (
+      {
         /**
          * A multi-path Font Awesome icon seems to imply a duotune icon. The 0th path seems to
          * be the faded element (referred to as the "secondary" path in the Font Awesome docs)
@@ -26,7 +25,7 @@ export const FontAwesomeIconPath: FunctionComponent<{
             d={pathData}
           />
         ))
-      )}
+      }
     </>
   );
 };

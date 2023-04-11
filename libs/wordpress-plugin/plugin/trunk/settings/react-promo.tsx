@@ -1,8 +1,8 @@
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { HTMLProps, PropsWithChildren, ReactNode } from "react";
-import { faArrowUpRight } from "./fa-arrow-up-right";
 
+import { faArrowUpRight } from "./fa-arrow-up-right";
 import { FontAwesomeIcon } from "./font-awesome-icon";
 import aiImage from "./images/ai.png";
 import blockTrioImage from "./images/block-trio.png";

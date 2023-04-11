@@ -134,12 +134,12 @@ function get_block_protocol_blocks()
 	return array_values($filtered_blocks);
 }
 
-$isBlockProtocolAdmin = $pagenow == 'admin.php' && ('block_protocol' === $_GET['page']);
+$is_block_protocol_admin = $pagenow == 'admin.php' && ('block_protocol' === $_GET['page']);
 
 // Test connection to the BP API and show a message with status if any error
 function check_block_protocol_connection()
 {
-    global $isBlockProtocolAdmin;
+    global $is_block_protocol_admin;
 	$response = get_block_protocol_blocks();
 
 	if (isset($response['errors'])) {
@@ -147,7 +147,7 @@ function check_block_protocol_connection()
 		$error = $errors[0];
 		$message = $error['msg'];
 
-        if ($error['code'] === "MISSING_API_KEY" && $isBlockProtocolAdmin) {
+        if ($error['code'] === "MISSING_API_KEY" && $is_block_protocol_admin) {
             return;
         }
 
@@ -173,9 +173,9 @@ function block_protocol_database_unsupported()
 				<?php 
 				
 				echo (esc_html(
-					"The database you are using is not supported by the plugin. Please use MySQL " 
+					"The database you are using is not supported by the plugin. Please use MySQL "
 					. BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION 
-					. "+ or MariaDB " 
+					. "+ or MariaDB "
 					. BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION 
 					. "+"));
 				?>
@@ -186,7 +186,7 @@ function block_protocol_database_unsupported()
 }
 
 global $pagenow;
-if ($pagenow == 'index.php' || $pagenow == 'plugins.php' || ($isBlockProtocolAdmin)) {
+if ($pagenow == 'index.php' || $pagenow == 'plugins.php' || ($is_block_protocol_admin)) {
     add_action('admin_notices', 'check_block_protocol_connection');
 	add_action('admin_notices', 'block_protocol_database_unsupported');
 }

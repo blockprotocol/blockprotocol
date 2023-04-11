@@ -179,7 +179,8 @@ function block_protocol_field_api_key_renderer($args)
     $public = explode('.', $options[$args['label_for']])[1];
     ?>
     <p style="max-width:570px;">
-        <?= sprintf(__('This WordPress instance is linked to <strong>%s</strong> Block Protocol account. The public portion of the API key linked to this account is shown below.', 'block_protocol'), htmlentities($options['block_protocol_field_api_email'])); ?>
+        <?= isset($options['block_protocol_field_api_email']) ? sprintf(__('This WordPress instance is linked to your <strong>%s</strong> Block Protocol account.', 'block_protocol'), htmlentities($options['block_protocol_field_api_email'])) : 'This WordPress instance is linked to your Block Protocol account.'; ?>
+        The public portion of the API key linked to this account is shown below.
     </p>
     <input id="<?php echo esc_attr($args['label_for']); ?>"
            type="text"
@@ -343,7 +344,7 @@ function block_protocol_field_hidden_renderer($field)
 
 function block_protocol_options_page_settings_html()
 {
-    if ($_GET['activated'] === 'true') {
+    if (isset($_GET['activated']) && $_GET['activated'] === 'true') {
         ?>
         <div class="BPSettingsBanner">
             <p class="BPSettingsBannerInstructionsPara"><strong>Success!</strong> You now have access to <strong>Þ</strong> blocks on this website.</p>
@@ -353,7 +354,7 @@ function block_protocol_options_page_settings_html()
                     <li>
                         <div class="BPSettingsBannerInstructionsBadge">1</div>
                         Head to a new post or page, and click the blue “Toggle block inserter” button in the top-left that looks like this
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="fa"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="BPSettingsFa"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="BPSettingsBannerInstructionsInsert"><g fill="none" fill-rule="evenodd"><rect fill="#007CBA" width="32" height="32" rx="2"/><path fill="#FFF" d="M15 15h-5v2h5v5h2v-5h5v-2h-5v-5h-2z"/></g></svg>
                     </li>
                     <li>
@@ -372,7 +373,14 @@ function block_protocol_options_page_settings_html()
         // output security fields for the registered setting "block_protocol"
         settings_fields('block_protocol');
         block_protocol_field_hidden_renderer('block_protocol_field_api_email');
-        // @todo – don't do this, see https://hashintel.slack.com/archives/C02LG39FJAU/p1680544602069229
+        /**
+         * This will display the full API key which has been saved as a hidden field. This is necessary
+         * as the wordpress options.php will remove any missing fields. We don't want to be in a position
+         * of outputting an API key, so we should find an alternative
+         *
+         * @todo find a way to avoid outputting the full API key
+         * @see https://hashintel.slack.com/archives/C02LG39FJAU/p1680544602069229
+         */
         block_protocol_field_hidden_renderer('block_protocol_field_api_key');
         block_protocol_field_hidden_renderer('block_protocol_field_api_email_verification_id');
         // output setting sections and their fields
@@ -445,8 +453,7 @@ function block_protocol_options_page_html()
     }
 
     $options = get_option('block_protocol_options');
-    $apiKey = $options ? $options['block_protocol_field_api_key'] : null;
-
+    $api_key = $options ? $options['block_protocol_field_api_key'] : null;
     // add error/update messages
 
     // check if the user have submitted the settings
@@ -465,7 +472,7 @@ function block_protocol_options_page_html()
             <?php echo esc_html(get_admin_page_title()); ?>
         </h1>
         <?php
-        $apiKey ? block_protocol_options_page_settings_html() : block_protocol_options_page_activate_html();
+        $api_key ? block_protocol_options_page_settings_html() : block_protocol_options_page_activate_html();
         ?>
     </div>
     <?php

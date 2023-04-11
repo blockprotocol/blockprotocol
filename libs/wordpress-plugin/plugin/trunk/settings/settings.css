@@ -28,7 +28,7 @@
     src: url("../fonts/inter-bold.ttf") format("trueType");
 }
 
-svg.fa {
+svg.BPSettingsFa {
     fill: currentColor;
     width: 1em;
     height: 1em;
@@ -96,7 +96,7 @@ p.BPSettingsBannerInstructionsPara {
     margin-bottom: 14px;
 }
 
-.BPSettingsBannerInstructions li .fa {
+.BPSettingsBannerInstructions li .BPSettingsFa {
     margin-left: 4px;
 }
 
