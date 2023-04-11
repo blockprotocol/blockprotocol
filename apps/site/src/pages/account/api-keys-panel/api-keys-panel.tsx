@@ -30,10 +30,10 @@ export const ApiKeysPanel: FunctionComponent = () => {
   const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);
 
   const fetchAndSetApiKeys = useCallback(async () => {
-    const res = await apiClient.getUserApiKeys();
+    const { data } = await apiClient.getUserApiKeys();
 
-    if (res.data) {
-      setApiKeys(res.data.apiKeysMetadata.filter((key) => !key.revokedAt));
+    if (data) {
+      setApiKeys(data.apiKeysMetadata.filter((key) => !key.revokedAt));
     }
   }, []);
 
