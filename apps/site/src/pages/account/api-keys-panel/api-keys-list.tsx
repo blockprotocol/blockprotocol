@@ -62,6 +62,15 @@ export const ApiKeysList = ({
     onKeyRenamed(publicId, displayName);
   };
 
+  const createKeyCard = (
+    <ApiKeyCard
+      onClose={closeNewKeyCard}
+      onSubmit={createKey}
+      submitTitle="Create key"
+      inputLabel="Name your new key"
+    />
+  );
+
   if (isMobile) {
     return (
       <Box>
@@ -97,12 +106,7 @@ export const ApiKeysList = ({
             <Typography sx={{ mb: 2, fontWeight: 500, fontSize: 16 }}>
               Create new key
             </Typography>
-            <ApiKeyCard
-              onClose={closeNewKeyCard}
-              onSubmit={createKey}
-              submitTitle="Create key"
-              inputLabel="Name your new key"
-            />
+            {createKeyCard}
           </Box>
         )}
       </Box>
@@ -115,11 +119,17 @@ export const ApiKeysList = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Token</TableCell>
-              <TableCell>Last Used</TableCell>
-              <TableCell>Created</TableCell>
-              <TableCell />
+              {apiKeys.length ? (
+                <>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Token</TableCell>
+                  <TableCell>Last Used</TableCell>
+                  <TableCell>Created</TableCell>
+                  <TableCell />
+                </>
+              ) : (
+                <TableCell colSpan={5}>Choose a name</TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -142,12 +152,7 @@ export const ApiKeysList = ({
               <TableRow>
                 <TableCell sx={{ verticalAlign: "top" }}>New Key</TableCell>
                 <TableCell colSpan={4} sx={{ px: 0 }}>
-                  <ApiKeyCard
-                    onClose={closeNewKeyCard}
-                    onSubmit={createKey}
-                    submitTitle="Create key"
-                    inputLabel="Name your new key"
-                  />
+                  {createKeyCard}
                 </TableCell>
               </TableRow>
             )}
