@@ -14,6 +14,8 @@ const hotfixPackageName = (packageName: string): string => {
 
 const currentTime = new Date().toISOString();
 
+const esmCdnUrl = process.env.ESM_CDN_URL || "https://esm.sh";
+
 const temporalAxes: QueryTemporalAxes = {
   pinned: {
     axis: "transactionTime",
@@ -81,7 +83,7 @@ const handler: NextApiHandler = async (req, res) => {
       // we already handled loading React in the HTML
       continue;
     }
-    externalUrlLookup[packageName] = `https://esm.sh/${hotfixPackageName(
+    externalUrlLookup[packageName] = `${esmCdnUrl}/${hotfixPackageName(
       packageName,
     )}@${packageVersion}?target=es2021`;
   }
@@ -118,10 +120,10 @@ const handler: NextApiHandler = async (req, res) => {
       window.addEventListener("message", handleMessage);
     </script>
     <script type="module">
-      import React from "https://esm.sh/react@${reactVersion}?target=es2021"
-      import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
-      import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/index.js?target=es2021&deps=react@${reactVersion}";
+      import React from "${esmCdnUrl}/react@${reactVersion}?target=es2021"
+      import ReactDOM from "${esmCdnUrl}/react-dom@${reactVersion}?target=es2021"
+      import { jsx as _jsx } from "${esmCdnUrl}/react@${reactVersion}/jsx-runtime.js?target=es2021";
+      import { MockBlockDock } from "${esmCdnUrl}/mock-block-dock@${mockBlockDockVersion}/dist/index.js?target=es2021&deps=react@${reactVersion}";
 
       const requireLookup = {
         "react-dom": ReactDOM,
