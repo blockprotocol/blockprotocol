@@ -1,13 +1,12 @@
 import { Box, TableCell, TableRow, Typography } from "@mui/material";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { ReactElement, useMemo } from "react";
 
 import { SparklesSolidIcon } from "../../../components/icons/sparkles-solid-icon";
 import { UserFacingApiKeyProperties } from "../../../lib/api/model/api-key.model";
 import { CODE_FONT_FAMILY } from "../../../theme/typography";
-import { ApiKeyCard } from "./api-key-card";
 import { ApiKeyTableRowActions } from "./api-key-table-row-actions";
+import { KeyAction, useApiKeys } from "./api-keys-context";
 import { NewlyCreatedApiKeyCard } from "./newly-created-api-key-card";
-import { RevokeApiKeyCard } from "./revoke-api-key-card";
 import { formatDateRelativeAndExact } from "./utils";
 
 const MaskedPublicId = ({ publicId }: { publicId: string }) => {
@@ -54,43 +53,28 @@ export const NewIndicator = () => {
 };
 
 export interface ApiKeyItemProps {
+  renameApiKeyCard: ReactElement;
+  revokeApiKeyCard: ReactElement;
+  matchingNewlyCreatedKey?: string;
   apiKey: UserFacingApiKeyProperties;
-  newlyCreatedKeyIds: string[];
-  revokeApiKey: (publicId: string) => Promise<void>;
-  renameApiKey: (publicId: string, displayName: string) => Promise<void>;
-  keyAction?: "rename" | "revoke";
-  setKeyActionStatus: Dispatch<
-    SetStateAction<
-      | {
-          publicId: string;
-          action: "rename" | "revoke";
-        }
-      | undefined
-    >
-  >;
+  keyAction?: KeyAction;
 }
 
 export const ApiKeyTableRow = ({
   apiKey: { displayName, publicId, createdAt, lastUsedAt },
-  newlyCreatedKeyIds,
-  renameApiKey,
-  revokeApiKey,
+  matchingNewlyCreatedKey,
+  renameApiKeyCard,
+  revokeApiKeyCard,
   keyAction,
-  setKeyActionStatus,
 }: ApiKeyItemProps) => {
+  const { setKeyActionStatus } = useApiKeys();
   const hasAction = !!keyAction;
 
-  const dismissKeyAction = () => setKeyActionStatus(undefined);
-
-  const foundNewlyCreatedKey = newlyCreatedKeyIds.find((key) =>
-    key.includes(publicId),
-  );
-
   const coreCells = useMemo(() => {
-    if (foundNewlyCreatedKey) {
+    if (matchingNewlyCreatedKey) {
       return (
         <TableCell colSpan={3}>
-          <NewlyCreatedApiKeyCard apiKey={foundNewlyCreatedKey} />
+          <NewlyCreatedApiKeyCard apiKey={matchingNewlyCreatedKey} />
         </TableCell>
       );
     }
@@ -108,44 +92,31 @@ export const ApiKeyTableRow = ({
         </TableCell>
       </>
     );
-  }, [createdAt, lastUsedAt, publicId, foundNewlyCreatedKey]);
+  }, [createdAt, lastUsedAt, publicId, matchingNewlyCreatedKey]);
 
   return (
     <TableRow key={publicId}>
       {hasAction ? (
         <TableCell colSpan={5} sx={{ px: 0 }}>
-          {keyAction === "revoke" ? (
-            <RevokeApiKeyCard
-              onClose={dismissKeyAction}
-              displayName={displayName}
-              onRevoke={async () => revokeApiKey(publicId)}
-            />
-          ) : (
-            <ApiKeyCard
-              onClose={dismissKeyAction}
-              defaultValue={displayName}
-              showDiscardButton
-              submitTitle="Rename key"
-              inputLabel="Rename your key"
-              onSubmit={async (newDisplayName) =>
-                renameApiKey(publicId, newDisplayName)
-              }
-            />
-          )}
+          {keyAction === "revoke" ? revokeApiKeyCard : renameApiKeyCard}
         </TableCell>
       ) : (
         <>
           <TableCell
-            sx={{ verticalAlign: foundNewlyCreatedKey ? "top" : "inherit" }}
+            sx={{
+              verticalAlign: matchingNewlyCreatedKey ? "top" : "inherit",
+            }}
           >
             {displayName}
-            {foundNewlyCreatedKey && <NewIndicator />}
+            {matchingNewlyCreatedKey && <NewIndicator />}
           </TableCell>
 
           {coreCells}
 
           <TableCell
-            sx={{ verticalAlign: foundNewlyCreatedKey ? "top" : "inherit" }}
+            sx={{
+              verticalAlign: matchingNewlyCreatedKey ? "top" : "inherit",
+            }}
           >
             <ApiKeyTableRowActions
               id={publicId}

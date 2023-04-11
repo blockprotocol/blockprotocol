@@ -11,11 +11,13 @@ import {
   useTheme,
 } from "@mui/material";
 
+import { UserFacingApiKeyProperties } from "../../../lib/api/model/api-key.model";
 import { apiClient } from "../../../lib/api-client";
 import { ApiKeyCard } from "./api-key-card";
-import { ApiKeyTableRow } from "./api-key-table-row";
+import { ApiKeyItemProps, ApiKeyTableRow } from "./api-key-table-row";
 import { useApiKeys } from "./api-keys-context";
 import { MobileApiKeyItem } from "./mobile-api-key-item";
+import { RevokeApiKeyCard } from "./revoke-api-key-card";
 
 export const ApiKeysList = () => {
   const theme = useTheme();
@@ -73,6 +75,43 @@ export const ApiKeysList = () => {
     />
   );
 
+  const generateApiKeyItemProps = (
+    data: UserFacingApiKeyProperties,
+  ): ApiKeyItemProps => {
+    const dismissKeyAction = () => setKeyActionStatus(undefined);
+
+    const { displayName, publicId } = data;
+    return {
+      apiKey: data,
+      matchingNewlyCreatedKey: newlyCreatedKeyIds.find((key) =>
+        key.includes(publicId),
+      ),
+      keyAction:
+        keyActionStatus?.publicId === publicId
+          ? keyActionStatus.action
+          : undefined,
+      renameApiKeyCard: (
+        <ApiKeyCard
+          onClose={dismissKeyAction}
+          defaultValue={displayName}
+          showDiscardButton
+          submitTitle="Rename key"
+          inputLabel="Rename your key"
+          onSubmit={async (newDisplayName) =>
+            renameApiKey(publicId, newDisplayName)
+          }
+        />
+      ),
+      revokeApiKeyCard: (
+        <RevokeApiKeyCard
+          onClose={dismissKeyAction}
+          displayName={displayName}
+          onRevoke={async () => revokeApiKey(publicId)}
+        />
+      ),
+    };
+  };
+
   if (isMobile) {
     return (
       <Box>
@@ -80,19 +119,11 @@ export const ApiKeysList = () => {
           <>
             <MobileApiKeyItem
               key={data.publicId}
-              apiKey={data}
-              newlyCreatedKeyIds={newlyCreatedKeyIds}
-              renameApiKey={renameApiKey}
-              revokeApiKey={revokeApiKey}
-              keyAction={
-                keyActionStatus?.publicId === data.publicId
-                  ? keyActionStatus.action
-                  : undefined
-              }
-              setKeyActionStatus={setKeyActionStatus}
+              {...generateApiKeyItemProps(data)}
             />
 
             <Box
+              key={`${data.publicId}-divider`}
               sx={{
                 mt: 3,
                 mb: index < apiKeys.length - 1 ? 3 : 0,
@@ -138,16 +169,7 @@ export const ApiKeysList = () => {
             {apiKeys.map((data) => (
               <ApiKeyTableRow
                 key={data.publicId}
-                apiKey={data}
-                newlyCreatedKeyIds={newlyCreatedKeyIds}
-                renameApiKey={renameApiKey}
-                revokeApiKey={revokeApiKey}
-                keyAction={
-                  keyActionStatus?.publicId === data.publicId
-                    ? keyActionStatus.action
-                    : undefined
-                }
-                setKeyActionStatus={setKeyActionStatus}
+                {...generateApiKeyItemProps(data)}
               />
             ))}
             {isCreatingNewKey && (

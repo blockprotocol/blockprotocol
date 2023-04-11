@@ -3,10 +3,9 @@ import { ReactNode } from "react";
 
 import { Button } from "../../../components/button";
 import { CODE_FONT_FAMILY } from "../../../theme/typography";
-import { ApiKeyCard } from "./api-key-card";
 import { ApiKeyItemProps, NewIndicator } from "./api-key-table-row";
+import { useApiKeys } from "./api-keys-context";
 import { NewlyCreatedApiKeyCard } from "./newly-created-api-key-card";
-import { RevokeApiKeyCard } from "./revoke-api-key-card";
 import { formatDateRelativeAndExact } from "./utils";
 
 const Field = ({
@@ -76,41 +75,19 @@ const ActionButton = ({
 
 export const MobileApiKeyItem = ({
   apiKey: { displayName, publicId, createdAt, lastUsedAt },
-  newlyCreatedKeyIds,
-  renameApiKey,
-  revokeApiKey,
+  matchingNewlyCreatedKey,
+  renameApiKeyCard,
+  revokeApiKeyCard,
   keyAction,
-  setKeyActionStatus,
 }: ApiKeyItemProps) => {
-  const dismissKeyAction = () => setKeyActionStatus(undefined);
-
-  const foundNewlyCreatedKey = newlyCreatedKeyIds.find((key) =>
-    key.includes(publicId),
-  );
+  const { setKeyActionStatus } = useApiKeys();
 
   if (keyAction === "rename") {
-    return (
-      <ApiKeyCard
-        onClose={dismissKeyAction}
-        defaultValue={displayName}
-        showDiscardButton
-        submitTitle="Rename key"
-        inputLabel="Rename your key"
-        onSubmit={async (newDisplayName) =>
-          renameApiKey(publicId, newDisplayName)
-        }
-      />
-    );
+    return renameApiKeyCard;
   }
 
   if (keyAction === "revoke") {
-    return (
-      <RevokeApiKeyCard
-        onClose={dismissKeyAction}
-        displayName={displayName}
-        onRevoke={async () => revokeApiKey(publicId)}
-      />
-    );
+    return revokeApiKeyCard;
   }
 
   return (
@@ -126,15 +103,15 @@ export const MobileApiKeyItem = ({
           }}
         >
           {displayName}
-          {foundNewlyCreatedKey && <NewIndicator />}
+          {matchingNewlyCreatedKey && <NewIndicator />}
         </Typography>
 
-        {foundNewlyCreatedKey ? (
+        {matchingNewlyCreatedKey ? (
           <Field
             label="Full api key"
             value={
               <NewlyCreatedApiKeyCard
-                apiKey={foundNewlyCreatedKey}
+                apiKey={matchingNewlyCreatedKey}
                 sx={{ mt: 0.5 }}
               />
             }

@@ -2,10 +2,12 @@ import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
 import { UserFacingApiKeyProperties } from "../../../lib/api/model/api-key.model";
 
+export type KeyAction = "rename" | "revoke";
+
 export type KeyActionStatus =
   | {
       publicId: string;
-      action: "rename" | "revoke";
+      action: KeyAction;
     }
   | undefined;
 
