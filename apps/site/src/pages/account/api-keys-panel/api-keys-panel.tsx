@@ -1,7 +1,13 @@
 import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Box, Stack } from "@mui/material";
 import { NextSeo } from "next-seo";
-import { FunctionComponent, useCallback, useEffect, useState } from "react";
+import {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { Button } from "../../../components/button";
 import { FontAwesomeIcon } from "../../../components/icons";
@@ -9,46 +15,63 @@ import { Link } from "../../../components/link";
 import { PanelSection } from "../../../components/pages/account/panel-section";
 import { UserFacingApiKeyProperties } from "../../../lib/api/model/api-key.model";
 import { apiClient } from "../../../lib/api-client";
+import {
+  ApiKeysContext,
+  ApiKeysContextValue,
+  KeyActionStatus,
+} from "./api-keys-context";
 import { ApiKeysEmptyState } from "./api-keys-empty-state";
 import { ApiKeysList } from "./api-keys-list";
 
 export const ApiKeysPanel: FunctionComponent = () => {
-  const [activeApiKeys, setActiveApiKeys] = useState<
-    UserFacingApiKeyProperties[]
-  >([]);
-
+  const [apiKeys, setApiKeys] = useState<UserFacingApiKeyProperties[]>([]);
+  const [keyActionStatus, setKeyActionStatus] = useState<KeyActionStatus>();
   const [isCreatingNewKey, setIsCreatingNewKey] = useState(false);
-  const [newlyCreatedKeyId, setNewlyCreatedKeyId] = useState<string>();
+  const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);
 
-  const fetchAndSetApiKeys = () =>
-    apiClient
-      .getUserApiKeys()
-      .then(({ data }) =>
-        data
-          ? setActiveApiKeys(
-              data.apiKeysMetadata.filter((key) => !key.revokedAt),
-            )
-          : null,
-      );
-
-  useEffect(() => {
-    void fetchAndSetApiKeys();
-  }, []);
-
-  const createKey = useCallback(async (displayName: string) => {
-    const res = await apiClient.generateApiKey({ displayName });
+  const fetchAndSetApiKeys = useCallback(async () => {
+    const res = await apiClient.getUserApiKeys();
 
     if (res.data) {
-      await fetchAndSetApiKeys();
-      setNewlyCreatedKeyId(res.data.apiKey);
-      setIsCreatingNewKey(false);
+      setApiKeys(res.data.apiKeysMetadata.filter((key) => !key.revokedAt));
     }
   }, []);
 
-  const hasKeys = !!activeApiKeys.length;
+  useEffect(() => {
+    void fetchAndSetApiKeys();
+    /** this useEffect meant to be only run once */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const apiKeysContextValue: ApiKeysContextValue = useMemo(
+    () => ({
+      apiKeys,
+      setApiKeys,
+      isCreatingNewKey,
+      setIsCreatingNewKey,
+      newlyCreatedKeyIds,
+      setNewlyCreatedKeyIds,
+      keyActionStatus,
+      setKeyActionStatus,
+      fetchAndSetApiKeys,
+    }),
+    [
+      apiKeys,
+      setApiKeys,
+      isCreatingNewKey,
+      setIsCreatingNewKey,
+      newlyCreatedKeyIds,
+      setNewlyCreatedKeyIds,
+      keyActionStatus,
+      setKeyActionStatus,
+      fetchAndSetApiKeys,
+    ],
+  );
+
+  const shouldRenderEmptyState = !apiKeys.length && !isCreatingNewKey;
 
   return (
-    <>
+    <ApiKeysContext.Provider value={apiKeysContextValue}>
       <NextSeo title="Block Protocol – API" />
 
       <Stack gap={5.25}>
@@ -67,29 +90,7 @@ export const ApiKeysPanel: FunctionComponent = () => {
             </Box>
           }
         >
-          {hasKeys || isCreatingNewKey ? (
-            <ApiKeysList
-              apiKeys={activeApiKeys}
-              onKeyRemoved={(publicId) => {
-                setActiveApiKeys(
-                  activeApiKeys.filter((key) => key.publicId !== publicId),
-                );
-              }}
-              onKeyRenamed={(publicId, displayName) => {
-                setActiveApiKeys(
-                  activeApiKeys.map((key) =>
-                    key.publicId === publicId ? { ...key, displayName } : key,
-                  ),
-                );
-              }}
-              createKey={createKey}
-              newlyCreatedKeyId={newlyCreatedKeyId}
-              isCreatingNewKey={isCreatingNewKey}
-              closeNewKeyCard={() => setIsCreatingNewKey(false)}
-            />
-          ) : (
-            <ApiKeysEmptyState />
-          )}
+          {shouldRenderEmptyState ? <ApiKeysEmptyState /> : <ApiKeysList />}
 
           {!isCreatingNewKey && (
             <Button
@@ -110,6 +111,6 @@ export const ApiKeysPanel: FunctionComponent = () => {
           )}
         </PanelSection>
       </Stack>
-    </>
+    </ApiKeysContext.Provider>
   );
 };

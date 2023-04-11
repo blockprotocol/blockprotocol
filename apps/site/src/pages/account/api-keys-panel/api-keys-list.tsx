@@ -10,40 +10,28 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
 
-import { UserFacingApiKeyProperties } from "../../../lib/api/model/api-key.model";
 import { apiClient } from "../../../lib/api-client";
 import { ApiKeyCard } from "./api-key-card";
 import { ApiKeyTableRow } from "./api-key-table-row";
+import { useApiKeys } from "./api-keys-context";
 import { MobileApiKeyItem } from "./mobile-api-key-item";
 
-interface ApiKeysListProps {
-  apiKeys: UserFacingApiKeyProperties[];
-  onKeyRemoved: (publicId: string) => void;
-  onKeyRenamed: (publicId: string, displayName: string) => void;
-  isCreatingNewKey: boolean;
-  newlyCreatedKeyId?: string;
-  createKey: (displayName: string) => Promise<void>;
-  closeNewKeyCard: () => void;
-}
-
-export const ApiKeysList = ({
-  apiKeys,
-  onKeyRemoved,
-  onKeyRenamed,
-  isCreatingNewKey,
-  newlyCreatedKeyId,
-  closeNewKeyCard,
-  createKey,
-}: ApiKeysListProps) => {
+export const ApiKeysList = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [keyActionStatus, setKeyActionStatus] = useState<{
-    publicId: string;
-    action: "rename" | "revoke";
-  }>();
+  const {
+    apiKeys,
+    keyActionStatus,
+    setKeyActionStatus,
+    newlyCreatedKeyIds,
+    isCreatingNewKey,
+    setApiKeys,
+    setIsCreatingNewKey,
+    setNewlyCreatedKeyIds,
+    fetchAndSetApiKeys,
+  } = useApiKeys();
 
   const revokeApiKey = async (publicId: string) => {
     const res = await apiClient.revokeApiKey({ publicId });
@@ -53,18 +41,32 @@ export const ApiKeysList = ({
     }
 
     setKeyActionStatus(undefined);
-    onKeyRemoved(publicId);
+    setApiKeys(apiKeys.filter((key) => key.publicId !== publicId));
   };
 
   const renameApiKey = async (publicId: string, displayName: string) => {
     await apiClient.updateApiKey({ publicId, displayName });
     setKeyActionStatus(undefined);
-    onKeyRenamed(publicId, displayName);
+    setApiKeys(
+      apiKeys.map((key) =>
+        key.publicId === publicId ? { ...key, displayName } : key,
+      ),
+    );
+  };
+
+  const createKey = async (displayName: string) => {
+    const { data } = await apiClient.generateApiKey({ displayName });
+
+    if (data) {
+      await fetchAndSetApiKeys();
+      setNewlyCreatedKeyIds((ids) => [...ids, data.apiKey]);
+      setIsCreatingNewKey(false);
+    }
   };
 
   const createKeyCard = (
     <ApiKeyCard
-      onClose={closeNewKeyCard}
+      onClose={() => setIsCreatingNewKey(false)}
       onSubmit={createKey}
       submitTitle="Create key"
       inputLabel="Name your new key"
@@ -79,7 +81,7 @@ export const ApiKeysList = ({
             <MobileApiKeyItem
               key={data.publicId}
               apiKey={data}
-              newlyCreatedKeyId={newlyCreatedKeyId}
+              newlyCreatedKeyIds={newlyCreatedKeyIds}
               renameApiKey={renameApiKey}
               revokeApiKey={revokeApiKey}
               keyAction={
@@ -137,7 +139,7 @@ export const ApiKeysList = ({
               <ApiKeyTableRow
                 key={data.publicId}
                 apiKey={data}
-                newlyCreatedKeyId={newlyCreatedKeyId}
+                newlyCreatedKeyIds={newlyCreatedKeyIds}
                 renameApiKey={renameApiKey}
                 revokeApiKey={revokeApiKey}
                 keyAction={

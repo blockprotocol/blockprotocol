@@ -55,7 +55,7 @@ export const NewIndicator = () => {
 
 export interface ApiKeyItemProps {
   apiKey: UserFacingApiKeyProperties;
-  newlyCreatedKeyId?: string;
+  newlyCreatedKeyIds: string[];
   revokeApiKey: (publicId: string) => Promise<void>;
   renameApiKey: (publicId: string, displayName: string) => Promise<void>;
   keyAction?: "rename" | "revoke";
@@ -72,7 +72,7 @@ export interface ApiKeyItemProps {
 
 export const ApiKeyTableRow = ({
   apiKey: { displayName, publicId, createdAt, lastUsedAt },
-  newlyCreatedKeyId,
+  newlyCreatedKeyIds,
   renameApiKey,
   revokeApiKey,
   keyAction,
@@ -82,14 +82,15 @@ export const ApiKeyTableRow = ({
 
   const dismissKeyAction = () => setKeyActionStatus(undefined);
 
-  const isNewlyCreated =
-    newlyCreatedKeyId && newlyCreatedKeyId.includes(publicId);
+  const foundNewlyCreatedKey = newlyCreatedKeyIds.find((key) =>
+    key.includes(publicId),
+  );
 
   const coreCells = useMemo(() => {
-    if (isNewlyCreated) {
+    if (foundNewlyCreatedKey) {
       return (
         <TableCell colSpan={3}>
-          <NewlyCreatedApiKeyCard apiKey={newlyCreatedKeyId} />
+          <NewlyCreatedApiKeyCard apiKey={foundNewlyCreatedKey} />
         </TableCell>
       );
     }
@@ -107,7 +108,7 @@ export const ApiKeyTableRow = ({
         </TableCell>
       </>
     );
-  }, [createdAt, lastUsedAt, publicId, newlyCreatedKeyId, isNewlyCreated]);
+  }, [createdAt, lastUsedAt, publicId, foundNewlyCreatedKey]);
 
   return (
     <TableRow key={publicId}>
@@ -134,14 +135,18 @@ export const ApiKeyTableRow = ({
         </TableCell>
       ) : (
         <>
-          <TableCell sx={{ verticalAlign: isNewlyCreated ? "top" : "inherit" }}>
+          <TableCell
+            sx={{ verticalAlign: foundNewlyCreatedKey ? "top" : "inherit" }}
+          >
             {displayName}
-            {isNewlyCreated && <NewIndicator />}
+            {foundNewlyCreatedKey && <NewIndicator />}
           </TableCell>
 
           {coreCells}
 
-          <TableCell sx={{ verticalAlign: isNewlyCreated ? "top" : "inherit" }}>
+          <TableCell
+            sx={{ verticalAlign: foundNewlyCreatedKey ? "top" : "inherit" }}
+          >
             <ApiKeyTableRowActions
               id={publicId}
               onRename={() =>

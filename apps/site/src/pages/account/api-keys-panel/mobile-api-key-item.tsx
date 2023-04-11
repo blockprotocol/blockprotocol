@@ -76,7 +76,7 @@ const ActionButton = ({
 
 export const MobileApiKeyItem = ({
   apiKey: { displayName, publicId, createdAt, lastUsedAt },
-  newlyCreatedKeyId,
+  newlyCreatedKeyIds,
   renameApiKey,
   revokeApiKey,
   keyAction,
@@ -84,8 +84,9 @@ export const MobileApiKeyItem = ({
 }: ApiKeyItemProps) => {
   const dismissKeyAction = () => setKeyActionStatus(undefined);
 
-  const isNewlyCreated =
-    newlyCreatedKeyId && newlyCreatedKeyId.includes(publicId);
+  const foundNewlyCreatedKey = newlyCreatedKeyIds.find((key) =>
+    key.includes(publicId),
+  );
 
   if (keyAction === "rename") {
     return (
@@ -125,15 +126,15 @@ export const MobileApiKeyItem = ({
           }}
         >
           {displayName}
-          {isNewlyCreated && <NewIndicator />}
+          {foundNewlyCreatedKey && <NewIndicator />}
         </Typography>
 
-        {isNewlyCreated ? (
+        {foundNewlyCreatedKey ? (
           <Field
             label="Full api key"
             value={
               <NewlyCreatedApiKeyCard
-                apiKey={newlyCreatedKeyId}
+                apiKey={foundNewlyCreatedKey}
                 sx={{ mt: 0.5 }}
               />
             }
