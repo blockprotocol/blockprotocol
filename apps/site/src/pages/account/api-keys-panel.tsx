@@ -9,15 +9,19 @@ import {
   useState,
 } from "react";
 
-import { Button } from "../../../components/button";
-import { FontAwesomeIcon } from "../../../components/icons";
-import { Link } from "../../../components/link";
-import { PanelSection } from "../../../components/pages/account/panel-section";
-import { apiClient } from "../../../lib/api-client";
-import { ApiKeysContext } from "./api-keys-context";
-import { ApiKeysEmptyState } from "./api-keys-empty-state";
-import { ApiKeysList } from "./api-keys-list";
-import { ApiKeyProps, ApiKeysContextValue, KeyActionStatus } from "./types";
+import { Button } from "../../components/button";
+import { FontAwesomeIcon } from "../../components/icons";
+import { Link } from "../../components/link";
+import { PanelSection } from "../../components/pages/account/panel-section";
+import { apiClient } from "../../lib/api-client";
+import { ApiKeysContext } from "./api-keys-panel/api-keys-context";
+import { ApiKeysEmptyState } from "./api-keys-panel/api-keys-empty-state";
+import { ApiKeysList } from "./api-keys-panel/api-keys-list";
+import {
+  ApiKeyProps,
+  ApiKeysContextValue,
+  KeyActionStatus,
+} from "./api-keys-panel/types";
 
 export const ApiKeysPanel: FunctionComponent = () => {
   const [apiKeys, setApiKeys] = useState<ApiKeyProps[]>([]);

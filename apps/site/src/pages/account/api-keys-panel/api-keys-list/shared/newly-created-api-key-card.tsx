@@ -1,7 +1,7 @@
 import { Box, BoxProps, Typography } from "@mui/material";
 
-import { CODE_FONT_FAMILY } from "../../../theme/typography";
-import { CopyToClipboardButton } from "./copy-to-clipboard-button";
+import { CopyToClipboardButton } from "../../../../../components/copy-to-clipboard-button";
+import { CODE_FONT_FAMILY } from "../../../../../theme/typography";
 
 export const NewlyCreatedApiKeyCard = ({
   apiKey,

@@ -1,11 +1,11 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 
-import { Button } from "../../../components/button";
-import { useSnackbar } from "../../../components/hooks/use-snackbar";
-import { WarningIcon } from "../../../components/icons";
-import { TrashIcon } from "../../../components/icons/trash-icon";
-import { ColoredCard } from "./colored-card";
+import { Button } from "../../../../components/button";
+import { useSnackbar } from "../../../../components/hooks/use-snackbar";
+import { WarningIcon } from "../../../../components/icons";
+import { TrashIcon } from "../../../../components/icons/trash-icon";
+import { ColoredCard } from "./shared/colored-card";
 
 interface RevokeApiKeyCardProps {
   onClose: () => void;

@@ -6,19 +6,15 @@ import {
   usePopupState,
 } from "material-ui-popup-state/hooks";
 
-import { FontAwesomeIcon } from "../../../components/icons";
+import { FontAwesomeIcon } from "../../../../../components/icons";
 
-interface ApiKeyTableRowActionsProps {
+interface RowActionsProps {
   id: string;
   onRename: (publicId: string) => void;
   onRevoke: (publicId: string) => void;
 }
 
-export const ApiKeyTableRowActions = ({
-  id,
-  onRename,
-  onRevoke,
-}: ApiKeyTableRowActionsProps) => {
+export const RowActions = ({ id, onRename, onRevoke }: RowActionsProps) => {
   const popupState = usePopupState({
     variant: "popover",
     popupId: id,

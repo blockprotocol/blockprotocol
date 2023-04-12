@@ -1,12 +1,13 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { Stack, styled } from "@mui/material";
+import { Stack, styled, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
 
-import { Button } from "../../../components/button";
-import { FontAwesomeIcon } from "../../../components/icons";
-import { TextField } from "../../../components/text-field";
-import { ColoredCard } from "./colored-card";
-import { KeyNameInfoText } from "./key-name-info-text";
+import { Button } from "../../../../components/button";
+import { FontAwesomeIcon } from "../../../../components/icons";
+import { InfoCircleIcon } from "../../../../components/icons/info-circle-icon";
+import { TextField } from "../../../../components/text-field";
+import { ColoredCard } from "./shared/colored-card";
 
 interface ApiKeyCardProps {
   onClose: () => void;
@@ -93,7 +94,26 @@ export const ApiKeyCard = ({
         )}
       </Stack>
 
-      <KeyNameInfoText />
+      <Stack
+        direction="row"
+        sx={{ gap: 1, mt: 2, alignItems: "flex-start", color: "#3A2084" }}
+      >
+        <InfoCircleIcon sx={{ fontSize: 13, mt: 0.2 }} />
+        <Typography
+          sx={{
+            maxWidth: "unset",
+            color: "inherit",
+            fontSize: 14,
+            lineHeight: 1.3,
+          }}
+        >
+          Key names usually refer to the website or environment where they’ll be
+          used.{" "}
+          <Box component="span" color="purple.70">
+            e.g. “WordPress” or “Staging”
+          </Box>
+        </Typography>
+      </Stack>
     </ColoredCard>
   );
 };

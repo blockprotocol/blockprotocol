@@ -1,13 +1,13 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
-import { Button } from "../../../components/button";
-import { CODE_FONT_FAMILY } from "../../../theme/typography";
-import { NewIndicator } from "./api-key-table-row";
-import { useApiKeys } from "./api-keys-context";
-import { NewlyCreatedApiKeyCard } from "./newly-created-api-key-card";
-import { ApiKeyItemProps } from "./types";
-import { formatDateRelativeAndExact } from "./utils";
+import { Button } from "../../../../components/button";
+import { CODE_FONT_FAMILY } from "../../../../theme/typography";
+import { useApiKeys } from "../api-keys-context";
+import { ApiKeyItemProps } from "../types";
+import { formatDate } from "./shared/format-date";
+import { NewIndicator } from "./shared/new-indicator";
+import { NewlyCreatedApiKeyCard } from "./shared/newly-created-api-key-card";
 
 const Field = ({
   label,
@@ -41,7 +41,7 @@ const Field = ({
 };
 
 const DateField = ({ label, date }: { label: string; date?: Date | null }) => {
-  const formattedDates = formatDateRelativeAndExact(date);
+  const formattedDates = formatDate(date);
 
   return (
     <Field

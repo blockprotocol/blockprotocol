@@ -12,11 +12,11 @@ import {
 } from "@mui/material";
 
 import { apiClient } from "../../../lib/api-client";
-import { ApiKeyCard } from "./api-key-card";
-import { ApiKeyTableRow } from "./api-key-table-row";
 import { useApiKeys } from "./api-keys-context";
-import { MobileApiKeyItem } from "./mobile-api-key-item";
-import { RevokeApiKeyCard } from "./revoke-api-key-card";
+import { ApiKeyCard } from "./api-keys-list/api-key-card";
+import { ApiKeyTableRow } from "./api-keys-list/api-key-table-row";
+import { MobileApiKeyItem } from "./api-keys-list/mobile-api-key-item";
+import { RevokeApiKeyCard } from "./api-keys-list/revoke-api-key-card";
 import { ApiKeyItemProps, ApiKeyProps } from "./types";
 
 export const ApiKeysList = () => {

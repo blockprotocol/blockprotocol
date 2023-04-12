@@ -2,7 +2,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { Box, BoxProps, IconButton } from "@mui/material";
 import { ReactNode } from "react";
 
-import { FontAwesomeIcon } from "../../../components/icons";
+import { FontAwesomeIcon } from "../../../../../components/icons";
 
 const CloseCardButton = ({
   onClick,

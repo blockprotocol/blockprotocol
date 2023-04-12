@@ -1,13 +1,13 @@
 import { Box, TableCell, TableRow, Typography } from "@mui/material";
 import { useMemo } from "react";
 
-import { SparklesSolidIcon } from "../../../components/icons/sparkles-solid-icon";
-import { CODE_FONT_FAMILY } from "../../../theme/typography";
-import { ApiKeyTableRowActions } from "./api-key-table-row-actions";
-import { useApiKeys } from "./api-keys-context";
-import { NewlyCreatedApiKeyCard } from "./newly-created-api-key-card";
-import { ApiKeyItemProps } from "./types";
-import { formatDateRelativeAndExact } from "./utils";
+import { CODE_FONT_FAMILY } from "../../../../theme/typography";
+import { useApiKeys } from "../api-keys-context";
+import { ApiKeyItemProps } from "../types";
+import { RowActions } from "./api-key-table-row/row-actions";
+import { formatDate } from "./shared/format-date";
+import { NewIndicator } from "./shared/new-indicator";
+import { NewlyCreatedApiKeyCard } from "./shared/newly-created-api-key-card";
 
 const MaskedPublicId = ({ publicId }: { publicId: string }) => {
   return (
@@ -24,7 +24,7 @@ const MaskedPublicId = ({ publicId }: { publicId: string }) => {
 };
 
 const DateText = ({ date }: { date?: Date | null }) => {
-  const formattedDates = formatDateRelativeAndExact(date);
+  const formattedDates = formatDate(date);
 
   return (
     <Typography>
@@ -32,22 +32,6 @@ const DateText = ({ date }: { date?: Date | null }) => {
       <Typography sx={{ color: "gray.70", fontSize: 14 }}>
         {formattedDates.exact}
       </Typography>
-    </Typography>
-  );
-};
-
-export const NewIndicator = () => {
-  return (
-    <Typography
-      variant="bpSmallCaps"
-      sx={{
-        color: "purple.70",
-        fontSize: 13,
-        fontWeight: 500,
-      }}
-    >
-      new
-      <SparklesSolidIcon sx={{ color: "purple", fontSize: 15, ml: 0.5 }} />
     </Typography>
   );
 };
@@ -110,7 +94,7 @@ export const ApiKeyTableRow = ({
               verticalAlign: matchingNewlyCreatedKey ? "top" : "inherit",
             }}
           >
-            <ApiKeyTableRowActions
+            <RowActions
               id={publicId}
               onRename={() =>
                 setKeyActionStatus({ publicId, action: "rename" })

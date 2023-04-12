@@ -2,8 +2,8 @@ import { faClipboard } from "@fortawesome/free-regular-svg-icons";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 
-import { Button } from "../../../components/button";
-import { FontAwesomeIcon } from "../../../components/icons";
+import { Button } from "./button";
+import { FontAwesomeIcon } from "./icons";
 
 const copyStyle = {
   backgroundColor: "purple.70",
