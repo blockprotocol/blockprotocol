@@ -61,8 +61,5 @@ export const generateDistExampleGraph = async (
     return;
   }
 
-  /* @todo - Should this be optional? */
-  throw new Error(
-    "No example graph found. Please supply either a `./src/example-graph.ts`, or an `./example-graph.json` file.",
-  );
+  console.warn("No example graph file found. Skipping generation.");
 };

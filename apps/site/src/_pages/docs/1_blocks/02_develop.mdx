@@ -55,7 +55,7 @@ The `create-block-app` package and provides everything you need to develop a blo
       - `icon`: an icon to be associated with your block (in place of `public/omega.svg`)
       - `name`: a slugified name for your block (which may differ to the package `name` in package.json); it can be defined as `blockname` or `@namespace/blockname`, where `namespace` must be your username on blockprotocol.org if you intend to publish it there
     - list the `externals`, which are generated from `peerDependencies` in package.json.
-  - Generates an `example-graph.json` file, using the `./src/example-graph.ts` script, which provides a sample state of a datastore which can be used when demonstrating the use of your graph.
+  - Generates an `example-graph.json` file using the `./src/example-graph.ts` script if it exists, which provides a sample state of a datastore which can be used when demonstrating the use of your graph.
 - If using the HTML template, `yarn build` simply copies your block source, `example-graph.json`, and `block-metadata.json` file to a `dist/` folder.
 
 ### Updating the block schema
@@ -449,4 +449,4 @@ Read more about verification in [the FAQ](https://blockprotocol.org/docs/faq#how
 - **To change the icon:** add an icon to the `public` folder and update `blockprotocol.icon` in `package.json`
 - add a preview `image` to the `public` folder and update `blockprotocol.image` in `package.json`
 - update your block’s `README.md` – it will appear below your block on its [Þ Hub](https://blockprotocol.org/hub) page if you change it from the default
-- update the `example-graph` (either `./src/example-graph.ts` or `./example-graph.json` depending on approach) to update the data the block has available to it when a user loads it on the [Þ Hub](https://blockprotocol.org/hub)
+- update or add an `example-graph` (either `./src/example-graph.ts` or `./example-graph.json` depending on approach) to update the data the block has available to it when a user loads it on the [Þ Hub](https://blockprotocol.org/hub)

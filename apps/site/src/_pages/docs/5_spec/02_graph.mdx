@@ -154,7 +154,7 @@ Blocks using the graph module provide an **entity type** which describes the sha
 
 The versioned URL of the entity type's schema must be referenced in the block's `block-metadata.json` under a `schema` key.
 
-Blocks also include an `example-graph` file (either `example-graph.ts` or `example-graph.json` depending on approach) which defines example data that a block can use.
+Blocks may also include an `example-graph` file (either `example-graph.ts` or `example-graph.json` depending on approach) which defines example data that a block can use.
 
 #### <Hidden>Block package </Hidden>Specification
 
@@ -165,7 +165,7 @@ A block using the graph module MAY expand `block-metadata.json` to specify:
 - `schema`: the versioned URL of the **entity type** associated with the block entity. As per the specification, the schema hosted at the remote address should not be subject to change and versions of entity types should be treated as immutable, permanently available, records.
 - `variants`: an array of objects, each with a `name` and `properties`, and optionally `description`, `icon`, and `examples`. These objects represents different variants of the block that the user can create, where `properties` sets the starting properties. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ "https://blockprotocol.org/@alice/types/property-type/level/": 1 }` and `{ "https://blockprotocol.org/@alice/types/property-type/level/": 2 }` as `properties`, respectively
 
-A block using the graph module MUST include an `example-graph.json` file alongside its metadata. The file's contents
+A block using the graph module MAY include an `example-graph.json` file alongside its metadata. The file's contents
 
 - MUST be a JSON object
 - MUST contain an `entities` key where each element is a JSON representation of an entity which MUST conform to the structure specified in [entity definition](#structure-specification).
