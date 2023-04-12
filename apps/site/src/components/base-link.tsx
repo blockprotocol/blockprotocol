@@ -15,6 +15,7 @@ import { FRONTEND_URL } from "../lib/config";
 export const isHrefExternal = (href: string | UrlObject) =>
   typeof href === "string" &&
   (href.endsWith("/discord") ||
+    href.endsWith(".pdf") ||
     (!/^(mailto:|#|\/|https:\/\/blockprotocol\.org)/.test(href) &&
       !href.startsWith(FRONTEND_URL)));
 
