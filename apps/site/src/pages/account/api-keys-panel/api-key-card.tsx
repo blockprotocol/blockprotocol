@@ -1,6 +1,6 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Stack, styled } from "@mui/material";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import { Button } from "../../../components/button";
 import { FontAwesomeIcon } from "../../../components/icons";
@@ -25,29 +25,29 @@ const DiscardButton = styled(Button)(({ theme: { palette } }) => ({
   },
 }));
 
+interface FormValues {
+  displayName: string;
+}
+
 export const ApiKeyCard = ({
   onClose,
   inputLabel,
   defaultValue,
-  onSubmit,
+  onSubmit: onSubmitProp,
   submitTitle,
   showDiscardButton,
 }: ApiKeyCardProps) => {
-  const [value, setValue] = useState(defaultValue ?? "");
-  const [loading, setLoading] = useState(false);
+  const { register, handleSubmit, formState } = useForm<FormValues>({
+    defaultValues: { displayName: defaultValue },
+  });
 
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      await onSubmit(value);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const onSubmit = ({ displayName }: FormValues) => onSubmitProp(displayName);
 
   return (
     <ColoredCard color="purple" onClose={onClose}>
       <Stack
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
         sx={(theme) => ({
           flexDirection: "row",
           gap: 2.5,
@@ -61,18 +61,20 @@ export const ApiKeyCard = ({
         })}
       >
         <TextField
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
           label={inputLabel}
           placeholder="Key name"
           autoFocus
           fullWidth
-          InputProps={{ sx: { background: "white" } }}
+          InputProps={{
+            ...register("displayName", { required: true }),
+            sx: { background: "white" },
+          }}
+          error={!!formState.errors.displayName}
           sx={{ minWidth: "40%" }}
         />
         <Button
-          loading={loading}
-          onClick={handleSubmit}
+          type="submit"
+          loading={formState.isSubmitting}
           squared
           endIcon={<FontAwesomeIcon icon={faCheck} />}
           sx={{ whiteSpace: "nowrap" }}
