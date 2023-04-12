@@ -10,8 +10,7 @@ The code that does this is [here](https://github.com/blockprotocol/blockprotocol
 
 ## Why self-host?
 
-esm.sh is a great project, but it has some stability issues. Updates occasionally mean that some imports fail, break the packages we are using it to import,
-which means that the block preview fails to load, breaking both user-facing pages and our CI (which test the block pages).
+esm.sh is a great project, but it has some stability issues. Updates occasionally mean that some imports fail, breaking the packages we are using it to import, which means that the block preview fails to load, breaking both user-facing pages and our CI (which test the block pages).
 
 ## Deployment
 
@@ -19,8 +18,8 @@ The Dockerfile in this folder builds esm.sh from a specific version and that ima
 
 This process is not automated, instead:
 
-1.  Build the image
 1.  Test the image locally (see below)
+1.  Build the image
 1.  Tag the image as `latest` for the relevant ECR repository
 1.  Push it to the repository
 1.  Force a new deployment of the ECS service
