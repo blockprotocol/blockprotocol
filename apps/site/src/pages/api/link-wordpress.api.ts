@@ -56,7 +56,7 @@ export default createBaseHandler<
       (await User.create(db, {
         email,
         hasVerifiedEmail: false,
-        referrer: "wordpress",
+        referrer: "WordPress",
         wordpressInstanceUrl,
       }));
 
@@ -68,7 +68,7 @@ export default createBaseHandler<
       );
     }
 
-    const { id: verificationCodeId } = await user.sendLinkWordpressCode(db, {
+    const { id: verificationCodeId } = await user.sendLinkWordPressCode(db, {
       instance: wordpressInstanceUrl,
       settings: wordpressSettingsUrl,
     });

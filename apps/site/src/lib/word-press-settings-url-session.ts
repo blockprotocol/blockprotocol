@@ -1,11 +1,11 @@
 export const wordpressSettingsUrlSessionKey =
   "blockprotocol.dashboard.wordpressSettingsUrl";
 
-export const setWordpressSettingsUrlSession = (
+export const setWordPressSettingsUrlSession = (
   wordpressSettingsUrl: string | null | undefined,
 ) => {
   if (typeof window === "undefined") {
-    throw new Error("Cannot call setWordpressSettingsUrlSession on server");
+    throw new Error("Cannot call setWordPressSettingsUrlSession on server");
   }
 
   try {
@@ -22,9 +22,9 @@ export const setWordpressSettingsUrlSession = (
   }
 };
 
-export const getWordpressSettingsUrlSessionOnce = () => {
+export const getWordPressSettingsUrlSessionOnce = () => {
   if (typeof window === "undefined") {
-    throw new Error("Cannot call getWordpressSettingsUrlSessionOnce on server");
+    throw new Error("Cannot call getWordPressSettingsUrlSessionOnce on server");
   }
 
   try {

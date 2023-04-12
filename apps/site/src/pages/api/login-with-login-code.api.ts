@@ -60,7 +60,7 @@ export default createBaseHandler<
 
     const loginCode = await user.getVerificationCode(db, {
       verificationCodeId,
-      variant: ["login", "linkWordpress"],
+      variant: ["login", "linkWordPress"],
     });
 
     if (!loginCode) {
@@ -86,8 +86,8 @@ export default createBaseHandler<
         );
       }
 
-      if (loginCode.variant === "linkWordpress") {
-        const wordpressInstanceUrl = loginCode.wordPressUrls?.instance;
+      if (loginCode.variant === "linkWordPress") {
+        const wordpressInstanceUrl = loginCode.wordpressUrls?.instance;
         if (!wordpressInstanceUrl) {
           return res.status(500).json(
             formatErrors({
@@ -100,7 +100,7 @@ export default createBaseHandler<
 
         await loginCode.setToUsed(db);
 
-        await user.addWordpressInstanceUrlAndVerify(db, {
+        await user.addWordPressInstanceUrlAndVerify(db, {
           wordpressInstanceUrl,
           updateReferrer: false,
         });
@@ -111,10 +111,10 @@ export default createBaseHandler<
       req.login(user, () =>
         res.status(200).json({
           user: user.serialize(true),
-          ...(loginCode.variant === "linkWordpress"
+          ...(loginCode.variant === "linkWordPress"
             ? {
                 redirectPath: "/dashboard",
-                wordpressSettingsUrl: loginCode.wordPressUrls?.settings,
+                wordpressSettingsUrl: loginCode.wordpressUrls?.settings,
               }
             : {}),
         }),
