@@ -18,7 +18,7 @@ runs:
     - name: Install Rust tools
       uses: taiki-e/install-action@v2
       with:
-        tool: wasm-pack@0.10.3
+        tool: wasm-pack@0.11.0
 
     - name: Cache Rust dependencies
       uses: Swatinem/rust-cache@v2
