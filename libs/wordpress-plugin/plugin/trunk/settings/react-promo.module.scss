@@ -32,7 +32,7 @@
   line-height: 1.3;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #0E1114;
+  color: #0e1114;
   margin-bottom: 4px;
   margin-top: 0;
 }
@@ -104,13 +104,13 @@
 
   a {
     text-decoration: none;
-    color: #6048E5;
+    color: #6048e5;
   }
 }
 
 .PromoListItemComingSoon {
   svg {
-    color: #6F59EC;
+    color: #6f59ec;
   }
 }
 
@@ -120,10 +120,12 @@
   font-size: 12px;
   line-height: 140%;
   text-transform: uppercase;
-  color: #6F59EC;
+  color: #6f59ec;
 }
 
-.PromoInfoText { color: #758AA1; }
+.PromoInfoText {
+  color: #758aa1;
+}
 
 .PromoInfoImage {
   display: flex;
@@ -145,5 +147,5 @@
 }
 
 .PromoCardPurpleText {
-  color: #6048E5;
+  color: #6048e5;
 }
