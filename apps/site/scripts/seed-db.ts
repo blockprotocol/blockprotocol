@@ -88,19 +88,19 @@ const script = async () => {
       shortname: "alice",
       preferredName: "Alice",
       email: "alice@example.com",
-      referrer: "blockprotocol",
+      referrer: "Block Protocol",
     },
     {
       shortname: "bob",
       preferredName: "Bob",
       email: "bob@example.com",
-      referrer: "blockprotocol",
+      referrer: "Block Protocol",
     },
     {
       shortname: "hash",
       preferredName: "HASH",
       email: "hash@example.com",
-      referrer: "blockprotocol",
+      referrer: "Block Protocol",
     },
   ] satisfies UserProperties[];
 
