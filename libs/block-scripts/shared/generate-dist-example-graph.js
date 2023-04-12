@@ -3,6 +3,7 @@ import path from "node:path";
 import fs from "fs-extra";
 
 import { blockDistDirPath, blockRootDirPath } from "./paths.js";
+import { writeFormattedJson } from "./write-formatted-json.js";
 
 /* @todo - Where do we validate these metadata files, should it be here? */
 
@@ -48,13 +49,13 @@ export const generateDistExampleGraph = async (
         "The default export of the example-graph script must be a valid example graph, containing top-level 'entities' and 'blockEntityRecordId' properties.",
       );
     }
-    await fs.writeJson(distExampleGraphPath, exampleGraph);
+    await writeFormattedJson(distExampleGraphPath, exampleGraph);
 
     await fs.remove(sourceScriptExampleGraphPath);
     // eslint-disable-next-line no-param-reassign
     delete assetsManifest["example-graph.js"];
 
-    await fs.writeJson(assetsManifestPath, assetsManifest, { spaces: 2 });
+    await writeFormattedJson(assetsManifestPath, assetsManifest);
     return;
   } else if (await fs.pathExists(sourcePlainTextExampleGraphPath)) {
     await fs.copy(sourcePlainTextExampleGraphPath, distExampleGraphPath);
