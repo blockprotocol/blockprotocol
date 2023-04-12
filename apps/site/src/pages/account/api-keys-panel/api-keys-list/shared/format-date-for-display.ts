@@ -1,6 +1,6 @@
 import { format, formatDistanceToNowStrict, isSameDay } from "date-fns";
 
-export const formatDate = (date?: Date | string | null) => {
+export const formatDateForDisplay = (date?: Date | string | null) => {
   if (!date) {
     return { relative: "Never", exact: "" };
   }

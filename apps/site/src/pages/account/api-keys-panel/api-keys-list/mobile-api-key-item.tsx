@@ -5,7 +5,7 @@ import { Button } from "../../../../components/button";
 import { CODE_FONT_FAMILY } from "../../../../theme/typography";
 import { useApiKeys } from "../api-keys-context";
 import { ApiKeyItemProps } from "../types";
-import { formatDate } from "./shared/format-date";
+import { formatDateForDisplay } from "./shared/format-date-for-display";
 import { NewIndicator } from "./shared/new-indicator";
 import { NewlyCreatedApiKeyCard } from "./shared/newly-created-api-key-card";
 
@@ -41,7 +41,7 @@ const Field = ({
 };
 
 const DateField = ({ label, date }: { label: string; date?: Date | null }) => {
-  const formattedDates = formatDate(date);
+  const formattedDates = formatDateForDisplay(date);
 
   return (
     <Field
