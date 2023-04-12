@@ -148,11 +148,20 @@ export const ApiKeysList = () => {
     <Box>
       <TableContainer>
         <Table>
-          <TableHead>
+          <TableHead
+            sx={{
+              th: {
+                pl: 0,
+                py: 1,
+                color: "gray.80",
+                fontSize: 14,
+              },
+            }}
+          >
             <TableRow>
               {apiKeys.length ? (
                 <>
-                  <TableCell>Name</TableCell>
+                  <TableCell sx={{ width: 130 }}>Name</TableCell>
                   <TableCell>Token</TableCell>
                   <TableCell>Last Used</TableCell>
                   <TableCell>Created</TableCell>
@@ -163,7 +172,15 @@ export const ApiKeysList = () => {
               )}
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody
+            sx={{
+              td: {
+                color: "gray.90",
+                pl: 0,
+                fontWeight: 500,
+              },
+            }}
+          >
             {apiKeys.map((data) => (
               <ApiKeyTableRow
                 key={data.publicId}
@@ -173,9 +190,7 @@ export const ApiKeysList = () => {
             {isCreatingNewKey && (
               <TableRow>
                 <TableCell sx={{ verticalAlign: "top" }}>New Key</TableCell>
-                <TableCell colSpan={4} sx={{ px: 0 }}>
-                  {createKeyCard}
-                </TableCell>
+                <TableCell colSpan={4}>{createKeyCard}</TableCell>
               </TableRow>
             )}
           </TableBody>

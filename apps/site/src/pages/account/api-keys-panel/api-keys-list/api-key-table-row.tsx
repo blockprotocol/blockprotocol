@@ -12,7 +12,12 @@ import { NewlyCreatedApiKeyCard } from "./shared/newly-created-api-key-card";
 const MaskedPublicId = ({ publicId }: { publicId: string }) => {
   return (
     <Typography
-      sx={{ fontFamily: CODE_FONT_FAMILY, color: "gray.50", fontSize: 14 }}
+      sx={{
+        fontFamily: CODE_FONT_FAMILY,
+        color: "gray.50",
+        fontSize: 14,
+        lineBreak: "anywhere",
+      }}
     >
       b10ck5.
       <Box component="span" sx={{ color: "gray.90" }}>
@@ -73,7 +78,7 @@ export const ApiKeyTableRow = ({
   return (
     <TableRow key={publicId}>
       {hasAction ? (
-        <TableCell colSpan={5} sx={{ px: 0 }}>
+        <TableCell colSpan={5}>
           {keyAction === "revoke" ? revokeApiKeyCard : renameApiKeyCard}
         </TableCell>
       ) : (
