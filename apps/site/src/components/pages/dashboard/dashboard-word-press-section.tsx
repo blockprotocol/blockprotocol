@@ -11,7 +11,7 @@ import { Link } from "../../link";
 const defaultApiKey =
   "b10ck5.00000000000000000000000000000000.00000000-0000-0000-0000-000000000000";
 
-export const DashboardWordpressSection = ({
+export const DashboardWordPressSection = ({
   wordpressSettingsUrl,
 }: {
   wordpressSettingsUrl: string;
@@ -91,7 +91,6 @@ export const DashboardWordpressSection = ({
           }}
         >
           <Typography mb={3}>
-            {/** @todo link wordpress */}
             <Box component="span" fontWeight={700}>
               Click or tap
             </Box>{" "}

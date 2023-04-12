@@ -58,7 +58,7 @@ export type UserProperties = {
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
   wordpressInstanceUrls?: string[];
-  referrer?: "wordpress" | "blockprotocol";
+  referrer?: "WordPress" | "Block Protocol";
 };
 
 export type UserAvatarProperties = {
@@ -320,7 +320,7 @@ export class User {
     return this;
   }
 
-  async addWordpressInstanceUrlAndVerify(
+  async addWordPressInstanceUrlAndVerify(
     db: Db,
     {
       wordpressInstanceUrl,
@@ -339,7 +339,7 @@ export class User {
               wordpressInstanceUrl,
             ],
           }),
-      ...(updateReferrer ? { referrer: "wordpress" } : {}),
+      ...(updateReferrer ? { referrer: "WordPress" } : {}),
       hasVerifiedEmail: true,
     });
   }
@@ -491,13 +491,13 @@ export class User {
     return emailVerificationCode;
   }
 
-  async sendLinkWordpressCode(
+  async sendLinkWordPressCode(
     db: Db,
-    wordPressUrls: VerificationCodeWordPressUrls,
+    wordpressUrls: VerificationCodeWordPressUrls,
   ): Promise<VerificationCode> {
     const emailVerificationCode = await this.createVerificationCode(db, {
-      variant: "linkWordpress",
-      wordPressUrls,
+      variant: "linkWordPress",
+      wordpressUrls,
     });
 
     const magicLinkQueryParams: (
@@ -519,22 +519,22 @@ export class User {
     ).toString()}`;
 
     // Doesn't make sense to include the code itself as they won't be on the
-    // page to enter the code, as this will be triggered by the Wordpress
+    // page to enter the code, as this will be triggered by the WordPress
     // backend
     if (shouldUseDummyEmailService) {
       await sendDummyEmail([
-        `Magic Link to activate Wordpress plugin: ${magicLink}`,
+        `Magic Link to activate WordPress plugin: ${magicLink}`,
       ]);
     } else {
       await sendMail({
         to: this.email,
-        subject: "Activate your Block Protocol Wordpress plugin",
+        subject: "Activate your Block Protocol WordPress plugin",
         html: dedent`
           <p>To ${
             this.hasVerifiedEmail
               ? "login to your Block Protocol account"
               : "finish creating your Block Protocol account"
-          }, and to link it to your Wordpress instance, <a href="${magicLink}">click here</a>.</p>
+          }, and to link it to your WordPress instance, <a href="${magicLink}">click here</a>.</p>
           <p><em>Alternatively, you copy the URL and paste it into your browser: ${magicLink}</em></p>
         `,
       });
