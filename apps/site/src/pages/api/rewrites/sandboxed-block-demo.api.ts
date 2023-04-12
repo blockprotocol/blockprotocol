@@ -14,7 +14,7 @@ const hotfixPackageName = (packageName: string): string => {
 
 const currentTime = new Date().toISOString();
 
-const esmCdnUrl = process.env.ESM_CDN_URL || "https://esm.sh";
+const esmCdnUrl = process.env.ESM_CDN_URL || "https://esm.blockprotocol.org";
 
 const temporalAxes: QueryTemporalAxes = {
   pinned: {

@@ -10,8 +10,8 @@ The code that does this is [here](https://github.com/blockprotocol/blockprotocol
 
 ## Why self-host?
 
-esm.sh is a great project, but it has some stability issues. Updates occasionally break the packages we are using it to import,
-which means that the fail to load, breaking both user-facing pages and our CI (which test the block pages).
+esm.sh is a great project, but it has some stability issues. Updates occasionally mean that some imports fail, break the packages we are using it to import,
+which means that the block preview fails to load, breaking both user-facing pages and our CI (which test the block pages).
 
 ## Deployment
 

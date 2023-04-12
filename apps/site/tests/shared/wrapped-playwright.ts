@@ -26,7 +26,7 @@ const tolerableSharedConsoleMessageMatches: RegExp[] = [
   /Layout was forced before the page was fully loaded. If stylesheets are not yet loaded this may cause a flash of unstyled content/,
   /Loading failed for the <script> with source “http:\/\/localhost:\d+\/_next\/static\/chunks/,
 
-  // Firefox - sandboxed iframe → esm.sh lodash
+  // Firefox - sandboxed iframe → https://esm.blockprotocol.org lodash
   /InstallTrigger is deprecated and will be removed in the future./,
   /onmozfullscreenchange is deprecated./,
   /onmozfullscreenerror is deprecated./,
