@@ -36,7 +36,7 @@ function block_protocol_migration_1()
   global $wpdb;
   $charset_collate = $wpdb->get_charset_collate();
 
-  $sql = "CREATE TABLE `{$wpdb->prefix}block_protocol_entities` (
+  $sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}block_protocol_entities` (
     -- common data across all entities
     entity_id char(36) NOT NULL,
     entity_type_id text NOT NULL,
@@ -66,6 +66,14 @@ function block_protocol_migration_1()
   block_protocol_maybe_capture_error($wpdb->last_error);
 }
 
+function block_protocol_migration_2()
+{
+  // This migration is solely to try to recreate the database in older installations
+  // that may have a unmigrated DB but a migration_version of `2`.
+  // This only works because we have `IF NOT EXISTS` in the first migration.
+  block_protocol_migration_1();
+}
+
 function block_protocol_set_migration_version_to(int $migration_version)
 {
   global $wpdb;
@@ -75,21 +83,35 @@ function block_protocol_set_migration_version_to(int $migration_version)
   }
 }
 
+function block_protocol_migrations()
+{
+  return [
+    'block_protocol_migration_1',
+    'block_protocol_migration_2',
+  ];
+}
+
 function block_protocol_migrate()
 {
-  $saved_version = (int) get_site_option('block_protocol_db_migration_version');
-
   // Don't apply migrations if the DB version is unsupported.
   if (!block_protocol_is_database_supported()) {
     return;
   }
 
-  if ($saved_version < 2) {
-    block_protocol_migration_1();
-    block_protocol_set_migration_version_to(2);
-  }
+  $saved_version = ((int) get_site_option('block_protocol_db_migration_version')) ?? 0;
 
-  // future migrations go here
+  $migrations = block_protocol_migrations();
+
+  // Apply new migrations sequentially, skipping already-applied ones.
+  foreach ($migrations as $index => $migration) {
+    // Fetch the saved version at each iteration as it should be changing
+    $saved_version = (int) get_site_option('block_protocol_db_migration_version');
+    $expected_migration_version = $index + 1;
+    if ($saved_version <= $expected_migration_version) {
+      ($migration)();
+      block_protocol_set_migration_version_to($expected_migration_version + 1);
+    }
+  }
 }
 
 function block_protocol_database_available() 

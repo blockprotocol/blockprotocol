@@ -12,6 +12,7 @@ module.exports = {
     render: "./plugin/trunk/block/render.tsx",
     "register-variations": "./plugin/trunk/block/register-variations.tsx",
     sentry: "./plugin/trunk/block/sentry.ts",
+    settings: "./plugin/trunk/settings/settings.tsx",
   },
   output: {
     path: path.join(__dirname, "./plugin/trunk/build"),
