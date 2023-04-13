@@ -32,7 +32,10 @@
 This PR:
 
 - [ ] modifies an **npm**-publishable library and **I have added a changeset file(s)**
-- [ ] does not modify any publishable libraries
+- [ ] modifies a **Cargo**-publishable library and **I have amended the version**
+- [ ] modifies a **Cargo**-publishable library, but **it is not yet ready to publish**
+- [ ] modifies a **block** that will need publishing via GitHub action once merged
+- [ ] does not modify any publishable blocks or libraries
 - [ ] I am unsure / need advice
 
 ## 📜 Does this require a change to the docs?
