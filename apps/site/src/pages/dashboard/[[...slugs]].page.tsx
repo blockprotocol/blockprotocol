@@ -9,27 +9,27 @@ import {
 import { DashboardCard } from "../../components/pages/dashboard/dashboard-card/dashboard-card";
 import { DashboardSectionGrid } from "../../components/pages/dashboard/dashboard-section-grid";
 import { DashboardSectionTitle } from "../../components/pages/dashboard/dashboard-section-title";
-import { DashboardWordpressSection } from "../../components/pages/dashboard/dashboard-wordpress-section";
+import { DashboardWordPressSection } from "../../components/pages/dashboard/dashboard-word-press-section";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 import {
   DashboardSection,
   getDashboardSectionCards,
 } from "../../components/pages/dashboard/utils";
-import { getWordpressSettingsUrlSessionOnce } from "../../lib/wordpress-settings-url-session";
+import { getWordPressSettingsUrlSessionOnce } from "../../lib/word-press-settings-url-session";
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName, shortname } = user ?? {};
 
-  const [wordpressSettingsUrl, setWordpressSettingsUrl] = useState<
+  const [wordpressSettingsUrl, setWordPressSettingsUrl] = useState<
     string | null
   >(null);
 
   useLayoutEffect(() => {
-    const nextSettingsUrl = getWordpressSettingsUrlSessionOnce();
+    const nextSettingsUrl = getWordPressSettingsUrlSessionOnce();
 
     if (nextSettingsUrl) {
-      setWordpressSettingsUrl(nextSettingsUrl);
+      setWordPressSettingsUrl(nextSettingsUrl);
     }
   }, []);
 
@@ -72,7 +72,7 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
             Welcome, {userName}!
           </Typography>
           {typeof wordpressSettingsUrl === "string" ? (
-            <DashboardWordpressSection
+            <DashboardWordPressSection
               wordpressSettingsUrl={wordpressSettingsUrl}
             />
           ) : null}

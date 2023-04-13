@@ -185,6 +185,10 @@ const nextConfig = {
         destination: "/types/modules/:modulename/:typename*.json",
       },
       {
+        source: "/legal/terms/dpa/attachment-:number",
+        destination: "/legal/terms/dpa/attachment-:number.pdf",
+      },
+      {
         source: "/types/core/:typename",
         destination: "/types/core/:typename.json",
       },
