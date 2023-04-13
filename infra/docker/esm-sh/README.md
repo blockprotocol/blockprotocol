@@ -27,8 +27,8 @@ This process is not automated, instead:
 To test the Docker image before deploying:
 
 1.  Remove the `origin` key from `config.json` (otherwise some files will be fetched from the deployed server) and build the image (restore the key afterwards)
-1.  `docker run -p 80:80 bp-esm` (you can expose a different port but amend the command below)
+1.  `docker run -p 8080:8080 bp-esm`
 1.  Visit `localhost` and check you see the homepage
-1.  In the `blockprotocol` repo, set `ESM_CDN_URL="http://localhost"` in `.env.local`
+1.  In the `blockprotocol` repo, set `ESM_CDN_URL="http://localhost:8080"` in `.env.local`
 1.  Run `yarn dev` in the `blockprotocol` repo to start the site
 1.  Visit a block page and check it works, e.g. http://localhost:3000/@hash/blocks/code

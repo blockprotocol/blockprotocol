@@ -1,5 +1,5 @@
 {
-  "port": 80,
+  "port": 8080,
   "origin": "https://esm.blocksandbox.org",
   "workDir": "/esm",
   "database": "bolt:/esm/.esmd/esm.db",
