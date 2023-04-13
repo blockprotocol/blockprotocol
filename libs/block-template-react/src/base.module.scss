@@ -9,29 +9,25 @@ Styles used for the Hello World example included with block-react-template
     sans-serif;
   color: #1e293b;
 
-  /* Typography */
-
-  h1,
-  p {
+  .heading,
+  .paragraph {
     max-width: 60ch;
   }
 
-  h1 {
+  .heading {
     font-size: clamp(3.05rem, 3.54vw + 2.17rem, 5rem);
     margin: 1rem 0 0.5rem;
     font-weight: 700;
     color: #0f172a;
   }
 
-  p {
+  .paragraph {
     margin-bottom: 1rem;
     font-size: clamp(1rem, 0.34vw + 0.91rem, 1.12rem);
     line-height: 1.5;
   }
 
-  /* Buttons */
-
-  button {
+  .button {
     background-color: #0284c7;
     color: #ffffff;
     border: none;
@@ -40,10 +36,10 @@ Styles used for the Hello World example included with block-react-template
     font-size: clamp(0.85rem, 0.22vw + 0.83rem, 0.95rem);
     line-height: 1.5;
     transition: 250ms ease-in-out;
-  }
 
-  button:hover {
-    background-color: #0369a1;
-    cursor: pointer;
+    &:hover {
+      background-color: #0369a1;
+      cursor: pointer;
+    }
   }
 }
