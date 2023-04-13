@@ -1,6 +1,6 @@
 {
   "port": 80,
-  "origin": "https://esm.blockprotocol.org",
+  "origin": "https://esm.blocksandbox.org",
   "workDir": "/esm",
   "database": "bolt:/esm/.esmd/esm.db",
   "storage": "local:/esm/.esmd/storage",
