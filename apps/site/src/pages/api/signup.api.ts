@@ -44,7 +44,7 @@ export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
       (await User.create(db, {
         email,
         hasVerifiedEmail: false,
-        referrer: "blockprotocol",
+        referrer: "Block Protocol",
       }));
 
     if (await user.hasExceededEmailVerificationRateLimit(db)) {

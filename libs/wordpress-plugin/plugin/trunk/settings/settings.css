@@ -1,0 +1,212 @@
+@font-face {
+  font-family: "Inter";
+  font-weight: 300;
+  src: url("../fonts/inter-light.ttf") format("trueType");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 400;
+  src: url("../fonts/inter-regular.ttf") format("trueType");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 500;
+  src: url("../fonts/inter-medium.ttf") format("trueType");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 600;
+  src: url("../fonts/inter-semibold.ttf") format("trueType");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 700;
+  src: url("../fonts/inter-bold.ttf") format("trueType");
+}
+
+svg.BPSettingsFa {
+  fill: currentColor;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
+.BPSettingsBanner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 24px;
+  gap: 2px;
+  margin: 34px 0;
+  background: #f4f3ff;
+  border: 1px solid #d9d6fe;
+  border-radius: 6px;
+  color: #4732ba;
+  font-family: Inter, sans-serif;
+  max-width: 826px;
+}
+
+.BPSettingsBannerHeading {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+  color: inherit;
+}
+
+.BPSettingsBannerHeading svg {
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #ad9eff;
+  margin-right: 10px;
+}
+
+.BPSettingsBanner p {
+  font-size: 13px;
+  line-height: 150%;
+  margin: 0;
+}
+
+p.BPSettingsBannerInstructionsPara {
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.BPSettingsBannerInstructionsHeader {
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.7;
+  text-transform: uppercase;
+  margin: 12px 0 10px;
+}
+
+.BPSettingsBannerInstructions li {
+  display: flex;
+  font-size: 13px;
+  align-items: center;
+}
+
+.BPSettingsBannerInstructions li:not(:last-of-type) {
+  margin-bottom: 14px;
+}
+
+.BPSettingsBannerInstructions li .BPSettingsFa {
+  margin-left: 4px;
+}
+
+.BPSettingsBannerInstructionsInsert {
+  width: 32px;
+  height: 32px;
+  display: block;
+  margin-left: 12px;
+}
+
+.BPSettingsBannerInstructionsBadge {
+  width: 18px;
+  height: 18px;
+  background: #e4ddfd;
+  border-radius: 18px;
+  font-family: "Helvetica", sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: #4732ba;
+  text-align: center;
+  line-height: 18px;
+  margin-right: 8px;
+}
+
+.BPSettingsInput {
+  box-sizing: border-box;
+  padding: 16px 8px;
+  width: 444px;
+  height: 40px;
+  background: #ffffff;
+  border: 1px solid #8d8f94;
+  border-radius: 6px;
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 24px;
+  margin-right: 8px;
+}
+
+.BPSettingsInput:disabled {
+  background: #dde7f0;
+  border-color: #c1cfde;
+  color: #64778c;
+}
+
+.BPSettingsInput::placeholder {
+  color: #64778c;
+}
+
+.BPSettingsButton {
+  cursor: pointer;
+  color: white;
+  background: #3a6fac;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 150%;
+  height: 40px;
+  border: 1px solid #3a6fac;
+}
+
+.BPSettingsButton:disabled {
+  background: #dde7f0;
+  border-color: #c1cfde;
+  color: #64778c;
+  cursor: default;
+}
+
+.BPSettingsButtonSvg {
+  margin-left: 8px;
+}
+
+.BPSettingsButton:disabled .BPSettingsButtonSvg {
+  color: #91a5ba;
+}
+
+.BPActivate {
+  font-family: "Helvetica", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.BPActivateHeading {
+  font-family: "Helvetica", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 16px;
+  color: black;
+  margin: 0;
+}
+
+.BPActivateError {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.BPActivateErrorRed {
+  color: #df3449;
+}
+
+.BPActivatePara {
+  max-width: 624px;
+}
