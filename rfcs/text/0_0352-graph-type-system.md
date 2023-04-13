@@ -1,10 +1,3 @@
-- **Feature Name:** `graph-type-system`
-- **Start Date:** 2022-06-14
-- **RFC PR:** [blockprotocol/blockprotocol#352](https://github.com/blockprotocol/blockprotocol/pull/352)
-- **RFC Discussion:** [blockprotocol/blockprotocol#418](https://github.com/blockprotocol/blockprotocol/discussions/418)
-
-<!-- markdownlint-disable  MD036 -->
-
 # Summary
 
 [summary]: #summary
@@ -116,12 +109,8 @@ Given the motivation above and some other implications of the current design, th
 
 As well as addressing these existing shortcomings, this RFC seeks to:
 
-<!-- markdownlint-disable  MD029 -->
-
-3.  define a constrained type system that is able to describe any JSON object structure
-4.  refine the current way of defining links between entities, encapsulating the approach within the type system
-
-<!-- markdownlint-enable  MD029 -->
+1.  define a constrained type system that is able to describe any JSON object structure
+2.  refine the current way of defining links between entities, encapsulating the approach within the type system
 
 ## Types
 
@@ -1852,7 +1841,7 @@ This would accept Entity instances with the following shape
 #### Specifying there is a List of Links
 
 The Entity Type can also express that it can have multiple outgoing links of the same type.
-Furthermore list of links can be constrainted with `minItems` and `maxItems`.
+Furthermore list of links can be constrained with `minItems` and `maxItems`.
 
 **Example 1**
 

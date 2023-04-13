@@ -89,7 +89,7 @@ const getHeadingsFromParent = (parent: Parent): Heading[] =>
 
 // Parses the name from a MDX file name (removing the prefix index and the .mdx file extension)
 const parseNameFromFileName = (fileName: string): string => {
-  const matches = fileName.match(/^\d+_(.*?)\.mdx$/);
+  const matches = fileName.match(/^\d+_(.*?)\.(mdx|md)$/);
 
   if (!matches || matches.length < 2) {
     throw new Error(`Invalid MDX fileName: ${fileName}`);
@@ -122,10 +122,19 @@ export const getSerializedPage = async (params: {
 
   let mdxPath = path.join(process.cwd(), `src/_pages/${pathToDirectory}`);
 
+  if (pathToDirectory === "roadmap") {
+    if (parts.indexOf("index") === -1) {
+      mdxPath = path.join(process.cwd(), `../../rfcs/text`);
+    }
+  }
+
   for (const part of parts) {
     const fileNames = await fs.readdir(mdxPath);
     const nextFileNamePart = fileNames.find(
-      (fileName) => fileName.endsWith(part) || fileName.endsWith(`${part}.mdx`),
+      (fileName) =>
+        fileName.endsWith(part) ||
+        fileName.endsWith(`${part}.mdx`) ||
+        fileName.endsWith(`${part}.md`),
     )!;
     mdxPath = path.join(mdxPath, nextFileNamePart);
   }
@@ -273,6 +282,73 @@ export const getAllPages = (params: {
   });
 };
 
+const getRfcsPages = (): SiteMapPage[] => {
+  const directoryItems = fs.readdirSync(
+    path.join(process.cwd(), `../../rfcs/text`),
+  );
+
+  return directoryItems.flatMap((directoryItem) => {
+    const fileName = directoryItem;
+
+    const markdownFilePath = `${path.join(
+      process.cwd(),
+      `../../rfcs/text`,
+    )}/${fileName}`;
+    const source = fs.readFileSync(markdownFilePath);
+
+    const { content } = matter(source);
+
+    const ast = parseAST(content);
+
+    const headings = getHeadingsFromParent(ast);
+
+    const h1 = headings.find(({ depth }) => depth === 1);
+
+    const title = h1 ? getVisibleText(h1) : "Unknown";
+
+    const name = parseNameFromFileName(fileName);
+
+    return {
+      title,
+      href: `/${"roadmap".replace(/\d+_/g, "")}${
+        name === "index" ? "" : `/${slugify(name, { lower: true })}`
+      }`,
+      markdownFilePath,
+      sections: headings.reduce<SiteMapPageSection[]>(
+        (prev, currentHeading) => {
+          const newSection = {
+            title: getVisibleText(currentHeading),
+            anchor: slugify(getFullText(currentHeading), {
+              lower: true,
+            }),
+            subSections: [],
+          };
+
+          if (currentHeading.depth === 2) {
+            return [...prev, newSection];
+          } else if (currentHeading.depth === 3) {
+            return prev.length > 0
+              ? [
+                  ...prev.slice(0, -1),
+                  {
+                    ...prev[prev.length - 1]!,
+                    subSections: [
+                      ...(prev[prev.length - 1]!.subSections || []),
+                      newSection,
+                    ],
+                  },
+                ]
+              : prev;
+          }
+          return prev;
+        },
+        [],
+      ),
+      subPages: [],
+    };
+  });
+};
+
 export const getRoadmapPages = (params: {
   pathToDirectory: string;
   fileName: string;
@@ -363,10 +439,7 @@ export const getRoadmapPages = (params: {
                 markdownFilePath,
                 subPages:
                   slug === "rfcs"
-                    ? getAllPages({
-                        pathToDirectory: `roadmap`,
-                        filterIndexPage: true,
-                      }).map((page) => ({
+                    ? getRfcsPages().map((page) => ({
                         ...page,
                         title: page.href.replace(`/${thisPath}/`, ""),
                       }))
