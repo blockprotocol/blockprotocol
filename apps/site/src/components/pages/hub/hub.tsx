@@ -45,7 +45,7 @@ const HubItem = ({
   <Stack direction="row" spacing={2} alignItems="start">
     {image ? (
       <Link href={url}>
-        <Box component="img" sx={{ width: 24 }} src={image} />
+        <Box component="img" sx={{ width: 24, minWidth: 24 }} src={image} />
       </Link>
     ) : null}
     <Stack spacing={0.75}>
@@ -63,9 +63,16 @@ const HubItem = ({
       {description ? (
         <Typography
           variant="bpSmallCopy"
-          color={(theme) => theme.palette.gray[80]}
-          fontSize={15}
-          fontWeight={400}
+          sx={{
+            color: (theme) => theme.palette.gray[80],
+            display: "-webkit-box",
+            "-webkit-line-clamp": "2",
+            "-webkit-box-orient": "vertical",
+            overflow: "hidden",
+            minWidth: 0,
+            fontSize: 15,
+            fontWeight: 400,
+          }}
         >
           {description}
         </Typography>

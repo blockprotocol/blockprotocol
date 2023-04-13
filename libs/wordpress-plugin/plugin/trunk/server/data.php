@@ -25,12 +25,15 @@ function block_protocol_report_version_info()
   global $wp_version;
   global $wpdb;
 
+  $db_migration_version = (int) get_site_option('block_protocol_db_migration_version');
+
   return [
     "wpVersion" => $wp_version,
     "dbServerInfo" => $wpdb->db_server_info(),
     "phpVersion" => phpversion(),
     "dbVersion" => $wpdb->db_version(),
     "dbSupported" => block_protocol_is_database_supported(),
+    "dbMigration" => $db_migration_version,
   ];
 }
 
