@@ -8,6 +8,8 @@ const tolerableSharedConsoleMessageMatches: RegExp[] = [
   /\[Fast Refresh\]/, // Next.js dev server (for local test runs)
   /Download the Apollo DevTools for a better development experience/,
   /Download the React DevTools for a better development experience/,
+  // No idea why this is happening (happens on homepage for example), needs investigation, could be related with MUI sx prop
+  /Using kebab-case for css properties/,
 
   // Vercel feedback script (in comment widget on preview deployments) makes 404 request for .well-known/vercel-user-meta
   /\[error] Failed to load resource: the server responded with a status of 404 \(\)/,

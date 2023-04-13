@@ -51,6 +51,7 @@ export const NewlyCreatedApiKeyCard = ({
         }}
       >
         <Typography
+          data-testid="api-key-value"
           sx={{
             color: "gray.80",
             fontSize: 14,

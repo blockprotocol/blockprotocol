@@ -13,6 +13,7 @@ const CloseCardButton = ({
 }) => {
   return (
     <IconButton
+      data-testid="close-card-button"
       onClick={onClick}
       sx={{
         position: "absolute",
