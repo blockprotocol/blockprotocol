@@ -1,11 +1,5 @@
 # @blockprotocol/core
 
-## 0.1.3-canary-20230413145831
-
-### Patch Changes
-
-- [#1262](https://github.com/blockprotocol/blockprotocol/pull/1262) [`f3375910`](https://github.com/blockprotocol/blockprotocol/commit/f3375910f2fcdbfcd738b3d888e50ae7696d3939) Thanks [@CiaranMn](https://github.com/CiaranMn)! - store core handler instance map on window
-
 ## 0.1.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/core",
-  "version": "0.1.3-canary-20230413145831",
+  "version": "0.1.2",
   "description": "Implementation of the Block Protocol Core specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",

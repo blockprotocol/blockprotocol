@@ -1,12 +1,5 @@
 # block-scripts
 
-## 0.2.4-canary-20230413145831
-
-### Patch Changes
-
-- Updated dependencies []:
-  - @blockprotocol/graph@0.2.3-canary-20230413145831
-
 ## 0.2.3
 
 ### Patch Changes
