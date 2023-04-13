@@ -14,4 +14,25 @@
 
 # Libraries
 
-Contains the source code for Block Protocol development libraries, utilities, and plugins. Full write-ups of most can be found in the [Block Protocol docs], and a summary table will shortly be published below.
+Contains the source code for Block Protocol development libraries, utilities, and plugins. Full write-ups of most can be found either in `README.md` files in each individual library folder or in the [Block Protocol docs], and a summary table will shortly be published below.
+
+## Publishing
+
+All libraries except those in `@local/` are published to `npm` via
+[Changesets](https://github.com/changesets/changesets).
+
+To record a change for publication:
+
+1.  From the root of the repository, run `yarn changeset`
+1.  Select the package(s) affected by this change (space to select, enter to move to the next step)
+    - Do not worry about selecting packages which depend on changed packages – Changesets will handle bumping them
+1.  Select the semver increment
+1.  Describe the change
+1.  Commit the created changeset file
+
+When a PR with a changeset file is merged, the change is added to a PR entitled 'Version Packages',
+which has a diff showing the version increments which will be applied to affected packages, including dependents.
+
+Once the 'Version Packages' PR is merged, the changes are published to npm.
+
+Canary versions can be published by running the `Canary Release` workflow in GitHub Actions, and selecting the branch which contains changesets to publish.
