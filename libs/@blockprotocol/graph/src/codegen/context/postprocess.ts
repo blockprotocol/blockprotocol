@@ -136,6 +136,11 @@ export class PostprocessContext {
     }
   }
 
+  addDependentIdentifierInFile(identifier: string, path: string): void {
+    this.filesToDependentIdentifiers[path] ??= new Set();
+    this.filesToDependentIdentifiers[path]!.add(identifier);
+  }
+
   defineIdentifierInFile(
     identifier: string,
     {
