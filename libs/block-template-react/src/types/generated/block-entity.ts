@@ -56,12 +56,12 @@ export type LinkOutgoingLinksByLinkEntityTypeId = {};
 export type LinkProperties = {};
 
 /**
- * A word or set of words by which something is known, addressed, or referred to.
+ * A word or set of words by which something is known, addressed, or referred to
  */
 export type Name0PropertyValue = Text;
 
 /**
- * A word or set of words by which something is known, addressed, or referred to
+ * A word or set of words by which something is known, addressed, or referred to.
  */
 export type Name1PropertyValue = Text;
 
@@ -82,7 +82,7 @@ export type OrganizationOutgoingLinksByLinkEntityTypeId = {
  * A group of entities (people, companies, etc.) focused on a common purpose
  */
 export type OrganizationProperties = {
-  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/"?: Name1PropertyValue;
+  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/"?: Name0PropertyValue;
   "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/"?: WebsitePropertyValue;
 };
 
@@ -96,7 +96,7 @@ export type PersonV2OutgoingLinksByLinkEntityTypeId = {};
  * A human being or individual
  */
 export type PersonV2Properties = {
-  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/"?: Name1PropertyValue;
+  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/"?: Name0PropertyValue;
   "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/"?: WebsitePropertyValue;
   "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/avatar/"?: AvatarPropertyValue;
   "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/e-mail/"?: EMailPropertyValue;
@@ -119,7 +119,7 @@ export type PersonV3OutgoingLinksByLinkEntityTypeId = {
  * A human being or individual
  */
 export type PersonV3Properties = {
-  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/"?: Name1PropertyValue;
+  "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/name/"?: Name0PropertyValue;
   "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/website/"?: WebsitePropertyValue;
   "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/avatar/"?: AvatarPropertyValue;
   "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/property-type/e-mail/"?: EMailPropertyValue;
@@ -140,7 +140,7 @@ export type ThingOutgoingLinksByLinkEntityTypeId = {};
  * A generic thing
  */
 export type ThingProperties = {
-  "https://blockprotocol.org/@blockprotocol/types/property-type/name/"?: Name0PropertyValue;
+  "https://blockprotocol.org/@blockprotocol/types/property-type/name/"?: Name1PropertyValue;
 };
 
 /**
