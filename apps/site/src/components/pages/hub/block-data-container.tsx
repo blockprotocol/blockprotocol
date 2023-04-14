@@ -1,4 +1,3 @@
-import { BlockVariant } from "@blockprotocol/core";
 import { Entity, EntityPropertiesObject } from "@blockprotocol/graph";
 import {
   Entity as EntityTemporal,
