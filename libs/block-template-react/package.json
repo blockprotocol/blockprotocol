@@ -68,6 +68,9 @@
         "block-entity.ts": [
           {
             "blockEntityType": true
+          },
+          {
+            "sourceTypeId": "https://blockprotocol-87igvkbkw.stage.hash.ai/@alfie/types/entity-type/person/v/3"
           }
         ]
       }
