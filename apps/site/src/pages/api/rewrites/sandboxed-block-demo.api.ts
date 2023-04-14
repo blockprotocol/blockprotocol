@@ -193,6 +193,11 @@ const handler: NextApiHandler = async (req, res) => {
           methodName: "completeText",
           payload,
         }),
+        openaiCompleteChat: ({ data: payload }) => handleServiceMessage({
+          providerName: "OpenAI",
+          methodName: "completeChat",
+          payload,
+        }),
         mapboxForwardGeocoding: ({ data: payload }) => handleServiceMessage({
           providerName: "Mapbox",
           methodName: "forwardGeocoding",

@@ -1,6 +1,10 @@
 // @todo use more descriptive names instead of --step-1, --step-2
 // wouldn't need this when this is in
 
+import {
+  fluidFontClassName,
+  fluidTypographyStyles,
+} from "@hashintel/design-system";
 import { Components } from "@mui/material";
 
 import { DESKTOP_NAVBAR_HEIGHT } from "../../../components/navbar";
@@ -154,5 +158,6 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
           }
 
           ${rootTypographyStyles}
+          ${fluidTypographyStyles(`.${fluidFontClassName}`)}
         `,
 };

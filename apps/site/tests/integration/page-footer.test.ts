@@ -83,6 +83,10 @@ test("pricing footer link works", async ({ page }) => {
     "NEXT_PUBLIC_BILLING_FEATURE_FLAG is not set",
   );
 
+  await page.goto("/");
+
+  await page.locator("footer").scrollIntoViewIfNeeded();
+
   await expect(page.locator("footer >> a:has-text('Pricing')")).toHaveAttribute(
     "href",
     "/pricing",

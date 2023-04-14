@@ -1,6 +1,5 @@
 import "../styles/nprogress.css";
 import "../styles/prism.css";
-import "../styles/table-component.css";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -26,6 +25,7 @@ import {
   UserState,
 } from "../context/user-context";
 import { apiClient } from "../lib/api-client";
+import { setWordPressSettingsUrlSession } from "../lib/word-press-settings-url-session";
 import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
 import { ApiMeResponse } from "./api/me.api";
@@ -93,6 +93,14 @@ const MyApp = ({
 
   const [user, setUser] = useState<UserState>("loading");
 
+  const signOut = useCallback(() => {
+    Sentry.configureScope((scope) => {
+      scope.clear();
+    });
+    setWordPressSettingsUrlSession(null);
+    setUser(undefined);
+  }, []);
+
   const refetchUser = useCallback(async () => {
     const { data, error } = await apiClient.get<ApiMeResponse>("me", {
       "axios-retry": {
@@ -116,17 +124,14 @@ const MyApp = ({
     }
 
     if ("guest" in data) {
-      Sentry.configureScope((scope) => {
-        scope.clear();
-      });
-      setUser(undefined);
+      signOut();
     } else {
       Sentry.configureScope((scope) => {
         scope.setUser({ id: data.user.id });
       });
       setUser(data.user);
     }
-  }, []);
+  }, [signOut]);
 
   useEffect(() => {
     void refetchUser();
@@ -174,8 +179,8 @@ const MyApp = ({
   }, [user, router]);
 
   const userContextValue = useMemo<UserContextValue>(
-    () => ({ user, setUser, refetch: refetchUser }),
-    [refetchUser, user],
+    () => ({ user, setUser, refetch: refetchUser, signOut }),
+    [refetchUser, user, signOut],
   );
 
   // Use the layout defined at the page level, if available

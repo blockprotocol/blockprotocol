@@ -27,14 +27,14 @@ test("API key page should generate a valid key", async ({
   const keyNameInput = page.locator('[placeholder="Key Name"]');
 
   await page.locator('a:has-text("Create and manage API keys")').click();
-  await expect(page).toHaveURL("/settings/api-keys");
+  await expect(page).toHaveURL("/account/api");
 
   await expect(
     page.locator("text=These keys allow you to access the block protocol"),
   ).toBeVisible();
   await expect(page.locator("data-test-id=apiKeyLink").first()).toHaveAttribute(
     "href",
-    "/docs#th-hub-and-api",
+    "/docs/hub/api",
   );
   await expect(tableWithKeys).not.toBeVisible();
 

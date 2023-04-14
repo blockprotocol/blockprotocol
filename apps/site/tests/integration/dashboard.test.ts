@@ -26,12 +26,12 @@ test("dashboard page should contain key elements", async ({ page }) => {
   await login({ page });
   await page.goto("/dashboard");
 
-  await expect(page.locator("text=Welcome back, Alice!")).toBeVisible();
+  await expect(page.locator("text=Welcome, Alice!")).toBeVisible();
 
   for (const [text, url] of [
     ["Build a block", "/docs/blocks/develop"],
-    ["Create a Type", "/@alice/all-types"],
-    ["Create and manage API keys", "/settings/api-keys"],
+    ["Create a Type", "/@alice/types"],
+    ["Create and manage API keys", "/account/api"],
     ["View your public profile", "/@alice"],
     ["Browse blocks for inspiration", "/hub"],
   ] as const) {
@@ -45,8 +45,8 @@ test("dashboard page should contain key elements", async ({ page }) => {
     expect(await card.getAttribute("href")).toEqual(url);
   }
 
-  await page.locator('[aria-label="settings-tabs"] >> text=API Keys').click();
-  await expect(page).toHaveURL("/settings/api-keys");
+  await page.locator('[aria-label="settings-tabs"] >> text=My Account').click();
+  await expect(page).toHaveURL("/account/general");
 
   await page.locator('[aria-label="settings-tabs"] >> text=Dashboard').click();
   await expect(page).toHaveURL("/dashboard");

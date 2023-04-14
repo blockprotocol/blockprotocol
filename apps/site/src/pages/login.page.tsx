@@ -2,7 +2,14 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Fade, Paper } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { Button } from "../components/button";
 import { FontAwesomeIcon } from "../components/icons";
@@ -46,13 +53,14 @@ const LoginPage: NextPage = () => {
 
   const [email, setEmail] = useState<string>();
   const [redirectPath, setRedirectPath] = useState<string>();
-  const [initialVerificationCode, setInitialVerificationCode] =
+  const [verificationCodeToCheck, setVerificationCodeToCheck] =
     useState<string>();
   const [verificationCodeInfo, setVerificationCodeInfo] = useState<
     VerificationCodeInfo | undefined
   >();
+  const [checkedQueryParams, setCheckedQueryParams] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (Object.values(parsedQuery).filter((value) => !!value).length > 0) {
       if (parsedQuery.email) {
         setEmail(parsedQuery.email);
@@ -65,13 +73,19 @@ const LoginPage: NextPage = () => {
 
       if (parsedQuery.email && userId && verificationCodeId && code) {
         setVerificationCodeInfo({ userId, verificationCodeId });
-        setInitialVerificationCode(code);
+        setVerificationCodeToCheck(code);
         setCurrentScreen("VerificationCode");
       }
 
       void router.replace({ pathname: router.pathname }, undefined, {
         shallow: true,
       });
+    }
+
+    // Cannot use router.isReady in a later effect to check if there's a verification code
+    // because that effect may run before the state is set by this effect
+    if (router.isReady) {
+      setCheckedQueryParams(true);
     }
   }, [parsedQuery, router]);
 
@@ -89,25 +103,31 @@ const LoginPage: NextPage = () => {
   // variables inside handleLogin dependencies saves us from triggering multiple API calls.
   const redirectRef = useRef<() => void>(() => {});
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     redirectRef.current = () => {
       void router.push({ pathname: redirectPath ?? "/dashboard" });
     };
   }, [router, redirectPath]);
 
   useEffect(() => {
-    if (user) {
+    // We may not have parsed the query yet, so it may be too soon to redirect,
+    // and we don't want to redirect before checking the verification code as
+    // it may be a link to WordPress one
+    if (checkedQueryParams && user && !verificationCodeToCheck) {
       redirectRef.current();
     }
-  }, [user]);
+  }, [checkedQueryParams, user, verificationCodeToCheck]);
 
   const handleLogin = useCallback(
-    (loggedInUser: SerializedUser) => {
+    (loggedInUser: SerializedUser, nextRedirectPath?: string) => {
       if (!loggedInUser.isSignedUp) {
         /** @todo: redirect to signup page if user hasn't completed signup */
       }
+      if (nextRedirectPath) {
+        setRedirectPath(nextRedirectPath);
+      }
+      setVerificationCodeToCheck(undefined);
       setUser(loggedInUser);
-      redirectRef.current();
     },
     [setUser],
   );
@@ -186,7 +206,7 @@ const LoginPage: NextPage = () => {
                     verificationCodeId,
                   });
                 }}
-                initialVerificationCode={initialVerificationCode}
+                initialVerificationCode={verificationCodeToCheck}
                 onSubmit={handleLogin}
                 onChangeEmail={() => setCurrentScreen("Email")}
                 resend={apiClient.sendLoginCode}

@@ -1,26 +1,23 @@
 [þ hub]: https://blockprotocol.org/hub?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol documentation]: https://blockprotocol.org/docs?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[Block Protocol for WordPress]: https://blockprotocol.org/docs/blocks/environments#wordpress?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol specification]: https://blockprotocol.org/docs/spec?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [blockprotocol.org]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [becoming an embedder]: https://blockprotocol.org/docs/blocks/environments#other-environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [create a new block]: https://blockprotocol.org/docs/blocks/develop?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[contact us]: https://blockprotocol.org/contact?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [core specification]: https://blockprotocol.org/docs/spec/core?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [developing blocks]: https://blockprotocol.org/docs/blocks/develop?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [graph module]: https://blockprotocol.org/docs/spec/graph-module?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [hook module]: https://blockprotocol.org/docs/spec/hook-module?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[rfcs & roadmap]: https://blockprotocol.org/docs/spec/rfcs_and_roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[rfcs & roadmap]: https://blockprotocol.org/docs/roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [using blocks]: https://blockprotocol.org/docs/blocks/environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[open issues]: https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen
-[hash]: https://github.com/hashintel/hash/tree/main/apps/hash
-[awesome blocks]: https://github.com/blockprotocol/awesome-blocks
+[WordPress]: https://blockprotocol.org/docs/blocks/environments#wordpress?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 
 <!-- markdownlint-disable link-fragments -->
 
-[github_banner]: #block-protocol
-[github_star]: https://github.com/blockprotocol/blockprotocol#
+[awesome blocks]: https://github.com/blockprotocol/awesome-blocks
 [gh-what-is-the-bp]: #--what-is-the-block-protocol
 [gh-getting-started]: #--getting-started
 [gh-examples]: #--examples
@@ -31,6 +28,10 @@
 [gh-security]: #--license
 [gh-contact]: #--contact
 [gh-acknowledgments]: #--acknowledgments
+[github_banner]: #block-protocol
+[github_star]: https://github.com/blockprotocol/blockprotocol#
+[hash]: https://github.com/hashintel/hash/tree/main/apps/hash
+[open issues]: https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen
 
 [![github_banner](https://static.blockprotocol.com/cdn-cgi/imagedelivery/EipKtqu98OotgfhvKf6Eew/f8b0bf95-88ea-47ea-cac2-49cb2851b700/github)][github_banner]
 
@@ -42,7 +43,7 @@ Public monorepo for the _[Block Protocol]_.
 
 ## [![gh-what-is-the-bp](/.github/assets/gh_icon_what-is-the-block-protocol_20px-base.svg)][gh-what-is-the-bp] &nbsp; What is the Block Protocol?
 
-The Block Protocol is an open standard for building and using data-driven blocks. Blocks developed in accordance with the protocol allow you to make websites and applications that are both more useful to and readable by humans and machines. Neither blocks nor the applications that embed them require any knowledge of each other's existence. Both need only conform to the protocol.
+The Block Protocol is an open standard for building, using and embedding data-driven blocks. Blocks developed in accordance with the protocol allow you to make websites and applications that are both more useful to and readable by humans and machines. Neither blocks nor the applications that embed them require any knowledge of each other's existence. Both need only conform to the protocol.
 
 ## [![a](/.github/assets/gh_icon_getting-started_20px-base.svg)][gh-getting-started] &nbsp; Getting Started
 
@@ -56,7 +57,9 @@ Please refer to the [Block Protocol documentation] for complete instructions on 
 
 - **Environments**
   - [HASH] is an embedding application that supports the Block Protocol, enabling its users to insert arbitrary blocks from the [Þ Hub] at runtime.
-  - The [Block Protocol for WordPress] plugin allows Þ blocks to be used within WordPress.
+  - [WordPress] supports the embedding of Þ blocks, through the Block Protocol for WordPress plugin.
+  - Additional environments will be listed here as they become generally available.
+  - You can also integrate the Block Protocol [into your own app](https://blockprotocol.org/docs/blocks/environments#other-environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root) and [contact us] to have it listed here.
 - **Blocks**
   - Please view the [Þ Hub].
   - We'll also be adding star examples to the [Awesome Blocks] repo. Feel free to open a PR to suggest an addition there.
@@ -81,7 +84,7 @@ As a block developer, you probably care most about our utility libraries. All of
 - [`@blockprotocol/core`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/core): implements the Block Protocol [Core specification] for blocks and embedding applications
 - [`@blockprotocol/graph`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/graph): implements the Block Protocol [Graph module] for blocks and embedding applications
 - [`@blockprotocol/hook`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/hook): implements the Block Protocol [Hook module] for blocks and embedding applications
-- [`@blockprotocol/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/type-system): implements the type system as a WASM-based npm package (with code autogenerated from `crate` subfolder)
+- [`@blockprotocol/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/type-system): implements the type system as a WebAssembly-based npm package (with code autogenerated from `crate` subfolder)
 - [`@local/*`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@local): auxiliary Yarn workspaces for local development and testing
 - [`block-scripts`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/block-scripts): scripts used by `block-template-*`
 - `block-template-*`: starter templates for blocks, used by `create-block-app`
@@ -98,7 +101,7 @@ As a block developer, you probably care most about our utility libraries. All of
 
 1.  [`rfcs`](https://github.com/blockprotocol/blockprotocol/tree/main/rfcs): contains RFCs (Requests For Comments); this folder is intended to maintain a consistent and controlled process for new features to enter the project
 
-1.  [`libs/@blockprotocol/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/type-system): Rust crate which auto-generates a WASM-based npm package, providing a single source of truth for type system definitions
+1.  [`libs/@blockprotocol/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/type-system): Rust crate which auto-generates a WebAssembly-based npm package, providing a single source of truth for type system definitions
 
 ## [![a](/.github/assets/gh_icon_contributing_20px-base.svg)][gh-contributing] &nbsp; Contributing
 
@@ -116,7 +119,7 @@ Please feel free to fork the repo in order to create a pull request:
 1.  Push to the branch (`git push origin feature/AmazingFeature`)
 1.  Open a pull request targeting this repo
 
-If you’re looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues].
+If you’re looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues]. See [CONTRIBUTING](/.github/CONTRIBUTING.md) for more information.
 
 ## [![a](/.github/assets/gh_icon_license_20px-base.svg)][gh-license] &nbsp; License
 
@@ -124,7 +127,7 @@ The vast majority of this repository is dual-licensed under the Apache 2.0 and M
 
 ## [![a](/.github/assets/gh_icon_security_20px-base.svg)][gh-security] &nbsp; Security
 
-Please see [SECURITY](SECURITY.md) for instructions around reporting issues, and details of which package versions we actively support.
+Please see [SECURITY](/.github/SECURITY.md) for instructions around reporting issues, and details of which package versions we actively support.
 
 ## [![a](/.github/assets/gh_icon_contact_20px-base.svg)][gh-contact] &nbsp; Contact
 
@@ -136,5 +139,5 @@ Project permalink: `https://github.com/blockprotocol/blockprotocol`
 
 ## [![a](/.github/assets/gh_icon_acknowledgement_20px-base.svg)][gh-acknowledgments] &nbsp; Acknowledgments
 
-- [Ciaran Morinan](https://github.com/CiaranMn) - HASH ([profile](https://hash.ai/@ciaran))
-- [Joel Spolsky](https://github.com/jspolsky) - HASH ([profile](https://hash.ai/@spolsky))
+- [Ciaran Morinan](https://github.com/CiaranMn) - [HASH](https://hash.ai/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root) ([profile](https://hash.ai/@ciaran))
+- [Joel Spolsky](https://github.com/jspolsky) - [HASH](?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root) ([profile](https://hash.ai/@spolsky))

@@ -83,23 +83,26 @@ const script = async () => {
 
   await db.createCollection(blocksDbCollectionName);
 
-  const mockUsers: UserProperties[] = [
+  const mockUsers = [
     {
       shortname: "alice",
       preferredName: "Alice",
       email: "alice@example.com",
+      referrer: "Block Protocol",
     },
     {
       shortname: "bob",
       preferredName: "Bob",
       email: "bob@example.com",
+      referrer: "Block Protocol",
     },
     {
       shortname: "hash",
       preferredName: "HASH",
       email: "hash@example.com",
+      referrer: "Block Protocol",
     },
-  ];
+  ] satisfies UserProperties[];
 
   await Promise.all(
     mockUsers.map((params) =>
