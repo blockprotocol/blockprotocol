@@ -33,7 +33,7 @@ const DevApp = () => {
         min: 50,
         max: 200,
       }}
-      includeDefaultMockData // this seeds the datastore with sample entities and links, remove this to start with just the contents of `initialData`
+      // includeDefaultMockData // this seeds the datastore with sample entities and links, remove this to start with just the contents of `initialData`
       // hideDebugToggle <- uncomment this to disable the debug UI entirely
       // readonly <- uncomment this to start your block in readonly mode. You can also toggle it in the UI
     />
