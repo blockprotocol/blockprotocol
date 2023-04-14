@@ -4,13 +4,19 @@
 
 import { Entity } from "@blockprotocol/graph";
 
-import { NamePropertyValue, Text } from "./shared";
-
-export type { NamePropertyValue, Text };
-
 export type BlockEntity = Thing;
 
 export type BlockEntityOutgoingLinkAndTarget = ThingOutgoingLinkAndTarget;
+
+/**
+ * A word or set of words by which something is known, addressed, or referred to.
+ */
+export type NamePropertyValue = Text;
+
+/**
+ * An ordered sequence of characters
+ */
+export type Text = string;
 
 export type Thing = Entity<ThingProperties>;
 
