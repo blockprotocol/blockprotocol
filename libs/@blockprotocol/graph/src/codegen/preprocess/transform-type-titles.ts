@@ -106,9 +106,17 @@ export const rewriteTypeTitles = (context: PreprocessContext) => {
         if (typedKeys(baseUrlToTypes).length > 1) {
           // They're not all the same BaseUrl so we need to differentiate the different types, and then the different
           // revisions of the types
+
+          // We want this process to be deterministic so we sort by Base URL
+          const baseUrlToTypesEntries = typedEntries(baseUrlToTypes);
+          (baseUrlToTypesEntries as [BaseUrl, any][]).sort(
+            ([baseUrlA, _A], [baseUrlB, _B]) =>
+              baseUrlA.localeCompare(baseUrlB),
+          );
+
           /* @todo - Add option to pass in a named capture-group regex which can extract more components */
           for (const [index, [_baseUrl, typesOfBaseUrl]] of typedEntries(
-            typedEntries(baseUrlToTypes),
+            baseUrlToTypesEntries,
           )) {
             if (typesOfBaseUrl.length > 1) {
               for (const currentTypeRevision of typesOfBaseUrl) {
