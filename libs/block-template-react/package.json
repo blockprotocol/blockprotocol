@@ -69,6 +69,16 @@
           {
             "blockEntityType": true
           }
+        ],
+        "person.ts": [
+          {
+            "sourceTypeId": "https://blockprotocol.org/@examples/types/entity-type/person/v/1"
+          }
+        ],
+        "company.ts": [
+          {
+            "sourceTypeId": "https://blockprotocol.org/@examples/types/entity-type/company/v/1"
+          }
         ]
       }
     }
