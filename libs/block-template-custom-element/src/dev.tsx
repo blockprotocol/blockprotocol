@@ -2,7 +2,7 @@ import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
 import packageJson from "../package.json";
-import { exampleGraph } from "./example-graph";
+import exampleGraph from "./example-graph";
 import ElementClass from "./index";
 
 const node = document.getElementById("app");

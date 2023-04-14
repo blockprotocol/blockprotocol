@@ -15,7 +15,7 @@ export const blockEntity: BlockEntity = {
   },
 } as const;
 
-export const exampleGraph = {
+const exampleGraph = {
   blockEntityRecordId: blockEntity.metadata.recordId,
   entities: [blockEntity],
 };
