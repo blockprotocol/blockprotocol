@@ -26,7 +26,7 @@ const individualOutgoingLinkAndTargetDefinition = (
   linkIdentifier: string,
   targetIdentifiers: [string, ...string[]],
 ): IdentifierToCompiledDefinition => {
-  const identifier = `${sourceName}${linkIdentifier}Links`;
+  const identifier = `${sourceName}${linkIdentifier}Link`;
 
   const targetUnion = targetIdentifiers.join(" | ");
   const compiledContents = `export type ${identifier} = { linkEntity: ${linkIdentifier}; rightEntity: ${targetUnion} }`;
