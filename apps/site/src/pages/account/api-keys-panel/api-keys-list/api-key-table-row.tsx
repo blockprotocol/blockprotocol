@@ -53,7 +53,7 @@ export const ApiKeyTableRow = ({
   const hasAction = !!keyAction;
 
   return (
-    <TableRow key={publicId}>
+    <TableRow>
       {hasAction ? (
         <TableCell colSpan={5}>
           {keyAction === "revoke" ? revokeApiKeyCard : renameApiKeyCard}
