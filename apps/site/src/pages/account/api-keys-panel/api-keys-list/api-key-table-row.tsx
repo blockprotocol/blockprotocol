@@ -15,7 +15,7 @@ const MaskedPublicId = ({ publicId }: { publicId: string }) => {
         fontFamily: CODE_FONT_FAMILY,
         color: ({ palette }) => palette.gray[50],
         fontSize: 14,
-        lineBreak: "anywhere",
+        wordBreak: "break-word",
       }}
     >
       b10ck5.

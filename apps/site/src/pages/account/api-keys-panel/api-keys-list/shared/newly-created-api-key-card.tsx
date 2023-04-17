@@ -57,7 +57,7 @@ export const NewlyCreatedApiKeyCard = ({
             fontSize: 14,
             maxWidth: "unset",
             mb: 1.25,
-            lineBreak: "anywhere",
+            wordBreak: "break-word",
             fontFamily: CODE_FONT_FAMILY,
           })}
         >
