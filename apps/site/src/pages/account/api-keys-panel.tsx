@@ -17,6 +17,7 @@ import { apiClient } from "../../lib/api-client";
 import { ApiKeysContext } from "./api-keys-panel/api-keys-context";
 import { ApiKeysEmptyState } from "./api-keys-panel/api-keys-empty-state";
 import { ApiKeysList } from "./api-keys-panel/api-keys-list";
+import { ApiKeysLoading } from "./api-keys-panel/api-keys-loading";
 import {
   ApiKeyProps,
   ApiKeysContextValue,
@@ -25,12 +26,14 @@ import {
 
 export const ApiKeysPanel: FunctionComponent = () => {
   const [apiKeys, setApiKeys] = useState<ApiKeyProps[]>([]);
+  const [apiKeysLoading, setApiKeysLoading] = useState(true);
   const [keyActionStatus, setKeyActionStatus] = useState<KeyActionStatus>();
   const [isCreatingNewKey, setIsCreatingNewKey] = useState(false);
   const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);
 
   const fetchAndSetApiKeys = useCallback(async () => {
     const { data } = await apiClient.getUserApiKeys();
+    setApiKeysLoading(false);
 
     if (data) {
       setApiKeys(data.apiKeysMetadata.filter((key) => !key.revokedAt));
@@ -90,9 +93,15 @@ export const ApiKeysPanel: FunctionComponent = () => {
             </Box>
           }
         >
-          {shouldRenderEmptyState ? <ApiKeysEmptyState /> : <ApiKeysList />}
+          {apiKeysLoading ? (
+            <ApiKeysLoading />
+          ) : shouldRenderEmptyState ? (
+            <ApiKeysEmptyState />
+          ) : (
+            <ApiKeysList />
+          )}
 
-          {!isCreatingNewKey && (
+          {!isCreatingNewKey && !apiKeysLoading && (
             <Button
               squared
               variant="tertiary"
