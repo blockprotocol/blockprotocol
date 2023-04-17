@@ -48,6 +48,11 @@ const generateBaseWebpackConfig = async (mode) => {
         ],
         "block entry point",
       ),
+      ...((await fs.pathExists("./src/example-graph.ts"))
+        ? {
+            "example-graph": "./src/example-graph.ts",
+          }
+        : {}),
     },
     output: {
       publicPath: "",
