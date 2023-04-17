@@ -10,8 +10,9 @@ function block_protocol_database_at_version(string $mysql_version, string $maria
 {
 
   global $wpdb;
-  
-  $db_version = $wpdb->db_version();
+
+  // $wpdb->db_version() can be broken for MariaDB - @see https://core.trac.wordpress.org/ticket/47738
+  $db_version = $wpdb->get_var( 'SELECT VERSION()' );
   $db_server_info = $wpdb->db_server_info();
 
   if (strpos($db_server_info, 'MariaDB') != false) {
