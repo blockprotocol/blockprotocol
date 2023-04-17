@@ -90,7 +90,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
                 backgroundColor: theme.palette.gray[50],
               },
               warning: { backgroundColor: theme.palette.orange[500] },
-              danger: { backgroundColor: theme.palette.red[600] },
+              danger: { backgroundColor: theme.palette.red[70] },
               inherit: {},
             }[color]),
         });
@@ -114,7 +114,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
               teal: { backgroundColor: theme.palette.teal[600] },
               gray: { backgroundColor: theme.palette.gray[30] },
               warning: { backgroundColor: theme.palette.orange[600] },
-              danger: { backgroundColor: theme.palette.red[700] },
+              danger: { backgroundColor: theme.palette.red[80] },
               inherit: {},
             }[color]),
         });
@@ -132,7 +132,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
               teal: { borderColor: theme.palette.teal[500] },
               gray: { borderColor: theme.palette.gray[50] },
               warning: { borderColor: theme.palette.orange[500] },
-              danger: { borderColor: theme.palette.red[700] },
+              danger: { borderColor: theme.palette.red[80] },
               inherit: {},
             }[color]),
         });
@@ -162,7 +162,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
                 borderColor: "#FEB173",
                 background: theme.palette.orange[100],
               },
-              danger: { color: theme.palette.red[600] },
+              danger: { color: theme.palette.red[70] },
               inherit: {},
             }[color]),
         });
@@ -190,7 +190,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
               },
               danger: {
                 background: theme.palette.red[200],
-                color: theme.palette.red[700],
+                color: theme.palette.red[80],
               },
               inherit: {},
             }[color]),
