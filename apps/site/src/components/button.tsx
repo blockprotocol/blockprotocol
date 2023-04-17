@@ -99,6 +99,7 @@ export const Button: FunctionComponent<ButtonProps> = forwardRef(
               opacity: 0,
             },
             color: "transparent !important",
+            transition: "none",
           },
           ...(Array.isArray(sx) ? sx : [sx]),
         ]}
