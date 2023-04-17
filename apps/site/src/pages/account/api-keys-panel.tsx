@@ -1,5 +1,5 @@
 import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Box, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { NextSeo } from "next-seo";
 import {
   FunctionComponent,
@@ -13,6 +13,7 @@ import { Button } from "../../components/button";
 import { FontAwesomeIcon } from "../../components/icons";
 import { Link } from "../../components/link";
 import { PanelSection } from "../../components/pages/account/panel-section";
+import { Spacer } from "../../components/spacer";
 import { apiClient } from "../../lib/api-client";
 import { ApiKeysContext } from "./api-keys-panel/api-keys-context";
 import { ApiKeysEmptyState } from "./api-keys-panel/api-keys-empty-state";
@@ -81,7 +82,7 @@ export const ApiKeysPanel: FunctionComponent = () => {
         <PanelSection
           title="API Keys"
           description={
-            <Box mb={2}>
+            <>
               API keys allow you to access the Block Protocol from within other
               applications.
               <br />
@@ -90,9 +91,10 @@ export const ApiKeysPanel: FunctionComponent = () => {
               <Link href="/docs/hub/api" data-test-id="apiKeyLink">
                 Learn more <FontAwesomeIcon icon={faChevronRight} />
               </Link>
-            </Box>
+            </>
           }
         >
+          <Spacer height={2} />
           {apiKeysLoading ? (
             <ApiKeysLoading />
           ) : shouldRenderEmptyState ? (
