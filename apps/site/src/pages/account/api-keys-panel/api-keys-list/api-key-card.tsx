@@ -21,7 +21,7 @@ const DiscardButton = styled(Button)(({ theme: { palette } }) => ({
   color: palette.purple[90],
   background: palette.purple[20],
   "&:before": {
-    borderColor: "#e4ddfda8",
+    borderColor: "rgba(228, 221, 253, 0.66)",
   },
 }));
 
