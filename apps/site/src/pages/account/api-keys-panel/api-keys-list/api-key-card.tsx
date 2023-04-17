@@ -100,7 +100,6 @@ export const ApiKeyCard = ({
         <InfoCircleIcon sx={{ fontSize: 13, mt: 0.2 }} />
         <Typography
           sx={{
-            maxWidth: "unset",
             color: "inherit",
             fontSize: 14,
             lineHeight: 1.3,
