@@ -55,11 +55,6 @@
       "tagName": "my-block"
     },
     "displayName": "Template",
-    "examples": [
-      {
-        "https://blockprotocol.org/@blockprotocol/types/property-type/name/": "World"
-      }
-    ],
     "icon": "public/omega.svg",
     "image": "public/block-preview.png",
     "name": "block-template-custom-element",
