@@ -16,7 +16,7 @@ export type KeyActionStatus =
 export interface ApiKeyItemProps {
   renameApiKeyCard: ReactElement;
   revokeApiKeyCard: ReactElement;
-  matchingNewlyCreatedKey?: string;
+  fullKeyValue?: string;
   apiKey: ApiKeyProps;
   keyAction?: KeyAction;
 }

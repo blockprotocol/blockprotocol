@@ -44,7 +44,7 @@ const DateText = ({ date }: { date?: Date | null }) => {
 
 export const ApiKeyTableRow = ({
   apiKey: { displayName, publicId, createdAt, lastUsedAt },
-  matchingNewlyCreatedKey,
+  fullKeyValue,
   renameApiKeyCard,
   revokeApiKeyCard,
   keyAction,
@@ -62,16 +62,16 @@ export const ApiKeyTableRow = ({
         <>
           <TableCell
             sx={{
-              verticalAlign: matchingNewlyCreatedKey ? "top" : "inherit",
+              verticalAlign: fullKeyValue ? "top" : "inherit",
             }}
           >
             {displayName}
-            {matchingNewlyCreatedKey && <NewIndicator />}
+            {fullKeyValue && <NewIndicator />}
           </TableCell>
 
-          {matchingNewlyCreatedKey ? (
+          {fullKeyValue ? (
             <TableCell colSpan={3}>
-              <NewlyCreatedApiKeyCard apiKey={matchingNewlyCreatedKey} />
+              <NewlyCreatedApiKeyCard apiKey={fullKeyValue} />
             </TableCell>
           ) : (
             <>
@@ -89,7 +89,7 @@ export const ApiKeyTableRow = ({
 
           <TableCell
             sx={{
-              verticalAlign: matchingNewlyCreatedKey ? "top" : "inherit",
+              verticalAlign: fullKeyValue ? "top" : "inherit",
             }}
           >
             <RowActions

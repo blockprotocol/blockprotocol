@@ -81,9 +81,7 @@ export const ApiKeysList = () => {
     const { displayName, publicId } = data;
     return {
       apiKey: data,
-      matchingNewlyCreatedKey: newlyCreatedKeyIds.find((key) =>
-        key.includes(publicId),
-      ),
+      fullKeyValue: newlyCreatedKeyIds.find((key) => key.includes(publicId)),
       keyAction:
         keyActionStatus?.publicId === publicId
           ? keyActionStatus.action

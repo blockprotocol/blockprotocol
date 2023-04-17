@@ -82,7 +82,7 @@ const ActionButton = ({
 
 export const MobileApiKeyItem = ({
   apiKey: { displayName, publicId, createdAt, lastUsedAt },
-  matchingNewlyCreatedKey,
+  fullKeyValue,
   renameApiKeyCard,
   revokeApiKeyCard,
   keyAction,
@@ -110,17 +110,14 @@ export const MobileApiKeyItem = ({
           }}
         >
           {displayName}
-          {matchingNewlyCreatedKey && <NewIndicator />}
+          {fullKeyValue && <NewIndicator />}
         </Typography>
 
-        {matchingNewlyCreatedKey ? (
+        {fullKeyValue ? (
           <Field
             label="Full api key"
             value={
-              <NewlyCreatedApiKeyCard
-                apiKey={matchingNewlyCreatedKey}
-                sx={{ mt: 0.5 }}
-              />
+              <NewlyCreatedApiKeyCard apiKey={fullKeyValue} sx={{ mt: 0.5 }} />
             }
           />
         ) : (
