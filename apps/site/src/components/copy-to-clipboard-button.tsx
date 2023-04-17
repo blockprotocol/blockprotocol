@@ -1,17 +1,10 @@
 import { faClipboard } from "@fortawesome/free-regular-svg-icons";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useRef, useState } from "react";
+import { useTheme } from "@mui/material";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Button } from "./button";
 import { FontAwesomeIcon } from "./icons";
-
-const copyStyle = {
-  backgroundColor: "purple.70",
-  color: "white",
-  "& svg": {
-    color: "purple.20",
-  },
-};
 
 const boxShadow =
   "0px 4px 11px rgba(39, 50, 86, 0.02), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.04), 0px 0.5px 1px rgba(39, 50, 86, 0.15)";
@@ -39,6 +32,18 @@ export const CopyToClipboardButton = ({ copyText }: { copyText: string }) => {
     };
   }, []);
 
+  const { palette } = useTheme();
+  const copyStyle = useMemo(
+    () => ({
+      backgroundColor: palette.purple[70],
+      color: "white",
+      "& svg": {
+        color: palette.purple[20],
+      },
+    }),
+    [palette],
+  );
+
   return (
     <Button
       variant="tertiary"
@@ -50,7 +55,7 @@ export const CopyToClipboardButton = ({ copyText }: { copyText: string }) => {
           width: 170,
           fontSize: 14,
           whiteSpace: "nowrap",
-          color: "gray.70",
+          color: palette.gray[70],
           boxShadow,
 
           "&:hover": {

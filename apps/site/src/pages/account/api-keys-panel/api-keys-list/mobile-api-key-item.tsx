@@ -31,7 +31,10 @@ const Field = ({
           value
         )}
         {!!valueDescription && (
-          <Typography component="span" sx={{ fontSize: 14, color: "gray.70" }}>
+          <Typography
+            component="span"
+            sx={{ fontSize: 14, color: ({ palette }) => palette.gray[70] }}
+          >
             {valueDescription}
           </Typography>
         )}
@@ -67,7 +70,10 @@ const ActionButton = ({
       variant="tertiary"
       squared
       color="gray"
-      sx={[{ flex: 1 }, !!danger && { color: "red.70" }]}
+      sx={[
+        { flex: 1 },
+        !!danger && { color: ({ palette }) => palette.red[70] },
+      ]}
     >
       {title}
     </Button>

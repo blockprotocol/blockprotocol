@@ -1,5 +1,5 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
-import { Box, BoxProps, IconButton } from "@mui/material";
+import { Box, BoxProps, IconButton, Palette, useTheme } from "@mui/material";
 import { ReactNode } from "react";
 
 import { FontAwesomeIcon } from "../../../../../components/icons";
@@ -38,25 +38,27 @@ interface ColoredCardProps {
   color?: Color;
 }
 
-const colorValues: Record<
+const getColorValues = (
+  palette: Palette,
+): Record<
   Color,
   {
     backgroundColor: string;
     borderColor: string;
     iconColor: string;
   }
-> = {
+> => ({
   purple: {
-    backgroundColor: "purple.100",
-    borderColor: "purple.200",
-    iconColor: "purple.400",
+    backgroundColor: palette.purple[100],
+    borderColor: palette.purple[200],
+    iconColor: palette.purple[400],
   },
   red: {
-    backgroundColor: "red.100",
-    borderColor: "red.200",
-    iconColor: "red.400",
+    backgroundColor: palette.red[100],
+    borderColor: palette.red[200],
+    iconColor: palette.red[400],
   },
-};
+});
 
 export const ColoredCard = ({
   sx,
@@ -64,7 +66,9 @@ export const ColoredCard = ({
   children,
   color = "purple",
 }: ColoredCardProps) => {
-  const { backgroundColor, borderColor, iconColor } = colorValues[color];
+  const { palette } = useTheme();
+  const { backgroundColor, borderColor, iconColor } =
+    getColorValues(palette)[color];
 
   return (
     <Box

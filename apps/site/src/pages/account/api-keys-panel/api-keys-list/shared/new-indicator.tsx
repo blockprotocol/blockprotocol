@@ -6,14 +6,20 @@ export const NewIndicator = () => {
   return (
     <Typography
       variant="bpSmallCaps"
-      sx={{
-        color: "purple.70",
+      sx={({ palette }) => ({
+        color: palette.purple[70],
         fontSize: 13,
         fontWeight: 500,
-      }}
+      })}
     >
       new
-      <SparklesSolidIcon sx={{ color: "purple", fontSize: 15, ml: 0.5 }} />
+      <SparklesSolidIcon
+        sx={{
+          color: ({ palette }) => palette.purple[70],
+          fontSize: 15,
+          ml: 0.5,
+        }}
+      />
     </Typography>
   );
 };

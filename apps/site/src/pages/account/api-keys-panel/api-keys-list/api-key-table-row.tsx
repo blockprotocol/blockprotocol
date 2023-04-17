@@ -14,13 +14,13 @@ const MaskedPublicId = ({ publicId }: { publicId: string }) => {
     <Typography
       sx={{
         fontFamily: CODE_FONT_FAMILY,
-        color: "gray.50",
+        color: ({ palette }) => palette.gray[50],
         fontSize: 14,
         lineBreak: "anywhere",
       }}
     >
       b10ck5.
-      <Box component="span" sx={{ color: "gray.90" }}>
+      <Box component="span" sx={{ color: ({ palette }) => palette.gray[90] }}>
         {publicId}
       </Box>
       .xxxxx
@@ -34,7 +34,9 @@ const DateText = ({ date }: { date?: Date | null }) => {
   return (
     <Typography>
       {formattedDates.relative}
-      <Typography sx={{ color: "gray.70", fontSize: 14 }}>
+      <Typography
+        sx={{ color: ({ palette }) => palette.gray[70], fontSize: 14 }}
+      >
         {formattedDates.exact}
       </Typography>
     </Typography>

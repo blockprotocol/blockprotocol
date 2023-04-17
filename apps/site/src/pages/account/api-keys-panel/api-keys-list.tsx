@@ -126,7 +126,7 @@ export const ApiKeysList = () => {
                 mt: 3,
                 mb: index < apiKeys.length - 1 ? 3 : 0,
                 borderTop: "1px solid",
-                borderColor: "gray.30",
+                borderColor: ({ palette }) => palette.gray[30],
               }}
             />
           </>
@@ -153,7 +153,7 @@ export const ApiKeysList = () => {
               th: {
                 pl: 0,
                 py: 1,
-                color: "gray.80",
+                color: ({ palette }) => palette.gray[80],
                 fontSize: 14,
               },
             }}
@@ -175,7 +175,7 @@ export const ApiKeysList = () => {
           <TableBody
             sx={{
               td: {
-                color: "gray.90",
+                color: ({ palette }) => palette.gray[90],
                 pl: 0,
                 fontWeight: 500,
               },

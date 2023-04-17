@@ -1,6 +1,5 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { Stack, styled, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, Stack, styled, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 import { Button } from "../../../../components/button";
@@ -109,7 +108,7 @@ export const ApiKeyCard = ({
         >
           Key names usually refer to the website or environment where they’ll be
           used.{" "}
-          <Box component="span" color="purple.70">
+          <Box component="span" color={({ palette }) => palette.purple[70]}>
             e.g. “WordPress” or “Staging”
           </Box>
         </Typography>

@@ -37,16 +37,26 @@ export const RevokeApiKeyCard = ({
     <ColoredCard color="red" onClose={onClose}>
       <Typography sx={{ fontWeight: 700, color: "black" }}>
         <WarningIcon
-          sx={{ color: "red.80", fontSize: 18, mt: -0.5, mr: 1.5 }}
+          sx={{
+            color: ({ palette }) => palette.red[80],
+            fontSize: 18,
+            mt: -0.5,
+            mr: 1.5,
+          }}
         />
         You are about to revoke{" "}
-        <Box component="span" color="red.80">
+        <Box component="span" color={({ palette }) => palette.red[80]}>
           {displayName}
         </Box>
       </Typography>
 
       <Typography
-        sx={{ color: "gray.80", fontSize: 14, maxWidth: "unset", mb: 2 }}
+        sx={{
+          color: ({ palette }) => palette.gray[80],
+          fontSize: 14,
+          maxWidth: "unset",
+          mb: 2,
+        }}
       >
         Any applications which rely on this key may become broken.{" "}
         <span style={{ fontWeight: 700 }}>
@@ -84,7 +94,7 @@ export const RevokeApiKeyCard = ({
           sx={{
             color: "black",
             "&:before": {
-              borderColor: "gray.30",
+              borderColor: ({ palette }) => palette.gray[30],
             },
           }}
         >

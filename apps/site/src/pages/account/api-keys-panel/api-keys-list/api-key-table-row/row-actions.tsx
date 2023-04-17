@@ -36,11 +36,13 @@ export const RowActions = ({ id, onRename, onRevoke }: RowActionsProps) => {
       >
         <MenuItem onClick={() => onRename(id)}>Rename</MenuItem>
         <MenuItem
-          sx={{
-            color: "red.70",
-            "&:hover": { color: "red.70" },
-            "&:active": { color: "white", backgroundColor: "red.70" },
-          }}
+          sx={({ palette }) => ({
+            color: palette.red[70],
+            "&:hover": {
+              color: palette.red[70],
+            },
+            "&:active": { color: "white", backgroundColor: palette.red[70] },
+          })}
           onClick={() => onRevoke(id)}
         >
           Revoke
