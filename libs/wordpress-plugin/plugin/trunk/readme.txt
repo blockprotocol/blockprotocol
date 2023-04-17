@@ -5,7 +5,7 @@ Tags: block protocol, blocks, gutenberg, gutenberg blocks, block, schema, countd
 Requires at least: 5.6.0
 Tested up to: 6.2
 Requires PHP: 7.4
-Stable tag: 0.0.7
+Stable tag: 0.0.8
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 
@@ -84,12 +84,13 @@ Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Disc
 
 <!-- Only the latest release's entry should appear here – the full log should be in changelog.txt -->
 
-= 0.0.7 =
-* Provider better support for querying with MariaDB
+= 0.0.8 =
+* Improved onboarding experience
+* Attempt to re-run migrations where they previously failed, for older dbs now supported
 
 == Upgrade Notice ==
 
 <!-- Upgrade notices describe the reason a user should upgrade. No more than 300 characters. -->
 
-= 0.0.7 =
-Upgrade for better MariaDB support
+= 0.0.8 =
+Upgrade for older database support and improved onboarding experience
