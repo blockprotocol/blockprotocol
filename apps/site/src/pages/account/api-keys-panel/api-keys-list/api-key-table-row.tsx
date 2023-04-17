@@ -1,5 +1,4 @@
 import { Box, TableCell, TableRow, Typography } from "@mui/material";
-import { useMemo } from "react";
 
 import { CODE_FONT_FAMILY } from "../../../../theme/typography";
 import { useApiKeys } from "../api-keys-context";
@@ -53,30 +52,6 @@ export const ApiKeyTableRow = ({
   const { setKeyActionStatus } = useApiKeys();
   const hasAction = !!keyAction;
 
-  const coreCells = useMemo(() => {
-    if (matchingNewlyCreatedKey) {
-      return (
-        <TableCell colSpan={3}>
-          <NewlyCreatedApiKeyCard apiKey={matchingNewlyCreatedKey} />
-        </TableCell>
-      );
-    }
-
-    return (
-      <>
-        <TableCell>
-          <MaskedPublicId publicId={publicId} />
-        </TableCell>
-        <TableCell>
-          <DateText date={lastUsedAt} />
-        </TableCell>
-        <TableCell>
-          <DateText date={createdAt} />
-        </TableCell>
-      </>
-    );
-  }, [createdAt, lastUsedAt, publicId, matchingNewlyCreatedKey]);
-
   return (
     <TableRow key={publicId}>
       {hasAction ? (
@@ -94,7 +69,23 @@ export const ApiKeyTableRow = ({
             {matchingNewlyCreatedKey && <NewIndicator />}
           </TableCell>
 
-          {coreCells}
+          {matchingNewlyCreatedKey ? (
+            <TableCell colSpan={3}>
+              <NewlyCreatedApiKeyCard apiKey={matchingNewlyCreatedKey} />
+            </TableCell>
+          ) : (
+            <>
+              <TableCell>
+                <MaskedPublicId publicId={publicId} />
+              </TableCell>
+              <TableCell>
+                <DateText date={lastUsedAt} />
+              </TableCell>
+              <TableCell>
+                <DateText date={createdAt} />
+              </TableCell>
+            </>
+          )}
 
           <TableCell
             sx={{
