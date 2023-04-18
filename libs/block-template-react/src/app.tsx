@@ -78,12 +78,13 @@ export const App: BlockComponent<BlockEntity> = ({
      *   - our module helper will dispatch messages to the app from this element, and listen for responses on it
      */
     <div className={styles.block} ref={blockRootRef}>
-      <h1>{`Hello, ${title}`}</h1>
-      <p>
+      <h1 className={styles.heading}>{`Hello, ${title}`}</h1>
+      <p className={styles.paragraph}>
         The entityId of this block is {entityId}. Use it to update its data,
         e.g. by calling <code>updateEntity</code>.
       </p>
       <button
+        className={styles.button}
         onClick={() =>
           /**
            * This is an example of using the graph module to send a message to the embedding application

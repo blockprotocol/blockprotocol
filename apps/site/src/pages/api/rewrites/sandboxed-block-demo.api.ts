@@ -92,9 +92,6 @@ const handler: NextApiHandler = async (req, res) => {
   // We will dynamically update initialEntities in response to updated prop messages in the iFrame code
   const mockBlockDockInitialData = {
     initialEntities: exampleGraph?.entities ?? [],
-    initialEntityTypes: exampleGraph?.entityTypes,
-    initialLinks: exampleGraph?.links,
-    initialLinkedQueries: exampleGraph?.linkedQueries,
     initialTemporalAxes: temporalAxes,
   };
 
