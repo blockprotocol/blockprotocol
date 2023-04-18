@@ -10,11 +10,9 @@ export interface ApiKeyItemProps {
 }
 
 export interface ApiKeysContextValue {
-  apiKeys: ApiKeyProps[];
   setApiKeys: Dispatch<SetStateAction<ApiKeyProps[]>>;
   isCreatingNewKey: boolean;
   setIsCreatingNewKey: Dispatch<SetStateAction<boolean>>;
-  fetchAndSetApiKeys: () => Promise<void>;
   revokeApiKey: (publicId: string) => Promise<void>;
   renameApiKey: (publicId: string, displayName: string) => Promise<void>;
 }

@@ -26,15 +26,6 @@ export const ApiKeysPanel: FunctionComponent = () => {
   const [apiKeysLoading, setApiKeysLoading] = useState(true);
   const [isCreatingNewKey, setIsCreatingNewKey] = useState(false);
 
-  const fetchAndSetApiKeys = useCallback(async () => {
-    const { data } = await apiClient.getUserApiKeys();
-    setApiKeysLoading(false);
-
-    if (data) {
-      setApiKeys(data.apiKeysMetadata.filter((key) => !key.revokedAt));
-    }
-  }, []);
-
   const revokeApiKey = useCallback(async (publicId: string) => {
     const res = await apiClient.revokeApiKey({ publicId });
 
@@ -59,27 +50,30 @@ export const ApiKeysPanel: FunctionComponent = () => {
   );
 
   useEffect(() => {
+    const fetchAndSetApiKeys = async () => {
+      const { data } = await apiClient.getUserApiKeys();
+      setApiKeysLoading(false);
+
+      if (data) {
+        setApiKeys(data.apiKeysMetadata.filter((key) => !key.revokedAt));
+      }
+    };
+
     void fetchAndSetApiKeys();
-    /** this useEffect meant to be only run once */
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const apiKeysContextValue: ApiKeysContextValue = useMemo(
     () => ({
-      apiKeys,
       setApiKeys,
       isCreatingNewKey,
       setIsCreatingNewKey,
-      fetchAndSetApiKeys,
       revokeApiKey,
       renameApiKey,
     }),
     [
-      apiKeys,
       setApiKeys,
       isCreatingNewKey,
       setIsCreatingNewKey,
-      fetchAndSetApiKeys,
       revokeApiKey,
       renameApiKey,
     ],
@@ -113,7 +107,7 @@ export const ApiKeysPanel: FunctionComponent = () => {
           ) : shouldRenderEmptyState ? (
             <ApiKeysEmptyState />
           ) : (
-            <ApiKeysList />
+            <ApiKeysList apiKeys={apiKeys} />
           )}
 
           {!isCreatingNewKey && !apiKeysLoading && (

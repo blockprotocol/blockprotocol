@@ -14,18 +14,23 @@ import { apiClient } from "../../../lib/api-client";
 import { useApiKeys } from "./api-keys-context";
 import { ApiKeyCard } from "./api-keys-list/api-key-card";
 import { ApiKeysMemoizedItems } from "./api-keys-list/api-keys-memoized-items";
+import { ApiKeyProps } from "./types";
 
-export const ApiKeysList = () => {
-  const { apiKeys, isCreatingNewKey, setIsCreatingNewKey, fetchAndSetApiKeys } =
-    useApiKeys();
+export const ApiKeysList = ({ apiKeys }: { apiKeys: ApiKeyProps[] }) => {
+  const { isCreatingNewKey, setIsCreatingNewKey, setApiKeys } = useApiKeys();
 
   const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);
 
   const createKey = async (displayName: string) => {
     const { data } = await apiClient.generateApiKey({ displayName });
 
-    if (data) {
-      await fetchAndSetApiKeys();
+    const newKeysRes = await apiClient.getUserApiKeys();
+    const newKey = newKeysRes.data?.apiKeysMetadata.find(
+      (key) => key.displayName === displayName,
+    );
+
+    if (data && newKey) {
+      setApiKeys((current) => [...current, newKey]);
       setNewlyCreatedKeyIds((ids) => [...ids, data.apiKey]);
       setIsCreatingNewKey(false);
     }
