@@ -3,10 +3,13 @@ import { Box, TableCell, TableRow, Typography } from "@mui/material";
 import { CODE_FONT_FAMILY } from "../../../../theme/typography";
 import { useApiKeys } from "../api-keys-context";
 import { ApiKeyItemProps } from "../types";
+import { ApiKeyCard } from "./api-key-card";
 import { RowActions } from "./api-key-table-row/row-actions";
+import { RevokeApiKeyCard } from "./revoke-api-key-card";
 import { formatDateForDisplay } from "./shared/format-date-for-display";
 import { NewIndicator } from "./shared/new-indicator";
 import { NewlyCreatedApiKeyCard } from "./shared/newly-created-api-key-card";
+import { useKeyAction } from "./shared/use-key-action";
 
 const MaskedPublicId = ({ publicId }: { publicId: string }) => {
   return (
@@ -47,16 +50,34 @@ const DateText = ({ date }: { date?: Date | null }) => {
 export const ApiKeyTableRow = ({
   apiKey: { displayName, publicId, createdAt, lastUsedAt },
   fullKeyValue,
-  renameApiKeyCard,
-  revokeApiKeyCard,
-  keyAction,
 }: ApiKeyItemProps) => {
-  const { setKeyActionStatus } = useApiKeys();
-  const hasAction = !!keyAction;
+  const [keyAction, setKeyAction] = useKeyAction();
+  const { renameApiKey, revokeApiKey } = useApiKeys();
+
+  const renameApiKeyCard = (
+    <ApiKeyCard
+      onClose={() => setKeyAction(undefined)}
+      defaultValue={displayName}
+      showDiscardButton
+      submitTitle="Rename key"
+      inputLabel="Rename your key"
+      onSubmit={async (newDisplayName) =>
+        renameApiKey(publicId, newDisplayName)
+      }
+    />
+  );
+
+  const revokeApiKeyCard = (
+    <RevokeApiKeyCard
+      onClose={() => setKeyAction(undefined)}
+      displayName={displayName}
+      onRevoke={async () => revokeApiKey(publicId)}
+    />
+  );
 
   return (
     <TableRow>
-      {hasAction ? (
+      {keyAction ? (
         <TableCell colSpan={5}>
           {keyAction === "revoke" ? revokeApiKeyCard : renameApiKeyCard}
         </TableCell>
@@ -96,12 +117,8 @@ export const ApiKeyTableRow = ({
           >
             <RowActions
               id={publicId}
-              onRename={() =>
-                setKeyActionStatus({ publicId, action: "rename" })
-              }
-              onRevoke={() =>
-                setKeyActionStatus({ publicId, action: "revoke" })
-              }
+              onRename={() => setKeyAction("rename")}
+              onRevoke={() => setKeyAction("revoke")}
             />
           </TableCell>
         </>

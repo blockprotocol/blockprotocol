@@ -19,16 +19,11 @@ import { ApiKeysContext } from "./api-keys-panel/api-keys-context";
 import { ApiKeysEmptyState } from "./api-keys-panel/api-keys-empty-state";
 import { ApiKeysList } from "./api-keys-panel/api-keys-list";
 import { ApiKeysLoading } from "./api-keys-panel/api-keys-loading";
-import {
-  ApiKeyProps,
-  ApiKeysContextValue,
-  KeyActionStatus,
-} from "./api-keys-panel/types";
+import { ApiKeyProps, ApiKeysContextValue } from "./api-keys-panel/types";
 
 export const ApiKeysPanel: FunctionComponent = () => {
   const [apiKeys, setApiKeys] = useState<ApiKeyProps[]>([]);
   const [apiKeysLoading, setApiKeysLoading] = useState(true);
-  const [keyActionStatus, setKeyActionStatus] = useState<KeyActionStatus>();
   const [isCreatingNewKey, setIsCreatingNewKey] = useState(false);
   const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);
 
@@ -78,8 +73,6 @@ export const ApiKeysPanel: FunctionComponent = () => {
       setIsCreatingNewKey,
       newlyCreatedKeyIds,
       setNewlyCreatedKeyIds,
-      keyActionStatus,
-      setKeyActionStatus,
       fetchAndSetApiKeys,
       revokeApiKey,
       renameApiKey,
@@ -91,8 +84,6 @@ export const ApiKeysPanel: FunctionComponent = () => {
       setIsCreatingNewKey,
       newlyCreatedKeyIds,
       setNewlyCreatedKeyIds,
-      keyActionStatus,
-      setKeyActionStatus,
       fetchAndSetApiKeys,
       revokeApiKey,
       renameApiKey,

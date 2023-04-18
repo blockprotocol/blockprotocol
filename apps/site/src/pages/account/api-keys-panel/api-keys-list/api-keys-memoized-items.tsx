@@ -3,10 +3,8 @@ import { Fragment, memo } from "react";
 
 import { useApiKeys } from "../api-keys-context";
 import { ApiKeyItemProps, ApiKeyProps } from "../types";
-import { ApiKeyCard } from "./api-key-card";
 import { ApiKeyTableRow } from "./api-key-table-row";
 import { MobileApiKeyItem } from "./mobile-api-key-item";
-import { RevokeApiKeyCard } from "./revoke-api-key-card";
 
 const ApiKeysMemoizedItems = ({
   apiKeys,
@@ -15,46 +13,12 @@ const ApiKeysMemoizedItems = ({
   apiKeys: ApiKeyProps[];
   mobile?: boolean;
 }) => {
-  const {
-    keyActionStatus,
-    setKeyActionStatus,
-    newlyCreatedKeyIds,
-    revokeApiKey,
-    renameApiKey,
-  } = useApiKeys();
+  const { newlyCreatedKeyIds } = useApiKeys();
 
-  const generateApiKeyItemProps = (data: ApiKeyProps): ApiKeyItemProps => {
-    const dismissKeyAction = () => setKeyActionStatus(undefined);
-
-    const { displayName, publicId } = data;
-    return {
-      apiKey: data,
-      fullKeyValue: newlyCreatedKeyIds.find((key) => key.includes(publicId)),
-      keyAction:
-        keyActionStatus?.publicId === publicId
-          ? keyActionStatus.action
-          : undefined,
-      renameApiKeyCard: (
-        <ApiKeyCard
-          onClose={dismissKeyAction}
-          defaultValue={displayName}
-          showDiscardButton
-          submitTitle="Rename key"
-          inputLabel="Rename your key"
-          onSubmit={async (newDisplayName) =>
-            renameApiKey(publicId, newDisplayName)
-          }
-        />
-      ),
-      revokeApiKeyCard: (
-        <RevokeApiKeyCard
-          onClose={dismissKeyAction}
-          displayName={displayName}
-          onRevoke={async () => revokeApiKey(publicId)}
-        />
-      ),
-    };
-  };
+  const generateApiKeyItemProps = (data: ApiKeyProps): ApiKeyItemProps => ({
+    apiKey: data,
+    fullKeyValue: newlyCreatedKeyIds.find((key) => key.includes(data.publicId)),
+  });
 
   if (mobile) {
     return (
