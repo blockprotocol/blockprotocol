@@ -69,6 +69,8 @@ export const VerificationCodeScreen: FunctionComponent<
 }) => {
   const verificationCodeInputRef = useRef<HTMLInputElement>(null);
 
+  const submittedInitialVerificationCode = useRef<string | null>(null);
+
   useEffect(() => {
     if (verificationCodeInputRef.current) {
       verificationCodeInputRef.current.select();
@@ -120,6 +122,10 @@ export const VerificationCodeScreen: FunctionComponent<
 
   const handleSubmit = useCallback(
     async (code: string) => {
+      if (submitting) {
+        return;
+      }
+
       setTouchedVerificationCodeInput(true);
       setApiSubmittedErrorMessage(undefined);
 
@@ -140,13 +146,17 @@ export const VerificationCodeScreen: FunctionComponent<
         }
       }
     },
-    [onSubmit, submit, userId, verificationCodeId],
+    [onSubmit, submit, submitting, userId, verificationCodeId],
   );
 
   useEffect(() => {
-    if (initialVerificationCode) {
+    if (
+      initialVerificationCode &&
+      initialVerificationCode !== submittedInitialVerificationCode.current
+    ) {
       setTouchedVerificationCodeInput(true);
       setVerificationCode(initialVerificationCode);
+      submittedInitialVerificationCode.current = initialVerificationCode;
       void handleSubmit(initialVerificationCode);
     }
   }, [initialVerificationCode, setVerificationCode, handleSubmit]);
