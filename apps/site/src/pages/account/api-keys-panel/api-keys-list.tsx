@@ -11,14 +11,23 @@ import {
 import { useState } from "react";
 
 import { apiClient } from "../../../lib/api-client";
-import { useApiKeys } from "./api-keys-context";
 import { ApiKeyCard } from "./api-keys-list/api-key-card";
 import { ApiKeysMemoizedItems } from "./api-keys-list/api-keys-memoized-items";
 import { ApiKeyProps } from "./types";
 
-export const ApiKeysList = ({ apiKeys }: { apiKeys: ApiKeyProps[] }) => {
-  const { isCreatingNewKey, setIsCreatingNewKey, setApiKeys } = useApiKeys();
+interface ApiKeysListProps {
+  apiKeys: ApiKeyProps[];
+  isCreatingNewKey: boolean;
+  closeCreateKeyCard: () => void;
+  onKeyCreated: (newKey: ApiKeyProps) => void;
+}
 
+export const ApiKeysList = ({
+  apiKeys,
+  isCreatingNewKey,
+  closeCreateKeyCard,
+  onKeyCreated,
+}: ApiKeysListProps) => {
   const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);
 
   const createKey = async (displayName: string) => {
@@ -30,15 +39,15 @@ export const ApiKeysList = ({ apiKeys }: { apiKeys: ApiKeyProps[] }) => {
     );
 
     if (data && newKey) {
-      setApiKeys((current) => [...current, newKey]);
+      onKeyCreated(newKey);
       setNewlyCreatedKeyIds((ids) => [...ids, data.apiKey]);
-      setIsCreatingNewKey(false);
+      closeCreateKeyCard();
     }
   };
 
   const createKeyCard = (
     <ApiKeyCard
-      onClose={() => setIsCreatingNewKey(false)}
+      onClose={closeCreateKeyCard}
       onSubmit={createKey}
       submitTitle="Create key"
       inputLabel="Name your new key"

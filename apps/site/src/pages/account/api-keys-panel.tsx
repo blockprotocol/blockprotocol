@@ -64,19 +64,10 @@ export const ApiKeysPanel: FunctionComponent = () => {
 
   const apiKeysContextValue: ApiKeysContextValue = useMemo(
     () => ({
-      setApiKeys,
-      isCreatingNewKey,
-      setIsCreatingNewKey,
       revokeApiKey,
       renameApiKey,
     }),
-    [
-      setApiKeys,
-      isCreatingNewKey,
-      setIsCreatingNewKey,
-      revokeApiKey,
-      renameApiKey,
-    ],
+    [revokeApiKey, renameApiKey],
   );
 
   const shouldRenderEmptyState = !apiKeys.length && !isCreatingNewKey;
@@ -107,7 +98,14 @@ export const ApiKeysPanel: FunctionComponent = () => {
           ) : shouldRenderEmptyState ? (
             <ApiKeysEmptyState />
           ) : (
-            <ApiKeysList apiKeys={apiKeys} />
+            <ApiKeysList
+              apiKeys={apiKeys}
+              closeCreateKeyCard={() => setIsCreatingNewKey(false)}
+              isCreatingNewKey={isCreatingNewKey}
+              onKeyCreated={(newKey) =>
+                setApiKeys((current) => [...current, newKey])
+              }
+            />
           )}
 
           {!isCreatingNewKey && !apiKeysLoading && (
