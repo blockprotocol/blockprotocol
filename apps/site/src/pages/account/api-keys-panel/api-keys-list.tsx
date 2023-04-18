@@ -7,8 +7,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 
 import { apiClient } from "../../../lib/api-client";
@@ -20,9 +18,6 @@ import { RevokeApiKeyCard } from "./api-keys-list/revoke-api-key-card";
 import { ApiKeyItemProps, ApiKeyProps } from "./types";
 
 export const ApiKeysList = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
   const {
     apiKeys,
     keyActionStatus,
@@ -108,9 +103,13 @@ export const ApiKeysList = () => {
     };
   };
 
-  if (isMobile) {
-    return (
-      <Box>
+  return (
+    <>
+      <Box
+        sx={(theme) => ({
+          [theme.breakpoints.up("md")]: { display: "none" },
+        })}
+      >
         {apiKeys.map((data, index) => (
           <>
             <MobileApiKeyItem
@@ -139,61 +138,63 @@ export const ApiKeysList = () => {
           </Box>
         )}
       </Box>
-    );
-  }
 
-  return (
-    <Box>
-      <TableContainer>
-        <Table>
-          <TableHead
-            sx={{
-              th: {
-                pl: 0,
-                py: 1,
-                color: ({ palette }) => palette.gray[80],
-                fontSize: 14,
-              },
-            }}
-          >
-            <TableRow>
-              {apiKeys.length ? (
-                <>
-                  <TableCell sx={{ width: 130 }}>Name</TableCell>
-                  <TableCell>Token</TableCell>
-                  <TableCell>Last Used</TableCell>
-                  <TableCell>Created</TableCell>
-                  <TableCell />
-                </>
-              ) : (
-                <TableCell colSpan={5}>Choose a name</TableCell>
-              )}
-            </TableRow>
-          </TableHead>
-          <TableBody
-            sx={{
-              td: {
-                color: ({ palette }) => palette.gray[90],
-                pl: 0,
-                fontWeight: 500,
-              },
-            }}
-          >
-            {apiKeys.map((data) => (
-              <ApiKeyTableRow
-                key={data.publicId}
-                {...generateApiKeyItemProps(data)}
-              />
-            ))}
-            {isCreatingNewKey && (
+      <Box
+        sx={(theme) => ({
+          [theme.breakpoints.down("md")]: { display: "none" },
+        })}
+      >
+        <TableContainer>
+          <Table>
+            <TableHead
+              sx={{
+                th: {
+                  pl: 0,
+                  py: 1,
+                  color: ({ palette }) => palette.gray[80],
+                  fontSize: 14,
+                },
+              }}
+            >
               <TableRow>
-                <TableCell sx={{ verticalAlign: "top" }}>New Key</TableCell>
-                <TableCell colSpan={4}>{createKeyCard}</TableCell>
+                {apiKeys.length ? (
+                  <>
+                    <TableCell sx={{ width: 130 }}>Name</TableCell>
+                    <TableCell>Token</TableCell>
+                    <TableCell>Last Used</TableCell>
+                    <TableCell>Created</TableCell>
+                    <TableCell />
+                  </>
+                ) : (
+                  <TableCell colSpan={5}>Choose a name</TableCell>
+                )}
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+            </TableHead>
+            <TableBody
+              sx={{
+                td: {
+                  color: ({ palette }) => palette.gray[90],
+                  pl: 0,
+                  fontWeight: 500,
+                },
+              }}
+            >
+              {apiKeys.map((data) => (
+                <ApiKeyTableRow
+                  key={data.publicId}
+                  {...generateApiKeyItemProps(data)}
+                />
+              ))}
+              {isCreatingNewKey && (
+                <TableRow>
+                  <TableCell sx={{ verticalAlign: "top" }}>New Key</TableCell>
+                  <TableCell colSpan={4}>{createKeyCard}</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </>
   );
 };
