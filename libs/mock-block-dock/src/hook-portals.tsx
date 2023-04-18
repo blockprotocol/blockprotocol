@@ -37,6 +37,8 @@ const HookPortalNonTemporal = ({ entityId, path, type }: HookData) => {
     return { entity: foundEntity, value: foundValue };
   }, [graph, entityId, path]);
 
+  console.log({ value });
+
   const updateValue = useCallback(
     async (newValue: JsonValue) => {
       const newProperties = { ...entity?.properties };
@@ -90,6 +92,8 @@ const HookPortalTemporal = ({ entityId, path, type }: HookData) => {
 
     return { entity: foundEntity, value: foundValue };
   }, [graph, entityId, path]);
+
+  console.log({ value });
 
   const updateValue = useCallback(
     async (newValue: JsonValue) => {

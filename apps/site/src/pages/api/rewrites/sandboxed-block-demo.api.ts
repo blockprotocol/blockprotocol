@@ -291,8 +291,11 @@ const handler: NextApiHandler = async (req, res) => {
             }
 
             mockBlockDockProps.blockEntityRecordId = blockEntity.metadata.recordId;
+            mockBlockDockProps.debug = true;
             
             document.getElementById("loading-indicator")?.remove();
+            
+            console.log({ mockBlockDockProps })
 
             ReactDOM.render(
               _jsx(MockBlockDock, mockBlockDockProps),

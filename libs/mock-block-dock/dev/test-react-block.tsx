@@ -46,7 +46,9 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
     hookRef,
     "text",
     blockEntity?.metadata.recordId.entityId ?? "",
-    [extractBaseUrl(propertyTypes.description.$id)],
+    [
+      "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/",
+    ],
     () => {
       throw new Error(
         "Fallback called – dock is not correctly handling text hook.",

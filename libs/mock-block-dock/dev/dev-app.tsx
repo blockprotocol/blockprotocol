@@ -1,4 +1,5 @@
 import { extractBaseUrl } from "@blockprotocol/graph";
+import { EntityTemporalVersioningMetadata } from "@blockprotocol/graph/dist/cjs/temporal/main";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { createRoot } from "react-dom/client";
 
@@ -11,6 +12,21 @@ import { TestReactBlock } from "./test-react-block";
 
 const node = document.getElementById("app");
 
+const intervalForAllTime =
+  (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {
+    return {
+      start: {
+        kind: "inclusive",
+        limit: new Date(0).toISOString(),
+      },
+      end: {
+        kind: "unbounded",
+      },
+    } as const;
+  };
+
+const interval = intervalForAllTime();
+
 const blockEntityMap = {
   react: {
     metadata: {
@@ -19,6 +35,10 @@ const blockEntityMap = {
         editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
+      temporalVersioning: {
+        transactionTime: interval,
+        decisionTime: interval,
+      },
     },
     properties: {
       [extractBaseUrl(propertyTypes.name.$id)]: "World",
@@ -32,6 +52,10 @@ const blockEntityMap = {
         editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
+      temporalVersioning: {
+        transactionTime: interval,
+        decisionTime: interval,
+      },
     },
     properties: { [extractBaseUrl(propertyTypes.name.$id)]: "World" },
   },
@@ -42,6 +66,10 @@ const blockEntityMap = {
         editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
+      temporalVersioning: {
+        transactionTime: interval,
+        decisionTime: interval,
+      },
     },
     properties: { [extractBaseUrl(propertyTypes.name.$id)]: "World" },
   },
@@ -52,6 +80,10 @@ const blockEntityMap = {
         editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
+      temporalVersioning: {
+        transactionTime: interval,
+        decisionTime: interval,
+      },
     },
     properties: { [extractBaseUrl(propertyTypes.name.$id)]: "World" },
   },
@@ -109,6 +141,11 @@ const DevApp: FunctionComponent = () => {
       blockType = "react";
   }
 
+  console.log({
+    initialEntities: Object.values(blockEntityMap),
+    blockEntity: blockEntity.metadata.recordId,
+  });
+
   return (
     <>
       <div
@@ -139,7 +176,10 @@ const DevApp: FunctionComponent = () => {
 
       <MockBlockDock
         blockDefinition={blockDefinition}
-        blockEntityRecordId={blockEntity.metadata.recordId}
+        blockEntityRecordId={{
+          entityId: "test-entity-callout",
+          editionId: "1970-01-01T00:00:00.000Z",
+        }}
         blockInfo={{
           displayName: "Test Block",
           blockType: {
@@ -155,10 +195,65 @@ const DevApp: FunctionComponent = () => {
         debug
         key={testBlockType} // completely reset the state when block type has changed
         initialData={{
-          initialEntities: Object.values(blockEntityMap),
+          initialEntities: [
+            {
+              properties: {
+                "https://blockprotocol.org/@hash/types/property-type/callout-block-emoji/":
+                  "📢",
+                "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/":
+                  "Hello World!",
+              },
+              metadata: {
+                recordId: {
+                  entityId: "test-entity-callout",
+                  editionId: "1970-01-01T00:00:00.000Z",
+                },
+                entityTypeId:
+                  "https://blockprotocol.org/@hash/types/entity-type/callout-block/v/2",
+                temporalVersioning: {
+                  transactionTime: {
+                    start: {
+                      kind: "inclusive",
+                      limit: "1970-01-01T00:00:00.000Z",
+                    },
+                    end: {
+                      kind: "unbounded",
+                    },
+                  },
+                  decisionTime: {
+                    start: {
+                      kind: "inclusive",
+                      limit: "1970-01-01T00:00:00.000Z",
+                    },
+                    end: {
+                      kind: "unbounded",
+                    },
+                  },
+                },
+              },
+            },
+          ],
+          initialTemporalAxes: {
+            pinned: {
+              axis: "transactionTime",
+              timestamp: "2023-04-18T11:15:05.518Z",
+            },
+            variable: {
+              axis: "decisionTime",
+              interval: {
+                start: {
+                  kind: "unbounded",
+                },
+                end: {
+                  kind: "inclusive",
+                  limit: "2023-04-18T11:15:05.518Z",
+                },
+              },
+            },
+          },
         }}
         includeDefaultMockData
-        temporal={false}
+        temporal
         simulateDatastoreLatency={{ min: 50, max: 200 }}
       />
     </>

@@ -15,7 +15,15 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
+import { MockBlockDock } from "mock-block-dock";
+import React, {
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import ReactDOM from "react-dom";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { Alert } from "../../alert";
@@ -29,6 +37,102 @@ import { BlockTabsModal } from "./block-data-container/block-tabs-modal";
 import { BlockVariantsTabs } from "./block-data-container/block-variants-tabs";
 import { SandboxedBlockDemo } from "./block-data-container/sandboxed-block-demo";
 import { BlockExampleGraph, BlockSchema } from "./hub-utils";
+
+const requireLookup = {
+  "react-dom": ReactDOM,
+  react: React,
+};
+
+const require = (packageName) => {
+  return requireLookup[packageName];
+};
+
+const loadCjsFromSource = async () => {
+  const source = await fetch(
+    "https://blockprotocol.hashai.workers.dev/blocks/hash/paragraph/main.0ea3f20e7a6148347eb6.js",
+  ).then((res) => res.text());
+  const module = { exports: {} };
+  const moduleFactory = new Function("require", "module", "exports", source);
+  moduleFactory(require, module, module.exports);
+
+  return module.exports;
+};
+
+const findBlockExport = (module) => {
+  const result = module.default ?? module.App ?? module[Object.keys(module)[0]];
+  if (!result) {
+    throw new Error("Could not find export from block source");
+  }
+  console.log({ result });
+  return result;
+};
+
+const mbdProps = {
+  initialData: {
+    initialEntities: [
+      {
+        properties: {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/":
+            "William Shakespeare was an English playwright, poet and actor, widely regarded as the greatest writer in the English language and the world's greatest dramatist. He is often called England's national poet and the \"Bard of Avon\".",
+        },
+        metadata: {
+          recordId: {
+            entityId: "test-entity-paragraph",
+            editionId: "1970-01-01T00:00:00.000Z",
+          },
+          entityTypeId:
+            "https://blockprotocol.org/@hash/types/entity-type/paragraph-block/v/2",
+          temporalVersioning: {
+            transactionTime: {
+              start: {
+                kind: "inclusive",
+                limit: "1970-01-01T00:00:00.000Z",
+              },
+              end: {
+                kind: "unbounded",
+              },
+            },
+            decisionTime: {
+              start: {
+                kind: "inclusive",
+                limit: "1970-01-01T00:00:00.000Z",
+              },
+              end: {
+                kind: "unbounded",
+              },
+            },
+          },
+        },
+      },
+    ],
+    initialTemporalAxes: {
+      pinned: {
+        axis: "transactionTime",
+        timestamp: "2023-04-18T11:28:13.954Z",
+      },
+      variable: {
+        axis: "decisionTime",
+        interval: {
+          start: {
+            kind: "unbounded",
+          },
+          end: {
+            kind: "inclusive",
+            limit: "2023-04-18T11:28:13.954Z",
+          },
+        },
+      },
+    },
+  },
+  hideDebugToggle: true,
+  readonly: false,
+  serviceModuleCallbacks: {},
+  blockEntityRecordId: {
+    entityId: "test-entity-paragraph",
+    editionId: "1970-01-01T00:00:00.000Z",
+  },
+  debug: true,
+};
 
 const intervalForAllTime =
   (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {
@@ -68,6 +172,8 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   const [blockModalOpen, setBlockModalOpen] = useState(false);
   const [alertSnackBarOpen, setAlertSnackBarOpen] = useState(false);
   const [readonly, setReadonly] = useState(false);
+
+  const exportCode = useRef();
 
   const [propertiesText, setPropertiesText] = useState<string | null>(null);
 
@@ -120,11 +226,9 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
         }
       }
 
-      if (entityProperties) {
-        exampleEntity.properties = entityProperties;
-        setEntity(exampleEntity);
-        return;
-      }
+      exampleEntity.properties = entityProperties ?? {};
+      setEntity(exampleEntity);
+      return;
     }
 
     if (exampleGraph) {
@@ -191,6 +295,13 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
     }
   }, [entity, setPropertiesText]);
 
+  useEffect(() => {
+    loadCjsFromSource().then((source) => {
+      const module = findBlockExport(source);
+      exportCode.current = module;
+    });
+  }, []);
+
   // If the text of the properties is updated, try and update the entity
   useEffect(() => {
     if (propertiesText) {
@@ -246,6 +357,12 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
       };
     }
   }, [entity, readonly]);
+
+  if (!exportCode.current) {
+    return "Loading";
+  }
+
+  console.log({ mbdProps, code: exportCode.current });
 
   return (
     <>
@@ -340,6 +457,10 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
                     the Hub.
                   </>
                 ) : (
+                  // <MockBlockDock
+                  //   {...mbdProps}
+                  //   blockDefinition={{ ReactComponent: exportCode.current }}
+                  // />
                   <SandboxedBlockDemo
                     key={metadata.blockSitePath} // reset sandbox state when switching block
                     metadata={metadata}
