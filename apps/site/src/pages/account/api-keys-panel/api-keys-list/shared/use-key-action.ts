@@ -1,7 +1,7 @@
 import { useTheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
-export type KeyAction = "rename" | "revoke";
+type KeyAction = "rename" | "revoke";
 
 export const useKeyAction = () => {
   const [keyAction, setKeyAction] = useState<KeyAction>();
