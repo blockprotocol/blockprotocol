@@ -25,7 +25,6 @@ export const ApiKeysPanel: FunctionComponent = () => {
   const [apiKeys, setApiKeys] = useState<ApiKeyProps[]>([]);
   const [apiKeysLoading, setApiKeysLoading] = useState(true);
   const [isCreatingNewKey, setIsCreatingNewKey] = useState(false);
-  const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);
 
   const fetchAndSetApiKeys = useCallback(async () => {
     const { data } = await apiClient.getUserApiKeys();
@@ -71,8 +70,6 @@ export const ApiKeysPanel: FunctionComponent = () => {
       setApiKeys,
       isCreatingNewKey,
       setIsCreatingNewKey,
-      newlyCreatedKeyIds,
-      setNewlyCreatedKeyIds,
       fetchAndSetApiKeys,
       revokeApiKey,
       renameApiKey,
@@ -82,8 +79,6 @@ export const ApiKeysPanel: FunctionComponent = () => {
       setApiKeys,
       isCreatingNewKey,
       setIsCreatingNewKey,
-      newlyCreatedKeyIds,
-      setNewlyCreatedKeyIds,
       fetchAndSetApiKeys,
       revokeApiKey,
       renameApiKey,

@@ -14,8 +14,6 @@ export interface ApiKeysContextValue {
   setApiKeys: Dispatch<SetStateAction<ApiKeyProps[]>>;
   isCreatingNewKey: boolean;
   setIsCreatingNewKey: Dispatch<SetStateAction<boolean>>;
-  newlyCreatedKeyIds: string[];
-  setNewlyCreatedKeyIds: Dispatch<SetStateAction<string[]>>;
   fetchAndSetApiKeys: () => Promise<void>;
   revokeApiKey: (publicId: string) => Promise<void>;
   renameApiKey: (publicId: string, displayName: string) => Promise<void>;

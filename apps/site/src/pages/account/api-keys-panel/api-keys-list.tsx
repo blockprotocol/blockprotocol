@@ -8,6 +8,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { useApiKeys } from "./api-keys-context";
@@ -15,13 +16,10 @@ import { ApiKeyCard } from "./api-keys-list/api-key-card";
 import { ApiKeysMemoizedItems } from "./api-keys-list/api-keys-memoized-items";
 
 export const ApiKeysList = () => {
-  const {
-    apiKeys,
-    isCreatingNewKey,
-    setIsCreatingNewKey,
-    setNewlyCreatedKeyIds,
-    fetchAndSetApiKeys,
-  } = useApiKeys();
+  const { apiKeys, isCreatingNewKey, setIsCreatingNewKey, fetchAndSetApiKeys } =
+    useApiKeys();
+
+  const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);
 
   const createKey = async (displayName: string) => {
     const { data } = await apiClient.generateApiKey({ displayName });
@@ -49,7 +47,11 @@ export const ApiKeysList = () => {
           [theme.breakpoints.up("md")]: { display: "none" },
         })}
       >
-        <ApiKeysMemoizedItems apiKeys={apiKeys} mobile />
+        <ApiKeysMemoizedItems
+          apiKeys={apiKeys}
+          mobile
+          newlyCreatedKeyIds={newlyCreatedKeyIds}
+        />
 
         {isCreatingNewKey && (
           <Box mt={3}>
@@ -101,7 +103,10 @@ export const ApiKeysList = () => {
                 },
               }}
             >
-              <ApiKeysMemoizedItems apiKeys={apiKeys} />
+              <ApiKeysMemoizedItems
+                apiKeys={apiKeys}
+                newlyCreatedKeyIds={newlyCreatedKeyIds}
+              />
 
               {isCreatingNewKey && (
                 <TableRow>

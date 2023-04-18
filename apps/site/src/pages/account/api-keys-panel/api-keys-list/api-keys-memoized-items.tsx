@@ -1,7 +1,6 @@
 import { Box } from "@mui/system";
 import { Fragment, memo } from "react";
 
-import { useApiKeys } from "../api-keys-context";
 import { ApiKeyItemProps, ApiKeyProps } from "../types";
 import { ApiKeyTableRow } from "./api-key-table-row";
 import { MobileApiKeyItem } from "./mobile-api-key-item";
@@ -18,24 +17,25 @@ const MemoizedApiKeyItem = memo(
 
 const ApiKeysMemoizedItems = ({
   apiKeys,
+  newlyCreatedKeyIds,
   mobile = false,
 }: {
   apiKeys: ApiKeyProps[];
+  newlyCreatedKeyIds: string[];
   mobile?: boolean;
 }) => {
-  const { newlyCreatedKeyIds } = useApiKeys();
-
-  const generateApiKeyItemProps = (data: ApiKeyProps): ApiKeyItemProps => ({
-    apiKey: data,
-    fullKeyValue: newlyCreatedKeyIds.find((key) => key.includes(data.publicId)),
-  });
-
   if (mobile) {
     return (
       <>
         {apiKeys.map((data, index) => (
           <Fragment key={data.publicId}>
-            <MemoizedApiKeyItem mobile {...generateApiKeyItemProps(data)} />
+            <MemoizedApiKeyItem
+              mobile
+              apiKey={data}
+              fullKeyValue={newlyCreatedKeyIds.find((key) =>
+                key.includes(data.publicId),
+              )}
+            />
 
             <Box
               sx={{
@@ -56,7 +56,10 @@ const ApiKeysMemoizedItems = ({
       {apiKeys.map((data) => (
         <MemoizedApiKeyItem
           key={data.publicId}
-          {...generateApiKeyItemProps(data)}
+          apiKey={data}
+          fullKeyValue={newlyCreatedKeyIds.find((key) =>
+            key.includes(data.publicId),
+          )}
         />
       ))}
     </>
