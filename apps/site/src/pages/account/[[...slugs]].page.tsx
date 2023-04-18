@@ -75,13 +75,6 @@ const Account: AuthWallPageContent = () => {
     }
   }, [router]);
 
-  useEffect(() => {
-    if (router.asPath === "/account") {
-      // otherwise sidebar component does not recognize the current page
-      void router.replace(`/account/${accountPanels[0]?.slug}`, undefined);
-    }
-  }, [router]);
-
   return (
     <>
       <NextSeo title="Block Protocol - Settings" />

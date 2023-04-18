@@ -3,14 +3,20 @@ import { faKey, faUserPen } from "@fortawesome/free-solid-svg-icons";
 import { SolidSparklesIcon } from "../../icons/solid-sparkles-icon";
 import { DashboardCardProps } from "./dashboard-card/dashboard-card";
 
-export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
+export const dashboardPages: {
+  tabTitle: string;
+  tabHref: string;
+  // Used to indicate which tab should be active when the current page is a subpage of the tab's href
+  displayHref?: string;
+}[] = [
   {
     tabTitle: "Dashboard",
     tabHref: "/dashboard",
   },
   {
     tabTitle: "My Account",
-    tabHref: "/account",
+    tabHref: "/account/general",
+    displayHref: "/account",
   },
 ];
 
