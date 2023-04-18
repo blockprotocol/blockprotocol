@@ -27,7 +27,8 @@ export const getSpecPage = (): SiteMapPage => ({
 });
 
 export const getRoadmapPage = (): SiteMapPage => ({
-  ...getRoadmapPages({ pathToDirectory: "roadmap", fileName: "00_index.mdx" }),
+  ...getPage({ pathToDirectory: "roadmap", fileName: "00_index.mdx" }),
+  subPages: getRoadmapPages(),
 });
 
 export const getLegalSubPages = (): SiteMapPage[] =>

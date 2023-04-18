@@ -89,7 +89,7 @@ const getHeadingsFromParent = (parent: Parent): Heading[] =>
 
 // Parses the name from a MDX file name (removing the prefix index and the .mdx file extension)
 const parseNameFromFileName = (fileName: string): string => {
-  const matches = fileName.match(/^\d+_(.*?)\.(mdx|md)$/);
+  const matches = fileName.match(/^\d+[_-](.*?)\.(mdx|md)$/);
 
   if (!matches || matches.length < 2) {
     throw new Error(`Invalid MDX fileName: ${fileName}`);
@@ -183,186 +183,31 @@ const getVisibleText = (node: Node): string =>
       : []),
   ].join("");
 
+const getHeadingsFromMarkdown = (markdownFilePath: string): Heading[] => {
+  const source = fs.readFileSync(path.join(process.cwd(), markdownFilePath));
+
+  const { content } = matter(source);
+
+  const ast = parseAST(content);
+
+  const headings = getHeadingsFromParent(ast);
+
+  return headings;
+};
+
 // Get the structure of a given MDX file in a given directory
 export const getPage = (params: {
   pathToDirectory: string;
   fileName: string;
+  isRfc?: boolean;
 }): SiteMapPage => {
-  const { pathToDirectory, fileName } = params;
+  const { pathToDirectory, fileName, isRfc = false } = params;
 
-  const markdownFilePath = `src/_pages/${pathToDirectory}/${fileName}`;
-  const source = fs.readFileSync(path.join(process.cwd(), markdownFilePath));
+  const markdownFilePath = isRfc
+    ? `../../rfcs/text/${fileName}`
+    : `src/_pages/${pathToDirectory}/${fileName}`;
 
-  const { content } = matter(source);
-
-  const ast = parseAST(content);
-
-  const headings = getHeadingsFromParent(ast);
-
-  const h1 = headings.find(({ depth }) => depth === 1);
-
-  const title = h1 ? getVisibleText(h1) : "Unknown";
-
-  const name = parseNameFromFileName(fileName);
-
-  return {
-    title,
-    href: `/${pathToDirectory.replace(/\d+_/g, "")}${
-      name === "index" ? "" : `/${slugify(name, { lower: true })}`
-    }`,
-    markdownFilePath,
-    sections: headings.reduce<SiteMapPageSection[]>((prev, currentHeading) => {
-      const newSection = {
-        title: getVisibleText(currentHeading),
-        anchor: slugify(getFullText(currentHeading), {
-          lower: true,
-        }),
-        subSections: [],
-      };
-
-      if (currentHeading.depth === 2) {
-        return [...prev, newSection];
-      } else if (currentHeading.depth === 3) {
-        return prev.length > 0
-          ? [
-              ...prev.slice(0, -1),
-              {
-                ...prev[prev.length - 1]!,
-                subSections: [
-                  ...(prev[prev.length - 1]!.subSections || []),
-                  newSection,
-                ],
-              },
-            ]
-          : prev;
-      }
-      return prev;
-    }, []),
-    subPages: [],
-  };
-};
-
-// Get the structure of a all MDX files in a given directory
-export const getAllPages = (params: {
-  pathToDirectory: string;
-  filterIndexPage?: boolean;
-}): SiteMapPage[] => {
-  const { pathToDirectory, filterIndexPage = false } = params;
-
-  const directoryItems = fs
-    .readdirSync(path.join(process.cwd(), `src/_pages/${pathToDirectory}`))
-    .filter((item) => !filterIndexPage || item !== "00_index.mdx");
-
-  return directoryItems.flatMap((directoryItem) => {
-    if (
-      fs
-        .lstatSync(`src/_pages/${pathToDirectory}/${directoryItem}`)
-        .isDirectory()
-    ) {
-      const indexPage = getPage({
-        pathToDirectory: `${pathToDirectory}/${directoryItem}`,
-        fileName: "00_index.mdx",
-      });
-
-      const subPages = getAllPages({
-        pathToDirectory: `${pathToDirectory}/${directoryItem}`,
-        filterIndexPage: true,
-      });
-
-      return {
-        ...indexPage,
-        subPages,
-      };
-    }
-
-    return getPage({
-      pathToDirectory,
-      fileName: directoryItem,
-    });
-  });
-};
-
-const getRfcsPages = (): SiteMapPage[] => {
-  const directoryItems = fs.readdirSync(
-    path.join(process.cwd(), `../../rfcs/text`),
-  );
-
-  return directoryItems.flatMap((directoryItem) => {
-    const fileName = directoryItem;
-
-    const markdownFilePath = `${path.join(
-      process.cwd(),
-      `../../rfcs/text`,
-    )}/${fileName}`;
-    const source = fs.readFileSync(markdownFilePath);
-
-    const { content } = matter(source);
-
-    const ast = parseAST(content);
-
-    const headings = getHeadingsFromParent(ast);
-
-    const h1 = headings.find(({ depth }) => depth === 1);
-
-    const title = h1 ? getVisibleText(h1) : "Unknown";
-
-    const name = parseNameFromFileName(fileName);
-
-    return {
-      title,
-      href: `/${"roadmap".replace(/\d+_/g, "")}${
-        name === "index" ? "" : `/${slugify(name, { lower: true })}`
-      }`,
-      markdownFilePath,
-      sections: headings.reduce<SiteMapPageSection[]>(
-        (prev, currentHeading) => {
-          const newSection = {
-            title: getVisibleText(currentHeading),
-            anchor: slugify(getFullText(currentHeading), {
-              lower: true,
-            }),
-            subSections: [],
-          };
-
-          if (currentHeading.depth === 2) {
-            return [...prev, newSection];
-          } else if (currentHeading.depth === 3) {
-            return prev.length > 0
-              ? [
-                  ...prev.slice(0, -1),
-                  {
-                    ...prev[prev.length - 1]!,
-                    subSections: [
-                      ...(prev[prev.length - 1]!.subSections || []),
-                      newSection,
-                    ],
-                  },
-                ]
-              : prev;
-          }
-          return prev;
-        },
-        [],
-      ),
-      subPages: [],
-    };
-  });
-};
-
-export const getRoadmapPages = (params: {
-  pathToDirectory: string;
-  fileName: string;
-}): SiteMapPage => {
-  const { pathToDirectory, fileName } = params;
-
-  const markdownFilePath = `src/_pages/${pathToDirectory}/${fileName}`;
-  const source = fs.readFileSync(path.join(process.cwd(), markdownFilePath));
-
-  const { content } = matter(source);
-
-  const ast = parseAST(content);
-
-  const headings = getHeadingsFromParent(ast);
+  const headings = getHeadingsFromMarkdown(markdownFilePath);
 
   const h1 = headings.find(({ depth }) => depth === 1);
 
@@ -378,11 +223,13 @@ export const getRoadmapPages = (params: {
     markdownFilePath,
     sections: headings
       .reduce<SiteMapPageSection[]>((prev, currentHeading) => {
+        const slug = slugify(getFullText(currentHeading), {
+          lower: true,
+        });
+
         const newSection = {
           title: getVisibleText(currentHeading),
-          anchor: slugify(getFullText(currentHeading), {
-            lower: true,
-          }),
+          anchor: slug,
           subSections: [],
         };
 
@@ -402,51 +249,99 @@ export const getRoadmapPages = (params: {
               ]
             : prev;
         }
+
         return prev;
       }, [])
       .filter((heading) => heading.anchor !== "proposed-changes"),
-    subPages: headings
-      .filter((heading) => {
-        return (
-          slugify(getFullText(heading), {
-            lower: true,
-          }) === "proposed-changes"
-        );
-      })
-      .map((heading) => {
+    subPages: [],
+  };
+};
+
+// Get the structure of a all MDX files in a given directory
+export const getAllPages = (params: {
+  pathToDirectory: string;
+  filterIndexPage?: boolean;
+  isRfc?: boolean;
+}): SiteMapPage[] => {
+  const { pathToDirectory, filterIndexPage = false, isRfc = false } = params;
+
+  const thisPath = isRfc ? "../../rfcs/text" : `src/_pages/${pathToDirectory}`;
+
+  const directoryItems = fs
+    .readdirSync(path.join(process.cwd(), thisPath))
+    .filter((item) => !filterIndexPage || item !== "00_index.mdx");
+
+  return directoryItems.flatMap((directoryItem) => {
+    if (fs.lstatSync(`${thisPath}/${directoryItem}`).isDirectory()) {
+      const indexPage = getPage({
+        pathToDirectory: `${pathToDirectory}/${directoryItem}`,
+        fileName: "00_index.mdx",
+      });
+
+      const subPages = getAllPages({
+        pathToDirectory: `${pathToDirectory}/${directoryItem}`,
+        filterIndexPage: true,
+      });
+
+      return {
+        ...indexPage,
+        subPages,
+      };
+    }
+
+    return getPage({
+      pathToDirectory,
+      fileName: directoryItem,
+      isRfc,
+    });
+  });
+};
+
+export const getRoadmapPages = (): SiteMapPage[] => {
+  const pathToDirectory = "roadmap";
+
+  const markdownFilePath = `src/_pages/${pathToDirectory}/00_index.mdx`;
+
+  const headings = getHeadingsFromMarkdown(markdownFilePath);
+
+  const depthThreeHeadings = headings.filter((heading) => heading.depth === 3);
+
+  const proposedChanges = headings.find((heading) => {
+    return (
+      slugify(getFullText(heading), {
+        lower: true,
+      }) === "proposed-changes"
+    );
+  }) as Heading;
+
+  return [
+    {
+      title: getVisibleText(proposedChanges),
+      href: `/${pathToDirectory}#${slugify(getFullText(proposedChanges), {
+        lower: true,
+      })}`,
+      markdownFilePath,
+      subPages: depthThreeHeadings.map((currentHeading) => {
+        const slug = slugify(getFullText(currentHeading), {
+          lower: true,
+        });
         return {
-          title: getVisibleText(heading),
-          href: `/${pathToDirectory.replace(/\d+_/g, "")}${
-            name === "index" ? "" : `/${slugify(name, { lower: true })}`
-          }#${slugify(getFullText(heading), {
-            lower: true,
-          })}`,
+          title: getVisibleText(currentHeading),
+          href: `/${pathToDirectory}#${slug}`,
           markdownFilePath,
-          subPages: headings
-            .filter((currentHeading) => currentHeading.depth === 3)
-            .map((currentHeading) => {
-              const thisPath = pathToDirectory.replace(/\d+_/g, "");
-
-              const slug = slugify(getFullText(currentHeading), {
-                lower: true,
-              });
-
-              return {
-                title: getVisibleText(currentHeading),
-                href: `/${thisPath}${
-                  name === "index" ? "" : `/${slugify(name, { lower: true })}`
-                }#${slug}`,
-                markdownFilePath,
-                subPages:
-                  slug === "rfcs"
-                    ? getRfcsPages().map((page) => ({
-                        ...page,
-                        title: page.href.replace(`/${thisPath}/`, ""),
-                      }))
-                    : [],
-              };
-            }),
+          subPages:
+            slug === "rfcs"
+              ? getAllPages({
+                  pathToDirectory,
+                  filterIndexPage: true,
+                  isRfc: true,
+                }).map((page) => ({
+                  ...page,
+                  title: page.href.replace(`/${pathToDirectory}/`, ""),
+                }))
+              : [],
         };
       }),
-  };
+    },
+  ];
 };
