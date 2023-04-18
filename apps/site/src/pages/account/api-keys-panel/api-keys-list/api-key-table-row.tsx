@@ -61,9 +61,10 @@ export const ApiKeyTableRow = ({
       showDiscardButton
       submitTitle="Rename key"
       inputLabel="Rename your key"
-      onSubmit={async (newDisplayName) =>
-        renameApiKey(publicId, newDisplayName)
-      }
+      onSubmit={async (newDisplayName) => {
+        await renameApiKey(publicId, newDisplayName);
+        setKeyAction(undefined);
+      }}
     />
   );
 
