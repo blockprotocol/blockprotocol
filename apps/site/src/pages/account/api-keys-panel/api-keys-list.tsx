@@ -8,6 +8,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { Fragment } from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { useApiKeys } from "./api-keys-context";
@@ -111,14 +112,10 @@ export const ApiKeysList = () => {
         })}
       >
         {apiKeys.map((data, index) => (
-          <>
-            <MobileApiKeyItem
-              key={data.publicId}
-              {...generateApiKeyItemProps(data)}
-            />
+          <Fragment key={data.publicId}>
+            <MobileApiKeyItem {...generateApiKeyItemProps(data)} />
 
             <Box
-              key={`${data.publicId}-divider`}
               sx={{
                 mt: 3,
                 mb: index < apiKeys.length - 1 ? 3 : 0,
@@ -126,7 +123,7 @@ export const ApiKeysList = () => {
                 borderColor: ({ palette }) => palette.gray[30],
               }}
             />
-          </>
+          </Fragment>
         ))}
 
         {isCreatingNewKey && (
