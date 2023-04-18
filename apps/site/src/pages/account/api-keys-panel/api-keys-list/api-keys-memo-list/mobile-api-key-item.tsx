@@ -1,13 +1,16 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
-import { Button } from "../../../../components/button";
-import { CODE_FONT_FAMILY } from "../../../../theme/typography";
-import { useApiKeys } from "../api-keys-context";
-import { ApiKeyItemProps } from "../types";
-import { formatDateForDisplay } from "./shared/format-date-for-display";
-import { NewIndicator } from "./shared/new-indicator";
-import { NewlyCreatedApiKeyCard } from "./shared/newly-created-api-key-card";
+import { Button } from "../../../../../components/button";
+import { CODE_FONT_FAMILY } from "../../../../../theme/typography";
+import { useApiKeys } from "../../api-keys-context";
+import { useKeyActionStatus } from "../../shared/key-action-status";
+import { ApiKeyItemProps } from "../../types";
+import { ApiKeyCard } from "../api-key-card";
+import { RevokeApiKeyCard } from "../revoke-api-key-card";
+import { formatDateForDisplay } from "../shared/format-date-for-display";
+import { NewIndicator } from "../shared/new-indicator";
+import { NewlyCreatedApiKeyCard } from "../shared/newly-created-api-key-card";
 
 const Field = ({
   label,
@@ -80,14 +83,47 @@ const ActionButton = ({
   );
 };
 
+// @todo reduce duplication
+// @todo memo
 export const MobileApiKeyItem = ({
-  apiKey: { displayName, publicId, createdAt, lastUsedAt },
-  fullKeyValue,
-  renameApiKeyCard,
-  revokeApiKeyCard,
-  keyAction,
+  apiKey,
+  onRevoke,
+  onRename,
 }: ApiKeyItemProps) => {
-  const { setKeyActionStatus } = useApiKeys();
+  const [keyActionStatus, setKeyActionStatus] = useKeyActionStatus();
+  const { newlyCreatedKeyIds } = useApiKeys();
+  const { displayName, publicId, createdAt, lastUsedAt } = apiKey;
+
+  // @todo remove publicId from here
+  const keyAction = keyActionStatus?.action;
+
+  // Add this to the apiKey itself
+  const fullKeyValue = newlyCreatedKeyIds.find((key) => key.includes(publicId));
+
+  const renameApiKeyCard = (
+    <ApiKeyCard
+      onClose={() => setKeyActionStatus(undefined)}
+      defaultValue={displayName}
+      showDiscardButton
+      submitTitle="Rename key"
+      inputLabel="Rename your key"
+      onSubmit={async (newDisplayName) => {
+        await onRename(publicId, newDisplayName);
+        setKeyActionStatus(undefined);
+      }}
+    />
+  );
+
+  const revokeApiKeyCard = (
+    <RevokeApiKeyCard
+      onClose={() => setKeyActionStatus(undefined)}
+      displayName={displayName}
+      onRevoke={async () => {
+        await onRevoke(publicId);
+        setKeyActionStatus(undefined);
+      }}
+    />
+  );
 
   if (keyAction === "rename") {
     return renameApiKeyCard;

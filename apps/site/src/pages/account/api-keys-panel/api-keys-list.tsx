@@ -8,48 +8,22 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useCallback } from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { useApiKeys } from "./api-keys-context";
 import { ApiKeyCard } from "./api-keys-list/api-key-card";
-import { ApiKeyTableRow } from "./api-keys-list/api-key-table-row";
-import { MobileApiKeyItem } from "./api-keys-list/mobile-api-key-item";
-import { RevokeApiKeyCard } from "./api-keys-list/revoke-api-key-card";
-import { ApiKeyItemProps, ApiKeyProps } from "./types";
+import { ApiKeysMemoList } from "./api-keys-list/api-keys-memo-list";
 
-export const ApiKeysList = () => {
-  const {
-    apiKeys,
-    keyActionStatus,
-    setKeyActionStatus,
-    newlyCreatedKeyIds,
-    isCreatingNewKey,
-    setApiKeys,
-    setIsCreatingNewKey,
-    setNewlyCreatedKeyIds,
-    fetchAndSetApiKeys,
-  } = useApiKeys();
-
-  const revokeApiKey = async (publicId: string) => {
-    const res = await apiClient.revokeApiKey({ publicId });
-
-    if (res.error) {
-      throw new Error(res.error.message);
-    }
-
-    setKeyActionStatus(undefined);
-    setApiKeys(apiKeys.filter((key) => key.publicId !== publicId));
-  };
-
-  const renameApiKey = async (publicId: string, displayName: string) => {
-    await apiClient.updateApiKey({ publicId, displayName });
-    setKeyActionStatus(undefined);
-    setApiKeys(
-      apiKeys.map((key) =>
-        key.publicId === publicId ? { ...key, displayName } : key,
-      ),
-    );
-  };
+export const ApiKeysList = ({
+  isCreatingNewKey,
+  onCreatingNewKeyChange,
+}: {
+  isCreatingNewKey: boolean;
+  onCreatingNewKeyChange: (isCreatingNewKey: boolean) => void;
+}) => {
+  const { apiKeys, setNewlyCreatedKeyIds, fetchAndSetApiKeys, setApiKeys } =
+    useApiKeys();
 
   const createKey = async (displayName: string) => {
     const { data } = await apiClient.generateApiKey({ displayName });
@@ -57,78 +31,55 @@ export const ApiKeysList = () => {
     if (data) {
       await fetchAndSetApiKeys();
       setNewlyCreatedKeyIds((ids) => [...ids, data.apiKey]);
-      setIsCreatingNewKey(false);
+      onCreatingNewKeyChange(false);
     }
   };
 
   const createKeyCard = (
     <ApiKeyCard
-      onClose={() => setIsCreatingNewKey(false)}
+      onClose={() => onCreatingNewKeyChange(false)}
       onSubmit={createKey}
       submitTitle="Create key"
       inputLabel="Name your new key"
     />
   );
 
-  const generateApiKeyItemProps = (data: ApiKeyProps): ApiKeyItemProps => {
-    const dismissKeyAction = () => setKeyActionStatus(undefined);
+  // @todo move into context
+  const revokeApiKey = useCallback(
+    async (publicId: string) => {
+      const res = await apiClient.revokeApiKey({ publicId });
 
-    const { displayName, publicId } = data;
-    return {
-      apiKey: data,
-      fullKeyValue: newlyCreatedKeyIds.find((key) => key.includes(publicId)),
-      keyAction:
-        keyActionStatus?.publicId === publicId
-          ? keyActionStatus.action
-          : undefined,
-      renameApiKeyCard: (
-        <ApiKeyCard
-          onClose={dismissKeyAction}
-          defaultValue={displayName}
-          showDiscardButton
-          submitTitle="Rename key"
-          inputLabel="Rename your key"
-          onSubmit={async (newDisplayName) =>
-            renameApiKey(publicId, newDisplayName)
-          }
-        />
-      ),
-      revokeApiKeyCard: (
-        <RevokeApiKeyCard
-          onClose={dismissKeyAction}
-          displayName={displayName}
-          onRevoke={async () => revokeApiKey(publicId)}
-        />
-      ),
-    };
-  };
+      if (res.error) {
+        throw new Error(res.error.message);
+      }
+
+      setApiKeys(apiKeys.filter((key) => key.publicId !== publicId));
+    },
+    [apiKeys, setApiKeys],
+  );
+
+  // @todo move into context
+  const renameApiKey = useCallback(
+    async (publicId: string, displayName: string) => {
+      await apiClient.updateApiKey({ publicId, displayName });
+      setApiKeys(
+        apiKeys.map((key) =>
+          key.publicId === publicId ? { ...key, displayName } : key,
+        ),
+      );
+    },
+    [apiKeys, setApiKeys],
+  );
 
   return (
     <>
-      <Box
-        sx={(theme) => ({
-          [theme.breakpoints.up("md")]: { display: "none" },
-        })}
-      >
-        {apiKeys.map((data, index) => (
-          <>
-            <MobileApiKeyItem
-              key={data.publicId}
-              {...generateApiKeyItemProps(data)}
-            />
-
-            <Box
-              key={`${data.publicId}-divider`}
-              sx={{
-                mt: 3,
-                mb: index < apiKeys.length - 1 ? 3 : 0,
-                borderTop: "1px solid",
-                borderColor: ({ palette }) => palette.gray[30],
-              }}
-            />
-          </>
-        ))}
-
+      <Box sx={{ display: { xs: "block", md: "none" } }}>
+        <ApiKeysMemoList
+          apiKeys={apiKeys}
+          mobile
+          onRename={renameApiKey}
+          onRevoke={revokeApiKey}
+        />
         {isCreatingNewKey && (
           <Box mt={3}>
             <Typography sx={{ mb: 2, fontWeight: 500, fontSize: 16 }}>
@@ -138,12 +89,7 @@ export const ApiKeysList = () => {
           </Box>
         )}
       </Box>
-
-      <Box
-        sx={(theme) => ({
-          [theme.breakpoints.down("md")]: { display: "none" },
-        })}
-      >
+      <Box sx={{ display: { xs: "none", md: "block" } }}>
         <TableContainer>
           <Table>
             <TableHead
@@ -179,12 +125,11 @@ export const ApiKeysList = () => {
                 },
               }}
             >
-              {apiKeys.map((data) => (
-                <ApiKeyTableRow
-                  key={data.publicId}
-                  {...generateApiKeyItemProps(data)}
-                />
-              ))}
+              <ApiKeysMemoList
+                apiKeys={apiKeys}
+                onRename={renameApiKey}
+                onRevoke={revokeApiKey}
+              />
               {isCreatingNewKey && (
                 <TableRow>
                   <TableCell sx={{ verticalAlign: "top" }}>New Key</TableCell>

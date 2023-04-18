@@ -14,21 +14,18 @@ export type KeyActionStatus =
   | undefined;
 
 export interface ApiKeyItemProps {
-  renameApiKeyCard: ReactElement;
-  revokeApiKeyCard: ReactElement;
-  fullKeyValue?: string;
   apiKey: ApiKeyProps;
-  keyAction?: KeyAction;
+  // @todo move into context
+  onRevoke: (publicId: string) => Promise<void>;
+  onRename: (publicId: string, displayName: string) => Promise<void>;
 }
 
 export interface ApiKeysContextValue {
+  // @todo remove from context
   apiKeys: ApiKeyProps[];
   setApiKeys: Dispatch<SetStateAction<ApiKeyProps[]>>;
-  isCreatingNewKey: boolean;
-  setIsCreatingNewKey: Dispatch<SetStateAction<boolean>>;
+  // @todo remove – move into ApiKeyProps
   newlyCreatedKeyIds: string[];
   setNewlyCreatedKeyIds: Dispatch<SetStateAction<string[]>>;
-  keyActionStatus: KeyActionStatus;
-  setKeyActionStatus: Dispatch<SetStateAction<KeyActionStatus>>;
   fetchAndSetApiKeys: () => Promise<void>;
 }

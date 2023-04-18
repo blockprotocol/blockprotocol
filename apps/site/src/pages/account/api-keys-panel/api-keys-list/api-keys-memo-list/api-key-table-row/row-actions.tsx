@@ -6,7 +6,7 @@ import {
   usePopupState,
 } from "material-ui-popup-state/hooks";
 
-import { FontAwesomeIcon } from "../../../../../components/icons";
+import { FontAwesomeIcon } from "../../../../../../components/icons";
 
 interface RowActionsProps {
   id: string;
