@@ -33,11 +33,13 @@ const DateText = ({ date }: { date?: Date | null }) => {
   return (
     <Typography>
       {formattedDates.relative}
-      <Typography
+      <Box
+        component="span"
         sx={{ color: ({ palette }) => palette.gray[70], fontSize: 14 }}
       >
+        <br />
         {formattedDates.exact}
-      </Typography>
+      </Box>
     </Typography>
   );
 };
