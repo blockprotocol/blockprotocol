@@ -297,7 +297,7 @@ export const getAllPages = (params: {
   });
 };
 
-export const getRoadmapPages = (): SiteMapPage[] => {
+export const getRoadmapSubPages = (): SiteMapPage[] => {
   const pathToDirectory = "roadmap";
 
   const markdownFilePath = `src/_pages/${pathToDirectory}/00_index.mdx`;
