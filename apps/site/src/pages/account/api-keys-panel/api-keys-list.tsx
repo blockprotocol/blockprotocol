@@ -8,49 +8,20 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Fragment } from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { useApiKeys } from "./api-keys-context";
 import { ApiKeyCard } from "./api-keys-list/api-key-card";
-import { ApiKeyTableRow } from "./api-keys-list/api-key-table-row";
-import { MobileApiKeyItem } from "./api-keys-list/mobile-api-key-item";
-import { RevokeApiKeyCard } from "./api-keys-list/revoke-api-key-card";
-import { ApiKeyItemProps, ApiKeyProps } from "./types";
+import { ApiKeysMemoizedItems } from "./api-keys-list/api-keys-memoized-items";
 
 export const ApiKeysList = () => {
   const {
     apiKeys,
-    keyActionStatus,
-    setKeyActionStatus,
-    newlyCreatedKeyIds,
     isCreatingNewKey,
-    setApiKeys,
     setIsCreatingNewKey,
     setNewlyCreatedKeyIds,
     fetchAndSetApiKeys,
   } = useApiKeys();
-
-  const revokeApiKey = async (publicId: string) => {
-    const res = await apiClient.revokeApiKey({ publicId });
-
-    if (res.error) {
-      throw new Error(res.error.message);
-    }
-
-    setKeyActionStatus(undefined);
-    setApiKeys(apiKeys.filter((key) => key.publicId !== publicId));
-  };
-
-  const renameApiKey = async (publicId: string, displayName: string) => {
-    await apiClient.updateApiKey({ publicId, displayName });
-    setKeyActionStatus(undefined);
-    setApiKeys(
-      apiKeys.map((key) =>
-        key.publicId === publicId ? { ...key, displayName } : key,
-      ),
-    );
-  };
 
   const createKey = async (displayName: string) => {
     const { data } = await apiClient.generateApiKey({ displayName });
@@ -71,39 +42,6 @@ export const ApiKeysList = () => {
     />
   );
 
-  const generateApiKeyItemProps = (data: ApiKeyProps): ApiKeyItemProps => {
-    const dismissKeyAction = () => setKeyActionStatus(undefined);
-
-    const { displayName, publicId } = data;
-    return {
-      apiKey: data,
-      fullKeyValue: newlyCreatedKeyIds.find((key) => key.includes(publicId)),
-      keyAction:
-        keyActionStatus?.publicId === publicId
-          ? keyActionStatus.action
-          : undefined,
-      renameApiKeyCard: (
-        <ApiKeyCard
-          onClose={dismissKeyAction}
-          defaultValue={displayName}
-          showDiscardButton
-          submitTitle="Rename key"
-          inputLabel="Rename your key"
-          onSubmit={async (newDisplayName) =>
-            renameApiKey(publicId, newDisplayName)
-          }
-        />
-      ),
-      revokeApiKeyCard: (
-        <RevokeApiKeyCard
-          onClose={dismissKeyAction}
-          displayName={displayName}
-          onRevoke={async () => revokeApiKey(publicId)}
-        />
-      ),
-    };
-  };
-
   return (
     <>
       <Box
@@ -111,20 +49,7 @@ export const ApiKeysList = () => {
           [theme.breakpoints.up("md")]: { display: "none" },
         })}
       >
-        {apiKeys.map((data, index) => (
-          <Fragment key={data.publicId}>
-            <MobileApiKeyItem {...generateApiKeyItemProps(data)} />
-
-            <Box
-              sx={{
-                mt: 3,
-                mb: index < apiKeys.length - 1 ? 3 : 0,
-                borderTop: "1px solid",
-                borderColor: ({ palette }) => palette.gray[30],
-              }}
-            />
-          </Fragment>
-        ))}
+        <ApiKeysMemoizedItems apiKeys={apiKeys} mobile />
 
         {isCreatingNewKey && (
           <Box mt={3}>
@@ -176,12 +101,8 @@ export const ApiKeysList = () => {
                 },
               }}
             >
-              {apiKeys.map((data) => (
-                <ApiKeyTableRow
-                  key={data.publicId}
-                  {...generateApiKeyItemProps(data)}
-                />
-              ))}
+              <ApiKeysMemoizedItems apiKeys={apiKeys} />
+
               {isCreatingNewKey && (
                 <TableRow>
                   <TableCell sx={{ verticalAlign: "top" }}>New Key</TableCell>
