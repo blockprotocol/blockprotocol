@@ -41,6 +41,29 @@ export const ApiKeysPanel: FunctionComponent = () => {
     }
   }, []);
 
+  const revokeApiKey = useCallback(async (publicId: string) => {
+    const res = await apiClient.revokeApiKey({ publicId });
+
+    if (res.error) {
+      throw new Error(res.error.message);
+    }
+
+    setApiKeys((current) => current.filter((key) => key.publicId !== publicId));
+  }, []);
+
+  const renameApiKey = useCallback(
+    async (publicId: string, displayName: string) => {
+      await apiClient.updateApiKey({ publicId, displayName });
+
+      setApiKeys((current) =>
+        current.map((key) =>
+          key.publicId === publicId ? { ...key, displayName } : key,
+        ),
+      );
+    },
+    [],
+  );
+
   useEffect(() => {
     void fetchAndSetApiKeys();
     /** this useEffect meant to be only run once */
@@ -58,6 +81,8 @@ export const ApiKeysPanel: FunctionComponent = () => {
       keyActionStatus,
       setKeyActionStatus,
       fetchAndSetApiKeys,
+      revokeApiKey,
+      renameApiKey,
     }),
     [
       apiKeys,
@@ -69,6 +94,8 @@ export const ApiKeysPanel: FunctionComponent = () => {
       keyActionStatus,
       setKeyActionStatus,
       fetchAndSetApiKeys,
+      revokeApiKey,
+      renameApiKey,
     ],
   );
 

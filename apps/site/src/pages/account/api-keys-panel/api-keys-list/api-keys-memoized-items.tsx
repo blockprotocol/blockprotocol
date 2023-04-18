@@ -1,7 +1,6 @@
 import { Box } from "@mui/system";
 import { Fragment, memo } from "react";
 
-import { apiClient } from "../../../../lib/api-client";
 import { useApiKeys } from "../api-keys-context";
 import { ApiKeyItemProps, ApiKeyProps } from "../types";
 import { ApiKeyCard } from "./api-key-card";
@@ -20,29 +19,9 @@ const ApiKeysMemoizedItems = ({
     keyActionStatus,
     setKeyActionStatus,
     newlyCreatedKeyIds,
-    setApiKeys,
+    revokeApiKey,
+    renameApiKey,
   } = useApiKeys();
-
-  const revokeApiKey = async (publicId: string) => {
-    const res = await apiClient.revokeApiKey({ publicId });
-
-    if (res.error) {
-      throw new Error(res.error.message);
-    }
-
-    setKeyActionStatus(undefined);
-    setApiKeys(apiKeys.filter((key) => key.publicId !== publicId));
-  };
-
-  const renameApiKey = async (publicId: string, displayName: string) => {
-    await apiClient.updateApiKey({ publicId, displayName });
-    setKeyActionStatus(undefined);
-    setApiKeys(
-      apiKeys.map((key) =>
-        key.publicId === publicId ? { ...key, displayName } : key,
-      ),
-    );
-  };
 
   const generateApiKeyItemProps = (data: ApiKeyProps): ApiKeyItemProps => {
     const dismissKeyAction = () => setKeyActionStatus(undefined);

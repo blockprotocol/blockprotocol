@@ -31,4 +31,6 @@ export interface ApiKeysContextValue {
   keyActionStatus: KeyActionStatus;
   setKeyActionStatus: Dispatch<SetStateAction<KeyActionStatus>>;
   fetchAndSetApiKeys: () => Promise<void>;
+  revokeApiKey: (publicId: string) => Promise<void>;
+  renameApiKey: (publicId: string, displayName: string) => Promise<void>;
 }
