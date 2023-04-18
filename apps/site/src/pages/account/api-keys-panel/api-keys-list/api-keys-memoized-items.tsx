@@ -6,6 +6,16 @@ import { ApiKeyItemProps, ApiKeyProps } from "../types";
 import { ApiKeyTableRow } from "./api-key-table-row";
 import { MobileApiKeyItem } from "./mobile-api-key-item";
 
+const MemoizedApiKeyItem = memo(
+  ({ mobile = false, ...rest }: ApiKeyItemProps & { mobile?: boolean }) => {
+    if (mobile) {
+      return <MobileApiKeyItem {...rest} />;
+    }
+
+    return <ApiKeyTableRow {...rest} />;
+  },
+);
+
 const ApiKeysMemoizedItems = ({
   apiKeys,
   mobile = false,
@@ -25,7 +35,7 @@ const ApiKeysMemoizedItems = ({
       <>
         {apiKeys.map((data, index) => (
           <Fragment key={data.publicId}>
-            <MobileApiKeyItem {...generateApiKeyItemProps(data)} />
+            <MemoizedApiKeyItem mobile {...generateApiKeyItemProps(data)} />
 
             <Box
               sx={{
@@ -44,7 +54,7 @@ const ApiKeysMemoizedItems = ({
   return (
     <>
       {apiKeys.map((data) => (
-        <ApiKeyTableRow
+        <MemoizedApiKeyItem
           key={data.publicId}
           {...generateApiKeyItemProps(data)}
         />
