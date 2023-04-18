@@ -51,12 +51,12 @@ The `create-block-app` package and provides everything you need to develop a blo
     - brings in anything in the `blockprotocol` object in `package.json`, e.g.
       - `blockType`: the type of block this is.
       - `displayName`: a friendly display name
-      - `examples`: an array of example data structures your block would accept and use
       - `image`: a preview image showing your block in action (in place of `public/block-preview.png`)
       - `icon`: an icon to be associated with your block (in place of `public/omega.svg`)
       - `name`: a slugified name for your block (which may differ to the package `name` in package.json); it can be defined as `blockname` or `@namespace/blockname`, where `namespace` must be your username on blockprotocol.org if you intend to publish it there
     - list the `externals`, which are generated from `peerDependencies` in package.json.
-- If using the HTML template, `yarn build` simply copies your block source and `block-metadata.json` file to a `dist/` folder.
+  - Generates an `example-graph.json` file using the `./src/example-graph.ts` script if it exists, which provides a sample state of a datastore which can be used when demonstrating the use of your graph.
+- If using the HTML template, `yarn build` simply copies your block source, `example-graph.json`, and `block-metadata.json` file to a `dist/` folder.
 
 ### Updating the block schema
 
@@ -166,7 +166,7 @@ A common use for the Graph Module is to update the block entity – to update th
 
 Each block template includes a demonstration of calling `graphModule.updateEntity` to update the block entity.
 
-To do this, you need to call `updateEntity` using the `entityId` of the `blockEntity`:
+To do this, you need to call `updateEntity` using the `entityId` and `entityTypeId` of the `blockEntity`:
 
 ```js
 // Update the block entity, and receive the updated entity in return
@@ -403,15 +403,18 @@ Once you’ve finished writing your block, run `yarn build` or `npm run build`.
 
 This will produce a compiled version of your code in the `dist` folder, along with a metadata file describing your block (`block-metadata.json`).
 
-It is worth updating the `blockprotocol` object in `package.json` to include your own `icon`, `image`, and `examples` for your block. These will automatically be included in the `block-metadata.json` produced after running `yarn build` or `npm run build`.
+It is worth updating the `blockprotocol` object in `package.json` to include your own `icon`, and `image` for your block.
+These will automatically be included in the `block-metadata.json` produced after running `yarn build` or `npm run build`.
 
-You now have a block package that you can provide to apps to use, by **publishing it on the Hub**.
+In addition to the above, updating the `example-graph` (either `./src/example-graph.ts` or `./example-graph.json` depending on approach) is a great way to help users understand how to use your block, and how it functions. Many environments (such as the [Þ Hub](https://blockprotocol.org/hub)) will insert this data when users are viewing blocks.
+
+You now have a block package that you can provide to apps to use, by **publishing it on the [Þ Hub](https://blockprotocol.org/hub)**.
 
 ## Publish
 
 Once you've built a block, you can add it to the [Þ Hub](https://blockprotocol.org/hub). This provides you with an instant online public playground in which to demo your block, and allows other users of the Block Protocol to discover it, or embed it through any Þ application.
 
-To publish a block on the Hub take the following steps.
+To publish a block on the [Þ Hub](https://blockprotocol.org/hub) take the following steps.
 
 ### Pre-requisite: obtain an API Key
 
@@ -424,7 +427,7 @@ To publish a block on the Hub take the following steps.
 - run `npx blockprotocol@latest publish` to generate a `.blockprotocolrc` file when prompted
 - Replace the placeholder key in that file with your API key
 - now run `npx blockprotocol@latest publish` again
-- See your block on the Hub!
+- See your block on the [Þ Hub](https://blockprotocol.org/hub)!
 
 ### Updating your block
 
@@ -439,11 +442,11 @@ field in your `package.json` points to a public repository containing your code,
 
 Read more about verification in [the FAQ](https://blockprotocol.org/docs/faq#how-does-block-verification-work).
 
-### Improving your block's appearance on the Þ Hub
+### Improving your block's appearance on the [Þ Hub](https://blockprotocol.org/hub)
 
 - **To update the preview image**: take a screenshot of your block in action and replace `public/block-preview.png`
 - **To modify the description:** update the `description` in package.json
 - **To change the icon:** add an icon to the `public` folder and update `blockprotocol.icon` in `package.json`
 - add a preview `image` to the `public` folder and update `blockprotocol.image` in `package.json`
-- update your block’s `README.md` – it will appear below your block on its hub page if you change it from the default
-- update the example properties object in `blockprotocol.examples` in `package.json`
+- update your block’s `README.md` – it will appear below your block on its [Þ Hub](https://blockprotocol.org/hub) page if you change it from the default
+- update or add an `example-graph` (either `./src/example-graph.ts` or `./example-graph.json` depending on approach) to update the data the block has available to it when a user loads it on the [Þ Hub](https://blockprotocol.org/hub)
