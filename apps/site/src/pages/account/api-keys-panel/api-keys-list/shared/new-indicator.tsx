@@ -6,6 +6,7 @@ export const NewIndicator = () => {
   return (
     <Typography
       variant="bpSmallCaps"
+      component="span"
       sx={({ palette }) => ({
         color: palette.purple[70],
         fontSize: 13,
