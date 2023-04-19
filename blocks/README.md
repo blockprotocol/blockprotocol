@@ -1,11 +1,6 @@
 # Blocks
 
-This directory contains the source code for all Block Protocol developed public [Block Protocol](https://blockprotocol.org/) blocks.
-
-You can live preview most of these on the [`@blockprotocol`](https://blockprotocol.org/@blockprotocol/blocks) page in the [Þ Hub](https://blockprotocol.org/hub), and direct links are provided below.
-
-| Directory | Spec Target | Status | Publication URL | Description |
-| --------- | ----------- | ------ | --------------- | ----------- |
+This directory contains the source code for all Block Protocol-developed public [Block Protocol](https://blockprotocol.org/) blocks.
 
 ## Running these blocks
 

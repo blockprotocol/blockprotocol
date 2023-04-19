@@ -1,6 +1,7 @@
 {
-  "name": "@blocks/aio-demo",
+  "name": "@blocks/demo",
   "version": "0.0.0",
+  "private": true,
   "description": "This is an all-in-one demo block for the Block Protocol.",
   "keywords": [
     "blockprotocol",
@@ -10,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:blockprotocol/blockprotocol.git",
-    "directory": "libs/mock-block-dock"
+    "directory": "blocks/demo"
   },
   "license": "MIT",
   "author": {
@@ -25,7 +26,6 @@
     "format": "prettier --write --ignore-unknown .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
-    "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/cleanup-before-publishing.ts",
     "serve": "block-scripts serve"
   },
   "prettier": {
@@ -64,7 +64,7 @@
     "displayName": "All-In-One Demo Block",
     "icon": "public/omega.svg",
     "image": "public/block-preview.png",
-    "name": "aio-demo",
+    "name": "demo",
     "protocol": "0.3",
     "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
     "codegen": {

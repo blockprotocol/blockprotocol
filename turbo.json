@@ -28,7 +28,7 @@
       "dependsOn": ["codegen"],
       "outputs": ["dist/**", ".next/**", "public/schemas/**"]
     },
-    "@blocks/aio-demo#codegen": {
+    "@blocks/demo#codegen": {
       "dependsOn": ["^build"],
       "outputs": ["src/entity-types/**/*.gen.ts"]
     },
