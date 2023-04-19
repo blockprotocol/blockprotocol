@@ -149,7 +149,7 @@ const nextConfig = {
       },
       {
         source: "/spec/rfcs_and_roadmap",
-        destination: "/spec/roadmap",
+        destination: "/roadmap",
         permanent: true,
       },
       {
