@@ -34,8 +34,8 @@ export const ApiKeysList = ({
     const { data } = await apiClient.generateApiKey({ displayName });
 
     const newKeysRes = await apiClient.getUserApiKeys();
-    const newKey = newKeysRes.data?.apiKeysMetadata.find(
-      (key) => key.displayName === displayName,
+    const newKey = newKeysRes.data?.apiKeysMetadata.find((key) =>
+      data?.apiKey.includes(key.publicId),
     );
 
     if (data && newKey) {

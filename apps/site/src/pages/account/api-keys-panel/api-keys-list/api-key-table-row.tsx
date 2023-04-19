@@ -54,33 +54,29 @@ export const ApiKeyTableRow = ({
   const [keyAction, setKeyAction] = useKeyAction();
   const { renameApiKey, revokeApiKey } = useApiKeys();
 
-  const renameApiKeyCard = (
-    <ApiKeyCard
-      onClose={() => setKeyAction(undefined)}
-      defaultValue={displayName}
-      showDiscardButton
-      submitTitle="Rename key"
-      inputLabel="Rename your key"
-      onSubmit={async (newDisplayName) => {
-        await renameApiKey(publicId, newDisplayName);
-        setKeyAction(undefined);
-      }}
-    />
-  );
-
-  const revokeApiKeyCard = (
-    <RevokeApiKeyCard
-      onClose={() => setKeyAction(undefined)}
-      displayName={displayName}
-      onRevoke={async () => revokeApiKey(publicId)}
-    />
-  );
-
   return (
     <TableRow>
       {keyAction ? (
         <TableCell colSpan={5}>
-          {keyAction === "revoke" ? revokeApiKeyCard : renameApiKeyCard}
+          {keyAction === "revoke" ? (
+            <RevokeApiKeyCard
+              onClose={() => setKeyAction(undefined)}
+              displayName={displayName}
+              onRevoke={async () => revokeApiKey(publicId)}
+            />
+          ) : (
+            <ApiKeyCard
+              onClose={() => setKeyAction(undefined)}
+              defaultValue={displayName}
+              showDiscardButton
+              submitTitle="Rename key"
+              inputLabel="Rename your key"
+              onSubmit={async (newDisplayName) => {
+                await renameApiKey(publicId, newDisplayName);
+                setKeyAction(undefined);
+              }}
+            />
+          )}
         </TableCell>
       ) : (
         <>

@@ -1,19 +1,23 @@
 import { Box } from "@mui/system";
 import { Fragment, memo } from "react";
 
+import { UserFacingApiKeyProperties } from "../../../../lib/api/model/api-key.model";
 import { ApiKeyItemProps, ApiKeyProps } from "../types";
 import { ApiKeyTableRow } from "./api-key-table-row";
 import { MobileApiKeyItem } from "./mobile-api-key-item";
 
-const MemoizedApiKeyItem = memo(
-  ({ mobile = false, ...rest }: ApiKeyItemProps & { mobile?: boolean }) => {
-    if (mobile) {
-      return <MobileApiKeyItem {...rest} />;
-    }
+const ApiKeyItem = ({
+  mobile = false,
+  ...rest
+}: ApiKeyItemProps & { mobile?: boolean }) => {
+  if (mobile) {
+    return <MobileApiKeyItem {...rest} />;
+  }
 
-    return <ApiKeyTableRow {...rest} />;
-  },
-);
+  return <ApiKeyTableRow {...rest} />;
+};
+
+const MemoizedApiKeyItem = memo(ApiKeyItem);
 
 const ApiKeysMemoizedItems = ({
   apiKeys,
@@ -24,18 +28,19 @@ const ApiKeysMemoizedItems = ({
   newlyCreatedKeyIds: string[];
   mobile?: boolean;
 }) => {
+  const getApiKeyItemProps = (
+    data: UserFacingApiKeyProperties,
+  ): ApiKeyItemProps => ({
+    apiKey: data,
+    fullKeyValue: newlyCreatedKeyIds.find((key) => key.includes(data.publicId)),
+  });
+
   if (mobile) {
     return (
       <>
         {apiKeys.map((data, index) => (
           <Fragment key={data.publicId}>
-            <MemoizedApiKeyItem
-              mobile
-              apiKey={data}
-              fullKeyValue={newlyCreatedKeyIds.find((key) =>
-                key.includes(data.publicId),
-              )}
-            />
+            <MemoizedApiKeyItem mobile {...getApiKeyItemProps(data)} />
 
             <Box
               sx={{
@@ -54,13 +59,7 @@ const ApiKeysMemoizedItems = ({
   return (
     <>
       {apiKeys.map((data) => (
-        <MemoizedApiKeyItem
-          key={data.publicId}
-          apiKey={data}
-          fullKeyValue={newlyCreatedKeyIds.find((key) =>
-            key.includes(data.publicId),
-          )}
-        />
+        <MemoizedApiKeyItem key={data.publicId} {...getApiKeyItemProps(data)} />
       ))}
     </>
   );
