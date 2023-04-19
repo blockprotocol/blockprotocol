@@ -62,7 +62,11 @@ export const TextField: FunctionComponent<MuiTextFieldProps> = ({
       >
         <FormHelperText
           error={textFieldProps.error}
-          sx={{ marginTop: 1, fontSize: 13, color: "gray.70" }}
+          sx={{
+            marginTop: 1,
+            fontSize: 13,
+            color: ({ palette }) => palette.gray["70"],
+          }}
         >
           {recentHelperText}
         </FormHelperText>

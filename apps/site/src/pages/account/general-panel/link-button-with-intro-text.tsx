@@ -17,7 +17,7 @@ export const LinkButtonWithIntroText = ({
         sx={{
           maxWidth: "unset",
           mb: 1.25,
-          color: "gray.70",
+          color: ({ palette }) => palette.gray[70],
           fontSize: 14,
         }}
       >

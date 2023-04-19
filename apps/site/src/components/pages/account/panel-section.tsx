@@ -29,12 +29,12 @@ export const PanelSection = ({
             variant="bpHeading2"
             sx={(theme) => ({
               fontSize: 28,
-              color: "gray.90",
+              color: theme.palette.gray[90],
               mb: 1,
               [theme.breakpoints.down("md")]: {
                 pb: 1.5,
                 borderBottom: "1px solid",
-                borderBottomColor: "gray.30",
+                borderBottomColor: theme.palette.gray[30],
               },
             })}
           >
@@ -42,7 +42,7 @@ export const PanelSection = ({
           </Typography>
           <Typography
             sx={{
-              color: "gray.70",
+              color: ({ palette }) => palette.gray[70],
               maxWidth: "unset",
               fontSize: 15,
             }}

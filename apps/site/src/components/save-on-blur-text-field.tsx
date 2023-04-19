@@ -92,7 +92,7 @@ export const SaveOnBlurTextField = ({
                     icon={faCheck}
                     sx={{
                       fontSize: 16,
-                      color: "purple.70",
+                      color: theme.palette.purple[70],
                     }}
                   />
                 </m.div>

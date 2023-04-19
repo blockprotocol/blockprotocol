@@ -1,10 +1,11 @@
-import { faClipboard, faEye } from "@fortawesome/free-regular-svg-icons";
+import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { Box, Stack, Typography, typographyClasses } from "@mui/material";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { CODE_FONT_FAMILY } from "../../../theme/typography";
 import { Button } from "../../button";
+import { CopyToClipboardButton } from "../../copy-to-clipboard-button";
 import { FontAwesomeIcon } from "../../icons";
 import { Link } from "../../link";
 
@@ -18,23 +19,6 @@ export const DashboardWordPressSection = ({
 }) => {
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-  const copiedTimeout = useRef<null | ReturnType<typeof setTimeout>>(null);
-
-  const copyKey = (keyToCopy: string) => {
-    void navigator.clipboard.writeText(keyToCopy);
-
-    setCopied(true);
-
-    if (copiedTimeout.current) {
-      clearTimeout(copiedTimeout.current);
-    }
-
-    copiedTimeout.current = setTimeout(() => {
-      setCopied(false);
-    }, 3_000);
-  };
 
   const generateApiKey = () => {
     if (generating) {
@@ -48,7 +32,7 @@ export const DashboardWordPressSection = ({
         setGenerating(false);
         if (data) {
           setApiKey(data.apiKey);
-          copyKey(data.apiKey);
+          void navigator.clipboard.writeText(data.apiKey);
         }
       });
   };
@@ -171,17 +155,7 @@ export const DashboardWordPressSection = ({
             </Typography>
             <Stack direction="row" justifyContent="flex-end" minWidth="172px">
               {apiKey ? (
-                <Button
-                  variant="tertiary"
-                  color="gray"
-                  squared
-                  startIcon={<FontAwesomeIcon icon={faClipboard} />}
-                  onClick={() => copyKey(apiKey)}
-                  disabled={copied}
-                  size="small"
-                >
-                  {copied ? "Copied" : "Copy to clipboard"}
-                </Button>
+                <CopyToClipboardButton copyText={apiKey} />
               ) : (
                 <Button
                   variant="tertiary"
