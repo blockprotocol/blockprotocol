@@ -28,8 +28,11 @@ test("Docs page should contain key elements and interactions should work", async
   for (const [name, href] of [
     ["Introduction", "/docs"],
     ["Blocks", "/docs/blocks"],
-    ["Specification", "/spec"],
+    ["Types", "/docs/types"],
+    ["Services", "/docs/services"],
     ["FAQs", "/docs/faq"],
+    ["Specification", "/spec"],
+    ["Roadmap", "/roadmap"],
   ] as const) {
     const item = sidebarLocator.locator(`a:has-text("${name}")`).first();
     await expect(item).toBeVisible();
@@ -94,12 +97,12 @@ test("Docs page should contain key elements and interactions should work", async
     "https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/spec",
   );
 
-  // confirm docs footer nav have correct links
-  await expect(page.locator("text=PreviousAPI >> a")).toBeVisible();
+  // confirm specification footer nav contains the correct links
+  await expect(page.locator("text=PreviousFAQs >> a")).toBeVisible();
 
-  await expect(page.locator("text=PreviousAPI >> a")).toHaveAttribute(
+  await expect(page.locator("text=PreviousFAQs >> a")).toHaveAttribute(
     "href",
-    "/docs/hub/api",
+    "/docs/faqs",
   );
 
   await expect(page.locator("text=NextCore >> a")).toBeVisible();
