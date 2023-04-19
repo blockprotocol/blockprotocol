@@ -63,13 +63,13 @@ export const AvatarWithOverlay = ({
     >
       <Avatar
         src={src}
-        sx={{
+        sx={({ palette }) => ({
           pointerEvents: "none",
           width: 150,
           height: 150,
-          backgroundColor: "gray.10",
+          backgroundColor: palette.gray[10],
           border: "1px solid",
-          borderColor: "gray.30",
+          borderColor: palette.gray[30],
           position: "relative",
 
           transition: (theme) => theme.transitions.create("transform"),
@@ -85,27 +85,27 @@ export const AvatarWithOverlay = ({
             zIndex: 1,
             background: lastNonIdleMode === "drop" ? dropBg : dangerBg,
           },
-        }}
+        })}
       >
         <FontAwesomeIcon
           icon={faUploadSolid}
-          sx={{
-            transition: (theme) => theme.transitions.create("opacity"),
+          sx={(theme) => ({
+            transition: theme.transitions.create("opacity"),
             opacity: mode === "drop" ? 1 : 0,
             position: "absolute",
-            color: "gray.70",
+            color: theme.palette.gray[70],
             fontSize: 80,
-          }}
+          })}
         />
         <FontAwesomeIcon
           icon={faFaceLaugh}
-          sx={{
-            transition: (theme) => theme.transitions.create("opacity"),
+          sx={(theme) => ({
+            transition: theme.transitions.create("opacity"),
             opacity: mode === "drop" ? 0 : 1,
             position: "absolute",
-            color: "gray.40",
+            color: theme.palette.gray[40],
             fontSize: 80,
-          }}
+          })}
         />
       </Avatar>
       <AnimatePresence>

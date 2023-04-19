@@ -170,7 +170,11 @@ export const GeneralPanel: FunctionComponent = () => {
 
             <Box flex={1}>
               <Typography
-                sx={{ color: "gray.80", fontSize: 15, fontWeight: 500 }}
+                sx={{
+                  color: ({ palette }) => palette.gray[80],
+                  fontSize: 15,
+                  fontWeight: 500,
+                }}
               >
                 Avatar
               </Typography>

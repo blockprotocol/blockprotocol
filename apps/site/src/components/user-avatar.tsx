@@ -1,4 +1,4 @@
-import { Avatar, AvatarProps, Typography } from "@mui/material";
+import { Avatar, AvatarProps, Typography, useTheme } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { SerializedUser } from "../lib/api/model/user.model";
@@ -21,6 +21,7 @@ export const UserAvatar: FunctionComponent<UserAvatarProps> = ({
   size = 32,
   sx = [],
 }) => {
+  const { palette } = useTheme();
   const { preferredName, userAvatarUrl } = user || {};
 
   return (
@@ -30,10 +31,10 @@ export const UserAvatar: FunctionComponent<UserAvatarProps> = ({
         {
           width: size,
           height: size,
-          backgroundColor: "gray.20",
+          backgroundColor: palette.gray[20],
           border: "1px solid",
-          borderColor: "gray.30",
-          color: "gray.70",
+          borderColor: palette.gray[30],
+          color: palette.gray[70],
           fontSize: size / 2,
         },
         ...(Array.isArray(sx) ? sx : [sx]),

@@ -179,7 +179,10 @@ export const OverviewCard: FunctionComponent<OverviewCardProps> = ({
           {description && (
             <Typography
               variant="bpSmallCopy"
-              sx={{ display: "block", color: "gray.70" }}
+              sx={{
+                display: "block",
+                color: ({ palette }) => palette.gray[70],
+              }}
             >
               {description.length <= 100
                 ? description
@@ -197,13 +200,16 @@ export const OverviewCard: FunctionComponent<OverviewCardProps> = ({
             {version && (
               <Typography
                 sx={{ mr: 1.5, mb: 1.5 }}
-                color="gray.60"
+                color={({ palette }) => palette.gray[60]}
                 variant="bpMicroCopy"
               >
                 {version}
               </Typography>
             )}
-            <Typography color="gray.60" variant="bpMicroCopy">
+            <Typography
+              color={({ palette }) => palette.gray[60]}
+              variant="bpMicroCopy"
+            >
               <ClientOnlyLastUpdated value={lastUpdated} />
             </Typography>
           </Box>
