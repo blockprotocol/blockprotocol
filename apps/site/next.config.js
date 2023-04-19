@@ -98,6 +98,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/docs/roadmap",
+        destination: "/roadmap",
+        permanent: true,
+      },
+      {
         source: "/spec/block-types",
         destination: "/spec/core",
         permanent: true,
