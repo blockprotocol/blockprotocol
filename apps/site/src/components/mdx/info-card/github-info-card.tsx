@@ -107,7 +107,7 @@ export const GitHubInfoCard: FunctionComponent = () => (
       }}
     >
       <LinkButton
-        href="https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/3_spec"
+        href="https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/spec"
         variant="primary"
         color="teal"
         size="small"
