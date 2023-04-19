@@ -7,6 +7,8 @@ import {
   TableHead,
   TableRow,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useState } from "react";
 
@@ -28,6 +30,10 @@ export const ApiKeysList = ({
   closeCreateKeyCard,
   onKeyCreated,
 }: ApiKeysListProps) => {
+  const theme = useTheme();
+  // using isMobile for conditional rendering on this page, since this page is not SSR, and has a loading state for now
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);
 
   const createKey = async (displayName: string) => {
@@ -54,13 +60,9 @@ export const ApiKeysList = ({
     />
   );
 
-  return (
-    <>
-      <Box
-        sx={(theme) => ({
-          [theme.breakpoints.up("md")]: { display: "none" },
-        })}
-      >
+  if (isMobile) {
+    return (
+      <Box>
         <ApiKeysMemoizedItems
           apiKeys={apiKeys}
           mobile
@@ -76,62 +78,60 @@ export const ApiKeysList = ({
           </Box>
         )}
       </Box>
+    );
+  }
 
-      <Box
-        sx={(theme) => ({
-          [theme.breakpoints.down("md")]: { display: "none" },
-        })}
-      >
-        <TableContainer>
-          <Table>
-            <TableHead
-              sx={{
-                th: {
-                  pl: 0,
-                  py: 1,
-                  color: ({ palette }) => palette.gray[80],
-                  fontSize: 14,
-                },
-              }}
-            >
-              <TableRow>
-                {apiKeys.length ? (
-                  <>
-                    <TableCell sx={{ width: 130 }}>Name</TableCell>
-                    <TableCell>Token</TableCell>
-                    <TableCell>Last Used</TableCell>
-                    <TableCell>Created</TableCell>
-                    <TableCell />
-                  </>
-                ) : (
-                  <TableCell colSpan={5}>Choose a name</TableCell>
-                )}
-              </TableRow>
-            </TableHead>
-            <TableBody
-              sx={{
-                td: {
-                  color: ({ palette }) => palette.gray[90],
-                  pl: 0,
-                  fontWeight: 500,
-                },
-              }}
-            >
-              <ApiKeysMemoizedItems
-                apiKeys={apiKeys}
-                newlyCreatedKeyIds={newlyCreatedKeyIds}
-              />
-
-              {isCreatingNewKey && (
-                <TableRow>
-                  <TableCell sx={{ verticalAlign: "top" }}>New Key</TableCell>
-                  <TableCell colSpan={4}>{createKeyCard}</TableCell>
-                </TableRow>
+  return (
+    <Box>
+      <TableContainer>
+        <Table>
+          <TableHead
+            sx={{
+              th: {
+                pl: 0,
+                py: 1,
+                color: ({ palette }) => palette.gray[80],
+                fontSize: 14,
+              },
+            }}
+          >
+            <TableRow>
+              {apiKeys.length ? (
+                <>
+                  <TableCell sx={{ width: 130 }}>Name</TableCell>
+                  <TableCell>Token</TableCell>
+                  <TableCell>Last Used</TableCell>
+                  <TableCell>Created</TableCell>
+                  <TableCell />
+                </>
+              ) : (
+                <TableCell colSpan={5}>Choose a name</TableCell>
               )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </>
+            </TableRow>
+          </TableHead>
+          <TableBody
+            sx={{
+              td: {
+                color: ({ palette }) => palette.gray[90],
+                pl: 0,
+                fontWeight: 500,
+              },
+            }}
+          >
+            <ApiKeysMemoizedItems
+              apiKeys={apiKeys}
+              newlyCreatedKeyIds={newlyCreatedKeyIds}
+            />
+
+            {isCreatingNewKey && (
+              <TableRow>
+                <TableCell sx={{ verticalAlign: "top" }}>New Key</TableCell>
+                <TableCell colSpan={4}>{createKeyCard}</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
