@@ -120,11 +120,9 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
         }
       }
 
-      if (entityProperties) {
-        exampleEntity.properties = entityProperties;
-        setEntity(exampleEntity);
-        return;
-      }
+      exampleEntity.properties = entityProperties ?? {};
+      setEntity(exampleEntity);
+      return;
     }
 
     if (exampleGraph) {

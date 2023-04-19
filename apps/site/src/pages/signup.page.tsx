@@ -2,7 +2,7 @@ import { faArrowLeft, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Fade, Paper, Typography } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "../components/button";
 import {
@@ -129,15 +129,15 @@ const SignupPage: NextPage = () => {
     setCurrentScreen("VerificationCode");
   };
 
-  const handleVerificationCodeSubmitted = (
-    loggedInUser: SerializedUser,
-    nextRedirectPath?: string,
-  ) => {
-    if (nextRedirectPath) {
-      setRedirectPath(nextRedirectPath);
-    }
-    setUser(loggedInUser);
-  };
+  const handleVerificationCodeSubmitted = useCallback(
+    (loggedInUser: SerializedUser, nextRedirectPath?: string) => {
+      if (nextRedirectPath) {
+        setRedirectPath(nextRedirectPath);
+      }
+      setUser(loggedInUser);
+    },
+    [setUser],
+  );
 
   return (
     <Box
