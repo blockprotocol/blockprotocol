@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
-import { ReactNode, useEffect, useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 
 import { Sidebar } from "../../components/page-sidebar";
 import {
@@ -72,13 +72,6 @@ const Account: AuthWallPageContent = () => {
       return accountPanels.find(({ slug }) =>
         currentSettingsPageSlug.startsWith(slug),
       );
-    }
-  }, [router]);
-
-  useEffect(() => {
-    if (router.asPath === "/account") {
-      // otherwise sidebar component does not recognize the current page
-      void router.replace(`/account/${accountPanels[0]?.slug}`, undefined);
     }
   }, [router]);
 

@@ -28,7 +28,9 @@ export const TopNavigationTabs: FunctionComponent = () => {
         <Tabs
           value={
             dashboardPages.find((dashboardPage) =>
-              router.asPath.includes(dashboardPage.tabHref),
+              router.asPath.includes(
+                dashboardPage.displayHref ?? dashboardPage.tabHref,
+              ),
             )?.tabHref
           }
           aria-label="settings-tabs"
