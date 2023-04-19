@@ -19,57 +19,55 @@ import { ApiKeysContext } from "./api-keys-panel/api-keys-context";
 import { ApiKeysEmptyState } from "./api-keys-panel/api-keys-empty-state";
 import { ApiKeysList } from "./api-keys-panel/api-keys-list";
 import { ApiKeysLoading } from "./api-keys-panel/api-keys-loading";
-import {
-  ApiKeyProps,
-  ApiKeysContextValue,
-  KeyActionStatus,
-} from "./api-keys-panel/types";
+import { ApiKeyProps, ApiKeysContextValue } from "./api-keys-panel/types";
 
 export const ApiKeysPanel: FunctionComponent = () => {
   const [apiKeys, setApiKeys] = useState<ApiKeyProps[]>([]);
   const [apiKeysLoading, setApiKeysLoading] = useState(true);
-  const [keyActionStatus, setKeyActionStatus] = useState<KeyActionStatus>();
   const [isCreatingNewKey, setIsCreatingNewKey] = useState(false);
-  const [newlyCreatedKeyIds, setNewlyCreatedKeyIds] = useState<string[]>([]);
 
-  const fetchAndSetApiKeys = useCallback(async () => {
-    const { data } = await apiClient.getUserApiKeys();
-    setApiKeysLoading(false);
+  const revokeApiKey = useCallback(async (publicId: string) => {
+    const res = await apiClient.revokeApiKey({ publicId });
 
-    if (data) {
-      setApiKeys(data.apiKeysMetadata.filter((key) => !key.revokedAt));
+    if (res.error) {
+      throw new Error(res.error.message);
     }
+
+    setApiKeys((current) => current.filter((key) => key.publicId !== publicId));
   }, []);
 
+  const renameApiKey = useCallback(
+    async (publicId: string, displayName: string) => {
+      await apiClient.updateApiKey({ publicId, displayName });
+
+      setApiKeys((current) =>
+        current.map((key) =>
+          key.publicId === publicId ? { ...key, displayName } : key,
+        ),
+      );
+    },
+    [],
+  );
+
   useEffect(() => {
+    const fetchAndSetApiKeys = async () => {
+      const { data } = await apiClient.getUserApiKeys();
+      setApiKeysLoading(false);
+
+      if (data) {
+        setApiKeys(data.apiKeysMetadata.filter((key) => !key.revokedAt));
+      }
+    };
+
     void fetchAndSetApiKeys();
-    /** this useEffect meant to be only run once */
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const apiKeysContextValue: ApiKeysContextValue = useMemo(
     () => ({
-      apiKeys,
-      setApiKeys,
-      isCreatingNewKey,
-      setIsCreatingNewKey,
-      newlyCreatedKeyIds,
-      setNewlyCreatedKeyIds,
-      keyActionStatus,
-      setKeyActionStatus,
-      fetchAndSetApiKeys,
+      revokeApiKey,
+      renameApiKey,
     }),
-    [
-      apiKeys,
-      setApiKeys,
-      isCreatingNewKey,
-      setIsCreatingNewKey,
-      newlyCreatedKeyIds,
-      setNewlyCreatedKeyIds,
-      keyActionStatus,
-      setKeyActionStatus,
-      fetchAndSetApiKeys,
-    ],
+    [revokeApiKey, renameApiKey],
   );
 
   const shouldRenderEmptyState = !apiKeys.length && !isCreatingNewKey;
@@ -100,7 +98,14 @@ export const ApiKeysPanel: FunctionComponent = () => {
           ) : shouldRenderEmptyState ? (
             <ApiKeysEmptyState />
           ) : (
-            <ApiKeysList />
+            <ApiKeysList
+              apiKeys={apiKeys}
+              closeCreateKeyCard={() => setIsCreatingNewKey(false)}
+              isCreatingNewKey={isCreatingNewKey}
+              onKeyCreated={(newKey) =>
+                setApiKeys((current) => [...current, newKey])
+              }
+            />
           )}
 
           {!isCreatingNewKey && !apiKeysLoading && (
