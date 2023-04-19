@@ -10,13 +10,13 @@ It currently shows a range of Graph Module actions, including creating entities,
 
 From this folder
 
-```
+```sh
 yarn && yarn dev
 ```
 
 From outside a workspace:
 
-```
+```sh
 yarn && yarn workspace @blocks/demo dev
 ```
 
