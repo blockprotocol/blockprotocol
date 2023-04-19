@@ -95,18 +95,18 @@ test("Docs page should contain key elements and interactions should work", async
   );
 
   // confirm docs footer nav have correct links
-  await expect(page.locator("text=PreviousFAQs >> a")).toBeVisible();
+  await expect(page.locator("text=PreviousAPI >> a")).toBeVisible();
 
-  await expect(page.locator("text=PreviousFAQs >> a")).toHaveAttribute(
+  await expect(page.locator("text=PreviousAPI >> a")).toHaveAttribute(
     "href",
-    "/docs/faq",
+    "/docs/hub/api",
   );
 
   await expect(page.locator("text=NextCore >> a")).toBeVisible();
 
   await expect(page.locator("text=NextCore >> a")).toHaveAttribute(
     "href",
-    "/docs/spec/core",
+    "/spec/core",
   );
 
   if (isMobile) {
