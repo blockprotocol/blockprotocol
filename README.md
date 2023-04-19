@@ -11,7 +11,7 @@
 [discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [graph module]: https://blockprotocol.org/docs/spec/graph-module?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [hook module]: https://blockprotocol.org/docs/spec/hook-module?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[rfcs & roadmap]: https://blockprotocol.org/docs/roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[rfcs & roadmap]: https://blockprotocol.org/roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [using blocks]: https://blockprotocol.org/docs/blocks/environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [WordPress]: https://blockprotocol.org/docs/blocks/environments#wordpress?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 
