@@ -11,7 +11,7 @@
 [discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [graph module]: https://blockprotocol.org/docs/spec/graph-module?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [hook module]: https://blockprotocol.org/docs/spec/hook-module?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[rfcs & roadmap]: https://blockprotocol.org/roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[roadmap]: https://blockprotocol.org/roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [using blocks]: https://blockprotocol.org/docs/blocks/environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [WordPress]: https://blockprotocol.org/docs/blocks/environments#wordpress?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 
@@ -68,7 +68,7 @@ For more examples, please refer to the [Block Protocol documentation] or browse 
 
 ## [![a](/.github/assets/gh_icon_roadmap_20px-base.svg)][gh-roadmap] &nbsp; Roadmap
 
-Learn more on our [RFCs & Roadmap] page in the docs.
+Learn more on our [Roadmap] page in the docs.
 
 - See the [RFC category on GitHub Discussions](https://github.com/blockprotocol/blockprotocol/discussions/categories/rfc) for a list of active RFCs
 - See the [open issues] for a list of some other proposed features (and known issues).
