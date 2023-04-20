@@ -230,7 +230,7 @@ export const BANNERS: Banner[] = [
     ),
   },
   {
-    shouldDisplay: ({ asPath }) => asPath.startsWith("/docs/spec"),
+    shouldDisplay: ({ asPath }) => asPath.startsWith("/spec"),
     overlapsFooter: true,
     contents: (
       <Grid container spacing={3}>
