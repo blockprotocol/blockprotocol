@@ -31,7 +31,7 @@ export class BlockElement extends BlockElementBase<BlockEntity> {
      * – we are passing the 'entityId' of the entity loaded into the block (graph.blockEntity').
      *
      * Many other messages are available for your block to read and update entities, and links between entities
-     * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions
+     * @see https://blockprotocol.org/spec/graph-module#message-definitions
      */
     this.graphModule
       .updateEntity<BlockEntity["properties"]>({

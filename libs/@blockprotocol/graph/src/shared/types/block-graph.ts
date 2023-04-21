@@ -46,7 +46,7 @@ export type BlockGraphProperties<
    * The 'graph' object contains messages sent under the graph module from the app to the block.
    * They are sent on initialization and again when the application has new values to send.
    * One such message is 'graph.blockEntitySubgraph', which is a data entity fitting the block's schema (its type).
-   * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list
+   * @see https://blockprotocol.org/spec/graph-module#message-definitions for a full list
    */
   graph: {
     blockEntitySubgraph?: Subgraph<
