@@ -39,7 +39,7 @@ A block implements a hook by sending a `hook` message to the embedding applicati
 
 - `node: HTMLElement | null`: The DOM node the embedding application will render a view into, or modifying an already rendered view.
 - `type: "text" | "image" | "video" | string`: The type of view for the hook. While this can be any string, we believe `text`, `image`, and `video` will be commonly used. Straying from these commonly used types could make your block less portable between different embedding applications, particularly those designed to support all blocks.
-- `path: string`: A path (expressed as a [JSON path](https://goessner.net/articles/JsonPath/)) to a property present in the block's [schema](https://blockprotocol.org/spec/graph-module#block-package), which the embedding application can use to render the view for this hook
+- `path: string`: A path (expressed as a [JSON path](https://goessner.net/articles/JsonPath/)) to a property present in the block's [schema](https://blockprotocol.org/spec/graph#block-package), which the embedding application can use to render the view for this hook
 - `hookId: string | null`: The ID of the hook as provided in the response when first sending a `hook` message. This should be `null` on first call.
 
 The embedding application must respond with a `hookResponse` message specifying a `hookId: string` property, which will be provided in future `hook` messages to establish that the hook is simply being updated, and not set up for the first time.

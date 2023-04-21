@@ -109,7 +109,7 @@ Entity data can be hosted in any application which implements the Block Protocol
 
 Yes. Blocks can fetch their own data from external modules. For example, a map block might fetch data from a mapping module.
 
-We believe the best blocks will communicate data back and forth with the embedding application, making use of the operations defined in the [Graph Module specification](https://blockprotocol.org/spec/graph-module).
+We believe the best blocks will communicate data back and forth with the embedding application, making use of the operations defined in the [Graph Module specification](https://blockprotocol.org/spec/graph).
 
 For example: a mapping block might persist a user’s choices about map positioning or styling back to an embedding application, all without the application knowing anything about the block, or the block even being aware of which application it is being used within.
 
@@ -121,7 +121,7 @@ The Block Protocol enables blocks to store and retrieve data in an application w
 
 Blocks can have their own local state - they might use this to allow users to explore data or draft changes, without saving anything.
 
-To save data beyond the session, blocks should make use of the [operations defined in the spec](https://blockprotocol.org/spec/graph-module) to send updates to the embedding application.
+To save data beyond the session, blocks should make use of the [operations defined in the spec](https://blockprotocol.org/spec/graph) to send updates to the embedding application.
 
 </FAQ>
 
@@ -396,7 +396,7 @@ We expect to have to add custom keywords to cover relationships which JSON Schem
 
 We encourage applications to include JSON-LD describing entities on their public pages to make them machine-readable.
 
-In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](https://blockprotocol.org/spec/graph-module). We have also taken a different approach to identifying entities, which may not have a public URL and may require a combination of fields to identify.
+In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](https://blockprotocol.org/spec/graph). We have also taken a different approach to identifying entities, which may not have a public URL and may require a combination of fields to identify.
 
 </FAQ>
 
