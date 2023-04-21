@@ -23,7 +23,7 @@ export const MuiOutlinedInputThemeOptions: Components<Theme>["MuiOutlinedInput"]
 
           ".MuiOutlinedInput-input": {
             color: theme.palette.gray[70],
-            "-webkit-text-fill-color": theme.palette.gray[70],
+            WebkitTextFillColor: theme.palette.gray[70],
           },
 
           "& .MuiOutlinedInput-notchedOutline": {

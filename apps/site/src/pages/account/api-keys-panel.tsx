@@ -1,142 +1,132 @@
-import { Box, Typography } from "@mui/material";
+import { faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Stack } from "@mui/material";
 import { NextSeo } from "next-seo";
-import { FunctionComponent, useEffect, useMemo, useState } from "react";
+import {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { Button } from "../../components/button";
-import { WarningIcon } from "../../components/icons";
+import { FontAwesomeIcon } from "../../components/icons";
 import { Link } from "../../components/link";
-import { GenerateApiModal } from "../../components/pages/dashboard/generate-api-modal";
-import { Table, TableRows } from "../../components/table";
-import { DateTimeCell } from "../../components/table-cells";
-import { UserFacingApiKeyProperties } from "../../lib/api/model/api-key.model";
+import { PanelSection } from "../../components/pages/account/panel-section";
+import { Spacer } from "../../components/spacer";
 import { apiClient } from "../../lib/api-client";
+import { ApiKeysContext } from "./api-keys-panel/api-keys-context";
+import { ApiKeysEmptyState } from "./api-keys-panel/api-keys-empty-state";
+import { ApiKeysList } from "./api-keys-panel/api-keys-list";
+import { ApiKeysLoading } from "./api-keys-panel/api-keys-loading";
+import { ApiKeyProps, ApiKeysContextValue } from "./api-keys-panel/types";
 
 export const ApiKeysPanel: FunctionComponent = () => {
-  const [activeApiKeys, setActiveApiKeys] = useState<
-    UserFacingApiKeyProperties[]
-  >([]);
+  const [apiKeys, setApiKeys] = useState<ApiKeyProps[]>([]);
+  const [apiKeysLoading, setApiKeysLoading] = useState(true);
+  const [isCreatingNewKey, setIsCreatingNewKey] = useState(false);
 
-  const [generateKeyStatus, setGenerateStatus] = useState<{
-    showModal: boolean;
-    keyToRegenerate?: UserFacingApiKeyProperties | undefined;
-  }>({
-    showModal: false,
-  });
+  const revokeApiKey = useCallback(async (publicId: string) => {
+    const res = await apiClient.revokeApiKey({ publicId });
 
-  const fetchAndSetApiKeys = () =>
-    apiClient
-      .getUserApiKeys()
-      .then(({ data }) =>
-        data
-          ? setActiveApiKeys(
-              data.apiKeysMetadata.filter((key) => !key.revokedAt),
-            )
-          : null,
+    if (res.error) {
+      throw new Error(res.error.message);
+    }
+
+    setApiKeys((current) => current.filter((key) => key.publicId !== publicId));
+  }, []);
+
+  const renameApiKey = useCallback(
+    async (publicId: string, displayName: string) => {
+      await apiClient.updateApiKey({ publicId, displayName });
+
+      setApiKeys((current) =>
+        current.map((key) =>
+          key.publicId === publicId ? { ...key, displayName } : key,
+        ),
       );
+    },
+    [],
+  );
 
   useEffect(() => {
-    /** @todo handle errors and show the user a msg */
+    const fetchAndSetApiKeys = async () => {
+      const { data } = await apiClient.getUserApiKeys();
+      setApiKeysLoading(false);
+
+      if (data) {
+        setApiKeys(data.apiKeysMetadata.filter((key) => !key.revokedAt));
+      }
+    };
+
     void fetchAndSetApiKeys();
   }, []);
 
-  const tableRows: TableRows = useMemo(
-    () =>
-      activeApiKeys.map((key) => [
-        key.displayName,
-        key.publicId,
-        key.lastUsedAt ? (
-          <DateTimeCell key="lastUsed" timestamp={key.lastUsedAt} />
-        ) : (
-          "Never"
-        ),
-        <DateTimeCell key="createdAt" timestamp={key.createdAt} />,
-      ]),
-
-    [activeApiKeys],
+  const apiKeysContextValue: ApiKeysContextValue = useMemo(
+    () => ({
+      revokeApiKey,
+      renameApiKey,
+    }),
+    [revokeApiKey, renameApiKey],
   );
-  const activeKey = activeApiKeys[0];
 
-  const closeGenerateModal = () => {
-    setGenerateStatus({
-      showModal: false,
-      keyToRegenerate: undefined,
-    });
-  };
+  const shouldRenderEmptyState = !apiKeys.length && !isCreatingNewKey;
 
   return (
-    <>
-      <NextSeo title="Block Protocol – Dashboard" />
+    <ApiKeysContext.Provider value={apiKeysContextValue}>
+      <NextSeo title="Block Protocol – API" />
 
-      <Typography variant="bpHeading2" sx={{ fontSize: 28, fontWeight: 400 }}>
-        API Keys
-      </Typography>
-      <Box sx={{ my: 2 }}>
-        <Typography
-          sx={{
-            typography: "bpBodyCopy",
-          }}
-        >
-          These keys allow you to access the Block Protocol from within other
-          applications.
-        </Typography>
-        <Typography
-          sx={{
-            typography: "bpBodyCopy",
-          }}
-        >
-          Keep them private to prevent other people from accessing your account.{" "}
-          <br />
-          <Link href="/docs/hub/api" data-test-id="apiKeyLink">
-            Learn More
-          </Link>
-        </Typography>
-      </Box>
-      {!!tableRows.length && (
-        <Table
-          header={["Name", "Public ID", "Last Used", "Created"]}
-          rows={tableRows}
-        />
-      )}
-
-      <Box sx={{ paddingTop: 2 }}>
-        <Button
-          color={activeKey ? "warning" : "gray"}
-          onClick={() =>
-            setGenerateStatus({
-              showModal: true,
-              keyToRegenerate: activeKey,
-            })
-          }
-          sx={{
-            width: {
-              xs: "100%",
-              md: "auto",
-            },
-          }}
-          variant="tertiary"
-        >
-          {activeKey ? (
+      <Stack gap={5.25}>
+        <PanelSection
+          title="API Keys"
+          description={
             <>
-              <WarningIcon
-                width="auto"
-                height="1em"
-                sx={{ fontSize: "1em", marginRight: 1 }}
-              />{" "}
-              Regenerate API Key
+              API keys allow you to access the Block Protocol from within other
+              applications.
+              <br />
+              Keep them secret, like passwords, to prevent others from accessing
+              your account.{" "}
+              <Link href="/docs/hub/api" data-test-id="apiKeyLink">
+                Learn more <FontAwesomeIcon icon={faChevronRight} />
+              </Link>
             </>
+          }
+        >
+          <Spacer height={2} />
+          {apiKeysLoading ? (
+            <ApiKeysLoading />
+          ) : shouldRenderEmptyState ? (
+            <ApiKeysEmptyState />
           ) : (
-            <>Create new key</>
+            <ApiKeysList
+              apiKeys={apiKeys}
+              closeCreateKeyCard={() => setIsCreatingNewKey(false)}
+              isCreatingNewKey={isCreatingNewKey}
+              onKeyCreated={(newKey) =>
+                setApiKeys((current) => [...current, newKey])
+              }
+            />
           )}
-        </Button>
 
-        {generateKeyStatus.showModal ? (
-          <GenerateApiModal
-            close={closeGenerateModal}
-            keyToRegenerate={generateKeyStatus.keyToRegenerate}
-            refetchKeyList={fetchAndSetApiKeys}
-          />
-        ) : null}
-      </Box>
-    </>
+          {!isCreatingNewKey && !apiKeysLoading && (
+            <Button
+              squared
+              variant="tertiary"
+              color="gray"
+              startIcon={<FontAwesomeIcon icon={faPlus} />}
+              onClick={() => setIsCreatingNewKey(true)}
+              sx={(theme) => ({
+                mt: 4,
+                [theme.breakpoints.down("md")]: {
+                  width: "100%",
+                },
+              })}
+            >
+              Create new key
+            </Button>
+          )}
+        </PanelSection>
+      </Stack>
+    </ApiKeysContext.Provider>
   );
 };
