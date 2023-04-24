@@ -92,7 +92,7 @@ As a block developer, you probably care most about our utility libraries. All of
 - [`create-block-app`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/create-block-app): a script to [create a new block] using `block-template-*`
 - [`mock-block-dock`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/mock-block-dock): a lightweight mock embedding application that can be used to test blocks during their development
 
-You might also find the [Þ feature showcase block](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/hook) helpful, for an all-in-one reference demonstrating the implementation of different Block Protocol methods.
+You might also find the [Þ feature showcase block](https://github.com/blockprotocol/blockprotocol/tree/main/blocks/feature-showcase) helpful, for an all-in-one reference demonstrating the implementation of different Block Protocol methods.
 
 ### For spec and site contributors
 
