@@ -2,18 +2,20 @@ import { VersionedUrl } from "@blockprotocol/graph";
 
 export type {
   Company,
-  CompanyFoundedByLinks,
+  CompanyFoundedByLink,
   CompanyOutgoingLinkAndTarget,
   CompanyOutgoingLinksByLinkEntityTypeId,
   CompanyProperties,
-  EmployedBy,
   FoundedBy,
+} from "./generated/company";
+export type {
+  EmployedBy,
   Person,
-  PersonEmployedByLinks,
+  PersonEmployedByLink,
   PersonOutgoingLinkAndTarget,
   PersonOutgoingLinksByLinkEntityTypeId,
   PersonProperties,
-} from "./generated/shared";
+} from "./generated/person";
 
 export const entityTypeIds = {
   thing: "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",

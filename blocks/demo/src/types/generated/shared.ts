@@ -6,15 +6,15 @@ import { Entity, LinkData } from "@blockprotocol/graph";
 
 export type Company = Entity<CompanyProperties>;
 
-export type CompanyFoundedByLinks = {
+export type CompanyFoundedByLink = {
   linkEntity: FoundedBy;
   rightEntity: Person;
 };
 
-export type CompanyOutgoingLinkAndTarget = CompanyFoundedByLinks;
+export type CompanyOutgoingLinkAndTarget = CompanyFoundedByLink;
 
 export type CompanyOutgoingLinksByLinkEntityTypeId = {
-  "https://blockprotocol.org/@examples/types/entity-type/founded-by/v/1": CompanyFoundedByLinks;
+  "https://blockprotocol.org/@examples/types/entity-type/founded-by/v/1": CompanyFoundedByLink;
 };
 
 /**
@@ -73,15 +73,15 @@ export type NamePropertyValue = Text;
 
 export type Person = Entity<PersonProperties>;
 
-export type PersonEmployedByLinks = {
+export type PersonEmployedByLink = {
   linkEntity: EmployedBy;
   rightEntity: Company;
 };
 
-export type PersonOutgoingLinkAndTarget = PersonEmployedByLinks;
+export type PersonOutgoingLinkAndTarget = PersonEmployedByLink;
 
 export type PersonOutgoingLinksByLinkEntityTypeId = {
-  "https://blockprotocol.org/@examples/types/entity-type/employed-by/v/1": PersonEmployedByLinks;
+  "https://blockprotocol.org/@examples/types/entity-type/employed-by/v/1": PersonEmployedByLink;
 };
 
 /**
