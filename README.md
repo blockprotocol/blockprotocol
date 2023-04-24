@@ -75,7 +75,7 @@ Learn more on our [Roadmap] page in the docs.
 
 ## [![a](/.github/assets/gh_icon_repo-overview_20px-base.svg)][gh-repo-overview] &nbsp; Repository overview
 
-Finding things within a monorepo isn't always straight forward, in particular if you're an external contributor looking at a repository for the first time. We've tried to logically separate our repo into executable **applications** or tools (`apps`), and developer **libraries** including packages and crates (`libs`). As an open-source community project, we welcome [contributions](#contributing).
+Finding things within a monorepo isn't always straight forward, in particular if you're an external contributor looking at a repository for the first time. We've tried to logically separate our repo into executable **applications** or tools (`apps`), developer **libraries** including packages and crates (`libs`), and a collection of Block Protocol maintained (`blocks`). As an open-source community project, we welcome [contributions](#contributing).
 
 ### For block and application developers
 

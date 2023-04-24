@@ -5,23 +5,32 @@ import { typedEntries } from "../../shared/util/typed-object-iter.js";
 import { PostprocessContext } from "../context/postprocess.js";
 import { entityDefinitionNameForEntityType } from "../shared.js";
 
-const generateDefinitionForEntity = (
-  fileName: string,
+const generateEntityDefinitionForEntityType = (
   entityTypeId: VersionedUrl,
+  title: string,
   context: PostprocessContext,
 ) => {
-  const typeName = mustBeDefined(context.entityTypes[entityTypeId]).title;
+  const typeName = title;
   const isLinkType = mustBeDefined(context.linkTypeMap[entityTypeId]);
 
   const linkSuffix = isLinkType ? ` & { linkData: LinkData }` : "";
   const entityName = entityDefinitionNameForEntityType(typeName);
 
+  const compiledContents = `\nexport type ${entityName} = Entity<${typeName}>${linkSuffix}\n`;
+
+  return { entityName, isLinkType, compiledContents };
+};
+
+const allocateEntityDefinitionToFile = (
+  fileName: string,
+  entityName: string,
+  isLinkType: boolean,
+  compiledContents: string,
+  context: PostprocessContext,
+) => {
   context.logTrace(
     `Adding${isLinkType ? " link " : " "}entity definition for ${entityName}`,
   );
-
-  mustBeDefined(context.filesToContents[fileName]);
-  const compiledContents = `\nexport type ${entityName} = Entity<${typeName}>${linkSuffix}\n`;
 
   context.defineIdentifierInFile(
     entityName,
@@ -51,13 +60,36 @@ export const generateEntityDefinitions = (
     ]),
   );
 
-  for (const [file, definedIdentifiers] of Object.entries(
-    context.filesToDefinedIdentifiers,
+  const entityTypeIdsToEntityDefinitions = Object.fromEntries(
+    typedEntries(context.entityTypes).map(([entityTypeId, { title }]) => {
+      return [
+        entityTypeId,
+        generateEntityDefinitionForEntityType(entityTypeId, title, context),
+      ];
+    }),
+  );
+
+  for (const [file, dependentIdentifiers] of typedEntries(
+    context.filesToDependentIdentifiers,
   )) {
-    for (const identifier of definedIdentifiers) {
+    for (const identifier of dependentIdentifiers) {
       const entityTypeId = entityTypeIdentifiersToIds[identifier];
       if (entityTypeId) {
-        generateDefinitionForEntity(file, entityTypeId, context);
+        const { entityName, isLinkType, compiledContents } = mustBeDefined(
+          entityTypeIdsToEntityDefinitions[entityTypeId],
+        );
+
+        if (context.filesToDefinedIdentifiers[file]?.has(identifier)) {
+          allocateEntityDefinitionToFile(
+            file,
+            entityName,
+            isLinkType,
+            compiledContents,
+            context,
+          );
+        } else {
+          context.addDependentIdentifierInFile(entityName, file);
+        }
       }
     }
   }
