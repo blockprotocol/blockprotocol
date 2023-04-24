@@ -28,7 +28,7 @@
       "dependsOn": ["codegen"],
       "outputs": ["dist/**", ".next/**", "public/schemas/**"]
     },
-    "@blocks/demo#codegen": {
+    "@blocks/feature-showcase#codegen": {
       "dependsOn": ["^build"],
       "outputs": ["src/entity-types/**/*.gen.ts"]
     },

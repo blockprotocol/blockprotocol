@@ -1,8 +1,8 @@
 {
-  "name": "@blocks/demo",
+  "name": "@blocks/feature-showcase",
   "version": "0.0.0",
   "private": true,
-  "description": "This is an all-in-one demo block for the Block Protocol.",
+  "description": "This is a feature showcase block for the Block Protocol.",
   "keywords": [
     "blockprotocol",
     "blocks"
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:blockprotocol/blockprotocol.git",
-    "directory": "blocks/demo"
+    "directory": "blocks/feature-showcase"
   },
   "license": "MIT",
   "author": {
@@ -61,10 +61,10 @@
     "blockType": {
       "entryPoint": "react"
     },
-    "displayName": "All-In-One Demo Block",
+    "displayName": "Feature Showcase Block",
     "icon": "public/omega.svg",
     "image": "public/block-preview.png",
-    "name": "demo",
+    "name": "feature-showcase",
     "protocol": "0.3",
     "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
     "codegen": {

@@ -1,4 +1,4 @@
-# All-in-one Demo Block
+# Feature Showcase Block
 
 ## Purpose
 
@@ -17,7 +17,7 @@ yarn && yarn dev
 From outside a workspace:
 
 ```sh
-yarn && yarn workspace @blocks/demo dev
+yarn && yarn workspace @blocks/feature-showcase dev
 ```
 
 ## Inspecting the source code
