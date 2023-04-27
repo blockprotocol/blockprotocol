@@ -34,7 +34,7 @@ test("Docs page should contain key elements and interactions should work", async
     ["Specification", "/spec"],
     ["Roadmap", "/roadmap"],
   ] as const) {
-    const item = sidebarLocator.locator(`a:has-text("${name}")`).first();
+    const item = sidebarLocator.locator(`a:text-is("${name}")`).first();
     await expect(item).toBeVisible();
     await expect(item).toHaveAttribute("href", href);
   }
@@ -102,7 +102,7 @@ test("Docs page should contain key elements and interactions should work", async
 
   await expect(page.locator("text=PreviousFAQs >> a")).toHaveAttribute(
     "href",
-    "/docs/faqs",
+    "/docs/faq",
   );
 
   await expect(page.locator("text=NextCore >> a")).toBeVisible();
