@@ -5,4 +5,4 @@
 "block-template-html": patch
 ---
 
-update links in readme and comments
+Update links in README and comments
