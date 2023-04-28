@@ -45,7 +45,7 @@ Once you have created the type representing the data your block needs, copy its 
 1.  When finished, run `yarn build` (or `npm run build`), which:
 
     - Bundles the component into a single source file
-    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json`. This file is documented in full [here](https://blockprotocol.org/docs/spec).
+    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json`. This file is documented in full [here](https://blockprotocol.org/spec).
 
 Please see [the Block Protocol docs](https://blockprotocol.org/docs/blocks/develop)
 for a fuller explanation of querying, creating and updating entity data from your block.

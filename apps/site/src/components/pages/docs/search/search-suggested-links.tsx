@@ -101,7 +101,7 @@ const SearchSuggestedLinks: FunctionComponent<SearchSuggestedLinksProps> = ({
             display: "none",
           },
         }}
-        href="/docs/spec"
+        href="/spec"
         onClick={() => closeModal?.()}
         startIcon={<SpecificationIcon />}
         squared

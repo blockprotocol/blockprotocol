@@ -98,6 +98,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/docs/roadmap",
+        destination: "/roadmap",
+        permanent: true,
+      },
+      {
         source: "/spec/block-types",
         destination: "/spec/core",
         permanent: true,
@@ -144,7 +149,7 @@ const nextConfig = {
       },
       {
         source: "/spec/rfcs_and_roadmap",
-        destination: "/spec/roadmap",
+        destination: "/roadmap",
         permanent: true,
       },
       {

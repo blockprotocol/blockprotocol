@@ -24,7 +24,7 @@ const handler = new GraphBlockHandler({
    * Here you can register functions will be called when your block receives specific messages from the application.
    * The example here is handling 'blockEntitySubgraph', which is the subgraph rooted at the entity associated directly
    * with this instance of the block.
-   * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for other such messages
+   * @see https://blockprotocol.org/spec/graph-module#message-definitions for other such messages
    */
   callbacks: {
     blockEntitySubgraph: ({ data: entitySubgraph }) => {
@@ -70,7 +70,7 @@ input.addEventListener("change", (event) => {
      *  - read and update entities
      *  - create link entities
      *  - and more
-     * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions
+     * @see https://blockprotocol.org/spec/graph-module#message-definitions
      */
     handler
       .updateEntity({

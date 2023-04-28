@@ -38,7 +38,7 @@ const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
     },
     {
       name: "Specification",
-      href: "/docs/spec",
+      href: "/spec",
     },
     ...(isBillingFeatureFlagEnabled
       ? [

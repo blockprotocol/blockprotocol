@@ -1,5 +1,22 @@
 # block-template-custom-element
 
+## 0.4.0
+
+### Minor Changes
+
+- [#1223](https://github.com/blockprotocol/blockprotocol/pull/1223) [`fe4fc27f`](https://github.com/blockprotocol/blockprotocol/commit/fe4fc27f9188596baa52d04e1de9042cbd04a014) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Add `example-graph.ts` script and bump `block-scripts`
+
+### Patch Changes
+
+- [#1280](https://github.com/blockprotocol/blockprotocol/pull/1280) [`69e3e035`](https://github.com/blockprotocol/blockprotocol/commit/69e3e035be168047d35a62b9309cc35160eb7014) Thanks [@CiaranMn](https://github.com/CiaranMn)! - specify @types/react-is version
+
+- [#1273](https://github.com/blockprotocol/blockprotocol/pull/1273) [`bae9405c`](https://github.com/blockprotocol/blockprotocol/commit/bae9405c0a7d0f8312b416d845aaa3069dfe61d9) Thanks [@nonparibus](https://github.com/nonparibus)! - Update links in README and comments
+
+- Updated dependencies [[`fe4fc27f`](https://github.com/blockprotocol/blockprotocol/commit/fe4fc27f9188596baa52d04e1de9042cbd04a014), [`af01f5c2`](https://github.com/blockprotocol/blockprotocol/commit/af01f5c2d2b124e3be0b285dfc5cebfd63edc395), [`d0a52220`](https://github.com/blockprotocol/blockprotocol/commit/d0a522208bc0765e2d7865d61ec06776420e69ac), [`96fd797b`](https://github.com/blockprotocol/blockprotocol/commit/96fd797bea62204386ad23514a76a7e9c5a1cbc3), [`bae9405c`](https://github.com/blockprotocol/blockprotocol/commit/bae9405c0a7d0f8312b416d845aaa3069dfe61d9), [`eacd07fb`](https://github.com/blockprotocol/blockprotocol/commit/eacd07fb3009b35e7c30f8be11e3e136651f41c2)]:
+  - block-scripts@0.3.0
+  - mock-block-dock@0.1.5
+  - @blockprotocol/graph@0.3.0
+
 ## 0.3.3
 
 ### Patch Changes
