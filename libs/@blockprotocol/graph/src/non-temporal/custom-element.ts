@@ -27,7 +27,7 @@ export abstract class BlockElementBase<
   /**
    * The 'graphModule' is a handler for sending messages to the embedding application, e.g. 'graphModule.updateEntity'
    * It starts off undefined and will be available once the initial exchange of messages has taken place (handled internally)
-   * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list of available messages
+   * @see https://blockprotocol.org/spec/graph#message-definitions for a full list of available messages
    */
   protected graphModule?: GraphBlockHandler;
 
@@ -40,7 +40,7 @@ export abstract class BlockElementBase<
      * The 'graph' object contains messages sent under the graph module from the app to the block.
      * They are sent on initialization and again when the application has new values to send.
      * One such message is 'graph.blockEntitySubgraph', which is a graph rooted at the block entity.
-     * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list
+     * @see https://blockprotocol.org/spec/graph#message-definitions for a full list
      */
     graph: { type: Object },
   };

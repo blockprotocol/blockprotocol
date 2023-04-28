@@ -61,7 +61,7 @@
     "blockType": {
       "entryPoint": "react"
     },
-    "displayName": "Feature Showcase Block",
+    "displayName": "Block Protocol Feature Showcase",
     "icon": "public/omega.svg",
     "image": "public/block-preview.png",
     "name": "feature-showcase",
