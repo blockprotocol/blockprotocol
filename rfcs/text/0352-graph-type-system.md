@@ -1,3 +1,8 @@
+- **Feature Name:** `graph-type-system`
+- **Start Date:** 2022-06-14
+- **RFC PR:** [blockprotocol/blockprotocol#352](https://github.com/blockprotocol/blockprotocol/pull/352)
+- **RFC Discussion:** [blockprotocol/blockprotocol#418](https://github.com/blockprotocol/blockprotocol/discussions/418)
+
 # Summary
 
 [summary]: #summary
@@ -110,7 +115,7 @@ Given the motivation above and some other implications of the current design, th
 As well as addressing these existing shortcomings, this RFC seeks to:
 
 1.  define a constrained type system that is able to describe any JSON object structure
-1.  refine the current way of defining links between entities, encapsulating the approach within the type system
+2.  refine the current way of defining links between entities, encapsulating the approach within the type system
 
 ## Types
 

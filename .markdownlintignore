@@ -1,0 +1,93 @@
+###########################
+## Specific to Markdownlint
+###########################
+
+## Ignore all files (but still allow sub-folder scanning)
+*
+!*/
+
+## Allow certain file types
+!*.md
+!*.mdx
+
+#################################
+## Shared between git and linters
+#################################
+
+## Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## Dependency directories
+node_modules
+vendor/
+
+## TypeScript cache
+*.tsbuildinfo
+
+## Optional eslint cache
+.eslintcache
+
+## Yarn Integrity file
+.yarn-integrity
+
+## macOS directory file
+.DS_Store
+
+## Next.js build output
+.next
+
+## Environment variables
+.env.local
+.blockprotocolrc
+
+## Build artifacts
+dist
+build/
+
+## VScode config
+.vscode
+
+## Vercel
+.vercel
+
+## Testing
+.nyc_output
+coverage
+
+## Local files
+var
+
+## Sentry
+.sentryclirc
+
+## Rust / WASM
+*.rs.bk
+bin
+Cargo.lock
+pkg
+target
+wasm-pack.log
+
+## Workspace-specific
+apps/site/playwright-report
+apps/site/public/schemas
+apps/site/site-map.json
+apps/site/test-results
+libs/@blockprotocol/type-system/.rollup.cache
+libs/@blockprotocol/type-system/wasm
+libs/block-template-html/dev/src
+libs/mock-block-dock/src/version.ts
+
+#########################
+## Shared between linters
+#########################
+
+# Keep license files as is
+LICENSE.md
+LICENSE-*.md
+
+## Ignore auto-generated files
+*.gen.ts
