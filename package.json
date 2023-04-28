@@ -20,7 +20,7 @@
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "fix:dependency-version-consistency": "check-dependency-version-consistency --fix .",
     "fix:eslint": "turbo run --continue fix:eslint",
-    "fix:markdownlint": "markdownlint-cli2 --fix '*.md' '#node_modules' '#**/vendor' '#**/LICENSE-APACHE.md'",
+    "fix:markdownlint": "markdownlint-cli2 --fix '**/*.md' '#**/node_modules' '#**/vendor' '#**/dist' '#**/LICENSE-APACHE.md'",
     "fix:prettier": "prettier --cache --write --ignore-unknown .",
     "fix:yarn-deduplicate": "yarn install && yarn-deduplicate --strategy=fewer && yarn install",
     "lint": "npm-run-all --continue-on-error \"lint:*\"",
