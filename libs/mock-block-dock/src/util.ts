@@ -485,7 +485,15 @@ export function filterAndSortEntitiesOrTypes<
 ): FilterResult {
   const { operation } = payload;
 
-  const multiSort = operation?.multiSort ?? [{ field: ["updatedAt"] }];
+  // Fallback by sorting by recordId, as this is a combined function we need to deal with both `OntologyTypeRecordId`
+  // and `EntityRecordId` which have different fields. We handle `undefined` values within the sort function so this
+  // is safe.
+  const multiSort = operation?.multiSort ?? [
+    { field: ["metadata", "recordId", "entityId"] },
+    { field: ["metadata", "recordId", "editionId"] },
+    { field: ["metadata", "recordId", "baseUrl"] },
+    { field: ["metadata", "recordId", "version"] },
+  ];
   const multiFilter = operation?.multiFilter;
 
   const appliedOperation = {
