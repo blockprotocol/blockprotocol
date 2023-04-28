@@ -133,7 +133,7 @@
     "@types/passport": "^1.0.11",
     "@types/prismjs": "^1.26.0",
     "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.9",
+    "@types/react-dom": "18.0.9",
     "@types/react-gtm-module": "^2.0.1",
     "@types/react-html-parser": "^2.0.2",
     "@types/react-slick": "^0.23.10",
