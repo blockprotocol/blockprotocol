@@ -11,7 +11,8 @@ export const getDbBlocks = async (filter: { shortname?: string }) => {
     .collection<ExpandedBlockMetadata>(blocksDbCollectionName)
     .find(filter.shortname ? { author: filter.shortname } : {}, {
       projection: defaultProjection,
-    });
+    })
+    .toArray();
 };
 
 export const getDbBlock = async (
