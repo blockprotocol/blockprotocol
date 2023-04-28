@@ -1,5 +1,18 @@
 # block-template-html
 
+## 0.3.0
+
+### Minor Changes
+
+- [#1223](https://github.com/blockprotocol/blockprotocol/pull/1223) [`fe4fc27f`](https://github.com/blockprotocol/blockprotocol/commit/fe4fc27f9188596baa52d04e1de9042cbd04a014) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Add `example-graph.json` and bump `block-scripts`
+
+### Patch Changes
+
+- [#1273](https://github.com/blockprotocol/blockprotocol/pull/1273) [`bae9405c`](https://github.com/blockprotocol/blockprotocol/commit/bae9405c0a7d0f8312b416d845aaa3069dfe61d9) Thanks [@nonparibus](https://github.com/nonparibus)! - Update links in README and comments
+
+- Updated dependencies [[`fe4fc27f`](https://github.com/blockprotocol/blockprotocol/commit/fe4fc27f9188596baa52d04e1de9042cbd04a014)]:
+  - block-scripts@0.3.0
+
 ## 0.2.5
 
 ### Patch Changes
