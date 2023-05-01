@@ -210,7 +210,7 @@ export const paidSubscriptionFeatures: Record<
         icon: <MicrophoneLogoIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>60 mins</strong> OpenAI Whisper audio transcription Mapbox
+            <strong>60 mins</strong> OpenAI Whisper audio transcription
           </>
         ),
         planned: true,
