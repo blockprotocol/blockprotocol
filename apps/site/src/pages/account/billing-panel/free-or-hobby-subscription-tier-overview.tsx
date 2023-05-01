@@ -55,8 +55,8 @@ export const paidSubscriptionFeatures: Record<
         icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>~{numberOfThousandOpenaiHobbyWords}k</strong> AI-generated
-            words (powered by GPT-3)
+            <strong>~{Math.floor(numberOfThousandOpenaiHobbyWords)}k</strong>{" "}
+            AI-generated words (powered by GPT-3 and GPT-4)
           </>
         ),
       },
@@ -157,7 +157,7 @@ export const paidSubscriptionFeatures: Record<
               component="span"
               sx={{ color: ({ palette }) => palette.gray[60] }}
             >
-              ~{numberOfThousandOpenaiProWords}k+ words,{" "}
+              ~{Math.floor(numberOfThousandOpenaiProWords)}k+ words,{" "}
               {externalServiceFreeAllowance["OpenAI Create Image Request"].pro}{" "}
               images,{" "}
               {

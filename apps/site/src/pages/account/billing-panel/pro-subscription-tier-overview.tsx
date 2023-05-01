@@ -39,8 +39,8 @@ export const proSubscriptionFeatures: Record<
       icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
-          <strong>~{numberOfThousandOpenaiProWords}k</strong> AI-generated words
-          (powered by GPT-3)
+          <strong>~{Math.floor(numberOfThousandOpenaiProWords)}k</strong>{" "}
+          AI-generated words (powered by GPT-3 and GPT-4)
         </>
       ),
     },

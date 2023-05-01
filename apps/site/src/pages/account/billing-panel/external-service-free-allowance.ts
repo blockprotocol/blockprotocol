@@ -5,11 +5,13 @@ const externalServiceNames = [
   "Mapbox Temporary Geocoding Request",
   "Mapbox Static Image Request",
   "OpenAI Create Image Request",
-  "OpenAI GPT-3.5 Turbo Token",
   "OpenAI Ada Token",
   "OpenAI Babbage Token",
   "OpenAI Curie Token",
+  "OpenAI GPT-3.5 Turbo Token",
   "OpenAI Davinci Token",
+  "OpenAI GPT-4 Input Token",
+  "OpenAI GPT-4 Output Token",
 ] as const;
 
 export type ExternalServicePriceName = (typeof externalServiceNames)[number];
@@ -79,10 +81,22 @@ export const externalServiceFreeAllowance: Record<
     hobby: 10_000,
     pro: 20_000,
   },
+  "OpenAI GPT-4 Input Token": {
+    free: 0,
+    hobby: 2_000,
+    pro: 4_000,
+  },
+  "OpenAI GPT-4 Output Token": {
+    free: 0,
+    hobby: 3_333,
+    pro: 6_666,
+  },
 };
 
 const openaiLanguageFreeAllowances = [
   externalServiceFreeAllowance["OpenAI GPT-3.5 Turbo Token"],
+  externalServiceFreeAllowance["OpenAI GPT-4 Input Token"],
+  externalServiceFreeAllowance["OpenAI GPT-4 Output Token"],
   externalServiceFreeAllowance["OpenAI Ada Token"],
   externalServiceFreeAllowance["OpenAI Babbage Token"],
   externalServiceFreeAllowance["OpenAI Curie Token"],

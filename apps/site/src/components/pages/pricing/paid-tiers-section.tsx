@@ -193,6 +193,42 @@ export const paidSubscriptionFeatures: Record<
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
                       <strong>
+                        {externalServiceFreeAllowance[
+                          "OpenAI GPT-4 Input Token"
+                        ].hobby / 1000}
+                        k
+                      </strong>{" "}
+                      OpenAI GPT-4 Input tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>
+                        {externalServiceFreeAllowance[
+                          "OpenAI GPT-4 Output Token"
+                        ].hobby / 1000}
+                        k
+                      </strong>{" "}
+                      OpenAI GPT-4 Output tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>
                         {externalServiceFreeAllowance["OpenAI Davinci Token"]
                           .hobby / 1000}
                         k
@@ -849,7 +885,7 @@ export const PaidTiersSection: FunctionComponent<{
                   title={`~${numberOfThousandOpenaiHobbyWords.toFixed(1)}k`}
                   description="AI-generated words"
                   poweredByIcon={<AbstractAiIcon sx={{ fontSize: 20 }} />}
-                  poweredBy="GPT-3"
+                  poweredBy="GPT-3 and GPT-4"
                 />
                 <HobbyTierPerk
                   headerIcon={faImage}
@@ -1010,6 +1046,7 @@ export const PaidTiersSection: FunctionComponent<{
         >
           <Box
             sx={{
+              position: "relative",
               display: "flex",
               flex: 1,
               flexDirection: "column",
@@ -1124,8 +1161,11 @@ export const PaidTiersSection: FunctionComponent<{
               />
             </Box>
             {lg ? (
-              <Collapse in={fullPlanDetailsOpen}>
-                <Box sx={{ mt: 10.75 }}>
+              <Collapse
+                in={fullPlanDetailsOpen}
+                sx={{ position: "absolute", bottom: 0, width: "100%" }}
+              >
+                <Box>
                   <Image
                     layout="responsive"
                     src={proTierBackground}
