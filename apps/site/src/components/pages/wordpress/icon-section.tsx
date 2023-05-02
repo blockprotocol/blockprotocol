@@ -9,6 +9,8 @@ export interface IconSectionProps {
   title: ReactNode;
   grayTitle?: ReactNode;
   description: ReactNode;
+  action?: ReactNode;
+  maxWidth?: number;
 }
 
 export const IconSection: FunctionComponent<GridProps & IconSectionProps> = ({
@@ -17,6 +19,8 @@ export const IconSection: FunctionComponent<GridProps & IconSectionProps> = ({
   title,
   grayTitle,
   description,
+  action,
+  maxWidth,
   ...props
 }) => {
   const theme = useTheme();
@@ -43,23 +47,26 @@ export const IconSection: FunctionComponent<GridProps & IconSectionProps> = ({
             color,
           }}
         >
-          <Box sx={{ mb: 1.5 }}>{icon}</Box>
+          <Box sx={{ mb: "24px" }}>{icon}</Box>
           <Typography
             sx={{ color, mb: 1 }}
             variant="bpLargeText"
-            fontWeight={700}
+            fontWeight={400}
+            fontSize="26px"
+            component="div"
           >
-            {title}
+            for <strong> {title} </strong>
             {grayTitle ? (
               <span style={{ color: theme.palette.gray[50] }}>{grayTitle}</span>
             ) : null}
           </Typography>
           <Typography
             variant="bpSmallCopy"
-            sx={{ fontWeight: 400, lineHeight: 1.2 }}
+            sx={{ fontWeight: 400, lineHeight: 1.2, mb: "24px", maxWidth }}
           >
             {description}
           </Typography>
+          {action}
         </Box>
       </FadeInOnViewport>
     </Grid>

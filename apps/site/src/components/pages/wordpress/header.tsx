@@ -1,16 +1,18 @@
-import { Stream } from "@cloudflare/stream-react";
-import { Box, Container, Skeleton, Typography, useTheme } from "@mui/material";
-import Image from "next/legacy/image";
-import { useState } from "react";
+import { Box, Container, Typography, useTheme } from "@mui/material";
 
-import wpHelixImage from "../../../../public/assets/new-home/wp-helix.png";
 import { BpWpIcons } from "./bp-wp-icons";
-import { EarlyAccessCTA } from "./early-access-cta";
+import { CustomButton } from "./custom-button";
 
 export const Header = () => {
   const theme = useTheme();
 
-  const [loading, setLoading] = useState(true);
+  const onInstallWordPress = () => {
+    // TODO
+  };
+
+  const onDownload = () => {
+    // TODO
+  };
 
   return (
     <Box
@@ -23,29 +25,13 @@ export const Header = () => {
         sx={{
           position: "relative",
           zIndex: 3,
-          pt: { xs: 7, md: 8.75 },
-          mb: { xs: 4, md: 6.25 },
-          width: { xs: "95%", md: "75%", lg: "60%" },
+          mt: { xs: 7, md: 9.75 },
+          width: { xs: "95%" },
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: { sm: "center", md: "start" },
         }}
       >
-        <Typography
-          sx={{
-            textTransform: "uppercase",
-            color: ({ palette }) => palette.purple[700],
-            mb: 2.25,
-            fontWeight: 500,
-            letterSpacing: "0.06rem",
-            mx: "auto",
-          }}
-          textAlign="center"
-          variant="bpSmallCaps"
-        >
-          Available Now
-        </Typography>
-
         <Box
           sx={({ breakpoints }) => ({
             display: "flex",
@@ -55,8 +41,9 @@ export const Header = () => {
             mb: 2.25,
             [breakpoints.down("md")]: {
               flexDirection: "column",
+              alignSelf: "center",
             },
-            fontSize: "clamp(3rem, 5vw, 7rem)",
+            fontSize: "clamp(3rem, 5vw, 5rem)",
           })}
         >
           <Box
@@ -76,15 +63,14 @@ export const Header = () => {
 
           <Typography
             variant="bpHeading1"
-            textAlign="center"
             sx={{
               lineHeight: 1,
               color: ({ palette }) => palette.gray[90],
-              fontSize: "1em",
-              whiteSpace: "nowrap",
+              fontSize: "0.8em",
+              textAlign: { xs: "center", md: "left" },
             }}
           >
-            WordPress Plugin
+            Block Protocol for WordPress
           </Typography>
         </Box>
 
@@ -92,82 +78,59 @@ export const Header = () => {
           variant="bpBodyCopy"
           lineHeight={1.4}
           color={theme.palette.gray[80]}
-          textAlign="center"
           sx={{
-            margin: "0 auto",
             fontSize: { xs: "1.25rem", md: "1.45rem" },
+            textAlign: { xs: "center", md: "left" },
           }}
         >
-          Block Protocol blocks work across all Þ supporting applications{" "}
-          <Box
-            component="strong"
-            sx={({ breakpoints }) => ({
-              display: "block",
-              [breakpoints.down("lg")]: {
-                display: "inline",
-              },
-            })}
-          >
-            ...now including WordPress, powering 43% of the web
-          </Box>
+          Upgrade your WordPress site with new superpowers
         </Typography>
 
         <Box
           sx={{
             marginTop: 6.25,
-            maxWidth: 500,
-            width: 1,
             display: "flex",
-            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: { xs: "column", md: "row" },
           }}
         >
-          <EarlyAccessCTA />
+          <CustomButton
+            onClick={onInstallWordPress}
+            buttonLabel="Install on WordPress.com"
+            sx={{
+              mb: { xs: 1, md: 0 },
+              mr: { xs: 0, md: 2.25 },
+              minWidth: 300,
+            }}
+          />
+          <CustomButton
+            onClick={onDownload}
+            backgroundColor="#FFFFFF"
+            color="#3A2084"
+            sx={{
+              border: "1px solid #3A2084",
+              mb: { xs: 1, md: 0 },
+              mr: { xs: 0, md: 5.25 },
+              minWidth: 300,
+            }}
+            buttonLabel="Download for WordPress.org"
+          />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: { xs: "center", md: "start" },
+            }}
+          >
+            <Typography sx={{ fontWeight: 500, fontSize: "14px" }}>
+              <strong>COMPATIBLE WITH</strong>
+            </Typography>
+            <Typography sx={{ fontWeight: 400, fontSize: "14px" }}>
+              Gutenberg, Elementor, Brizy, Divi
+            </Typography>
+          </Box>
         </Box>
       </Container>
-
-      <Box sx={{ width: "100%", position: "relative" }}>
-        <Box
-          sx={{
-            width: 1,
-            position: "absolute !important",
-            top: "50%",
-            left: 0,
-            transform: "translateY(-50%)",
-          }}
-        >
-          <Image layout="responsive" src={wpHelixImage} />
-        </Box>
-        <Box
-          sx={{
-            width: { xs: "95%", md: "75%", lg: "60%" },
-            maxWidth: 1200,
-            div: {
-              width: "100%",
-              height: "100%",
-              display: loading ? "none" : "block",
-            },
-            aspectRatio: "16/9",
-            margin: "auto",
-          }}
-        >
-          {loading ? (
-            <Skeleton
-              sx={{
-                width: "100%",
-                height: "100%",
-                transform: "unset",
-              }}
-            />
-          ) : null}
-          <Stream
-            controls
-            src="17a35fcc1fb28ce771c1d3917cd51c21"
-            onCanPlay={() => setLoading(false)}
-            primaryColor="#7963F5"
-            letterboxColor="transparent"
-          />
-        </Box>
-      </Box>
     </Box>
   );
 };
