@@ -233,14 +233,7 @@ export const FreeTierSection: FunctionComponent<{
                     <CustomLink href="/docs/blocks/environments#hash">
                       HASH
                     </CustomLink>{" "}
-                    and (soon){" "}
-                    <CustomLink href="/docs/blocks/environments#github-blocks">
-                      GitHub
-                    </CustomLink>
-                    /
-                    <CustomLink href="/docs/blocks/environments#figma">
-                      Figma
-                    </CustomLink>
+                    and more expected
                   </>
                 ),
               },
