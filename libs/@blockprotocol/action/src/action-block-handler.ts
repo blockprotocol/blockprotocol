@@ -55,7 +55,7 @@ export class ActionBlockHandler
   availableActions({ data }: { data?: AvailableActionsData }) {
     return this.sendMessage({
       message: {
-        messageName: "action",
+        messageName: "availableActions",
         data,
       },
     });
