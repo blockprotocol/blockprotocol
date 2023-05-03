@@ -1,5 +1,13 @@
 # block-template-react
 
+## 0.4.1
+
+### Patch Changes
+
+- [#1284](https://github.com/blockprotocol/blockprotocol/pull/1284) [`5f630c31`](https://github.com/blockprotocol/blockprotocol/commit/5f630c31a69c6711ace2d90987ca34ada31ecbe6) Thanks [@CiaranMn](https://github.com/CiaranMn)! - update version of Thing entity type
+
+- [#1284](https://github.com/blockprotocol/blockprotocol/pull/1284) [`5f630c31`](https://github.com/blockprotocol/blockprotocol/commit/5f630c31a69c6711ace2d90987ca34ada31ecbe6) Thanks [@CiaranMn](https://github.com/CiaranMn)! - more precise typing for scss module in react block template
+
 ## 0.4.0
 
 ### Minor Changes
