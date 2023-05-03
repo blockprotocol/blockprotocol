@@ -35,7 +35,7 @@ test("page footer navigation works", async ({ page, browserName }) => {
   ).toHaveAttribute("href", "/docs");
   await expect(
     page.locator("footer >> a:has-text('Specification')"),
-  ).toHaveAttribute("href", "/docs/spec");
+  ).toHaveAttribute("href", "/spec");
   await expect(
     page.locator("footer >> a:has-text('Contact Us')"),
   ).toHaveAttribute("href", "/contact");

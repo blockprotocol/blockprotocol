@@ -91,7 +91,7 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
       pathWithoutParams === href || pathWithoutParams?.startsWith(`${href}#`),
   );
 
-  const isSpec = currentPage?.href.startsWith("/docs/spec");
+  const isSpec = currentPage?.href.startsWith("/spec");
 
   return (
     <>

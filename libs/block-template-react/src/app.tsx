@@ -39,7 +39,7 @@ export const App: BlockComponent<BlockEntity> = ({
      * All block <> application messages are split into modules, and so is this property object.
      * Here, we're extracting the 'graph' module messages from the property object.
      * – and then taking a single message from it, 'blockEntitySubgraph'
-     * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for other such messages
+     * @see https://blockprotocol.org/spec/graph#message-definitions for other such messages
      */
     blockEntitySubgraph,
   },
@@ -93,7 +93,7 @@ export const App: BlockComponent<BlockEntity> = ({
            * – we are passing the 'entityId' of the entity loaded into the block ('blockEntity').
            *
            * Many other messages are available for your block to read and update entities, and links between entities
-           * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions
+           * @see https://blockprotocol.org/spec/graph#message-definitions
            */
           graphModule?.updateEntity({
             data: {

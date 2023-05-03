@@ -114,7 +114,7 @@ The starter blocks created by `create-block-app` implement a simple example of t
 
 The Graph Module describes how entities can be created, queried, updated, and linked together, including the block entity. It enables your block to create, read, update, and delete data in the embedding application.
 
-The Graph Module is available via the `graphModule` property in each starter template. It has a number of methods corresponding to the messages defined in the [specification](https://blockprotocol.org/docs/spec/graph-module).
+The Graph Module is available via the `graphModule` property in each starter template. It has a number of methods corresponding to the messages defined in the [specification](https://blockprotocol.org/spec/graph).
 
 Using these methods in combination, you can create complex graphs from within a block without having to know anything about the implementation details of the application embedding it.
 
@@ -391,7 +391,7 @@ const entities = getRoots(subgraph);
 
 Note, that we could have provided a `graphResolveDepths` parameter similar to the `getEntity` query example above, but have opted to not do so here which will default to a depth of 0 for all edge kinds, so the `Subgraph` will only return the roots.
 
-More information on building filters can be found within the documentation of the [`queryEntities` message in the specification](https://blockprotocol.org/docs/spec/graph-module#message:queryEntities).
+More information on building filters can be found within the documentation of the [`queryEntities` message in the specification](https://blockprotocol.org/spec/graph#message:queryEntities).
 
 #### Going further with the graph module
 

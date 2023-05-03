@@ -82,7 +82,7 @@ const ModuleMessageData: FunctionComponent<{
                       <Typography variant="bpMicroCopy">no</Typography>
                     )}
                   </td>
-                  <td>
+                  <td style={{ wordBreak: "break-word" }}>
                     <Typography variant="bpMicroCopy">
                       {typeof propertySchema.description === "string"
                         ? propertySchema.description

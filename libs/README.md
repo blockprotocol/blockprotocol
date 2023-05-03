@@ -14,7 +14,7 @@
 
 # Libraries
 
-Contains the source code for Block Protocol development libraries, utilities, and plugins. Full write-ups of most can be found either in `README.md` files in each individual library folder or in the [Block Protocol docs], and a summary table will shortly be published below.
+Contains the source code for Block Protocol development libraries and utilities, as well as plugins. Full write-ups of most can be found either in `README.md` files in each individual library folder or in the [Block Protocol docs], and a summary table will shortly be published below.
 
 ## Publishing
 

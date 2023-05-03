@@ -85,9 +85,7 @@ const script = async () => {
       data: Record<string, string>;
     };
 
-    const type = markdownPageInfo.href.startsWith("/docs/spec")
-      ? "spec"
-      : "docs";
+    const type = markdownPageInfo.href.startsWith("/spec") ? "spec" : "docs";
 
     indexObjects.push({
       ...matterData.data,
