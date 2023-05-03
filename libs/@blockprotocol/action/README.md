@@ -13,7 +13,7 @@ To create a `ActionBlockHandler`, pass the constructor:
 
 1.  An `element` in the block
 1.  `callbacks` to respond to messages from the embedder
-    - You should register a callback for the `updateAction` message, which allows embedding application to set new `labels for block actions.
+    - You should register a callback for the `updateAction` message, which allows embedding application to set new labels for block actions.
 
 To tell the embedding application what elements will dispatch actions, call the `availableActions` function.
 Send this message again if the available actions change.
