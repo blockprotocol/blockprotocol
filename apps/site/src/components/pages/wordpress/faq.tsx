@@ -350,32 +350,29 @@ export const FAQ = () => {
         <Box
           sx={{
             display: "flex",
+            gap: 2,
             flexDirection: { xs: "column", md: "row" },
           }}
         >
           <CustomButton
-            buttonLabel="Install on WordPress.com"
+            onClick={() => {}}
             sx={{
-              height: "40px",
-              fontSize: "14px",
-              padding: "8px, 18px, 8px, 18px",
-              marginRight: "14px",
-              mb: { xs: 1, md: 0 },
+              fontSize: 15,
+              color: "#F2F5FA",
+              background: ({ palette }) => palette.purple[700],
             }}
+            variant="primary"
             endIcon={<ArrowUpRightIcon />}
-          />
+          >
+            Install on WordPress.com
+          </CustomButton>
+
           <CustomButton
-            buttonLabel="Download ZIP for self-hosted Wordpress"
-            backgroundColor="#FFFFFF"
-            color="#3A2084"
-            sx={{
-              height: "40px",
-              fontSize: "14px",
-              padding: "8px, 18px, 8px, 18px",
-              border: "1px solid #6048E5",
-            }}
-            endIcon={<DownloadIcon sx={{ color: "#7556DC !important" }} />}
-          />
+            variant="secondary"
+            endIcon={<DownloadIcon fill="6048E5" />}
+          >
+            Download ZIP for self-hosted Wordpress
+          </CustomButton>
         </Box>
       </Box>
     </Box>

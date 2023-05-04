@@ -169,18 +169,17 @@ export const InstallPlugin = () => {
             description="Install the plugin with just one click and follow the prompts to get started"
             action={
               <CustomButton
-                buttonLabel="Install on WordPress.com"
-                backgroundColor="#2C81E4"
-                color="#FFFFFF"
+                variant="primary"
+                size="medium"
                 sx={{
-                  width: "230px",
-                  height: "40px",
-                  minHeight: "40px",
+                  backgroundColor: "#3373BE",
                   fontSize: "14px",
-                  p: "8px, 18px, 8px, 18px",
+                  alignContent: "start",
                 }}
                 endIcon={<ArrowUpRightIcon />}
-              />
+              >
+                Install on WordPress.com
+              </CustomButton>
             }
           />
 
@@ -195,24 +194,22 @@ export const InstallPlugin = () => {
               <span>
                 Download the plugin and upload the ZIP directly to your website
                 via the plugins admin panel
-                <br />
-                <br />
               </span>
             }
             action={
               <CustomButton
-                buttonLabel="Download plugin ZIP"
-                backgroundColor="#2C81E4"
-                color="#FFFFFF"
+                variant="primary"
+                size="medium"
                 sx={{
-                  width: "210px",
-                  height: "40px",
-                  minHeight: "40px",
+                  backgroundColor: "#2C81E4",
                   fontSize: "14px",
-                  p: "8px, 18px, 8px, 18px",
+                  width: "230px",
+                  alignContent: "start",
                 }}
                 endIcon={<DownloadIcon />}
-              />
+              >
+                Download plugin ZIP
+              </CustomButton>
             }
           />
         </Grid>

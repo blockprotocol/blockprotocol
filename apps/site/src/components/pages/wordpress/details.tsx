@@ -8,7 +8,7 @@ import {
   RightPointerIcon,
   TelescopeIcon,
 } from "../../icons";
-import { CustomButton } from "./custom-button";
+import { CustomLinkButton } from "./custom-link-button";
 import { DetailsSection } from "./details-section";
 
 export const Details = () => {
@@ -114,37 +114,26 @@ export const Details = () => {
             <Box
               sx={{
                 display: "flex",
+                gap: 1,
                 flexDirection: {
-                  sm: "column",
+                  xs: "column",
                   md: "row",
                 },
-                mt: "8px",
+                mt: 1,
               }}
             >
-              <CustomButton
+              <CustomLinkButton
+                href="/"
+                isPrimary={false}
+                variant="secondary"
                 endIcon={<TelescopeIcon />}
-                buttonLabel="Preview the AI blocks"
-                backgroundColor="#F4F3FF"
-                color="#3A2084"
-                sx={{
-                  height: "40px",
-                  border: "1px solid #EFEBFE",
-                  fontSize: "14px",
-                  mr: "8px",
-                  minHeight: "40px",
-                  p: "8px, 18px, 8px, 18px",
-                  mb: { xs: 1, md: 0 },
-                }}
-              />
-              <CustomButton
-                buttonLabel="Get these blocks"
-                sx={{
-                  height: "40px",
-                  fontSize: "14px",
-                  minHeight: "40px",
-                  p: "8px, 18px, 8px, 18px",
-                }}
-              />
+              >
+                Preview the AI blocks
+              </CustomLinkButton>
+
+              <CustomLinkButton href="/" isPrimary variant="primary">
+                Get these blocks
+              </CustomLinkButton>
             </Box>
           </DetailsSection>
           <Grid
@@ -277,37 +266,26 @@ export const Details = () => {
             <Box
               sx={{
                 display: "flex",
+                gap: 1,
                 flexDirection: {
-                  sm: "column",
+                  xs: "column",
                   md: "row",
                 },
-                mt: "8px",
+                mt: 1,
               }}
             >
-              <CustomButton
+              <CustomLinkButton
+                href="/"
+                isPrimary={false}
+                variant="secondary"
                 endIcon={<MagicIcon />}
-                buttonLabel="Learn more about the benefits"
-                backgroundColor="#F4F3FF"
-                color="#3A2084"
-                sx={{
-                  height: "40px",
-                  border: "1px solid #EFEBFE",
-                  fontSize: "14px",
-                  mr: "8px",
-                  minHeight: "40px",
-                  p: "8px, 18px, 8px, 18px",
-                  mb: { xs: 1, md: 0 },
-                }}
-              />
-              <CustomButton
-                buttonLabel="Get started"
-                sx={{
-                  height: "40px",
-                  fontSize: "14px",
-                  minHeight: "40px",
-                  p: "8px, 18px, 8px, 18px",
-                }}
-              />
+              >
+                Learn more about the benefits
+              </CustomLinkButton>
+
+              <CustomLinkButton href="/" isPrimary variant="primary">
+                Get started
+              </CustomLinkButton>
             </Box>
           </DetailsSection>
           <DetailsSection xs={12} lg={6}>
@@ -380,37 +358,26 @@ export const Details = () => {
             <Box
               sx={{
                 display: "flex",
+                gap: 1,
                 flexDirection: {
-                  sm: "column",
+                  xs: "column",
                   md: "row",
                 },
-                mt: "8px",
+                mt: 1,
               }}
             >
-              <CustomButton
+              <CustomLinkButton
+                href="/"
+                isPrimary={false}
+                variant="secondary"
                 endIcon={<GlobeIcon />}
-                buttonLabel="Browse all services"
-                backgroundColor="#F4F3FF"
-                color="#3A2084"
-                sx={{
-                  height: "40px",
-                  border: "1px solid #EFEBFE",
-                  fontSize: "14px",
-                  mr: "8px",
-                  minHeight: "40px",
-                  p: "8px, 18px, 8px, 18px",
-                  mb: { xs: 1, md: 0 },
-                }}
-              />
-              <CustomButton
-                buttonLabel="Access for free"
-                sx={{
-                  height: "40px",
-                  fontSize: "14px",
-                  minHeight: "40px",
-                  p: "8px, 18px, 8px, 18px",
-                }}
-              />
+              >
+                Browse all services
+              </CustomLinkButton>
+
+              <CustomLinkButton href="/" isPrimary variant="primary">
+                Access for free
+              </CustomLinkButton>
             </Box>
           </DetailsSection>
           <Grid
@@ -510,21 +477,15 @@ export const Details = () => {
               sx={{
                 display: "flex",
                 flexDirection: {
-                  sm: "column",
+                  xs: "column",
                   md: "row",
                 },
                 mt: "8px",
               }}
             >
-              <CustomButton
-                buttonLabel="Get the plugin for free"
-                sx={{
-                  height: "40px",
-                  fontSize: "14px",
-                  minHeight: "40px",
-                  p: "8px, 18px, 8px, 18px",
-                }}
-              />
+              <CustomLinkButton href="/" isPrimary variant="primary">
+                Get the plugin for free
+              </CustomLinkButton>
             </Box>
           </DetailsSection>
         </Grid>

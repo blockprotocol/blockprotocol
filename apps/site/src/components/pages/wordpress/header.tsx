@@ -87,34 +87,43 @@ export const Header = () => {
         </Typography>
 
         <Box
-          sx={{
-            marginTop: 6.25,
-            display: "flex",
-            alignItems: "center",
-            flexDirection: { xs: "column", md: "row" },
-          }}
+          display="flex"
+          marginTop={6.25}
+          flexDirection={{ xs: "column", md: "row" }}
+          gap={5}
         >
-          <CustomButton
-            onClick={onInstallWordPress}
-            buttonLabel="Install on WordPress.com"
+          <Box
             sx={{
-              mb: { xs: 1, md: 0 },
-              mr: { xs: 0, md: 2.25 },
-              minWidth: 300,
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              flexDirection: { xs: "column", md: "row" },
             }}
-          />
-          <CustomButton
-            onClick={onDownload}
-            backgroundColor="#FFFFFF"
-            color="#3A2084"
-            sx={{
-              border: "1px solid #3A2084",
-              mb: { xs: 1, md: 0 },
-              mr: { xs: 0, md: 5.25 },
-              minWidth: 300,
-            }}
-            buttonLabel="Download for WordPress.org"
-          />
+          >
+            <CustomButton
+              onClick={onInstallWordPress}
+              sx={{
+                fontSize: 15,
+                color: "#F2F5FA",
+                background: theme.palette.purple[700],
+              }}
+              variant="primary"
+            >
+              Install on WordPress.com
+            </CustomButton>
+            <CustomButton
+              onClick={onDownload}
+              sx={{
+                fontSize: 15,
+                color: "#3A2084",
+                background: "transparent",
+              }}
+              variant="secondary"
+            >
+              Download for WordPress.org
+            </CustomButton>
+          </Box>
+
           <Box
             sx={{
               display: "flex",
