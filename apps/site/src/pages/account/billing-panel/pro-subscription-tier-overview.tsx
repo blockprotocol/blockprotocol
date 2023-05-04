@@ -18,6 +18,7 @@ import { priceToHumanReadable } from "../../shared/subscription-utils";
 import {
   externalServiceFreeAllowance,
   numberOfThousandOpenaiProWords,
+  numberOfWordsToHumanReadable,
 } from "./external-service-free-allowance";
 import {
   SubscriptionFeature,
@@ -39,7 +40,9 @@ export const proSubscriptionFeatures: Record<
       icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
-          <strong>~{Math.floor(numberOfThousandOpenaiProWords)}k</strong>{" "}
+          <strong>
+            ~{numberOfWordsToHumanReadable(numberOfThousandOpenaiProWords)}k
+          </strong>{" "}
           AI-generated words (powered by GPT-3 and GPT-4)
         </>
       ),

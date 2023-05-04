@@ -118,3 +118,13 @@ export const numberOfThousandOpenaiHobbyWords =
   numberOfOpenaiHobbyWords * 0.001;
 
 export const numberOfThousandOpenaiProWords = numberOfOpenaiProWords * 0.001;
+
+export const numberOfWordsToHumanReadable = (numberOfWords: number) => {
+  // Round it to the nearest 1st decimal place
+  const roundedNumber = Math.round(numberOfWords * 10) / 10;
+
+  // Display the 1st decimal place only when it isn't `.0`
+  return roundedNumber % 1 === 0
+    ? roundedNumber.toFixed(0)
+    : roundedNumber.toFixed(1);
+};

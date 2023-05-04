@@ -24,6 +24,7 @@ import {
   numberOfOpenaiHobbyLanguageTokens,
   numberOfThousandOpenaiHobbyWords,
   numberOfThousandOpenaiProWords,
+  numberOfWordsToHumanReadable,
 } from "../../../pages/account/billing-panel/external-service-free-allowance";
 import { SubscriptionFeatureList } from "../../../pages/account/billing-panel/subscription-feature-list";
 import { SubscriptionFeature } from "../../../pages/account/billing-panel/subscription-feature-list-item";
@@ -447,7 +448,9 @@ export const paidSubscriptionFeatures: Record<
                 color: ({ palette }) => palette.purple[60],
               }}
             >
-              e.g. ~{numberOfThousandOpenaiProWords}k+ words,{" "}
+              e.g. ~
+              {numberOfWordsToHumanReadable(numberOfThousandOpenaiProWords)}k+
+              words,{" "}
               {externalServiceFreeAllowance["OpenAI Create Image Request"].pro}{" "}
               images, and{" "}
               {
@@ -882,7 +885,9 @@ export const PaidTiersSection: FunctionComponent<{
               <Stack flexDirection="row" flexWrap="wrap" gap={1} mt={2.25}>
                 <HobbyTierPerk
                   headerIcon={faText}
-                  title={`~${numberOfThousandOpenaiHobbyWords.toFixed(1)}k`}
+                  title={`~${numberOfWordsToHumanReadable(
+                    numberOfThousandOpenaiHobbyWords,
+                  )}k`}
                   description="AI-generated words"
                   poweredByIcon={<AbstractAiIcon sx={{ fontSize: 20 }} />}
                   poweredBy="GPT-3 and GPT-4"
