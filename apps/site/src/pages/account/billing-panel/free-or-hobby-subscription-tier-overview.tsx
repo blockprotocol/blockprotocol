@@ -34,9 +34,9 @@ import {
 } from "../../shared/subscription-utils";
 import {
   externalServiceFreeAllowance,
-  numberOfThousandOpenaiHobbyWords,
-  numberOfThousandOpenaiProWords,
-  numberOfWordsToHumanReadable,
+  numberOfOpenaiHobbyWords,
+  numberOfOpenaiProWords,
+  numberToNumberOfThousandsHumanReadable,
 } from "./external-service-free-allowance";
 import { SubscriptionFeatureList } from "./subscription-feature-list";
 import { SubscriptionFeature } from "./subscription-feature-list-item";
@@ -57,7 +57,8 @@ export const paidSubscriptionFeatures: Record<
         title: (
           <>
             <strong>
-              ~{numberOfWordsToHumanReadable(numberOfThousandOpenaiHobbyWords)}k
+              ~
+              {numberToNumberOfThousandsHumanReadable(numberOfOpenaiHobbyWords)}
             </strong>{" "}
             AI-generated words (powered by GPT-3 and GPT-4)
           </>
@@ -160,7 +161,7 @@ export const paidSubscriptionFeatures: Record<
               component="span"
               sx={{ color: ({ palette }) => palette.gray[60] }}
             >
-              ~{numberOfWordsToHumanReadable(numberOfThousandOpenaiProWords)}k+
+              ~{numberToNumberOfThousandsHumanReadable(numberOfOpenaiProWords)}{" "}
               words,{" "}
               {externalServiceFreeAllowance["OpenAI Create Image Request"].pro}{" "}
               images,{" "}

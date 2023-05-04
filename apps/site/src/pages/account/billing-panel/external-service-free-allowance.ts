@@ -114,17 +114,12 @@ export const numberOfOpenaiHobbyWords =
 
 export const numberOfOpenaiProWords = numberOfOpenaiProLanguageTokens * 0.75;
 
-export const numberOfThousandOpenaiHobbyWords =
-  numberOfOpenaiHobbyWords * 0.001;
+export const numberToNumberOfThousandsHumanReadable = (input: number) => {
+  const numberOfThousands = input * 0.001;
 
-export const numberOfThousandOpenaiProWords = numberOfOpenaiProWords * 0.001;
+  const roundedNumberOfThousands = Math.round(numberOfThousands);
 
-export const numberOfWordsToHumanReadable = (numberOfWords: number) => {
-  // Round it to the nearest 1st decimal place
-  const roundedNumber = Math.round(numberOfWords * 10) / 10;
-
-  // Display the 1st decimal place only when it isn't `.0`
-  return roundedNumber % 1 === 0
-    ? roundedNumber.toFixed(0)
-    : roundedNumber.toFixed(1);
+  return `${roundedNumberOfThousands}k${
+    roundedNumberOfThousands * 1000 < input ? "+" : ""
+  }`;
 };
