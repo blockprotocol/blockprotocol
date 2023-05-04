@@ -1,10 +1,10 @@
 import { MessageCallback, MessageReturn } from "@blockprotocol/core";
 import { JsonObject, JsonValue } from "@blockprotocol/graph";
 
-type ActionDefinition = {
-  element: HTMLElement;
+export type ActionDefinition = {
+  elementId: string;
   label?: string;
-  name: string;
+  actionName: string;
   payloadSchema: JsonObject;
 };
 
@@ -13,15 +13,15 @@ export type AvailableActionsData = {
 };
 
 export type ActionData = {
-  element: HTMLElement;
-  name: string;
+  elementId: string;
+  actionName: string;
   payload: JsonValue;
 };
 
 export type UpdateActionData = {
-  element: HTMLElement;
+  elementId: string;
+  actionName: string;
   label: string;
-  name: string;
 };
 
 export type ActionBlockMessages = {
