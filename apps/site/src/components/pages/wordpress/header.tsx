@@ -104,7 +104,7 @@ export const Header = () => {
               onClick={onInstallWordPress}
               sx={{
                 fontSize: 15,
-                color: "#F2F5FA",
+                color: theme.palette.bpGray[20],
                 background: theme.palette.purple[700],
               }}
               variant="primary"

@@ -7,14 +7,10 @@ import { FunctionComponent, ReactNode, useState } from "react";
 
 import { ExpandMoreIcon, RightPointerIcon } from "../../icons";
 
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
+const ExpandMore = styled((props: { expand: boolean } & IconButtonProps) => {
   return <IconButton {...props} />;
 })(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(90deg)",
+  transform: expand ? "rotate(90deg)" : "rotate(0deg)",
   marginLeft: "auto",
   transition: theme.transitions.create("transform", {
     duration: theme.transitions.duration.shortest,
@@ -41,10 +37,9 @@ export const FaqItem: FunctionComponent<FaqItemProps> = ({
     <Box
       sx={{
         borderBottom: hasBorderBottom ? 1 : 0,
-        borderColor: "#DDE7F0",
+        borderColor: ({ palette }) => palette.gray[30],
         mb: "12px",
-        pt: "12px",
-        pb: "12px",
+        py: "12px",
       }}
     >
       <Box

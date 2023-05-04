@@ -1,15 +1,13 @@
 import { Box, Grid, GridProps } from "@mui/material";
-import { FunctionComponent, ReactNode } from "react";
+import { FunctionComponent } from "react";
 
 import { FadeInOnViewport } from "../../fade-in-on-viewport";
 
-export interface IconSectionProps {
-  children: ReactNode;
-}
-
-export const DetailsSection: FunctionComponent<
-  GridProps & IconSectionProps
-> = ({ children, sx, ...props }) => {
+export const DetailsSection: FunctionComponent<GridProps> = ({
+  children,
+  sx,
+  ...props
+}) => {
   return (
     <Grid
       {...props}

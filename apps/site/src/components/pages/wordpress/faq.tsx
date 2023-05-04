@@ -31,7 +31,7 @@ export const FAQ = () => {
           lineHeight: 1,
           fontWeight: 500,
           mb: 1,
-          color: "#0E1114",
+          color: ({ palette }) => palette.black,
         }}
       >
         <strong>MORE INFORMATION</strong>
@@ -42,7 +42,7 @@ export const FAQ = () => {
           lineHeight: 1,
           fontWeight: 700,
           mb: 1,
-          color: "#6048E5",
+          color: ({ palette }) => palette.purple[700],
           fontStyle: "italic",
         }}
       >
@@ -168,12 +168,18 @@ export const FAQ = () => {
             things like using AI within WordPress.
           </Box>
           <Box sx={{ display: "flex" }}>
-            <Typography sx={{ color: "#64778C" }}>AI blocks</Typography>
-            <Typography sx={{ color: "#9EACBA" }}> powered by</Typography>
+            <Typography sx={{ color: ({ palette }) => palette.gray[70] }}>
+              AI blocks
+            </Typography>
+            <Typography
+              sx={{ color: ({ palette }) => palette.bpGray[50], px: "5px" }}
+            >
+              powered by
+            </Typography>
             <OpenAiIcon sx={{ width: "83px", height: "20px" }} />
           </Box>
-          <Grid container>
-            <Grid item xs={12} lg={4} sx={{ px: "5px" }}>
+          <Grid container spacing={2} mb={3}>
+            <Grid item xs={12} lg={4}>
               <Card
                 sx={{
                   minWidth: "auto",
@@ -188,7 +194,7 @@ export const FAQ = () => {
                   <Typography
                     gutterBottom
                     sx={{
-                      color: "#37434F",
+                      color: ({ palette }) => palette.bpGray[80],
                       fontSize: "18px",
                       display: "flex",
                       alignItems: "center",
@@ -197,7 +203,12 @@ export const FAQ = () => {
                   >
                     <AiTextIcon /> <strong>AI Text</strong>
                   </Typography>
-                  <Typography sx={{ color: "#4D5C6C", fontSize: "14px" }}>
+                  <Typography
+                    sx={{
+                      color: ({ palette }) => palette.gray[80],
+                      fontSize: "14px",
+                    }}
+                  >
                     Generate text in any style directly inside WordPress using
                     the latest models from ChatGPT and more
                   </Typography>
@@ -211,7 +222,7 @@ export const FAQ = () => {
                 }}
               >
                 <CardMedia
-                  sx={{ height: 202 }}
+                  sx={{ height: "202px" }}
                   image="/assets/block-cover-image.png"
                   title=""
                 />
@@ -219,7 +230,7 @@ export const FAQ = () => {
                   <Typography
                     gutterBottom
                     sx={{
-                      color: "#37434F",
+                      color: ({ palette }) => palette.bpGray[80],
                       fontSize: "18px",
                       display: "flex",
                       alignItems: "center",
@@ -228,7 +239,12 @@ export const FAQ = () => {
                   >
                     <AiImageIcon /> <strong>AI Image</strong>
                   </Typography>
-                  <Typography sx={{ color: "#4D5C6C", fontSize: "14px" }}>
+                  <Typography
+                    sx={{
+                      color: ({ palette }) => palette.gray[80],
+                      fontSize: "14px",
+                    }}
+                  >
                     Illustrate blog posts and make content pop with
                     photorealistic or stylized AI-generated imagery
                   </Typography>
@@ -242,7 +258,7 @@ export const FAQ = () => {
                 }}
               >
                 <CardMedia
-                  sx={{ height: 202 }}
+                  sx={{ height: "202px" }}
                   image="/assets/block-cover-chat.png"
                   title=""
                 />
@@ -250,7 +266,7 @@ export const FAQ = () => {
                   <Typography
                     gutterBottom
                     sx={{
-                      color: "#37434F",
+                      color: ({ palette }) => palette.bpGray[80],
                       fontSize: "18px",
                       display: "flex",
                       alignItems: "center",
@@ -259,7 +275,12 @@ export const FAQ = () => {
                   >
                     <AiChatIcon /> <strong>AI Chat</strong>
                   </Typography>
-                  <Box sx={{ color: "#4D5C6C", fontSize: "14px" }}>
+                  <Box
+                    sx={{
+                      color: ({ palette }) => palette.gray[80],
+                      fontSize: "14px",
+                    }}
+                  >
                     Chat with AI, embed one or more responses in a post, or
                     easily share a whole thread on your WordPress site
                   </Box>
@@ -331,17 +352,11 @@ export const FAQ = () => {
             plugin? Absolutely. It’s free, and gives your existing WordPress
             website new superpowers. If you get stuck or have any questions,
             feel free to{" "}
-            <Link
-              sx={{ color: "#7556DC", textDecoration: "none" }}
-              component="button"
-            >
+            <Link href="mailto:">
               <strong>contact us</strong>
             </Link>
             , or drop a line in our{" "}
-            <Link
-              sx={{ color: "#7556DC", textDecoration: "none" }}
-              component="button"
-            >
+            <Link href="" target="_blank">
               <strong>community Discord</strong>
             </Link>
             .
@@ -358,7 +373,7 @@ export const FAQ = () => {
             onClick={() => {}}
             sx={{
               fontSize: 15,
-              color: "#F2F5FA",
+              color: ({ palette }) => palette.bpGray[20],
               background: ({ palette }) => palette.purple[700],
             }}
             variant="primary"

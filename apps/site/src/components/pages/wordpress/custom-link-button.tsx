@@ -16,7 +16,7 @@ export const CustomLinkButton = ({
     ? theme.palette.purple[700]
     : theme.palette.purple[20];
 
-  const color = isPrimary ? "#FFFFFF" : theme.palette.purple[90];
+  const color = isPrimary ? theme.palette.white : theme.palette.purple[90];
 
   return (
     <LinkButton
