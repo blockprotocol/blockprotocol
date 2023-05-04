@@ -28,5 +28,5 @@ export type ThingOutgoingLinksByLinkEntityTypeId = {};
  * A generic thing
  */
 export type ThingProperties = {
-  "https://blockprotocol.org/@blockprotocol/types/property-type/name/"?: NamePropertyValue;
+  "https://blockprotocol.org/@blockprotocol/types/property-type/name/": NamePropertyValue;
 };
