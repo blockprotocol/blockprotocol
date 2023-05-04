@@ -207,7 +207,7 @@ export const FreeTierSection: FunctionComponent<{
                 icon: faWandMagicSparkles,
                 text: (
                   <>
-                    <strong>Free credits</strong> for use of OpenAI GPT-3.5,
+                    <strong>Free credits</strong> for use of OpenAI GPT-4,
                     Mapbox and more
                   </>
                 ),
