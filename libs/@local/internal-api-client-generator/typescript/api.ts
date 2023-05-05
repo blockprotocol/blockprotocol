@@ -181,11 +181,99 @@ export const ExternalServiceMethodRequestMethodNameEnum = {
   RetrieveStaticMap: "retrieveStaticMap",
   CreateImage: "createImage",
   CompleteText: "completeText",
+  CompleteChat: "completeChat",
 } as const;
 
 export type ExternalServiceMethodRequestMethodNameEnum =
   (typeof ExternalServiceMethodRequestMethodNameEnum)[keyof typeof ExternalServiceMethodRequestMethodNameEnum];
 
+/**
+ *
+ * @export
+ * @interface ExternalServicePrice
+ */
+export interface ExternalServicePrice {
+  /**
+   *
+   * @type {string}
+   * @memberof ExternalServicePrice
+   */
+  name: ExternalServicePriceNameEnum;
+  /**
+   * The price\'s unit amount in cents, represented as an integer or decimal string with at most 12 decimal places.
+   * @type {string}
+   * @memberof ExternalServicePrice
+   */
+  priceAmountInCents?: string;
+  /**
+   * Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+   * @type {string}
+   * @memberof ExternalServicePrice
+   */
+  currency?: string;
+  /**
+   *
+   * @type {ExternalServicePriceMonthlyFreeUnits}
+   * @memberof ExternalServicePrice
+   */
+  monthlyFreeUnits: ExternalServicePriceMonthlyFreeUnits;
+}
+
+export const ExternalServicePriceNameEnum = {
+  OpenAiGpt35TurboToken: "OpenAI GPT-3.5 Turbo Token",
+  MapboxAddressAutofillSession: "Mapbox Address Autofill Session",
+  MapboxIsochroneRequest: "Mapbox Isochrone Request",
+  MapboxDirectionsRequest: "Mapbox Directions Request",
+  MapboxTemporaryGeocodingRequest: "Mapbox Temporary Geocoding Request",
+  MapboxStaticImageRequest: "Mapbox Static Image Request",
+  OpenAiDallERequest: "OpenAI DALL-E Request",
+  OpenAiGpt3AdaToken: "OpenAI GPT-3 Ada Token",
+  OpenAiGpt3BabbageToken: "OpenAI GPT-3 Babbage Token",
+  OpenAiGpt3CurieToken: "OpenAI GPT-3 Curie Token",
+  OpenAiGpt3DavinciToken: "OpenAI GPT-3 Davinci Token",
+} as const;
+
+export type ExternalServicePriceNameEnum =
+  (typeof ExternalServicePriceNameEnum)[keyof typeof ExternalServicePriceNameEnum];
+
+/**
+ * The monthly free units for the stripe price for the \"free\", \"hobby\" and \"pro\" subscription tier.
+ * @export
+ * @interface ExternalServicePriceMonthlyFreeUnits
+ */
+export interface ExternalServicePriceMonthlyFreeUnits {
+  /**
+   *
+   * @type {number}
+   * @memberof ExternalServicePriceMonthlyFreeUnits
+   */
+  free: number;
+  /**
+   *
+   * @type {number}
+   * @memberof ExternalServicePriceMonthlyFreeUnits
+   */
+  hobby: number;
+  /**
+   *
+   * @type {number}
+   * @memberof ExternalServicePriceMonthlyFreeUnits
+   */
+  pro: number;
+}
+/**
+ *
+ * @export
+ * @interface GetExternalServicePrices200Response
+ */
+export interface GetExternalServicePrices200Response {
+  /**
+   *
+   * @type {Array<ExternalServicePrice>}
+   * @memberof GetExternalServicePrices200Response
+   */
+  externalServicePrices: Array<ExternalServicePrice>;
+}
 /**
  *
  * @export
@@ -467,6 +555,12 @@ export type SubscriptionTier =
  * @interface SubscriptionTierPrices
  */
 export interface SubscriptionTierPrices {
+  /**
+   *
+   * @type {StripePrice}
+   * @memberof SubscriptionTierPrices
+   */
+  free: StripePrice;
   /**
    *
    * @type {StripePrice}
@@ -847,6 +941,45 @@ export const DefaultApiAxiosParamCreator = function (
         localVarRequestOptions,
         configuration,
       );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Retrieve the prices (and free allowance) of each external service
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getExternalServicePrices: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/external-service-prices`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
 
       return {
         url: toPathString(localVarUrlObj),
@@ -1499,6 +1632,29 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Retrieve the prices (and free allowance) of each external service
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getExternalServicePrices(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetExternalServicePrices200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getExternalServicePrices(options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
      * @summary Get all paid invoices
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1866,6 +2022,19 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary Retrieve the prices (and free allowance) of each external service
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getExternalServicePrices(
+      options?: any,
+    ): AxiosPromise<GetExternalServicePrices200Response> {
+      return localVarFp
+        .getExternalServicePrices(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Get all paid invoices
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2090,6 +2259,17 @@ export interface DefaultApiInterface {
 
   /**
    *
+   * @summary Retrieve the prices (and free allowance) of each external service
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getExternalServicePrices(
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<GetExternalServicePrices200Response>;
+
+  /**
+   *
    * @summary Get all paid invoices
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -2299,6 +2479,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   ) {
     return DefaultApiFp(this.configuration)
       .externalServiceMethod(externalServiceMethodRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Retrieve the prices (and free allowance) of each external service
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getExternalServicePrices(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .getExternalServicePrices(options)
       .then((request) => request(this.axios, this.basePath));
   }
 

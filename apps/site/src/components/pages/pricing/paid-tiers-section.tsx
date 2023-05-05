@@ -22,8 +22,9 @@ import proTierBackground from "../../../../public/assets/pricing/pro-tier-backgr
 import {
   externalServiceFreeAllowance,
   numberOfOpenaiHobbyLanguageTokens,
-  numberOfThousandOpenaiHobbyWords,
-  numberOfThousandOpenaiProWords,
+  numberOfOpenaiHobbyWords,
+  numberOfOpenaiProWords,
+  numberToNumberOfThousandsHumanReadable,
 } from "../../../pages/account/billing-panel/external-service-free-allowance";
 import { SubscriptionFeatureList } from "../../../pages/account/billing-panel/subscription-feature-list";
 import { SubscriptionFeature } from "../../../pages/account/billing-panel/subscription-feature-list-item";
@@ -146,7 +147,9 @@ export const paidSubscriptionFeatures: Record<
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
             <strong>
-              {numberOfOpenaiHobbyLanguageTokens.toLocaleString()}
+              {numberToNumberOfThousandsHumanReadable(
+                numberOfOpenaiHobbyLanguageTokens,
+              )}
             </strong>{" "}
             OpenAI GPT language tokens
             <br />
@@ -159,7 +162,9 @@ export const paidSubscriptionFeatures: Record<
                 fontWeight: 400,
               }}
             >
-              Equating to ~{numberOfThousandOpenaiHobbyWords.toFixed(1)}k words
+              Equating to ~
+              {numberToNumberOfThousandsHumanReadable(numberOfOpenaiHobbyWords)}{" "}
+              words
             </Typography>
           </Box>
         ),
@@ -175,10 +180,11 @@ export const paidSubscriptionFeatures: Record<
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
                       <strong>
-                        {externalServiceFreeAllowance[
-                          "OpenAI GPT-3.5 Turbo Token"
-                        ].hobby / 1000}
-                        k
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance[
+                            "OpenAI GPT-3.5 Turbo Token"
+                          ].hobby,
+                        )}
                       </strong>{" "}
                       OpenAI GPT-3.5 Turbo tokens
                     </Box>
@@ -193,9 +199,48 @@ export const paidSubscriptionFeatures: Record<
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
                       <strong>
-                        {externalServiceFreeAllowance["OpenAI Davinci Token"]
-                          .hobby / 1000}
-                        k
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance[
+                            "OpenAI GPT-4 Input Token"
+                          ].hobby,
+                        )}
+                      </strong>{" "}
+                      OpenAI GPT-4 Input tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance[
+                            "OpenAI GPT-4 Output Token"
+                          ].hobby,
+                        )}
+                      </strong>{" "}
+                      OpenAI GPT-4 Output tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance["OpenAI Davinci Token"]
+                            .hobby,
+                        )}
                       </strong>{" "}
                       OpenAI GPT-3 Davinci tokens
                     </Box>
@@ -210,9 +255,10 @@ export const paidSubscriptionFeatures: Record<
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
                       <strong>
-                        {externalServiceFreeAllowance["OpenAI Curie Token"]
-                          .hobby / 1000}
-                        k
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance["OpenAI Curie Token"]
+                            .hobby,
+                        )}
                       </strong>{" "}
                       OpenAI GPT-3 Curie tokens
                     </Box>
@@ -227,9 +273,10 @@ export const paidSubscriptionFeatures: Record<
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
                       <strong>
-                        {externalServiceFreeAllowance["OpenAI Babbage Token"]
-                          .hobby / 1000}
-                        k
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance["OpenAI Babbage Token"]
+                            .hobby,
+                        )}
                       </strong>{" "}
                       OpenAI GPT-3 Babbage tokens
                     </Box>
@@ -244,9 +291,10 @@ export const paidSubscriptionFeatures: Record<
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
                       <strong>
-                        {externalServiceFreeAllowance["OpenAI Ada Token"]
-                          .hobby / 1000}
-                        k
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance["OpenAI Ada Token"]
+                            .hobby,
+                        )}
                       </strong>{" "}
                       OpenAI GPT-3 Ada tokens
                     </Box>
@@ -411,7 +459,9 @@ export const paidSubscriptionFeatures: Record<
                 color: ({ palette }) => palette.purple[60],
               }}
             >
-              e.g. ~{numberOfThousandOpenaiProWords}k+ words,{" "}
+              e.g. ~
+              {numberToNumberOfThousandsHumanReadable(numberOfOpenaiProWords)}{" "}
+              words,{" "}
               {externalServiceFreeAllowance["OpenAI Create Image Request"].pro}{" "}
               images, and{" "}
               {
@@ -846,10 +896,12 @@ export const PaidTiersSection: FunctionComponent<{
               <Stack flexDirection="row" flexWrap="wrap" gap={1} mt={2.25}>
                 <HobbyTierPerk
                   headerIcon={faText}
-                  title={`~${numberOfThousandOpenaiHobbyWords.toFixed(1)}k`}
+                  title={`~${numberToNumberOfThousandsHumanReadable(
+                    numberOfOpenaiHobbyWords,
+                  )}`}
                   description="AI-generated words"
                   poweredByIcon={<AbstractAiIcon sx={{ fontSize: 20 }} />}
-                  poweredBy="GPT-3"
+                  poweredBy="GPT-3 and GPT-4"
                 />
                 <HobbyTierPerk
                   headerIcon={faImage}
@@ -1010,6 +1062,7 @@ export const PaidTiersSection: FunctionComponent<{
         >
           <Box
             sx={{
+              position: "relative",
               display: "flex",
               flex: 1,
               flexDirection: "column",
@@ -1124,8 +1177,11 @@ export const PaidTiersSection: FunctionComponent<{
               />
             </Box>
             {lg ? (
-              <Collapse in={fullPlanDetailsOpen}>
-                <Box sx={{ mt: 10.75 }}>
+              <Collapse
+                in={fullPlanDetailsOpen}
+                sx={{ position: "absolute", bottom: 0, width: "100%" }}
+              >
+                <Box>
                   <Image
                     layout="responsive"
                     src={proTierBackground}
