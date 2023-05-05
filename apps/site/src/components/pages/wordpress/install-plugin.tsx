@@ -103,6 +103,7 @@ export const InstallPlugin = () => {
                   fontStyle: "italic",
                   lineHeight: 1,
                   fontWeight: 700,
+                  pr: "0.3rem",
                   mb: 1,
                 }}
                 display="inline"
@@ -154,7 +155,7 @@ export const InstallPlugin = () => {
           <IconSection
             xs={12}
             lg={6}
-            maxWidth={280}
+            maxWidth={380}
             color="#3373BE"
             icon={
               <WordPressIcon
@@ -174,6 +175,7 @@ export const InstallPlugin = () => {
                 sx={{
                   backgroundColor: "#3373BE",
                   fontSize: "14px",
+                  width: "250px",
                   alignContent: "start",
                 }}
                 endIcon={<ArrowUpRightIcon />}
@@ -226,19 +228,13 @@ export const InstallPlugin = () => {
             sx={{
               fontWeight: 400,
               lineHeight: 1.2,
-              mb: 1,
-              mt: 1,
+              my: 1,
             }}
           >
             <InfoCircleIcon sx={{ mr: 2, fill: "#48B3F4", color: "#48B3F4" }} />{" "}
             Once you’ve installed the plugin,{" "}
-            <Link
-              sx={{ color: "#0775E3", textDecoration: "none" }}
-              component="button"
-            >
-              get a free API key
-            </Link>{" "}
-            to connect your website to the Block Protocol
+            <Link href="">get a free API key</Link> to connect your website to
+            the Block Protocol
           </Box>
           <Box
             sx={{
@@ -248,22 +244,12 @@ export const InstallPlugin = () => {
               mt: 1,
             }}
           >
-            <DiscordIcon sx={{ color: "#A690F4", mr: 2 }} /> If you get stuck,
-            feel free to reach out on our{" "}
-            <Link
-              sx={{ color: "#7556DC", textDecoration: "none" }}
-              component="button"
-            >
-              community Discord server
-            </Link>{" "}
-            or drop us a{" "}
-            <Link
-              sx={{ color: "#7556DC", textDecoration: "none" }}
-              component="button"
-            >
-              message directly
-            </Link>
-            .
+            <DiscordIcon
+              sx={{ color: ({ palette }) => palette.purple[50], mr: 2 }}
+            />{" "}
+            If you get stuck, feel free to reach out on our{" "}
+            <Link href="/">community Discord server</Link> or drop us a{" "}
+            <Link href="/">message directly</Link>.
           </Box>
         </Box>
       </Box>

@@ -50,7 +50,11 @@ export const Details = () => {
             </Typography>
             <Typography
               variant="bpTitle"
-              sx={{ fontSize: "2.6rem", color: "#6048E5", fontStyle: "italic" }}
+              sx={{
+                fontSize: "2.6rem",
+                color: ({ palette }) => palette.purple[700],
+                fontStyle: "italic",
+              }}
             >
               AI Blocks
             </Typography>
@@ -102,7 +106,10 @@ export const Details = () => {
                   <strong>
                     <Typography
                       display="inline"
-                      sx={{ color: "#6048E5", fontWeight: 700 }}
+                      sx={{
+                        color: ({ palette }) => palette.purple[700],
+                        fontWeight: 700,
+                      }}
                     >
                       Free credits
                     </Typography>{" "}
@@ -177,6 +184,7 @@ export const Details = () => {
                   fontSize: "2.6rem",
                   fontStyle: "italic",
                   fontWeight: 700,
+                  pr: "0.3rem",
                 }}
               >
                 Super
@@ -198,7 +206,7 @@ export const Details = () => {
               <Typography
                 component="span"
                 sx={{
-                  color: "#6048E5",
+                  color: ({ palette }) => palette.purple[700],
                   fontSize: "2.6rem",
                   fontStyle: "italic",
                   fontWeight: 700,
@@ -219,7 +227,10 @@ export const Details = () => {
                 <Typography component="div">
                   <strong>
                     Turn WordPress into a powerful{" "}
-                    <Typography display="inline" sx={{ color: "#6048E5" }}>
+                    <Typography
+                      display="inline"
+                      sx={{ color: ({ palette }) => palette.purple[700] }}
+                    >
                       <strong>entity graph</strong>
                     </Typography>{" "}
                     and unlock a whole range of new functionality.
@@ -231,11 +242,19 @@ export const Details = () => {
               </Box>
               <Box sx={{ display: "flex", mb: "12px" }}>
                 <ArrowUpRightIcon
-                  sx={{ scale: "0.7 !important", color: "#6F59EC" }}
+                  sx={{
+                    scale: "0.7 !important",
+                    color: ({ palette }) => palette.purple[600],
+                  }}
                 />
                 <Typography component="div">
                   <strong>
-                    <Typography sx={{ color: "#6F59EC", fontWeight: "700px" }}>
+                    <Typography
+                      sx={{
+                        color: ({ palette }) => palette.purple[600],
+                        fontWeight: "700px",
+                      }}
+                    >
                       <strong>COMING SOON</strong>
                     </Typography>
                     Improve your search rankings
@@ -243,18 +262,26 @@ export const Details = () => {
                   by leveraging structured data (SEO) blocks that take context
                   from their surroundings and dynamically generating whole-page
                   JSON-LD based on related information{" "}
-                  <Typography sx={{ color: "#758AA1" }}>
+                  <Typography sx={{ color: ({ palette }) => palette.gray[60] }}>
                     (e.g. offers in WooCommerce, or tickets for an event)
                   </Typography>
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", mb: "12px" }}>
                 <ArrowUpRightIcon
-                  sx={{ scale: "0.7 !important", color: "#6F59EC" }}
+                  sx={{
+                    scale: "0.7 !important",
+                    color: ({ palette }) => palette.purple[600],
+                  }}
                 />
                 <Typography component="div">
                   <strong>
-                    <Typography sx={{ color: "#6F59EC", fontWeight: "700" }}>
+                    <Typography
+                      sx={{
+                        color: ({ palette }) => palette.purple[600],
+                        fontWeight: "700",
+                      }}
+                    >
                       PLANNED
                     </Typography>
                     Build apps on top of your structured data,
@@ -299,7 +326,7 @@ export const Details = () => {
             >
               <Typography
                 sx={{
-                  color: "#6048E5",
+                  color: ({ palette }) => palette.purple[700],
                   fontSize: "2.6rem",
                   fontStyle: "italic",
                   fontWeight: 500,
@@ -341,11 +368,19 @@ export const Details = () => {
               </Box>
               <Box sx={{ display: "flex", mb: "12px" }}>
                 <ArrowUpRightIcon
-                  sx={{ scale: "0.7 !important", color: "#6F59EC" }}
+                  sx={{
+                    scale: "0.7 !important",
+                    color: ({ palette }) => palette.purple[600],
+                  }}
                 />
                 <Typography component="div">
                   <strong>
-                    <Typography sx={{ color: "#6F59EC", fontWeight: 700 }}>
+                    <Typography
+                      sx={{
+                        color: ({ palette }) => palette.purple[600],
+                        fontWeight: 700,
+                      }}
+                    >
                       COMING SOON
                     </Typography>
                     Sync data from external apps into WordPress
@@ -414,7 +449,7 @@ export const Details = () => {
               <Typography
                 variant="bpTitle"
                 sx={{
-                  color: "#6048E5",
+                  color: ({ palette }) => palette.purple[700],
                   fontSize: "2.6rem",
                   fontStyle: "italic",
                 }}
@@ -446,7 +481,7 @@ export const Details = () => {
                   </strong>{" "}
                   without having to update the plugin, or install additional
                   plugins{" "}
-                  <Typography sx={{ color: "#758AA1" }}>
+                  <Typography sx={{ color: ({ palette }) => palette.gray[60] }}>
                     (as is required for Gutenberg blocks)
                   </Typography>
                 </Typography>
