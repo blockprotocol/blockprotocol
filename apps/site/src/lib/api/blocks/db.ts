@@ -1,44 +1,17 @@
 import { ExpandedBlockMetadata } from "../../blocks";
 import { connectToDatabase } from "../mongodb";
-import { blockDownloadsCollectionName, blocksDbCollectionName } from "./shared";
+import { blocksDbCollectionName } from "./shared";
 
 const defaultProjection = { _id: 0 };
-
-const weeklyDownloadCountAggregationStage = [
-  {
-    $lookup: {
-      from: blockDownloadsCollectionName,
-      let: { id: "$_id" },
-      pipeline: [
-        {
-          $match: {
-            $expr: { $eq: ["$$id", "$blockId"] },
-            downloadedAt: {
-              $gte: new Date(
-                new Date().valueOf() - 7 * 60 * 60 * 24 * 1000,
-              ).toISOString(),
-            },
-          },
-        },
-      ],
-      as: "weeklyDownloads",
-    },
-  },
-  { $addFields: { downloads: { weekly: { $size: "$weeklyDownloads" } } } },
-  { $project: { weeklyDownloads: 0, ...defaultProjection } },
-];
 
 export const getDbBlocks = async (filter: { shortname?: string }) => {
   const { db } = await connectToDatabase();
 
   return db
-    .collection(blocksDbCollectionName)
-    .aggregate<ExpandedBlockMetadata>([
-      {
-        $match: filter.shortname ? { author: filter.shortname } : {},
-      },
-      ...weeklyDownloadCountAggregationStage,
-    ])
+    .collection<ExpandedBlockMetadata>(blocksDbCollectionName)
+    .find(filter.shortname ? { author: filter.shortname } : {}, {
+      projection: defaultProjection,
+    })
     .toArray();
 };
 
@@ -52,15 +25,11 @@ export const getDbBlock = async (
 ) => {
   const { db } = await connectToDatabase();
 
-  const results = await db
-    .collection(blocksDbCollectionName)
-    .aggregate<ExpandedBlockMetadata>([
-      { $match: filter },
-      ...weeklyDownloadCountAggregationStage,
-    ])
-    .toArray();
-
-  return results[0] ?? null;
+  return db
+    .collection<ExpandedBlockMetadata>(blocksDbCollectionName)
+    .findOne(filter, {
+      projection: defaultProjection,
+    });
 };
 
 export const insertDbBlock = async (block: ExpandedBlockMetadata) => {

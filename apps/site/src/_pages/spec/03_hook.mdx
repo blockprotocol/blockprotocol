@@ -1,6 +1,6 @@
 # Hook Module
 
-This document (version 0.3) defines a **hook module** according to the terms set out in the [core specification](https://blockprotocol.org/docs/spec/core).
+This document (version 0.3) defines a **hook module** according to the terms set out in the [core specification](https://blockprotocol.org/spec/core).
 
 Under the hook module, a block can invite embedding application to take over the rendering of an element within the block (the **hook**), allowing embedding applications to provide users with application-specific **views** of specific data types without the block needing to know about them.
 
@@ -11,7 +11,7 @@ The module is designed to meet the following aims:
 
 The module meets these aims by allowing blocks to delegate visualizing and editing functionality upwards to the embedding application.
 
-The hook module is dependent on [the graph module](https://blockprotocol.org/docs/spec/graph-module), as it relies on the existence of **entities** – use of the graph module is a prerequisite for use of the hook module.
+The hook module is dependent on [the graph module](https://blockprotocol.org/spec/graph), as it relies on the existence of **entities** – use of the graph module is a prerequisite for use of the hook module.
 
 ## Glossary
 
@@ -115,7 +115,7 @@ There are only two messages in the hook module: the `hook` request from the bloc
 
 ### <Hidden>Message definitions </Hidden>Specification
 
-The messages available for exchange in the hook module are defined in the [module's JSON definition](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/hook/src/hook-module.json#L5) and are also
+The messages available for exchange in the hook module are defined in the [module's JSON definition](https://blockprotocol.org/spec/hook#message-definitions) and are also
 listed below for ease of reference.
 
 <HookModuleMessageList />

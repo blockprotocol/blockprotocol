@@ -1,17 +1,17 @@
 [þ hub]: https://blockprotocol.org/hub?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol documentation]: https://blockprotocol.org/docs?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[block protocol specification]: https://blockprotocol.org/docs/spec?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[block protocol specification]: https://blockprotocol.org/spec?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [blockprotocol.org]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [becoming an embedder]: https://blockprotocol.org/docs/blocks/environments#other-environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [create a new block]: https://blockprotocol.org/docs/blocks/develop?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [contact us]: https://blockprotocol.org/contact?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[core specification]: https://blockprotocol.org/docs/spec/core?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[core specification]: https://blockprotocol.org/spec/core?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [developing blocks]: https://blockprotocol.org/docs/blocks/develop?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[graph module]: https://blockprotocol.org/docs/spec/graph-module?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[hook module]: https://blockprotocol.org/docs/spec/hook-module?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[rfcs & roadmap]: https://blockprotocol.org/docs/roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[graph module]: https://blockprotocol.org/spec/graph?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[hook module]: https://blockprotocol.org/spec/hook?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[roadmap]: https://blockprotocol.org/roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [using blocks]: https://blockprotocol.org/docs/blocks/environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [WordPress]: https://blockprotocol.org/docs/blocks/environments#wordpress?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 
@@ -68,18 +68,18 @@ For more examples, please refer to the [Block Protocol documentation] or browse 
 
 ## [![a](/.github/assets/gh_icon_roadmap_20px-base.svg)][gh-roadmap] &nbsp; Roadmap
 
-Learn more on our [RFCs & Roadmap] page in the docs.
+Learn more on our [Roadmap] page in the docs.
 
 - See the [RFC category on GitHub Discussions](https://github.com/blockprotocol/blockprotocol/discussions/categories/rfc) for a list of active RFCs
 - See the [open issues] for a list of some other proposed features (and known issues).
 
 ## [![a](/.github/assets/gh_icon_repo-overview_20px-base.svg)][gh-repo-overview] &nbsp; Repository overview
 
-Finding things within a monorepo isn't always straight forward, in particular if you're an external contributor looking at a repository for the first time. We've tried to logically separate our repo into executable **applications** or tools (`apps`), and developer **libraries** including packages and crates (`libs`). As an open-source community project, we welcome [contributions](#contributing).
+Finding things within a monorepo isn't always straight forward, in particular if you're an external contributor looking at a repository for the first time. We've tried to logically separate our repo into executable **applications** or tools (`apps`), developer **libraries** including packages and crates (`libs`), and a collection of Block Protocol maintained **blocks** (`blocks`). As an open-source community project, we welcome [contributions](#contributing).
 
 ### For block and application developers
 
-As a block developer, you probably care most about our utility libraries. All of those listed below are contained within the [`libs`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/) folder and are available via `yarn add <package_name>` or `npm install <package_name>`. Individual README files within each directory provide more details.
+As a block developer, you probably care most about our utility libraries. All of the below are contained within the [`libs`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/) folder and are available via `yarn add <package_name>` or `npm install <package_name>`. Individual README files within each directory provide more details.
 
 - [`@blockprotocol/core`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/core): implements the Block Protocol [Core specification] for blocks and embedding applications
 - [`@blockprotocol/graph`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/graph): implements the Block Protocol [Graph module] for blocks and embedding applications
@@ -91,6 +91,8 @@ As a block developer, you probably care most about our utility libraries. All of
 - [`blockprotocol`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/blockprotocol): command line interface for interacting with the Block Protocol API, e.g. for publishing blocks
 - [`create-block-app`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/create-block-app): a script to [create a new block] using `block-template-*`
 - [`mock-block-dock`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/mock-block-dock): a lightweight mock embedding application that can be used to test blocks during their development
+
+You might also find the [Þ feature showcase block](https://github.com/blockprotocol/blockprotocol/tree/main/blocks/feature-showcase) helpful, for an all-in-one reference demonstrating the implementation of different Block Protocol methods.
 
 ### For spec and site contributors
 

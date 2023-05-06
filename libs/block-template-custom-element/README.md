@@ -60,7 +60,7 @@ This template uses the Lit custom element framework. Please see [the Lit docs](h
         - `icon`: an icon to be associated with your block
         - `name`: a slugified name for your block (which may differ to the package `name` in package.json); it can be defined as `blockname` or `@namespace/blockname`, where `namespace` must be your username on blockprotocol.org if you intend to publish it there
       - lists the `externals` - libraries the block expects the host app to provide
-    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/docs/spec).
+    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/spec).
 
 Please see [the Block Protocol docs](https://blockprotocol.org/docs/blocks/develop)
 for a fuller explanation of querying, creating and updating entity data from your block.

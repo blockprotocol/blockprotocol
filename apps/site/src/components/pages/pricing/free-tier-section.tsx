@@ -207,7 +207,7 @@ export const FreeTierSection: FunctionComponent<{
                 icon: faWandMagicSparkles,
                 text: (
                   <>
-                    <strong>Free credits</strong> for use of OpenAI GPT-3.5,
+                    <strong>Free credits</strong> for use of OpenAI GPT-4,
                     Mapbox and more
                   </>
                 ),
@@ -233,14 +233,7 @@ export const FreeTierSection: FunctionComponent<{
                     <CustomLink href="/docs/blocks/environments#hash">
                       HASH
                     </CustomLink>{" "}
-                    and (soon){" "}
-                    <CustomLink href="/docs/blocks/environments#github-blocks">
-                      GitHub
-                    </CustomLink>
-                    /
-                    <CustomLink href="/docs/blocks/environments#figma">
-                      Figma
-                    </CustomLink>
+                    and more expected
                   </>
                 ),
               },
