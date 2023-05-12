@@ -231,6 +231,9 @@ export const EntityTypeForm = ({
             allowed: true,
           };
         },
+        canEditResource: ({ kind, resource }) => {
+          return { allowed: false };
+        },
         // @todo remove this cast when @hashintel/type-editor uses a version of @blockprotocol/graph
         //   that removes the ownedById from OntologyMetadata
       } as EntityTypeEditorProps["ontologyFunctions"];

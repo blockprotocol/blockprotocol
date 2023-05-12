@@ -41,6 +41,7 @@ import { isLinkEntityType } from "../../../../util/type-system-util";
 import { EntityTypeEditBar } from "./[...slug-maybe-version].page/entity-type-edit-bar";
 import { EntityTypeForm } from "./[...slug-maybe-version].page/entity-type-form";
 import { fetchEntityType } from "./[...slug-maybe-version].page/fetch-entity-type";
+import { EntityTypeDescription } from "./[...slug-maybe-version].page/entity-type-description";
 
 type EntityTypeState = {
   entityType: EntityTypeWithMetadata;
@@ -396,68 +397,8 @@ const EntityTypePage: NextPage = () => {
                 >
                   Description
                 </Typography>
-                <Box
-                  display="flex"
-                  gap={1}
-                  onMouseEnter={() => setDescriptionHovered(true)}
-                  onMouseLeave={() => setDescriptionHovered(false)}
-                >
-                  {/* To be replaced with the Editable field once that goes in the blockprotocol's design system */}
-                  <Input
-                    {...descriptionInputProps}
-                    autoFocus
-                    multiline
-                    disableUnderline
-                    style={{ whiteSpace: "pre" }}
-                    readOnly={!editingDescription}
-                    inputRef={descriptionInputRef}
-                    onBlur={(evt) => {
-                      setEditingDescription(false);
-                      return descriptionInputProps.onBlur(evt);
-                    }}
-                    onKeyDown={({ shiftKey, code, currentTarget }) => {
-                      if (!shiftKey && code === "Enter") {
-                        currentTarget.blur();
-                      }
-                    }}
-                    onFocus={(event) => {
-                      event.currentTarget.setSelectionRange(
-                        event.currentTarget.value.length,
-                        event.currentTarget.value.length,
-                      );
-                    }}
-                    sx={{
-                      fontFamily: "Inter",
-                      width: 1,
-                      p: 0,
-                      [`.${inputBaseClasses.root}, .${inputBaseClasses.input}`]:
-                        {
-                          width: 1,
-                          p: 0,
-                          color: ({ palette }) => palette.gray[90],
-                          fontSize: 16,
-                          lineHeight: 1.7,
-                        },
-                      [`.${outlinedInputClasses.notchedOutline}`]: {
-                        display: "none",
-                      },
-                    }}
-                  />
 
-                  <Fade in={!editingDescription && descriptionHovered}>
-                    <IconButton
-                      onClick={() => {
-                        setEditingDescription(true);
-                        setFocus("description");
-                      }}
-                      sx={{
-                        padding: 0.5,
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faPenToSquare} />
-                    </IconButton>
-                  </Fade>
-                </Box>
+                <EntityTypeDescription readonly={!userCanEdit} />
               </Box>
 
               <Box
