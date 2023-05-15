@@ -3,7 +3,7 @@
 set -euxo pipefail
 
 # Change to the root directory
-pushd "$(dirname "$0")/../.."
+pushd "$(dirname "$0")/.."
 
 # Install dependencies
 curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sh -s -- --to /usr/local/bin
