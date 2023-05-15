@@ -10,8 +10,8 @@ curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sh -s -- 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly-2022-10-28
 source "$HOME/.cargo/env"
 
-# Change back to the project directory
-popd
-
 # Run `yarn`
 yarn install
+
+# Change back to the app directory
+popd
