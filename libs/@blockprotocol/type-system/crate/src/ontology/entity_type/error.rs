@@ -32,6 +32,6 @@ pub enum ParseEntityTypeError {
 
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum MergeEntityTypeError {
-    #[error("`{0}` does not inherit from `{1}`")]
-    DoesNotInheritFrom(String, String),
+    #[error("`{0}` is not contained in the `allOf` property of `{1}`")]
+    NotInAllOf(String, String),
 }
