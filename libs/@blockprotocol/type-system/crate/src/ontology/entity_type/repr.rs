@@ -81,7 +81,7 @@ impl EntityType {
                 .iter()
                 .position(|x| x.url == other.id)
                 .ok_or_else(|| {
-                    MergeEntityTypeError::DoesNotInheritFrom(other.id.clone(), self.id.clone())
+                    MergeEntityTypeError::DoesNotInheritFrom(self.id.clone(), other.id.clone())
                 })?,
         );
 
