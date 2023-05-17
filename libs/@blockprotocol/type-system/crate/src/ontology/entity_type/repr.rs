@@ -213,3 +213,48 @@ impl From<super::EntityTypeReference> for EntityTypeReference {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{repr, url::BaseUrl, utils::tests::check_serialization_from_str, EntityType};
+
+    #[test]
+    fn merge_entity_type() {
+        let building = check_serialization_from_str::<EntityType, repr::EntityType>(
+            crate::test_data::entity_type::BUILDING_V1,
+            None,
+        );
+        let church: EntityType = check_serialization_from_str::<EntityType, repr::EntityType>(
+            crate::test_data::entity_type::CHURCH_V1,
+            None,
+        );
+
+        let building_repr = repr::EntityType::from(building);
+        let mut church_repr = repr::EntityType::from(church);
+
+        church_repr
+            .merge_parent(building_repr)
+            .expect("merging entity types failed");
+
+        let church_closure =
+            EntityType::try_from(church_repr).expect("entity type closure is not valid");
+
+        assert!(
+            church_closure.properties().contains_key(
+                &BaseUrl::new(
+                    "https://blockprotocol.org/@alice/types/property-type/built-at/".to_owned()
+                )
+                .expect("invalid url")
+            )
+        );
+        assert!(
+            church_closure.properties().contains_key(
+                &BaseUrl::new(
+                    "https://blockprotocol.org/@alice/types/property-type/number-bells/".to_owned()
+                )
+                .expect("invalid url")
+            )
+        );
+        assert!(church_closure.inherits_from().all_of().is_empty());
+    }
+}
