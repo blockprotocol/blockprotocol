@@ -64,7 +64,10 @@ impl EntityType {
     ///   - merge the `properties` and `required` fields
     ///   - merge the `links` field
     ///
-    /// Please note that the `required` field may have a different order after merging.
+    /// # Notes
+    ///
+    /// - This does not validate the resulting entity type.
+    /// - The `required` field may have a different order after merging.
     ///
     /// # Errors
     ///
