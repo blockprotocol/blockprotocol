@@ -22,10 +22,10 @@ pub struct Object<T> {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'object'"))]
     r#type: ObjectTypeTag,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUrl, T>"))]
-    properties: HashMap<String, T>,
+    pub(crate) properties: HashMap<String, T>,
     #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "BaseUrl[]"))]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    required: Vec<String>,
+    pub(crate) required: Vec<String>,
 }
 
 impl<const MIN: usize> TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeReference>>>

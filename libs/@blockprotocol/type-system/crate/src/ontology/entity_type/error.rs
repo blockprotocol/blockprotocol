@@ -29,3 +29,9 @@ pub enum ParseEntityTypeError {
     #[error("error in JSON: `{0}`")]
     InvalidJson(String),
 }
+
+#[derive(Debug, PartialEq, Eq, Error)]
+pub enum MergeEntityTypeError {
+    #[error("`{0}` does not inherit from `{1}`")]
+    DoesNotInheritFrom(String, String),
+}

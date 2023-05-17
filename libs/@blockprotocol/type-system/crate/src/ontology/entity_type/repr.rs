@@ -1,10 +1,14 @@
-use std::{collections::HashMap, str::FromStr};
+use std::{
+    collections::{HashMap, HashSet},
+    str::FromStr,
+};
 
 use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
 use crate::{
+    ontology::entity_type::error::MergeEntityTypeError,
     repr,
     url::{BaseUrl, ParseVersionedUrlError, VersionedUrl},
     ParseEntityTypeError,
@@ -50,6 +54,51 @@ pub struct EntityType {
     property_object: repr::Object<repr::ValueOrArray<repr::PropertyTypeReference>>,
     #[serde(flatten)]
     links: repr::Links,
+}
+
+impl EntityType {
+    /// Merges another entity type into this one.
+    ///
+    /// This will:
+    ///   - remove the other entity type from the `allOf`
+    ///   - merge the `properties` and `required` fields
+    ///   - merge the `links` field
+    ///
+    /// Please note that the `required` field may have a different order after merging.
+    ///
+    /// # Errors
+    ///
+    /// - [`DoesNotInheritFrom`] if the other entity type is not in the `allOf` field
+    ///
+    /// [`DoesNotInheritFrom`]: MergeEntityTypeError::DoesNotInheritFrom
+    pub fn merge_parent(&mut self, other: Self) -> Result<(), MergeEntityTypeError> {
+        self.all_of.elements.remove(
+            self.all_of
+                .elements
+                .iter()
+                .position(|x| x.url == other.id)
+                .ok_or_else(|| {
+                    MergeEntityTypeError::DoesNotInheritFrom(other.id.clone(), self.id.clone())
+                })?,
+        );
+
+        self.property_object
+            .properties
+            .extend(other.property_object.properties);
+
+        self.property_object.required = self
+            .property_object
+            .required
+            .drain(..)
+            .chain(other.property_object.required)
+            .collect::<HashSet<_>>()
+            .into_iter()
+            .collect();
+
+        self.links.links.extend(other.links.links);
+
+        Ok(())
+    }
 }
 
 impl TryFrom<EntityType> for super::EntityType {
