@@ -1,6 +1,6 @@
 {
   "name": "block-template-html",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Block Protocol block template for an html-based block",
   "keywords": [
     "blockprotocol",

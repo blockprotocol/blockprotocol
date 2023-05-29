@@ -34,8 +34,9 @@ import {
 } from "../../shared/subscription-utils";
 import {
   externalServiceFreeAllowance,
-  numberOfThousandOpenaiHobbyWords,
-  numberOfThousandOpenaiProWords,
+  numberOfOpenaiHobbyWords,
+  numberOfOpenaiProWords,
+  numberToNumberOfThousandsHumanReadable,
 } from "./external-service-free-allowance";
 import { SubscriptionFeatureList } from "./subscription-feature-list";
 import { SubscriptionFeature } from "./subscription-feature-list-item";
@@ -55,8 +56,11 @@ export const paidSubscriptionFeatures: Record<
         icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>~{numberOfThousandOpenaiHobbyWords}k</strong> AI-generated
-            words (powered by GPT-3)
+            <strong>
+              ~
+              {numberToNumberOfThousandsHumanReadable(numberOfOpenaiHobbyWords)}
+            </strong>{" "}
+            AI-generated words (powered by GPT-3 and GPT-4)
           </>
         ),
       },
@@ -157,7 +161,8 @@ export const paidSubscriptionFeatures: Record<
               component="span"
               sx={{ color: ({ palette }) => palette.gray[60] }}
             >
-              ~{numberOfThousandOpenaiProWords}k+ words,{" "}
+              ~{numberToNumberOfThousandsHumanReadable(numberOfOpenaiProWords)}{" "}
+              words,{" "}
               {externalServiceFreeAllowance["OpenAI Create Image Request"].pro}{" "}
               images,{" "}
               {
@@ -210,7 +215,7 @@ export const paidSubscriptionFeatures: Record<
         icon: <MicrophoneLogoIcon sx={{ fontSize: 18 }} />,
         title: (
           <>
-            <strong>60 mins</strong> OpenAI Whisper audio transcription Mapbox
+            <strong>60 mins</strong> OpenAI Whisper audio transcription
           </>
         ),
         planned: true,

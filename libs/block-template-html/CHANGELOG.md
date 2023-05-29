@@ -1,5 +1,11 @@
 # block-template-html
 
+## 0.3.1
+
+### Patch Changes
+
+- [#1284](https://github.com/blockprotocol/blockprotocol/pull/1284) [`5f630c31`](https://github.com/blockprotocol/blockprotocol/commit/5f630c31a69c6711ace2d90987ca34ada31ecbe6) Thanks [@CiaranMn](https://github.com/CiaranMn)! - upgrade Thing entity type version
+
 ## 0.3.0
 
 ### Minor Changes

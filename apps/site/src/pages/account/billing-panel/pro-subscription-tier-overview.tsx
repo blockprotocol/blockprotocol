@@ -17,7 +17,8 @@ import { TrophyStarIcon } from "../../../components/icons/trophy-star-icon";
 import { priceToHumanReadable } from "../../shared/subscription-utils";
 import {
   externalServiceFreeAllowance,
-  numberOfThousandOpenaiProWords,
+  numberOfOpenaiProWords,
+  numberToNumberOfThousandsHumanReadable,
 } from "./external-service-free-allowance";
 import {
   SubscriptionFeature,
@@ -39,8 +40,10 @@ export const proSubscriptionFeatures: Record<
       icon: <AbstractAiIcon sx={{ fontSize: 18 }} />,
       title: (
         <>
-          <strong>~{numberOfThousandOpenaiProWords}k</strong> AI-generated words
-          (powered by GPT-3)
+          <strong>
+            ~{numberToNumberOfThousandsHumanReadable(numberOfOpenaiProWords)}
+          </strong>{" "}
+          AI-generated words (powered by GPT-3 and GPT-4)
         </>
       ),
     },
