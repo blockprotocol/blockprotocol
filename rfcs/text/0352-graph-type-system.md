@@ -110,12 +110,12 @@ In the following document we outline an approach to being more specific about th
 Given the motivation above and some other implications of the current design, this RFC attempts to:
 
 1.  make descriptions of data **discoverable**, **reusable**, and **composable**
-1.  remove the few instances where the specification currently misuses (modifies in a breaking way) JSON schema
+2.  remove the few instances where the specification currently misuses (modifies in a breaking way) JSON schema
 
 As well as addressing these existing shortcomings, this RFC seeks to:
 
-1.  define a constrained type system that is able to describe any JSON object structure
-2.  refine the current way of defining links between entities, encapsulating the approach within the type system
+3.  define a constrained type system that is able to describe any JSON object structure
+4.  refine the current way of defining links between entities, encapsulating the approach within the type system
 
 ## Types
 

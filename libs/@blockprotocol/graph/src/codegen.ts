@@ -3,6 +3,8 @@
  */
 import * as path from "node:path";
 
+import { VersionedUrl } from "@blockprotocol/type-system";
+
 import { compile } from "./codegen/compile.js";
 import {
   CompileContext,
@@ -20,6 +22,19 @@ export {
   type CodegenParameters,
   validateCodegenParameters,
 } from "./codegen/parameters.js";
+
+export const collateSchema = async (schemaUrl: VersionedUrl) => {
+  const context = new InitializeContext({
+    schemaUrl,
+    targets: {},
+    outputFolder: "",
+    logLevel: "info",
+  });
+
+  await initialize(context);
+
+  return context;
+};
 
 export const codegen = async (
   params: CodegenParameters,
