@@ -3,4 +3,4 @@
 "block-scripts": patch
 ---
 
-add @babel/plugin-proposal-private-methods dependency
+add missing babel plugin dependencies
