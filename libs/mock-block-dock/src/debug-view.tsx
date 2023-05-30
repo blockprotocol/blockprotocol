@@ -1,3 +1,4 @@
+import { StyledComponent } from "@emotion/styled";
 import { Box, CssBaseline, styled, ThemeProvider } from "@mui/material";
 import { ReactNode, useState } from "react";
 
@@ -12,7 +13,7 @@ type DebugViewProps = {
 
 export const SIDEBAR_WIDTH = 200;
 
-export const MainContainer = styled(Box)(({ theme }) => ({
+export const MainContainer: StyledComponent<any> = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   flex: 1,
