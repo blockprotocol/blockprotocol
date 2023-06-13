@@ -40,7 +40,7 @@ pub struct EntityType {
     id: String,
     title: String,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(flatten)]
     all_of: repr::AllOf<EntityTypeReference>,
