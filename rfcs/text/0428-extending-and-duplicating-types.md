@@ -290,7 +290,7 @@ These issues (and there are probably more) are the reason why we're going to rem
 
 In the Block Protocol, we will allow type extension through the `allOf` JSON Schema keyword which applies all constraints from the sub-schemas within the `allOf` array.
 
-We'll add the following fields to the existing [Entity Type meta schema](https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type) definition:
+We'll add the following fields to the [existing Entity Type meta schema](https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type) definition:
 
 ```json
 {
