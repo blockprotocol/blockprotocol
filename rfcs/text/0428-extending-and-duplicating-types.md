@@ -326,7 +326,6 @@ which can be coerced into the following `Person` instance:
 Notice how we are keeping the same `entityId` for this entity instance, but simply coercing the entity instance by selecting the properties of interest for the given type.
 
 **An example of _satisfiable_ overlapping constraints**:
-q
 Given a _supertype_ `Person`:
 
 ```json
