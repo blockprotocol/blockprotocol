@@ -206,6 +206,14 @@ Furthermore, resolving the intentions of the existing definition for the message
 
 We propose that we should treat type updates as complete replacements, so implementation is much more straightforward for embedding applications. Partial schema updates also add some level of indirection, and that may obfuscate error sources and error reasons. Therefore, updates to types must be complete replacements rather than partial schema updates.
 
+### Changes to the link type system
+
+The discussed extension to the type system has implications on link types which extend from each other. Given the above `Person` and saying it defines `Knows` and `Has Friend` links, and that those links are **ordered**. Currently, the order of a link is defined in a given direction, e.g. _left-to-right_, and has a single value. With the inheritance of link types this would presently imply, that the order of the `Knows` link _within the `Knows` links list_ would have to be the same as the order of the `Has Friend` link _within the `Has Friend` links list_.
+
+**To mitigate this problem, we decided to remove link ordering**. This means, that links will no longer have an inherent order and no assumption is being made of the order.
+
+This change will affect any code that relies on the order property of link types. If applications have such code, they will need to update it to use a different mechanism for ordering links. A possibility is to add an ordering property to the link type itself. This makes the type-system itself easier to reason about whereas it will also allow application to use other types for their ordering instead of being forced to use integral values.
+
 # Reference-level explanation
 
 [reference-level-explanation]: #reference-level-explanation
@@ -980,7 +988,6 @@ While various implementations likely will want to implement checking for the sim
   - This may be especially difficult if a property type is defined as being an array of `oneOf` a given set of property type objects. Detecting which sub-schema applies to a given array element when accounting for dropped properties, **may** be a very difficult task.
 - Type extension might prove to have strange side-effects when considering link types which extend from one another.
   - Say `Person` defines `Knows` and `Has Friend` links. If `Has Friend` extends `Knows`, then technically any `Has Friend` instance is also a `Knows` instance, and would need to satisfy the link constraints set on both. This has implications for `minItems` and `maxItems`, as well as for link destinations. If `Person` says it only `Knows` other `Person` entities, but `Has Friend` links to both `Person` and `Pet` entities, then a `Has Friend` link to a `Pet` entity would break the constraint set for `Knows`.
-  - Say `Person` defines `Knows` and `Has Friend` links, and that those links are **ordered**. At the moment, the order of a link is defined in a given direction (e.g. left to right) and has a single value. That would presently imply that the order of the `Knows` link _within the `Knows` links list_ would have to be the same as the order of the `Has Friend` link _within the `Has Friend` links list_.
 
 # Future possibilities
 
