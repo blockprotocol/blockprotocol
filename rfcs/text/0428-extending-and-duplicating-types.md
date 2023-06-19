@@ -218,7 +218,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
 
 ```json
 {
-  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "type": "object",
   ...,
   "properties": {
@@ -230,7 +230,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
         "properties": {
           "$ref": {
             "$comment": "Valid reference to an existing Entity Type version",
-            "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/versioned-url"
           },
           "additionalProperties": false
         }
@@ -248,7 +248,7 @@ Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
@@ -272,7 +272,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -318,12 +318,12 @@ which can be coerced into the following `Person` instance:
 Notice how we are keeping the same `entityId` for this entity instance, but simply coercing the entity instance by selecting the properties of interest for the given type.
 
 **An example of _satisfiable_ overlapping constraints**:
-q
+
 Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
   "type": "object",
@@ -347,7 +347,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/2",
   "type": "object",
@@ -403,7 +403,7 @@ Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/3",
   "type": "object",
@@ -424,7 +424,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/3",
   "type": "object",
@@ -504,7 +504,7 @@ Concretely, this means that for a free-standing type that doesn't extend any oth
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
   "type": "object",
@@ -530,7 +530,7 @@ In the case of the `Employee` type:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/2",
   "type": "object",
@@ -573,7 +573,7 @@ Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
@@ -597,7 +597,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -618,7 +618,7 @@ a user, Bob, wishes to use Alice's `Employee` entity type but must change the `o
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@bob/entity-type/employee/v/1",
   "type": "object",
@@ -643,7 +643,7 @@ The original, conceptually expanded `Employee` entity type:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -671,7 +671,7 @@ This expanded entity type is equivalent to the original `Employee` entity type, 
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@bob/entity-type/employee/v/1",
   "type": "object",
@@ -723,7 +723,7 @@ must instead use a complete schema (absent of an `$id`)
   // New, complete updateEntityType message
   "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
   "schema": {
-    "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+    "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
     "type": "object",
     "kind": "entityType",
     "title": "Person",
@@ -750,7 +750,7 @@ given that the original schema was created as follows
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
   "kind": "entityType",
@@ -805,7 +805,7 @@ An alternative way to achieve the same semantic behaviour as with the implicit `
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "$id": "https://example.com/schema/v/1",
 
   // ... schema contents  ...
@@ -826,7 +826,7 @@ Here, referencing `https://example.com/schema/v/1` in a `$ref` will result in an
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
   "$id": "https://example.com/schema/v/1",
   "$ref": "#open",
   "unevaluatedProperties": false,
@@ -910,7 +910,7 @@ And as expected, an entity instance _not_ containing a `name` would not satisfy 
 }
 ```
 
-#### Unequal but compatible overlapping constraints
+#### Unequal but compatible overlapping constraints:
 
 Instead, say that `Person` defines that `name` is **required**, and `Superhero` defines that `name` is **optional**.
 
@@ -936,7 +936,7 @@ And as expected, an entity instance _not_ containing a `name` would not satisfy 
 
 In practice, this combination could be _statically analyzed_ and resolved to a single satisfiable constraint. The interaction of an **optional** definition with a **required** definition is known, and the **stronger** constraint of **required** would be the one that contains the other. Unfortunately, such static analysis is not as simple in the general case, especially when constraints that are intended to be added in the future (see the [Non-Primitive Data Types RFC](https://github.com/blockprotocol/blockprotocol/pull/355)) are taken into consideration. Checking the compatibility of two regexes, for example, is a very difficult task.
 
-#### Unequal and incompatible overlapping constraints
+#### Unequal and incompatible overlapping constraints:
 
 Finally, say that `Person` defines that `name` is a _string_ and is **required**, and `Superhero` defines that `name` is _an array of strings_ and is **required**.
 
