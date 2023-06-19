@@ -1,7 +1,7 @@
 <?php
 
 const BLOCK_PROTOCOL_DATA_URL = 'https://data.blockprotocol.org/v1/batch';
-const BLOCK_PROTOCOL_PUBLIC_AUTH_HEADER = 'Basic MkxFRkhRODk3TWdRcG4zMFZwelZjaHRxNXdJOg==';
+const BLOCK_PROTOCOL_PUBLIC_AUTH_HEADER = 'Basic Mk5nSVQ1Y1ZzdWJKeVk5d3N4MUV1b25qQjk5Og==';
 
 const BLOCK_PROTOCOL_SENTRY_DSN = "https://949242e663cf415c8c1a6a928ae18daa@o146262.ingest.sentry.io/4504758458122240";
 const BLOCK_PROTOCOL_SENTRY_CLIENT_DSN = "https://3cd856b5c8464898b8d070e25411ecf5@o146262.ingest.sentry.io/4504849668046848";
