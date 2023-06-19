@@ -980,6 +980,13 @@ While various implementations likely will want to implement checking for the sim
 - [Programming languages subtyping](https://en.wikipedia.org/wiki/Subtyping)
 - [Liskov substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle)
 
+# Unresolved questions
+
+[unresolved-questions]: #unresolved-questions
+
+- We haven't specified how projecting/selecting properties of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact properties of a subtype to provide a valid supertype instance in embedding applications.
+  - This may be especially difficult if a property type is defined as being an array of `oneOf` a given set of property type objects. Detecting which sub-schema applies to a given array element when accounting for dropped properties, **may** be a very difficult task.
+
 # Future possibilities
 
 [future-possibilities]: #future-possibilities
