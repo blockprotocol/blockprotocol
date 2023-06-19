@@ -208,11 +208,70 @@ We propose that we should treat type updates as complete replacements, so implem
 
 ### Removing link ordering
 
-The discussed extension to the type system has implications on link types which extend from each other. Given the above `Person` and saying it defines `Knows` and `Has Friend` links, and that those links are **ordered**. Currently, the order of a link is defined in a given direction, e.g. _left-to-right_, and has a single value. With the inheritance of link types this would presently imply, that the order of the `Knows` link _within the `Knows` links list_ would have to be the same as the order of the `Has Friend` link _within the `Has Friend` links list_.
+Adding a type extension mechanism causes issues with the behaviour of links in situations where an entity type refers to multiple link types where one extends the other.
 
-**To mitigate this problem, we decided to remove link ordering**. This means, that links will no longer have an inherent order and no assumption is being made of the order.
+#### Conflicting Link Orderings
 
-This change will affect any code that relies on the order property of link types. If applications have such code, they will need to update it to use a different mechanism for ordering links. A possibility is to add an ordering property to the link type itself. This makes the type-system itself easier to reason about whereas it will also allow application to use other types for their ordering instead of being forced to use integral values.
+To understand this, let's take the example of `Person` above. Let's define a `Knows` link type, and a `Has Friend` link type that extends `Knows`. Now let's say that `Person` defines `Knows` and `Has Friend` links to `Person` entities:
+
+```json
+{
+  "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
+  "title": "Person",
+  // ...
+  "links": {
+    "https://blockprotocol.org/@alice/entity-type/knows/v/1": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "ref": "https://blockprotocol.org/@alice/entity-type/person/v/1" }
+        ]
+      }
+    },
+    "https://blockprotocol.org/@alice/entity-type/has-friend/v/1": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "ref": "https://blockprotocol.org/@alice/entity-type/person/v/1" }
+        ]
+      }
+    }
+  }
+}
+```
+
+Now, let's say that a given `Person`, `Alice` has the following links:
+
+- `KnowsBob`
+- `HasFriendCharlie`
+- `HasFriendDave`
+
+Now, `HasFriendCharlie` and `HasFriendDave` are both link entities of type `Has Friend`, which extends `Knows`, which means they are also `Knows` links. Meaning if you were to query for `Has Friend` links for `Alice` you'd get:
+
+```ts
+getHasFriendLinks(alice); // [ HasFriendCharlie, HasFriendDave ]
+```
+
+and if you were to query for `Knows` links for `Alice` you'd get:
+
+```ts
+getKnowsLinks(alice); // [ KnowsBob, HasFriendCharlie, HasFriendDave ]
+```
+
+Now, what if we said that both of these link collections were **ordered**? We could define an order on the link entities, say
+
+```ts
+HasFriendCharlie.leftToRightOrder = 1;
+HasFriendDave.leftToRightOrder = 0;
+```
+
+Giving us:
+
+```ts
+getHasFriendLinks(alice); // [ HasFriendDave, HasFriendCharlie ]
+```
+
+But what about the `getKnowsLinks`? There is only one `leftToRightOrder` on each link entity, so the order will apply to _both_ lists, which could result in conflicting indices. Changing the order (index) of one of the elements in one collection will affect its position in the other.
 
 # Reference-level explanation
 
