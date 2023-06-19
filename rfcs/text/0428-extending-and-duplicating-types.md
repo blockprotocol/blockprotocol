@@ -220,7 +220,7 @@ This change will affect any code that relies on the order property of link types
 
 ## Defining extended entity types
 
-In the Block Protocol, we will allow type extension through the `allOf` JSON Schema keyword which applies all constraints from the sub-schemas within the `allOf` array.
+In the Block Protocol, we will allow type extension through the `allOf` JSON Schema keyword which applies all constraints from the sub-schemas within the `allOf` array..
 
 We'll add the following fields to the existing Entity Type meta schema definition:
 
@@ -462,7 +462,7 @@ In JSON schema this is generally achieved by setting `additionalProperties: fals
 Unfortunately, this causes problems when you start composing schemas (e.g. with entity type inheritance)
 
 If supertypes themselves specify one of these `{ "unevaluatedProperties": false }`, they are not able to be part of an `allOf` validator, as they will error as soon as they see properties that are not part of the root schema itself.
-When composing schemas that all contain `{ "unevaluatedProperties": false }`, each schema will disallow any other properties which they do not define. Using the following (ordinary) JSON Schema as an example:
+When composing schemas that all contain `{ "unevaluatedProperties": false }`, each schema will disallow any other properties which they do not define. Using the following JSON Schema as an example:
 
 ```json
 {
@@ -800,8 +800,8 @@ The proposed design attempts to make a trade-off between the following:
 
 - The expressiveness of the type system, allowing for greater re-use and expression of hierarchies between types
 - Implementation complexity, especially:
-  - when _not_ opting to try and avoid unsatisfiable schemas
-  - optimizing for trivial assumptions to be made regarding the compatibility of a supertype and subtype
+- when _not_ opting to try and avoid unsatisfiable schemas
+- optimizing for trivial assumptions to be made regarding the compatibility of a supertype and subtype
 
 As such, this section outlines a number of considerations or compromises which have been made within the design.
 
