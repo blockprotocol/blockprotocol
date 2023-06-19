@@ -206,7 +206,7 @@ Furthermore, resolving the intentions of the existing definition for the message
 
 We propose that we should treat type updates as complete replacements, so implementation is much more straightforward for embedding applications. Partial schema updates also add some level of indirection, and that may obfuscate error sources and error reasons. Therefore, updates to types must be complete replacements rather than partial schema updates.
 
-### Changes to the link type system
+### Removing link ordering
 
 The discussed extension to the type system has implications on link types which extend from each other. Given the above `Person` and saying it defines `Knows` and `Has Friend` links, and that those links are **ordered**. Currently, the order of a link is defined in a given direction, e.g. _left-to-right_, and has a single value. With the inheritance of link types this would presently imply, that the order of the `Knows` link _within the `Knows` links list_ would have to be the same as the order of the `Has Friend` link _within the `Has Friend` links list_.
 
