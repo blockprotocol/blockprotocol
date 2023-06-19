@@ -273,6 +273,15 @@ getHasFriendLinks(alice); // [ HasFriendDave, HasFriendCharlie ]
 
 But what about the `getKnowsLinks`? There is only one `leftToRightOrder` on each link entity, so the order will apply to _both_ lists, which could result in conflicting indices. Changing the order (index) of one of the elements in one collection will affect its position in the other.
 
+#### Other issues with link ordering
+
+The above issue is the reason why we have to do address link ordering in this RFC. The demonstrated issue is one of them, but link ordering as it's specified currently has other downsides, such as:
+
+- integer-based indexing is not very flexible. For example, if you want to add a link to the middle of the list, you'd have to renumber all the indices after the insertion point. To mitigate this issue, it's possible to use fractional indexing. However, some links may should not be ordered by the same index but rely on a different ordering mechanism. For example, a `HasFriend` link may be ordered by the date the friendship was established, while a `Knows` link may be ordered by the date the acquaintance was established. Even ordering by multiple properties or other factors may be desirable.
+- assuming an application, which is implementing the type system, supports collaborative editing, it's possible that two users will add links to the same entity at the same time. This will result in a conflict, which will be difficult to resolve.
+
+These issues (and there are probably more) are the reason why we're going to remove link ordering from the Block Protocol type system.
+
 # Reference-level explanation
 
 [reference-level-explanation]: #reference-level-explanation
