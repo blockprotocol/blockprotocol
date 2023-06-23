@@ -54,7 +54,7 @@ For example, one could want to define "groups" of entities within their system, 
 One could currently do this by creating a "Group" entity type, and an associated "Has Element" link type.
 They could then create a specific "Group" entity, and link it to the entities they wish to be part of the group:
 
-```
+```text
        ┌─────┐
        │Group│
        └──┬──┘
@@ -82,7 +82,7 @@ One might think a similar approach could be taken to define a "Path" entity type
 
 Take the following simple subgraph of 4 entities, (`A`, `B`, `C`, and `D`), with a set of some links connecting them as follows:
 
-```
+```text
            ┌─┐
       ┌──► │B│ ───┐
 ┌─┐   │    └─┘    │   ┌─┐
@@ -96,7 +96,7 @@ Now, we could apply the same strategy as above, and create a "Path" entity type,
 They could then use the _order_ of the link to maintain an ordered collection of the entities that make up the path.
 They could therefore define a path from `A` to `B` to `C` as follows:
 
-```
+```text
          ┌─────┐
          │Path │
          └──┬──┘
@@ -120,7 +120,7 @@ They could therefore define a path from `A` to `B` to `C` as follows:
 Unfortunately expressing a path as a list of entities falls apart when looking at cases where a pair of entities has multiple links between them.
 Take the following scenario with three entities, (`A`, `B`, and `C`), and three links (`1`, `2`, and `3`) between them:
 
-```
+```text
 ┌─┐  ┌─1──► ┌─┐         ┌─┐
 │A│ ─┤      │B│ ───3──► │C│
 └─┘  └─2──► └─┘         └─┘
