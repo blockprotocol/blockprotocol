@@ -275,7 +275,7 @@ But what about the `getKnowsLinks`? There is only one `leftToRightOrder` on each
 
 #### Other issues with link ordering
 
-The issue above caused us to revisit the thinking around link ordering, and is the instigator for its removal being included in this RFC. However, there are a number of other shortcomings in the current implementation, bolstering the decision to remove it (as opposed to iterating on it):
+The issue above caused us to revisit the thinking around link ordering, and is the motivator for removing link ordering in this RFC. However, there are a number of other shortcomings in the current implementation, bolstering the decision to remove it (as opposed to iterating on it):
 
 - Integer-based indexing is inflexible and causes issues with update logic. For example, if you want to add a link to the middle of the list, you'd have to increment all the conflicting indices after the insertion point.
   - One potential mitigation for this would be to use [fractional indexing](https://www.figma.com/blog/realtime-editing-of-ordered-sequences/), which would _help_ with the next shortcoming,
