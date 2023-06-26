@@ -275,7 +275,7 @@ But what about the `getKnowsLinks`? There is only one `leftToRightOrder` on each
 
 #### Other issues with link ordering
 
-The above issue is the reason why we have to do address link ordering in this RFC. The demonstrated issue is one of them, but link ordering as it's specified currently has other downsides, such as:
+The issue above caused us to revisit the thinking around link ordering, and is the instigator for its removal being included in this RFC. However, there are a number of other shortcomings in the current implementation, bolstering the decision to remove it (as opposed to iterating on it):
 
 - integer-based indexing is not very flexible. For example, if you want to add a link to the middle of the list, you'd have to renumber all the indices after the insertion point. To mitigate this issue, it's possible to use fractional indexing. However, some links may should not be ordered by the same index but rely on a different ordering mechanism. For example, a `HasFriend` link may be ordered by the date the friendship was established, while a `Knows` link may be ordered by the date the acquaintance was established. Even ordering by multiple properties or other factors may be desirable.
 - assuming an application, which is implementing the type system, supports collaborative editing, it's possible that two users will add links to the same entity at the same time. This will result in a conflict, which will be difficult to resolve.
