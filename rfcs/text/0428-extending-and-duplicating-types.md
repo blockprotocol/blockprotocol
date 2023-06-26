@@ -277,7 +277,7 @@ But what about the `getKnowsLinks`? There is only one `leftToRightOrder` on each
 
 The issue above caused us to revisit the thinking around link ordering, and is the instigator for its removal being included in this RFC. However, there are a number of other shortcomings in the current implementation, bolstering the decision to remove it (as opposed to iterating on it):
 
-- Integer-based indexing is inflexible and causes issues with update logic. For example, if you want to add a link to the middle of the list, you'd have to increment all the conflicting indices after the insertion point. 
+- Integer-based indexing is inflexible and causes issues with update logic. For example, if you want to add a link to the middle of the list, you'd have to increment all the conflicting indices after the insertion point.
   - One potential mitigation for this would be to use [fractional indexing](https://www.figma.com/blog/realtime-editing-of-ordered-sequences/), which would _help_ with the next shortcoming,
 - some embedding applications may support collaborative editing. In systems like those — with the need for realtime conflict resolution — the ordering of list elements is a problematic challenge, where a naive solution like an integer-based one might cause major problems when encountering race conditions. This can be helped by the aforementioned suggestion of [fractional indexing](https://www.figma.com/blog/realtime-editing-of-ordered-sequences/) but it still increases the burden on application developers.
 - Furthermore, there is a data modelling question as to if links can be ordered by a single property. There are many cases where the ordering might be use case dependent (as opposed to something intrinsic in the data), which is already partially supported by the `orderBy` field on the `query` methods. Various data models may also wish to have multi-tiered ordering, e.g. ordering first by one property and then secondly by another. As the current implementation does not account for all such use cases, and fractional indexing would not either, we opt to remove it for now and allow users to order links themselves at the application level. Should this decision cause problems, ordering can be added back in the future, with a design that takes issues into consideration including those posed by inheritance.
@@ -850,6 +850,28 @@ The above change applies to these Block Protocol operations (`updateEntityType` 
 - `updatePropertyType`
 
 which must all make use of complete schemas (absent of `$id`) in place of partial ones. These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1).
+
+## Removing link ordering
+
+The [current meta schema for `Link Data`](https://blockprotocol.org/types/modules/graph/0.3/schema/link-data) includes the [link ordering schema](https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders) as properties, which consists of `leftToRightOrder` and `rightToLeftOrder`. With the removal of link ordering, this will be removed in the next version of the meta schema, so the next version of the meta schema will look like this:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.4/schema/link-data",
+  "title": "Link Data",
+  "type": "object",
+  "properties": {
+    "leftEntityId": {
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-id"
+    },
+    "rightEntityId": {
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-id"
+    }
+  },
+  "required": ["leftEntityId", "rightEntityId"]
+}
+```
 
 # Drawbacks
 
