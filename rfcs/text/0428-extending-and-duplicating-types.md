@@ -296,9 +296,9 @@ We'll add the following fields to the [existing Entity Type meta schema](https:/
 {
   "$id": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "type": "object",
-  ...,
+  // ...,
   "properties": {
-    ...,
+    // ...,
     "allOf": {
       "type": "array",
       "items": {
@@ -883,14 +883,13 @@ The [current meta schema for `Entity Type`](https://blockprotocol.org/types/modu
           "required": ["type", "items"],
           "additionalProperties": false
         }
-      },
-      ...
-    },
-    ...
-  },
-  ...
+      }
+      // ...
+    }
+    // ...
+  }
+  // ...
 }
-
 ```
 
 and the next version of the `Link Data` meta schema will become this:
@@ -910,6 +909,62 @@ and the next version of the `Link Data` meta schema will become this:
     }
   },
   "required": ["leftEntityId", "rightEntityId"]
+}
+```
+
+Similary, the `Link Orders` reference will be removed from the [`updateEntity`](https://github.com/blockprotocol/blockprotocol/blob/3c06d843d95506c0ec33e08bee99ec923d4ec3de/libs/%40blockprotocol/graph/src/graph-module.json#L48-L80) method in the graph-module schema. The changes to [`createEntity`](https://github.com/blockprotocol/blockprotocol/blob/3c06d843d95506c0ec33e08bee99ec923d4ec3de/libs/%40blockprotocol/graph/src/graph-module.json#L6-L31) are implicit by updating the `Link Data` schema reference:
+
+```json5
+{
+  "name": "graph",
+  "version": "0.4",
+  "messages": [
+    {
+      "messageName": "createEntity",
+      "data": {
+        "type": "object",
+        "properties": {
+          "entityTypeId": {
+            "description": "The entityTypeId of the type of the entity to create",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/versioned-url"
+          },
+          "properties": {
+            "description": "The properties of the entity to create",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/property-type-object"
+          },
+          "linkData": {
+            "description": "Link data if the entity is a link entity",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/link-data"
+          }
+        },
+        "required": ["entityTypeId", "properties"]
+      },
+      //...
+    },
+    {
+      "messageName": "updateEntity",
+      "data": {
+        "type": "object",
+        "properties": {
+          "entityId": {
+            "description": "The entityId of the entity to update",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-id"
+          },
+          "entityTypeId": {
+            "description": "The entityTypeId of the updated entity",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/versioned-url"
+          },
+          "properties": {
+            "description": "The new properties object to assign to the entity",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/property-type-object"
+          }
+        }
+        "required": ["entityId", "entityTypeId", "properties"],
+      },
+      //...
+    },
+    // ...
+  ]
 }
 ```
 
