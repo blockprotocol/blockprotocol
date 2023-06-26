@@ -213,7 +213,7 @@ The fields within `"linkData"` are as follows:
 - `"leftToRightOrder"`: A value used to order this link entity against other link entities of the same type with the same `leftEntityId`.
 - `"rightToLeftOrder"`: A value used to order this link entity against other link entities of the same type with the same `rightEntityId`.
 
-The choice of "left" and "right" as opposed to "source" and "target" is an optimistic attempt to leave room for an extension of the system in the future to allow for "bi-directional" links (where a "source" and "target" would not make sense).
+The choice of "left" and "right" as opposed to "source" and "target" is an optimistic attempt to leave room for an extension of the system in the future to allow for "bidirectional" links (where a "source" and "target" would not make sense).
 
 # Reference-level explanation
 
