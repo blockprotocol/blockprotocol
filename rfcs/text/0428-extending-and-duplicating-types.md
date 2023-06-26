@@ -853,7 +853,47 @@ which must all make use of complete schemas (absent of `$id`) in place of partia
 
 ## Removing link ordering
 
-The [current meta schema for `Link Data`](https://blockprotocol.org/types/modules/graph/0.3/schema/link-data) includes the [link ordering schema](https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders) as properties, which consists of `leftToRightOrder` and `rightToLeftOrder`. With the removal of link ordering, this will be removed in the next version of the meta schema, so the next version of the meta schema will look like this:
+The [current meta schema for `Entity Type`](https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type) allows a `ordered` property inside of `links` and [current meta schema for `Link Data`](https://blockprotocol.org/types/modules/graph/0.3/schema/link-data) includes the [link ordering schema](https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders) as properties, which consists of `leftToRightOrder` and `rightToLeftOrder`. With the removal of link ordering, these will be removed in the next version of the meta schema, so the next version of the `Entity Type` meta schema will look like this (the changes to the `allOf` property from above were omitted):
+
+```json
+{
+  "$id": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
+  "title": "Entity Type",
+  "properties": {
+    "links": {
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "array"
+            },
+            "items": {
+              "$ref": "#/$defs/oneOfEntityTypeReference"
+            },
+            "minItems": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxItems": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": ["type", "items"],
+          "additionalProperties": false
+        }
+      },
+      ...
+    },
+    ...
+  },
+  ...
+}
+
+```
+
+and the next version of the `Link Data` meta schema will become this:
 
 ```json
 {
