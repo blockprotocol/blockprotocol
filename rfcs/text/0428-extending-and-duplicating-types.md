@@ -1053,6 +1053,7 @@ While various implementations likely will want to implement checking for the sim
 
 - We haven't specified how projecting/selecting properties of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact properties of a subtype to provide a valid supertype instance in embedding applications.
   - This may be especially difficult if a property type is defined as being an array of `oneOf` a given set of property type objects. Detecting which sub-schema applies to a given array element when accounting for dropped properties, **may** be a very difficult task.
+  - We intend to explore the viability of this and figure out a solution during the initial implementation of this RFC.
 
 # Future possibilities
 
