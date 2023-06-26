@@ -208,7 +208,7 @@ We propose that we should treat type updates as complete replacements, so implem
 
 ### Removing link ordering
 
-Adding a type extension mechanism causes issues with the behavior of links in situations where a link type extends another link type, and an entity type refers to both of them.
+Adding a type extension mechanism causes issues with the behavior of links in situations where a link type extends another link type, and an entity type refers to both of them. This, combined with a few other reasons explored below, has lead to us suggesting the removal of link ordering from the specification.
 
 #### Conflicting Link Orderings
 
