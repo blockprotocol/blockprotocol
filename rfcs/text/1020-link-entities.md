@@ -72,7 +72,7 @@ They could then create a specific "Group" entity, and link it to the entities th
 Being able to create such abstractions is a powerful feature of the Type System, as users are able to implicitly benefit from some of the following scenarios:
 
 - A user updates entity `A`, the link is still associated with the new version
-- A user deletes entity `A`, the EA (Embedding Application) knows that a link has been invalidated and is able to orchestrate/trigger a resolution flow
+- A user deletes entity `A`, the Embedding Application (EA) knows that a link has been invalidated and is able to orchestrate/trigger a resolution flow
 - A user redefines the destination constraints of `Has element` links on the `Group` entity type to disallow entities of type `D`.
   The EA can identify that the `D` entity breaks validation, and is able to orchestrate/trigger a resolution flow
 
@@ -117,7 +117,7 @@ They could therefore define a path from `A` to `B` to `C` as follows:
            └─┘
 ```
 
-Unfortunately expressing a path as a list of entities falls apart when looking at cases where a pair of entities has multiple links between them.
+Unfortunately, expressing a path as a list of entities falls apart when looking at cases where a pair of entities has multiple links between them.
 Take the following scenario with three entities, (`A`, `B`, and `C`), and three links (`1`, `2`, and `3`) between them:
 
 ```text
@@ -146,7 +146,7 @@ Take some of the following scenarios:
 - Associating a `Role` with a `Membership` link between a `User` and an `Organization` entity
 
 Within the current system, links do not have properties.
-A few potential ways to get around this in the current system, albeit problematic ones are explored in further detail in the [Rationale and Alternatives](#rationale-and-alternatives) section below.
+A few potential (albeit problematic) ways to get around this in the current system are explored in further detail in the [Rationale and Alternatives](#rationale-and-alternatives) section below.
 
 # Guide-level explanation
 
@@ -323,7 +323,7 @@ The definition of an entity is extended to allow for the presence of a `"linkDat
 
 #### "Left" and "Right"
 
-At the present, the system specifies uni-directional links, that is, links that go in a single direction from one entity to another entity.
+At the present, the system specifies unidirectional links, that is, links that go in a single direction from one entity to another entity.
 When modelling knowledge, it can be very helpful to model that a relationship goes in both directions, or that there is an equivalent inverse relationship.
 At the present, how this will be solved, if it will, is unknown; however, to hopefully avoid breaking changes in the future, this proposal opts to adopt terms which have weaker implications of directionality, thus "left" and "right".
 
@@ -376,7 +376,7 @@ This is somewhat similar to the primitives of [RDF](https://en.wikipedia.org/wik
 
 [unresolved-questions]: #unresolved-questions
 
-At this point, we have no come up with any.
+At this point, we are unaware of any.
 
 # Future possibilities
 
