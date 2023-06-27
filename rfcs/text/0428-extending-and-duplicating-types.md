@@ -892,7 +892,7 @@ The [current metaschema for `Entity Type`](https://blockprotocol.org/types/modul
 }
 ```
 
-and the next version of the `Link Data` meta schema will become this:
+and the next version of the `Link Data` metaschema will become this:
 
 ```json
 {
