@@ -853,7 +853,7 @@ which must all make use of complete schemas (absent of `$id`) in place of partia
 
 ## Removing link ordering
 
-The [current meta schema for `Entity Type`](https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type) allows a `ordered` property inside of `links` and [current meta schema for `Link Data`](https://blockprotocol.org/types/modules/graph/0.3/schema/link-data) includes the [link ordering schema](https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders) as properties, which consists of `leftToRightOrder` and `rightToLeftOrder`. With the removal of link ordering, these will be removed in the next version of the meta schema, so the next version of the `Entity Type` meta schema will look like this (the changes to the `allOf` property from above were omitted):
+The [current metaschema for `Entity Type`](https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type) allows an `ordered` property inside of `links` and [current schema for `Link Data`](https://blockprotocol.org/types/modules/graph/0.3/schema/link-data) includes the [link ordering schema](https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders) as properties, which consists of `leftToRightOrder` and `rightToLeftOrder`. With the removal of link ordering, these will be removed in the next version of the metaschema, so the next version of the `Entity Type` metaschema will look like this (the changes to the `allOf` property from above were omitted):
 
 ```json
 {
