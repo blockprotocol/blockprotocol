@@ -1,4 +1,4 @@
-import { getAllPages, getPage } from "../util/mdx-utils";
+import { getAllPages, getPage, getRoadmapSubPages } from "../util/mdx-utils";
 
 export type SiteMapPageSection = {
   title: string;
@@ -26,8 +26,10 @@ export const getSpecPage = (): SiteMapPage => ({
   subPages: getAllPages({ pathToDirectory: "spec", filterIndexPage: true }),
 });
 
-export const getRoadmapPage = (): SiteMapPage =>
-  getPage({ pathToDirectory: "roadmap", fileName: "0_index.mdx" });
+export const getRoadmapPage = (): SiteMapPage => ({
+  ...getPage({ pathToDirectory: "roadmap", fileName: "00_index.mdx" }),
+  subPages: getRoadmapSubPages(),
+});
 
 export const getLegalSubPages = (): SiteMapPage[] =>
   getAllPages({ pathToDirectory: "legal" });
