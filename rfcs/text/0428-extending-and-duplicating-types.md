@@ -7,9 +7,9 @@
 
 [summary]: #summary
 
-This RFC describes an extension to the [Graph module's Type System](./0352-graph-type-system.md) whereby entity types can be _extended_ and _duplicated_. These mechanisms allow users of the system to take existing entity types, and reuse their definitions to create new ones, in a compatible and incompatible fashion respectively.
+This RFC describes an extension to the [Graph module's Type System](./0352-graph-type-system.md) whereby entity types can be _extended_ and _duplicated_. These mechanisms allow users of the system to take existing entity types and reuse their definitions to create new ones — in a compatible fashion for _extension_ and an incompatible one for _duplication_.
 
-In brief, entity type extension can be considered as a flavor of inheritance that one popularly sees in object-oriented programming, while duplication is similar to "forking" that one sees in other systems (such as Git).
+In brief, entity type extension can be considered as a flavor of the inheritance mechanism that one popularly sees in object-oriented programming, while duplication is similar to "forking" that one sees in other systems (such as Git). As such, in the context of the Type System, these terms may be used interchangeably when it aids in intuition or ease of explanation.
 
 # Motivation
 
@@ -122,15 +122,15 @@ As such, the extension mechanism described above can applied to combine/re-use t
 
 ## The `additionalProperties` problem
 
-As established in the [Versioning RFC](./0408-versioning-types.md) for the type system, having `{ "additionalProperties": false }` for all schemas is an assumption made for determining type compatibility.
-If we assume this for _any_ entity type, then we lose the ability for [_coercive subtyping_](https://en.wikipedia.org/wiki/Subtyping#Coercions).
+As established in the [Versioning RFC](./0408-versioning-types.md) for the type system, _implicitly_ applying `{ "additionalProperties": false }` for all types is important when considering type compatibility.
+However, if we assume this for _any_ entity type, then we lose the ability for [_coercive subtyping_](https://en.wikipedia.org/wiki/Subtyping#Coercions) when we expand the system with the type extension mechanism.
 An instance that satisfies a given supertype will not validate against a subtype if that subtype adds additional properties.
 
-For example, if we supply the `Employee` instance from above to a `Person`, it will receive properties that are considered `additionalProperties` (the `occupation` property is not present on `Person`).
+For example, if we supply the `Employee` instance from above to a `Person`, it will receive properties that are considered `additionalProperties` (the `occupation` property is not present on `Person`) and therefore break the implicitly applied constraint.
 
-The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping strictness in JSON Schemas.
+This ability to select/project parts of a subtype that make up a supertype is an essential assumption for the rest of this proposal while keeping the benefits of having strict typing in the system.
 
-We propose slight modifications to how `{ "additionalProperties": true }` and `{ "unevaluatedProperties": false }` are used within our type extension system to let supertypes keep strictness while allowing composition. This modification refers to the implicit constraints that should be applied when validating types and instances, and should not affect syntax.
+To mitigate this issue, we propose slight modifications to how `{ "additionalProperties": true }` and `{ "unevaluatedProperties": false }` are used within our type extension system to let supertypes keep strictness while allowing composition. This modification refers to the implicit constraints that should be applied when validating types and instances, and should not affect syntax.
 
 Concrete examples of the issues that arise with `additionalProperties` and `unevaluatedProperties` are shown in the [Reference-level explanation](#problems-with-additionalproperties-and-unevaluatedproperties).
 
@@ -263,7 +263,7 @@ The issue above caused us to revisit the thinking around link ordering, and is t
 
 - Integer-based indexing is inflexible and causes issues with update logic. For example, if you want to add a link to the middle of the list, you'd have to increment all the conflicting indices after the insertion point.
   - One potential mitigation for this would be to use [fractional indexing](https://www.figma.com/blog/realtime-editing-of-ordered-sequences/), which would _help_ with the next shortcoming,
-- some embedding applications may support collaborative editing. In systems like those — with the need for realtime conflict resolution — the ordering of list elements is a problematic challenge, where a naive solution like an integer-based one might cause major problems when encountering race conditions. This can be helped by the aforementioned suggestion of [fractional indexing](https://www.figma.com/blog/realtime-editing-of-ordered-sequences/) but it still increases the burden on application developers.
+- Some embedding applications may support collaborative editing. In systems like those — with the need for realtime conflict resolution — the ordering of list elements is a problematic challenge, where a naive solution like an integer-based one might cause major problems when encountering race conditions. This can be helped by the aforementioned suggestion of [fractional indexing](https://www.figma.com/blog/realtime-editing-of-ordered-sequences/) but it still increases the burden on application developers.
 - Furthermore, there is a data modeling question regarding whether links can be ordered based on a single property. There are many cases where the ordering could be dependent on the specific use case (as opposed to something intrinsic in the data), which is already partially supported by the `orderBy` field on the `query` methods. Various data models may also wish to have multi-tiered ordering, e.g. ordering first by one property and then secondly by another. As the current implementation does not account for all such use cases, and fractional indexing would not either, we opt to remove it for now and allow users to order links themselves at the application level. Should this decision cause problems, ordering can be added back in the future, with a design that takes issues into consideration including those posed by inheritance.
 
 # Reference-level explanation
@@ -274,7 +274,7 @@ The issue above caused us to revisit the thinking around link ordering, and is t
 
 In the Block Protocol, we will allow type extension through the `allOf` JSON Schema keyword which applies all constraints from the sub-schemas within the `allOf` array.
 
-We'll add the following fields to the [existing Entity Type meta schema](https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type) definition:
+We'll add the following fields to the [existing Entity Type meta-schema](https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type) definition:
 
 ```json
 {
@@ -620,7 +620,7 @@ Subtypes in the system can be used in place of the supertypes that they extend, 
 
 ## Defining entity type duplication
 
-The Block Protocol meta schemas don't need to change to support type duplication as the mechanism isn't expressed within the system. Instead, we copy the contents of types and create new, completely distinct, types.
+The Block Protocol meta-schemas don't need to change to support type duplication as the details of the mechanism aren't expressed _within_ the system. Instead, the behavior is defined, in that it results in a copy of the contents of types — creating new, completely distinct, types.
 
 As such, when duplicating a type, the new type will have an entirely different URL and potentially a new `title`.
 
@@ -837,7 +837,7 @@ which must all make use of complete schemas (absent of `$id`) in place of partia
 
 ## Removing link ordering
 
-The [current metaschema for `Entity Type`](https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type) allows an `ordered` property inside of `links` and [current schema for `Link Data`](https://blockprotocol.org/types/modules/graph/0.3/schema/link-data) includes the [link ordering schema](https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders) as properties, which consists of `leftToRightOrder` and `rightToLeftOrder`. With the removal of link ordering, these will be removed in the next version of the metaschema, so the next version of the `Entity Type` metaschema will look like this (the changes to the `allOf` property from above were omitted):
+The [current meta-schema for `Entity Type`](https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type) allows an `ordered` property inside of `links` and [current schema for `Link Data`](https://blockprotocol.org/types/modules/graph/0.3/schema/link-data) includes the [link ordering schema](https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders) as properties, which consists of `leftToRightOrder` and `rightToLeftOrder`. With the removal of link ordering, these will be removed in the next version of the meta-schema, so the next version of the `Entity Type` meta-schema will look like this (the changes to the `allOf` property from above were omitted):
 
 ```json
 {
@@ -896,7 +896,7 @@ and the next version of the `Link Data` schema will become this:
 }
 ```
 
-Similary, the `Link Orders` reference will be removed from the [`updateEntity`](https://github.com/blockprotocol/blockprotocol/blob/3c06d843d95506c0ec33e08bee99ec923d4ec3de/libs/%40blockprotocol/graph/src/graph-module.json#L48-L80) method in the graph-module schema. The changes to [`createEntity`](https://github.com/blockprotocol/blockprotocol/blob/3c06d843d95506c0ec33e08bee99ec923d4ec3de/libs/%40blockprotocol/graph/src/graph-module.json#L6-L31) are implicit by updating the `Link Data` schema reference:
+Similarly, the `Link Orders` reference will be removed from the [`updateEntity`](https://github.com/blockprotocol/blockprotocol/blob/3c06d843d95506c0ec33e08bee99ec923d4ec3de/libs/%40blockprotocol/graph/src/graph-module.json#L48-L80) method in the graph-module schema. The changes to [`createEntity`](https://github.com/blockprotocol/blockprotocol/blob/3c06d843d95506c0ec33e08bee99ec923d4ec3de/libs/%40blockprotocol/graph/src/graph-module.json#L6-L31) are implicit by updating the `Link Data` schema reference:
 
 ```json5
 {
