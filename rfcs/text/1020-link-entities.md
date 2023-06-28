@@ -55,22 +55,22 @@ One could currently do this by creating a "Group" entity type, and an associated
 They could then create a specific "Group" entity, and link it to the entities they wish to be part of the group by creating "Has element" links to existing entities:
 
 ```text
-                    ┌─────┐
-     ┌──────────────┤Group├──────────────┐
-     │              └┬───┬┘              │
-     │               │   │               │
-     │               │   │               │
-     │           ┌───┘   └───┐           │
-     │           │           │           │
-     │           │           │           │
-     │           │           │           │
-Has element Has element Has element Has element
-     │           │           │           │
-     │           │           │           │
-     ▼           ▼           ▼           ▼
-    ┌─┐         ┌─┐         ┌─┐         ┌─┐
-    │A│         │B│         │C│         │D│
-    └─┘         └─┘         └─┘         └─┘
+                      ┌─────┐
+     ┌────────────────┤Group├────────────────┐
+     │                └┬───┬┘                │
+     │                 │   │                 │
+     │                 │   │                 │
+     │            ┌────┘   └────┐            │
+     │            │             │            │
+     │            │             │            │
+     │            │             │            │
+Has element  Has element   Has element  Has element
+     │            │             │            │
+     │            │             │            │
+     ▼            ▼             ▼            ▼
+    ┌─┐          ┌─┐           ┌─┐          ┌─┐
+    │A│          │B│           │C│          │D│
+    └─┘          └─┘           └─┘          └─┘
 ```
 
 Being able to create such abstractions is a powerful feature of the Type System, as users are able to implicitly benefit from some of the following scenarios:
