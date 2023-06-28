@@ -246,17 +246,7 @@ Now, let's say that a given `Person`, `Alice` has the following links:
 - `HasFriendCharlie`
 - `HasFriendDave`
 
-Now, `HasFriendCharlie` and `HasFriendDave` are both link entities of type `Has Friend`, which extends `Knows`, which means they are also `Knows` links. Meaning if you were to query for `Has Friend` links for `Alice` you'd get:
-
-```ts
-getHasFriendLinks(alice); // [ HasFriendCharlie, HasFriendDave ]
-```
-
-and if you were to query for `Knows` links for `Alice` you'd get:
-
-```ts
-getKnowsLinks(alice); // [ KnowsBob, HasFriendCharlie, HasFriendDave ]
-```
+Now, `HasFriendCharlie` and `HasFriendDave` are both link entities of type `Has Friend`, which extends `Knows`, which means they are also `Knows` links. Meaning if you were to query for `Has Friend` links for `Alice` you'd get `HasFriendCharlie` and `HasFriendDave`. But if you were to query for `Knows` links for `Alice` you'd get all links: `KnowsBob`, `HasFriendCharlie` and `HasFriendDave`.
 
 Now, what if we said that both of these link collections were **ordered**? We could define an order on the link entities, say
 
@@ -265,13 +255,7 @@ HasFriendCharlie.leftToRightOrder = 1;
 HasFriendDave.leftToRightOrder = 0;
 ```
 
-Giving us:
-
-```ts
-getHasFriendLinks(alice); // [ HasFriendDave, HasFriendCharlie ]
-```
-
-But what about the `getKnowsLinks`? There is only one `leftToRightOrder` on each link entity, so the order will apply to _both_ lists, which could result in conflicting indices. Changing the order (index) of one of the elements in one collection will affect its position in the other.
+This will give us `HasFriendDave` first, then `HasFriendCharlie`. But what about the `Knows` link? There is only one `leftToRightOrder` on each link entity, so the order will apply to _both_ lists, which could result in conflicting indices. Changing the order (index) of one of the elements in one collection will affect its position in the other.
 
 #### Other issues with link ordering
 
