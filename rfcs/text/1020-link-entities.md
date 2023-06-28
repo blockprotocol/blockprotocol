@@ -100,7 +100,7 @@ Take the following simple subgraph of 4 entities, (`A`, `B`, `C`, and `D`), with
 ```
 
 Now, we could apply the same strategy as above, and create a "Path" entity type, and an associated "Has Element" link type.
-They could then use the _order_ of the link to maintain an ordered collection of the entities that make up the path.
+They could then use the _order_ of the "Has Element" links to maintain an ordered collection of the entities that make up the path.
 They could therefore define a path from `A` to `B` to `C` as follows:
 
 ```text
