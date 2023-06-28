@@ -33,7 +33,7 @@ These inter-element references are the glue that makes up the graph and as such 
 
 > **Note**: The term "edge" is distinct from "link", it is used here to refer to the relationship between two graph elements which include elements of the type system _as well as_ entities.
 
-At the present, the following types of edges exist:
+At the present, the following kinds of edges exist (as well as their respective reversed edges, which are omitted for brevity):
 
 - Entity Type -> Link Type (constrains the types of links that can come from an entity)
 - Entity Type -> Entity Type (constrains the types of entities that can be linked to from an entity)
@@ -41,8 +41,8 @@ At the present, the following types of edges exist:
 - Property Type -> Property Type (constrains the types of properties that can appear within an object in another property)
 - Property Type -> Data Type (constrains the type of data that can be stored within a property)
 - Entity -> Entity Type (describes the associated entity type of an entity)
-- Entity -> Link (the outgoing or incoming link of an entity)
-- Link -> Entity (the source or target entity of a link)
+- Entity -> Link (identifies a link as one that is outgoing from this entity)
+- Link -> Entity (identifies an entity as the target of this link)
 
 ## Creating Higher-order abstractions through composition of the primitives of the type system
 
