@@ -76,9 +76,12 @@ Has element  Has element   Has element  Has element
 Being able to create such abstractions is a powerful feature of the Type System, as users are able to implicitly benefit from some of the following scenarios:
 
 - A user updates entity `A`, the link is still associated with the new version
+  - Made possible by the fact that the Block Protocol preserves entity _identity_ across update operations, and link endpoints are dependent on the identity of the entities.
 - A user deletes entity `A`, the Embedding Application (EA) knows that a link has been invalidated and is able to orchestrate/trigger a resolution flow
+  - This is a _possibility_ as the Block Protocol requires EAs to be aware of the linking primitives. Should a user have decided to store an `EntityId` in some arbitrary property (or some less straightforward identifier), it is not reasonable to expect an EA to have recognized that information through introspection, and to check for its ongoing validity.
 - A user redefines the destination constraints of `Has element` links on the `Group` entity type to disallow entities of type `D`.
   The EA can identify that the `D` entity breaks validation, and is able to orchestrate/trigger a resolution flow
+  - Again a _possibility_ for similar reasons to above, where the EA is aware of the linking primitives, including the associated constraints; making it a reasonable expectation that such conditions are verified and enforced on an ongoing basis.
 
 ### Paths
 
