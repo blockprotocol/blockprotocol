@@ -52,21 +52,25 @@ Due to the compositional design of the primitives of the Type System, it's possi
 For example, one could want to define "groups" of entities within their system, in such a way that they would be programmatically resolvable through blocks, _with constraints guaranteed by the specification_.
 
 One could currently do this by creating a "Group" entity type, and an associated "Has Element" link type.
-They could then create a specific "Group" entity, and link it to the entities they wish to be part of the group:
+They could then create a specific "Group" entity, and link it to the entities they wish to be part of the group by creating "Has element" links to existing entities:
 
 ```text
-       ┌─────┐
-       │Group│
-       └──┬──┘
-          │
-          │
- ┌───Has element───┐
- │     │     │     │
- │     │     │     │
- ▼     ▼     ▼     ▼
-┌─┐   ┌─┐   ┌─┐   ┌─┐
-│A│   │B│   │C│   │D│
-└─┘   └─┘   └─┘   └─┘
+                    ┌─────┐
+     ┌──────────────┤Group├──────────────┐
+     │              └┬───┬┘              │
+     │               │   │               │
+     │               │   │               │
+     │           ┌───┘   └───┐           │
+     │           │           │           │
+     │           │           │           │
+     │           │           │           │
+Has element Has element Has element Has element
+     │           │           │           │
+     │           │           │           │
+     ▼           ▼           ▼           ▼
+    ┌─┐         ┌─┐         ┌─┐         ┌─┐
+    │A│         │B│         │C│         │D│
+    └─┘         └─┘         └─┘         └─┘
 ```
 
 Being able to create such abstractions is a powerful feature of the Type System, as users are able to implicitly benefit from some of the following scenarios:
