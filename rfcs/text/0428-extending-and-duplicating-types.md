@@ -206,23 +206,83 @@ Furthermore, resolving the intentions of the existing definition for the message
 
 We propose that we should treat type updates as complete replacements, so implementation is much more straightforward for embedding applications. Partial schema updates also add some level of indirection, and that may obfuscate error sources and error reasons. Therefore, updates to types must be complete replacements rather than partial schema updates.
 
+### Removing link ordering
+
+Adding a type extension mechanism causes issues with the behavior of links in situations where a link type extends another link type, and an entity type refers to both of them. This, combined with a few other reasons explored below, has lead to us suggesting the removal of link ordering from the specification.
+
+#### Conflicting Link Orderings
+
+To understand this, let's take the example of `Person` above. Let's define a `Knows` link type, and a `Has Friend` link type that extends `Knows`. Now let's say that `Person` defines `Knows` and `Has Friend` links to `Person` entities:
+
+```json
+{
+  "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
+  "title": "Person",
+  // ...
+  "links": {
+    "https://blockprotocol.org/@alice/entity-type/knows/v/1": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "ref": "https://blockprotocol.org/@alice/entity-type/person/v/1" }
+        ]
+      }
+    },
+    "https://blockprotocol.org/@alice/entity-type/has-friend/v/1": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "ref": "https://blockprotocol.org/@alice/entity-type/person/v/1" }
+        ]
+      }
+    }
+  }
+}
+```
+
+Now, let's say that a given `Person`, `Alice` has the following links:
+
+- `KnowsBob`
+- `HasFriendCharlie`
+- `HasFriendDave`
+
+Now, `HasFriendCharlie` and `HasFriendDave` are both link entities of type `Has Friend`, which extends `Knows`, which means they are also `Knows` links. Meaning if you were to query for `Has Friend` links for `Alice` you'd get `HasFriendCharlie` and `HasFriendDave`. But if you were to query for `Knows` links for `Alice` you'd get all links: `KnowsBob`, `HasFriendCharlie` and `HasFriendDave`.
+
+Now, what if we said that both of these link collections were **ordered**? We could define an order on the link entities, say
+
+```ts
+HasFriendCharlie.leftToRightOrder = 1;
+HasFriendDave.leftToRightOrder = 0;
+```
+
+This will give us `HasFriendDave` first, then `HasFriendCharlie`. But what about the `Knows` link? There is only one `leftToRightOrder` on each link entity, so the order will apply to _both_ lists, which could result in conflicting indices. Changing the order (index) of one of the elements in one collection will affect its position in the other.
+
+#### Other issues with link ordering
+
+The issue above caused us to revisit the thinking around link ordering, and is the motivator for removing link ordering in this RFC. However, there are a number of other shortcomings in the current implementation, bolstering the decision to remove it (as opposed to iterating on it):
+
+- Integer-based indexing is inflexible and causes issues with update logic. For example, if you want to add a link to the middle of the list, you'd have to increment all the conflicting indices after the insertion point.
+  - One potential mitigation for this would be to use [fractional indexing](https://www.figma.com/blog/realtime-editing-of-ordered-sequences/), which would _help_ with the next shortcoming,
+- some embedding applications may support collaborative editing. In systems like those — with the need for realtime conflict resolution — the ordering of list elements is a problematic challenge, where a naive solution like an integer-based one might cause major problems when encountering race conditions. This can be helped by the aforementioned suggestion of [fractional indexing](https://www.figma.com/blog/realtime-editing-of-ordered-sequences/) but it still increases the burden on application developers.
+- Furthermore, there is a data modeling question regarding whether links can be ordered based on a single property. There are many cases where the ordering could be dependent on the specific use case (as opposed to something intrinsic in the data), which is already partially supported by the `orderBy` field on the `query` methods. Various data models may also wish to have multi-tiered ordering, e.g. ordering first by one property and then secondly by another. As the current implementation does not account for all such use cases, and fractional indexing would not either, we opt to remove it for now and allow users to order links themselves at the application level. Should this decision cause problems, ordering can be added back in the future, with a design that takes issues into consideration including those posed by inheritance.
+
 # Reference-level explanation
 
 [reference-level-explanation]: #reference-level-explanation
 
 ## Defining extended entity types
 
-In the Block Protocol, we will allow type extension through the `allOf` JSON Schema keyword which applies all constraints from the sub-schemas within the `allOf` array..
+In the Block Protocol, we will allow type extension through the `allOf` JSON Schema keyword which applies all constraints from the sub-schemas within the `allOf` array.
 
-We'll add the following fields to the existing Entity Type meta schema definition:
+We'll add the following fields to the [existing Entity Type meta schema](https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type) definition:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "type": "object",
-  ...,
+  // ...,
   "properties": {
-    ...,
+    // ...,
     "allOf": {
       "type": "array",
       "items": {
@@ -230,7 +290,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
         "properties": {
           "$ref": {
             "$comment": "Valid reference to an existing Entity Type version",
-            "$ref": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/versioned-url"
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/versioned-url"
           },
           "additionalProperties": false
         }
@@ -248,7 +308,7 @@ Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
@@ -272,7 +332,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -318,12 +378,11 @@ which can be coerced into the following `Person` instance:
 Notice how we are keeping the same `entityId` for this entity instance, but simply coercing the entity instance by selecting the properties of interest for the given type.
 
 **An example of _satisfiable_ overlapping constraints**:
-
 Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
   "type": "object",
@@ -347,7 +406,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/2",
   "type": "object",
@@ -403,7 +462,7 @@ Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/3",
   "type": "object",
@@ -424,7 +483,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/3",
   "type": "object",
@@ -454,7 +513,7 @@ In JSON schema this is generally achieved by setting `additionalProperties: fals
 Unfortunately, this causes problems when you start composing schemas (e.g. with entity type inheritance)
 
 If supertypes themselves specify one of these `{ "unevaluatedProperties": false }`, they are not able to be part of an `allOf` validator, as they will error as soon as they see properties that are not part of the root schema itself.
-When composing schemas that all contain `{ "unevaluatedProperties": false }`, each schema will disallow any other properties which they do not define. Using the following JSON Schema as an example:
+When composing schemas that all contain `{ "unevaluatedProperties": false }`, each schema will disallow any other properties which they do not define. Using the following (ordinary) JSON Schema as an example:
 
 ```json
 {
@@ -504,7 +563,7 @@ Concretely, this means that for a free-standing type that doesn't extend any oth
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
   "type": "object",
@@ -530,7 +589,7 @@ In the case of the `Employee` type:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/2",
   "type": "object",
@@ -573,7 +632,7 @@ Given a _supertype_ `Person`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
@@ -597,7 +656,7 @@ and a _subtype_ `Employee`:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -618,7 +677,7 @@ a user, Bob, wishes to use Alice's `Employee` entity type but must change the `o
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@bob/entity-type/employee/v/1",
   "type": "object",
@@ -643,7 +702,7 @@ The original, conceptually expanded `Employee` entity type:
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
   "type": "object",
@@ -671,7 +730,7 @@ This expanded entity type is equivalent to the original `Employee` entity type, 
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "kind": "entityType",
   "$id": "https://blockprotocol.org/@bob/entity-type/employee/v/1",
   "type": "object",
@@ -723,7 +782,7 @@ must instead use a complete schema (absent of an `$id`)
   // New, complete updateEntityType message
   "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
   "schema": {
-    "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+    "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
     "type": "object",
     "kind": "entityType",
     "title": "Person",
@@ -750,7 +809,7 @@ given that the original schema was created as follows
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
   "type": "object",
   "kind": "entityType",
@@ -776,6 +835,123 @@ The above change applies to these Block Protocol operations (`updateEntityType` 
 
 which must all make use of complete schemas (absent of `$id`) in place of partial ones. These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1).
 
+## Removing link ordering
+
+The [current metaschema for `Entity Type`](https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type) allows an `ordered` property inside of `links` and [current schema for `Link Data`](https://blockprotocol.org/types/modules/graph/0.3/schema/link-data) includes the [link ordering schema](https://blockprotocol.org/types/modules/graph/0.3/schema/link-orders) as properties, which consists of `leftToRightOrder` and `rightToLeftOrder`. With the removal of link ordering, these will be removed in the next version of the metaschema, so the next version of the `Entity Type` metaschema will look like this (the changes to the `allOf` property from above were omitted):
+
+```json
+{
+  "$id": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
+  "title": "Entity Type",
+  "properties": {
+    "links": {
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "array"
+            },
+            "items": {
+              "$ref": "#/$defs/oneOfEntityTypeReference"
+            },
+            "minItems": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxItems": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": ["type", "items"],
+          "additionalProperties": false
+        }
+      }
+      // ...
+    }
+    // ...
+  }
+  // ...
+}
+```
+
+and the next version of the `Link Data` schema will become this:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.4/schema/link-data",
+  "title": "Link Data",
+  "type": "object",
+  "properties": {
+    "leftEntityId": {
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-id"
+    },
+    "rightEntityId": {
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-id"
+    }
+  },
+  "required": ["leftEntityId", "rightEntityId"]
+}
+```
+
+Similary, the `Link Orders` reference will be removed from the [`updateEntity`](https://github.com/blockprotocol/blockprotocol/blob/3c06d843d95506c0ec33e08bee99ec923d4ec3de/libs/%40blockprotocol/graph/src/graph-module.json#L48-L80) method in the graph-module schema. The changes to [`createEntity`](https://github.com/blockprotocol/blockprotocol/blob/3c06d843d95506c0ec33e08bee99ec923d4ec3de/libs/%40blockprotocol/graph/src/graph-module.json#L6-L31) are implicit by updating the `Link Data` schema reference:
+
+```json5
+{
+  "name": "graph",
+  "version": "0.4",
+  "messages": [
+    {
+      "messageName": "createEntity",
+      "data": {
+        "type": "object",
+        "properties": {
+          "entityTypeId": {
+            "description": "The entityTypeId of the type of the entity to create",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/versioned-url"
+          },
+          "properties": {
+            "description": "The properties of the entity to create",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/property-type-object"
+          },
+          "linkData": {
+            "description": "Link data if the entity is a link entity",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/link-data"
+          }
+        },
+        "required": ["entityTypeId", "properties"]
+      },
+      //...
+    },
+    {
+      "messageName": "updateEntity",
+      "data": {
+        "type": "object",
+        "properties": {
+          "entityId": {
+            "description": "The entityId of the entity to update",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-id"
+          },
+          "entityTypeId": {
+            "description": "The entityTypeId of the updated entity",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/versioned-url"
+          },
+          "properties": {
+            "description": "The new properties object to assign to the entity",
+            "$ref": "https://blockprotocol.org/types/modules/graph/0.4/schema/property-type-object"
+          }
+        }
+        "required": ["entityId", "entityTypeId", "properties"],
+      },
+      //...
+    },
+    // ...
+  ]
+}
+```
+
 # Drawbacks
 
 [drawbacks]: #drawbacks
@@ -792,8 +968,8 @@ The proposed design attempts to make a trade-off between the following:
 
 - The expressiveness of the type system, allowing for greater re-use and expression of hierarchies between types
 - Implementation complexity, especially:
-- when _not_ opting to try and avoid unsatisfiable schemas
-- optimizing for trivial assumptions to be made regarding the compatibility of a supertype and subtype
+  - when _not_ opting to try and avoid unsatisfiable schemas
+  - optimizing for trivial assumptions to be made regarding the compatibility of a supertype and subtype
 
 As such, this section outlines a number of considerations or compromises which have been made within the design.
 
@@ -805,7 +981,7 @@ An alternative way to achieve the same semantic behaviour as with the implicit `
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "$id": "https://example.com/schema/v/1",
 
   // ... schema contents  ...
@@ -826,7 +1002,7 @@ Here, referencing `https://example.com/schema/v/1` in a `$ref` will result in an
 
 ```json
 {
-  "$schema": "https://blockprotocol.org/types/modules/graph/0.3.1/schema/entity-type",
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.4/schema/entity-type",
   "$id": "https://example.com/schema/v/1",
   "$ref": "#open",
   "unevaluatedProperties": false,
@@ -910,7 +1086,7 @@ And as expected, an entity instance _not_ containing a `name` would not satisfy 
 }
 ```
 
-#### Unequal but compatible overlapping constraints:
+#### Unequal but compatible overlapping constraints
 
 Instead, say that `Person` defines that `name` is **required**, and `Superhero` defines that `name` is **optional**.
 
@@ -936,7 +1112,7 @@ And as expected, an entity instance _not_ containing a `name` would not satisfy 
 
 In practice, this combination could be _statically analyzed_ and resolved to a single satisfiable constraint. The interaction of an **optional** definition with a **required** definition is known, and the **stronger** constraint of **required** would be the one that contains the other. Unfortunately, such static analysis is not as simple in the general case, especially when constraints that are intended to be added in the future (see the [Non-Primitive Data Types RFC](https://github.com/blockprotocol/blockprotocol/pull/355)) are taken into consideration. Checking the compatibility of two regexes, for example, is a very difficult task.
 
-#### Unequal and incompatible overlapping constraints:
+#### Unequal and incompatible overlapping constraints
 
 Finally, say that `Person` defines that `name` is a _string_ and is **required**, and `Superhero` defines that `name` is _an array of strings_ and is **required**.
 
@@ -978,9 +1154,7 @@ While various implementations likely will want to implement checking for the sim
 
 - We haven't specified how projecting/selecting properties of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact properties of a subtype to provide a valid supertype instance in embedding applications.
   - This may be especially difficult if a property type is defined as being an array of `oneOf` a given set of property type objects. Detecting which sub-schema applies to a given array element when accounting for dropped properties, **may** be a very difficult task.
-- Type extension might prove to have strange side-effects when considering link types which extend from one another.
-  - Say `Person` defines `Knows` and `Has Friend` links. If `Has Friend` extends `Knows`, then technically any `Has Friend` instance is also a `Knows` instance, and would need to satisfy the link constraints set on both. This has implications for `minItems` and `maxItems`, as well as for link destinations. If `Person` says it only `Knows` other `Person` entities, but `Has Friend` links to both `Person` and `Pet` entities, then a `Has Friend` link to a `Pet` entity would break the constraint set for `Knows`.
-  - Say `Person` defines `Knows` and `Has Friend` links, and that those links are **ordered**. At the moment, the order of a link is defined in a given direction (e.g. left to right) and has a single value. That would presently imply that the order of the `Knows` link _within the `Knows` links list_ would have to be the same as the order of the `Has Friend` link _within the `Has Friend` links list_.
+  - We intend to explore the viability of this and figure out a solution during the initial implementation of this RFC.
 
 # Future possibilities
 
