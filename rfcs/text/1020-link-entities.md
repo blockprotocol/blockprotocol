@@ -90,13 +90,13 @@ One might think a similar approach could be taken to define a "Path" entity type
 Take the following simple subgraph of 4 entities, (`A`, `B`, `C`, and `D`), with a set of some links connecting them as follows:
 
 ```text
-           ┌─┐
-      ┌──► │B│ ───┐
-┌─┐   │    └─┘    │   ┌─┐
-│A│ ──┤           ├─► │D│
-└─┘   │    ┌─┐    │   └─┘
-      └──► │C│ ───┘
-           └─┘
+             ┌─┐
+        ┌──► │B│ ───┐
+┌─┐     │    └─┘    │     ┌─┐
+│A│ ────┤           ├───► │D│
+└─┘     │    ┌─┐    │     └─┘
+        └──► │C│ ───┘
+             └─┘
 ```
 
 Now, we could apply the same strategy as above, and create a "Path" entity type, and an associated "Has Element" link type.
@@ -104,24 +104,24 @@ They could then use the _order_ of the link to maintain an ordered collection of
 They could therefore define a path from `A` to `B` to `C` as follows:
 
 ```text
-         ┌─────┐
-         │Path │
-         └──┬──┘
-            │
+               ┌─────┐
+     ┌─────────┤Path ├─────────┐
+     │         └──┬──┘         │
+     │            │            │
 
-       Has element
+Has element  Has element  Has element
 
-            │
-  ┌─────────┼─────────┐
-  │         │         │
-  │         ▼         │
-  │        ┌─┐        │
-  ▼   ┌──► │B│ ───┐   ▼
-┌─┐   │    └─┘    │   ┌─┐
-│A│ ──┤           ├─► │D│
-└─┘   │    ┌─┐    │   └─┘
-      └──► │C│ ───┘
-           └─┘
+     │            │            │
+     │            │            │
+     │            │            │
+     │            ▼            │
+     │           ┌─┐           │
+     ▼      ┌──► │B│ ───┐      ▼
+    ┌─┐     │    └─┘    │     ┌─┐
+    │A│ ────┤           ├───► │D│
+    └─┘     │    ┌─┐    │     └─┘
+            └──► │C│ ───┘
+                 └─┘
 ```
 
 Unfortunately, expressing a path as a list of entities falls apart when looking at cases where a pair of entities has multiple links between them.
