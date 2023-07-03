@@ -31,8 +31,8 @@
         "type": "object",
         "properties": {
           "$ref": {
-            "type": "string",
-            "const": "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1"
+            "$comment": "The versioned URL of a entity type (the $id of the entity type's schema)",
+            "type": "string"
           }
         },
         "required": ["$ref"],

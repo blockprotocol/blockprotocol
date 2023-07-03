@@ -1,0 +1,6 @@
+{
+  "extends": "../.markdownlint.json",
+  "no-emphasis-as-header": false,
+  "single-h1": false,
+  "ol-prefix": false
+}

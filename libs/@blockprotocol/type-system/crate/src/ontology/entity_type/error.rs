@@ -29,3 +29,9 @@ pub enum ParseEntityTypeError {
     #[error("error in JSON: `{0}`")]
     InvalidJson(String),
 }
+
+#[derive(Debug, PartialEq, Eq, Error)]
+pub enum MergeEntityTypeError {
+    #[error("`{0}` is not contained in the `allOf` property of `{1}`")]
+    NotInAllOf(String, String),
+}

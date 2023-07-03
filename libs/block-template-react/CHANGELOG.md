@@ -1,5 +1,13 @@
 # block-template-react
 
+## 0.4.2
+
+### Patch Changes
+
+- Updated dependencies [[`5ac80409`](https://github.com/blockprotocol/blockprotocol/commit/5ac80409d97c37a83ffc31ab69860ad3f99d3319)]:
+  - mock-block-dock@0.1.6
+  - block-scripts@0.3.1
+
 ## 0.4.1
 
 ### Patch Changes

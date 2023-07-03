@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 0.0.9 =
+* Bump write key used for data reporting
+
 = 0.0.8 =
 * Improved onboarding experience
 * Attempt to re-run migrations where they previously failed, for older dbs now supported

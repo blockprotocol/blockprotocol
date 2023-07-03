@@ -3,8 +3,6 @@
 - **RFC PR:** [blockprotocol/blockprotocol#352](https://github.com/blockprotocol/blockprotocol/pull/352)
 - **RFC Discussion:** [blockprotocol/blockprotocol#418](https://github.com/blockprotocol/blockprotocol/discussions/418)
 
-<!-- markdownlint-disable  MD036 -->
-
 # Summary
 
 [summary]: #summary
@@ -112,16 +110,12 @@ In the following document we outline an approach to being more specific about th
 Given the motivation above and some other implications of the current design, this RFC attempts to:
 
 1.  make descriptions of data **discoverable**, **reusable**, and **composable**
-1.  remove the few instances where the specification currently misuses (modifies in a breaking way) JSON schema
+2.  remove the few instances where the specification currently misuses (modifies in a breaking way) JSON schema
 
 As well as addressing these existing shortcomings, this RFC seeks to:
 
-<!-- markdownlint-disable  MD029 -->
-
 3.  define a constrained type system that is able to describe any JSON object structure
 4.  refine the current way of defining links between entities, encapsulating the approach within the type system
-
-<!-- markdownlint-enable  MD029 -->
 
 ## Types
 
@@ -1852,7 +1846,7 @@ This would accept Entity instances with the following shape
 #### Specifying there is a List of Links
 
 The Entity Type can also express that it can have multiple outgoing links of the same type.
-Furthermore list of links can be constrainted with `minItems` and `maxItems`.
+Furthermore list of links can be constrained with `minItems` and `maxItems`.
 
 **Example 1**
 

@@ -1,5 +1,11 @@
 # mock-block-dock
 
+## 0.1.6
+
+### Patch Changes
+
+- [#1293](https://github.com/blockprotocol/blockprotocol/pull/1293) [`5ac80409`](https://github.com/blockprotocol/blockprotocol/commit/5ac80409d97c37a83ffc31ab69860ad3f99d3319) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add missing babel plugin dependencies
+
 ## 0.1.5
 
 ### Patch Changes
