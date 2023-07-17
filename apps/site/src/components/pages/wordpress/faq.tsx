@@ -8,7 +8,6 @@ import {
   AiImageIcon,
   AiTextIcon,
   ArrowUpRightIcon,
-  BlockProtocolIcon,
   DownloadIcon,
   OpenAiIcon,
 } from "../../icons";
@@ -37,6 +36,7 @@ export const FAQ = () => {
         <strong>MORE INFORMATION</strong>
       </Typography>
       <Typography
+        variant="bpHeading1"
         sx={{
           fontSize: "2.6rem",
           lineHeight: 1,
@@ -49,6 +49,7 @@ export const FAQ = () => {
         In case you’re wondering...
       </Typography>
       <Typography
+        variant="bpHeading1"
         sx={{
           fontSize: "2.6rem",
           lineHeight: 1,
@@ -78,9 +79,16 @@ export const FAQ = () => {
       >
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }}>
+            <Typography
+              sx={{ fontWeight: 700, display: "inline" }}
+              component="div"
+            >
               What is the{" "}
-              <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+              <Typography
+                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              >
+                Þ
+              </Typography>{" "}
               Block Protocol?
             </Typography>
           }
@@ -97,7 +105,11 @@ export const FAQ = () => {
               >
                 <strong>developers</strong> to build blocks once which work
                 across any{" "}
-                <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+                <Typography
+                  sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+                >
+                  Þ
+                </Typography>{" "}
                 compliant application
               </ListItem>
               <ListItem
@@ -130,9 +142,13 @@ export const FAQ = () => {
         </FaqItem>
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }}>
+            <Typography sx={{ fontWeight: 700 }} component="div">
               What is the{" "}
-              <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+              <Typography
+                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              >
+                Þ
+              </Typography>{" "}
               Block Protocol for WordPress plugin?
             </Typography>
           }
@@ -140,7 +156,11 @@ export const FAQ = () => {
           <Box>
             The plugin adds support for the Block Protocol to any WordPress
             instance, enabling it to embed{" "}
-            <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+            <Typography
+              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+            >
+              Þ
+            </Typography>{" "}
             blocks and utilize external services from providers such as OpenAI,
             and Mapbox. The plugin introduces an in-database “entity graph”
             which allows information created using blocks to be captured as
@@ -151,9 +171,13 @@ export const FAQ = () => {
         </FaqItem>
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }}>
+            <Typography sx={{ fontWeight: 700 }} component="div">
               What are some example{" "}
-              <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+              <Typography
+                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              >
+                Þ
+              </Typography>{" "}
               blocks?
             </Typography>
           }
@@ -161,9 +185,17 @@ export const FAQ = () => {
           <Box>
             Because they work in multiple environments, developers can invest in
             ensuring their{" "}
-            <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+            <Typography
+              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+            >
+              Þ
+            </Typography>{" "}
             blocks are absolute best-in-class. This means that{" "}
-            <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+            <Typography
+              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+            >
+              Þ
+            </Typography>{" "}
             blocks provide an unparalleled user experience when it comes to
             things like using AI within WordPress.
           </Box>
@@ -297,9 +329,13 @@ export const FAQ = () => {
         </FaqItem>
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }}>
+            <Typography sx={{ fontWeight: 700 }} component="div">
               How are{" "}
-              <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+              <Typography
+                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              >
+                Þ
+              </Typography>{" "}
               blocks inserted within WordPress?
             </Typography>
           }
@@ -307,7 +343,11 @@ export const FAQ = () => {
           <Box>
             Once the plugin has been activated and a (free to obtain) API key
             entered,{" "}
-            <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+            <Typography
+              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+            >
+              Þ
+            </Typography>{" "}
             blocks simply appear within the normal block insertion menu in
             Gutenberg. New blocks also appear without needing to update the
             plugin.
@@ -315,16 +355,24 @@ export const FAQ = () => {
         </FaqItem>
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }}>
+            <Typography sx={{ fontWeight: 700 }} component="div">
               Are there security considerations around using{" "}
-              <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+              <Typography
+                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              >
+                Þ
+              </Typography>{" "}
               blocks?
             </Typography>
           }
         >
           <Box>
             Unlike normal Gutenberg blocks, adding new{" "}
-            <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+            <Typography
+              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+            >
+              Þ
+            </Typography>{" "}
             blocks doesn't require installing more plugins and doesn't require
             introducing any external PHP code. As a result, we believe it is
             generally safer to add new blocks in WordPress through the Block
@@ -332,15 +380,23 @@ export const FAQ = () => {
             Protocol is an open standard, anybody may develop a block, and any
             block may execute code in-browser. Because of this, by default we
             restrict blocks available via the plugin to ones on the{" "}
-            <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} /> Hub
-            which we have reviewed.
+            <Typography
+              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+            >
+              Þ
+            </Typography>{" "}
+            Hub which we have reviewed.
           </Box>
         </FaqItem>
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }}>
+            <Typography sx={{ fontWeight: 700 }} component="div">
               Should I install the{" "}
-              <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+              <Typography
+                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              >
+                Þ
+              </Typography>{" "}
               plugin?
             </Typography>
           }
@@ -348,7 +404,11 @@ export const FAQ = () => {
         >
           <Box>
             Should I install the{" "}
-            <BlockProtocolIcon gradient sx={{ scale: "0.6 !important" }} />{" "}
+            <Typography
+              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+            >
+              Þ
+            </Typography>{" "}
             plugin? Absolutely. It’s free, and gives your existing WordPress
             website new superpowers. If you get stuck or have any questions,
             feel free to{" "}
@@ -370,7 +430,9 @@ export const FAQ = () => {
           }}
         >
           <CustomButton
-            onClick={() => {}}
+            onClick={() => {
+              window.open("https://wordpress.com/plugins/blockprotocol/");
+            }}
             sx={{
               fontSize: 15,
               color: ({ palette }) => palette.bpGray[20],
@@ -385,6 +447,9 @@ export const FAQ = () => {
           <CustomButton
             variant="secondary"
             endIcon={<DownloadIcon fill="6048E5" />}
+            onClick={() => {
+              window.open("https://wordpress.org/plugins/blockprotocol/");
+            }}
           >
             Download ZIP for self-hosted Wordpress
           </CustomButton>

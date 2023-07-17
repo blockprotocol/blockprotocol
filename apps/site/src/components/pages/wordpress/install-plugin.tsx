@@ -3,7 +3,7 @@ import { Box, Grid, Link, Typography } from "@mui/material";
 import { FadeInOnViewport } from "../../fade-in-on-viewport";
 import {
   ArrowUpRightIcon,
-  DiscordIcon,
+  DiscordNewIcon,
   DownloadIcon,
   InfoCircleIcon,
   ServerIcon,
@@ -120,16 +120,13 @@ export const InstallPlugin = () => {
           width: "calc(100% - 2rem)",
           maxWidth: "1200px",
           background:
-            "linear-gradient(181.4deg, rgba(255, 255, 255, 0.65) 50%, #FDFCFE 94.38%)",
-          border: "2px solid white",
+            "linear-gradient(181.4deg, rgba(255, 255, 255, 0.65) 50%, rgba(166, 142, 187, 0.15) 94.38%)",
+          border: "2px solid #FFFFFF",
           borderBottomLeftRadius: "8px",
           borderBottomRightRadius: "8px",
           boxShadow:
             "0px 2.8px 2.2px rgba(166, 142, 187, 0.15), 0px 6.7px 5.3px rgba(166, 142, 187, 0.08), 0px 12.5px 10px rgba(166, 142, 187, 0.05), 0px 22.3px 17.9px rgba(166, 142, 187, 0.09), 0px 41.8px 33.4px rgba(166, 142, 187, 0.1), 0px 100px 80px rgba(166, 142, 187, 0.1)",
-          pt: { xs: 3, lg: 8.25 },
-          pl: { xs: "15px", lg: "77px" },
-          pr: { xs: "16px", lg: "83px" },
-          pb: { xs: 2.5, lg: 3 },
+          pt: { xs: 2.5, lg: 3 },
           position: "relative",
           zIndex: 1,
           margin: "auto",
@@ -143,19 +140,17 @@ export const InstallPlugin = () => {
           sx={({ breakpoints }) => ({
             width: "100% !important",
             pt: 0,
-            pb: 9,
-            margin: "1rem",
+            pb: 8,
+            rowGap: 3,
             [breakpoints.down("lg")]: {
-              maxWidth: 500,
+              maxWidth: 400,
             },
           })}
-          rowSpacing={{ xs: 3, lg: 5.5 }}
-          columnSpacing={{ xs: 0, lg: 5.5 }}
         >
           <IconSection
             xs={12}
             lg={6}
-            maxWidth={380}
+            maxWidth={277}
             color="#3373BE"
             icon={
               <WordPressIcon
@@ -171,12 +166,20 @@ export const InstallPlugin = () => {
             action={
               <CustomButton
                 variant="primary"
-                size="medium"
+                size="small"
                 sx={{
                   backgroundColor: "#3373BE",
                   fontSize: "14px",
-                  width: "250px",
+                  maxWidth: "240px",
+                  padding: "8px, 18px, 8px, 18px",
+                  height: "40px",
+                  display: "flex",
+                  gap: "8px",
                   alignContent: "start",
+                  color: "#FFFFFF",
+                }}
+                onClick={() => {
+                  window.open("https://wordpress.com/plugins/blockprotocol/");
                 }}
                 endIcon={<ArrowUpRightIcon />}
               >
@@ -188,8 +191,9 @@ export const InstallPlugin = () => {
           <IconSection
             xs={12}
             lg={6}
-            maxWidth={380}
+            maxWidth={377}
             color="#3373BE"
+            sx={{ ml: { lg: -8 } }}
             icon={<ServerIcon sx={{ fontSize: 32, mb: 1.5 }} />}
             title="self-hosted WordPress"
             description={
@@ -201,12 +205,20 @@ export const InstallPlugin = () => {
             action={
               <CustomButton
                 variant="primary"
-                size="medium"
+                size="small"
                 sx={{
                   backgroundColor: "#2C81E4",
                   fontSize: "14px",
-                  width: "230px",
+                  maxWidth: "210px",
+                  padding: "8px, 18px, 8px, 18px",
+                  height: "40px",
+                  display: "flex",
+                  gap: "8px",
                   alignContent: "start",
+                  color: "#FFFFFF",
+                }}
+                onClick={() => {
+                  window.open("https://wordpress.org/plugins/blockprotocol/");
                 }}
                 endIcon={<DownloadIcon />}
               >
@@ -222,6 +234,14 @@ export const InstallPlugin = () => {
             flexDirection: "column",
             alignItems: "start",
             alignSelf: "start",
+
+            pl: { xs: "15px", lg: "77px" },
+            pt: { xs: 2.5, lg: 3 },
+            pb: { xs: 2.5, lg: 3 },
+            width: "100%",
+            borderTop: "2px solid #FFFFFF",
+            background:
+              "linear-gradient(180deg, rgba(166, 142, 187, 0.05) 50%, rgba(253, 252, 254, 0.66) 94.38%),linear-gradient(0deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.66))",
           }}
         >
           <Box
@@ -231,7 +251,9 @@ export const InstallPlugin = () => {
               my: 1,
             }}
           >
-            <InfoCircleIcon sx={{ mr: 2, fill: "#48B3F4", color: "#48B3F4" }} />{" "}
+            <InfoCircleIcon
+              sx={{ fill: "#48B3F4", color: "#48B3F4", width: "18px" }}
+            />{" "}
             Once you’ve installed the plugin,{" "}
             <Link href="">get a free API key</Link> to connect your website to
             the Block Protocol
@@ -244,8 +266,8 @@ export const InstallPlugin = () => {
               mt: 1,
             }}
           >
-            <DiscordIcon
-              sx={{ color: ({ palette }) => palette.purple[50], mr: 2 }}
+            <DiscordNewIcon
+              sx={{ color: ({ palette }) => palette.purple[50], width: "18px" }}
             />{" "}
             If you get stuck, feel free to reach out on our{" "}
             <Link href="/">community Discord server</Link> or drop us a{" "}

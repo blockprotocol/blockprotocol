@@ -1,8 +1,9 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Stream } from "@cloudflare/stream-react";
+import { Box, Container, Grid, Skeleton, Typography } from "@mui/material";
+import { useState } from "react";
 
 import {
   ArrowUpRightIcon,
-  BlockProtocolIcon,
   GlobeIcon,
   MagicIcon,
   RightPointerIcon,
@@ -12,6 +13,8 @@ import { CustomLinkButton } from "./custom-link-button";
 import { DetailsSection } from "./details-section";
 
 export const Details = () => {
+  const [loading, setLoading] = useState(true);
+
   return (
     <Box
       sx={{
@@ -54,6 +57,8 @@ export const Details = () => {
                 fontSize: "2.6rem",
                 color: ({ palette }) => palette.purple[700],
                 fontStyle: "italic",
+                fontFamily: "colfax-web, sans-serif",
+                fontWeight: 700,
               }}
             >
               AI Blocks
@@ -64,21 +69,21 @@ export const Details = () => {
                 mt: "20px",
               }}
             >
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <RightPointerIcon />
                 <Typography>
                   The best <strong>AI text</strong> generation, style, tone,
                   grammar and editing blocks for WordPress
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <RightPointerIcon />
                 <Typography>
                   Powerful <strong>AI image generation</strong> blocks let you
                   illustrate posts in seconds
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <RightPointerIcon />
                 <Typography>
                   Advanced <strong>AI image editing</strong> blocks let you
@@ -86,7 +91,7 @@ export const Details = () => {
                   backgrounds of product photos in WooCommerce
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <RightPointerIcon />
                 <Typography component="div">
                   Best-in-class <strong>AI chat</strong> block lets you persist
@@ -94,13 +99,13 @@ export const Details = () => {
                   prior conversations, set the AI’s response style and more
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <RightPointerIcon />
                 <Typography>
                   Switch between AI models and providers at will
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <RightPointerIcon />
                 <Typography component="div">
                   <strong>
@@ -151,13 +156,30 @@ export const Details = () => {
               alignSelf: "center",
               justifySelf: "center",
             }}
-            component="img"
-            src="/assets/wp_bp_ai_cover.png"
-          />
+          >
+            {loading ? (
+              <Box height="400px">
+                <Skeleton
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    transform: "unset",
+                  }}
+                />
+              </Box>
+            ) : null}
+            <Stream
+              controls
+              src="17a35fcc1fb28ce771c1d3917cd51c21"
+              onCanPlay={() => setLoading(false)}
+              primaryColor="#7963F5"
+              letterboxColor="transparent"
+            />
+          </Grid>
           <Grid
             item
             xs={12}
-            lg={6}
+            lg={6.5}
             sx={{
               alignSelf: "center",
               justifySelf: "left",
@@ -165,7 +187,7 @@ export const Details = () => {
             component="img"
             src="/assets/wp_bp_seo_cover.png"
           />
-          <DetailsSection xs={12} lg={6}>
+          <DetailsSection xs={12} lg={5.5}>
             <Typography variant="bpTitle" sx={{ fontSize: "1rem" }}>
               <strong>LEVEL UP YOUR SEO</strong>
             </Typography>
@@ -222,7 +244,7 @@ export const Details = () => {
                 mt: "20px",
               }}
             >
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <RightPointerIcon />
                 <Typography component="div">
                   <strong>
@@ -240,34 +262,7 @@ export const Details = () => {
                   by links
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
-                <ArrowUpRightIcon
-                  sx={{
-                    scale: "0.7 !important",
-                    color: ({ palette }) => palette.purple[600],
-                  }}
-                />
-                <Typography component="div">
-                  <strong>
-                    <Typography
-                      sx={{
-                        color: ({ palette }) => palette.purple[600],
-                        fontWeight: "700px",
-                      }}
-                    >
-                      <strong>COMING SOON</strong>
-                    </Typography>
-                    Improve your search rankings
-                  </strong>{" "}
-                  by leveraging structured data (SEO) blocks that take context
-                  from their surroundings and dynamically generating whole-page
-                  JSON-LD based on related information{" "}
-                  <Typography sx={{ color: ({ palette }) => palette.gray[60] }}>
-                    (e.g. offers in WooCommerce, or tickets for an event)
-                  </Typography>
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <ArrowUpRightIcon
                   sx={{
                     scale: "0.7 !important",
@@ -280,6 +275,35 @@ export const Details = () => {
                       sx={{
                         color: ({ palette }) => palette.purple[600],
                         fontWeight: "700",
+                        fontSize: "12px",
+                      }}
+                    >
+                      COMING SOON
+                    </Typography>
+                    Improve your search rankings
+                  </strong>{" "}
+                  by leveraging structured data (SEO) blocks that take context
+                  from their surroundings and dynamically generating whole-page
+                  JSON-LD based on related information{" "}
+                  <Typography sx={{ color: ({ palette }) => palette.gray[60] }}>
+                    (e.g. offers in WooCommerce, or tickets for an event)
+                  </Typography>
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
+                <ArrowUpRightIcon
+                  sx={{
+                    scale: "0.7 !important",
+                    color: ({ palette }) => palette.purple[600],
+                  }}
+                />
+                <Typography component="div">
+                  <strong>
+                    <Typography
+                      sx={{
+                        color: ({ palette }) => palette.purple[600],
+                        fontWeight: "700",
+                        fontSize: "12px",
                       }}
                     >
                       PLANNED
@@ -315,7 +339,7 @@ export const Details = () => {
               </CustomLinkButton>
             </Box>
           </DetailsSection>
-          <DetailsSection xs={12} lg={6}>
+          <DetailsSection xs={12} lg={5.5} sx={{ marginTop: { xs: "40px" } }}>
             <Typography variant="bpTitle" sx={{ fontSize: "1rem" }}>
               <strong>SUPERCHARGE YOUR WEBSITE</strong>
             </Typography>
@@ -342,7 +366,7 @@ export const Details = () => {
                 mt: "20px",
               }}
             >
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <RightPointerIcon />
                 <Typography>
                   Access OpenAI, Mapbox, and other powerful APIs{" "}
@@ -351,7 +375,7 @@ export const Details = () => {
                   </strong>
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <RightPointerIcon />
                 <Typography>
                   <strong>Everything is handled by the Block Protocol.</strong>{" "}
@@ -359,14 +383,14 @@ export const Details = () => {
                   account with any other service provider.
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <RightPointerIcon />
                 <Typography>
                   Generous free allowances with all providers let you try out
                   blocks and use them in WordPress
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
+              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
                 <ArrowUpRightIcon
                   sx={{
                     scale: "0.7 !important",
@@ -379,6 +403,7 @@ export const Details = () => {
                       sx={{
                         color: ({ palette }) => palette.purple[600],
                         fontWeight: 700,
+                        fontSize: "12px",
                       }}
                     >
                       COMING SOON
@@ -418,7 +443,7 @@ export const Details = () => {
           <Grid
             item
             xs={12}
-            lg={6}
+            lg={6.5}
             sx={{
               alignSelf: "center",
               justifySelf: "right",
@@ -426,103 +451,122 @@ export const Details = () => {
             component="img"
             src="/assets/wp_bp_api_cover.png"
           />
-          <Grid
-            item
-            xs={12}
-            lg={6}
-            sx={{
-              alignSelf: "center",
-              justifySelf: "left",
-            }}
-            component="img"
-            src="/assets/wp_bp_blocks_cover.png"
-          />
-          <DetailsSection xs={12} lg={6}>
-            <Typography variant="bpTitle" sx={{ fontSize: "1rem" }}>
-              <strong>TONS MORE BENEFITS</strong>
-            </Typography>
-            <Typography
-              variant="bpTitle"
-              sx={{ fontSize: "2.6rem", fontStyle: "italic" }}
-              component="div"
+          <Grid container sx={{ marginTop: { xs: "40px", lg: "100px" } }}>
+            <Grid
+              item
+              xs={12}
+              lg={6.5}
+              sx={{
+                scale: "1.4",
+                marginTop: "120px",
+                marginLeft: "-150px",
+                marginBottom: "-150px",
+                order: { xs: 2, lg: 1 },
+              }}
+              component="img"
+              src="/assets/wp_bp_blocks_cover.png"
+            />
+            <DetailsSection
+              xs={12}
+              lg={5.5}
+              sx={{
+                marginLeft: { xs: "50px", lg: "150px" },
+                order: { xs: 1, lg: 2 },
+              }}
             >
+              <Typography variant="bpTitle" sx={{ fontSize: "1rem" }}>
+                <strong>TONS MORE BENEFITS</strong>
+              </Typography>
               <Typography
                 variant="bpTitle"
+                sx={{ fontSize: "2.6rem", fontStyle: "italic" }}
+                component="div"
+              >
+                <Typography
+                  variant="bpTitle"
+                  sx={{
+                    color: ({ palette }) => palette.purple[700],
+                    fontSize: "2.6rem",
+                    fontStyle: "italic",
+                  }}
+                >
+                  Instant access to
+                </Typography>
+                infinite blocks
+              </Typography>
+              <Box
                 sx={{
-                  color: ({ palette }) => palette.purple[700],
-                  fontSize: "2.6rem",
-                  fontStyle: "italic",
+                  fontSize: "1rem",
+                  mt: "20px",
                 }}
               >
-                Instant access to
-              </Typography>
-              infinite blocks
-            </Typography>
-            <Box
-              sx={{
-                fontSize: "1rem",
-                mt: "20px",
-              }}
-            >
-              <Box sx={{ display: "flex", mb: "12px" }}>
-                <RightPointerIcon />
-                <Typography>
-                  <strong>
-                    Discover and insert new blocks at the point of need
-                  </strong>{" "}
-                  from the normal block insertion menu built into WordPress
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
-                <RightPointerIcon />
-                <Typography component="div">
-                  <strong>
-                    New blocks are instantly available within WordPress
-                  </strong>{" "}
-                  without having to update the plugin, or install additional
-                  plugins{" "}
-                  <Typography sx={{ color: ({ palette }) => palette.gray[60] }}>
-                    (as is required for Gutenberg blocks)
+                <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
+                  <RightPointerIcon />
+                  <Typography>
+                    <strong>
+                      Discover and insert new blocks at the point of need
+                    </strong>{" "}
+                    from the normal block insertion menu built into WordPress
                   </Typography>
-                </Typography>
+                </Box>
+                <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
+                  <RightPointerIcon />
+                  <Typography component="div">
+                    <strong>
+                      New blocks are instantly available within WordPress
+                    </strong>{" "}
+                    without having to update the plugin, or install additional
+                    plugins{" "}
+                    <Typography
+                      sx={{ color: ({ palette }) => palette.gray[60] }}
+                    >
+                      (as is required for Gutenberg blocks)
+                    </Typography>
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
+                  <RightPointerIcon />
+                  <Typography>
+                    The Block Protocol is an open-source ecosystem of blocks
+                    that anybody can contribute to
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
+                  <RightPointerIcon />
+                  <Typography component="div">
+                    <strong>
+                      You can use Block Protocol blocks in any{" "}
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          display: "inline",
+                          color: "#7556DC",
+                        }}
+                      >
+                        Þ
+                      </Typography>
+                      -enabled environment,
+                    </strong>{" "}
+                    not just WordPress
+                  </Typography>
+                </Box>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
-                <RightPointerIcon />
-                <Typography>
-                  The Block Protocol is an open-source ecosystem of blocks that
-                  anybody can contribute to
-                </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: {
+                    xs: "column",
+                    md: "row",
+                  },
+                  mt: "8px",
+                }}
+              >
+                <CustomLinkButton href="/" isPrimary variant="primary">
+                  Get the plugin for free
+                </CustomLinkButton>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px" }}>
-                <RightPointerIcon />
-                <Typography>
-                  <strong>
-                    You can use Block Protocol blocks in any{" "}
-                    <BlockProtocolIcon
-                      gradient
-                      sx={{ scale: "0.6 !important" }}
-                    />
-                    -enabled environment,
-                  </strong>{" "}
-                  not just WordPress
-                </Typography>
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: {
-                  xs: "column",
-                  md: "row",
-                },
-                mt: "8px",
-              }}
-            >
-              <CustomLinkButton href="/" isPrimary variant="primary">
-                Get the plugin for free
-              </CustomLinkButton>
-            </Box>
-          </DetailsSection>
+            </DetailsSection>
+          </Grid>
         </Grid>
       </Container>
     </Box>

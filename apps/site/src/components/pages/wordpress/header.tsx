@@ -6,14 +6,6 @@ import { CustomButton } from "./custom-button";
 export const Header = () => {
   const theme = useTheme();
 
-  const onInstallWordPress = () => {
-    // TODO
-  };
-
-  const onDownload = () => {
-    // TODO
-  };
-
   return (
     <Box
       sx={{
@@ -101,7 +93,9 @@ export const Header = () => {
             }}
           >
             <CustomButton
-              onClick={onInstallWordPress}
+              onClick={() => {
+                window.open("https://wordpress.com/plugins/blockprotocol/");
+              }}
               sx={{
                 fontSize: 15,
                 color: theme.palette.bpGray[20],
@@ -112,7 +106,9 @@ export const Header = () => {
               Install on WordPress.com
             </CustomButton>
             <CustomButton
-              onClick={onDownload}
+              onClick={() => {
+                window.open("https://wordpress.org/plugins/blockprotocol/");
+              }}
               sx={{
                 fontSize: 15,
                 color: "#3A2084",
