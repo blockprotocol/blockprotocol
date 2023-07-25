@@ -51,7 +51,9 @@ export const FaqItem: FunctionComponent<FaqItemProps> = ({
         onClick={handleExpandClick}
       >
         <Box sx={{ display: "flex", mr: "14px" }}>
-          <RightPointerIcon />
+          <Box sx={{ mt: { xs: "-2px", md: "-1px" }, pr: "6px" }}>
+            <RightPointerIcon />
+          </Box>
           <Typography component="div">
             <strong>{title}</strong>
           </Typography>

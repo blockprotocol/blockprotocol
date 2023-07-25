@@ -46,15 +46,17 @@ export const IconSection: FunctionComponent<GridProps & IconSectionProps> = ({
             flexDirection: "column",
             color,
             maxWidth: "447px",
+            padding: {
+              xs: "2rem",
+            },
           }}
         >
-          <Box sx={{ mb: "24px" }}>{icon}</Box>
+          <Box sx={{ mb: "1rem" }}>{icon}</Box>
           <Typography
             sx={{ color, mb: 1 }}
             variant="bpLargeText"
             fontWeight={400}
             fontSize="26px"
-            width="447px"
             component="div"
           >
             for <strong> {title} </strong>

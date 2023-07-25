@@ -191,12 +191,13 @@ export const Details = () => {
             <Typography variant="bpTitle" sx={{ fontSize: "1rem" }}>
               <strong>LEVEL UP YOUR SEO</strong>
             </Typography>
+
             <Typography
               variant="bpTitle"
               sx={{ fontSize: "2.6rem", fontStyle: "italic", fontWeight: 700 }}
               component="div"
             >
-              <Typography
+              <Box
                 component="span"
                 sx={{
                   background:
@@ -206,12 +207,11 @@ export const Details = () => {
                   fontSize: "2.6rem",
                   fontStyle: "italic",
                   fontWeight: 700,
-                  pr: "0.3rem",
                 }}
               >
                 Super
-              </Typography>
-              <Typography
+              </Box>
+              <Box
                 component="span"
                 sx={{
                   background:
@@ -224,8 +224,8 @@ export const Details = () => {
                 }}
               >
                 -
-              </Typography>
-              <Typography
+              </Box>
+              <Box
                 component="span"
                 sx={{
                   color: ({ palette }) => palette.purple[700],
@@ -235,8 +235,8 @@ export const Details = () => {
                 }}
               >
                 structured data
-              </Typography>
-              {" comes to WordPress"}
+              </Box>
+              <span>{" comes to WordPress"}</span>
             </Typography>
             <Box
               sx={{
@@ -266,7 +266,7 @@ export const Details = () => {
                 <ArrowUpRightIcon
                   sx={{
                     scale: "0.7 !important",
-                    color: ({ palette }) => palette.purple[600],
+                    mt: "-3px",
                   }}
                 />
                 <Typography component="div">
@@ -294,7 +294,7 @@ export const Details = () => {
                 <ArrowUpRightIcon
                   sx={{
                     scale: "0.7 !important",
-                    color: ({ palette }) => palette.purple[600],
+                    mt: "-3px",
                   }}
                 />
                 <Typography component="div">
@@ -348,17 +348,18 @@ export const Details = () => {
               sx={{ fontSize: "2.6rem", fontStyle: "italic" }}
               component="div"
             >
-              <Typography
+              <Box
                 sx={{
                   color: ({ palette }) => palette.purple[700],
                   fontSize: "2.6rem",
                   fontStyle: "italic",
                   fontWeight: 500,
                 }}
+                component="span"
               >
-                <strong>Powerful API services</strong>
-              </Typography>
-              without the fuss
+                <strong>{"Powerful API services "}</strong>
+              </Box>
+              <span>without the fuss</span>
             </Typography>
             <Box
               sx={{
@@ -394,7 +395,7 @@ export const Details = () => {
                 <ArrowUpRightIcon
                   sx={{
                     scale: "0.7 !important",
-                    color: ({ palette }) => palette.purple[600],
+                    mt: "-3px",
                   }}
                 />
                 <Typography component="div">
@@ -470,7 +471,8 @@ export const Details = () => {
               xs={12}
               lg={5.5}
               sx={{
-                marginLeft: { xs: "50px", lg: "150px" },
+                paddingLeft: { lg: "60px" },
+                marginLeft: { lg: "150px" },
                 order: { xs: 1, lg: 2 },
               }}
             >
@@ -482,8 +484,8 @@ export const Details = () => {
                 sx={{ fontSize: "2.6rem", fontStyle: "italic" }}
                 component="div"
               >
-                <Typography
-                  variant="bpTitle"
+                <Box
+                  component="span"
                   sx={{
                     color: ({ palette }) => palette.purple[700],
                     fontSize: "2.6rem",
@@ -491,8 +493,8 @@ export const Details = () => {
                   }}
                 >
                   Instant access to
-                </Typography>
-                infinite blocks
+                </Box>
+                <span>{" infinite blocks"}</span>
               </Typography>
               <Box
                 sx={{

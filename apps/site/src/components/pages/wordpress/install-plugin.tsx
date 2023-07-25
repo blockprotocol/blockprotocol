@@ -139,7 +139,6 @@ export const InstallPlugin = () => {
           container
           sx={({ breakpoints }) => ({
             width: "100% !important",
-            pt: 0,
             pb: 8,
             rowGap: 3,
             [breakpoints.down("lg")]: {
@@ -148,9 +147,9 @@ export const InstallPlugin = () => {
           })}
         >
           <IconSection
+            item
             xs={12}
             lg={6}
-            maxWidth={277}
             color="#3373BE"
             icon={
               <WordPressIcon
@@ -193,7 +192,6 @@ export const InstallPlugin = () => {
             lg={6}
             maxWidth={377}
             color="#3373BE"
-            sx={{ ml: { lg: -8 } }}
             icon={<ServerIcon sx={{ fontSize: 32, mb: 1.5 }} />}
             title="self-hosted WordPress"
             description={
