@@ -236,7 +236,10 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
               setSelectedAnchorElement(ref);
             }
           }}
-          scroll={!asPath?.startsWith("/docs") && !asPath?.startsWith("/spec")}
+          scroll={
+            (!asPath?.startsWith("/docs") && !asPath?.startsWith("/spec")) ||
+            !asPath?.startsWith("/roadmap")
+          }
           href={href}
           sx={(theme) => ({
             alignSelf: "flex-start",
