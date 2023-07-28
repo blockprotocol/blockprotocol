@@ -20,6 +20,7 @@ Our aim is to develop a new standard for building frontend components, or "block
 - **Version 0.3:** in February 2023, [we released](https://hash.dev/blog/block-protocol-0-3-wordpress) the biggest update to the Block Protocol yet, overhauling the _graph module_, and introducing the new _type system_.
 - **Service Module:** that month we also introduced "zero-knowledge support" for external services and integrations in blocks. This provided blocks with the ability to communicate with external APIs and services, including those which require API keys, without embedding applications having to specifically support (or even be aware of) those services. This allowed users to access external APIs from services like OpenAI and Mapbox within blocks, without needing to sign up for their own accounts, manage billing separately from the apps they already use, or worry about API keys.
 - **WordPress support:** additionally in February 2023, we launched the _Block Protocol for WordPress_ integration for [Wordpress.com](https://wordpress.com/plugins/blockprotocol) and [self-hosted WordPress](https://wordpress.org/plugins/blockprotocol) users. This made the Block Protocol accessible to all users of the world's most widely used content management system (CMS).
+- **HASH launch:** our core team are currently focused on readying the open-source [HASH](https://hash.ai/) application for production. HASH is the most advanced and complete implementation of the Block Protocol today.
 
 ## Proposed Changes
 
@@ -113,7 +114,7 @@ The most detailed version of this would be for blocks to be able to:
 
 ##### Entity type extension and duplication
 
-Currently, if a user wants to add additional information to an existing entity type, their only option is to make a brand new one and manually copy the structure. We'd like to add support for users to be able to "extend" types in a way that doesn't break existing entity types and allows for reusability across embedding applications and blocks. To allow for situations where a user wants to customize an entity type in a way that a non-compatible fashion, we want a mechanism to "duplicate" or "fork" an existing entity type. For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/428).
+Currently, if a user wants to add additional information to an existing entity type, their only option is to make a brand new one and manually copy the structure. We'd like to add support for users to be able to "extend" types in a way that doesn't break existing entity types and allows for reusability across embedding applications and blocks. To allow for situations where a user wants to customize an entity type in a way that a non-compatible fashion, we want a mechanism to "duplicate" or "fork" an existing entity type. For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0428-extending-and-duplicating-types.md).
 
 ##### Non-primitive data types
 
