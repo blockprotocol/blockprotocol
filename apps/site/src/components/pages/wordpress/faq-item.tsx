@@ -52,10 +52,12 @@ export const FaqItem: FunctionComponent<FaqItemProps> = ({
       >
         <Box sx={{ display: "flex", mr: "14px" }}>
           <Box sx={{ mt: { xs: "-2px", md: "-1px" }, pr: "6px" }}>
-            <RightPointerIcon />
+            <Box sx={{ ml: "-4px" }}>
+              <RightPointerIcon />
+            </Box>
           </Box>
-          <Typography component="div">
-            <strong>{title}</strong>
+          <Typography component="div" fontWeight={600}>
+            {title}
           </Typography>
         </Box>
         <ExpandMore
@@ -68,7 +70,15 @@ export const FaqItem: FunctionComponent<FaqItemProps> = ({
         </ExpandMore>
       </Box>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <Box sx={{ pl: "30px" }}>{children}</Box>
+        <Box
+          sx={{
+            px: "30px",
+            pb: "1rem",
+            color: ({ palette }) => palette.bpGray[80],
+          }}
+        >
+          {children}
+        </Box>
       </Collapse>
     </Box>
   );

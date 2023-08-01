@@ -1,6 +1,3 @@
-export * from "./ai-chat-icon";
-export * from "./ai-image-icon";
-export * from "./ai-text-icon";
 export * from "./airplane-icon";
 export * from "./api-key-generated-icon";
 export * from "./arrow-left-icon";

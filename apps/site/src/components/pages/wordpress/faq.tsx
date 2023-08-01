@@ -2,16 +2,10 @@ import { Box, Grid, Link, List, ListItem, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import Image from "next/image";
 
-import {
-  AiChatIcon,
-  AiImageIcon,
-  AiTextIcon,
-  ArrowUpRightIcon,
-  DownloadIcon,
-  OpenAiIcon,
-} from "../../icons";
-import { CustomButton } from "./custom-button";
+import { ArrowUpRightIcon, DownloadIcon, OpenAiIcon } from "../../icons";
+import { LinkButton } from "../../link-button";
 import { FaqItem } from "./faq-item";
 
 export const FAQ = () => {
@@ -25,15 +19,17 @@ export const FAQ = () => {
       }}
     >
       <Typography
+        variant="bpHeading5"
         sx={{
-          fontSize: "1rem",
+          fontSize: "14px",
           lineHeight: 1,
           fontWeight: 500,
+          letterSpacing: ".06rem",
           mb: 1,
           color: ({ palette }) => palette.black,
         }}
       >
-        <strong>MORE INFORMATION</strong>
+        MORE INFORMATION
       </Typography>
       <Typography
         variant="bpHeading1"
@@ -54,9 +50,9 @@ export const FAQ = () => {
           fontSize: "2.6rem",
           lineHeight: 1,
           fontWeight: 700,
-          mb: 1,
+          mb: 4,
           fontStyle: "italic",
-          color: "#0E1114",
+          color: ({ palette }) => palette.black,
         }}
       >
         Frequently Asked Questions
@@ -79,18 +75,19 @@ export const FAQ = () => {
       >
         <FaqItem
           title={
-            <Typography
-              sx={{ fontWeight: 700, display: "inline" }}
-              component="div"
-            >
+            <div>
               What is the{" "}
               <Typography
-                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+                sx={{
+                  fontWeight: 600,
+                  color: ({ palette }) => palette.purple[70],
+                }}
+                component="span"
               >
                 Þ
               </Typography>{" "}
               Block Protocol?
-            </Typography>
+            </div>
           }
         >
           <Box sx={{ width: "100%" }}>
@@ -106,7 +103,11 @@ export const FAQ = () => {
                 <strong>developers</strong> to build blocks once which work
                 across any{" "}
                 <Typography
-                  sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+                  sx={{
+                    fontWeight: 600,
+                    color: ({ palette }) => palette.purple[70],
+                  }}
+                  component="span"
                 >
                   Þ
                 </Typography>{" "}
@@ -142,22 +143,30 @@ export const FAQ = () => {
         </FaqItem>
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }} component="div">
+            <div>
               What is the{" "}
               <Typography
-                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+                sx={{
+                  fontWeight: 600,
+                  color: ({ palette }) => palette.purple[70],
+                }}
+                component="span"
               >
                 Þ
               </Typography>{" "}
               Block Protocol for WordPress plugin?
-            </Typography>
+            </div>
           }
         >
           <Box>
             The plugin adds support for the Block Protocol to any WordPress
             instance, enabling it to embed{" "}
             <Typography
-              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              sx={{
+                fontWeight: 600,
+                color: ({ palette }) => palette.purple[70],
+              }}
+              component="span"
             >
               Þ
             </Typography>{" "}
@@ -171,42 +180,76 @@ export const FAQ = () => {
         </FaqItem>
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }} component="div">
+            <div>
               What are some example{" "}
               <Typography
-                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+                sx={{
+                  fontWeight: 600,
+                  color: ({ palette }) => palette.purple[70],
+                }}
+                component="span"
               >
                 Þ
               </Typography>{" "}
               blocks?
-            </Typography>
+            </div>
           }
         >
           <Box>
             Because they work in multiple environments, developers can invest in
             ensuring their{" "}
             <Typography
-              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              sx={{
+                fontWeight: 600,
+                color: ({ palette }) => palette.purple[70],
+              }}
+              component="span"
             >
               Þ
             </Typography>{" "}
             blocks are absolute best-in-class. This means that{" "}
             <Typography
-              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              sx={{
+                fontWeight: 700,
+                color: ({ palette }) => palette.purple[70],
+              }}
+              component="span"
             >
               Þ
             </Typography>{" "}
             blocks provide an unparalleled user experience when it comes to
             things like using AI within WordPress.
           </Box>
-          <Box sx={{ display: "flex" }}>
-            <Typography sx={{ color: ({ palette }) => palette.gray[70] }}>
-              AI blocks
+          <Box
+            sx={{
+              display: "flex",
+              mt: "1rem",
+              mb: "1rem",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="bpTitle"
+              sx={{
+                color: ({ palette }) => palette.gray[70],
+                fontWeight: 700,
+                fontSize: "14px",
+              }}
+              component="span"
+            >
+              AI BLOCKS
             </Typography>
             <Typography
-              sx={{ color: ({ palette }) => palette.bpGray[50], px: "5px" }}
+              variant="bpTitle"
+              sx={{
+                color: ({ palette }) => palette.bpGray[50],
+                fontWeight: 400,
+                px: "5px",
+                fontSize: "14px",
+              }}
+              component="span"
             >
-              powered by
+              POWERED BY
             </Typography>
             <OpenAiIcon sx={{ width: "83px", height: "20px" }} />
           </Box>
@@ -225,15 +268,23 @@ export const FAQ = () => {
                 <CardContent>
                   <Typography
                     gutterBottom
+                    fontWeight={600}
                     sx={{
                       color: ({ palette }) => palette.bpGray[80],
                       fontSize: "18px",
                       display: "flex",
                       alignItems: "center",
+                      gap: 1.5,
                     }}
                     component="div"
                   >
-                    <AiTextIcon /> <strong>AI Text</strong>
+                    <Image
+                      src="https://blockprotocol.hashai.workers.dev/blocks/hash/ai-text/public/ai-text.svg"
+                      alt="ai-text"
+                      width={24}
+                      height={24}
+                    />
+                    AI Text
                   </Typography>
                   <Typography
                     sx={{
@@ -261,15 +312,23 @@ export const FAQ = () => {
                 <CardContent>
                   <Typography
                     gutterBottom
+                    fontWeight={600}
                     sx={{
                       color: ({ palette }) => palette.bpGray[80],
                       fontSize: "18px",
                       display: "flex",
                       alignItems: "center",
+                      gap: 1.5,
                     }}
                     component="div"
                   >
-                    <AiImageIcon /> <strong>AI Image</strong>
+                    <Image
+                      src="https://blockprotocol.hashai.workers.dev/blocks/hash/ai-image/public/ai-image.svg"
+                      alt="ai-image"
+                      width={26}
+                      height={24}
+                    />
+                    AI Image
                   </Typography>
                   <Typography
                     sx={{
@@ -297,17 +356,25 @@ export const FAQ = () => {
                 <CardContent>
                   <Typography
                     gutterBottom
+                    fontWeight={600}
                     sx={{
                       color: ({ palette }) => palette.bpGray[80],
                       fontSize: "18px",
                       display: "flex",
                       alignItems: "center",
+                      gap: 1.5,
                     }}
                     component="div"
                   >
-                    <AiChatIcon /> <strong>AI Chat</strong>
+                    <Image
+                      src="https://blockprotocol.hashai.workers.dev/blocks/hash/ai-chat/public/ai-chat-icon.svg"
+                      alt="ai-chat"
+                      width={26}
+                      height={26}
+                    />
+                    AI Chat
                   </Typography>
-                  <Box
+                  <Typography
                     sx={{
                       color: ({ palette }) => palette.gray[80],
                       fontSize: "14px",
@@ -315,7 +382,7 @@ export const FAQ = () => {
                   >
                     Chat with AI, embed one or more responses in a post, or
                     easily share a whole thread on your WordPress site
-                  </Box>
+                  </Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -329,22 +396,30 @@ export const FAQ = () => {
         </FaqItem>
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }} component="div">
+            <div>
               How are{" "}
               <Typography
-                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+                sx={{
+                  fontWeight: 600,
+                  color: ({ palette }) => palette.purple[70],
+                }}
+                component="span"
               >
                 Þ
               </Typography>{" "}
               blocks inserted within WordPress?
-            </Typography>
+            </div>
           }
         >
           <Box>
             Once the plugin has been activated and a (free to obtain) API key
             entered,{" "}
             <Typography
-              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              sx={{
+                fontWeight: 700,
+                color: ({ palette }) => palette.purple[70],
+              }}
+              component="span"
             >
               Þ
             </Typography>{" "}
@@ -355,21 +430,29 @@ export const FAQ = () => {
         </FaqItem>
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }} component="div">
+            <div>
               Are there security considerations around using{" "}
               <Typography
-                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+                sx={{
+                  fontWeight: 600,
+                  color: ({ palette }) => palette.purple[70],
+                }}
+                component="span"
               >
                 Þ
               </Typography>{" "}
               blocks?
-            </Typography>
+            </div>
           }
         >
           <Box>
             Unlike normal Gutenberg blocks, adding new{" "}
             <Typography
-              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              sx={{
+                fontWeight: 600,
+                color: ({ palette }) => palette.purple[70],
+              }}
+              component="span"
             >
               Þ
             </Typography>{" "}
@@ -381,7 +464,11 @@ export const FAQ = () => {
             block may execute code in-browser. Because of this, by default we
             restrict blocks available via the plugin to ones on the{" "}
             <Typography
-              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+              sx={{
+                fontWeight: 700,
+                color: ({ palette }) => palette.purple[70],
+              }}
+              component="span"
             >
               Þ
             </Typography>{" "}
@@ -390,28 +477,25 @@ export const FAQ = () => {
         </FaqItem>
         <FaqItem
           title={
-            <Typography sx={{ fontWeight: 700 }} component="div">
+            <div>
               Should I install the{" "}
               <Typography
-                sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
+                sx={{
+                  fontWeight: 600,
+                  color: ({ palette }) => palette.purple[70],
+                }}
+                component="span"
               >
                 Þ
               </Typography>{" "}
               plugin?
-            </Typography>
+            </div>
           }
           hasBorderBottom={false}
         >
           <Box>
-            Should I install the{" "}
-            <Typography
-              sx={{ fontWeight: 700, display: "inline", color: "#7556DC" }}
-            >
-              Þ
-            </Typography>{" "}
-            plugin? Absolutely. It’s free, and gives your existing WordPress
-            website new superpowers. If you get stuck or have any questions,
-            feel free to{" "}
+            Absolutely. It’s free, and gives your existing WordPress website new
+            superpowers. If you get stuck or have any questions, feel free to{" "}
             <Link href="mailto:">
               <strong>contact us</strong>
             </Link>
@@ -429,30 +513,34 @@ export const FAQ = () => {
             flexDirection: { xs: "column", md: "row" },
           }}
         >
-          <CustomButton
-            onClick={() => {
-              window.open("https://wordpress.com/plugins/blockprotocol/");
-            }}
+          <LinkButton
+            variant="primary"
+            href="https://wordpress.com/plugins/blockprotocol/"
             sx={{
               fontSize: 15,
               color: ({ palette }) => palette.bpGray[20],
+              padding: "8px 20px 8px 20px",
               background: ({ palette }) => palette.purple[700],
             }}
-            variant="primary"
-            endIcon={<ArrowUpRightIcon />}
+            endIcon={
+              <ArrowUpRightIcon
+                sx={{ fill: ({ palette }) => palette.purple[30] }}
+              />
+            }
           >
             Install on WordPress.com
-          </CustomButton>
+          </LinkButton>
 
-          <CustomButton
+          <LinkButton
             variant="secondary"
             endIcon={<DownloadIcon fill="6048E5" />}
-            onClick={() => {
-              window.open("https://wordpress.org/plugins/blockprotocol/");
+            sx={{
+              padding: "8px 20px 8px 20px",
             }}
+            href="https://wordpress.org/plugins/blockprotocol/"
           >
             Download ZIP for self-hosted Wordpress
-          </CustomButton>
+          </LinkButton>
         </Box>
       </Box>
     </Box>

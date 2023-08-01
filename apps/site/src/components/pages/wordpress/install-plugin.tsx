@@ -9,7 +9,7 @@ import {
   ServerIcon,
   WordPressIcon,
 } from "../../icons";
-import { CustomButton } from "./custom-button";
+import { LinkButton } from "../../link-button";
 import { IconSection } from "./icon-section";
 
 export const InstallPlugin = () => {
@@ -69,44 +69,46 @@ export const InstallPlugin = () => {
         >
           <FadeInOnViewport>
             <Typography
-              variant="bpSmallCopy"
+              variant="bpHeading6"
               sx={{
-                fontSize: "1rem",
+                fontSize: "14px",
                 lineHeight: 1,
                 fontWeight: 500,
+                letterSpacing: "0.05em",
                 mb: 1,
                 color: "#0059A5",
               }}
             >
-              <strong>INSTALL THE PLUGIN</strong>
+              INSTALL THE PLUGIN
             </Typography>
             <Typography
-              variant="bpLargeText"
+              variant="bpTitle"
               sx={{
-                fontSize: "2.6rem",
+                fontSize: "2.625rem",
                 lineHeight: 1,
                 fontWeight: 700,
                 mb: 1,
                 fontStyle: "italic",
+                letterSpacing: "-0.03em",
               }}
               component="div"
             >
               Get started with the{" "}
               <Typography
-                variant="bpLargeText"
+                variant="bpTitle"
                 sx={{
                   background:
                     "linear-gradient(89.74deg, #7259FD 10.57%, #0085FF 95.46%)",
                   backgroundClip: "text",
                   textFillColor: "transparent",
-                  fontSize: "2.6rem",
+                  fontSize: "2.625rem",
                   fontStyle: "italic",
                   lineHeight: 1,
                   fontWeight: 700,
                   pr: "0.3rem",
                   mb: 1,
                 }}
-                display="inline"
+                component="span"
               >
                 Block Protocol
               </Typography>
@@ -126,7 +128,6 @@ export const InstallPlugin = () => {
           borderBottomRightRadius: "8px",
           boxShadow:
             "0px 2.8px 2.2px rgba(166, 142, 187, 0.15), 0px 6.7px 5.3px rgba(166, 142, 187, 0.08), 0px 12.5px 10px rgba(166, 142, 187, 0.05), 0px 22.3px 17.9px rgba(166, 142, 187, 0.09), 0px 41.8px 33.4px rgba(166, 142, 187, 0.1), 0px 100px 80px rgba(166, 142, 187, 0.1)",
-          pt: { xs: 2.5, lg: 3 },
           position: "relative",
           zIndex: 1,
           margin: "auto",
@@ -139,7 +140,7 @@ export const InstallPlugin = () => {
           container
           sx={({ breakpoints }) => ({
             width: "100% !important",
-            pb: 8,
+            pb: 3,
             rowGap: 3,
             [breakpoints.down("lg")]: {
               maxWidth: 400,
@@ -151,6 +152,7 @@ export const InstallPlugin = () => {
             xs={12}
             lg={6}
             color="#3373BE"
+            maxWidth={296}
             icon={
               <WordPressIcon
                 sx={{
@@ -163,27 +165,24 @@ export const InstallPlugin = () => {
             title="WordPress.com"
             description="Install the plugin with just one click and follow the prompts to get started"
             action={
-              <CustomButton
+              <LinkButton
                 variant="primary"
                 size="small"
                 sx={{
                   backgroundColor: "#3373BE",
                   fontSize: "14px",
-                  maxWidth: "240px",
-                  padding: "8px, 18px, 8px, 18px",
+                  maxWidth: "230px",
+                  padding: "8px 18px 8px 18px",
                   height: "40px",
                   display: "flex",
-                  gap: "8px",
                   alignContent: "start",
                   color: "#FFFFFF",
                 }}
-                onClick={() => {
-                  window.open("https://wordpress.com/plugins/blockprotocol/");
-                }}
-                endIcon={<ArrowUpRightIcon />}
+                endIcon={<ArrowUpRightIcon sx={{ fill: "#B7D6FA" }} />}
+                href="https://wordpress.com/plugins/blockprotocol/"
               >
                 Install on WordPress.com
-              </CustomButton>
+              </LinkButton>
             }
           />
 
@@ -201,27 +200,24 @@ export const InstallPlugin = () => {
               </span>
             }
             action={
-              <CustomButton
+              <LinkButton
                 variant="primary"
                 size="small"
                 sx={{
                   backgroundColor: "#2C81E4",
                   fontSize: "14px",
-                  maxWidth: "210px",
-                  padding: "8px, 18px, 8px, 18px",
+                  maxWidth: "197px",
+                  padding: "8px 18px 8px 18px",
                   height: "40px",
                   display: "flex",
-                  gap: "8px",
                   alignContent: "start",
                   color: "#FFFFFF",
                 }}
-                onClick={() => {
-                  window.open("https://wordpress.org/plugins/blockprotocol/");
-                }}
-                endIcon={<DownloadIcon />}
+                href="https://wordpress.org/plugins/blockprotocol/"
+                endIcon={<DownloadIcon sx={{ fill: "#B7E2FA" }} />}
               >
                 Download plugin ZIP
-              </CustomButton>
+              </LinkButton>
             }
           />
         </Grid>
@@ -232,8 +228,8 @@ export const InstallPlugin = () => {
             flexDirection: "column",
             alignItems: "start",
             alignSelf: "start",
-
-            pl: { xs: "15px", lg: "77px" },
+            pl: { xs: "30px", lg: "82px" },
+            pr: { xs: "30px" },
             pt: { xs: 2.5, lg: 3 },
             pb: { xs: 2.5, lg: 3 },
             width: "100%",
@@ -247,29 +243,51 @@ export const InstallPlugin = () => {
               fontWeight: 400,
               lineHeight: 1.2,
               my: 1,
+              gap: 3.0,
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            <InfoCircleIcon
-              sx={{ fill: "#48B3F4", color: "#48B3F4", width: "18px" }}
-            />{" "}
-            Once you’ve installed the plugin,{" "}
-            <Link href="">get a free API key</Link> to connect your website to
-            the Block Protocol
+            <InfoCircleIcon sx={{ color: "#48B3F4", width: "18px" }} />{" "}
+            <Box>
+              Once you’ve installed the plugin,{" "}
+              <Link sx={{ color: "#0775E3" }} href="">
+                <strong>get a free API key</strong>{" "}
+              </Link>{" "}
+              to connect your website to the Block Protocol
+            </Box>
           </Box>
+
           <Box
             sx={{
               fontWeight: 400,
               lineHeight: 1.2,
-              mb: 1,
-              mt: 1,
+              my: 1,
+              gap: 3.0,
+              display: "flex",
+              alignItems: "center",
             }}
           >
             <DiscordNewIcon
               sx={{ color: ({ palette }) => palette.purple[50], width: "18px" }}
             />{" "}
-            If you get stuck, feel free to reach out on our{" "}
-            <Link href="/">community Discord server</Link> or drop us a{" "}
-            <Link href="/">message directly</Link>.
+            <Box>
+              If you get stuck, feel free to reach out on our{" "}
+              <Link
+                sx={{ color: ({ palette }) => palette.purple[70] }}
+                href="/"
+              >
+                <strong>community Discord server</strong>{" "}
+              </Link>{" "}
+              or drop us a{" "}
+              <Link
+                sx={{ color: ({ palette }) => palette.purple[70] }}
+                href="/"
+              >
+                <strong>message directly</strong>{" "}
+              </Link>
+              .
+            </Box>
           </Box>
         </Box>
       </Box>

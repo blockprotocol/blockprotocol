@@ -1,7 +1,9 @@
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Typography, useTheme } from "@mui/material";
 
+import { FontAwesomeIcon } from "../../icons";
+import { LinkButton } from "../../link-button";
 import { BpWpIcons } from "./bp-wp-icons";
-import { CustomButton } from "./custom-button";
 
 export const Header = () => {
   const theme = useTheme();
@@ -92,32 +94,29 @@ export const Header = () => {
               flexDirection: { xs: "column", md: "row" },
             }}
           >
-            <CustomButton
-              onClick={() => {
-                window.open("https://wordpress.com/plugins/blockprotocol/");
-              }}
+            <LinkButton
+              variant="primary"
+              href="https://wordpress.com/plugins/blockprotocol/"
               sx={{
                 fontSize: 15,
                 color: theme.palette.bpGray[20],
                 background: theme.palette.purple[700],
               }}
-              variant="primary"
             >
               Install on WordPress.com
-            </CustomButton>
-            <CustomButton
-              onClick={() => {
-                window.open("https://wordpress.org/plugins/blockprotocol/");
-              }}
+            </LinkButton>
+            <LinkButton
+              variant="secondary"
+              href="https://wordpress.org/plugins/blockprotocol/"
               sx={{
                 fontSize: 15,
                 color: "#3A2084",
                 background: "transparent",
               }}
-              variant="secondary"
+              endIcon={<FontAwesomeIcon icon={faArrowRight} />}
             >
               Download for WordPress.org
-            </CustomButton>
+            </LinkButton>
           </Box>
 
           <Box
@@ -125,10 +124,20 @@ export const Header = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: { xs: "center", md: "start" },
+              alignSelf: "center",
             }}
           >
-            <Typography sx={{ fontWeight: 500, fontSize: "14px" }}>
-              <strong>COMPATIBLE WITH</strong>
+            <Typography
+              variant="bpHeading6"
+              sx={{
+                fontSize: "14px",
+                fontWeight: 500,
+                color: ({ palette }) => palette.black,
+                letterSpacing: "0.05em",
+                lineHeight: 1.3,
+              }}
+            >
+              COMPATIBLE WITH
             </Typography>
             <Typography sx={{ fontWeight: 400, fontSize: "14px" }}>
               Gutenberg, Elementor, Brizy, Divi
