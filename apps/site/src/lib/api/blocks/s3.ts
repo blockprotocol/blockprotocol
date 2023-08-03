@@ -5,7 +5,6 @@ import { BlockMetadata } from "@blockprotocol/core";
 import fs from "fs-extra";
 import { globby } from "globby";
 import mime from "mime-types";
-import fetch from "node-fetch";
 
 import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
 import {
