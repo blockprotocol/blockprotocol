@@ -2,7 +2,10 @@
 
 This repository is for contributing to the WordPress plugin.
 
-If you are looking to install it on your own WordPress server, please visit https://blockprotocol.org/wordpress
+If you are looking to install the Block Protocol plugin for WordPress on your own site:
+
+- [Download from the plugin directory](https://wordpress.org/plugins/blockprotocol/) to install on a self-hosted instance of WordPress _(wordpress.org)_
+- [One-click install on WordPress.com](https://wordpress.com/plugins/blockprotocol/) to easily add the plugin to any hosted WordPress.com site
 
 ## Working on the plugin
 
