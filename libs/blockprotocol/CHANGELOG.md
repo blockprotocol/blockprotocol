@@ -1,11 +1,5 @@
 # blockprotocol
 
-## 0.2.3-canary-20230803130052
-
-### Patch Changes
-
-- [#1310](https://github.com/blockprotocol/blockprotocol/pull/1310) [`8287dd3a`](https://github.com/blockprotocol/blockprotocol/commit/8287dd3a22c77e2ab8baef8f8c2184c20f95610a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - remove node-fetch dependency
-
 ## 0.2.2
 
 ### Patch Changes

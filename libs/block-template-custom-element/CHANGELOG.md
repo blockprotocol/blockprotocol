@@ -1,14 +1,5 @@
 # block-template-custom-element
 
-## 0.4.3-canary-20230803130052
-
-### Patch Changes
-
-- Updated dependencies [[`8287dd3a`](https://github.com/blockprotocol/blockprotocol/commit/8287dd3a22c77e2ab8baef8f8c2184c20f95610a)]:
-  - @blockprotocol/graph@0.3.1-canary-20230803130052
-  - block-scripts@0.3.2-canary-20230803130052
-  - mock-block-dock@0.1.7-canary-20230803130052
-
 ## 0.4.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/hook",
-  "version": "0.1.5-canary-20230803130052",
+  "version": "0.1.4",
   "description": "Implementation of the Block Protocol Hook module specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@blockprotocol/core": "0.1.2",
-    "@blockprotocol/graph": "0.3.1-canary-20230803130052"
+    "@blockprotocol/graph": "0.3.0"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
