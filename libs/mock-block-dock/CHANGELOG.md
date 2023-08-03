@@ -1,5 +1,13 @@
 # mock-block-dock
 
+## 0.1.7-canary-20230803163819
+
+### Patch Changes
+
+- Updated dependencies [[`8287dd3a`](https://github.com/blockprotocol/blockprotocol/commit/8287dd3a22c77e2ab8baef8f8c2184c20f95610a), [`8423b35e`](https://github.com/blockprotocol/blockprotocol/commit/8423b35e2dc0cce26ff5aa481c46ebb713aa5317)]:
+  - @blockprotocol/graph@0.3.1-canary-20230803163819
+  - @blockprotocol/hook@0.1.5-canary-20230803163819
+
 ## 0.1.6
 
 ### Patch Changes
