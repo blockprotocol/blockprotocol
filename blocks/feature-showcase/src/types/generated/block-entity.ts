@@ -4,9 +4,9 @@
 
 import { Entity } from "@blockprotocol/graph";
 
-import { NamePropertyValue, Text } from "./shared";
+import { NamePropertyValue, TextDataType } from "./shared";
 
-export type { NamePropertyValue, Text };
+export type { NamePropertyValue, TextDataType };
 
 export type BlockEntity = Thing;
 

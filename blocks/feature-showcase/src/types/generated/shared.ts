@@ -27,7 +27,7 @@ export type CompanyProperties = {
 /**
  * An e-mail address.
  */
-export type EMailPropertyValue = Text;
+export type EMailPropertyValue = TextDataType;
 
 export type EmployedBy = Entity<EmployedByProperties> & { linkData: LinkData };
 
@@ -69,7 +69,7 @@ export type LinkProperties = {};
 /**
  * A word or set of words by which something is known, addressed, or referred to.
  */
-export type NamePropertyValue = Text;
+export type NamePropertyValue = TextDataType;
 
 export type Person = Entity<PersonProperties>;
 
@@ -95,4 +95,4 @@ export type PersonProperties = {
 /**
  * An ordered sequence of characters
  */
-export type Text = string;
+export type TextDataType = string;

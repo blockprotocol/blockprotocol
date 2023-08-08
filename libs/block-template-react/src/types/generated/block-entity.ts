@@ -11,12 +11,12 @@ export type BlockEntityOutgoingLinkAndTarget = ThingOutgoingLinkAndTarget;
 /**
  * A word or set of words by which something is known, addressed, or referred to.
  */
-export type NamePropertyValue = Text;
+export type NamePropertyValue = TextDataType;
 
 /**
  * An ordered sequence of characters
  */
-export type Text = string;
+export type TextDataType = string;
 
 export type Thing = Entity<ThingProperties>;
 
