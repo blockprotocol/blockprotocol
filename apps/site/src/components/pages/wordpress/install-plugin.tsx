@@ -58,8 +58,8 @@ export const InstallPlugin = () => {
             borderTopRightRadius: "8px",
             maxWidth: "1200px",
             margin: "auto",
-            pb: { xs: 2, md: 4.5 },
-            pt: { xs: 2, md: 5.3 },
+            pb: { xs: 2, md: 7.25 },
+            pt: { xs: 2, md: 5.375 },
             pl: { xs: "15px", lg: "77px" },
             pr: { xs: "16px", lg: "83px" },
             [breakpoints.down("lg")]: {
@@ -148,7 +148,6 @@ export const InstallPlugin = () => {
           })}
         >
           <IconSection
-            item
             xs={12}
             lg={6}
             color="#3373BE"
@@ -228,10 +227,11 @@ export const InstallPlugin = () => {
             flexDirection: "column",
             alignItems: "start",
             alignSelf: "start",
-            pl: { xs: "30px", lg: "82px" },
+            pl: { xs: "30px", lg: "77px" },
             pr: { xs: "30px" },
             pt: { xs: 2.5, lg: 3 },
             pb: { xs: 2.5, lg: 3 },
+            gap: 1.5,
             width: "100%",
             borderTop: "2px solid #FFFFFF",
             background:
@@ -242,8 +242,7 @@ export const InstallPlugin = () => {
             sx={{
               fontWeight: 400,
               lineHeight: 1.2,
-              my: 1,
-              gap: 3.0,
+              gap: 2.25,
               display: "flex",
               alignItems: "center",
             }}
@@ -262,8 +261,7 @@ export const InstallPlugin = () => {
             sx={{
               fontWeight: 400,
               lineHeight: 1.2,
-              my: 1,
-              gap: 3.0,
+              gap: 2.25,
               display: "flex",
               alignItems: "center",
             }}

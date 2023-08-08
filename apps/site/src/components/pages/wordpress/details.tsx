@@ -194,7 +194,7 @@ export const Details = () => {
             component="img"
             src="/assets/wp_bp_seo_cover.png"
           />
-          <DetailsSection xs={12} lg={5.5}>
+          <DetailsSection xs={12} lg={5.5} sx={{ marginTop: { xs: "45px" } }}>
             <Typography
               variant="bpHeading6"
               sx={{
@@ -369,7 +369,7 @@ export const Details = () => {
               </CustomLinkButton>
             </Box>
           </DetailsSection>
-          <DetailsSection xs={12} lg={5.5} sx={{ marginTop: { xs: "40px" } }}>
+          <DetailsSection xs={12} lg={5.5} sx={{ marginTop: { xs: "45px" } }}>
             <Typography
               variant="bpHeading6"
               sx={{
@@ -412,7 +412,7 @@ export const Details = () => {
                 mt: "20px",
               }}
             >
-              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
+              <Box sx={{ display: "flex", mb: "14px", gap: 1.75 }}>
                 <Box sx={{ ml: "-4px" }}>
                   <RightPointerIcon />
                 </Box>
@@ -423,7 +423,7 @@ export const Details = () => {
                   </strong>
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
+              <Box sx={{ display: "flex", mb: "14px", gap: 1.75 }}>
                 <Box sx={{ ml: "-4px" }}>
                   <RightPointerIcon />
                 </Box>
@@ -433,7 +433,7 @@ export const Details = () => {
                   account with any other service provider.
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
+              <Box sx={{ display: "flex", mb: "14px", gap: 1.75 }}>
                 <Box sx={{ ml: "-4px" }}>
                   <RightPointerIcon />
                 </Box>
@@ -442,7 +442,7 @@ export const Details = () => {
                   blocks and use them in WordPress
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", mb: "12px", gap: 1.75 }}>
+              <Box sx={{ display: "flex", mb: "14px", gap: 1.75 }}>
                 <Box sx={{ ml: "-4px" }}>
                   <ArrowUpRightIcon
                     sx={{

@@ -50,7 +50,7 @@ export const FAQ = () => {
           fontSize: "2.6rem",
           lineHeight: 1,
           fontWeight: 700,
-          mb: 4,
+          mb: 2.25,
           fontStyle: "italic",
           color: ({ palette }) => palette.black,
         }}
@@ -63,7 +63,7 @@ export const FAQ = () => {
           height: 3,
           borderRadius: 100,
           background: "linear-gradient(89.98deg, #6B54EF 0%, #FFFFFF 100%)",
-          mb: "30px",
+          mb: 3.375,
         }}
       />
       <Box

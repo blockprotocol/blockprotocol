@@ -33,7 +33,7 @@ export const IconSection: FunctionComponent<GridProps & IconSectionProps> = ({
         ({ breakpoints }) => ({
           [breakpoints.up("lg")]: {
             display: "flex",
-            pl: { xs: "15px", lg: "50px" },
+            pl: { xs: "15px", lg: "45px" },
             pr: { xs: "16px", lg: "83px" },
           },
         }),
