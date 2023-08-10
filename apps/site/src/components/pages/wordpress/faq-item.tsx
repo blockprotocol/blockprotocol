@@ -1,8 +1,11 @@
-// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Box, Typography } from "@mui/material";
-import Collapse from "@mui/material/Collapse";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
-import { styled } from "@mui/material/styles";
+import {
+  Box,
+  Collapse,
+  IconButton,
+  IconButtonProps,
+  styled,
+  Typography,
+} from "@mui/material";
 import { FunctionComponent, ReactNode, useState } from "react";
 
 import { ExpandMoreIcon, RightPointerIcon } from "../../icons";
@@ -17,16 +20,16 @@ const ExpandMore = styled((props: { expand: boolean } & IconButtonProps) => {
   }),
 }));
 
-export interface FaqItemProps {
+interface FaqItemProps {
   title: ReactNode;
   children: ReactNode;
-  hasBorderBottom?: Boolean;
+  bordered?: Boolean;
 }
 
 export const FaqItem: FunctionComponent<FaqItemProps> = ({
   title,
   children,
-  hasBorderBottom = true,
+  bordered = true,
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -36,7 +39,7 @@ export const FaqItem: FunctionComponent<FaqItemProps> = ({
   return (
     <Box
       sx={{
-        borderBottom: hasBorderBottom ? 1 : 0,
+        borderBottom: bordered ? 1 : 0,
         borderColor: ({ palette }) => palette.gray[30],
         mb: "12px",
         py: "12px",

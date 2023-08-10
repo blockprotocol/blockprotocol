@@ -14,7 +14,7 @@ export const Header = () => {
         position: "relative",
         zIndex: 3,
         mt: { xs: 7, md: 10 },
-        pb: { xs: 11.5, md: 13.375 },
+        pb: { xs: 7, md: 13.375 },
         width: { xs: "95%", md: "75%", lg: "80%" },
         display: "flex",
         flexDirection: "column",

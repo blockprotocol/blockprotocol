@@ -1,7 +1,14 @@
-import { Box, Grid, Link, List, ListItem, Typography } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Link,
+  List,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import Image from "next/image";
 
 import { ArrowUpRightIcon, DownloadIcon, OpenAiIcon } from "../../icons";
@@ -40,6 +47,7 @@ export const FAQ = () => {
           mb: 1,
           color: ({ palette }) => palette.purple[700],
           fontStyle: "italic",
+          letterSpacing: "-0.03em",
         }}
       >
         In case you’re wondering...
@@ -53,6 +61,7 @@ export const FAQ = () => {
           mb: 2.25,
           fontStyle: "italic",
           color: ({ palette }) => palette.black,
+          letterSpacing: "-0.03em",
         }}
       >
         Frequently Asked Questions
@@ -491,7 +500,7 @@ export const FAQ = () => {
               plugin?
             </div>
           }
-          hasBorderBottom={false}
+          bordered={false}
         >
           <Box>
             Absolutely. It’s free, and gives your existing WordPress website new

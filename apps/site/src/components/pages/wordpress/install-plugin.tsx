@@ -15,11 +15,13 @@ import { IconSection } from "./icon-section";
 export const InstallPlugin = () => {
   return (
     <Box
+      id="get_started"
       sx={{
         fontFamily: "Inter",
         position: "relative",
         zIndex: 1,
         pb: 15,
+        scrollMarginTop: "250px",
       }}
     >
       <Box
@@ -138,18 +140,15 @@ export const InstallPlugin = () => {
       >
         <Grid
           container
-          sx={({ breakpoints }) => ({
+          sx={{
             width: "100% !important",
             pb: 3,
             rowGap: 3,
-            [breakpoints.down("lg")]: {
-              maxWidth: 400,
-            },
-          })}
+          }}
         >
           <IconSection
             xs={12}
-            lg={6}
+            sm={6}
             color="#3373BE"
             maxWidth={296}
             icon={
@@ -187,7 +186,7 @@ export const InstallPlugin = () => {
 
           <IconSection
             xs={12}
-            lg={6}
+            sm={6}
             maxWidth={377}
             color="#3373BE"
             icon={<ServerIcon sx={{ fontSize: 32, mb: 1.5 }} />}

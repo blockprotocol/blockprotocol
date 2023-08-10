@@ -36,7 +36,6 @@ export const Details = () => {
           container
           sx={({ breakpoints }) => ({
             [breakpoints.down("lg")]: {
-              pt: 2,
               maxWidth: 500,
               margin: "auto",
             },
@@ -44,7 +43,7 @@ export const Details = () => {
           columnSpacing={{ xs: 0, lg: 10 }}
           rowSpacing={{ xs: 3, lg: 6.875 }}
         >
-          <DetailsSection xs={12} lg={6}>
+          <DetailsSection xs={12} lg={6} order={{ xs: 2, lg: 1 }}>
             <Typography
               variant="bpHeading6"
               sx={{
@@ -153,7 +152,7 @@ export const Details = () => {
               }}
             >
               <CustomLinkButton
-                href="/"
+                href="/hub"
                 isPrimary={false}
                 variant="secondary"
                 endIcon={<TelescopeIcon />}
@@ -161,7 +160,7 @@ export const Details = () => {
                 Preview the AI blocks
               </CustomLinkButton>
 
-              <CustomLinkButton href="/" isPrimary variant="primary">
+              <CustomLinkButton href="#get_started" isPrimary variant="primary">
                 Get these blocks
               </CustomLinkButton>
             </Box>
@@ -170,6 +169,7 @@ export const Details = () => {
             item
             xs={12}
             lg={6}
+            order={{ xs: 1, lg: 2 }}
             sx={{
               alignSelf: "center",
               justifySelf: "center",
@@ -191,10 +191,11 @@ export const Details = () => {
               alignSelf: "center",
               justifySelf: "left",
             }}
+            order={{ xs: 3, lg: 3 }}
             component="img"
             src="/assets/wp_bp_seo_cover.png"
           />
-          <DetailsSection xs={12} lg={5.5} sx={{ marginTop: { xs: "45px" } }}>
+          <DetailsSection xs={12} lg={5.5} order={{ xs: 4, lg: 4 }}>
             <Typography
               variant="bpHeading6"
               sx={{
@@ -356,7 +357,7 @@ export const Details = () => {
               }}
             >
               <CustomLinkButton
-                href="/"
+                href="https://hash.dev/blog/block-protocol-0-3-wordpress"
                 isPrimary={false}
                 variant="secondary"
                 endIcon={<MagicIcon />}
@@ -364,12 +365,17 @@ export const Details = () => {
                 Learn more about the benefits
               </CustomLinkButton>
 
-              <CustomLinkButton href="/" isPrimary variant="primary">
+              <CustomLinkButton href="#get_started" isPrimary variant="primary">
                 Get started
               </CustomLinkButton>
             </Box>
           </DetailsSection>
-          <DetailsSection xs={12} lg={5.5} sx={{ marginTop: { xs: "45px" } }}>
+          <DetailsSection
+            xs={12}
+            lg={5.5}
+            sx={{ marginTop: { xs: "45px" } }}
+            order={{ xs: 5, lg: 5 }}
+          >
             <Typography
               variant="bpHeading6"
               sx={{
@@ -483,7 +489,7 @@ export const Details = () => {
               }}
             >
               <CustomLinkButton
-                href="/"
+                href="/hub"
                 isPrimary={false}
                 variant="secondary"
                 endIcon={<GlobeIcon />}
@@ -491,7 +497,7 @@ export const Details = () => {
                 Browse all services
               </CustomLinkButton>
 
-              <CustomLinkButton href="/" isPrimary variant="primary">
+              <CustomLinkButton href="#get_started" isPrimary variant="primary">
                 Access for free
               </CustomLinkButton>
             </Box>
@@ -500,6 +506,7 @@ export const Details = () => {
             item
             xs={12}
             lg={6.5}
+            order={{ xs: 6, lg: 6 }}
             sx={{
               alignSelf: "center",
               justifySelf: "right",
@@ -507,7 +514,11 @@ export const Details = () => {
             component="img"
             src="/assets/wp_bp_api_cover.png"
           />
-          <Grid container sx={{ marginTop: { xs: "40px", lg: "100px" } }}>
+          <Grid
+            container
+            sx={{ marginTop: { xs: "40px", lg: "100px" } }}
+            order={{ xs: 7, lg: 7 }}
+          >
             <Grid
               item
               xs={12}
@@ -642,7 +653,11 @@ export const Details = () => {
                   mt: "8px",
                 }}
               >
-                <CustomLinkButton href="/" isPrimary variant="primary">
+                <CustomLinkButton
+                  href="#get_started"
+                  isPrimary
+                  variant="primary"
+                >
                   Get the plugin for free
                 </CustomLinkButton>
               </Box>
