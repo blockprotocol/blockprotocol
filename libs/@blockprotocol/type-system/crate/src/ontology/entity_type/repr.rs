@@ -37,23 +37,23 @@ pub struct EntityType {
     kind: EntityTypeTag,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$id")]
-    id: String,
-    title: String,
+    pub id: String,
+    pub title: String,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(flatten)]
-    all_of: repr::AllOf<EntityTypeReference>,
+    pub all_of: repr::AllOf<EntityTypeReference>,
     #[cfg_attr(
         target_arch = "wasm32",
         tsify(optional, type = "Record<BaseUrl, any>[]")
     )]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    examples: Vec<HashMap<String, serde_json::Value>>,
+    pub examples: Vec<HashMap<String, serde_json::Value>>,
     #[serde(flatten)]
-    property_object: repr::Object<repr::ValueOrArray<repr::PropertyTypeReference>>,
+    pub property_object: repr::Object<repr::ValueOrArray<repr::PropertyTypeReference>>,
     #[serde(flatten)]
-    links: repr::Links,
+    pub links: repr::Links,
 }
 
 impl EntityType {
