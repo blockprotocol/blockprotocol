@@ -196,7 +196,7 @@ impl From<super::EntityType> for EntityType {
 pub struct EntityTypeReference {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
-    url: String,
+    pub url: String,
 }
 
 impl TryFrom<EntityTypeReference> for super::EntityTypeReference {
