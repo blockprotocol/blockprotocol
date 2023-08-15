@@ -264,136 +264,148 @@ export const FAQ = () => {
           </Box>
           <Grid container spacing={2} mb={3}>
             <Grid item xs={12} lg={4}>
-              <Card
-                sx={{
-                  minWidth: "auto",
-                }}
-              >
-                <CardMedia
-                  sx={{ height: "202px" }}
-                  image="/assets/block-cover-text.png"
-                  title=""
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    fontWeight={600}
-                    sx={{
-                      color: ({ palette }) => palette.bpGray[80],
-                      fontSize: "18px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1.5,
-                    }}
-                    component="div"
-                  >
-                    <Image
-                      src="https://blockprotocol.hashai.workers.dev/blocks/hash/ai-text/public/ai-text.svg"
-                      alt="ai-text"
-                      width={24}
-                      height={24}
-                    />
-                    AI Text
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: ({ palette }) => palette.gray[80],
-                      fontSize: "14px",
-                    }}
-                  >
-                    Generate text in any style directly inside WordPress using
-                    the latest models from ChatGPT and more
-                  </Typography>
-                </CardContent>
-              </Card>
+              <Link href="https://blockprotocol.org/@hash/blocks/ai-text">
+                <Card
+                  sx={{
+                    minWidth: "auto",
+                  }}
+                >
+                  <CardMedia
+                    sx={{ height: "202px" }}
+                    image="/assets/block-cover-text.png"
+                    title=""
+                  />
+                  <CardContent>
+                    <Typography
+                      gutterBottom
+                      fontWeight={600}
+                      sx={{
+                        color: ({ palette }) => palette.bpGray[80],
+                        fontSize: "18px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                      }}
+                      component="div"
+                    >
+                      <Image
+                        src="https://blockprotocol.hashai.workers.dev/blocks/hash/ai-text/public/ai-text.svg"
+                        alt="ai-text"
+                        width={24}
+                        height={24}
+                      />
+                      AI Text
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: ({ palette }) => palette.gray[80],
+                        fontSize: "14px",
+                      }}
+                    >
+                      Generate text in any style directly inside WordPress using
+                      the latest models from ChatGPT and more
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Link>
             </Grid>
             <Grid item xs={12} lg={4}>
-              <Card
-                sx={{
-                  minWidth: "auto",
-                }}
-              >
-                <CardMedia
-                  sx={{ height: "202px" }}
-                  image="/assets/block-cover-image.png"
-                  title=""
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    fontWeight={600}
-                    sx={{
-                      color: ({ palette }) => palette.bpGray[80],
-                      fontSize: "18px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1.5,
-                    }}
-                    component="div"
-                  >
-                    <Image
-                      src="https://blockprotocol.hashai.workers.dev/blocks/hash/ai-image/public/ai-image.svg"
-                      alt="ai-image"
-                      width={26}
-                      height={24}
-                    />
-                    AI Image
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: ({ palette }) => palette.gray[80],
-                      fontSize: "14px",
-                    }}
-                  >
-                    Illustrate blog posts and make content pop with
-                    photorealistic or stylized AI-generated imagery
-                  </Typography>
-                </CardContent>
-              </Card>
+              <Link href="https://blockprotocol.org/@hash/blocks/ai-image">
+                <Card
+                  sx={{
+                    minWidth: "auto",
+                  }}
+                >
+                  <CardMedia
+                    sx={{ height: "202px" }}
+                    image="/assets/block-cover-image.png"
+                    title=""
+                  />
+                  <CardContent>
+                    <Typography
+                      gutterBottom
+                      fontWeight={600}
+                      sx={{
+                        color: ({ palette }) => palette.bpGray[80],
+                        fontSize: "18px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                      }}
+                      component="div"
+                    >
+                      <Image
+                        src="https://blockprotocol.hashai.workers.dev/blocks/hash/ai-image/public/ai-image.svg"
+                        alt="ai-image"
+                        width={26}
+                        height={24}
+                      />
+                      AI Image
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: ({ palette }) => palette.gray[80],
+                        fontSize: "14px",
+                      }}
+                    >
+                      Illustrate blog posts and make content pop with
+                      photorealistic or stylized AI-generated imagery
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Link>
             </Grid>
             <Grid item xs={12} lg={4}>
-              <Card
-                sx={{
-                  minWidth: "auto",
-                }}
-              >
-                <CardMedia
-                  sx={{ height: "202px" }}
-                  image="/assets/block-cover-chat.png"
-                  title=""
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    fontWeight={600}
-                    sx={{
-                      color: ({ palette }) => palette.bpGray[80],
-                      fontSize: "18px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1.5,
-                    }}
-                    component="div"
-                  >
-                    <Image
-                      src="https://blockprotocol.hashai.workers.dev/blocks/hash/ai-chat/public/ai-chat-icon.svg"
-                      alt="ai-chat"
-                      width={26}
-                      height={26}
-                    />
-                    AI Chat
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: ({ palette }) => palette.gray[80],
-                      fontSize: "14px",
-                    }}
-                  >
-                    Chat with AI, embed one or more responses in a post, or
-                    easily share a whole thread on your WordPress site
-                  </Typography>
-                </CardContent>
-              </Card>
+              <Link href="https://blockprotocol.org/@hash/blocks/ai-chat">
+                <Card
+                  sx={{
+                    minWidth: "auto",
+                    cursor: "pointer",
+                  }}
+                  onClick={() =>
+                    window.open(
+                      "https://blockprotocol.org/@hash/blocks/ai-chat",
+                    )
+                  }
+                >
+                  <CardMedia
+                    sx={{ height: "202px" }}
+                    image="/assets/block-cover-chat.png"
+                    title=""
+                  />
+                  <CardContent>
+                    <Typography
+                      gutterBottom
+                      fontWeight={600}
+                      sx={{
+                        color: ({ palette }) => palette.bpGray[80],
+                        fontSize: "18px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                      }}
+                      component="div"
+                    >
+                      <Image
+                        src="https://blockprotocol.hashai.workers.dev/blocks/hash/ai-chat/public/ai-chat-icon.svg"
+                        alt="ai-chat"
+                        width={26}
+                        height={26}
+                      />
+                      AI Chat
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: ({ palette }) => palette.gray[80],
+                        fontSize: "14px",
+                      }}
+                    >
+                      Chat with AI, embed one or more responses in a post, or
+                      easily share a whole thread on your WordPress site
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Link>
             </Grid>
           </Grid>
           <Box>

@@ -1,5 +1,6 @@
 import { Stream } from "@cloudflare/stream-react";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Skeleton, Typography } from "@mui/material";
+import { useState } from "react";
 
 import {
   ArrowUpRightIcon,
@@ -12,6 +13,8 @@ import { CustomLinkButton } from "./custom-link-button";
 import { DetailsSection } from "./details-section";
 
 export const Details = () => {
+  const [loading, setLoading] = useState(true);
+
   return (
     <Box
       sx={{
@@ -175,10 +178,19 @@ export const Details = () => {
               justifySelf: "center",
             }}
           >
+            {loading ? (
+              <Skeleton
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  transform: "unset",
+                }}
+              />
+            ) : null}
             <Stream
               controls
               src="17a35fcc1fb28ce771c1d3917cd51c21"
-              autoplay
+              onCanPlay={() => setLoading(false)}
               primaryColor="#7963F5"
               letterboxColor="transparent"
             />

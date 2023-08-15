@@ -49,6 +49,8 @@ export const IconSection: FunctionComponent<GridProps & IconSectionProps> = ({
             maxWidth: "447px",
             padding: {
               xs: "2rem",
+              sm: "1rem",
+              md: "2rem",
             },
           }}
         >
@@ -62,7 +64,9 @@ export const IconSection: FunctionComponent<GridProps & IconSectionProps> = ({
           >
             for <strong> {title} </strong>
             {grayTitle ? (
-              <span style={{ color: theme.palette.gray[50] }}>{grayTitle}</span>
+              <Box component="span" sx={{ color: theme.palette.gray[50] }}>
+                {grayTitle}
+              </Box>
             ) : null}
           </Typography>
           <Typography
