@@ -272,7 +272,7 @@ export const InstallPlugin = () => {
               If you get stuck, feel free to reach out on our{" "}
               <Link
                 sx={{ color: ({ palette }) => palette.purple[70] }}
-                href="/"
+                href="/discord"
               >
                 <strong>community Discord server</strong>{" "}
               </Link>{" "}
