@@ -85,6 +85,8 @@ impl EntityType {
                 })?,
         );
 
+        self.all_of.elements.extend(other.all_of.elements);
+
         self.property_object
             .properties
             .extend(other.property_object.properties);

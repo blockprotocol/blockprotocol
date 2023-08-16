@@ -27,7 +27,7 @@ import {
   PersonOutgoingLinkAndTarget,
   PersonOutgoingLinksByLinkEntityTypeId,
   PersonProperties,
-  Text,
+  TextDataType,
 } from "./shared";
 
 export type {
@@ -55,5 +55,5 @@ export type {
   PersonOutgoingLinkAndTarget,
   PersonOutgoingLinksByLinkEntityTypeId,
   PersonProperties,
-  Text,
+  TextDataType,
 };
