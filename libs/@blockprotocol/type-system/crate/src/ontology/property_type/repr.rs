@@ -87,7 +87,7 @@ impl From<super::PropertyType> for PropertyType {
 pub struct PropertyTypeReference {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
-    url: String,
+    pub url: String,
 }
 
 impl PropertyTypeReference {
