@@ -5,10 +5,38 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { m, Variants } from "framer-motion";
 import Image from "next/legacy/image";
 
 import helixBoxes from "../../../../public/assets/new-home/helix-boxes.webp";
 import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "../../navbar";
+
+const fadeInWrapper: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+    },
+  },
+};
+
+const fadeInAndMoveDownChildren: Variants = {
+  hidden: { opacity: 0, translateY: -15 },
+  show: { opacity: 1, translateY: 0 },
+};
+
+const fadeInChildren: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1 },
+};
+
+const AnimatedTypography = m(Typography);
+
+AnimatedTypography.defaultProps = {
+  variants: fadeInAndMoveDownChildren,
+  transition: { duration: 0.4, ease: "easeOut" },
+};
 
 export const Header = () => {
   const theme = useTheme();
@@ -19,6 +47,10 @@ export const Header = () => {
 
   return (
     <Box
+      component={m.div}
+      variants={fadeInWrapper}
+      initial="hidden"
+      animate="show"
       sx={{
         background:
           "radial-gradient(116.02% 95.04% at 50% 100.79%, #F3F0F9 0%, #FFFFFF 70.54%)",
@@ -39,7 +71,7 @@ export const Header = () => {
           maxWidth: { xs: "95%", md: "75%", lg: "60%" },
         }}
       >
-        <Typography
+        <AnimatedTypography
           sx={{
             textTransform: "uppercase",
             color: ({ palette }) => palette.purple[800],
@@ -51,8 +83,8 @@ export const Header = () => {
           variant="bpSmallCaps"
         >
           The Block Protocol
-        </Typography>
-        <Typography
+        </AnimatedTypography>
+        <AnimatedTypography
           variant="bpHeading1"
           textAlign="center"
           sx={{
@@ -67,8 +99,8 @@ export const Header = () => {
         >
           The open standard for {sm ? <br /> : null}
           block-based apps
-        </Typography>
-        <Typography
+        </AnimatedTypography>
+        <AnimatedTypography
           variant="bpBodyCopy"
           lineHeight={1.4}
           color={theme.palette.gray[70]}
@@ -91,18 +123,20 @@ export const Header = () => {
           </strong>{" "}
           enables applications to make their interfaces infinitely extensible
           with interoperable components known as blocks
-        </Typography>
+        </AnimatedTypography>
       </Container>
-      <Image
-        layout="responsive"
-        src={helixBoxes}
-        style={{ zIndex: 999 }}
-        /**
-         * not using placeholder="blur" on this image, since it's transparent, making it blur looks weird
-         * `priority` makes sure this image is loaded ASAP, because this is the first image in the homepage
-         */
-        priority
-      />
+      <m.div variants={fadeInChildren} transition={{ duration: 0.3 }}>
+        <Image
+          layout="responsive"
+          src={helixBoxes}
+          style={{ zIndex: 999 }}
+          /**
+           * not using placeholder="blur" on this image, since it's transparent, making it blur looks weird
+           * `priority` makes sure this image is loaded ASAP, because this is the first image in the homepage
+           */
+          priority
+        />
+      </m.div>
     </Box>
   );
 };

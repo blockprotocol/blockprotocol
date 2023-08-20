@@ -1,5 +1,40 @@
 # block-template-html
 
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [[`5ac80409`](https://github.com/blockprotocol/blockprotocol/commit/5ac80409d97c37a83ffc31ab69860ad3f99d3319)]:
+  - block-scripts@0.3.1
+
+## 0.3.1
+
+### Patch Changes
+
+- [#1284](https://github.com/blockprotocol/blockprotocol/pull/1284) [`5f630c31`](https://github.com/blockprotocol/blockprotocol/commit/5f630c31a69c6711ace2d90987ca34ada31ecbe6) Thanks [@CiaranMn](https://github.com/CiaranMn)! - upgrade Thing entity type version
+
+## 0.3.0
+
+### Minor Changes
+
+- [#1223](https://github.com/blockprotocol/blockprotocol/pull/1223) [`fe4fc27f`](https://github.com/blockprotocol/blockprotocol/commit/fe4fc27f9188596baa52d04e1de9042cbd04a014) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Add `example-graph.json` and bump `block-scripts`
+
+### Patch Changes
+
+- [#1273](https://github.com/blockprotocol/blockprotocol/pull/1273) [`bae9405c`](https://github.com/blockprotocol/blockprotocol/commit/bae9405c0a7d0f8312b416d845aaa3069dfe61d9) Thanks [@nonparibus](https://github.com/nonparibus)! - Update links in README and comments
+
+- Updated dependencies [[`fe4fc27f`](https://github.com/blockprotocol/blockprotocol/commit/fe4fc27f9188596baa52d04e1de9042cbd04a014)]:
+  - block-scripts@0.3.0
+
+## 0.2.5
+
+### Patch Changes
+
+- [#1108](https://github.com/blockprotocol/blockprotocol/pull/1108) [`e3d889a1`](https://github.com/blockprotocol/blockprotocol/commit/e3d889a156851831c1fa851244d0abe19edfbf6d) Thanks [@nonparibus](https://github.com/nonparibus)! - update links to docs
+
+- Updated dependencies [[`e3d889a1`](https://github.com/blockprotocol/blockprotocol/commit/e3d889a156851831c1fa851244d0abe19edfbf6d)]:
+  - block-scripts@0.2.3
+
 ## 0.2.4
 
 ### Patch Changes

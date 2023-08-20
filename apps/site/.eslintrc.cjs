@@ -30,6 +30,12 @@ module.exports = {
             message: "Please use FunctionComponent instead.",
           },
           {
+            name: "framer-motion",
+            importNames: ["motion"],
+            message:
+              "Please use 'm' instead for 'framer-motion' to lazy-load correctly.",
+          },
+          {
             name: "@mui/material",
             importNames: ["Link"],
             message:

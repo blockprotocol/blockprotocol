@@ -23,18 +23,20 @@ test("API key page should generate a valid key", async ({
 
   await page.goto("/dashboard");
 
-  const tableWithKeys = page.locator("text=Public ID");
-  const keyNameInput = page.locator('[placeholder="Key Name"]');
+  const tableWithKeys = page.locator("text=Last used");
+  const keyNameInput = page.locator('[placeholder="Key name"]');
 
   await page.locator('a:has-text("Create and manage API keys")').click();
-  await expect(page).toHaveURL("/settings/api-keys");
+  await expect(page).toHaveURL("/account/api");
 
   await expect(
-    page.locator("text=These keys allow you to access the block protocol"),
+    page.locator(
+      "text=API keys allow you to access the Block Protocol from within other applications.",
+    ),
   ).toBeVisible();
   await expect(page.locator("data-test-id=apiKeyLink").first()).toHaveAttribute(
     "href",
-    "/docs/using-blocks#discovering-blocks",
+    "/docs/hub/api",
   );
   await expect(tableWithKeys).not.toBeVisible();
 
@@ -44,7 +46,7 @@ test("API key page should generate a valid key", async ({
   await keyNameInput.press("Enter");
 
   await keyNameInput.fill("oops");
-  await page.locator("text=Cancel").click();
+  await page.locator("data-testid=close-card-button").click();
 
   await page.locator("button >> text=Create new key").click();
   await expect(keyNameInput).toHaveValue("");
@@ -59,9 +61,8 @@ test("API key page should generate a valid key", async ({
   // ”Copy to Clipboard” does not work in Webkit on Linux
   if (browserName !== "webkit") {
     await page.locator("text=Copy to Clipboard").click();
-    await expect(page.locator("text=✓ Copied")).toBeVisible();
+    await expect(page.locator("text=Copied to clipboard")).toBeVisible();
   }
-  await page.locator("text=Go back").click();
 
   expect(apiKeyValue).toMatch(
     /^b10ck5\.\w{32}\.\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/,
@@ -77,43 +78,9 @@ test("API key page should generate a valid key", async ({
   }
 
   await expect(tableWithKeys).toBeVisible();
-  await expect(page.locator("text=my first key")).toBeVisible();
   await expect(page.locator(`text=${publicKeyId}`)).toBeVisible();
-  await page.locator("text=Regenerate API Key").click();
 
-  await expect(page.locator('button:has-text("Regenerate Key")')).toBeVisible();
-  await expect(
-    page.locator("text=Regenerating the my first key key will invalidate it."),
-  ).toBeVisible();
-
-  await page.locator("text=Cancel").click();
-  await expect(page.locator("text=Regenerate my first key")).not.toBeVisible();
-
-  await page.locator("text=Regenerate API Key").click();
-  await expect(page.locator('button:has-text("Regenerate Key")')).toBeVisible();
-
-  await page.locator('button:has-text("Regenerate Key")').click();
-
-  const apiKeyValue2 =
-    (await page.locator('[data-testid="api-key-value"]').textContent()) ?? "";
-  const publicKeyId2 = apiKeyValue2?.match(/\w{32}/)?.[0] ?? "";
-
-  expect(apiKeyValue).not.toEqual(apiKeyValue2);
-  expect(publicKeyId).not.toEqual(publicKeyId2);
-
-  // ”Copy to Clipboard” does not work in Webkit on Linux
-  if (browserName !== "webkit") {
-    await page.locator("text=Copy to Clipboard").click();
-    await expect(page.locator("text=✓ Copied")).toBeVisible();
-  }
-  await expect(page.locator("text=Key regenerated")).toBeVisible();
-  await page.locator("text=Go back").click();
-
-  await expect(page.locator(`text=${publicKeyId2}`)).toBeVisible();
-  await expect(page.locator(`text=${publicKeyId}`)).not.toBeVisible();
-
-  // @todo Consider moving to a separate test
-  // (requires another run of API key generation logic, perhaps without UI)
+  /** @todo add tests for rename/revoke/create multiple */
 
   const response1 = await request.get("/api/blocks");
   expect(response1.status()).toBe(401);
@@ -126,18 +93,19 @@ test("API key page should generate a valid key", async ({
     ],
   });
 
-  const response2 = await request.get("/api/blocks", {
-    headers: { "x-api-key": apiKeyValue },
-  });
-  expect(response2.status()).toBe(401);
-  expect(await response2.json()).toEqual({
-    errors: [
-      {
-        message: "API key has been revoked.",
-        msg: "API key has been revoked.",
-      },
-    ],
-  });
+  /** @todo use code below to test revoked keys, when test case for revoked key is added back  */
+  // const response2 = await request.get("/api/blocks", {
+  //   headers: { "x-api-key": apiKeyValue },
+  // });
+  // expect(response2.status()).toBe(401);
+  // expect(await response2.json()).toEqual({
+  //   errors: [
+  //     {
+  //       message: "API key has been revoked.",
+  //       msg: "API key has been revoked.",
+  //     },
+  //   ],
+  // });
 
   const response3 = await request.get("/api/blocks", {
     headers: { "x-api-key": "oops" },
@@ -164,7 +132,7 @@ test("API key page should generate a valid key", async ({
   });
 
   const response5 = await request.get("/api/blocks", {
-    headers: { "x-api-key": apiKeyValue2 },
+    headers: { "x-api-key": apiKeyValue },
   });
   expect(response5.status()).toBe(200);
   const blocks = await response5.json();

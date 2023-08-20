@@ -39,7 +39,7 @@ export const App: BlockComponent<BlockEntity> = ({
      * All block <> application messages are split into modules, and so is this property object.
      * Here, we're extracting the 'graph' module messages from the property object.
      * – and then taking a single message from it, 'blockEntitySubgraph'
-     * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for other such messages
+     * @see https://blockprotocol.org/spec/graph#message-definitions for other such messages
      */
     blockEntitySubgraph,
   },
@@ -78,12 +78,13 @@ export const App: BlockComponent<BlockEntity> = ({
      *   - our module helper will dispatch messages to the app from this element, and listen for responses on it
      */
     <div className={styles.block} ref={blockRootRef}>
-      <h1>{`Hello, ${title}`}</h1>
-      <p>
+      <h1 className={styles.heading}>{`Hello, ${title}`}</h1>
+      <p className={styles.paragraph}>
         The entityId of this block is {entityId}. Use it to update its data,
         e.g. by calling <code>updateEntity</code>.
       </p>
       <button
+        className={styles.button}
         onClick={() =>
           /**
            * This is an example of using the graph module to send a message to the embedding application
@@ -92,7 +93,7 @@ export const App: BlockComponent<BlockEntity> = ({
            * – we are passing the 'entityId' of the entity loaded into the block ('blockEntity').
            *
            * Many other messages are available for your block to read and update entities, and links between entities
-           * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions
+           * @see https://blockprotocol.org/spec/graph#message-definitions
            */
           graphModule?.updateEntity({
             data: {

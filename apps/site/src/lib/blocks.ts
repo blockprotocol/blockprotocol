@@ -6,6 +6,8 @@ import {
 import hostedGitInfo from "hosted-git-info";
 import sanitize from "sanitize-html";
 
+import { BlockExampleGraph } from "../components/pages/hub/hub-utils";
+
 const sanitizeUrl = (url: string) => {
   const results = sanitize(`<a href="${url}" />`, {
     allowedAttributes: {
@@ -28,12 +30,6 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   // the folder where the block's assets are stored, currently doubling up as a unique identifier for the block
   // @todo this needs rethinking when we introduce versions, as there will be multiple asset folders
   componentId: string;
-
-  downloads?: {
-    // minimum number of downloads of a block's source in the last 7 days (excludes cached results)
-    weekly: number;
-  };
-
   // an absolute URL to example-graph.json, if it exists
   exampleGraph?: string | null;
   lastUpdated?: string | null;
@@ -187,7 +183,7 @@ export const retrieveBlockFileContent = async ({
 }: ExpandedBlockMetadata): Promise<{
   schema: JsonObject;
   source: string;
-  exampleGraph: JsonObject | null;
+  exampleGraph: BlockExampleGraph | null;
 }> => {
   let schema = { title: "Unparseable schema" };
   try {

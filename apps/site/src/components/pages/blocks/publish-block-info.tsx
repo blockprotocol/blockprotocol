@@ -20,7 +20,7 @@ export const PublishBlockInfo = () => {
         <Link
           variant="bpSmallCopy"
           alignSelf="flex-end"
-          href="/docs/developing-blocks#lifecycle-of-a-block"
+          href="/docs/blocks/develop#lifecycle-of-a-block"
           target="_blank"
           sx={{
             display: "flex",

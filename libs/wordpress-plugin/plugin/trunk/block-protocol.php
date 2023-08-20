@@ -1,7 +1,7 @@
 <?php
 /**
  * @package blockprotocol
- * @version 0.0.4
+ * @version 0.0.9
  */
 /*
 Plugin Name: Block Protocol
@@ -9,14 +9,14 @@ Plugin URI: https://blockprotocol.org/wordpress
 Description: Access an open, growing ecosystem of high-quality and powerful blocks via the Block Protocol.
 Author: Block Protocol
 Author URI: https://blockprotocol.org/?utm_medium=organic&utm_source=wordpress_plugin-directory_blockprotocol-plugin_author-name
-Version: 0.0.4
+Version: 0.0.9
 Requires at least: 5.6.0
-Tested up to: 6.1.1
+Tested up to: 6.2
 License: AGPL-3.0
 License URI: https://www.gnu.org/licenses/agpl-3.0.en.html
 */
 
-const BLOCK_PROTOCOL_PLUGIN_VERISON = "0.0.4";
+const BLOCK_PROTOCOL_PLUGIN_VERSION = "0.0.9";
 
 if (is_readable(__DIR__ . '/vendor/autoload.php')) {
 	require __DIR__ . '/vendor/autoload.php';
@@ -75,6 +75,7 @@ function is_block_protocol_block_permitted($block)
 	return true;
 }
 
+
 // Get blocks from the Block Protocol API
 function get_block_protocol_blocks()
 {
@@ -84,6 +85,7 @@ function get_block_protocol_blocks()
 
 	if (!isset($options['block_protocol_field_api_key']) || strlen($options['block_protocol_field_api_key']) < 1) {
 		$return['errors'][0] = [];
+        $return['errors'][0]['code'] = 'MISSING_API_KEY';
 		$return['errors'][0]['msg'] = 'You need to set an API key in order to use the plugin – select Block Protocol from the left sidebar';
 		return $return;
 	}
@@ -132,15 +134,22 @@ function get_block_protocol_blocks()
 	return array_values($filtered_blocks);
 }
 
+$is_block_protocol_admin = $pagenow == 'admin.php' && ('block_protocol' === $_GET['page']);
+
 // Test connection to the BP API and show a message with status if any error
 function check_block_protocol_connection()
 {
+    global $is_block_protocol_admin;
 	$response = get_block_protocol_blocks();
 
 	if (isset($response['errors'])) {
 		$errors = $response['errors'];
 		$error = $errors[0];
 		$message = $error['msg'];
+
+        if ($error['code'] === "MISSING_API_KEY" && $is_block_protocol_admin) {
+            return;
+        }
 
 		?>
 		<div class="notice notice-error is-dismissible">
@@ -164,9 +173,9 @@ function block_protocol_database_unsupported()
 				<?php 
 				
 				echo (esc_html(
-					"The database you are using is not supported by the plugin. Please use MySQL " 
+					"The database you are using is not supported by the plugin. Please use MySQL "
 					. BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION 
-					. "+ or MariaDB " 
+					. "+ or MariaDB "
 					. BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION 
 					. "+"));
 				?>
@@ -177,8 +186,8 @@ function block_protocol_database_unsupported()
 }
 
 global $pagenow;
-if ($pagenow == 'index.php' || $pagenow == 'plugins.php' || ($pagenow == 'admin.php' && ('block_protocol' === $_GET['page']))) {
-	add_action('admin_notices', 'check_block_protocol_connection');
+if ($pagenow == 'index.php' || $pagenow == 'plugins.php' || ($is_block_protocol_admin)) {
+    add_action('admin_notices', 'check_block_protocol_connection');
 	add_action('admin_notices', 'block_protocol_database_unsupported');
 }
 
@@ -266,7 +275,7 @@ function block_protocol_editor_assets() {
 			'blockprotocol-sentry',
 			plugins_url('build/sentry.js', __FILE__),
 			[],
-			BLOCK_PROTOCOL_PLUGIN_VERISON
+			BLOCK_PROTOCOL_PLUGIN_VERSION
 		);
 		wp_add_inline_script(
 			'blockprotocol-sentry',

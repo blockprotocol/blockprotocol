@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { SerializedUser } from "../../../lib/api/model/user.model";
-import { Avatar } from "./avatar";
+import { UserAvatar } from "../../user-avatar";
 
 type SidebarProps = {
   isMobile: boolean;
@@ -13,6 +13,8 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   isMobile,
   user,
 }) => {
+  const avatarSize = isMobile ? 72 : 250;
+
   return (
     <Box
       sx={{
@@ -22,12 +24,18 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
         flexDirection: { xs: "row", md: "column" },
       }}
     >
-      <Avatar
-        size={isMobile ? 72 : 250}
-        name={user.preferredName || user.shortname}
+      <UserAvatar
+        size={avatarSize}
+        user={user}
         sx={{
           mb: 2,
           mr: { xs: 2, md: 0 },
+          background: `linear-gradient(359.31deg, #7158FF 0.28%, #7F68FF 99.11%)`,
+          border: "none",
+          borderRadius: "6px",
+          color: "white",
+          fontSize: 0.64 * avatarSize,
+          fontWeight: 900,
         }}
       />
       <Box>

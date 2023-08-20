@@ -3,5 +3,10 @@
   "compilerOptions": {
     "skipLibCheck": true
   },
-  "include": ["plugin/trunk/block/**/*", "plugin/trunk/block/window.d.ts"]
+  "include": [
+    "./declarations.d.ts",
+    "plugin/trunk/settings/**/*",
+    "plugin/trunk/block/**/*",
+    "plugin/trunk/block/window.d.ts"
+  ]
 }

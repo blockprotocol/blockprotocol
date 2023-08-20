@@ -37,7 +37,7 @@ pub struct PropertyType {
     id: String,
     title: String,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(flatten)]
     one_of: repr::OneOf<PropertyValues>,
@@ -87,7 +87,7 @@ impl From<super::PropertyType> for PropertyType {
 pub struct PropertyTypeReference {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
-    url: String,
+    pub url: String,
 }
 
 impl PropertyTypeReference {

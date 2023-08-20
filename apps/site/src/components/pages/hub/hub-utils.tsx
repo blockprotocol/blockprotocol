@@ -1,4 +1,4 @@
-import { Entity } from "@blockprotocol/graph";
+import { Entity, EntityRecordId } from "@blockprotocol/graph";
 import { Variants } from "framer-motion";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 import { useRouter } from "next/router";
@@ -9,7 +9,8 @@ export type BlockSchema = Record<string, any>;
 
 /** @todo possibly extend this type */
 export type BlockExampleGraph = {
-  entities?: Entity[];
+  blockEntityRecordId: EntityRecordId;
+  entities: Entity[];
 };
 
 const defaultBrowseType = "blocks";

@@ -20,7 +20,7 @@ import { Link } from "../link";
 import { UserAvatar } from "../user-avatar";
 
 export const AccountDropdown: FunctionComponent = () => {
-  const { user, setUser } = useUser();
+  const { user, signOut } = useUser();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -37,7 +37,7 @@ export const AccountDropdown: FunctionComponent = () => {
   const handleLogout = async () => {
     await apiClient.post("logout");
 
-    setUser(undefined);
+    signOut();
   };
 
   if (user === "loading" || !user) {
@@ -109,10 +109,10 @@ export const AccountDropdown: FunctionComponent = () => {
               </Typography>
             </ListItemButton>
           </Link>
-          <Link href="/settings/api-keys" onClick={() => setOpen(false)}>
+          <Link href="/account/general" onClick={() => setOpen(false)}>
             <ListItemButton sx={{ padding: (theme) => theme.spacing(1, 2) }}>
               <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
-                API Keys
+                Account Settings
               </Typography>
             </ListItemButton>
           </Link>
@@ -125,12 +125,9 @@ export const AccountDropdown: FunctionComponent = () => {
             </Typography>
           </ListItemButton>
           {isBillingFeatureFlagEnabled &&
-          !(
-            user.stripeSubscriptionTier === "pro" &&
-            user.stripeSubscriptionStatus === "active"
-          ) ? (
+          user.stripeSubscriptionTier !== "pro" ? (
             <ListItemButton
-              href="/settings/billing"
+              href="/account/billing"
               sx={{
                 position: "relative",
                 flexDirection: "column",

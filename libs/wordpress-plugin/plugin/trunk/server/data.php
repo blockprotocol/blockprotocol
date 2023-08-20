@@ -1,7 +1,7 @@
 <?php
 
 const BLOCK_PROTOCOL_DATA_URL = 'https://data.blockprotocol.org/v1/batch';
-const BLOCK_PROTOCOL_PUBLIC_AUTH_HEADER = 'Basic MkxFRkhRODk3TWdRcG4zMFZwelZjaHRxNXdJOg==';
+const BLOCK_PROTOCOL_PUBLIC_AUTH_HEADER = 'Basic Mk5nSVQ1Y1ZzdWJKeVk5d3N4MUV1b25qQjk5Og==';
 
 const BLOCK_PROTOCOL_SENTRY_DSN = "https://949242e663cf415c8c1a6a928ae18daa@o146262.ingest.sentry.io/4504758458122240";
 const BLOCK_PROTOCOL_SENTRY_CLIENT_DSN = "https://3cd856b5c8464898b8d070e25411ecf5@o146262.ingest.sentry.io/4504849668046848";
@@ -25,12 +25,15 @@ function block_protocol_report_version_info()
   global $wp_version;
   global $wpdb;
 
+  $db_migration_version = (int) get_site_option('block_protocol_db_migration_version');
+
   return [
     "wpVersion" => $wp_version,
     "dbServerInfo" => $wpdb->db_server_info(),
     "phpVersion" => phpversion(),
     "dbVersion" => $wpdb->db_version(),
     "dbSupported" => block_protocol_is_database_supported(),
+    "dbMigration" => $db_migration_version,
   ];
 }
 
@@ -90,7 +93,7 @@ function block_protocol_page_data(string $event, array $data)
   $data['keyPublicId'] = $public_id;
   $data['origin'] = get_site_url();
   $data['wpTimestamp'] = gmdate("Y-m-d\TH:i:s\Z");
-  $data["pluginVersion"] = BLOCK_PROTOCOL_PLUGIN_VERISON;
+  $data["pluginVersion"] = BLOCK_PROTOCOL_PLUGIN_VERSION;
 
   $payload = [
     'userId' => block_protocol_anonymous_user_id(),
@@ -159,7 +162,7 @@ function block_protocol_shared_sentry_args()
   return [	
     'environment' => $environment,
     'server_name' => $server_url,
-    'release' => BLOCK_PROTOCOL_PLUGIN_VERISON,
+    'release' => BLOCK_PROTOCOL_PLUGIN_VERSION,
   ];
 }
 

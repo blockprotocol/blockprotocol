@@ -87,6 +87,7 @@ const HEADING_MARGIN_TOP = {
   H3: 6,
   H4: 6,
   H5: 6,
+  H6: 6,
 };
 const HEADING_MARGIN_BOTTOM = 2;
 
@@ -189,7 +190,7 @@ export const mdxComponents: Record<
   h4: (props: TypographyProps) => {
     return (
       <Heading
-        mt={HEADING_MARGIN_TOP.H5}
+        mt={HEADING_MARGIN_TOP.H4}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading4"
         {...props}
@@ -202,6 +203,16 @@ export const mdxComponents: Record<
         mt={HEADING_MARGIN_TOP.H5}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading5"
+        {...props}
+      />
+    );
+  },
+  h6: (props: TypographyProps) => {
+    return (
+      <Heading
+        mt={HEADING_MARGIN_TOP.H6}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading6"
         {...props}
       />
     );

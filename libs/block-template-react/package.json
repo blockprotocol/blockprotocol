@@ -1,6 +1,6 @@
 {
   "name": "block-template-react",
-  "version": "0.3.2",
+  "version": "0.4.2",
   "description": "Block Protocol template for a React-based block",
   "keywords": [
     "blockprotocol",
@@ -33,14 +33,15 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.2.1"
+    "@blockprotocol/graph": "0.3.0"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
-    "@types/react-dom": "^18.0.9",
-    "block-scripts": "0.2.2",
+    "@types/react-dom": "18.0.9",
+    "@types/react-is": "18.2.0",
+    "block-scripts": "0.3.1",
     "eslint": "8.33.0",
-    "mock-block-dock": "0.1.3",
+    "mock-block-dock": "0.1.6",
     "prettier": "2.8.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -57,16 +58,11 @@
       "entryPoint": "react"
     },
     "displayName": "Template",
-    "examples": [
-      {
-        "https://blockprotocol.org/@blockprotocol/types/property-type/name/": "World"
-      }
-    ],
     "icon": "public/omega.svg",
     "image": "public/block-preview.png",
     "name": "block-template-react",
     "protocol": "0.3",
-    "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
+    "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/3",
     "codegen": {
       "outputFolder": "src/types/generated",
       "targets": {

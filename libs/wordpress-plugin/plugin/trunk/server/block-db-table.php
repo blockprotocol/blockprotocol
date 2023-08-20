@@ -1,22 +1,35 @@
 <?php
 
-const BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION = "8.0.0";
+// The following minimum versions are the minimum versions that support the JSON data type.
+// see https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-json
+const BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION = "5.7.8";
+// See https://mariadb.com/kb/en/mariadb-1027-release-notes/
 const BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION = "10.2.7";
 
-function block_protocol_is_database_supported()
+function block_protocol_database_at_version(string $mysql_version, string $mariadb_version)
 {
+
   global $wpdb;
-  
-  $db_version = $wpdb->db_version();
+
+  // $wpdb->db_version() can be broken for MariaDB - @see https://core.trac.wordpress.org/ticket/47738
+  $db_version = $wpdb->get_var( 'SELECT VERSION()' );
   $db_server_info = $wpdb->db_server_info();
 
   if (strpos($db_server_info, 'MariaDB') != false) {
     // site is using MariaDB
-    return $db_version >= BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION;
+    return strnatcmp($db_version, $mariadb_version) >= 0;
   } else {
     // site is using MySQL
-    return $db_version >= BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION;
+    return strnatcmp($db_version, $mysql_version) >= 0;
   }
+}
+
+function block_protocol_is_database_supported()
+{
+  return block_protocol_database_at_version(
+    BLOCK_PROTOCOL_MINIMUM_MYSQL_VERSION,
+    BLOCK_PROTOCOL_MINIMUM_MARIADB_VERSION
+  );
 }
 
 function block_protocol_migration_1()
@@ -24,7 +37,7 @@ function block_protocol_migration_1()
   global $wpdb;
   $charset_collate = $wpdb->get_charset_collate();
 
-  $sql = "CREATE TABLE `{$wpdb->prefix}block_protocol_entities` (
+  $sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}block_protocol_entities` (
     -- common data across all entities
     entity_id char(36) NOT NULL,
     entity_type_id text NOT NULL,
@@ -54,21 +67,52 @@ function block_protocol_migration_1()
   block_protocol_maybe_capture_error($wpdb->last_error);
 }
 
+function block_protocol_migration_2()
+{
+  // This migration is solely to try to recreate the database in older installations
+  // that may have a unmigrated DB but a migration_version of `2`.
+  // This only works because we have `IF NOT EXISTS` in the first migration.
+  block_protocol_migration_1();
+}
+
+function block_protocol_set_migration_version_to(int $migration_version)
+{
+  global $wpdb;
+
+  if (!$wpdb->last_error){
+    update_site_option('block_protocol_db_migration_version', $migration_version);
+  }
+}
+
+function block_protocol_migrations()
+{
+  return [
+    'block_protocol_migration_1',
+    'block_protocol_migration_2',
+  ];
+}
+
 function block_protocol_migrate()
 {
-  $saved_version = (int) get_site_option('block_protocol_db_migration_version');
-
   // Don't apply migrations if the DB version is unsupported.
   if (!block_protocol_is_database_supported()) {
     return;
   }
 
-  if ($saved_version < 2) {
-    block_protocol_migration_1();
-    update_site_option('block_protocol_db_migration_version', 2);
-  }
+  $saved_version = ((int) get_site_option('block_protocol_db_migration_version')) ?? 0;
 
-  // future migrations go here
+  $migrations = block_protocol_migrations();
+
+  // Apply new migrations sequentially, skipping already-applied ones.
+  foreach ($migrations as $index => $migration) {
+    // Fetch the saved version at each iteration as it should be changing
+    $saved_version = (int) get_site_option('block_protocol_db_migration_version');
+    $expected_migration_version = $index + 1;
+    if ($saved_version <= $expected_migration_version) {
+      ($migration)();
+      block_protocol_set_migration_version_to($expected_migration_version + 1);
+    }
+  }
 }
 
 function block_protocol_database_available() 

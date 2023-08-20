@@ -20,19 +20,9 @@ function generate_block_protocol_guidv4()
   return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
 }
 
-function get_block_protocol_subgraph(
-  string $base_where_term,
-  int $has_left_incoming_depth,
-  int $has_right_incoming_depth,
-  int $has_left_outgoing_depth,
-  int $has_right_outgoing_depth
-)
+function block_protocol_entity_selection()
 {
-  global $wpdb;
-
-  $table = get_block_protocol_table_name();
-
-  $selection = "
+  return "
   entity_id,
   entity_type_id,
   left_entity_id,
@@ -44,6 +34,194 @@ function get_block_protocol_subgraph(
   created_at,
   updated_by_id,
   updated_at";
+
+}
+
+/**
+ * Natively traverse a subgraph using a base where term.
+ * This functions is meant to be as compatible as possible with various MySQL/MariaDB versions
+ */
+function block_protocol_native_subgraph_query(
+  string $base_where_term,
+  int $has_left_incoming_depth,
+  int $has_right_incoming_depth,
+  int $has_left_outgoing_depth,
+  int $has_right_outgoing_depth
+) {
+  global $wpdb;
+
+  $table = get_block_protocol_table_name();
+
+  $subgraph = [];
+  $queue = [];
+
+  // Initial query using the base where term
+  $selection = block_protocol_entity_selection();
+  $sql = $wpdb->prepare("
+    SELECT
+      " . $selection . ",
+      0 as has_left_incoming_depth,
+      0 as has_right_incoming_depth,
+      0 as has_left_outgoing_depth,
+      0 as has_right_outgoing_depth
+    FROM {$table}
+    " . $base_where_term
+  );
+
+  // Initialize the queue with the starting nodes
+  $queue = $wpdb->get_results($sql, ARRAY_A);
+
+  $visited = [];
+
+  // Loop while the queue is not empty
+  while (!empty($queue)) {
+    // Dequeue the next node
+    $node = array_shift($queue);
+
+    // Skip nodes that have already been visited
+    if ($visited[$node['entity_id']] ?? false) {
+        continue;
+    }
+
+    $visited[$node['entity_id']] = true;
+
+    // ensure that the depths are all ints
+    $node['has_left_incoming_depth'] = (int) $node['has_left_incoming_depth'];
+    $node['has_right_incoming_depth'] = (int) $node['has_right_incoming_depth'];
+    $node['has_left_outgoing_depth'] = (int) $node['has_left_outgoing_depth'];
+    $node['has_right_outgoing_depth'] = (int) $node['has_right_outgoing_depth'];
+
+    // Add the node to the result list
+    $subgraph[] = $node;
+
+    $next_nodes = [];
+
+    // Add nodes connected by incoming has_left links
+    if ($node['has_left_incoming_depth'] < $has_left_incoming_depth) {
+      $sql = $wpdb->prepare(
+        "SELECT
+          " . $selection . ",
+          %d + 1 as has_left_incoming_depth,
+          %d as has_right_incoming_depth,
+          %d as has_left_outgoing_depth,
+          %d as has_right_outgoing_depth
+        FROM {$table}
+        WHERE left_entity_id = %d
+        ",
+        $node['has_left_incoming_depth'],
+        $node['has_right_incoming_depth'],
+        $node["has_left_outgoing_depth"],
+        $node["has_right_outgoing_depth"],
+        $node['entity_id']
+      );
+
+      $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
+    }
+
+    // Add nodes connected by incoming has_right links
+    if ($node['has_right_incoming_depth'] < $has_right_incoming_depth) {
+      $sql = $wpdb->prepare(
+        "SELECT
+          " . $selection . ",
+          %d as has_left_incoming_depth,
+          %d + 1 as has_right_incoming_depth,
+          %d as has_left_outgoing_depth,
+          %d as has_right_outgoing_depth
+        FROM {$table}
+        WHERE right_entity_id = %d
+        ",
+        $node['has_left_incoming_depth'],
+        $node['has_right_incoming_depth'],
+        $node["has_left_outgoing_depth"],
+        $node["has_right_outgoing_depth"],
+        $node['entity_id']
+      );
+
+      $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
+    }
+
+    // Add nodes connected by outgoing has_left links
+    if ($node['has_left_outgoing_depth'] < $has_left_outgoing_depth) {
+      $sql = $wpdb->prepare(
+        "SELECT
+          " . $selection . ",
+          %d as has_left_incoming_depth,
+          %d as has_right_incoming_depth,
+          %d + 1 as has_left_outgoing_depth,
+          %d as has_right_outgoing_depth
+        FROM {$table}
+        WHERE entity_id = %d
+        ",
+        $node['has_left_incoming_depth'],
+        $node['has_right_incoming_depth'],
+        $node["has_left_outgoing_depth"],
+        $node["has_right_outgoing_depth"],
+        $node['left_entity_id']
+      );
+
+      $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
+    }
+
+    // Add nodes connected by outgoing has_right links
+    if ($node['has_right_outgoing_depth'] < $has_right_outgoing_depth) {
+      $sql = $wpdb->prepare(
+        "SELECT
+          " . $selection . ",
+          %d as has_left_incoming_depth,
+          %d as has_right_incoming_depth,
+          %d as has_left_outgoing_depth,
+          %d + 1 as has_right_outgoing_depth
+        FROM {$table}
+        WHERE entity_id = %d
+        ",
+        $node['has_left_incoming_depth'],
+        $node['has_right_incoming_depth'],
+        $node["has_left_outgoing_depth"],
+        $node["has_right_outgoing_depth"],
+        $node['right_entity_id']
+      );
+
+      $next_nodes = array_merge($next_nodes, $wpdb->get_results($sql, ARRAY_A));
+    }
+
+    // Add the next nodes to the queue
+    foreach ($next_nodes as $next_node)  {
+      $entity_id = $next_node['entity_id'];
+
+      if (!($visited[$entity_id] ?? false)) {
+        $queue[] = $next_node;
+      }
+    }
+  }
+
+  foreach($subgraph as &$element) {
+    unset($element["has_left_incoming_depth"]);
+    unset($element["has_right_incoming_depth"]);
+    unset($element["has_left_outgoing_depth"]);
+    unset($element["has_right_outgoing_depth"]);
+  }
+
+  return $subgraph;
+}
+
+
+/**
+ * Traverse a subgraph using Recursive CTEs in the DB.
+ * This functions is likely unsupported by older versions of the DB.
+ */
+function block_protocol_db_subgraph_query(
+  string $base_where_term,
+  int $has_left_incoming_depth,
+  int $has_right_incoming_depth,
+  int $has_left_outgoing_depth,
+  int $has_right_outgoing_depth
+)
+{
+  global $wpdb;
+
+  $table = get_block_protocol_table_name();
+
+  $selection = block_protocol_entity_selection();
 
   $sql = $wpdb->prepare(
     "WITH RECURSIVE linked_entities AS (
@@ -77,8 +255,8 @@ function get_block_protocol_subgraph(
         has_right_incoming_depth,
         has_left_outgoing_depth,
         has_right_outgoing_depth
-    FROM {$table} e2 
-    JOIN linked_entities 
+    FROM {$table} e2
+    JOIN linked_entities
       ON e2.left_entity_id = linked_entities.entity_id
     WHERE has_left_incoming_depth < %d
 
@@ -101,8 +279,8 @@ function get_block_protocol_subgraph(
         has_right_incoming_depth + 1,
         has_left_outgoing_depth,
         has_right_outgoing_depth
-    FROM {$table} e2 
-    JOIN linked_entities 
+    FROM {$table} e2
+    JOIN linked_entities
       ON e2.right_entity_id = linked_entities.entity_id
     WHERE has_right_incoming_depth < %d
 
@@ -125,8 +303,8 @@ function get_block_protocol_subgraph(
         has_right_incoming_depth,
         has_left_outgoing_depth +1,
         has_right_outgoing_depth
-    FROM {$table} e2 
-    JOIN linked_entities 
+    FROM {$table} e2
+    JOIN linked_entities
       ON e2.entity_id = linked_entities.left_entity_id
     WHERE has_left_outgoing_depth < %d
 
@@ -149,8 +327,8 @@ function get_block_protocol_subgraph(
         has_right_incoming_depth,
         has_left_outgoing_depth,
         has_right_outgoing_depth + 1
-    FROM {$table} e2 
-    JOIN linked_entities 
+    FROM {$table} e2
+    JOIN linked_entities
       ON e2.entity_id = linked_entities.right_entity_id
     WHERE has_right_outgoing_depth < %d
   )
@@ -165,6 +343,40 @@ function get_block_protocol_subgraph(
   );
 
   $subgraph = $wpdb->get_results($sql, ARRAY_A);
+
+  return $subgraph;
+}
+
+function get_block_protocol_subgraph(
+  string $base_where_term,
+  int $has_left_incoming_depth,
+  int $has_right_incoming_depth,
+  int $has_left_outgoing_depth,
+  int $has_right_outgoing_depth
+)
+{
+  global $wpdb;
+  // See https://dev.mysql.com/doc/refman/8.0/en/mysql-nutshell.html
+  $mysql_recursive_cte_version = "8.0";
+  // See https://mariadb.com/kb/en/mariadb-1022-release-notes/#notable-changes
+  $mariadb_recursive_cte_version = "10.2.2";
+
+  // Dynamically choose how to execute the query based on the database version
+  $action =
+    block_protocol_database_at_version(
+      $mysql_recursive_cte_version,
+      $mariadb_recursive_cte_version
+    )
+    ? "block_protocol_db_subgraph_query"
+    : "block_protocol_native_subgraph_query";
+
+  $subgraph = ($action)(
+    $base_where_term,
+    $has_left_incoming_depth,
+    $has_right_incoming_depth,
+    $has_left_outgoing_depth,
+    $has_right_outgoing_depth,
+  );
 
   block_protocol_maybe_capture_error($wpdb->last_error);
   return $subgraph;
@@ -197,6 +409,10 @@ function get_all_block_protocol_entities()
   return $entities;
 }
 
+function block_protocol_json_encode(array $value)
+{
+  return json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+}
 
 function query_block_protocol_entities(WP_REST_Request $request)
 {
@@ -207,8 +423,11 @@ function query_block_protocol_entities(WP_REST_Request $request)
   $multi_filter = $params["operation"]["multiFilter"] ?? [];
   $multi_sort = $params["operation"]["multiSort"] ?? [];
 
+  $db_server_info = $wpdb->db_server_info();
+  $is_maria_db = strpos($db_server_info, 'MariaDB') != false;
+
   try {
-    $query = block_protocol_query_entities($multi_filter, $multi_sort);
+    $query = block_protocol_query_entities($multi_filter, $multi_sort, $is_maria_db);
   } catch (InvalidArgumentException $e) {
     return ["error" => $e->getMessage()];
   }
@@ -304,12 +523,20 @@ function create_block_protocol_entity(WP_REST_Request $request)
     return $results;
   }
 
-  $properties = json_encode($params['properties']);
+  $properties = block_protocol_json_encode($params['properties']);
 
   if (!$properties) {
     $results['error'] = "You must provide 'properties' to create an entity with";
     return $results;
   }
+
+  if ($properties == "[]") {
+    // if sent an empty properties object, json_encode will convert it into an array
+    // we could JSON_FORCE_OBJECT json_encode but that would convert any empty arrays inside into objects
+    // @todo different parsing strategy that preserves the original JSON
+    $properties = "{}";
+  }
+
 
   $entity_id = generate_block_protocol_guidv4();
 
@@ -393,11 +620,18 @@ function update_block_protocol_entity(WP_REST_Request $request)
   $left_to_right_order = isset($params['left_to_right_order']) ? $params['left_to_right_order'] : null;
   $right_to_left_order = isset($params['right_to_left_order']) ? $params['right_to_left_order'] : null;
 
-  $encoded_properties = json_encode($params['properties']);
+  $encoded_properties = block_protocol_json_encode($params['properties']);
 
   if (!$encoded_properties) {
     $results['error'] = "You must provide 'properties' for an update";
     return $results;
+  }
+
+  if ($encoded_properties == "[]") {
+    // if sent an empty properties object, json_encode will convert it into an array
+    // we could JSON_FORCE_OBJECT json_encode but that would convert any empty arrays inside into objects
+    // @todo different parsing strategy that preserves the original JSON
+    $encoded_properties = "{}";
   }
 
   $update = [
@@ -568,7 +802,7 @@ function upload_block_protocol_file(WP_REST_Request $request)
     'updated_at' => current_time('mysql', 1),
     'created_by_id' => $user_id,
     'updated_by_id' => $user_id,
-    'properties' => json_encode([
+    'properties' => block_protocol_json_encode([
       'https://blockprotocol.org/@blockprotocol/types/property-type/description/' => $description,
       'https://blockprotocol.org/@blockprotocol/types/property-type/file-name/' => $filename,
       'https://blockprotocol.org/@blockprotocol/types/property-type/file-size/' => $metadata['filesize'],
@@ -612,7 +846,7 @@ function call_block_protocol_service(WP_REST_Request $request)
 
   $url = $site_host . "/api/external-service-method";
 
-  $body = json_encode([
+  $body = block_protocol_json_encode([
     'providerName' => $provider_name,
     'methodName' => $method_name,
     'payload' => $data,

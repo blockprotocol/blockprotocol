@@ -2,7 +2,7 @@
 
 ## Step one: copy this template
 
-See [https://blockprotocol.org/docs/developing-blocks](https://blockprotocol.org/docs/developing-blocks)
+See [https://blockprotocol.org/docs/blocks/develop](https://blockprotocol.org/docs/blocks/develop)
 
 **TL;DR:** Run `npx create-block-app@latest [your-block-name] --template=custom-element`
 
@@ -15,7 +15,7 @@ A key part of the Block Protocol is the use of types to describe the data your b
 Your block should be associated with an “entity type” which will be used by embedding applications
 to understand what sorts of entities can be sent to it (e.g. what properties do they have?).
 
-You can create an entity type on [blockprotocol.org](https://blockprotocol.org) — see [the docs](https://blockprotocol.org/docs/developing-blocks) for a full guide.
+You can create an entity type on [blockprotocol.org](https://blockprotocol.org) — see [the docs](https://blockprotocol.org/docs/blocks/develop) for a full guide.
 
 Once you have created the type representing the data your block needs, copy its URL for use in the next step.
 
@@ -60,9 +60,9 @@ This template uses the Lit custom element framework. Please see [the Lit docs](h
         - `icon`: an icon to be associated with your block
         - `name`: a slugified name for your block (which may differ to the package `name` in package.json); it can be defined as `blockname` or `@namespace/blockname`, where `namespace` must be your username on blockprotocol.org if you intend to publish it there
       - lists the `externals` - libraries the block expects the host app to provide
-    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/docs/spec).
+    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/spec).
 
-Please see [the Block Protocol docs](https://blockprotocol.org/docs/developing-blocks)
+Please see [the Block Protocol docs](https://blockprotocol.org/docs/blocks/develop)
 for a fuller explanation of querying, creating and updating entity data from your block.
 
 You can format your code using `yarn format` (or `npm run format`).
@@ -85,7 +85,7 @@ and `dev.tsx` like this:
 
 ## Step five: publish your block
 
-Head over to [blockprotocol.org](https://blockprotocol.org/docs/developing-blocks#publish) to read instructions on publishing your block.
+Head over to [blockprotocol.org](https://blockprotocol.org/docs/blocks/develop#publish) to read instructions on publishing your block.
 
 ## Debugging
 

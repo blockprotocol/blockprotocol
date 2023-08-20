@@ -2,7 +2,7 @@ import { faArrowLeft, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Fade, Paper, Typography } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "../components/button";
 import {
@@ -52,7 +52,7 @@ const SignupPage: NextPage = () => {
     };
   }, [router]);
 
-  const { user, setUser } = useUser();
+  const { user, setUser, signOut } = useUser();
   const [currentScreen, setCurrentScreen] = useState<SignupPageScreen>("Email");
 
   const [email, setEmail] = useState<string>();
@@ -63,6 +63,7 @@ const SignupPage: NextPage = () => {
   const [verificationCodeInfo, setVerificationCodeInfo] = useState<
     VerificationCodeInfo | undefined
   >();
+  const [checkedQueryParams, setCheckedQueryParams] = useState(false);
 
   useEffect(() => {
     if (Object.values(parsedQuery).filter((value) => !!value).length > 0) {
@@ -85,18 +86,36 @@ const SignupPage: NextPage = () => {
         shallow: true,
       });
     }
+
+    if (router.isReady) {
+      setCheckedQueryParams(true);
+    }
   }, [parsedQuery, router]);
 
   useEffect(() => {
-    if (user && user !== "loading") {
-      if (user.isSignedUp) {
-        void router.push({ pathname: redirectPath ?? "/dashboard" });
-      } else if (currentScreen !== "CompleteSignup") {
-        setEmail(user.email);
-        setCurrentScreen("CompleteSignup");
+    if (checkedQueryParams && user && user !== "loading") {
+      if (!email || user.email === email) {
+        if (user.isSignedUp) {
+          void router.push({ pathname: redirectPath ?? "/dashboard" });
+        } else if (currentScreen !== "CompleteSignup") {
+          setEmail(user.email);
+          setCurrentScreen("CompleteSignup");
+        }
+      } else {
+        // We may already be logged in, but this is a verification code for a new account, so let's log out
+        signOut();
       }
     }
-  }, [user, router, currentScreen, redirectPath]);
+  }, [
+    user,
+    router,
+    currentScreen,
+    redirectPath,
+    checkedQueryParams,
+    email,
+    setUser,
+    signOut,
+  ]);
 
   const displayInfoSidebar =
     currentScreen === "Email" || currentScreen === "VerificationCode";
@@ -110,9 +129,15 @@ const SignupPage: NextPage = () => {
     setCurrentScreen("VerificationCode");
   };
 
-  const handleVerificationCodeSubmitted = (loggedInUser: SerializedUser) => {
-    setUser(loggedInUser);
-  };
+  const handleVerificationCodeSubmitted = useCallback(
+    (loggedInUser: SerializedUser, nextRedirectPath?: string) => {
+      if (nextRedirectPath) {
+        setRedirectPath(nextRedirectPath);
+      }
+      setUser(loggedInUser);
+    },
+    [setUser],
+  );
 
   return (
     <Box

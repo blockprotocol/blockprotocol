@@ -24,10 +24,10 @@ pub struct Array<T> {
     r#type: ArrayTypeTag,
     items: T,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     min_items: Option<usize>,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     max_items: Option<usize>,
 }
 

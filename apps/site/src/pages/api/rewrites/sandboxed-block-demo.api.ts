@@ -90,9 +90,6 @@ const handler: NextApiHandler = async (req, res) => {
   // We will dynamically update initialEntities in response to updated prop messages in the iFrame code
   const mockBlockDockInitialData = {
     initialEntities: exampleGraph?.entities ?? [],
-    initialEntityTypes: exampleGraph?.entityTypes,
-    initialLinks: exampleGraph?.links,
-    initialLinkedQueries: exampleGraph?.linkedQueries,
     initialTemporalAxes: temporalAxes,
   };
 
@@ -194,6 +191,11 @@ const handler: NextApiHandler = async (req, res) => {
         openaiCompleteText: ({ data: payload }) => handleServiceMessage({
           providerName: "OpenAI",
           methodName: "completeText",
+          payload,
+        }),
+        openaiCompleteChat: ({ data: payload }) => handleServiceMessage({
+          providerName: "OpenAI",
+          methodName: "completeChat",
           payload,
         }),
         mapboxForwardGeocoding: ({ data: payload }) => handleServiceMessage({

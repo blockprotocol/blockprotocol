@@ -13,6 +13,7 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { SerializedUser } from "../../lib/api/model/user.model";
 import { ApiClientError } from "../../lib/api-client";
+import { setWordPressSettingsUrlSession } from "../../lib/word-press-settings-url-session";
 import { Button } from "../button";
 import {
   isVerificationCodeFormatted,
@@ -31,7 +32,7 @@ type VerificationCodeScreenProps = {
   email: string;
   initialVerificationCode?: string;
   setVerificationCodeId: (verificationCodeId: string) => void;
-  onSubmit: (user: SerializedUser) => void;
+  onSubmit: (user: SerializedUser, redirectPath?: string) => void;
   onChangeEmail: () => void;
   resend: (params: { email: string }) => Promise<{
     data?: { userId: string; verificationCodeId: string };
@@ -42,7 +43,11 @@ type VerificationCodeScreenProps = {
     verificationCodeId: string;
     code: string;
   }) => Promise<{
-    data?: { user: SerializedUser };
+    data?: {
+      user: SerializedUser;
+      redirectPath?: string;
+      wordpressSettingsUrl?: string;
+    };
     error?: ApiClientError;
   }>;
 };
@@ -63,6 +68,8 @@ export const VerificationCodeScreen: FunctionComponent<
   submit,
 }) => {
   const verificationCodeInputRef = useRef<HTMLInputElement>(null);
+
+  const submittedInitialVerificationCode = useRef<string | null>(null);
 
   useEffect(() => {
     if (verificationCodeInputRef.current) {
@@ -115,6 +122,10 @@ export const VerificationCodeScreen: FunctionComponent<
 
   const handleSubmit = useCallback(
     async (code: string) => {
+      if (submitting) {
+        return;
+      }
+
       setTouchedVerificationCodeInput(true);
       setApiSubmittedErrorMessage(undefined);
 
@@ -130,17 +141,22 @@ export const VerificationCodeScreen: FunctionComponent<
         if (error) {
           setApiSubmittedErrorMessage(error.message);
         } else if (data) {
-          onSubmit(data.user);
+          setWordPressSettingsUrlSession(data.wordpressSettingsUrl);
+          onSubmit(data.user, data.redirectPath);
         }
       }
     },
-    [onSubmit, submit, userId, verificationCodeId],
+    [onSubmit, submit, submitting, userId, verificationCodeId],
   );
 
   useEffect(() => {
-    if (initialVerificationCode) {
+    if (
+      initialVerificationCode &&
+      initialVerificationCode !== submittedInitialVerificationCode.current
+    ) {
       setTouchedVerificationCodeInput(true);
       setVerificationCode(initialVerificationCode);
+      submittedInitialVerificationCode.current = initialVerificationCode;
       void handleSubmit(initialVerificationCode);
     }
   }, [initialVerificationCode, setVerificationCode, handleSubmit]);

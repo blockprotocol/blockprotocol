@@ -2,7 +2,7 @@
 
 This folder contains the code for [blockprotocol.org](https://blockprotocol.org), including:
 
-- the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/3_spec)
+- the [Block Protocol specification](https://blockprotocol.org/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/spec)
 - the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs)
 
 ## Local development
@@ -265,18 +265,39 @@ Retrieves the user object of the currently logged in user.
 Retrieves metadata on the API keys associated with the authenticated user.
 
 - Request Response:
-  - `apiKeys`: metadata on API keys (the key itself is only visible at the point of generation)
+  - `apiKeys`: metadata on all the user's API keys (the keys themselves are only visible at the point of generation)
 
 #### `POST /api/me/generate-api-key` [requires cookie authentication]
 
-Generates a new API key for the authenticated user, and revokes any others.
+Generates a new API key for the authenticated user.
 
 - Request Body:
 
-  - `displayName`: a display name for the API key
+  - `displayName`: a display name for the API key.
 
 - Request Response:
   - `apiKey`: the key itself, a string.
+
+#### `POST /api/me/revoke-api-key` [requires cookie authentication]
+
+Revokes a given API key for the authenticated user.
+
+- Request Body:
+
+  - `publicId`: the public ID portion of the API key to revoke.
+
+- Request Response: `SUCCESS`
+
+#### `POST /api/me/update-api-key` [requires cookie authentication]
+
+Update a given API key for the authenticated user.
+
+- Request Body:
+
+  - `publicId`: the public ID portion of the API key to update.
+  - `displayName`: the new `displayName` that should be present on the API key.
+
+- Request Response: `SUCCESS`
 
 #### `POST /api/logout` [requires cookie authentication]
 
@@ -294,6 +315,24 @@ Uploads a user avatar and apply it to logged in profile page.
 
 - Response Body:
   - `avatarUrl`: Url pointing to the newly uploaded user avatar.
+
+#### `GET /api/remove-user-avatar` [requires cookie authentication]
+
+Removes current avatar of the user.
+
+- Request Response: `SUCCESS`
+
+#### `POST /api/update-user-preferred-name` [requires cookie authentication]
+
+Updates preferred name of the authenticated user.
+
+- Request Body:
+
+  - `preferredName`: the preferred name of the user associated with the BP account
+
+- Request Response:
+
+  - `user`: the updated BP user
 
 #### `POST /api/blocks/create`
 

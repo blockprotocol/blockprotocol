@@ -73,7 +73,7 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
           description={schema.description as string}
           extraContent={`Version ${metadata.recordId.version}`}
           url={schema.$id}
-          sx={{ whiteSpace: "pre" }}
+          sx={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
         />
       ))}
       {createSchemaModal}

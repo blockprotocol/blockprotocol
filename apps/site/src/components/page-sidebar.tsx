@@ -23,6 +23,7 @@ import {
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { theme as themeImport } from "../theme";
+import { COPY_FONT_FAMILY } from "../theme/typography";
 import { parseHTML } from "../util/html-utils";
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
@@ -46,6 +47,7 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   paddingBottom: 8,
   minHeight: SIDEBAR_LINK_HEIGHT,
   wordBreak: "break-word",
+  width: "100%",
 }));
 
 type SidebarPageSectionProps = {
@@ -58,11 +60,18 @@ type SidebarPageSectionProps = {
   setOpenedPages: Dispatch<SetStateAction<string[]>>;
 };
 
-const highlightSection = (isSectionSelected: boolean) => ({
-  borderLeft: `3px solid ${
+const highlightSection = (isSectionSelected: boolean) => {
+  const borderLeft = `3px solid ${
     isSectionSelected ? themeImport.palette.purple[700] : "transparent"
-  }`,
-});
+  }`;
+
+  return {
+    borderLeft,
+    ":focus-visible": {
+      borderLeft,
+    },
+  };
+};
 
 const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
   depth = 1,
@@ -219,6 +228,7 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
           isSelected ? (theme) => theme.palette.purple[100] : "transparent"
         }
         pr={1}
+        fontFamily={COPY_FONT_FAMILY}
       >
         <SidebarLink
           ref={(ref) => {
@@ -226,7 +236,10 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
               setSelectedAnchorElement(ref);
             }
           }}
-          scroll={!asPath?.startsWith("/docs") && !asPath?.startsWith("/spec")}
+          scroll={
+            (!asPath?.startsWith("/docs") && !asPath?.startsWith("/spec")) ||
+            !asPath?.startsWith("/roadmap")
+          }
           href={href}
           sx={(theme) => ({
             alignSelf: "flex-start",

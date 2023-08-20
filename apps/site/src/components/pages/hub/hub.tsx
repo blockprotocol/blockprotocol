@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 
@@ -45,7 +45,7 @@ const HubItem = ({
   <Stack direction="row" spacing={2} alignItems="start">
     {image ? (
       <Link href={url}>
-        <Box component="img" sx={{ width: 24 }} src={image} />
+        <Box component="img" sx={{ width: 24, minWidth: 24 }} src={image} />
       </Link>
     ) : null}
     <Stack spacing={0.75}>
@@ -63,9 +63,16 @@ const HubItem = ({
       {description ? (
         <Typography
           variant="bpSmallCopy"
-          color={(theme) => theme.palette.gray[80]}
-          fontSize={15}
-          fontWeight={400}
+          sx={{
+            color: (theme) => theme.palette.gray[80],
+            display: "-webkit-box",
+            "-webkit-line-clamp": "2",
+            "-webkit-box-orient": "vertical",
+            overflow: "hidden",
+            minWidth: 0,
+            fontSize: 15,
+            fontWeight: 400,
+          }}
         >
           {description}
         </Typography>
@@ -116,12 +123,12 @@ const HubItemLoading = () => (
   </Stack>
 );
 
-const AnimatedTypography = motion(Typography);
+const AnimatedTypography = m(Typography);
 
 const HubHeaderWrapper = ({ children }: { children: ReactNode }) => (
-  <motion.div variants={fadeInWrapper} initial="hidden" animate="show">
+  <m.div variants={fadeInWrapper} initial="hidden" animate="show">
     {children}
-  </motion.div>
+  </m.div>
 );
 
 const HubHeading = ({ children }: { children: ReactNode }) => (
@@ -221,17 +228,20 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
           <Grid container columnSpacing={6}>
             <Grid
               item
-              xs={3}
-              sx={(theme) => ({
-                borderRight: 1,
-                borderColor: theme.palette.gray[30],
+              xs={12}
+              sm={3}
+              sx={({ breakpoints, palette }) => ({
+                pb: { xs: 2, sm: 5 },
+                pt: 6.5,
+                [breakpoints.up("sm")]: {
+                  borderRight: 1,
+                  borderColor: palette.gray[30],
+                },
               })}
-              pt={6.5}
-              pb={5}
             >
               <HubListBrowse onBrowseClick={listenRouteChange} />
             </Grid>
-            <Grid item xs={9} pt={6.5} pb={6.5}>
+            <Grid item xs={12} sm={9} sx={{ pt: { xs: 2, sm: 6.5 }, pb: 6.5 }}>
               {routeChanging ? <HubBrowseHeaderLoading /> : <HubBrowseHeader />}
             </Grid>
           </Grid>
@@ -242,14 +252,19 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
           <Grid container columnSpacing={6}>
             <Grid
               item
-              xs={3}
-              sx={(theme) => ({
-                borderRight: 1,
-                borderColor: theme.palette.gray[30],
+              xs={12}
+              sm={3}
+              sx={({ breakpoints, palette }) => ({
+                display: "none",
+                [breakpoints.up("sm")]: {
+                  display: "block",
+                  borderRight: 1,
+                  borderColor: palette.gray[30],
+                },
               })}
               pt={6.5}
             />
-            <Grid item xs={9} pt={6.5} pb={9}>
+            <Grid item xs={12} sm={9} pt={6.5} pb={9}>
               {routeChanging ? (
                 <Stack gap={6}>
                   <HubItemLoading />
@@ -260,7 +275,7 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
               ) : (
                 <Box
                   key={browseType}
-                  component={motion.div}
+                  component={m.div}
                   variants={fadeInWrapper}
                   initial="hidden"
                   animate="show"
@@ -271,9 +286,9 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
                   }}
                 >
                   {listing.map((item) => (
-                    <motion.div key={item.url} variants={fadeInChildren}>
+                    <m.div key={item.url} variants={fadeInChildren}>
                       <HubItem item={item} />
-                    </motion.div>
+                    </m.div>
                   ))}
                 </Box>
               )}

@@ -249,11 +249,15 @@ const Navbar: FunctionComponent<
   const lastScrollbarSize = useLastScrollbarSize();
 
   const isHomePage = generatePathWithoutParams(hydrationFriendlyAsPath) === "/";
-  const isDocs = hydrationFriendlyAsPath.startsWith("/docs");
+  const isDocs =
+    hydrationFriendlyAsPath.startsWith("/docs") ||
+    hydrationFriendlyAsPath.startsWith("/spec") ||
+    hydrationFriendlyAsPath.startsWith("/roadmap");
+  const isTypeEditor = hydrationFriendlyAsPath.includes("/types/entity-type/");
   const [mobileNavVisible, setMobileNavVisible] = useMobileNavVisible();
 
   const { scrolledPast, isNavbarHidden } = useScrollingNavbar(
-    isDocs,
+    isDocs || isTypeEditor,
     isHomePage ? HOME_PAGE_HEADER_HEIGHT : null,
     mobileNavVisible,
   );

@@ -35,7 +35,7 @@ pub struct DataType {
     id: String,
     title: String,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(rename = "type")]
     json_type: String,

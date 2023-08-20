@@ -1,5 +1,31 @@
 # block-scripts
 
+## 0.3.1
+
+### Patch Changes
+
+- [#1293](https://github.com/blockprotocol/blockprotocol/pull/1293) [`5ac80409`](https://github.com/blockprotocol/blockprotocol/commit/5ac80409d97c37a83ffc31ab69860ad3f99d3319) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add missing babel plugin dependencies
+
+## 0.3.0
+
+### Minor Changes
+
+- [#1223](https://github.com/blockprotocol/blockprotocol/pull/1223) [`fe4fc27f`](https://github.com/blockprotocol/blockprotocol/commit/fe4fc27f9188596baa52d04e1de9042cbd04a014) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Add support for example-graph scripts
+
+### Patch Changes
+
+- Updated dependencies [[`d0a52220`](https://github.com/blockprotocol/blockprotocol/commit/d0a522208bc0765e2d7865d61ec06776420e69ac), [`96fd797b`](https://github.com/blockprotocol/blockprotocol/commit/96fd797bea62204386ad23514a76a7e9c5a1cbc3), [`bae9405c`](https://github.com/blockprotocol/blockprotocol/commit/bae9405c0a7d0f8312b416d845aaa3069dfe61d9), [`eacd07fb`](https://github.com/blockprotocol/blockprotocol/commit/eacd07fb3009b35e7c30f8be11e3e136651f41c2)]:
+  - @blockprotocol/graph@0.3.0
+
+## 0.2.3
+
+### Patch Changes
+
+- [#1108](https://github.com/blockprotocol/blockprotocol/pull/1108) [`e3d889a1`](https://github.com/blockprotocol/blockprotocol/commit/e3d889a156851831c1fa851244d0abe19edfbf6d) Thanks [@nonparibus](https://github.com/nonparibus)! - update links to docs
+
+- Updated dependencies []:
+  - @blockprotocol/graph@0.2.2
+
 ## 0.2.2
 
 ### Patch Changes

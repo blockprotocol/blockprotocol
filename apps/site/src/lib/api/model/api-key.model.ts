@@ -195,7 +195,12 @@ export class ApiKey {
       privateId,
       salt: apiKey.salt,
     });
-    if (providedKeyHash !== apiKey.hashedString) {
+    if (
+      !crypto.timingSafeEqual(
+        Buffer.from(providedKeyHash),
+        Buffer.from(apiKey.hashedString),
+      )
+    ) {
       throw new Error(INVALID_KEY_ERROR_MSG);
     } else if (apiKey.isRevoked()) {
       throw new Error("API key has been revoked.");
@@ -206,13 +211,53 @@ export class ApiKey {
     return apiKey;
   }
 
-  static async revokeAll(db: Db, params: { user: User }): Promise<void> {
-    await db
+  static async updateByUser(
+    db: Db,
+    params: {
+      publicId: string;
+      user: User;
+      displayName?: string;
+      revokedAt?: Date;
+    },
+  ): Promise<{ found: boolean; updated: boolean }> {
+    const response = await db
       .collection<ApiKeyDocument>(ApiKey.COLLECTION_NAME)
-      .updateMany(
-        { user: params.user.toRef(), revokedAt: { $eq: null } },
-        { $set: { revokedAt: new Date() } },
+      .updateOne(
+        {
+          user: params.user.toRef(),
+          publicId: params.publicId,
+          // Only allow revoking if the key is not already revoked.
+          // We filter for unrevoked keys in case the `revokedAt` param is provided.
+          ...(params.revokedAt ? { revokedAt: { $eq: null } } : {}),
+        },
+        {
+          $set: {
+            // Only set the fields that are provided as explicit `undefined`
+            // could be used to unset fields by accident.
+            ...(params.displayName ? { displayName: params.displayName } : {}),
+            ...(params.revokedAt ? { revokedAt: params.revokedAt } : {}),
+          },
+        },
       );
+
+    return {
+      found: response.matchedCount === 1,
+      updated: response.modifiedCount === 1,
+    };
+  }
+
+  static async revokeByUser(
+    db: Db,
+    params: {
+      publicId: string;
+      user: User;
+    },
+  ) {
+    const result = await ApiKey.updateByUser(db, {
+      ...params,
+      revokedAt: new Date(),
+    });
+    return { found: result.found, revoked: result.updated };
   }
 
   isRevoked() {

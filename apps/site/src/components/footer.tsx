@@ -38,7 +38,7 @@ const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
     },
     {
       name: "Specification",
-      href: "/docs/spec",
+      href: "/spec",
     },
     ...(isBillingFeatureFlagEnabled
       ? [
@@ -52,6 +52,10 @@ const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
       name: "Contact Us",
       href: "/contact",
     },
+    {
+      name: "About Us",
+      href: "/about",
+    },
   ],
 };
 
@@ -60,15 +64,15 @@ const DISCOVER_NAVIGATION_LINKS: NavigationSection = {
   links: [
     {
       name: "Open-source blocks",
-      href: "/hub",
+      href: "/hub?type=blocks",
     },
     {
       name: "Semantic types",
-      href: "/hub",
+      href: "/hub?type=types",
     },
     {
       name: "API services",
-      href: "/hub",
+      href: "/hub?type=services",
     },
   ],
 };
@@ -78,7 +82,7 @@ const PUBLISH_NAVIGATION_LINKS: NavigationSection = {
   links: [
     {
       name: "a block",
-      href: "/docs/developing-blocks#publish",
+      href: "/docs/blocks/develop#publish",
       arrow: true,
     },
     // Uncomment when we have the pages to link this to

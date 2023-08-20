@@ -69,7 +69,7 @@ The expected structure of a given entity's `properties` is described by its **en
 
 For example, the structure of the **Microsoft** entity might be described by the `Company` entity type.
 
-The formal specification for defining entities can be found [here](https://blockprotocol.org/docs/spec/graph-module#entity-definition).
+The formal specification for defining entities can be found [here](https://blockprotocol.org/spec/graph#entity-definition).
 
 We are going to be working with entities of type `Person` and `Project`.
 
@@ -501,11 +501,11 @@ Messages are used by the block to make requests for the creation, editing, or de
 
 It is up to the embedding application which requests are permitted. Our mock application permits everything.
 
-We are going to be using one such message: `updateEntity`. A full list is available [here](https://blockprotocol.org/docs/spec/graph-module#message-definitions).
+We are going to be using one such message: `updateEntity`. A full list is available [here](https://blockprotocol.org/spec/graph#message-definitions).
 
 To send a message to the embedding application, we call the relevant method on `graphModule`, passing the expected `data`.
 
-Here, we use the `updateEntity` method ([docs](https://blockprotocol.org/docs/spec/graph-module#message:updateEntity)).
+Here, we use the `updateEntity` method ([docs](https://blockprotocol.org/spec/graph#message:updateEntity)).
 This is a request to the application to update an entity. It expects two fields:
 
 1.  the `entityId` of the entity to update
@@ -680,7 +680,7 @@ We have a Hub of blocks available at [https://blockprotocol.org/hub](https://blo
 #### In your browser
 
 - Sign up for an account at https://blockprotocol.org if you haven’t already
-- Create an API key and copy it: https://blockprotocol.org/settings/api-keys
+- Create an API key and copy it: https://blockprotocol.org/account/api
 
 #### In your terminal
 

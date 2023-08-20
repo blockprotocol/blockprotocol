@@ -11,6 +11,7 @@ import Image from "next/legacy/image";
 import { ReactNode } from "react";
 
 import supportedApplicationsFullImage from "../../../../public/assets/new-home/supported-applications-full-min.webp";
+import { FadeInOnViewport } from "../../fade-in-on-viewport";
 import {
   FontAwesomeIcon,
   GithubIcon,
@@ -101,7 +102,7 @@ export const SupportedApplications = () => {
             maxWidth: { xs: "95%", md: "85%", lg: 1000 },
           }}
         >
-          <Box
+          <FadeInOnViewport
             sx={{
               display: "flex",
               flexDirection: { xs: "column", sm: "row" },
@@ -132,7 +133,7 @@ export const SupportedApplications = () => {
 
               <Stack gap={2.5} flexDirection="row" justifyContent="center">
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#wordpress"
+                  href="/docs/blocks/environments#wordpress"
                   label="WordPress"
                   icon={
                     <WordPressIcon
@@ -146,7 +147,7 @@ export const SupportedApplications = () => {
                 />
 
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#hash"
+                  href="/docs/blocks/environments#hash"
                   label="HASH"
                   icon={
                     <HashIcon
@@ -186,7 +187,7 @@ export const SupportedApplications = () => {
 
               <Stack gap={2.5} flexDirection="row" justifyContent="center">
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#github-blocks"
+                  href="/docs/blocks/environments#github-blocks"
                   label="GitHub Blocks"
                   icon={
                     <GithubIcon
@@ -199,7 +200,7 @@ export const SupportedApplications = () => {
                 />
 
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#figma"
+                  href="/docs/blocks/environments#figma"
                   label="Figma"
                   icon={
                     <FontAwesomeIcon
@@ -212,7 +213,7 @@ export const SupportedApplications = () => {
                   }
                 />
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#other-environments"
+                  href="/docs/blocks/environments#other-environments"
                   label="Vote on what’s next"
                   icon={
                     <Grid2PlusIcon
@@ -225,9 +226,9 @@ export const SupportedApplications = () => {
                 />
               </Stack>
             </Box>
-          </Box>
+          </FadeInOnViewport>
 
-          <Box
+          <FadeInOnViewport
             sx={{
               display: "flex",
               flexDirection: { xs: "column", lg: "row" },
@@ -311,7 +312,7 @@ export const SupportedApplications = () => {
 
               <Box>
                 <LinkButton
-                  href="/docs/developing-blocks"
+                  href="/docs/blocks/develop"
                   variant="primary"
                   sx={{ color: ({ palette }) => palette.common.white }}
                   startIcon={
@@ -409,12 +410,14 @@ export const SupportedApplications = () => {
                   Þ Hub
                 </Link>{" "}
                 to extend the functionality of the apps you use, and enjoy
-                high-quality, consistent interfaces across applications.
+                high-quality, consistent interfaces across applications. Use
+                services like <strong>OpenAI</strong> without a subscription,
+                for free, including in apps that don't yet support them.
               </Typography>
 
               <Stack flexDirection="row" gap={2}>
                 <LinkButton
-                  href="/docs/using-blocks"
+                  href="/docs/blocks/environments"
                   variant="primary"
                   sx={{
                     color: ({ palette }) => palette.common.white,
@@ -451,7 +454,7 @@ export const SupportedApplications = () => {
                 </LinkButton>
               </Stack>
             </Box>
-          </Box>
+          </FadeInOnViewport>
         </Container>
       </Box>
       <Box
