@@ -8,7 +8,7 @@ export const primitiveLinkEntityTypeId =
 
 /** The suffix to append to generated types for each class of ontology type */
 export const generatedTypeSuffix = {
-  dataType: "",
+  dataType: "DataType",
   propertyType: "PropertyValue",
   entityType: "Properties",
 };

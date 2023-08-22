@@ -21,7 +21,7 @@ pub struct Links {
         )
     )]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    pub(crate) links: HashMap<String, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>,
+    pub links: HashMap<String, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>,
 }
 
 impl TryFrom<Links> for super::Links {

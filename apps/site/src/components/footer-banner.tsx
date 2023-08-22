@@ -15,7 +15,7 @@ import { ArrowRightIcon, BoltIcon } from "./icons";
 import { Link as LinkComponent, LinkProps } from "./link";
 import { LinkButton } from "./link-button";
 import { FinalCTA } from "./pages/home/final-cta";
-import { RequestAnotherApplication } from "./pages/wordpress/request-another-application";
+import { FAQ } from "./pages/wordpress/faq";
 
 type Banner = {
   shouldDisplay: (params: { pathname: string; asPath: string }) => boolean;
@@ -372,7 +372,7 @@ export const BANNERS: Banner[] = [
         }}
         contents={
           <Box width={1}>
-            <RequestAnotherApplication />
+            <FAQ />
           </Box>
         }
         fullWidth
