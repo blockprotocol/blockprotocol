@@ -10,7 +10,7 @@ import { NextResponse } from "next/server";
 
 import { ApiEntityTypeByUrlResponse } from "../pages/api/types/entity-type/get.api";
 import { ApiPropertyTypeByUrlResponse } from "../pages/api/types/property-type/get.api";
-import { hardcodedTypes } from "./return-types-as-json/hardcoded-types";
+import { hardcodedTypes } from "./hardcoded-types";
 
 const generateErrorResponse = (
   status: 400 | 401 | 404 | 500 | 501,
