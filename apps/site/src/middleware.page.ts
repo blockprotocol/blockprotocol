@@ -3,6 +3,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+import { hardcodedTypes } from "./middleware.page/hardcoded-types";
 import {
   returnTypeAsJson,
   versionedTypeUrlRegExp,
@@ -38,10 +39,13 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // if this is a /types/* page, serve JSON unless asked for HTML
+  // if this is a /types/* page, serve JSON unless we're asked for HTML (unless it's a hardcoded type – no HTML available)
   const openingTypePage = Boolean(url.pathname.match(versionedTypeUrlRegExp));
   const htmlRequested = request.headers.get("accept")?.includes("text/html");
-  if (openingTypePage && !htmlRequested) {
+  const isHardedCodedType =
+    url.href.replace(url.origin, "https://blockprotocol.org") in hardcodedTypes;
+
+  if (openingTypePage && (!htmlRequested || isHardedCodedType)) {
     return returnTypeAsJson(request);
   }
 }
