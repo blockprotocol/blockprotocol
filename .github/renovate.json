@@ -6,6 +6,7 @@
   "branchPrefix": "deps/",
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
+  "dependencyDashboardOSVVulnerabilitySummary": "none",
   "dependencyDashboardTitle": "🚀 Dependency Updates",
   "npm": { "minimumReleaseAge": "3 days" },
   "postUpdateOptions": ["yarnDedupeFewer"],
