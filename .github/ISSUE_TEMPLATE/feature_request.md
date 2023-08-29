@@ -3,7 +3,7 @@ name: Feature request
 about: Float your very best hopes and ideas
 title: ''
 labels: 'category: feature'
-assignees: ''
+assignees: nonparibus
 
 ---
 
