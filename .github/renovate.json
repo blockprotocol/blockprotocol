@@ -11,7 +11,7 @@
   "npm": { "minimumReleaseAge": "3 days" },
   "postUpdateOptions": ["yarnDedupeFewer"],
   "rangeStrategy": "bump",
-  "rebaseWhen": "conflicted"
+  "rebaseWhen": "conflicted",
   "semanticCommits": "disabled",
 
   "packageRules": [
