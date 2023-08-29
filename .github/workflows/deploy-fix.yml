@@ -17,8 +17,8 @@ jobs:
 
       - name: Commit
         run: |
-          git config user.name HASH
-          git config user.email careers@hash.dev
+          git config user.name "Block Protocol"
+          git config user.email careers@blockprotocol.org
           git add .
           git commit -m '`yarn fix`'
           git push
