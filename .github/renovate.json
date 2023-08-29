@@ -41,5 +41,5 @@
       "matchManagers": ["docker-compose", "dockerfile"],
       "commitMessageTopic": "Docker tag `{{depName}}`",
       "additionalBranchPrefix": "docker/"
-    },
+    }
 }
