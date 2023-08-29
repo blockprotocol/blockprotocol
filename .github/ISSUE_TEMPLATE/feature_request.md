@@ -1,10 +1,9 @@
 ---
 name: Feature request
 about: Float your very best hopes and ideas
-title: ''
-labels: 'category: feature'
+title: ""
+labels: "category: feature"
 assignees: nonparibus
-
 ---
 
 **Is your feature request related to a problem? Please describe.**

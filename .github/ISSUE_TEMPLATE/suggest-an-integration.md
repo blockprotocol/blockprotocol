@@ -1,10 +1,9 @@
 ---
 name: Suggest an integration
 about: Request support for a third-party API via the Service Module
-title: ''
-labels: 'area: apps, category: feature'
+title: ""
+labels: "area: apps, category: feature"
 assignees: nonparibus
-
 ---
 
 **What service are you hoping to see integrated?**

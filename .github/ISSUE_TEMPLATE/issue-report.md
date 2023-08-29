@@ -1,10 +1,9 @@
 ---
 name: Issue report
 about: Create a report to help us improve
-title: ''
-labels: 'category: bug'
+title: ""
+labels: "category: bug"
 assignees: CiaranMn
-
 ---
 
 **Describe the bug**
