@@ -42,4 +42,5 @@
       "commitMessageTopic": "Docker tag `{{depName}}`",
       "additionalBranchPrefix": "docker/"
     }
+  ]
 }
