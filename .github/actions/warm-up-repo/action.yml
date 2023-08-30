@@ -11,17 +11,17 @@ runs:
   using: composite
 
   steps:
-    - uses: actions/setup-node@v3.8.1
+    - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
       with:
         node-version: 16 ## aligned with Node version on Vercel
 
     - name: Install Rust tools
-      uses: taiki-e/install-action@v2.17.7
+      uses: taiki-e/install-action@cc5a5c56a296ea597e6ea38f551f25dee8be1225 # v2.17.7
       with:
         tool: just@1.13.0,wasm-pack@0.11.0
 
     - name: Cache Rust dependencies
-      uses: Swatinem/rust-cache@v2.6.2
+      uses: Swatinem/rust-cache@e207df5d269b42b69c8bc5101da26f7d31feddb4 # v2.6.2
       with:
         workspaces: libs/@blockprotocol/type-system/crate
         shared-key: "shared"
