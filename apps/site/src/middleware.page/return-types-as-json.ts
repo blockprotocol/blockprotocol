@@ -29,7 +29,7 @@ const generateJsonResponse = (object: DataType | EntityType | PropertyType) =>
   });
 
 export const versionedTypeUrlRegExp =
-  /types\/(entity-type|data-type|property-type)\/.+\/v\/\d+$/;
+  /^\/@.+\/types\/(entity-type|data-type|property-type)\/.+\/v\/\d+$/;
 
 const validateVersionedUrl = (url: string): url is VersionedUrl =>
   !!url.match(versionedTypeUrlRegExp);
