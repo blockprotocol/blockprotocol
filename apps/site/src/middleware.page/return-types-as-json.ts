@@ -31,9 +31,8 @@ const generateJsonResponse = (object: DataType | EntityType | PropertyType) =>
 export const versionedTypeUrlRegExp =
   /^\/@.+\/types\/(entity-type|data-type|property-type)\/.+\/v\/\d+$/;
 
-export const isValidBlockProtocolVersionedUrl = (
-  url: string,
-): url is VersionedUrl => !!new URL(url).pathname.match(versionedTypeUrlRegExp);
+const isValidBlockProtocolVersionedUrl = (url: string): url is VersionedUrl =>
+  !!new URL(url).pathname.match(versionedTypeUrlRegExp);
 
 const getTypeByVersionedUrl = (
   versionedUrl: VersionedUrl,
@@ -66,7 +65,7 @@ export const returnTypeAsJson = async (request: NextRequest) => {
 
   const productionUrl = url.replace(origin, "https://blockprotocol.org");
 
-  const kind = url.match(versionedTypeUrlRegExp)?.[1];
+  const kind = new URL(url).pathname.match(versionedTypeUrlRegExp)?.[1];
 
   let type: DataType | PropertyType | EntityType | null =
     hardcodedTypes[productionUrl as keyof typeof hardcodedTypes];
