@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 
 import { hardcodedTypes } from "./middleware.page/hardcoded-types";
 import {
-  isValidBlockProtocolVersionedUrl,
   returnTypeAsJson,
+  versionedTypeUrlRegExp,
 } from "./middleware.page/return-types-as-json";
 
 const productionFrontendHost = process.env.NEXT_PUBLIC_FRONTEND_URL
@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // if this is a /types/* page, serve JSON unless we're asked for HTML (unless it's a hardcoded type – no HTML available)
-  const openingTypePage = isValidBlockProtocolVersionedUrl(url.href);
+  const openingTypePage = !!url.pathname.match(versionedTypeUrlRegExp);
   const htmlRequested = request.headers.get("accept")?.includes("text/html");
   const isHardedCodedType =
     url.href.replace(url.origin, "https://blockprotocol.org") in hardcodedTypes;
