@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 
 import { hardcodedTypes } from "./middleware.page/hardcoded-types";
 import {
-  isValidBlockProtocolVersionedUrl,
   returnTypeAsJson,
   versionedTypeUrlRegExp,
 } from "./middleware.page/return-types-as-json";
