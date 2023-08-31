@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 
 import { hardcodedTypes } from "./middleware.page/hardcoded-types";
 import {
+  isValidBlockProtocolVersionedUrl,
   returnTypeAsJson,
-  versionedTypeUrlRegExp,
 } from "./middleware.page/return-types-as-json";
 
 const productionFrontendHost = process.env.NEXT_PUBLIC_FRONTEND_URL
@@ -31,20 +31,16 @@ export async function middleware(request: NextRequest) {
     );
 
     if (url.host === productionFrontendHost && openingBlockSandboxPage) {
-      // eslint-disable-next-line no-console
-      console.log("redirecting to sandbox", url.host, url.pathname);
       return changeHostAndRedirect(productionSandboxHost);
     }
 
     if (url.host === productionSandboxHost && !openingBlockSandboxPage) {
-      // eslint-disable-next-line no-console
-      console.log("redirecting to production", url.host, url.pathname);
       return changeHostAndRedirect(productionFrontendHost);
     }
   }
 
   // if this is a /types/* page, serve JSON unless we're asked for HTML (unless it's a hardcoded type – no HTML available)
-  const openingTypePage = Boolean(url.pathname.match(versionedTypeUrlRegExp));
+  const openingTypePage = isValidBlockProtocolVersionedUrl(url.href);
   const htmlRequested = request.headers.get("accept")?.includes("text/html");
   const isHardedCodedType =
     url.href.replace(url.origin, "https://blockprotocol.org") in hardcodedTypes;

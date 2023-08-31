@@ -31,8 +31,9 @@ const generateJsonResponse = (object: DataType | EntityType | PropertyType) =>
 export const versionedTypeUrlRegExp =
   /^\/@.+\/types\/(entity-type|data-type|property-type)\/.+\/v\/\d+$/;
 
-const validateVersionedUrl = (url: string): url is VersionedUrl =>
-  !!url.match(versionedTypeUrlRegExp);
+export const isValidBlockProtocolVersionedUrl = (
+  url: string,
+): url is VersionedUrl => !!new URL(url).pathname.match(versionedTypeUrlRegExp);
 
 const getTypeByVersionedUrl = (
   versionedUrl: VersionedUrl,
@@ -52,7 +53,7 @@ const getTypeByVersionedUrl = (
 export const returnTypeAsJson = async (request: NextRequest) => {
   const { url } = request;
 
-  const isUrlValid = validateVersionedUrl(url);
+  const isUrlValid = isValidBlockProtocolVersionedUrl(url);
 
   if (!isUrlValid) {
     return generateErrorResponse(
