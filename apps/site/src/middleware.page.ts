@@ -27,14 +27,18 @@ export async function middleware(request: NextRequest) {
     };
 
     const openingBlockSandboxPage = Boolean(
-      url.pathname.match(/^\/@[\w_-]+\/blocks\/[\w_-]+\/sandboxed-demo$/),
+      url.pathname.match(/^\/@[\w_-]+\/blocks\/[\w_-]+\/sandboxed-demo(\/?)$/),
     );
 
     if (url.host === productionFrontendHost && openingBlockSandboxPage) {
+      // eslint-disable-next-line no-console
+      console.log("redirecting to sandbox", url.host, url.pathname);
       return changeHostAndRedirect(productionSandboxHost);
     }
 
     if (url.host === productionSandboxHost && !openingBlockSandboxPage) {
+      // eslint-disable-next-line no-console
+      console.log("redirecting to production", url.host, url.pathname);
       return changeHostAndRedirect(productionFrontendHost);
     }
   }
