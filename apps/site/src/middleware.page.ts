@@ -31,14 +31,10 @@ export async function middleware(request: NextRequest) {
     );
 
     if (url.host === productionFrontendHost && openingBlockSandboxPage) {
-      // eslint-disable-next-line no-console
-      console.log("redirecting to sandbox", url.host, url.pathname);
       return changeHostAndRedirect(productionSandboxHost);
     }
 
     if (url.host === productionSandboxHost && !openingBlockSandboxPage) {
-      // eslint-disable-next-line no-console
-      console.log("redirecting to production", url.host, url.pathname);
       return changeHostAndRedirect(productionFrontendHost);
     }
   }
