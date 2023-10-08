@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 use crate::{
-    repr, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError, ParseOneOfArrayError,
+    raw, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError, ParseOneOfArrayError,
     ParsePropertyTypeObjectError, ParsePropertyTypeReferenceArrayError, PropertyTypeReference,
     PropertyValues,
 };
@@ -31,10 +31,10 @@ pub struct Array<T> {
     max_items: Option<usize>,
 }
 
-impl TryFrom<Array<repr::OneOf<repr::PropertyValues>>> for super::Array<OneOf<PropertyValues>> {
+impl TryFrom<Array<raw::OneOf<raw::PropertyValues>>> for super::Array<OneOf<PropertyValues>> {
     type Error = ParseOneOfArrayError;
 
-    fn try_from(array_repr: Array<repr::OneOf<repr::PropertyValues>>) -> Result<Self, Self::Error> {
+    fn try_from(array_repr: Array<raw::OneOf<raw::PropertyValues>>) -> Result<Self, Self::Error> {
         Ok(Self {
             items: array_repr
                 .items
@@ -46,10 +46,10 @@ impl TryFrom<Array<repr::OneOf<repr::PropertyValues>>> for super::Array<OneOf<Pr
     }
 }
 
-impl TryFrom<Array<repr::PropertyTypeReference>> for super::Array<PropertyTypeReference> {
+impl TryFrom<Array<raw::PropertyTypeReference>> for super::Array<PropertyTypeReference> {
     type Error = ParsePropertyTypeReferenceArrayError;
 
-    fn try_from(array_repr: Array<repr::PropertyTypeReference>) -> Result<Self, Self::Error> {
+    fn try_from(array_repr: Array<raw::PropertyTypeReference>) -> Result<Self, Self::Error> {
         Ok(Self {
             items: array_repr
                 .items
@@ -61,13 +61,13 @@ impl TryFrom<Array<repr::PropertyTypeReference>> for super::Array<PropertyTypeRe
     }
 }
 
-impl TryFrom<Array<repr::MaybeOneOfEntityTypeReference>>
+impl TryFrom<Array<raw::MaybeOneOfEntityTypeReference>>
     for super::Array<Option<OneOf<EntityTypeReference>>>
 {
     type Error = ParseEntityTypeReferenceArrayError;
 
     fn try_from(
-        array_repr: Array<repr::MaybeOneOfEntityTypeReference>,
+        array_repr: Array<raw::MaybeOneOfEntityTypeReference>,
     ) -> Result<Self, Self::Error> {
         let items = match array_repr.items.into_inner() {
             None => None,
@@ -108,13 +108,13 @@ pub enum ValueOrArray<T> {
     Array(Array<T>),
 }
 
-impl TryFrom<ValueOrArray<repr::PropertyTypeReference>>
+impl TryFrom<ValueOrArray<raw::PropertyTypeReference>>
     for super::ValueOrArray<PropertyTypeReference>
 {
     type Error = ParsePropertyTypeObjectError;
 
     fn try_from(
-        value_or_array_repr: ValueOrArray<repr::PropertyTypeReference>,
+        value_or_array_repr: ValueOrArray<raw::PropertyTypeReference>,
     ) -> Result<Self, Self::Error> {
         Ok(match value_or_array_repr {
             ValueOrArray::Value(val) => Self::Value(

@@ -1,5 +1,5 @@
 pub(crate) mod error;
-pub(in crate::ontology) mod repr;
+pub(in crate::ontology) mod raw;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AllOf<T> {

@@ -1,6 +1,6 @@
 mod error;
 pub(in crate::ontology) mod links;
-pub(in crate::ontology) mod repr;
+pub(in crate::ontology) mod raw;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
@@ -227,7 +227,7 @@ mod tests {
 
     #[test]
     fn book() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let entity_type = check_serialization_from_str::<EntityType, raw::EntityType>(
             test_data::entity_type::BOOK_V1,
             None,
         );
@@ -246,7 +246,7 @@ mod tests {
 
     #[test]
     fn address() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let entity_type = check_serialization_from_str::<EntityType, raw::EntityType>(
             test_data::entity_type::ADDRESS_V1,
             None,
         );
@@ -262,7 +262,7 @@ mod tests {
 
     #[test]
     fn organization() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let entity_type = check_serialization_from_str::<EntityType, raw::EntityType>(
             test_data::entity_type::ORGANIZATION_V1,
             None,
         );
@@ -276,7 +276,7 @@ mod tests {
 
     #[test]
     fn building() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let entity_type = check_serialization_from_str::<EntityType, raw::EntityType>(
             test_data::entity_type::BUILDING_V1,
             None,
         );
@@ -297,7 +297,7 @@ mod tests {
 
     #[test]
     fn person() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let entity_type = check_serialization_from_str::<EntityType, raw::EntityType>(
             test_data::entity_type::PERSON_V1,
             None,
         );
@@ -320,7 +320,7 @@ mod tests {
 
     #[test]
     fn playlist() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let entity_type = check_serialization_from_str::<EntityType, raw::EntityType>(
             test_data::entity_type::PLAYLIST_V1,
             None,
         );
@@ -337,7 +337,7 @@ mod tests {
 
     #[test]
     fn song() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let entity_type = check_serialization_from_str::<EntityType, raw::EntityType>(
             test_data::entity_type::SONG_V1,
             None,
         );
@@ -351,7 +351,7 @@ mod tests {
 
     #[test]
     fn page() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let entity_type = check_serialization_from_str::<EntityType, raw::EntityType>(
             test_data::entity_type::PAGE,
             None,
         );

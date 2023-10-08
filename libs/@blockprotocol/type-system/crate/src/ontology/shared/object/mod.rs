@@ -1,5 +1,5 @@
 pub(crate) mod error;
-pub(in crate::ontology) mod repr;
+pub(in crate::ontology) mod raw;
 
 use std::collections::HashMap;
 
@@ -79,11 +79,11 @@ mod tests {
 
     use super::*;
     use crate::{
-        repr, url::VersionedUrl, utils::tests::ensure_failed_validation,
+        raw, url::VersionedUrl, utils::tests::ensure_failed_validation,
         ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray,
     };
 
-    type ObjectRepr = repr::Object<repr::ValueOrArray<repr::PropertyTypeReference>>;
+    type ObjectRepr = raw::Object<raw::ValueOrArray<raw::PropertyTypeReference>>;
     type Object = super::Object<ValueOrArray<PropertyTypeReference>, 1>;
 
     #[test]

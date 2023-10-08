@@ -1,14 +1,14 @@
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    repr,
+    raw,
     utils::{set_panic_hook, Result},
     DataType, ParseDataTypeError,
 };
 
 fn convert_data_type(data_type_obj: &JsValue) -> std::result::Result<DataType, ParseDataTypeError> {
     let data_type_repr = data_type_obj
-        .into_serde::<repr::DataType>()
+        .into_serde::<raw::DataType>()
         .map_err(|err| ParseDataTypeError::InvalidJson(err.to_string()))?;
 
     DataType::try_from(data_type_repr)
