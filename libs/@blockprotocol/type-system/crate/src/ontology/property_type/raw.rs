@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
-    repr,
+    raw,
     url::{ParseVersionedUrlError, VersionedUrl},
     ParsePropertyTypeError,
 };
@@ -40,7 +40,7 @@ pub struct PropertyType {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(flatten)]
-    one_of: repr::OneOf<PropertyValues>,
+    one_of: raw::OneOf<PropertyValues>,
 }
 
 impl TryFrom<PropertyType> for super::PropertyType {
@@ -118,13 +118,13 @@ impl From<super::PropertyTypeReference> for PropertyTypeReference {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum PropertyValues {
-    DataTypeReference(repr::DataTypeReference),
-    PropertyTypeObject(repr::Object<repr::ValueOrArray<PropertyTypeReference>>),
+    DataTypeReference(raw::DataTypeReference),
+    PropertyTypeObject(raw::Object<raw::ValueOrArray<PropertyTypeReference>>),
     ArrayOfPropertyValues(
         // This is a hack, currently recursive enums seem to break tsify
         // https://github.com/madonoharu/tsify/issues/5
         #[cfg_attr(target_arch = "wasm32", tsify(type = "Array<OneOf<PropertyValues>>"))]
-        repr::Array<repr::OneOf<PropertyValues>>,
+        raw::Array<raw::OneOf<PropertyValues>>,
     ),
 }
 

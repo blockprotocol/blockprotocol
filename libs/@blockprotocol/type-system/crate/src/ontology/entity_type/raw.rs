@@ -9,7 +9,7 @@ use tsify::Tsify;
 
 use crate::{
     ontology::entity_type::error::MergeEntityTypeError,
-    repr,
+    raw,
     url::{BaseUrl, ParseVersionedUrlError, VersionedUrl},
     ParseEntityTypeError,
 };
@@ -43,7 +43,7 @@ pub struct EntityType {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(flatten)]
-    pub all_of: repr::AllOf<EntityTypeReference>,
+    pub all_of: raw::AllOf<EntityTypeReference>,
     #[cfg_attr(
         target_arch = "wasm32",
         tsify(optional, type = "Record<BaseUrl, any>[]")
@@ -51,9 +51,9 @@ pub struct EntityType {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub examples: Vec<HashMap<String, serde_json::Value>>,
     #[serde(flatten)]
-    pub property_object: repr::Object<repr::ValueOrArray<repr::PropertyTypeReference>>,
+    pub property_object: raw::Object<raw::ValueOrArray<raw::PropertyTypeReference>>,
     #[serde(flatten)]
-    pub links: repr::Links,
+    pub links: raw::Links,
 }
 
 impl EntityType {
@@ -218,21 +218,21 @@ impl From<super::EntityTypeReference> for EntityTypeReference {
 
 #[cfg(test)]
 mod tests {
-    use crate::{repr, url::BaseUrl, utils::tests::check_serialization_from_str, EntityType};
+    use crate::{raw, url::BaseUrl, utils::tests::check_serialization_from_str, EntityType};
 
     #[test]
     fn merge_entity_type() {
-        let building = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let building = check_serialization_from_str::<EntityType, raw::EntityType>(
             crate::test_data::entity_type::BUILDING_V1,
             None,
         );
-        let church: EntityType = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let church: EntityType = check_serialization_from_str::<EntityType, raw::EntityType>(
             crate::test_data::entity_type::CHURCH_V1,
             None,
         );
 
-        let building_repr = repr::EntityType::from(building);
-        let mut church_repr = repr::EntityType::from(church);
+        let building_repr = raw::EntityType::from(building);
+        let mut church_repr = raw::EntityType::from(church);
 
         church_repr
             .merge_parent(building_repr)

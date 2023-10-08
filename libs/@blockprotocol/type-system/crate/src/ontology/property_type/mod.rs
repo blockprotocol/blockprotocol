@@ -8,7 +8,7 @@ use crate::{
 };
 
 mod error;
-pub(in crate::ontology) mod repr;
+pub(in crate::ontology) mod raw;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
@@ -213,7 +213,7 @@ mod tests {
 
     #[test]
     fn favorite_quote() {
-        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+        let property_type = check_serialization_from_str::<PropertyType, raw::PropertyType>(
             test_data::property_type::FAVORITE_QUOTE_V1,
             None,
         );
@@ -227,7 +227,7 @@ mod tests {
 
     #[test]
     fn age() {
-        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+        let property_type = check_serialization_from_str::<PropertyType, raw::PropertyType>(
             test_data::property_type::AGE_V1,
             None,
         );
@@ -241,7 +241,7 @@ mod tests {
 
     #[test]
     fn user_id() {
-        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+        let property_type = check_serialization_from_str::<PropertyType, raw::PropertyType>(
             test_data::property_type::USER_ID_V2,
             None,
         );
@@ -256,7 +256,7 @@ mod tests {
 
     #[test]
     fn contact_information() {
-        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+        let property_type = check_serialization_from_str::<PropertyType, raw::PropertyType>(
             test_data::property_type::CONTACT_INFORMATION_V1,
             None,
         );
@@ -271,7 +271,7 @@ mod tests {
 
     #[test]
     fn interests() {
-        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+        let property_type = check_serialization_from_str::<PropertyType, raw::PropertyType>(
             test_data::property_type::INTERESTS_V1,
             None,
         );
@@ -287,7 +287,7 @@ mod tests {
 
     #[test]
     fn numbers() {
-        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+        let property_type = check_serialization_from_str::<PropertyType, raw::PropertyType>(
             test_data::property_type::NUMBERS_V1,
             None,
         );
@@ -301,7 +301,7 @@ mod tests {
 
     #[test]
     fn contrived_property() {
-        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+        let property_type = check_serialization_from_str::<PropertyType, raw::PropertyType>(
             test_data::property_type::CONTRIVED_PROPERTY_V1,
             None,
         );
@@ -316,7 +316,7 @@ mod tests {
     #[test]
     fn invalid_metaschema() {
         let invalid_schema_url = "https://blockprotocol.org/types/modules/graph/0.3/schema/foo";
-        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+        ensure_failed_validation::<raw::PropertyType, PropertyType>(
             &json!(
                 {
                   "$schema": invalid_schema_url,
@@ -336,7 +336,7 @@ mod tests {
 
     #[test]
     fn invalid_id() {
-        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+        ensure_failed_validation::<raw::PropertyType, PropertyType>(
             &json!(
                 {
                   "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
@@ -356,7 +356,7 @@ mod tests {
 
     #[test]
     fn empty_one_of() {
-        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+        ensure_failed_validation::<raw::PropertyType, PropertyType>(
             &json!(
                 {
                   "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
@@ -374,7 +374,7 @@ mod tests {
 
     #[test]
     fn invalid_reference() {
-        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+        ensure_failed_validation::<raw::PropertyType, PropertyType>(
             &json!(
                 {
                   "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",

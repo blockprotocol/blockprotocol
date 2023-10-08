@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::{repr, EntityTypeReference, ParseAllOfError};
+use crate::{raw, EntityTypeReference, ParseAllOfError};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -17,10 +17,10 @@ pub struct AllOf<T> {
     pub elements: Vec<T>,
 }
 
-impl TryFrom<AllOf<repr::EntityTypeReference>> for super::AllOf<EntityTypeReference> {
+impl TryFrom<AllOf<raw::EntityTypeReference>> for super::AllOf<EntityTypeReference> {
     type Error = ParseAllOfError;
 
-    fn try_from(all_of_repr: AllOf<repr::EntityTypeReference>) -> Result<Self, Self::Error> {
+    fn try_from(all_of_repr: AllOf<raw::EntityTypeReference>) -> Result<Self, Self::Error> {
         let inner = all_of_repr
             .elements
             .into_iter()

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::{repr, EntityTypeReference, ParseOneOfError, PropertyValues};
+use crate::{raw, EntityTypeReference, ParseOneOfError, PropertyValues};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -13,10 +13,10 @@ pub struct OneOf<T> {
     pub possibilities: Vec<T>,
 }
 
-impl TryFrom<OneOf<repr::PropertyValues>> for super::OneOf<PropertyValues> {
+impl TryFrom<OneOf<raw::PropertyValues>> for super::OneOf<PropertyValues> {
     type Error = ParseOneOfError;
 
-    fn try_from(one_of_repr: OneOf<repr::PropertyValues>) -> Result<Self, Self::Error> {
+    fn try_from(one_of_repr: OneOf<raw::PropertyValues>) -> Result<Self, Self::Error> {
         let inner = one_of_repr
             .possibilities
             .into_iter()
@@ -27,10 +27,10 @@ impl TryFrom<OneOf<repr::PropertyValues>> for super::OneOf<PropertyValues> {
     }
 }
 
-impl TryFrom<OneOf<repr::EntityTypeReference>> for super::OneOf<EntityTypeReference> {
+impl TryFrom<OneOf<raw::EntityTypeReference>> for super::OneOf<EntityTypeReference> {
     type Error = ParseOneOfError;
 
-    fn try_from(one_of_repr: OneOf<repr::EntityTypeReference>) -> Result<Self, Self::Error> {
+    fn try_from(one_of_repr: OneOf<raw::EntityTypeReference>) -> Result<Self, Self::Error> {
         let inner = one_of_repr
             .possibilities
             .into_iter()
