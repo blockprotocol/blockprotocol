@@ -1,48 +1,63 @@
 #![feature(lint_reasons)]
-#![feature(extern_types)]
-#![feature(once_cell)]
-// This is a nuisance for wasm_bindgen which requires pub functions
-#![cfg_attr(not(target_arch = "wasm32"), warn(unreachable_pub))]
 #![warn(
-    clippy::pedantic,
+    clippy::all,
     clippy::nursery,
-    // Encountering a lot of false positives appearing on things like `derive` macros. We should
-    // revisit periodically in case the bug gets fixed
-    // clippy::allow_attributes_without_reason,
-    clippy::as_underscore,
-    clippy::clone_on_ref_ptr,
-    clippy::create_dir,
-    clippy::dbg_macro,
-    clippy::default_union_representation,
-    clippy::deref_by_slicing,
-    clippy::empty_structs_with_brackets,
-    clippy::filetype_is_file,
-    clippy::get_unwrap,
-    clippy::print_stdout,
-    clippy::print_stderr,
-    clippy::rc_buffer,
-    clippy::rc_mutex,
-    clippy::same_name_method,
-    clippy::str_to_string,
-    clippy::string_add,
-    clippy::string_slice,
-    clippy::string_to_string,
-    clippy::try_err,
-    clippy::undocumented_unsafe_blocks,
-    clippy::unnecessary_self_imports,
-    clippy::unwrap_used,
-    clippy::use_debug,
-    clippy::verbose_file_reads
+    clippy::pedantic,
+    clippy::restriction,
+    future_incompatible,
+    nonstandard_style
 )]
+#![cfg_attr(not(target_arch = "wasm32"), warn(unreachable_pub))]
 #![allow(
-    clippy::redundant_pub_crate,
-    reason = "Conflicts with `unreachable_pub` \
-                  see <https://github.com/rust-lang/rust-clippy/issues/5369>"
-)]
-#![expect(clippy::use_self, reason = "Too many false positives")]
-#![expect(
+    clippy::absolute_paths,
+    clippy::allow_attributes,
+    clippy::allow_attributes_without_reason,
+    clippy::arithmetic_side_effects,
+    clippy::as_conversions,
+    clippy::blanket_clippy_restriction_lints,
+    clippy::default_numeric_fallback,
+    clippy::else_if_without_else,
+    clippy::enum_variant_names,
+    clippy::exhaustive_enums,
+    clippy::exhaustive_structs,
+    clippy::expect_used,
+    clippy::impl_trait_in_params,
+    clippy::implicit_return,
+    clippy::indexing_slicing,
+    clippy::let_underscore_must_use,
+    clippy::min_ident_chars,
+    clippy::missing_assert_message,
+    clippy::missing_docs_in_private_items,
+    clippy::missing_inline_in_public_items,
+    clippy::missing_trait_methods,
+    clippy::mod_module_files,
     clippy::module_name_repetitions,
-    reason = "This encourages importing `as` which breaks IDEs"
+    clippy::multiple_inherent_impl,
+    clippy::multiple_unsafe_ops_per_block,
+    clippy::panic,
+    clippy::partial_pub_fields,
+    clippy::pattern_type_mismatch,
+    clippy::pub_use,
+    clippy::pub_with_shorthand,
+    clippy::question_mark_used,
+    clippy::ref_patterns,
+    clippy::redundant_pub_crate,
+    clippy::self_named_module_files,
+    clippy::semicolon_outside_block,
+    clippy::separated_literal_suffix,
+    clippy::shadow_reuse,
+    clippy::shadow_same,
+    clippy::shadow_unrelated,
+    clippy::single_call_fn,
+    clippy::single_char_lifetime_names,
+    clippy::std_instead_of_alloc,
+    clippy::std_instead_of_core,
+    clippy::tests_outside_test_module,
+    clippy::unimplemented,
+    clippy::unneeded_field_pattern,
+    clippy::unreachable,
+    clippy::unwrap_in_result,
+    clippy::wildcard_enum_match_arm
 )]
 
 mod ontology;
