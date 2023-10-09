@@ -106,10 +106,6 @@ pub struct MaybeOneOfEntityTypeReference {
 }
 
 impl MaybeOneOfEntityTypeReference {
-    #[expect(
-        clippy::missing_const_for_fn,
-        reason = "constant functions cannot evaluate destructors"
-    )]
     #[must_use]
     pub fn into_inner(self) -> Option<raw::OneOf<raw::EntityTypeReference>> {
         self.inner

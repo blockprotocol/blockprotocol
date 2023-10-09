@@ -31,7 +31,7 @@ impl BaseUrl {
     ///
     /// # Errors
     /// - `ParseBaseUrlError` if the given URL string is invalid
-    pub fn new(url: String) -> Result<BaseUrl, ParseBaseUrlError> {
+    pub fn new(url: String) -> Result<Self, ParseBaseUrlError> {
         Self::validate_str(&url)?;
 
         Ok(Self(url))
@@ -56,6 +56,10 @@ impl BaseUrl {
     }
 
     #[must_use]
+    #[expect(
+        clippy::missing_panics_doc,
+        reason = "The URL is validated on creation"
+    )]
     pub fn to_url(&self) -> Url {
         Url::parse(&self.0).expect("invalid Base URL")
     }
@@ -94,6 +98,10 @@ pub struct VersionedUrl {
 
 impl VersionedUrl {
     #[must_use]
+    #[expect(
+        clippy::missing_panics_doc,
+        reason = "The URL is validated on creation"
+    )]
     pub fn to_url(&self) -> Url {
         let mut url = self.base_url.to_url();
         url.path_segments_mut()

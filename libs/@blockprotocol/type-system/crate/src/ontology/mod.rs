@@ -36,7 +36,7 @@ pub use shared::{
 
 // Re-export the repr contents so they're nicely grouped and so that they're easier to import in
 // a non-ambiguous way where they don't get confused with their non repr counterparts.
-// For example, `import crate::repr` lets you then use `repr::DataType`
+// For example, `import crate::raw` lets you then use `raw::DataType`
 pub mod raw {
     pub use super::{
         data_type::raw::{DataType, DataTypeReference},
