@@ -56,6 +56,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
+  forceNonTemporal?: boolean,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -81,7 +82,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
       )
     ) {
       for (const outwardEdge of outwardEdges) {
-        if (isTemporalSubgraph(subgraph)) {
+        if (!forceNonTemporal && isTemporalSubgraph(subgraph)) {
           const outwardEdgeTemporal = outwardEdge as OutwardEdge<true>;
           if (isOutgoingLinkEdge(outwardEdgeTemporal)) {
             const { entityId: linkEntityId, interval: edgeInterval } =
@@ -94,12 +95,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
             );
 
             if (intersection === null) {
-              throw new Error(
-                `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
-                  `EntityId: ${linkEntityId}\n` +
-                  `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-                  `Edge Valid Interval: ${JSON.stringify(edgeInterval)}`,
-              );
+              continue;
             }
 
             for (const entity of getEntityRevisionsByEntityId(
@@ -150,6 +146,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
+  forceNonTemporal?: boolean,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -174,7 +171,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
       )
     ) {
       for (const outwardEdge of outwardEdges) {
-        if (isTemporalSubgraph(subgraph)) {
+        if (!forceNonTemporal && isTemporalSubgraph(subgraph)) {
           const outwardEdgeTemporal = outwardEdge as OutwardEdge<true>;
           if (isIncomingLinkEdge(outwardEdgeTemporal)) {
             const { entityId: linkEntityId, interval: edgeInterval } =
@@ -187,12 +184,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
             );
 
             if (intersection === null) {
-              throw new Error(
-                `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
-                  `EntityId: ${linkEntityId}\n` +
-                  `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-                  `Edge Valid Interval: ${JSON.stringify(edgeInterval)}`,
-              );
+              continue;
             }
 
             for (const entity of getEntityRevisionsByEntityId(
@@ -243,8 +235,9 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
+  forceNonTemporal?: boolean,
 ): Entity<Temporal>[] | undefined => {
-  if (isTemporalSubgraph(subgraph)) {
+  if (!forceNonTemporal && isTemporalSubgraph(subgraph)) {
     const searchInterval =
       interval !== undefined
         ? interval
@@ -317,8 +310,9 @@ export const getRightEntityForLinkEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
+  forceNonTemporal?: boolean,
 ): Entity<Temporal>[] | undefined => {
-  if (isTemporalSubgraph(subgraph)) {
+  if (!forceNonTemporal && isTemporalSubgraph(subgraph)) {
     const searchInterval =
       interval !== undefined
         ? interval
@@ -391,11 +385,12 @@ export const getOutgoingLinkAndTargetEntities = <
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
+  forceNonTemporal?: boolean,
 ): LinkAndRightEntities => {
   const searchInterval =
     interval ?? getLatestInstantIntervalForSubgraph(subgraph);
 
-  if (isTemporalSubgraph(subgraph)) {
+  if (!forceNonTemporal && isTemporalSubgraph(subgraph)) {
     const outgoingLinkEntities = getOutgoingLinksForEntity(
       subgraph as Subgraph<true>,
       entityId,

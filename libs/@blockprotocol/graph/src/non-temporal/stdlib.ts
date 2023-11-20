@@ -119,11 +119,18 @@ export const getDataTypesReferencedByPropertyType =
 export const getIncomingLinksForEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-) => getIncomingLinksForEntityGeneral<false>(subgraph, entityId);
+) =>
+  getIncomingLinksForEntityGeneral<false>(subgraph, entityId, undefined, true);
 export const getLeftEntityForLinkEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-) => getLeftEntityForLinkEntityGeneral<false>(subgraph, entityId)?.pop();
+) =>
+  getLeftEntityForLinkEntityGeneral<false>(
+    subgraph,
+    entityId,
+    undefined,
+    true,
+  )?.pop();
 export const getOutgoingLinkAndTargetEntities = <
   LinkAndRightEntities extends LinkEntityAndRightEntity[] = LinkEntityAndRightEntity[],
 >(
@@ -133,15 +140,24 @@ export const getOutgoingLinkAndTargetEntities = <
   getOutgoingLinkAndTargetEntitiesGeneral<false, LinkAndRightEntities>(
     subgraph,
     entityId,
+    undefined,
+    true,
   );
 export const getOutgoingLinksForEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-) => getOutgoingLinksForEntityGeneral<false>(subgraph, entityId);
+) =>
+  getOutgoingLinksForEntityGeneral<false>(subgraph, entityId, undefined, true);
 export const getRightEntityForLinkEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-) => getRightEntityForLinkEntityGeneral<false>(subgraph, entityId)?.pop();
+) =>
+  getRightEntityForLinkEntityGeneral<false>(
+    subgraph,
+    entityId,
+    undefined,
+    true,
+  )?.pop();
 export const getDataTypeById = getDataTypeByIdGeneral;
 export const getDataTypeByVertexId = getDataTypeByVertexIdGeneral;
 export const getDataTypes = getDataTypesGeneral;
