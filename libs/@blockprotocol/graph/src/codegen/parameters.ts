@@ -23,6 +23,7 @@ export type CodegenParameters = {
   typeNameOverrides?: {
     [sourceTypeId: string]: string;
   };
+  rewriteTypeId?: (typeId: VersionedUrl) => VersionedUrl;
   /** Generate look-up maps with aliases for all type URLs */
   typeIdAliases?:
     | { enabled: false }
@@ -174,8 +175,9 @@ export const validateCodegenParameters = (
 
 export type ProcessedCodegenParameters = Omit<
   Required<CodegenParameters>,
-  "targets"
+  "targets" | "rewriteTypeId"
 > & {
+  rewriteTypeId: CodegenParameters["rewriteTypeId"];
   targets: {
     [fileName: string]: {
       sourceTypeIds: VersionedUrl[];
@@ -226,6 +228,7 @@ export const processCodegenParameters = (
 
   return {
     ...parameters,
+    rewriteTypeId: parameters.rewriteTypeId,
     targets,
     typeIdAliases: parameters.typeIdAliases ?? { enabled: true },
     typeNameOverrides: parameters.typeNameOverrides ?? {},
