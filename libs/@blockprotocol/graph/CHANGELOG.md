@@ -1,13 +1,5 @@
 # @blockprotocol/graph
 
-## 0.3.1-canary-20231120181031
-
-### Patch Changes
-
-- [#1349](https://github.com/blockprotocol/blockprotocol/pull/1349) [`4f67cb14`](https://github.com/blockprotocol/blockprotocol/commit/4f67cb14f36671a7a3d22f6b20fe535b8bdb2325) Thanks [@benwerner01](https://github.com/benwerner01)! - Ensure non-temporal BP methods have a non-temporal return, even when passed a temporal subgraph. Add `getFetchUrlFromTypeId` parameter to the codegen script. Gracefully handle non-intersecting edges in `getIncomingLinksForEntity` and `getOutgoingLinksForEntity`.
-
-- [#1311](https://github.com/blockprotocol/blockprotocol/pull/1311) [`8423b35e`](https://github.com/blockprotocol/blockprotocol/commit/8423b35e2dc0cce26ff5aa481c46ebb713aa5317) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add suffix to auto-generated data types, to avoid name clashes
-
 ## 0.3.0
 
 ### Minor Changes
