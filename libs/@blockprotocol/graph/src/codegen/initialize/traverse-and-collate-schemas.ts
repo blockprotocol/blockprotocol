@@ -125,9 +125,9 @@ export const traverseAndCollateSchemas = async (
     initialContext.logDebug(`Fetching ${typeId}...`);
 
     // Rewrite the type ID before attempting to fetch it if a
-    // `rewriteTypeId` function was provided in the parameters
-    const rewrittenTypeId = initialContext.parameters.rewriteTypeId
-      ? initialContext.parameters.rewriteTypeId(typeId)
+    // `getFetchUrlFromTypeId` function was provided in the parameters
+    const rewrittenTypeId = initialContext.parameters.getFetchUrlFromTypeId
+      ? initialContext.parameters.getFetchUrlFromTypeId(typeId)
       : typeId;
 
     addFetchPromise(
