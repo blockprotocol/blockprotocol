@@ -95,12 +95,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
             );
 
             if (intersection === null) {
-              throw new Error(
-                `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
-                  `EntityId: ${linkEntityId}\n` +
-                  `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-                  `Edge Valid Interval: ${JSON.stringify(edgeInterval)}`,
-              );
+              continue;
             }
 
             for (const entity of getEntityRevisionsByEntityId(
@@ -189,12 +184,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
             );
 
             if (intersection === null) {
-              throw new Error(
-                `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
-                  `EntityId: ${linkEntityId}\n` +
-                  `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-                  `Edge Valid Interval: ${JSON.stringify(edgeInterval)}`,
-              );
+              continue;
             }
 
             for (const entity of getEntityRevisionsByEntityId(
