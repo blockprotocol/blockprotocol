@@ -26,7 +26,7 @@ export type CodegenParameters = {
   /**
    * Enables fetching the schema from a different URL to the one in its schema.
    * The return of this function will be used as the URL to fetch the type from,
-   * but does NOT affect the id in the generated schema.
+   * but does NOT affect the type id in the generated schema.
    */
   getFetchUrlFromTypeId?: (typeId: VersionedUrl) => VersionedUrl;
   /** Generate look-up maps with aliases for all type URLs */
