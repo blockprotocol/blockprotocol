@@ -4,7 +4,7 @@ use thiserror::Error;
 use tsify::Tsify;
 
 use crate::{
-    url::{ParseBaseUrlError, ParseVersionedUrlError},
+    url::{ParseBaseUrlError, ParseVersionedUrlError, VersionedUrl},
     ParseAllOfError, ParseLinksError, ParsePropertyTypeObjectError,
 };
 
@@ -33,5 +33,5 @@ pub enum ParseEntityTypeError {
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum MergeEntityTypeError {
     #[error("`{0}` is not contained in the `allOf` property of `{1}`")]
-    NotInAllOf(String, String),
+    NotInAllOf(VersionedUrl, VersionedUrl),
 }

@@ -7,20 +7,23 @@ mod wasm;
 use std::collections::{HashMap, HashSet};
 
 pub use error::ParseEntityTypeError;
+use serde::{Deserialize, Serialize};
 
 use crate::{
+    ontology::entity_type::error::MergeEntityTypeError,
     url::{BaseUrl, VersionedUrl},
     AllOf, Links, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, ValidateUrl,
     ValidationError, ValueOrArray,
 };
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(try_from = "raw::EntityType", into = "raw::EntityType")]
 pub struct EntityType {
     id: VersionedUrl,
     title: String,
     description: Option<String>,
     property_object: Object<ValueOrArray<PropertyTypeReference>>,
-    inherits_from: AllOf<EntityTypeReference>,
+    pub inherits_from: AllOf<EntityTypeReference>,
     links: Links,
     examples: Vec<HashMap<BaseUrl, serde_json::Value>>,
 }
@@ -88,6 +91,56 @@ impl EntityType {
     #[must_use]
     pub const fn examples(&self) -> &Vec<HashMap<BaseUrl, serde_json::Value>> {
         &self.examples
+    }
+
+    /// Merges another entity type into this one.
+    ///
+    /// This will:
+    ///   - remove the other entity type from the `allOf`
+    ///   - merge the `properties` and `required` fields
+    ///   - merge the `links` field
+    ///
+    /// # Notes
+    ///
+    /// - This does not validate the resulting entity type.
+    /// - The `required` field may have a different order after merging.
+    ///
+    /// # Errors
+    ///
+    /// - [`DoesNotInheritFrom`] if the other entity type is not in the `allOf` field
+    ///
+    /// [`DoesNotInheritFrom`]: MergeEntityTypeError::NotInAllOf
+    pub fn merge_parent(&mut self, other: Self) -> Result<(), MergeEntityTypeError> {
+        self.inherits_from.elements.remove(
+            self.inherits_from
+                .all_of()
+                .iter()
+                .position(|x| x.url == other.id)
+                .ok_or_else(|| {
+                    MergeEntityTypeError::NotInAllOf(other.id.clone(), self.id.clone())
+                })?,
+        );
+
+        self.inherits_from
+            .elements
+            .extend(other.inherits_from.elements);
+
+        self.property_object
+            .properties
+            .extend(other.property_object.properties);
+
+        self.property_object.required = self
+            .property_object
+            .required
+            .drain(..)
+            .chain(other.property_object.required)
+            .collect::<HashSet<_>>()
+            .into_iter()
+            .collect();
+
+        self.links.0.extend(other.links.0);
+
+        Ok(())
     }
 
     #[must_use]
@@ -281,7 +334,9 @@ mod tests {
             None,
         );
 
-        test_property_type_references(&entity_type, []);
+        test_property_type_references(&entity_type, [
+            "https://blockprotocol.org/@alice/types/property-type/built-at/v/1",
+        ]);
 
         test_link_mappings(&entity_type, [
             (

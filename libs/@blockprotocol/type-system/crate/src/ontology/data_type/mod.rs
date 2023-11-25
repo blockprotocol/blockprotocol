@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 pub use error::ParseDataTypeError;
+use serde::{Deserialize, Serialize};
 
 use crate::{
     url::{BaseUrl, VersionedUrl},
@@ -12,7 +13,8 @@ pub(in crate::ontology) mod raw;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(try_from = "raw::DataType", into = "raw::DataType")]
 pub struct DataType {
     id: VersionedUrl,
     title: String,
