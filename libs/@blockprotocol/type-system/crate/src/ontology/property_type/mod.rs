@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
 pub use error::ParsePropertyTypeError;
+use serde::{Deserialize, Serialize};
 
 use crate::{
     url::{BaseUrl, VersionedUrl},
@@ -12,7 +13,8 @@ pub(in crate::ontology) mod raw;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(try_from = "raw::PropertyType", into = "raw::PropertyType")]
 pub struct PropertyType {
     id: VersionedUrl,
     title: String,

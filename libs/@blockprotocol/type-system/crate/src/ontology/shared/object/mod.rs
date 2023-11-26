@@ -7,20 +7,11 @@ use crate::{url::BaseUrl, ValidateUrl, ValidationError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Object<T, const MIN: usize = 0> {
-    properties: HashMap<BaseUrl, T>,
-    required: Vec<BaseUrl>,
+    pub(crate) properties: HashMap<BaseUrl, T>,
+    pub(crate) required: Vec<BaseUrl>,
 }
 
 impl<T: ValidateUrl, const MIN: usize> Object<T, MIN> {
-    /// Creates a new `Object` without validating.
-    #[must_use]
-    pub fn new_unchecked(properties: HashMap<BaseUrl, T>, required: Vec<BaseUrl>) -> Self {
-        Self {
-            properties,
-            required,
-        }
-    }
-
     /// Creates a new `Object` with the given properties and required properties.
     ///
     /// # Errors
@@ -58,6 +49,17 @@ impl<T: ValidateUrl, const MIN: usize> Object<T, MIN> {
         }
 
         Ok(())
+    }
+}
+
+impl<T, const MIN: usize> Object<T, MIN> {
+    /// Creates a new `Object` without validating.
+    #[must_use]
+    pub fn new_unchecked(properties: HashMap<BaseUrl, T>, required: Vec<BaseUrl>) -> Self {
+        Self {
+            properties,
+            required,
+        }
     }
 
     #[must_use]
