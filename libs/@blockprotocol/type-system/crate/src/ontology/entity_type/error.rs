@@ -32,6 +32,9 @@ pub enum ParseEntityTypeError {
 
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum MergeEntityTypeError {
-    #[error("`{0}` is not contained in the `allOf` property of `{1}`")]
-    NotInAllOf(VersionedUrl, VersionedUrl),
+    #[error("`{parent}` is not contained in the `allOf` property of `{child}`")]
+    DoesNotInheritFrom {
+        child: VersionedUrl,
+        parent: VersionedUrl,
+    },
 }

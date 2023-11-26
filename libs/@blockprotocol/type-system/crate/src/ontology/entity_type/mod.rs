@@ -109,15 +109,16 @@ impl EntityType {
     ///
     /// - [`DoesNotInheritFrom`] if the other entity type is not in the `allOf` field
     ///
-    /// [`DoesNotInheritFrom`]: MergeEntityTypeError::NotInAllOf
+    /// [`DoesNotInheritFrom`]: MergeEntityTypeError::DoesNotInheritFrom
     pub fn merge_parent(&mut self, other: Self) -> Result<(), MergeEntityTypeError> {
         self.inherits_from.elements.remove(
             self.inherits_from
                 .all_of()
                 .iter()
                 .position(|x| x.url == other.id)
-                .ok_or_else(|| {
-                    MergeEntityTypeError::NotInAllOf(other.id.clone(), self.id.clone())
+                .ok_or_else(|| MergeEntityTypeError::DoesNotInheritFrom {
+                    child: self.id.clone(),
+                    parent: other.id.clone(),
                 })?,
         );
 
