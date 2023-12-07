@@ -56,7 +56,6 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
-  forceNonTemporal?: boolean,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -82,7 +81,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
       )
     ) {
       for (const outwardEdge of outwardEdges) {
-        if (!forceNonTemporal && isTemporalSubgraph(subgraph)) {
+        if (isTemporalSubgraph(subgraph)) {
           const outwardEdgeTemporal = outwardEdge as OutwardEdge<true>;
           if (isOutgoingLinkEdge(outwardEdgeTemporal)) {
             const { entityId: linkEntityId, interval: edgeInterval } =
@@ -146,7 +145,6 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
-  forceNonTemporal?: boolean,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -171,7 +169,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
       )
     ) {
       for (const outwardEdge of outwardEdges) {
-        if (!forceNonTemporal && isTemporalSubgraph(subgraph)) {
+        if (isTemporalSubgraph(subgraph)) {
           const outwardEdgeTemporal = outwardEdge as OutwardEdge<true>;
           if (isIncomingLinkEdge(outwardEdgeTemporal)) {
             const { entityId: linkEntityId, interval: edgeInterval } =
@@ -235,9 +233,8 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
-  forceNonTemporal?: boolean,
 ): Entity<Temporal>[] | undefined => {
-  if (!forceNonTemporal && isTemporalSubgraph(subgraph)) {
+  if (isTemporalSubgraph(subgraph)) {
     const searchInterval =
       interval !== undefined
         ? interval
@@ -310,9 +307,8 @@ export const getRightEntityForLinkEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
-  forceNonTemporal?: boolean,
 ): Entity<Temporal>[] | undefined => {
-  if (!forceNonTemporal && isTemporalSubgraph(subgraph)) {
+  if (isTemporalSubgraph(subgraph)) {
     const searchInterval =
       interval !== undefined
         ? interval
