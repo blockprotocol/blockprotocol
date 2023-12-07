@@ -1,5 +1,16 @@
 # block-template-custom-element
 
+## 0.4.3-canary-20231207113055
+
+### Patch Changes
+
+- [#1311](https://github.com/blockprotocol/blockprotocol/pull/1311) [`8423b35e`](https://github.com/blockprotocol/blockprotocol/commit/8423b35e2dc0cce26ff5aa481c46ebb713aa5317) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add suffix to auto-generated data types, to avoid name clashes
+
+- Updated dependencies [[`cb5cbaf7`](https://github.com/blockprotocol/blockprotocol/commit/cb5cbaf7dcb5dfb8f03f952dac6e3c54f15d634d), [`8423b35e`](https://github.com/blockprotocol/blockprotocol/commit/8423b35e2dc0cce26ff5aa481c46ebb713aa5317)]:
+  - @blockprotocol/graph@0.3.1-canary-20231207113055
+  - block-scripts@0.3.2-canary-20231207113055
+  - mock-block-dock@0.1.7-canary-20231207113055
+
 ## 0.4.2
 
 ### Patch Changes

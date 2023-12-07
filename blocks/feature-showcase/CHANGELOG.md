@@ -1,5 +1,12 @@
 # @blocks/feature-showcase
 
+## 0.0.3-canary-20231207113055
+
+### Patch Changes
+
+- Updated dependencies [[`cb5cbaf7`](https://github.com/blockprotocol/blockprotocol/commit/cb5cbaf7dcb5dfb8f03f952dac6e3c54f15d634d), [`8423b35e`](https://github.com/blockprotocol/blockprotocol/commit/8423b35e2dc0cce26ff5aa481c46ebb713aa5317)]:
+  - @blockprotocol/graph@0.3.1-canary-20231207113055
+
 ## 0.0.2
 
 ## 0.0.1
