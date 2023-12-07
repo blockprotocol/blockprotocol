@@ -1,23 +1,23 @@
 import { faKey, faUserPen } from "@fortawesome/free-solid-svg-icons";
 
-import { isBillingFeatureFlagEnabled } from "../../../lib/config";
 import { SolidSparklesIcon } from "../../icons/solid-sparkles-icon";
 import { DashboardCardProps } from "./dashboard-card/dashboard-card";
 
-export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
+export const dashboardPages: {
+  tabTitle: string;
+  tabHref: string;
+  // Used to indicate which tab should be active when the current page is a subpage of the tab's href
+  displayHref?: string;
+}[] = [
   {
     tabTitle: "Dashboard",
     tabHref: "/dashboard",
   },
-  isBillingFeatureFlagEnabled
-    ? {
-        tabTitle: "Settings",
-        tabHref: "/settings",
-      }
-    : {
-        tabTitle: "API Keys",
-        tabHref: "/settings/api-keys",
-      },
+  {
+    tabTitle: "My Account",
+    tabHref: "/account/general",
+    displayHref: "/account",
+  },
 ];
 
 export type DashboardSection = "create" | "manage" | "explore";
@@ -37,23 +37,23 @@ export const getDashboardSectionCards = (props: {
           "Read the quickstart guide and learn how to create and use blocks",
         link: {
           title: "Read the guide",
-          href: "/docs/developing-blocks",
+          href: "/docs/blocks/develop",
         },
       },
       {
-        title: "My blocks",
+        title: "View your blocks",
         colorGradient:
           "linear-gradient(310.17deg, #FFB172 -167.67%, #9482FF 13.54%, #84E6FF 126.83%)",
         colorGradientOnHover:
           "linear-gradient(304.41deg, #FFB172 -167.57%, #9482FF -22.66%, #84E6FF 53.07%)",
         description: "Browse your blocks or publish a new one to the Þ Hub",
         link: {
-          title: "My blocks",
+          title: "View your blocks",
           href: `${props.profileLink}/blocks`,
         },
       },
       {
-        title: "My types",
+        title: "Create a Type",
         colorGradient:
           "linear-gradient(91.21deg, #FFB172 -84.62%, #9482FF 62.56%, #84E6FF 154.58%)",
         colorGradientOnHover:
@@ -61,8 +61,8 @@ export const getDashboardSectionCards = (props: {
         description:
           "Types are a formal way to describe data, links, properties and entities",
         link: {
-          title: "My types",
-          href: `${props.profileLink}/all-types`,
+          title: "Create a Type",
+          href: `${props.profileLink}/types`,
         },
       },
     ],
@@ -70,10 +70,10 @@ export const getDashboardSectionCards = (props: {
       {
         title: "Create and manage API keys",
         description:
-          "Your API key will allow you to search for and blocks by name, author, or compatible data structure",
+          "Your API key will allow you to search and discover blocks by name, author, or compatible data structure",
         link: {
           title: "Manage keys",
-          href: "/settings/api-keys",
+          href: "/account/api",
         },
         icon: faKey,
         variant: "secondary",

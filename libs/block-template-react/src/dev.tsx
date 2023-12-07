@@ -1,26 +1,11 @@
-import { VersionedUrl } from "@blockprotocol/graph";
 import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
 import packageJson from "../package.json";
+import exampleGraph from "./example-graph";
 import Component from "./index";
-import { RootEntity } from "./types.gen";
 
 const node = document.getElementById("app");
-
-const testEntity: RootEntity = {
-  metadata: {
-    recordId: {
-      entityId: "test-entity",
-      editionId: new Date().toISOString(),
-    },
-    entityTypeId: packageJson.blockprotocol.schema as VersionedUrl,
-  },
-  properties: {
-    "https://blockprotocol.org/@blockprotocol/types/property-type/name/":
-      "World",
-  },
-} as const;
 
 /**
  * This is an embedding application for local development and debugging.
@@ -37,17 +22,19 @@ const DevApp = () => {
   return (
     <MockBlockDock
       blockDefinition={{ ReactComponent: Component }}
-      blockEntityRecordId={testEntity.metadata.recordId}
+      blockEntityRecordId={exampleGraph.blockEntityRecordId}
       blockInfo={packageJson.blockprotocol}
       debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
       initialData={{
-        initialEntities: [testEntity],
+        initialEntities: exampleGraph.entities,
       }}
+      simulateDatastoreLatency={{
+        // configure this to adjust the range of artificial latency in responses to datastore-related requests (in ms)
+        min: 50,
+        max: 200,
+      }}
+      includeDefaultMockData // this seeds the datastore with sample entities and links, remove this to start with just the contents of `initialData`
       // hideDebugToggle <- uncomment this to disable the debug UI entirely
-      // initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it)
-      // initialEntityTypes={[]} <- customise the entity types in the datastore
-      // initialLinks={[]} <- customise the links in the datastore
-      // initialLinkedQueries={[]} <- customise the linkedQueries in the datastore
       // readonly <- uncomment this to start your block in readonly mode. You can also toggle it in the UI
     />
   );

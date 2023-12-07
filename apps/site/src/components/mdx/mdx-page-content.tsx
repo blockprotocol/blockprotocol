@@ -48,7 +48,12 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
         (heading) => heading.anchor === anchor,
       );
 
-      const previousRoute = sessionStorage.getItem("previousRoute");
+      let previousRoute;
+      try {
+        previousRoute = window.sessionStorage.getItem("previousRoute");
+      } catch {
+        // sessionStorage is not available
+      }
 
       const shouldScrollToAnchor =
         // if anchor is empty and we haven't scrolled, prevent it
@@ -199,9 +204,10 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
               },
             },
           /** Headers that come after headers shouldn't have a top margin */
-          "& h2 + h3, h2 + h4, h2 + h5, h3 + h4, h3 + h5, h4 + h5": {
-            marginTop: 0,
-          },
+          "& h2 + h3, h2 + h4, h2 + h5, h2 + h6, h3 + h4, h3 + h5, h3 + h6, h4 + h5, h4 + h6, h5 + h6":
+            {
+              marginTop: 0,
+            },
           "& > h1:first-of-type": {
             marginTop: 0,
           },

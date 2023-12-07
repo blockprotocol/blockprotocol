@@ -14,12 +14,14 @@ import {
   getDataTypeByVertexId as getDataTypeByVertexIdGeneral,
   getDataTypes as getDataTypesGeneral,
   getDataTypesByBaseUrl as getDataTypesByBaseUrlGeneral,
+  getDataTypesReferencedByPropertyType as getDataTypesReferencedByPropertyTypeGeneral,
   getEntities as getEntitiesGeneral,
   getEntityRevision as getEntityRevisionGeneral,
   getEntityTypeById as getEntityTypeByIdGeneral,
   getEntityTypeByVertexId as getEntityTypeByVertexIdGeneral,
   getEntityTypes as getEntityTypesGeneral,
   getEntityTypesByBaseUrl as getEntityTypesByBaseUrlGeneral,
+  getEntityTypesReferencedByEntityType as getEntityTypesReferencedByEntityTypeGeneral,
   getIncomingLinksForEntity as getIncomingLinksForEntityGeneral,
   getLeftEntityForLinkEntity as getLeftEntityForLinkEntityGeneral,
   getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesGeneral,
@@ -29,9 +31,11 @@ import {
   getPropertyTypes as getPropertyTypesGeneral,
   getPropertyTypesByBaseUrl as getPropertyTypesByBaseUrlGeneral,
   getPropertyTypesReferencedByEntityType as getPropertyTypesReferencedByEntityTypeGeneral,
+  getPropertyTypesReferencedByPropertyType as getPropertyTypesReferencedByPropertyTypeGeneral,
   getRightEntityForLinkEntity as getRightEntityForLinkEntityGeneral,
   getRoots as getRootsGeneral,
   getVertexIdForRecordId as getVertexIdForRecordIdGeneral,
+  inferSubgraphEdges as inferSubgraphEdgesGeneral,
   isDataTypeRootedSubgraph as isDataTypeRootedSubgraphGeneral,
   isEntityRootedSubgraph as isEntityRootedSubgraphGeneral,
   isEntityTypeRootedSubgraph as isEntityTypeRootedSubgraphGeneral,
@@ -101,9 +105,17 @@ export const buildSubgraph = (
   rootRecordIds: (EntityRecordId | OntologyTypeRecordId)[],
   depths: GraphResolveDepths,
 ) => buildSubgraphGeneral<false>(data, rootRecordIds, depths, undefined);
+export const inferSubgraphEdges = (subgraph: Subgraph) =>
+  inferSubgraphEdgesGeneral<false>(subgraph);
 
 export const getPropertyTypesReferencedByEntityType =
   getPropertyTypesReferencedByEntityTypeGeneral;
+export const getEntityTypesReferencedByEntityType =
+  getEntityTypesReferencedByEntityTypeGeneral;
+export const getPropertyTypesReferencedByPropertyType =
+  getPropertyTypesReferencedByPropertyTypeGeneral;
+export const getDataTypesReferencedByPropertyType =
+  getDataTypesReferencedByPropertyTypeGeneral;
 export const getIncomingLinksForEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
@@ -121,6 +133,8 @@ export const getOutgoingLinkAndTargetEntities = <
   getOutgoingLinkAndTargetEntitiesGeneral<false, LinkAndRightEntities>(
     subgraph,
     entityId,
+    undefined,
+    true,
   );
 export const getOutgoingLinksForEntity = (
   subgraph: Subgraph,

@@ -27,7 +27,7 @@
         },
         "required": ["entityTypeId", "properties"]
       },
-      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": []
     },
     {
       "messageName": "createEntityResponse",
@@ -76,7 +76,7 @@
         ],
         "required": ["entityId", "entityTypeId", "properties"]
       },
-      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": []
     },
     {
       "messageName": "updateEntityResponse",
@@ -105,7 +105,7 @@
         "description": "The entityId of the entity to delete",
         "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id"
       },
-      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": []
     },
     {
       "messageName": "deleteEntityResponse",
@@ -145,7 +145,7 @@
         },
         "required": ["entityId"]
       },
-      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": []
     },
     {
       "messageName": "getEntityResponse",
@@ -183,7 +183,7 @@
         },
         "required": ["operation"]
       },
-      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": []
     },
     {
       "messageName": "queryEntitiesResponse",
@@ -253,7 +253,7 @@
           }
         ]
       },
-      "errorCodes": ["NOT_IMPLEMENTED", "INTERNAL_ERROR"]
+      "errorCodes": []
     },
     {
       "messageName": "uploadFileResponse",

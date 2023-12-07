@@ -1,6 +1,6 @@
 import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 
-import { hardcodedTypes } from "../middleware.page/return-types-as-json/hardcoded-types";
+import { hardcodedTypes } from "../middleware.page/hardcoded-types";
 
 export const linkEntityTypeId =
   hardcodedTypes[

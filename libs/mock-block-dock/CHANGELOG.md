@@ -1,5 +1,66 @@
 # mock-block-dock
 
+## 0.1.6
+
+### Patch Changes
+
+- [#1293](https://github.com/blockprotocol/blockprotocol/pull/1293) [`5ac80409`](https://github.com/blockprotocol/blockprotocol/commit/5ac80409d97c37a83ffc31ab69860ad3f99d3319) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add missing babel plugin dependencies
+
+## 0.1.5
+
+### Patch Changes
+
+- [#1127](https://github.com/blockprotocol/blockprotocol/pull/1127) [`af01f5c2`](https://github.com/blockprotocol/blockprotocol/commit/af01f5c2d2b124e3be0b285dfc5cebfd63edc395) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - update default sort for queries
+
+- Updated dependencies [[`d0a52220`](https://github.com/blockprotocol/blockprotocol/commit/d0a522208bc0765e2d7865d61ec06776420e69ac), [`96fd797b`](https://github.com/blockprotocol/blockprotocol/commit/96fd797bea62204386ad23514a76a7e9c5a1cbc3), [`bae9405c`](https://github.com/blockprotocol/blockprotocol/commit/bae9405c0a7d0f8312b416d845aaa3069dfe61d9), [`eacd07fb`](https://github.com/blockprotocol/blockprotocol/commit/eacd07fb3009b35e7c30f8be11e3e136651f41c2)]:
+  - @blockprotocol/graph@0.3.0
+  - @blockprotocol/hook@0.1.4
+
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [[`58d8f99c`](https://github.com/blockprotocol/blockprotocol/commit/58d8f99c0dac48a857c67d4c5dbda9a01afd108b)]:
+  - @blockprotocol/core@0.1.2
+  - @blockprotocol/graph@0.2.2
+  - @blockprotocol/hook@0.1.3
+  - @blockprotocol/service@0.1.3
+
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [[`2b771f30`](https://github.com/blockprotocol/blockprotocol/commit/2b771f30e88ae610a01cb024eab082b8c7bb9a8a)]:
+  - @blockprotocol/graph@0.2.1
+  - @blockprotocol/hook@0.1.2
+
+## 0.1.2
+
+### Patch Changes
+
+- [#1161](https://github.com/blockprotocol/blockprotocol/pull/1161) [`dcfb45a4`](https://github.com/blockprotocol/blockprotocol/commit/dcfb45a4f1f3cbc47ff00a434e6eb52fef10c9b3) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Add latency simulation
+
+- [#1157](https://github.com/blockprotocol/blockprotocol/pull/1157) [`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2) Thanks [@CiaranMn](https://github.com/CiaranMn)! - fix handling of duplicate tag names in custom element renderer
+
+- [#1162](https://github.com/blockprotocol/blockprotocol/pull/1162) [`032352a9`](https://github.com/blockprotocol/blockprotocol/commit/032352a998d960f1c9a0527f8681173860585a83) Thanks [@CiaranMn](https://github.com/CiaranMn)! - remove (broken) commonjs build output
+
+- [#1160](https://github.com/blockprotocol/blockprotocol/pull/1160) [`bbb00ce6`](https://github.com/blockprotocol/blockprotocol/commit/bbb00ce66c9175fecd9c017880f2cf7845b0a3d9) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Introduce `includeDefaultMockData` toggle on MockBlockDock
+
+- Updated dependencies [[`065e6ac4`](https://github.com/blockprotocol/blockprotocol/commit/065e6ac4b3722b633fb3996b5482f61a9f5b2b69), [`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2), [`9a98416d`](https://github.com/blockprotocol/blockprotocol/commit/9a98416df8756c26037a4559affd421f80f84547)]:
+  - @blockprotocol/hook@0.1.1
+  - @blockprotocol/core@0.1.1
+  - @blockprotocol/graph@0.2.0
+  - @blockprotocol/service@0.1.2
+
+## 0.1.1
+
+### Patch Changes
+
+- [#1049](https://github.com/blockprotocol/blockprotocol/pull/1049) [`fdb366cb`](https://github.com/blockprotocol/blockprotocol/commit/fdb366cb29a5b2bdd209a6ea56b2925bc8ee1c12) Thanks [@benwerner01](https://github.com/benwerner01)! - handle additional error codes from the service module
+
+- Updated dependencies [[`52cc687f`](https://github.com/blockprotocol/blockprotocol/commit/52cc687f13f1076e6bf77198e60e9cd5adc3a32b), [`fdb366cb`](https://github.com/blockprotocol/blockprotocol/commit/fdb366cb29a5b2bdd209a6ea56b2925bc8ee1c12)]:
+  - @blockprotocol/service@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

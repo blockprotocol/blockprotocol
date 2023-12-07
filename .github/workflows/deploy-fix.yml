@@ -1,0 +1,26 @@
+name: Fix
+on: workflow_dispatch
+jobs:
+  yarn:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        with:
+          token: ${{ secrets.MACHINE_USER_TOKEN }}
+
+      - name: Warm up repo
+        uses: ./.github/actions/warm-up-repo
+
+      - name: Fix
+        run: yarn fix
+
+      - name: Commit
+        run: |
+          git config user.name "Block Protocol"
+          git config user.email careers@blockprotocol.org
+          git add .
+          git commit -m '`yarn fix`'
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.MACHINE_USER_TOKEN }}

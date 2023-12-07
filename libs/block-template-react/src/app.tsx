@@ -14,7 +14,10 @@ import { useRef } from "react";
  * any of these ensure that your styling does not affect anything outside your block.
  */
 import styles from "./base.module.scss";
-import { RootEntity, RootEntityLinkedEntities } from "./types.gen";
+import {
+  BlockEntity,
+  BlockEntityOutgoingLinkAndTarget,
+} from "./types/generated/block-entity";
 
 /**
  * This function is to help illustrate a property being changed when the button is pressed.
@@ -29,14 +32,14 @@ const supplyRandomName = () => {
  * It is a function that takes a property object (known as "props" in React) and returns an element.
  * You should update this comment to describe what your block does, or remove the comment.
  */
-export const App: BlockComponent<RootEntity> = ({
+export const App: BlockComponent<BlockEntity> = ({
   graph: {
     /**
      * The properties sent to the block represent the messages sent automatically from the application to the block.
      * All block <> application messages are split into modules, and so is this property object.
      * Here, we're extracting the 'graph' module messages from the property object.
      * – and then taking a single message from it, 'blockEntitySubgraph'
-     * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for other such messages
+     * @see https://blockprotocol.org/spec/graph#message-definitions for other such messages
      */
     blockEntitySubgraph,
   },
@@ -55,13 +58,13 @@ export const App: BlockComponent<RootEntity> = ({
   const { graphModule } = useGraphBlockModule(blockRootRef);
 
   const { rootEntity: blockEntity } = useEntitySubgraph<
-    RootEntity,
-    RootEntityLinkedEntities
+    BlockEntity,
+    BlockEntityOutgoingLinkAndTarget[]
   >(blockEntitySubgraph);
 
   const entityId = blockEntity.metadata.recordId.entityId;
 
-  const nameKey: keyof RootEntity["properties"] =
+  const nameKey: keyof BlockEntity["properties"] =
     "https://blockprotocol.org/@blockprotocol/types/property-type/name/";
 
   const title = blockEntity.properties[nameKey];
@@ -75,12 +78,13 @@ export const App: BlockComponent<RootEntity> = ({
      *   - our module helper will dispatch messages to the app from this element, and listen for responses on it
      */
     <div className={styles.block} ref={blockRootRef}>
-      <h1>{`Hello, ${title}`}</h1>
-      <p>
+      <h1 className={styles.heading}>{`Hello, ${title}`}</h1>
+      <p className={styles.paragraph}>
         The entityId of this block is {entityId}. Use it to update its data,
         e.g. by calling <code>updateEntity</code>.
       </p>
       <button
+        className={styles.button}
         onClick={() =>
           /**
            * This is an example of using the graph module to send a message to the embedding application
@@ -89,7 +93,7 @@ export const App: BlockComponent<RootEntity> = ({
            * – we are passing the 'entityId' of the entity loaded into the block ('blockEntity').
            *
            * Many other messages are available for your block to read and update entities, and links between entities
-           * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions
+           * @see https://blockprotocol.org/spec/graph#message-definitions
            */
           graphModule?.updateEntity({
             data: {

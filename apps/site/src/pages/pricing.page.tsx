@@ -21,13 +21,11 @@ const PricingPage: NextPage = () => {
   const [subscriptionTierPrices, setSubscriptionTierPrices] =
     useState<SubscriptionTierPrices>();
 
-  const currentSubscriptionTier = useMemo(() => {
-    if (user && user !== "loading") {
-      return user.stripeSubscriptionStatus === "active"
-        ? user.stripeSubscriptionTier ?? "free"
-        : "free";
-    }
-  }, [user]);
+  const currentSubscriptionTier = useMemo(
+    () =>
+      user && user !== "loading" ? user.stripeSubscriptionTier : undefined,
+    [user],
+  );
 
   const fetchSubscriptionTierPrices = useCallback(async () => {
     const {

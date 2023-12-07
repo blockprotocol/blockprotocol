@@ -12,6 +12,8 @@ export type ApiLoginWithLoginCodeRequestBody = {
 
 export type ApiLoginWithLoginCodeResponse = {
   user: SerializedUser;
+  redirectPath?: string;
+  wordpressSettingsUrl?: string;
 };
 
 export default createBaseHandler<
@@ -44,11 +46,21 @@ export default createBaseHandler<
       );
     }
 
+    if (!user.hasVerifiedEmail) {
+      return res.status(400).json(
+        formatErrors({
+          msg: "User's email has not been verified yet",
+          param: "userId",
+          value: userId,
+        }),
+      );
+    }
+
     const { verificationCodeId, code } = body;
 
     const loginCode = await user.getVerificationCode(db, {
       verificationCodeId,
-      variant: "login",
+      variant: ["login", "linkWordPress"],
     });
 
     if (!loginCode) {
@@ -74,11 +86,37 @@ export default createBaseHandler<
         );
       }
 
-      await loginCode.setToUsed(db);
+      if (loginCode.variant === "linkWordPress") {
+        const wordpressInstanceUrl = loginCode.wordpressUrls?.instance;
+        if (!wordpressInstanceUrl) {
+          return res.status(500).json(
+            formatErrors({
+              msg: "Internal error. Please try again.",
+              param: "code",
+              value: code,
+            }),
+          );
+        }
+
+        await loginCode.setToUsed(db);
+
+        await user.addWordPressInstanceUrlAndVerify(db, {
+          wordpressInstanceUrl,
+          updateReferrer: false,
+        });
+      } else {
+        await loginCode.setToUsed(db);
+      }
 
       req.login(user, () =>
         res.status(200).json({
           user: user.serialize(true),
+          ...(loginCode.variant === "linkWordPress"
+            ? {
+                redirectPath: "/dashboard",
+                wordpressSettingsUrl: loginCode.wordpressUrls?.settings,
+              }
+            : {}),
         }),
       );
     }

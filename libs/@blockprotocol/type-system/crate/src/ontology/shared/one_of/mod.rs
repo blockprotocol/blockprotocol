@@ -1,5 +1,5 @@
 pub(crate) mod error;
-pub(in crate::ontology) mod repr;
+pub(in crate::ontology) mod raw;
 
 use crate::ValidationError;
 
@@ -45,12 +45,12 @@ mod tests {
     use serde_json::json;
 
     use crate::{
-        repr, utils::tests::ensure_failed_validation, ParseOneOfError, PropertyValues,
+        raw, utils::tests::ensure_failed_validation, ParseOneOfError, PropertyValues,
         ValidationError,
     };
 
     type OneOf = super::OneOf<PropertyValues>;
-    type OneOfRepr = repr::OneOf<repr::PropertyValues>;
+    type OneOfRepr = raw::OneOf<raw::PropertyValues>;
 
     #[test]
     fn empty() {

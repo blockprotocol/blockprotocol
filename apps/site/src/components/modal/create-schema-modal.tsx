@@ -1,3 +1,4 @@
+import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import {
@@ -7,9 +8,11 @@ import {
   useCallback,
   useState,
 } from "react";
+import slugify from "slugify";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
+import { generateOntologyUrl } from "../../pages/shared/schema";
 import { Button } from "../button";
 import { TextField } from "../text-field";
 import { Modal } from "./modal";
@@ -31,12 +34,9 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
   const router = useRouter();
   const { user } = useUser();
 
-  const handleSchemaTitleChange = (value: string) => {
-    // trim surrounding whitespace and remove most special characters
-    const formattedText = value.replace(/[^a-zA-Z0-9\-_ ()']/g, "");
-
-    setNewSchemaTitle(formattedText);
-  };
+  const isMac =
+    typeof window !== "undefined" &&
+    navigator.platform.toUpperCase().includes("MAC");
 
   const handleCreateSchema = useCallback(
     async (evt: FormEvent) => {
@@ -49,17 +49,48 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       setLoading(true);
       setApiErrorMessage(undefined);
 
-      const { data, error } = await apiClient.createEntityType({
+      const title = newSchemaTitle.trim();
+      const { baseUrl, versionedUrl } = generateOntologyUrl({
+        author: router.query.shortname as `@${string}`,
+        title,
+        kind: "entityType",
+        version: 1,
+      });
+
+      const draft: EntityTypeWithMetadata = {
         schema: {
           description: newDescription.trim(),
-          title: newSchemaTitle.trim(),
+          title,
+          $schema:
+            "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+          $id: versionedUrl,
+          kind: "entityType",
+          properties: {},
+          type: "object",
         },
-      });
-      setLoading(false);
-      if (error) {
-        setApiErrorMessage(error.message);
-      } else if (data) {
-        void router.push(new URL(data.entityType.schema.$id).pathname);
+        metadata: {
+          recordId: {
+            baseUrl,
+            version: 1,
+          },
+        },
+      };
+
+      const exists = await apiClient
+        .getEntityTypeByUrl({
+          versionedUrl,
+        })
+        .then((res) => !res.error);
+
+      if (exists) {
+        setLoading(false);
+        setApiErrorMessage("Type title must be unique");
+      } else {
+        void router.push(
+          `${new URL(draft.schema.$id).pathname}?draft=${encodeURIComponent(
+            Buffer.from(JSON.stringify(draft)).toString("base64"),
+          )}`,
+        );
       }
     },
     [user, newDescription, newSchemaTitle, router],
@@ -71,7 +102,12 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       (newSchemaTitle === "" ? "Please enter a valid value" : undefined)
     : undefined;
 
-  const isSchemaTitleInvalid = !!apiErrorMessage || newSchemaTitle === "";
+  const isSchemaTitleInvalid =
+    !!apiErrorMessage ||
+    slugify(newSchemaTitle, {
+      lower: true,
+      strict: true,
+    }) === "";
 
   const displayError = touchedTitleInput && isSchemaTitleInvalid;
 
@@ -117,7 +153,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
               if (apiErrorMessage) {
                 setApiErrorMessage(undefined);
               }
-              handleSchemaTitleChange(evt.target.value);
+              setNewSchemaTitle(evt.target.value);
             }}
             required
             error={displayError}
@@ -131,6 +167,16 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
             onChange={(evt) => setNewDescription(evt.target.value)}
             multiline
             required
+            maxRows={8}
+            onKeyDown={(evt) => {
+              const { metaKey, ctrlKey, code } = evt;
+              if (
+                ((isMac && metaKey) || (!isMac && ctrlKey)) &&
+                code === "Enter"
+              ) {
+                void handleCreateSchema(evt);
+              }
+            }}
           />
 
           <Button

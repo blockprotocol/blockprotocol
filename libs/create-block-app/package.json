@@ -1,6 +1,6 @@
 {
   "name": "create-block-app",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Create new https://blockprotocol.org blocks",
   "keywords": [
     "blockprotocol",

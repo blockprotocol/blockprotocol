@@ -3,46 +3,45 @@
   "extends": ["config:base"],
 
   "automerge": true,
+  "branchPrefix": "deps/",
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
+  "dependencyDashboardOSVVulnerabilitySummary": "none",
+  "dependencyDashboardTitle": "🚀 Dependency Updates",
+  "npm": { "minimumReleaseAge": "3 days" },
   "postUpdateOptions": ["yarnDedupeFewer"],
   "rangeStrategy": "bump",
   "rebaseWhen": "conflicted",
+  "semanticCommits": "disabled",
+
   "packageRules": [
     {
-      "enabled": true,
-      "groupName": "ESLint",
       "matchManagers": ["npm"],
-      "matchPackagePatterns": [
-        "^@types/eslint",
-        "^@typescript-eslint/",
-        "^eslint-",
-        "^eslint$"
-      ]
+      "commitMessageTopic": "npm package `{{depName}}`",
+      "additionalBranchPrefix": "js/"
     },
     {
-      "enabled": true,
-      "groupName": "Jest",
-      "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@types/jest$", "^jest", "^ts-jest$", "^jest-"]
+      "matchManagers": ["poetry"],
+      "commitMessageTopic": "Python package `{{depName}}`",
+      "additionalBranchPrefix": "py/",
+      "reviewers": ["team:Python"]
     },
     {
-      "enabled": true,
-      "groupName": "Playwright",
-      "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@playwright/", "^playwright$", "^playwright-"]
+      "matchManagers": ["cargo"],
+      "additionalBranchPrefix": "rs/",
+      "reviewers": ["team:Rust"],
+      "commitMessageTopic": "Rust crate `{{depName}}`"
     },
     {
-      "enabled": true,
-      "groupName": "Jest",
-      "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@types/jest$", "^jest", "^ts-jest$"]
+      "matchManagers": ["github-actions"],
+      "commitMessageTopic": "GitHub Action `{{depName}}`",
+      "additionalBranchPrefix": "gha/",
+      "pinDigests": true
     },
     {
-      "enabled": true,
-      "groupName": "Sentry",
-      "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@sentry/"]
+      "matchManagers": ["docker-compose", "dockerfile"],
+      "commitMessageTopic": "Docker tag `{{depName}}`",
+      "additionalBranchPrefix": "docker/"
     }
   ]
 }

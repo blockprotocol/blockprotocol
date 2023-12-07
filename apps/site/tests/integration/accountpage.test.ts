@@ -20,7 +20,7 @@ test("key elements should be present when user views their account page", async 
   for (const [testId, href] of [
     ["profile-page-overview-tab", "/@alice"],
     ["profile-page-blocks-tab", "/@alice/blocks"],
-    ["profile-page-schemas-tab", "/@alice/all-types"],
+    ["profile-page-schemas-tab", "/@alice/types"],
   ] as const) {
     const item = page.locator(`[data-testid='${testId}']`);
     await expect(item).toBeVisible();
@@ -42,7 +42,7 @@ test("key elements should be present when user views their account page", async 
 
   await expect(page.locator("text=Build a block")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks",
+    "/docs/blocks/develop",
   );
 
   await expect(page.locator("text=Create an Entity Type")).toBeVisible();
@@ -62,7 +62,7 @@ test("key elements should be present when user views their account page", async 
 
   await expect(page.locator("text=Build a block")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks",
+    "/docs/blocks/develop",
   );
 
   // Schema tab tests
@@ -90,7 +90,7 @@ test("key elements should be present when guest user views account page", async 
   for (const [testId, href] of [
     ["profile-page-overview-tab", "/@hash"],
     ["profile-page-blocks-tab", "/@hash/blocks"],
-    ["profile-page-schemas-tab", "/@hash/all-types"],
+    ["profile-page-schemas-tab", "/@hash/types"],
   ] as const) {
     const item = page.locator(`[data-testid='${testId}']`);
     await expect(item).toBeVisible();
@@ -179,7 +179,7 @@ test("key elements should be present when guest user views account page", async 
 
   await page.locator("[data-testid='profile-page-schemas-tab']").click();
 
-  await expect(page).toHaveURL("/@hash/all-types");
+  await expect(page).toHaveURL("/@hash/types");
 
   await expect(
     page.locator("text=@hash hasn’t published any types yet"),

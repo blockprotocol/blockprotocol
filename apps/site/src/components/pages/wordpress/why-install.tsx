@@ -1,5 +1,6 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 
+import { FadeInOnViewport } from "../../fade-in-on-viewport";
 import {
   BinarySharpIcon,
   BlockProtocolIcon,
@@ -31,35 +32,37 @@ export const WhyInstall = () => {
           fontFamily: "Inter",
         }}
       >
-        <Typography
-          sx={({ breakpoints }) => ({
-            fontSize: "2rem",
-            lineHeight: 1,
-            fontWeight: 900,
-            mb: 1,
-            width: 1,
-            textAlign: "center",
-            [breakpoints.down("sm")]: {
-              textAlign: "left",
-            },
-          })}
-        >
-          Why install the Block Protocol plugin?
-        </Typography>
-        <Typography
-          sx={({ breakpoints }) => ({
-            fontSize: "2rem",
-            lineHeight: 1,
-            color: ({ palette }) => palette.purple[70],
-            width: 1,
-            textAlign: "center",
-            [breakpoints.down("sm")]: {
-              textAlign: "left",
-            },
-          })}
-        >
-          Do more with a supercharged WordPress...
-        </Typography>
+        <FadeInOnViewport>
+          <Typography
+            sx={({ breakpoints }) => ({
+              fontSize: "2rem",
+              lineHeight: 1,
+              fontWeight: 900,
+              mb: 1,
+              width: 1,
+              textAlign: "center",
+              [breakpoints.down("sm")]: {
+                textAlign: "left",
+              },
+            })}
+          >
+            Why install the Block Protocol plugin?
+          </Typography>
+          <Typography
+            sx={({ breakpoints }) => ({
+              fontSize: "2rem",
+              lineHeight: 1,
+              color: ({ palette }) => palette.purple[70],
+              width: 1,
+              textAlign: "center",
+              [breakpoints.down("sm")]: {
+                textAlign: "left",
+              },
+            })}
+          >
+            Do more with a supercharged WordPress...
+          </Typography>
+        </FadeInOnViewport>
 
         <Grid
           container
@@ -125,33 +128,35 @@ export const WhyInstall = () => {
             grayTitle=" including OpenAI-powered blocks"
             description={
               <>
-                Directly access powerful third-party tools such as those from
-                Mapbox and OpenAI without needing to sign up for your own
-                account with dozens of different services or install any
-                additional WordPress plugins&#65293;the <strong>Þ</strong>{" "}
-                abstracts away the need to interface with different providers
+                Get <strong>free access</strong> to powerful 3rd-party tools
+                such as those from Mapbox and OpenAI without needing to sign up
+                for your own account with them, or install additional WordPress
+                plugins&#65293;the <strong>Þ</strong> abstracts away the need to
+                interface with different providers
               </>
             }
           />
         </Grid>
 
-        <Typography
-          sx={{
-            fontSize: "1.75rem",
-            lineHeight: 1,
-            letterSpacing: "-0.02em",
-            mt: 13.75,
-            fontWeight: 900,
-            textAlign: "center",
-          }}
-        >
-          Download the free <BlockProtocolIcon gradient sx={{ mb: 0.5 }} />
-          WordPress plugin
-        </Typography>
-
-        <Box sx={{ maxWidth: 500, width: 1, mt: 5 }}>
-          <EarlyAccessCTA />
-        </Box>
+        <FadeInOnViewport>
+          <Typography
+            sx={{
+              fontSize: "1.75rem",
+              lineHeight: 1,
+              letterSpacing: "-0.02em",
+              mt: 13.75,
+              fontWeight: 900,
+              textAlign: "center",
+            }}
+          >
+            {"Download the free "}
+            <BlockProtocolIcon gradient sx={{ mb: 0.5 }} />
+            {" WordPress plugin"}
+          </Typography>
+          <Box sx={{ maxWidth: 500, width: 1, mt: 5 }}>
+            <EarlyAccessCTA />
+          </Box>
+        </FadeInOnViewport>
       </Container>
     </Box>
   );

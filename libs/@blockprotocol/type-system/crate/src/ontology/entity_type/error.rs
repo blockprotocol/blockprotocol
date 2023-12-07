@@ -4,7 +4,7 @@ use thiserror::Error;
 use tsify::Tsify;
 
 use crate::{
-    url::{ParseBaseUrlError, ParseVersionedUrlError},
+    url::{ParseBaseUrlError, ParseVersionedUrlError, VersionedUrl},
     ParseAllOfError, ParseLinksError, ParsePropertyTypeObjectError,
 };
 
@@ -28,4 +28,13 @@ pub enum ParseEntityTypeError {
     InvalidVersionedUrl(ParseVersionedUrlError),
     #[error("error in JSON: `{0}`")]
     InvalidJson(String),
+}
+
+#[derive(Debug, PartialEq, Eq, Error)]
+pub enum MergeEntityTypeError {
+    #[error("`{parent}` is not contained in the `allOf` property of `{child}`")]
+    DoesNotInheritFrom {
+        child: VersionedUrl,
+        parent: VersionedUrl,
+    },
 }

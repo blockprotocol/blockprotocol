@@ -2,14 +2,14 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Breadcrumbs, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
+import { Crumb } from "../hooks/use-crumbs";
 import { FontAwesomeIcon } from "../icons";
 import { Link } from "../link";
 import { itemIsPage } from "./util";
 
 type MobileBreadcrumbsProps = {
   hydrationFriendlyAsPath: string;
-  crumbs: (SiteMapPage | SiteMapPageSection)[];
+  crumbs: Crumb[];
 };
 
 export const MobileBreadcrumbs: FunctionComponent<MobileBreadcrumbsProps> = ({

@@ -1,6 +1,6 @@
 {
   "name": "block-template-html",
-  "version": "0.2.0",
+  "version": "0.3.2",
   "description": "Block Protocol block template for an html-based block",
   "keywords": [
     "blockprotocol",
@@ -18,7 +18,7 @@
     "url": "https://hash.ai"
   },
   "scripts": {
-    "build": "rimraf dist && cp -R src dist && cp block-metadata.json dist && cp -R public dist",
+    "build": "rimraf dist && cp -R src dist && cp block-metadata.json dist && cp example-graph.json dist && cp -R public dist",
     "dev": "yarn prepare && echo \"Serving at http://localhost:63212\" && http-server -p 63212 ./dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
@@ -34,7 +34,7 @@
   "dependencies": {},
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
-    "block-scripts": "0.1.0",
+    "block-scripts": "0.3.1",
     "eslint": "8.33.0",
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",

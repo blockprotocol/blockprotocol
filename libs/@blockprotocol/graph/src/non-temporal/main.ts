@@ -41,6 +41,7 @@ import {
   FilterOperatorRequiringValue as FilterOperatorRequiringValueGeneral,
   FilterOperatorType as FilterOperatorTypeGeneral,
   FilterOperatorWithoutValue as FilterOperatorWithoutValueGeneral,
+  GetDataTypeData as GetDataTypeDataGeneral,
   GetEntityData as GetEntityDataGeneral,
   GetEntityTypeData as GetEntityTypeDataGeneral,
   GetPropertyTypeData as GetPropertyTypeDataGeneral,
@@ -121,6 +122,8 @@ import {
   PropertyTypeRootType as PropertyTypeRootTypeGeneral,
   PropertyTypeVertex as PropertyTypeVertexGeneral,
   PropertyTypeWithMetadata as PropertyTypeWithMetadataGeneral,
+  QueryDataTypesData as QueryDataTypesDataGeneral,
+  QueryDataTypesResult as QueryDataTypesResultGeneral,
   QueryEntitiesData as QueryEntitiesDataGeneral,
   QueryEntitiesResult as QueryEntitiesResultGeneral,
   QueryEntityTypesData as QueryEntityTypesDataGeneral,
@@ -214,7 +217,7 @@ export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
    * The 'graph' object contains messages sent under the graph module from the app to the block.
    * They are sent on initialization and again when the application has new values to send.
    * One such message is 'graph.blockEntity', which is a data entity fitting the block's schema (its type).
-   * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list
+   * @see https://blockprotocol.org/spec/graph#message-definitions for a full list
    */
   graph: {
     blockEntitySubgraph: Subgraph<{
@@ -291,10 +294,15 @@ export type UpdateEntityTypeData = UpdateEntityTypeDataGeneral;
 export type OntologyElementMetadata = OntologyElementMetadataGeneral;
 export type PropertyTypeWithMetadata = PropertyTypeWithMetadataGeneral;
 export type QueryPropertyTypesData = QueryPropertyTypesDataGeneral;
-export type QueryPropertyTypesResult = QueryPropertyTypesResultGeneral;
+export type QueryPropertyTypesResult<T extends Subgraph<PropertyTypeRootType>> =
+  QueryPropertyTypesResultGeneral<T>;
 export type GetPropertyTypeData = GetPropertyTypeDataGeneral;
 export type CreatePropertyTypeData = CreatePropertyTypeDataGeneral;
 export type UpdatePropertyTypeData = UpdatePropertyTypeDataGeneral;
+export type QueryDataTypesData = QueryDataTypesDataGeneral;
+export type QueryDataTypesResult<T extends Subgraph<DataTypeRootType>> =
+  QueryDataTypesResultGeneral<T>;
+export type GetDataTypeData = GetDataTypeDataGeneral;
 export type OntologyTypeRecordId = OntologyTypeRecordIdGeneral;
 export const isOntologyTypeRecordId = isOntologyTypeRecordIdGeneral;
 export type OntologyTypeRevisionId = OntologyTypeRevisionIdGeneral;

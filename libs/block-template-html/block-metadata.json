@@ -11,11 +11,6 @@
   },
   "protocol": "0.3",
   "displayName": "Template",
-  "examples": [
-    {
-      "https://blockprotocol.org/@blockprotocol/types/property-type/name/": "World"
-    }
-  ],
   "icon": "public/omega.svg",
   "image": "public/block-preview.png",
   "source": "app.html"

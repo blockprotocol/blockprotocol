@@ -13,13 +13,12 @@ import {
   Subgraph,
 } from "../../../types/subgraph.js";
 import { TimeInterval } from "../../../types/temporal-versioning.js";
-import { typedEntries } from "../../../util.js";
+import { mustBeDefined, typedEntries } from "../../../util.js";
 import {
   intervalForTimestamp,
   intervalIntersectionWithInterval,
   intervalIsStrictlyAfterInterval,
 } from "../../interval.js";
-import { mustBeDefined } from "../../must-be-defined.js";
 import {
   getEntityRevision,
   getEntityRevisionsByEntityId,
@@ -95,12 +94,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
             );
 
             if (intersection === null) {
-              throw new Error(
-                `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
-                  `EntityId: ${linkEntityId}\n` +
-                  `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-                  `Edge Valid Interval: ${JSON.stringify(edgeInterval)}`,
-              );
+              continue;
             }
 
             for (const entity of getEntityRevisionsByEntityId(
@@ -188,12 +182,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
             );
 
             if (intersection === null) {
-              throw new Error(
-                `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
-                  `EntityId: ${linkEntityId}\n` +
-                  `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-                  `Edge Valid Interval: ${JSON.stringify(edgeInterval)}`,
-              );
+              continue;
             }
 
             for (const entity of getEntityRevisionsByEntityId(
@@ -392,11 +381,12 @@ export const getOutgoingLinkAndTargetEntities = <
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
+  forceNonTemporal?: boolean,
 ): LinkAndRightEntities => {
   const searchInterval =
     interval ?? getLatestInstantIntervalForSubgraph(subgraph);
 
-  if (isTemporalSubgraph(subgraph)) {
+  if (!forceNonTemporal && isTemporalSubgraph(subgraph)) {
     const outgoingLinkEntities = getOutgoingLinksForEntity(
       subgraph as Subgraph<true>,
       entityId,
@@ -437,7 +427,11 @@ export const getOutgoingLinkAndTargetEntities = <
           ) ??
           []; /** @todo - Are we comfortable hiding the `undefined` value here with an empty array? */
 
-        if (rightEntityRevisions.length !== 1) {
+        if (rightEntityRevisions.length === 0) {
+          throw new Error(
+            `No right entity found for the link entity with ID: ${linkEntity.metadata.recordId.entityId}`,
+          );
+        } else if (rightEntityRevisions.length > 1) {
           throw new Error(
             `Querying a Subgraph without support for temporal versioning but there wasn't a unique revision for the right entity of the link entity with ID: ${linkEntity.metadata.recordId.entityId}`,
           );

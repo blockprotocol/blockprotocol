@@ -19,8 +19,15 @@ import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode, useState } from "react";
 
 import proTierBackground from "../../../../public/assets/pricing/pro-tier-background.svg";
-import { SubscriptionFeatureList } from "../../../pages/settings/billing-settings-panel/subscription-feature-list";
-import { SubscriptionFeature } from "../../../pages/settings/billing-settings-panel/subscription-feature-list-item";
+import {
+  externalServiceFreeAllowance,
+  numberOfOpenaiHobbyLanguageTokens,
+  numberOfOpenaiHobbyWords,
+  numberOfOpenaiProWords,
+  numberToNumberOfThousandsHumanReadable,
+} from "../../../pages/account/billing-panel/external-service-free-allowance";
+import { SubscriptionFeatureList } from "../../../pages/account/billing-panel/subscription-feature-list";
+import { SubscriptionFeature } from "../../../pages/account/billing-panel/subscription-feature-list-item";
 import {
   PaidSubscriptionTier,
   priceToHumanReadable,
@@ -93,7 +100,13 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>50</strong> OpenAI DALL-E images
+            <strong>
+              {
+                externalServiceFreeAllowance["OpenAI Create Image Request"]
+                  .hobby
+              }
+            </strong>{" "}
+            OpenAI DALL-E images
             <br />
             <Typography
               component="span"
@@ -133,7 +146,12 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>200,000</strong> OpenAI GPT-3 tokens
+            <strong>
+              {numberToNumberOfThousandsHumanReadable(
+                numberOfOpenaiHobbyLanguageTokens,
+              )}
+            </strong>{" "}
+            OpenAI GPT language tokens
             <br />
             <Typography
               component="span"
@@ -144,7 +162,9 @@ export const paidSubscriptionFeatures: Record<
                 fontWeight: 400,
               }}
             >
-              Equating to ~150k words
+              Equating to ~
+              {numberToNumberOfThousandsHumanReadable(numberOfOpenaiHobbyWords)}{" "}
+              words
             </Typography>
           </Box>
         ),
@@ -159,7 +179,14 @@ export const paidSubscriptionFeatures: Record<
                       component="span"
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
-                      <strong>10k</strong> OpenAI Davinci tokens
+                      <strong>
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance[
+                            "OpenAI GPT-3.5 Turbo Token"
+                          ].hobby,
+                        )}
+                      </strong>{" "}
+                      OpenAI GPT-3.5 Turbo tokens
                     </Box>
                   ),
                   iconCentered: true,
@@ -171,7 +198,14 @@ export const paidSubscriptionFeatures: Record<
                       component="span"
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
-                      <strong>40k</strong> OpenAI Curie tokens
+                      <strong>
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance[
+                            "OpenAI GPT-4 Input Token"
+                          ].hobby,
+                        )}
+                      </strong>{" "}
+                      OpenAI GPT-4 Input tokens
                     </Box>
                   ),
                   iconCentered: true,
@@ -183,7 +217,14 @@ export const paidSubscriptionFeatures: Record<
                       component="span"
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
-                      <strong>50k</strong> OpenAI Babbage tokens
+                      <strong>
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance[
+                            "OpenAI GPT-4 Output Token"
+                          ].hobby,
+                        )}
+                      </strong>{" "}
+                      OpenAI GPT-4 Output tokens
                     </Box>
                   ),
                   iconCentered: true,
@@ -195,7 +236,67 @@ export const paidSubscriptionFeatures: Record<
                       component="span"
                       sx={{ color: ({ palette }) => palette.purple[30] }}
                     >
-                      <strong>100k</strong> OpenAI Ada tokens
+                      <strong>
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance["OpenAI Davinci Token"]
+                            .hobby,
+                        )}
+                      </strong>{" "}
+                      OpenAI GPT-3 Davinci tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance["OpenAI Curie Token"]
+                            .hobby,
+                        )}
+                      </strong>{" "}
+                      OpenAI GPT-3 Curie tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance["OpenAI Babbage Token"]
+                            .hobby,
+                        )}
+                      </strong>{" "}
+                      OpenAI GPT-3 Babbage tokens
+                    </Box>
+                  ),
+                  iconCentered: true,
+                },
+                {
+                  icon: <GradientFontAwesomeIcon icon={faArrowRight} light />,
+                  title: (
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[30] }}
+                    >
+                      <strong>
+                        {numberToNumberOfThousandsHumanReadable(
+                          externalServiceFreeAllowance["OpenAI Ada Token"]
+                            .hobby,
+                        )}
+                      </strong>{" "}
+                      OpenAI GPT-3 Ada tokens
                     </Box>
                   ),
                   iconCentered: true,
@@ -229,7 +330,13 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>20</strong> Mapbox Address Autofills
+            <strong>
+              {
+                externalServiceFreeAllowance["Mapbox Address Autofill Session"]
+                  .hobby
+              }
+            </strong>{" "}
+            Mapbox Address Autofills
             <br />
             <Typography
               component="span"
@@ -269,7 +376,13 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>300</strong> Mapbox Static Images
+            <strong>
+              {
+                externalServiceFreeAllowance["Mapbox Static Image Request"]
+                  .hobby
+              }
+            </strong>{" "}
+            Mapbox Static Images
             <br />
             <Typography
               component="span"
@@ -346,7 +459,16 @@ export const paidSubscriptionFeatures: Record<
                 color: ({ palette }) => palette.purple[60],
               }}
             >
-              e.g. 300k+ words, 100 images, and 40 address autofills
+              e.g. ~
+              {numberToNumberOfThousandsHumanReadable(numberOfOpenaiProWords)}{" "}
+              words,{" "}
+              {externalServiceFreeAllowance["OpenAI Create Image Request"].pro}{" "}
+              images, and{" "}
+              {
+                externalServiceFreeAllowance["Mapbox Address Autofill Session"]
+                  .pro
+              }{" "}
+              address autofills
             </Typography>
           </Box>
         ),
@@ -358,7 +480,10 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>500</strong> Mapbox Isochrone API calls
+            <strong>
+              {externalServiceFreeAllowance["Mapbox Isochrone Request"].pro}
+            </strong>{" "}
+            Mapbox Isochrone API calls
           </Box>
         ),
       },
@@ -369,7 +494,10 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>500</strong> Mapbox Directions API calls
+            <strong>
+              {externalServiceFreeAllowance["Mapbox Directions Request"].pro}
+            </strong>{" "}
+            Mapbox Directions API calls
           </Box>
         ),
       },
@@ -380,7 +508,14 @@ export const paidSubscriptionFeatures: Record<
             component="span"
             sx={{ color: ({ palette }) => palette.purple[30] }}
           >
-            <strong>500</strong> Mapbox Temporary Geocoding API calls
+            <strong>
+              {
+                externalServiceFreeAllowance[
+                  "Mapbox Temporary Geocoding Request"
+                ].pro
+              }
+            </strong>{" "}
+            Mapbox Temporary Geocoding API calls
           </Box>
         ),
       },
@@ -724,7 +859,7 @@ export const PaidTiersSection: FunctionComponent<{
               <Box>
                 <CustomLinkButton
                   href={{
-                    pathname: "/settings/billing/upgrade",
+                    pathname: "/account/billing/upgrade",
                     query: { tier: "hobby" },
                   }}
                   endIcon={
@@ -761,28 +896,36 @@ export const PaidTiersSection: FunctionComponent<{
               <Stack flexDirection="row" flexWrap="wrap" gap={1} mt={2.25}>
                 <HobbyTierPerk
                   headerIcon={faText}
-                  title="150k"
+                  title={`~${numberToNumberOfThousandsHumanReadable(
+                    numberOfOpenaiHobbyWords,
+                  )}`}
                   description="AI-generated words"
                   poweredByIcon={<AbstractAiIcon sx={{ fontSize: 20 }} />}
-                  poweredBy="GPT-3"
+                  poweredBy="GPT-3 and GPT-4"
                 />
                 <HobbyTierPerk
                   headerIcon={faImage}
-                  title="50"
+                  title={externalServiceFreeAllowance[
+                    "OpenAI Create Image Request"
+                  ].hobby.toString()}
                   description="AI-generated images"
                   poweredByIcon={<AbstractAiIcon sx={{ fontSize: 20 }} />}
                   poweredBy="DALL-E"
                 />
                 <HobbyTierPerk
                   headerIcon={faLocationDot}
-                  title="20"
+                  title={externalServiceFreeAllowance[
+                    "Mapbox Address Autofill Session"
+                  ].hobby.toString()}
                   description="Address autofills"
                   poweredByIcon={<MapboxLogoIcon sx={{ fontSize: 20 }} />}
                   poweredBy="MAPBOX"
                 />
                 <HobbyTierPerk
                   headerIcon={faMapLocationDot}
-                  title="300"
+                  title={externalServiceFreeAllowance[
+                    "Mapbox Static Image Request"
+                  ].hobby.toString()}
                   description="Unique maps created"
                   poweredByIcon={<MapboxLogoIcon sx={{ fontSize: 20 }} />}
                   poweredBy="MAPBOX"
@@ -856,7 +999,7 @@ export const PaidTiersSection: FunctionComponent<{
             >
               <CustomLinkButton
                 href={{
-                  pathname: "/settings/billing/upgrade",
+                  pathname: "/account/billing/upgrade",
                   query: { tier: "hobby" },
                 }}
                 endIcon={
@@ -919,6 +1062,7 @@ export const PaidTiersSection: FunctionComponent<{
         >
           <Box
             sx={{
+              position: "relative",
               display: "flex",
               flex: 1,
               flexDirection: "column",
@@ -988,7 +1132,7 @@ export const PaidTiersSection: FunctionComponent<{
                   <CustomLinkButton
                     pink
                     href={{
-                      pathname: "/settings/billing/upgrade",
+                      pathname: "/account/billing/upgrade",
                       query: { tier: "pro" },
                     }}
                     endIcon={
@@ -1033,8 +1177,11 @@ export const PaidTiersSection: FunctionComponent<{
               />
             </Box>
             {lg ? (
-              <Collapse in={fullPlanDetailsOpen}>
-                <Box sx={{ mt: 6.25 }}>
+              <Collapse
+                in={fullPlanDetailsOpen}
+                sx={{ position: "absolute", bottom: 0, width: "100%" }}
+              >
+                <Box>
                   <Image
                     layout="responsive"
                     src={proTierBackground}
@@ -1069,7 +1216,7 @@ export const PaidTiersSection: FunctionComponent<{
               <CustomLinkButton
                 pink
                 href={{
-                  pathname: "/settings/billing/upgrade",
+                  pathname: "/account/billing/upgrade",
                   query: { tier: "pro" },
                 }}
                 endIcon={

@@ -27,10 +27,14 @@ import {
   QueryEntityTypesResult,
 } from "./ontology/entity-type.js";
 import {
+  DataTypeRootType,
   EntityRootType,
   EntityTypeRootType,
   EntityVertexId,
+  GetDataTypeData,
   PropertyTypeRootType,
+  QueryDataTypesData,
+  QueryDataTypesResult,
   Subgraph,
 } from "./subgraph.js";
 
@@ -42,7 +46,7 @@ export type BlockGraphProperties<
    * The 'graph' object contains messages sent under the graph module from the app to the block.
    * They are sent on initialization and again when the application has new values to send.
    * One such message is 'graph.blockEntitySubgraph', which is a data entity fitting the block's schema (its type).
-   * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for a full list
+   * @see https://blockprotocol.org/spec/graph#message-definitions for a full list
    */
   graph: {
     blockEntitySubgraph?: Subgraph<
@@ -78,10 +82,13 @@ export type GraphEmbedderMessages<
 
 export type CreateResourceError =
   | "FORBIDDEN"
+  | "INTERNAL_ERROR"
   | "INVALID_INPUT"
   | "NOT_IMPLEMENTED";
+
 export type ReadOrModifyResourceError =
   | "FORBIDDEN"
+  | "INTERNAL_ERROR"
   | "INVALID_INPUT"
   | "NOT_FOUND"
   | "NOT_IMPLEMENTED";
@@ -172,7 +179,21 @@ export type GraphEmbedderMessageCallbacks<Temporal extends boolean> = {
   queryPropertyTypes: MessageCallback<
     QueryPropertyTypesData,
     null,
-    MessageReturn<QueryPropertyTypesResult>,
+    MessageReturn<
+      QueryPropertyTypesResult<Subgraph<Temporal, PropertyTypeRootType>>
+    >,
+    ReadOrModifyResourceError
+  >;
+  getDataType: MessageCallback<
+    GetDataTypeData,
+    null,
+    MessageReturn<Subgraph<Temporal, DataTypeRootType>>,
+    ReadOrModifyResourceError
+  >;
+  queryDataTypes: MessageCallback<
+    QueryDataTypesData,
+    null,
+    MessageReturn<QueryDataTypesResult<Subgraph<Temporal, DataTypeRootType>>>,
     ReadOrModifyResourceError
   >;
   /** @todo - Reimplement linked queries */

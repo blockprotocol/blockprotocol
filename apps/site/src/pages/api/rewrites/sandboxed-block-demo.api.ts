@@ -90,9 +90,6 @@ const handler: NextApiHandler = async (req, res) => {
   // We will dynamically update initialEntities in response to updated prop messages in the iFrame code
   const mockBlockDockInitialData = {
     initialEntities: exampleGraph?.entities ?? [],
-    initialEntityTypes: exampleGraph?.entityTypes,
-    initialLinks: exampleGraph?.links,
-    initialLinkedQueries: exampleGraph?.linkedQueries,
     initialTemporalAxes: temporalAxes,
   };
 
@@ -107,28 +104,21 @@ const handler: NextApiHandler = async (req, res) => {
     />
     <script type="module">
       const handleMessage = ({ data }) => {
-        if (typeof data !== "string") {
+        if (!("type" in data)) {
           return;
         }
-        globalThis.blockEntityProps = JSON.parse(data);
+        if (data.type === "blockEntityProps") {
+          globalThis.blockEntityProps = data.payload;
+        }
         window.removeEventListener("message", handleMessage);
       }
       window.addEventListener("message", handleMessage);
-  
-      globalThis.handleServiceMessage = ({ providerName, methodName, payload }) => {
-        window.parent.postMessage({ 
-          type: "serviceModule", 
-          payload, 
-          providerName, 
-          methodName 
-        }, "*");
-      }
     </script>
     <script type="module">
       import React from "https://esm.sh/react@${reactVersion}?target=es2021"
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/index.js?target=es2021&deps=react@${reactVersion}";
 
       const requireLookup = {
         "react-dom": ReactDOM,
@@ -166,54 +156,84 @@ const handler: NextApiHandler = async (req, res) => {
       const timeout = setTimeout(() => { 
         document.getElementById("loading-indicator").style.visibility = "visible";
       }, 400);
+      
+      const serviceMessageType = "serviceModule";
+      
+      const handleServiceMessage = ({ providerName, methodName, payload }) => {
+        const id = new Date().valueOf() + Math.random();
+        const requestId = "service-request-" + id;
+        const promise = new Promise((resolve, reject) => {
+          window[requestId] = { resolve };
+        });
+        window.parent.postMessage({ 
+          requestId,
+          type: serviceMessageType, 
+          payload, 
+          providerName, 
+          methodName 
+        }, "*");
+        return promise;
+      }
+      
+      window.addEventListener("message", ({ data }) => {
+        if ("type" in data && data.type === serviceMessageType) {
+          const resolver = window[data.requestId]?.resolve;
+          resolver(data.payload);
+        }
+      });
 
       const serviceModuleCallbacks = {
-        openaiCreateImage: (payload) => globalThis.handleServiceMessage({
+        openaiCreateImage: ({ data: payload }) => handleServiceMessage({
           providerName: "OpenAI",
           methodName: "createImage",
           payload,
         }),
-        openaiCompleteText: payload => globalThis.handleServiceMessage({
+        openaiCompleteText: ({ data: payload }) => handleServiceMessage({
           providerName: "OpenAI",
           methodName: "completeText",
           payload,
         }),
-        mapboxForwardGeocoding: payload => globalThis.handleServiceMessage({
+        openaiCompleteChat: ({ data: payload }) => handleServiceMessage({
+          providerName: "OpenAI",
+          methodName: "completeChat",
+          payload,
+        }),
+        mapboxForwardGeocoding: ({ data: payload }) => handleServiceMessage({
           providerName: "Mapbox",
           methodName: "forwardGeocoding",
           payload,
         }),
-        mapboxReverseGeocoding: payload => globalThis.handleServiceMessage({
+        mapboxReverseGeocoding: ({ data: payload }) => handleServiceMessage({
           providerName: "Mapbox",
           methodName: "reverseGeocoding",
           payload,
         }),
-        mapboxRetrieveDirections: payload => globalThis.handleServiceMessage({
+        mapboxRetrieveDirections: ({ data: payload }) => handleServiceMessage({
           providerName: "Mapbox",
           methodName: "retrieveDirections",
           payload,
         }),
-        mapboxRetrieveIsochrones: payload => globalThis.handleServiceMessage({
+        mapboxRetrieveIsochrones: ({ data: payload }) => handleServiceMessage({
           providerName: "Mapbox",
           methodName: "retrieveIsochrones",
           payload,
         }),
-        mapboxSuggestAddress: payload => globalThis.handleServiceMessage({
+        mapboxSuggestAddress: ({ data: payload }) => handleServiceMessage({
           providerName: "Mapbox",
           methodName: "suggestAddress",
           payload,
         }),
-        mapboxRetrieveAddress: payload => globalThis.handleServiceMessage({
+        mapboxRetrieveAddress: ({ data: payload }) => handleServiceMessage({
           providerName: "Mapbox",
           methodName: "retrieveAddress",
           payload,
         }),
-        mapboxCanRetrieveAddress: payload => globalThis.handleServiceMessage({
+        mapboxCanRetrieveAddress: ({ data: payload }) => handleServiceMessage({
           providerName: "Mapbox",
           methodName: "canRetrieveAddress",
           payload,
         }),
-        mapboxRetrieveStaticMap: payload => globalThis.handleServiceMessage({
+        mapboxRetrieveStaticMap: ({ data: payload }) => handleServiceMessage({
           providerName: "Mapbox",
           methodName: "retrieveStaticMap",
           payload,
@@ -273,7 +293,7 @@ const handler: NextApiHandler = async (req, res) => {
             mockBlockDockProps.blockEntityRecordId = blockEntity.metadata.recordId;
             
             document.getElementById("loading-indicator")?.remove();
-          
+
             ReactDOM.render(
               _jsx(MockBlockDock, mockBlockDockProps),
               document.getElementById("container")
@@ -287,8 +307,8 @@ const handler: NextApiHandler = async (req, res) => {
           window.addEventListener(
               "message", 
               ({ data }) => {
-                if (typeof data === "string") { 
-                  render(JSON.parse(data)) 
+                if ("type" in data && data.type === "blockEntityProps") {
+                  render(data.payload) 
                 }
               }
           );

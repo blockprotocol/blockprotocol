@@ -1,5 +1,37 @@
 # @blockprotocol/hook
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [[`d0a52220`](https://github.com/blockprotocol/blockprotocol/commit/d0a522208bc0765e2d7865d61ec06776420e69ac), [`96fd797b`](https://github.com/blockprotocol/blockprotocol/commit/96fd797bea62204386ad23514a76a7e9c5a1cbc3), [`bae9405c`](https://github.com/blockprotocol/blockprotocol/commit/bae9405c0a7d0f8312b416d845aaa3069dfe61d9), [`eacd07fb`](https://github.com/blockprotocol/blockprotocol/commit/eacd07fb3009b35e7c30f8be11e3e136651f41c2)]:
+  - @blockprotocol/graph@0.3.0
+
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [[`58d8f99c`](https://github.com/blockprotocol/blockprotocol/commit/58d8f99c0dac48a857c67d4c5dbda9a01afd108b)]:
+  - @blockprotocol/core@0.1.2
+  - @blockprotocol/graph@0.2.2
+
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [[`2b771f30`](https://github.com/blockprotocol/blockprotocol/commit/2b771f30e88ae610a01cb024eab082b8c7bb9a8a)]:
+  - @blockprotocol/graph@0.2.1
+
+## 0.1.1
+
+### Patch Changes
+
+- [#1147](https://github.com/blockprotocol/blockprotocol/pull/1147) [`065e6ac4`](https://github.com/blockprotocol/blockprotocol/commit/065e6ac4b3722b633fb3996b5482f61a9f5b2b69) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add example of Hook Module usage in custom element blocks
+
+- Updated dependencies [[`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2), [`9a98416d`](https://github.com/blockprotocol/blockprotocol/commit/9a98416df8756c26037a4559affd421f80f84547)]:
+  - @blockprotocol/core@0.1.1
+  - @blockprotocol/graph@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes

@@ -17,32 +17,12 @@ env:
 jobs:
   linting:
     name: Linting
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 ## Needed for Changesets to find `main` branch
-
-        ## https://github.com/changesets/changesets/issues/517
-      - name: Create git reference to main branch (for Changesets)
-        if: ${{ github.event.pull_request.title != 'Version Packages' }}
-        run: git pull --force --no-tags origin main:main
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - uses: ./.github/actions/warm-up-repo
-
-      - name: Run yarn lint:changeset
-        if: ${{ (success() || failure()) && github.event.pull_request.title != 'Version Packages' }}
-        run: |
-          if ! yarn lint:changeset; then
-            echo ''
-            echo ''
-            echo 'ℹ️ ℹ️ ℹ️'
-            echo 'Please fix the above errors locally for the check to pass.'
-            echo 'If you don’t see them, try merging target branch into yours.'
-            echo 'ℹ️ ℹ️ ℹ️'
-            exit 1
-          fi
 
       - name: Run yarn lint:dependency-version-consistency
         if: ${{ success() || failure() }}
@@ -169,11 +149,11 @@ jobs:
 
   packages:
     name: NPM Packages
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - uses: ./.github/actions/warm-up-repo
 
@@ -235,7 +215,7 @@ jobs:
           docker stop verdaccio
 
       - name: Upload block folder as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
         if: ${{ success() || failure() }}
         with:
           name: ${{ env.BLOCK_NAME }}
@@ -259,9 +239,9 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
         with:
           path: apps/site/.next/cache
           key: ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-${{ hashFiles('apps/site/**') }}
@@ -333,7 +313,7 @@ jobs:
         if: ${{ success() || failure() }}
         run: yarn nyc report --reporter=lcovonly --reporter=text
 
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
         if: ${{ success() || failure() }}
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
@@ -354,14 +334,14 @@ jobs:
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
         with:
           name: site-integration-tests-playwright-report-${{ matrix.device }}
           path: apps/site/playwright-report
           retention-days: 14
 
       - name: Upload artifact playwright-var
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
         if: ${{ success() || failure() }}
         with:
           name: site-integration-tests-var-${{ matrix.device }}

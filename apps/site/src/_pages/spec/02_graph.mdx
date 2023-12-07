@@ -1,0 +1,486 @@
+# Graph Module
+
+This document (version 0.3) defines a **graph module** according to the terms set out in the [core specification](https://blockprotocol.org/spec/core).
+
+The graph module describes how **ontology types** and **entities** can be created, queried, updated, and linked together – including the **block entity** (the entity associated directly with the block).
+
+## Glossary
+
+**Entity:** an instance of data, often corresponding to a thing in the world, constrained by a particular entity type.
+
+**Link Entity:** a kind of entity which represents a connection or relation between its left and right entity, constrained by a link entity type.
+
+**Left Entity:** the entity which is on the "left" of a specific link entity – in most situations this can be thought of as the "source" of the link.
+
+**Right Entity:** the entity which is on the "right" of a specific link entity – in most situations this can be thought of as the "target" of the link.
+
+**Ontology Type:** an element of the Block Protocol Type System, represented as a self-contained schema accessible via a URL. Ontology types are composed together to describe the shape of entities within the graph and the potential links between them.
+
+**Entity type:** an ontology type that defines the structure of an entity, the type of link entities it may be connected to and the type of entities on the other end of those links. An entity type references other entity types and property types.
+
+**Link Entity type:** an entity type which has a special marker to say it defines the structure of a link entity.
+
+**Property type:** an ontology type that defines the structure of an individual property within an entity. A property type references other property types and data types.
+
+**Data type:** an ontology type that defines the possible space of possible values that an individual property can take within an entity.
+
+**Graph:** a network of graph elements (entities, entity types, property types, and data types) connected by edges.
+
+**Edge:** a directed connection between two graph elements which describes their relationship. Possible edges include those that describe references between types, or the relationship between the left and right entities of link entities.
+
+**Subgraph:** a specific subset of a graph, usually returned as a result of a query. Can contain a set of roots which are distinguished elements of the subgraph, and usually correspond to the direct results of the query – the subgraph may contain other elements of the graph that were connected to the root elements through various edges.
+
+**Block entity**: an entity associated with the specific instance of the block, conforming to block's specified entity type.
+
+**Block Entity Subgraph:** a subgraph which contains the block entity as its root, with connected elements to a given depth.
+
+## The Type System
+
+The data model of the graph module is defined through its **Type System**.
+The type system describes how a graph of **entities** is structured, through a composition of the 3 classes of **ontology types**: **data types**, **property types**, and **entity types**.
+
+When composed, these types are capable of describing any JSON object.
+
+### <Hidden>The Type System </Hidden>Data Types
+
+A **data type** describes a space of possible valid _values_.
+These cover all possible primitive values that can be represented within JSON, as well as `Object`s and `Empty List`s which are included for completeness of the system ([see the RFC for rationale](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0352-graph-type-system.md#including-an-empty-list-data-type)).
+
+At present, there are 6 primitive data types.
+New ones cannot be created, although that is a planned extension in the near-future, whereby new ones will be defined by combining the primitive data types and constraints such as max lengths, minimum values, etc. ([see the associated in-development RFC](https://github.com/blockprotocol/blockprotocol/pull/355)).
+
+When represented as JSON schema, the 6 primitive data types are:
+
+#### Text
+
+```json
+{
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+  "title": "Text",
+  "description": "An ordered sequence of characters",
+  "type": "string"
+}
+```
+
+#### Number
+
+```json
+{
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
+  "title": "Number",
+  "description": "An arithmetical value (in the Real number system)",
+  "type": "number"
+}
+```
+
+#### Boolean
+
+```json
+{
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1",
+  "title": "Boolean",
+  "description": "A True or False value",
+  "type": "boolean"
+}
+```
+
+#### Null
+
+```json
+{
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/null/v/1",
+  "title": "Null",
+  "description": "A placeholder value representing 'nothing'",
+  "type": "null"
+}
+```
+
+#### Object
+
+```json
+{
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1",
+  "title": "Object",
+  "description": "A plain JSON object with no pre-defined structure",
+  "type": "object"
+}
+```
+
+#### Empty List
+
+```json
+{
+  "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
+  "kind": "dataType",
+  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1",
+  "title": "Empty List",
+  "description": "An Empty List",
+  "type": "array",
+  "const": []
+}
+```
+
+### <Hidden>The Type System </Hidden>Property Types
+
+A **property type** is the definition of the possible values that can be associated with a **property**.
+When represented in JSON schema, a property type satisfies the following meta-schema:
+
+<PropertyTypeMetaSchema />
+
+### <Hidden>The Type System </Hidden>Entity Types
+
+An **entity type** is the definition of (1) the structure of an **entity**'s **properties**, and (2) its outgoing **link entities** and their endpoint entities.
+When represented in JSON schema, an entity type satisfies the following meta-schema:
+
+<EntityTypeMetaSchema />
+
+## Defining blocks
+
+### Block package
+
+#### <Hidden>Block package </Hidden>Summary
+
+Blocks using the graph module provide an **entity type** which describes the shape of their **block entity**. Embedding applications should use this to constrain the entity they send to blocks when they are instantiated, and the entities which are linked to it as part of the block subgraph.
+
+The versioned URL of the entity type's schema must be referenced in the block's `block-metadata.json` under a `schema` key.
+
+Blocks may also include an `example-graph` file (either `example-graph.ts` or `example-graph.json` depending on approach) which defines example data that a block can use.
+
+#### <Hidden>Block package </Hidden>Specification
+
+##### Blocks
+
+A block using the graph module MAY expand `block-metadata.json` to specify:
+
+- `schema`: the versioned URL of the **entity type** associated with the block entity. As per the specification, the schema hosted at the remote address should not be subject to change and versions of entity types should be treated as immutable, permanently available, records.
+- `variants`: an array of objects, each with a `name` and `properties`, and optionally `description`, `icon`, and `examples`. These objects represents different variants of the block that the user can create, where `properties` sets the starting properties. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ "https://blockprotocol.org/@alice/types/property-type/level/": 1 }` and `{ "https://blockprotocol.org/@alice/types/property-type/level/": 2 }` as `properties`, respectively
+
+A block using the graph module MAY include an `example-graph.json` file alongside its metadata. The file's contents
+
+- MUST be a JSON object
+- MUST contain an `entities` key where each element is a JSON representation of an entity which MUST conform to the structure specified in [entity definition](#structure-specification).
+- MUST contain a `blockEntityRecordId` key, which is the `EntityRecordId` of the associated block entity in the `entities` array
+
+##### Embedding applications
+
+An embedding application MUST use the constraints set in the associated entity type to constrain the data it sends to the block in the **block entity subgraph**.
+
+## Entity definition
+
+### <Hidden>Entity </Hidden>Structure
+
+#### <Hidden>Entity Structure </Hidden>Summary
+
+An entity is a combination of **metadata** and **properties**.
+
+The **metadata** is a minimum collection of fields that are fixed and specified in this document, although embedding applications MAY choose to add their own.
+
+The **properties** is a JSON object which satisfies the constraints of the entity’s **entity type**.
+
+#### <Hidden>Entity Structure </Hidden>Specification
+
+##### Entities
+
+When embedding applications pass entities to blocks, whether the **block entity** or any other:
+
+- entities MUST be represented by an object, which:
+
+  - MUST contain a field `metadata`, an object which:
+  - MUST contain a field `recordId`, an object which:
+    - MUST contain a field `entityId` uniquely identifying the entity in the application, which MUST be a string.
+    - MUST contain a field `editionId` which identifies the specific _edition_ of the entity, which MUST be a string, and MUST be unique for each edition of an entity for applications that have versioning for their data.
+  - MUST contain an `entityTypeId` identifying the entity type the entity belongs to, which MUST be a versioned URL from which a valid entity type schema is retrievable.
+
+  - MUST contain a field `properties` if the block has defined any `required` properties in its schema, and otherwise MAY be omitted. If present, it:
+    - MUST be an object
+    - MUST conform to the constraints described by the entity type of the entity
+  - if the entity is a link entity it MUST (and if it is not, MUST NOT) contain a field `linkData`, an object which:
+    - MUST contain a field `leftEntityId` identifying the left entity of the link, which MUST be a string
+    - MUST contain a field `rightEntityId` identifying the right entity of the link, which MUST be a string
+    - MAY contain a field `leftToRightOrder` used to order this link entity against other link entities of the same type with the same `leftEntityId`, which MUST be a non-negative integer
+    - MAY contain a field `rightToLeftOrder` used to order this link entity against other link entities of the same type with the same `rightEntityId`, which MUST be a non-negative integer
+
+i.e. any entity MUST conform to the following schema:
+
+<EntityMetaSchema />
+
+### <Hidden>Entity </Hidden>Identification
+
+#### <Hidden>Entity Identification </Hidden>Summary
+
+Blocks must pass an `entityId` when making requests in respect of any entity.
+
+Embedding applications should ensure that the `entityId` is stable and unique for any given entity, across any versions of it that may exist.
+
+#### <Hidden>Entity Identification </Hidden>Specification
+
+Blocks MUST provide `entityId` when identifying a particular entity for the purpose of **messages** under the graph module.
+
+Embedding applications MUST provide `entityId` for each entity it supplies the block at the root of the entity data object, as described under [Structure](#structure) above.
+
+`entityId` SHOULD be a stable, unique reference to the entity, so that blocks may use it for comparing the identity of entities – i.e. so that blocks can assume that entities with the same `entityId` are the same entity, and that the same entity referenced in different places will have the same `entityId` wherever it appears.
+
+## Subgraph Definition
+
+### <Hidden>Subgraph </Hidden>Summary
+
+Many of the values returned by embedding applications for messages of the graph module include a **subgraph**.
+
+A subgraph is a data structure which contains elements of the graph, **vertices**, and **edges** which is a precomputed lookup set of the relationships between elements of the graph.
+
+### <Hidden>Subgraph </Hidden>Structure
+
+A **subgraph** is a JSON object with the following fields, each described in detail below:
+
+- `roots`
+- `vertices`
+- `edges`
+- `depths`
+
+#### <Hidden>Subgraph Structure</Hidden> Vertices
+
+##### <Hidden>Subgraph Structure Vertices</Hidden> Vertex
+
+A `Vertex` is a JSON object which satisfies the following schema:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "kind": {
+      "oneOf": ["entity"]
+    },
+    "inner": {
+      "$comment": "the entity",
+      "type": "object"
+    }
+  },
+  "required": ["kind", "inner"]
+}
+```
+
+> **Note**: The `kind` field is used to allow for future expansion of the subgraph format to include other kinds of vertices, such as ontology types.
+
+##### <Hidden>Subgraph Structure Vertices</Hidden> The `Vertices` object
+
+The `vertices` field of a **subgraph** is a JSON object where:
+
+- the keys are `entityId`s
+- the values are a JSON object where:
+  - the keys are `revisionId`s - a unique identifier for an instance of a specific **entity** within a subgraph, and MUST be a string. This is a forward-facing field which currently doesn't serve a functional purpose and as such can be any string.
+  - the values are `Vertex` objects
+
+> **Note**: The `revisionId` will be used to identify different revisions of the same element within a single subgraph. This could be multiple versions of the same ontology type, or multiple revisions of an entity in an application that supports versioning.
+
+#### <Hidden>Subgraph Structure</Hidden> Roots
+
+The **roots** of a subgraph are distinguished elements which were the starting points for traversal of **edges** (up to depths defined by the **graph resolve depths**).
+
+The `roots` _field_ of the subgraph is an array of **Vertex IDs** which identify the roots, and are JSON objects which satisfy the following schema:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "baseId": {
+      "type": "string"
+    },
+    "revisionId": {
+      "type": "string"
+    }
+  },
+  "required": ["baseId", "revisionId"]
+}
+```
+
+The `baseId` field MUST correspond to the key of the `vertices` object which is the parent of the object that contains the vertex of the root.
+The `revisionId` field MUST correspond to the key of the object of `vertices[baseId]` which contains the vertex of the root.
+
+That is to say, `subgraph.vertices[baseId][revisionId]` MUST be the vertex of the root in question.
+
+#### <Hidden>Subgraph Structure</Hidden> Edges
+
+##### <Hidden>Subgraph Structure Vertices</Hidden> 'Outward' Edge
+
+An **outward edge** is a partial definition of an edge between two vertices, which defines the edge-variant and one of the endpoints of the edge.
+When used in the context of the `Edges` object, it fully qualifies the definition of a `leftEndpoint - edge -> rightEndpoint`
+
+It's made up of a trio of information:
+
+- `reversed`
+- `kind` the kind of edge, which is one of:
+  - `HAS_LEFT_ENTITY`
+  - `HAS_RIGHT_ENTITY`
+- `rightEndpoint` the `entityId` of the right endpoint of the edge
+
+The fields lead to the following permutations:
+
+**Entity has outgoing link** (the entity on the left endpoint has an outgoing link entity)
+
+```json
+{
+  "reversed": true,
+  "kind": "HAS_LEFT_ENTITY",
+  "rightEndpoint": "Some Entity Id"
+}
+```
+
+**Entity has incoming link** (the entity on the left endpoint has an incoming link entity)
+
+```json
+{
+  "reversed": true,
+  "kind": "HAS_RIGHT_ENTITY",
+  "rightEndpoint": "Some Entity Id"
+}
+```
+
+**Link Entity has left entity** (the link entity on the left endpoint has a left entity)
+
+```json
+{
+  "reversed": false,
+  "kind": "HAS_LEFT_ENTITY",
+  "rightEndpoint": "Some Entity Id"
+}
+```
+
+**Link Entity has right entity** (the link entity on the left endpoint has a right entity)
+
+```json
+{
+  "reversed": false,
+  "kind": "HAS_RIGHT_ENTITY",
+  "rightEndpoint": "Some Entity Id"
+}
+```
+
+Specifically an `OutwardEdge` is a JSON object which satisfies the following schema:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "kind": {
+      "oneOf": ["HAS_LEFT_ENTITY", "HAS_RIGHT_ENTITY"]
+    },
+    "reversed": {
+      "type": "boolean"
+    },
+    "rightEndpoint": {
+      "$comment": "The entity ID of the right endpoint of this edge",
+      "type": "string"
+    }
+  },
+  "required": ["kind", "reversed", "rightEndpoint"]
+}
+```
+
+##### <Hidden>Subgraph Structure Vertices</Hidden> The `Edges` object
+
+The `edges` field of a **subgraph** is a JSON object where:
+
+- the keys are `entityId`s
+- the values are a JSON object where:
+  - the keys identify the point at which the edge was created, and MUST be strings - This is a forward-facing field which currently doesn't serve a functional purpose and as such can be any string.
+  - the values are an array of `OutwardEdge` objects of the edges that have an endpoint at the entity associated with the `entityId`.
+
+#### <Hidden>Subgraph Structure</Hidden> Resolve Depths
+
+A **subgraph** is constructed by exploring the datastore along **edges** from a set of **elements**.
+This traversal is limited by a set of **resolve depths** which constrain the depth of the query.
+
+The `resolveDepths` field of the subgraph is a JSON object which:
+
+- MUST contain key `hasLeftEntity`
+- MUST contain key `hasRightEntity`
+- the values of `hasLeftEntity` and `hasRightEntity` MUST be a JSON object which:
+  - MUST contain the key `incoming` and the value MUST be an integer between 0 and 255, which defines the number of incoming edges to explore of that edge kind
+  - MUST contain the key `outgoing` and the value MUST be an integer between 0 and 255, which defines the number of outgoing edges to explore of that edge kind
+
+While traversing, the depths are decremented according to the following pseudo-code:
+
+```js
+export const traverseElement = ({
+  datastore,
+  element,
+  currentTraversalDepths,
+}) => {
+  // handle element
+
+  for (const [edgeKind, depthsPerDirection] of currentTraversalDepths) {
+    for (const [direction, depth] of depthsPerDirection) {
+      if (depth < 1) {
+        continue;
+      }
+
+      for (const neighborVertex of getNeighbors(element, edgeKind, direction)) {
+        traverseElement({
+          datastore,
+          neighborVertex,
+          currentTraversalDepths: {
+            ...currentTraversalDepths,
+            [edgeKind]: {
+              ...currentTraversalDepths[edgeKind],
+              [direction]: depth - 1,
+            },
+          },
+        });
+      }
+    }
+  }
+};
+```
+
+## Messages
+
+### Error definitions
+
+#### <Hidden>Error definitions </Hidden>Specification
+
+The following error codes MAY appear as a value for `code` in an entry in the `errors` array sent with any message:
+
+- `NOT_FOUND`: the message relied on an entity that was not found
+- `FORBIDDEN`: the message relied on permissions that the user or block does not have
+- `INVALID_INPUT`: the message relied on previous input that was missing or otherwise invalid
+- `NOT_IMPLEMENTED`: the embedding application or block does not support the requested operation
+- `INTERNAL_ERROR`: the embedding application encountered an internal error while executing the request
+
+Individual messages MAY specify only a subset of these codes as being valid for that message.
+
+### Message definitions
+
+#### <Hidden>Message definitions </Hidden>Summary
+
+Messages under the graph module can be grouped into two functional categories:
+
+- **values** provided by the embedding application, marked as `source: "embedder"` and `sentOnInitialization: true`
+- **requests** made by the block during its lifetime, marked as `source: "block"`
+
+Note that there is no reason why embedding applications cannot make requests, nor why blocks cannot send values on initialization, but the module does yet not specify any such messages.
+
+The **values** are all sent from the embedding application to the block on initialization, and re-sent subsequently if they change. They are:
+
+- `blockEntitySubgraph`: the subgraph rooted at the block entity, resolved to a depth determined by the embedding application and reported in the `depths` field of the subgraph
+- `readonly`: whether or not the block should display in ‘readonly’ mode, disabling or hiding any editing controls it offers.
+
+The **requests** may be made by the block once it has been initialized, and represent operations which create, read, update or delete entities. They are named according to the pattern `[action][Resource]`, e.g. `createEntity`.
+
+As well as the formal module JSON specification, the messages can be sent and received via the `@blockprotocol/graph` [package](https://www.npmjs.com/package/@blockprotocol/graph).
+
+#### <Hidden>Message definitions </Hidden>Specification
+
+The messages available for exchange in the graph module are defined in the [module's JSON definition](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json#L5) and are also
+listed below for ease of reference.
+
+<GraphModuleMessageList />

@@ -31,6 +31,10 @@ export const mustBeDefined = <T>(x: T | undefined, message?: string): T => {
   return x;
 };
 
+export const randomNumberFromRange = (min: number, max: number) => {
+  return Math.random() * (max - min) + min;
+};
+
 // @todo deduplicate this and libs/@blockprotocol/graph/src/internal/mutate-subgraph/is-equal.ts
 // https://gist.github.com/jsjain/a2ba5d40f20e19f734a53c0aad937fbb
 export const isEqual = (first: any, second: any): boolean => {
@@ -481,7 +485,15 @@ export function filterAndSortEntitiesOrTypes<
 ): FilterResult {
   const { operation } = payload;
 
-  const multiSort = operation?.multiSort ?? [{ field: ["updatedAt"] }];
+  // Fallback by sorting by recordId, as this is a combined function we need to deal with both `OntologyTypeRecordId`
+  // and `EntityRecordId` which have different fields. We handle `undefined` values within the sort function so this
+  // is safe.
+  const multiSort = operation?.multiSort ?? [
+    { field: ["metadata", "recordId", "entityId"] },
+    { field: ["metadata", "recordId", "editionId"] },
+    { field: ["metadata", "recordId", "baseUrl"] },
+    { field: ["metadata", "recordId", "version"] },
+  ];
   const multiFilter = operation?.multiFilter;
 
   const appliedOperation = {

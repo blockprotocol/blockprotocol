@@ -1,12 +1,4 @@
-import {
-  extractBaseUrl,
-  extractVersion,
-  getReferencedIdsFromEntityType,
-  getReferencedIdsFromPropertyType,
-} from "@blockprotocol/type-system/slim";
-
-import { unionOfIntervals } from "../../shared/stdlib/interval.js";
-import { Entity, EntityId } from "../../shared/types/entity.js";
+import { Entity } from "../../shared/types/entity.js";
 import {
   DataTypeVertex,
   DataTypeWithMetadata,
@@ -14,31 +6,29 @@ import {
   EntityTypeVertex,
   EntityTypeWithMetadata,
   EntityVertex,
+  EntityVertexId,
   isTemporalSubgraph,
+  OntologyTypeVertexId,
   PropertyTypeVertex,
   PropertyTypeWithMetadata,
   Subgraph,
 } from "../../shared/types/subgraph.js";
-import { addOutwardEdgeToSubgraphByMutation } from "./edge.js";
 
 /**
  * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
  *
- * This MUTATES the given {@link Subgraph} by adding a given list of data types to the vertices, creating any ontology
- * related edges that are **directly implied** by them (see note below).
+ * This MUTATES the given {@link Subgraph} by adding a given list of data types to the vertices.
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
- *
- * *Note*: This only adds edges as implied by the given data types, if the {@link Subgraph} is invalid at the time of
- * method call (e.g. by missing data type endpoints), this will not loop through the vertex set to finish incomplete
- * edges.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
  * @param {DataTypeWithMetadata[]} dataTypes – the data types to add to the provided subgraph
+ * @returns {OntologyTypeVertexId[]} – the vertex IDs of the data type vertices that were added
  */
-export const addDataTypesToSubgraphByMutation = (
+export const addDataTypeVerticesToSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
   dataTypes: DataTypeWithMetadata[],
-) => {
+): OntologyTypeVertexId[] => {
+  const vertexIds: OntologyTypeVertexId[] = [];
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   for (const dataType of dataTypes) {
     const { baseUrl, version } = dataType.metadata.recordId;
@@ -51,29 +41,27 @@ export const addDataTypesToSubgraphByMutation = (
     subgraph.vertices[baseUrl] ??= {};
     subgraph.vertices[baseUrl]![version] = dataTypeVertex;
 
-    /** @todo - with the introduction of non-primitive data types edges will need to be added here */
+    vertexIds.push({ baseId: baseUrl, revisionId: version.toString() });
   }
   /* eslint-enable no-param-reassign */
+  return vertexIds;
 };
 
 /**
  * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
  *
- * This MUTATES the given {@link Subgraph} by adding a given list of property types to the vertices, creating any ontology
- * related edges that are **directly implied** by them (see note below).
+ * This MUTATES the given {@link Subgraph} by adding a given list of property types to the vertices.
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
- *
- * *Note*: This only adds edges as implied by the given property types, if the {@link Subgraph} is invalid at the time of
- * method call (e.g. by missing property type endpoints), this will not loop through the vertex set to finish incomplete
- * edges.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
  * @param {PropertyTypeWithMetadata[]} propertyTypes – the data types to add to the provided subgraph
+ * @returns {OntologyTypeVertexId[]} – the vertex IDs of the property type vertices that were added
  */
-export const addPropertyTypesToSubgraphByMutation = (
+export const addPropertyTypeVerticesToSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
   propertyTypes: PropertyTypeWithMetadata[],
-) => {
+): OntologyTypeVertexId[] => {
+  const vertexIds: OntologyTypeVertexId[] = [];
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   for (const propertyType of propertyTypes) {
     const { baseUrl, version } = propertyType.metadata.recordId;
@@ -86,74 +74,27 @@ export const addPropertyTypesToSubgraphByMutation = (
     subgraph.vertices[baseUrl] ??= {};
     subgraph.vertices[baseUrl]![version] = propertyTypeVertex;
 
-    const { constrainsValuesOnDataTypes, constrainsPropertiesOnPropertyTypes } =
-      getReferencedIdsFromPropertyType(propertyType.schema);
-
-    for (const { edgeKind, endpoints } of [
-      {
-        edgeKind: "CONSTRAINS_VALUES_ON" as const,
-        endpoints: constrainsValuesOnDataTypes,
-      },
-      {
-        edgeKind: "CONSTRAINS_PROPERTIES_ON" as const,
-        endpoints: constrainsPropertiesOnPropertyTypes,
-      },
-    ]) {
-      for (const versionedUrl of endpoints) {
-        const targetBaseUrl = extractBaseUrl(versionedUrl);
-        const targetRevisionId = extractVersion(versionedUrl).toString();
-
-        addOutwardEdgeToSubgraphByMutation(
-          subgraph,
-          baseUrl,
-          version.toString(),
-          {
-            kind: edgeKind,
-            reversed: false,
-            rightEndpoint: {
-              baseId: targetBaseUrl,
-              revisionId: targetRevisionId,
-            },
-          },
-        );
-
-        addOutwardEdgeToSubgraphByMutation(
-          subgraph,
-          targetBaseUrl,
-          targetRevisionId,
-          {
-            kind: edgeKind,
-            reversed: true,
-            rightEndpoint: {
-              baseId: baseUrl,
-              revisionId: version.toString(),
-            },
-          },
-        );
-      }
-    }
+    vertexIds.push({ baseId: baseUrl, revisionId: version.toString() });
   }
   /* eslint-enable no-param-reassign */
+  return vertexIds;
 };
 
 /**
  * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
  *
- * This MUTATES the given {@link Subgraph} by adding a given list of entity types to the vertices, creating any ontology
- * related edges that are **directly implied** by them (see note below).
+ * This MUTATES the given {@link Subgraph} by adding a given list of entity types to the vertices.
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
- *
- * *Note*: This only adds edges as implied by the given entity types, if the {@link Subgraph} is invalid at the time of
- * method call (e.g. by missing entity type endpoints), this will not loop through the vertex set to finish incomplete
- * edges.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
  * @param {EntityTypeWithMetadata[]} entityTypes – the data types to add to the provided subgraph
+ * @returns {OntologyTypeVertexId[]} – the vertex IDs of the entity type vertices that were added
  */
-export const addEntityTypesToSubgraphByMutation = (
+export const addEntityTypeVerticesToSubgraphByMutation = (
   subgraph: Subgraph<boolean>,
   entityTypes: EntityTypeWithMetadata[],
-) => {
+): OntologyTypeVertexId[] => {
+  const vertexIds: OntologyTypeVertexId[] = [];
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   for (const entityType of entityTypes) {
     const { baseUrl, version } = entityType.metadata.recordId;
@@ -166,95 +107,29 @@ export const addEntityTypesToSubgraphByMutation = (
     subgraph.vertices[baseUrl] ??= {};
     subgraph.vertices[baseUrl]![version] = entityTypeVertex;
 
-    const {
-      constrainsPropertiesOnPropertyTypes,
-      constrainsLinksOnEntityTypes,
-      constrainsLinkDestinationsOnEntityTypes,
-    } = getReferencedIdsFromEntityType(entityType.schema);
-
-    for (const { edgeKind, endpoints } of [
-      {
-        edgeKind: "CONSTRAINS_PROPERTIES_ON" as const,
-        endpoints: constrainsPropertiesOnPropertyTypes,
-      },
-      {
-        edgeKind: "CONSTRAINS_LINKS_ON" as const,
-        endpoints: constrainsLinksOnEntityTypes,
-      },
-      {
-        edgeKind: "CONSTRAINS_LINK_DESTINATIONS_ON" as const,
-        endpoints: constrainsLinkDestinationsOnEntityTypes,
-      },
-    ]) {
-      for (const versionedUrl of endpoints) {
-        const targetBaseUrl = extractBaseUrl(versionedUrl);
-        const targetRevisionId = extractVersion(versionedUrl).toString();
-
-        addOutwardEdgeToSubgraphByMutation(
-          subgraph,
-          baseUrl,
-          version.toString(),
-          {
-            kind: edgeKind,
-            reversed: false,
-            rightEndpoint: {
-              baseId: targetBaseUrl,
-              revisionId: targetRevisionId,
-            },
-          },
-        );
-
-        addOutwardEdgeToSubgraphByMutation(
-          subgraph,
-          targetBaseUrl,
-          targetRevisionId,
-          {
-            kind: edgeKind,
-            reversed: true,
-            rightEndpoint: {
-              baseId: baseUrl,
-              revisionId: version.toString(),
-            },
-          },
-        );
-      }
-    }
+    vertexIds.push({ baseId: baseUrl, revisionId: version.toString() });
   }
   /* eslint-enable no-param-reassign */
+  return vertexIds;
 };
 
 /**
  * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
  *
- * This MUTATES the given {@link Subgraph} by adding a given list of entities to the vertices, creating any link edges
- * that are **directly implied** by any link entities in the list (see note below).
+ * This MUTATES the given {@link Subgraph} by adding a given list of entities to the vertices.
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
- *
- * *Note*: This only adds edges as implied by the given entities, if the {@link Subgraph} is invalid at the time of
- * method call (e.g. by missing link endpoints), this will not loop through the vertex set to finish incomplete edges.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
  * @param {Entity[]} entities – the entities to add to the provided subgraph
+ * @returns {EntityVertexId[]} – the vertex IDs of the added entities
  */
-export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
+export const addEntityVerticesToSubgraphByMutation = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entities: Entity<Temporal>[],
-) => {
+): EntityVertexId[] => {
+  const vertexIds: EntityVertexId[] = [];
   if (isTemporalSubgraph(subgraph)) {
-    /*
-     * @todo This assumes that the left and right entity ID of a link entity is static for its entire lifetime, that is
-     *   not necessarily going to continue being the case
-     */
     /* eslint-disable no-param-reassign -- We want to mutate the input here */
-    const linkMap: Record<
-      EntityId,
-      {
-        leftEntityId: EntityId;
-        rightEntityId: EntityId;
-        edgeIntervals: EntityIdWithInterval["interval"][];
-      }
-    > = {};
-
     for (const entity of entities) {
       const entityId = entity.metadata.recordId.entityId;
 
@@ -268,37 +143,6 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
           subgraph.temporalAxes.resolved.variable.axis
         ];
 
-      if (entityTemporal.linkData) {
-        const linkInfo = linkMap[entityId];
-        if (!linkInfo) {
-          linkMap[entityId] = {
-            leftEntityId: entityTemporal.linkData.leftEntityId,
-            rightEntityId: entityTemporal.linkData.rightEntityId,
-            edgeIntervals: [entityInterval],
-          };
-        } else {
-          if (
-            linkMap[entityId]!.leftEntityId !==
-              entityTemporal.linkData.leftEntityId &&
-            linkMap[entityId]!.rightEntityId !==
-              entityTemporal.linkData.rightEntityId
-          ) {
-            /*
-             * @todo This assumes that the left and right entity ID of a link entity is static for its entire lifetime, that is
-             *   not necessarily going to continue being the case
-             */
-            throw new Error(
-              `Link entity ${entityId} has multiple left and right entities`,
-            );
-          }
-          linkInfo.edgeIntervals.push(
-            entityTemporal.metadata.temporalVersioning[
-              subgraph.temporalAxes.resolved.variable.axis
-            ],
-          );
-        }
-      }
-
       const entityVertex: EntityVertex<true> = {
         kind: "entity",
         inner: entityTemporal,
@@ -311,69 +155,15 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
       } else {
         subgraph.vertices[entityId]![entityInterval.start.limit] = entityVertex;
       }
-    }
-    for (const [
-      linkEntityId,
-      { leftEntityId, rightEntityId, edgeIntervals },
-    ] of Object.entries(linkMap)) {
-      // If the list of entities is comprehensive, and link destinations cannot change, the result of this should be an
-      // array with a single interval that spans the full lifespan of the link entity.
-      const unionedIntervals = unionOfIntervals(...edgeIntervals);
 
-      for (const edgeInterval of unionedIntervals) {
-        addOutwardEdgeToSubgraphByMutation(
-          subgraph,
-          linkEntityId,
-          edgeInterval.start.limit,
-          {
-            kind: "HAS_LEFT_ENTITY",
-            reversed: false,
-            rightEndpoint: { entityId: leftEntityId, interval: edgeInterval },
-          },
-        );
-        addOutwardEdgeToSubgraphByMutation(
-          subgraph,
-          leftEntityId,
-          edgeInterval.start.limit,
-          {
-            kind: "HAS_LEFT_ENTITY",
-            reversed: true,
-            rightEndpoint: { entityId: linkEntityId, interval: edgeInterval },
-          },
-        );
-        addOutwardEdgeToSubgraphByMutation(
-          subgraph,
-          linkEntityId,
-          edgeInterval.start.limit,
-          {
-            kind: "HAS_RIGHT_ENTITY",
-            reversed: false,
-            rightEndpoint: { entityId: rightEntityId, interval: edgeInterval },
-          },
-        );
-        addOutwardEdgeToSubgraphByMutation(
-          subgraph,
-          rightEntityId,
-          edgeInterval.start.limit,
-          {
-            kind: "HAS_RIGHT_ENTITY",
-            reversed: true,
-            rightEndpoint: { entityId: linkEntityId, interval: edgeInterval },
-          },
-        );
-      }
+      vertexIds.push({
+        baseId: entityId,
+        revisionId: entityInterval.start.limit,
+      });
     }
   } else {
     // unsure why this cast is needed
     const subgraphNonTemporal = subgraph as Subgraph<false>;
-
-    const linkMap: Record<
-      EntityId,
-      {
-        leftEntityId: EntityId;
-        rightEntityId: EntityId;
-      }
-    > = {};
 
     for (const entity of entities) {
       const entityId = entity.metadata.recordId.entityId;
@@ -383,29 +173,6 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
         entities should too
       */
       const entityNonTemporal = entity as Entity<false>;
-
-      if (entityNonTemporal.linkData) {
-        const linkInfo = linkMap[entityId];
-        if (!linkInfo) {
-          linkMap[entityId] = {
-            leftEntityId: entityNonTemporal.linkData.leftEntityId,
-            rightEntityId: entityNonTemporal.linkData.rightEntityId,
-          };
-        } else if (
-          linkMap[entityId]!.leftEntityId !==
-            entityNonTemporal.linkData.leftEntityId &&
-          linkMap[entityId]!.rightEntityId !==
-            entityNonTemporal.linkData.rightEntityId
-        ) {
-          /*
-           * @todo This assumes that the left and right entity ID of a link entity is static for its entire lifetime, that is
-           *   not necessarily going to continue being the case
-           */
-          throw new Error(
-            `Link entity ${entityId} has multiple left and right entities`,
-          );
-        }
-      }
 
       const entityVertex: EntityVertex<false> = {
         kind: "entity",
@@ -423,53 +190,12 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
           `Encountered multiple entities with entityId ${entityId}`,
         );
       }
-
-      for (const [
-        linkEntityId,
-        { leftEntityId, rightEntityId },
-      ] of Object.entries(linkMap)) {
-        addOutwardEdgeToSubgraphByMutation(
-          subgraphNonTemporal,
-          linkEntityId,
-          timestamp,
-          {
-            kind: "HAS_LEFT_ENTITY",
-            reversed: false,
-            rightEndpoint: leftEntityId,
-          },
-        );
-        addOutwardEdgeToSubgraphByMutation(
-          subgraphNonTemporal,
-          leftEntityId,
-          timestamp,
-          {
-            kind: "HAS_LEFT_ENTITY",
-            reversed: true,
-            rightEndpoint: linkEntityId,
-          },
-        );
-        addOutwardEdgeToSubgraphByMutation(
-          subgraphNonTemporal,
-          linkEntityId,
-          timestamp,
-          {
-            kind: "HAS_RIGHT_ENTITY",
-            reversed: false,
-            rightEndpoint: rightEntityId,
-          },
-        );
-        addOutwardEdgeToSubgraphByMutation(
-          subgraphNonTemporal,
-          rightEntityId,
-          timestamp,
-          {
-            kind: "HAS_RIGHT_ENTITY",
-            reversed: true,
-            rightEndpoint: linkEntityId,
-          },
-        );
-      }
+      vertexIds.push({
+        baseId: entityId,
+        revisionId: timestamp,
+      });
     }
   }
   /* eslint-enable no-param-reassign */
+  return vertexIds;
 };

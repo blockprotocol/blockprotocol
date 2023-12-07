@@ -8,6 +8,8 @@ const tolerableSharedConsoleMessageMatches: RegExp[] = [
   /\[Fast Refresh\]/, // Next.js dev server (for local test runs)
   /Download the Apollo DevTools for a better development experience/,
   /Download the React DevTools for a better development experience/,
+  // Vercel feedback script (in comment widget on preview deployments) makes 404 request for .well-known/vercel-user-meta
+  /\[error] Failed to load resource: the server responded with a status of 404 \(\)/,
 
   // Custom responses from /api/** handlers (status codes need changing or messages need to be moved to tests' tolerateCustomConsoleMessages())
   /Failed to load resource: the server responded with a status of 400 \(Bad Request\)/,

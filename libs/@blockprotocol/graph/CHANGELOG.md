@@ -1,5 +1,46 @@
 # @blockprotocol/graph
 
+## 0.3.0
+
+### Minor Changes
+
+- [#1264](https://github.com/blockprotocol/blockprotocol/pull/1264) [`96fd797b`](https://github.com/blockprotocol/blockprotocol/commit/96fd797bea62204386ad23514a76a7e9c5a1cbc3) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Fix determinism in codegen
+
+- [#1265](https://github.com/blockprotocol/blockprotocol/pull/1265) [`eacd07fb`](https://github.com/blockprotocol/blockprotocol/commit/eacd07fb3009b35e7c30f8be11e3e136651f41c2) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Fix re-exports of helper types in codegen
+
+### Patch Changes
+
+- [#1279](https://github.com/blockprotocol/blockprotocol/pull/1279) [`d0a52220`](https://github.com/blockprotocol/blockprotocol/commit/d0a522208bc0765e2d7865d61ec06776420e69ac) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Add retry logic around type fetching in codegen
+
+- [#1273](https://github.com/blockprotocol/blockprotocol/pull/1273) [`bae9405c`](https://github.com/blockprotocol/blockprotocol/commit/bae9405c0a7d0f8312b416d845aaa3069dfe61d9) Thanks [@nonparibus](https://github.com/nonparibus)! - Update links in README and comments
+
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [[`58d8f99c`](https://github.com/blockprotocol/blockprotocol/commit/58d8f99c0dac48a857c67d4c5dbda9a01afd108b)]:
+  - @blockprotocol/core@0.1.2
+
+## 0.2.1
+
+### Patch Changes
+
+- [#1182](https://github.com/blockprotocol/blockprotocol/pull/1182) [`2b771f30`](https://github.com/blockprotocol/blockprotocol/commit/2b771f30e88ae610a01cb024eab082b8c7bb9a8a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - codegen: fix nested output folder creation
+
+- Updated dependencies [[`2b771f30`](https://github.com/blockprotocol/blockprotocol/commit/2b771f30e88ae610a01cb024eab082b8c7bb9a8a)]:
+  - @blockprotocol/type-system@0.1.1
+
+## 0.2.0
+
+### Minor Changes
+
+- [#1158](https://github.com/blockprotocol/blockprotocol/pull/1158) [`9a98416d`](https://github.com/blockprotocol/blockprotocol/commit/9a98416df8756c26037a4559affd421f80f84547) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Introduce an improved codegen utility with support for multiple files, better errors, type name overrides, and more.
+
+### Patch Changes
+
+- Updated dependencies [[`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2)]:
+  - @blockprotocol/core@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

@@ -1,0 +1,58 @@
+version: "3.3"
+services:
+  # Uncomment below to test MariaDB.
+  # Comment out the `db` service below it.
+
+  # db:
+  #   platform: linux/amd64
+  #   image: mariadb:10.6.12
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - db_data:/var/lib/mysql
+  #   restart: always
+  #   environment:
+  #     MARIADB_ROOT_PASSWORD: somewordpress
+  #     MARIADB_DATABASE: wordpress
+  #     MARIADB_USER: wordpress
+  #     MARIADB_PASSWORD: wordpress
+
+  db:
+    platform: linux/amd64
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - "8000:80"
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      BLOCK_PROTOCOL_SITE_HOST: https://blockprotocol.org
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      # Mount the plugin folder inside our plugins directory so that WP automatically picks up our work.
+      - type: bind
+        source: ../../../libs/wordpress-plugin/plugin/trunk
+        target: /var/www/html/wp-content/plugins/blockprotocol
+
+volumes:
+  db_data: {}

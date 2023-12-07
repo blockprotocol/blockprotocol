@@ -1,10 +1,10 @@
 import { NextSeo } from "next-seo";
 import { FunctionComponent } from "react";
 
+import { Details } from "../components/pages/wordpress/details";
 import { EmailSubmittedProvider } from "../components/pages/wordpress/email-submitted-context";
 import { Header } from "../components/pages/wordpress/header";
-import { WhyDevelop } from "../components/pages/wordpress/why-develop";
-import { WhyInstall } from "../components/pages/wordpress/why-install";
+import { InstallPlugin } from "../components/pages/wordpress/install-plugin";
 
 const WordPressPage: FunctionComponent = () => (
   <>
@@ -23,8 +23,8 @@ const WordPressPage: FunctionComponent = () => (
 
     <EmailSubmittedProvider>
       <Header />
-      <WhyInstall />
-      <WhyDevelop />
+      <Details />
+      <InstallPlugin />
     </EmailSubmittedProvider>
   </>
 );

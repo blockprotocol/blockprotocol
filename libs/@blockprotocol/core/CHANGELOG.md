@@ -1,5 +1,17 @@
 # @blockprotocol/core
 
+## 0.1.2
+
+### Patch Changes
+
+- [#1212](https://github.com/blockprotocol/blockprotocol/pull/1212) [`58d8f99c`](https://github.com/blockprotocol/blockprotocol/commit/58d8f99c0dac48a857c67d4c5dbda9a01afd108b) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Make instanceof check safe across iFrames
+
+## 0.1.1
+
+### Patch Changes
+
+- [#1157](https://github.com/blockprotocol/blockprotocol/pull/1157) [`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2) Thanks [@CiaranMn](https://github.com/CiaranMn)! - update block init message retry from microtask to macrotask
+
 ## 0.1.0
 
 ### Minor Changes

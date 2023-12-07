@@ -1,3 +1,3 @@
 # Block Scripts
 
-See https://blockprotocol.org/docs/developing-blocks
+See https://blockprotocol.org/docs/blocks/develop

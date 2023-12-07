@@ -27,12 +27,14 @@ test("Docs page should contain key elements and interactions should work", async
 
   for (const [name, href] of [
     ["Introduction", "/docs"],
-    ["Developing Blocks", "/docs/developing-blocks"],
-    ["Using Blocks", "/docs/using-blocks"],
-    ["Specification", "/docs/spec"],
+    ["Blocks", "/docs/blocks"],
+    ["Types", "/docs/types"],
+    ["Services", "/docs/services"],
     ["FAQs", "/docs/faq"],
+    ["Specification", "/spec"],
+    ["Roadmap", "/roadmap"],
   ] as const) {
-    const item = sidebarLocator.locator(`a:has-text("${name}")`).first();
+    const item = sidebarLocator.locator(`a:text-is("${name}")`).first();
     await expect(item).toBeVisible();
     await expect(item).toHaveAttribute("href", href);
   }
@@ -73,7 +75,7 @@ test("Docs page should contain key elements and interactions should work", async
   // navigate to spec page
   await sidebarLocator.locator("a:has-text('Specification')").first().click();
 
-  await expect(page).toHaveURL("/docs/spec");
+  await expect(page).toHaveURL("/spec");
 
   await expect(page.locator('h1:has-text("Specification")')).toBeVisible();
 
@@ -92,22 +94,22 @@ test("Docs page should contain key elements and interactions should work", async
     ),
   ).toHaveAttribute(
     "href",
-    "https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/3_spec",
+    "https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/spec",
   );
 
-  // confirm docs footer nav have correct links
-  await expect(page.locator("text=PreviousUsing Blocks >> a")).toBeVisible();
+  // confirm specification footer nav contains the correct links
+  await expect(page.locator("text=PreviousFAQs >> a")).toBeVisible();
 
-  await expect(page.locator("text=PreviousUsing Blocks >> a")).toHaveAttribute(
+  await expect(page.locator("text=PreviousFAQs >> a")).toHaveAttribute(
     "href",
-    "/docs/using-blocks",
+    "/docs/faq",
   );
 
   await expect(page.locator("text=NextCore >> a")).toBeVisible();
 
   await expect(page.locator("text=NextCore >> a")).toHaveAttribute(
     "href",
-    "/docs/spec/core",
+    "/spec/core",
   );
 
   if (isMobile) {

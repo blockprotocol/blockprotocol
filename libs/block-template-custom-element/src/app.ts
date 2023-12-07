@@ -1,9 +1,9 @@
 import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 import { css, html } from "lit";
 
-import { RootEntity } from "./types.gen";
+import { BlockEntity } from "./types/generated/block-entity";
 
-const nameKey: keyof RootEntity["properties"] =
+const nameKey: keyof BlockEntity["properties"] =
   "https://blockprotocol.org/@blockprotocol/types/property-type/name/";
 
 /**
@@ -14,7 +14,7 @@ const nameKey: keyof RootEntity["properties"] =
  * 1. 'graph': contains properties representing messages sent from the embedding application to the block, e.g. 'blockEntitySubgraph'
  * 2. 'graphModule': has various methods you can use to send messages to the embedding application, e.g. 'updateEntity'
  */
-export class BlockElement extends BlockElementBase<RootEntity> {
+export class BlockElement extends BlockElementBase<BlockEntity> {
   /** @see https://lit.dev/docs/components/styles */
   static styles = css`
     font-family: sans-serif;
@@ -31,10 +31,10 @@ export class BlockElement extends BlockElementBase<RootEntity> {
      * – we are passing the 'entityId' of the entity loaded into the block (graph.blockEntity').
      *
      * Many other messages are available for your block to read and update entities, and links between entities
-     * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions
+     * @see https://blockprotocol.org/spec/graph#message-definitions
      */
     this.graphModule
-      .updateEntity<RootEntity["properties"]>({
+      .updateEntity<BlockEntity["properties"]>({
         data: {
           entityId: this.getBlockEntity().metadata.recordId.entityId,
           entityTypeId: this.getBlockEntity().metadata.entityTypeId,

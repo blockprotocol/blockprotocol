@@ -8,6 +8,7 @@ import type { Stripe } from "stripe";
 import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-login-code.api";
 import { getEntityTypes } from "../../../pages/api/types/entity-type/shared/db";
 import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
+import { SubscriptionTier } from "../../../pages/shared/subscription-utils";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api";
 import {
   FRONTEND_URL,
@@ -22,7 +23,9 @@ import { ApiKey } from "./api-key.model";
 import {
   VerificationCode,
   VerificationCodeDocument,
+  VerificationCodePropertiesVariant,
   VerificationCodeVariant,
+  VerificationCodeWordPressUrls,
 } from "./verification-code.model";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
@@ -37,7 +40,7 @@ export type SerializedUser = {
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
-  stripeSubscriptionTier?: "hobby" | "pro";
+  stripeSubscriptionTier: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
 };
@@ -51,9 +54,11 @@ export type UserProperties = {
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
-  stripeSubscriptionTier?: "hobby" | "pro";
+  stripeSubscriptionTier?: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
+  wordpressInstanceUrls?: string[];
+  referrer?: "WordPress" | "Block Protocol";
 };
 
 export type UserAvatarProperties = {
@@ -83,9 +88,11 @@ export class User {
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
   stripeSubscriptionStatus?: Stripe.Subscription.Status;
-  stripeSubscriptionTier?: "hobby" | "pro";
+  stripeSubscriptionTier?: SubscriptionTier;
   canMakeApiServiceCalls?: boolean;
   usageLimitCents?: number;
+  wordpressInstanceUrls?: string[];
+  referrer: UserProperties["referrer"];
 
   static COLLECTION_NAME = "bp-users";
 
@@ -115,6 +122,8 @@ export class User {
     this.stripeSubscriptionTier = args.stripeSubscriptionTier;
     this.canMakeApiServiceCalls = args.canMakeApiServiceCalls;
     this.usageLimitCents = args.usageLimitCents;
+    this.wordpressInstanceUrls = args.wordpressInstanceUrls;
+    this.referrer = args.referrer;
   }
 
   private static isShortnameReserved(shortname: string): boolean {
@@ -203,13 +212,21 @@ export class User {
 
   static async getByEmail(
     db: Db,
-    params: { email: string; hasVerifiedEmail: boolean },
+    params: {
+      email: string;
+    } & ( // hasVerifiedEmail should be required for safety, unless an explicit flag of verifiedAndNonVerified true is passed. This union achieves that
+      | { hasVerifiedEmail: boolean; verifiedAndNonVerified?: undefined }
+      | { hasVerifiedEmail?: undefined; verifiedAndNonVerified: true }
+    ),
   ): Promise<User | null> {
-    const { email, hasVerifiedEmail } = params;
+    const { email, hasVerifiedEmail, verifiedAndNonVerified } = params;
 
     const userDocument = await db
       .collection<UserDocument>(User.COLLECTION_NAME)
-      .findOne({ email, hasVerifiedEmail });
+      .findOne({
+        email,
+        ...(verifiedAndNonVerified ? {} : { hasVerifiedEmail }),
+      });
 
     return userDocument ? User.fromDocument(userDocument) : null;
   }
@@ -229,15 +246,21 @@ export class User {
 
   static async create(
     db: Db,
-    params: {
+    {
+      wordpressInstanceUrl,
+      ...params
+    }: {
       email: string;
       hasVerifiedEmail: boolean;
+      referrer: NonNullable<UserProperties["referrer"]>;
       preferredName?: string;
       shortname?: string;
+      wordpressInstanceUrl?: string;
     },
   ): Promise<User> {
     const userProperties: UserProperties = {
       ...params,
+      wordpressInstanceUrls: wordpressInstanceUrl ? [wordpressInstanceUrl] : [],
     };
 
     const { insertedId } = await db
@@ -297,18 +320,40 @@ export class User {
     return this;
   }
 
+  async addWordPressInstanceUrlAndVerify(
+    db: Db,
+    {
+      wordpressInstanceUrl,
+      updateReferrer,
+    }: {
+      wordpressInstanceUrl: string;
+      updateReferrer: boolean;
+    },
+  ) {
+    return await this.update(db, {
+      ...(this.wordpressInstanceUrls?.includes(wordpressInstanceUrl)
+        ? {}
+        : {
+            wordpressInstanceUrls: [
+              ...(this.wordpressInstanceUrls ?? []),
+              wordpressInstanceUrl,
+            ],
+          }),
+      ...(updateReferrer ? { referrer: "WordPress" } : {}),
+      hasVerifiedEmail: true,
+    });
+  }
+
   isSignedUp(): boolean {
     return !!this.shortname && !!this.preferredName;
   }
 
   async createVerificationCode(
     db: Db,
-    params: { variant: VerificationCodeVariant },
+    params: VerificationCodePropertiesVariant,
   ): Promise<VerificationCode> {
-    const { variant } = params;
-
     const verificationCode = await VerificationCode.create(db, {
-      variant,
+      ...params,
       user: this,
     });
 
@@ -317,7 +362,10 @@ export class User {
 
   async getVerificationCode(
     db: Db,
-    params: { verificationCodeId: string; variant: VerificationCodeVariant },
+    params: {
+      verificationCodeId: string;
+      variant: VerificationCodeVariant | VerificationCodeVariant[];
+    },
   ): Promise<VerificationCode | null> {
     const { verificationCodeId, variant } = params;
 
@@ -325,7 +373,7 @@ export class User {
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .findOne({
         user: this.toRef(),
-        variant,
+        variant: Array.isArray(variant) ? { $in: variant } : variant,
         _id: new ObjectId(verificationCodeId),
       });
 
@@ -392,7 +440,6 @@ export class User {
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .count({
         user: this.toRef(),
-        variant: "login",
         createdAt: {
           $gt: new Date(
             new Date().getTime() -
@@ -444,11 +491,60 @@ export class User {
     return emailVerificationCode;
   }
 
+  async sendLinkWordPressCode(
+    db: Db,
+    wordpressUrls: VerificationCodeWordPressUrls,
+  ): Promise<VerificationCode> {
+    const emailVerificationCode = await this.createVerificationCode(db, {
+      variant: "linkWordPress",
+      wordpressUrls,
+    });
+
+    const magicLinkQueryParams: (
+      | ApiVerifyEmailRequestBody
+      | ApiLoginWithLoginCodeRequestBody
+    ) & {
+      email: string;
+    } = {
+      email: this.email,
+      userId: this.id,
+      verificationCodeId: emailVerificationCode.id,
+      code: emailVerificationCode.code,
+    };
+
+    const path = this.hasVerifiedEmail ? "login" : "signup";
+
+    const magicLink = `${FRONTEND_URL}/${path}?${new URLSearchParams(
+      magicLinkQueryParams,
+    ).toString()}`;
+
+    // Doesn't make sense to include the code itself as they won't be on the
+    // page to enter the code, as this will be triggered by the WordPress
+    // backend
+    if (shouldUseDummyEmailService) {
+      await sendDummyEmail([
+        `Magic Link to activate WordPress plugin: ${magicLink}`,
+      ]);
+    } else {
+      await sendMail({
+        to: this.email,
+        subject: "Activate your Block Protocol WordPress plugin",
+        html: dedent`
+          <p>To ${
+            this.hasVerifiedEmail
+              ? "login to your Block Protocol account"
+              : "finish creating your Block Protocol account"
+          }, and to link it to your WordPress instance, <a href="${magicLink}">click here</a>.</p>
+          <p><em>Alternatively, you copy the URL and paste it into your browser: ${magicLink}</em></p>
+        `,
+      });
+    }
+
+    return emailVerificationCode;
+  }
+
   async generateApiKey(db: Db, params: { displayName: string }) {
     const { displayName } = params;
-
-    /* @todo allow users to have multiple API keys - remove this once implemented */
-    await ApiKey.revokeAll(db, { user: this });
 
     return await ApiKey.create(db, { displayName, user: this });
   }
@@ -485,7 +581,7 @@ export class User {
       stripeCustomerId: this.stripeCustomerId,
       stripeSubscriptionId: this.stripeSubscriptionId,
       stripeSubscriptionStatus: this.stripeSubscriptionStatus,
-      stripeSubscriptionTier: this.stripeSubscriptionTier,
+      stripeSubscriptionTier: this.stripeSubscriptionTier ?? "free",
       canMakeApiServiceCalls: this.canMakeApiServiceCalls,
       usageLimitCents: this.usageLimitCents,
     };
