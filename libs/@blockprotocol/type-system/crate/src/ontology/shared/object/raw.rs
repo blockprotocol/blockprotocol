@@ -4,9 +4,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::{
-    repr, url::BaseUrl, ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray,
-};
+use crate::{raw, url::BaseUrl, ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray};
 
 /// Will serialize as a constant value `"object"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -22,19 +20,19 @@ pub struct Object<T> {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'object'"))]
     r#type: ObjectTypeTag,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUrl, T>"))]
-    pub(crate) properties: HashMap<String, T>,
+    pub properties: HashMap<String, T>,
     #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "BaseUrl[]"))]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub(crate) required: Vec<String>,
+    pub required: Vec<String>,
 }
 
-impl<const MIN: usize> TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeReference>>>
+impl<const MIN: usize> TryFrom<Object<raw::ValueOrArray<raw::PropertyTypeReference>>>
     for super::Object<ValueOrArray<PropertyTypeReference>, MIN>
 {
     type Error = ParsePropertyTypeObjectError;
 
     fn try_from(
-        object_repr: Object<repr::ValueOrArray<repr::PropertyTypeReference>>,
+        object_repr: Object<raw::ValueOrArray<raw::PropertyTypeReference>>,
     ) -> Result<Self, Self::Error> {
         let properties = object_repr
             .properties
@@ -91,7 +89,7 @@ mod tests {
 
     use super::*;
     use crate::{
-        repr::PropertyTypeReference,
+        raw::PropertyTypeReference,
         url::VersionedUrl,
         utils::tests::{check_repr_serialization_from_value, ensure_repr_failed_deserialization},
     };

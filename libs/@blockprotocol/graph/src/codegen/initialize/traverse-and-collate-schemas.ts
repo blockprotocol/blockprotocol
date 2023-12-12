@@ -124,8 +124,14 @@ export const traverseAndCollateSchemas = async (
 
     initialContext.logDebug(`Fetching ${typeId}...`);
 
+    // Rewrite the type ID before attempting to fetch it if a
+    // `getFetchUrlFromTypeId` function was provided in the parameters
+    const rewrittenTypeId = initialContext.parameters.getFetchUrlFromTypeId
+      ? initialContext.parameters.getFetchUrlFromTypeId(typeId)
+      : typeId;
+
     addFetchPromise(
-      fetchTypeAsJson(typeId).then((type) => {
+      fetchTypeAsJson(rewrittenTypeId).then((type) => {
         if (isDataType(type)) {
           initialContext.addDataType(type);
         } else if (isPropertyType(type)) {

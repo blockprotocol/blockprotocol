@@ -10,7 +10,7 @@ import { NextResponse } from "next/server";
 
 import { ApiEntityTypeByUrlResponse } from "../pages/api/types/entity-type/get.api";
 import { ApiPropertyTypeByUrlResponse } from "../pages/api/types/property-type/get.api";
-import { hardcodedTypes } from "./return-types-as-json/hardcoded-types";
+import { hardcodedTypes } from "./hardcoded-types";
 
 const generateErrorResponse = (
   status: 400 | 401 | 404 | 500 | 501,
@@ -29,10 +29,10 @@ const generateJsonResponse = (object: DataType | EntityType | PropertyType) =>
   });
 
 export const versionedTypeUrlRegExp =
-  /types\/(entity-type|data-type|property-type)\/.+\/v\/\d+$/;
+  /^\/@.+\/types\/(entity-type|data-type|property-type)\/.+\/v\/\d+$/;
 
-const validateVersionedUrl = (url: string): url is VersionedUrl =>
-  !!url.match(versionedTypeUrlRegExp);
+const isValidBlockProtocolVersionedUrl = (url: string): url is VersionedUrl =>
+  !!new URL(url).pathname.match(versionedTypeUrlRegExp);
 
 const getTypeByVersionedUrl = (
   versionedUrl: VersionedUrl,
@@ -52,7 +52,7 @@ const getTypeByVersionedUrl = (
 export const returnTypeAsJson = async (request: NextRequest) => {
   const { url } = request;
 
-  const isUrlValid = validateVersionedUrl(url);
+  const isUrlValid = isValidBlockProtocolVersionedUrl(url);
 
   if (!isUrlValid) {
     return generateErrorResponse(
@@ -65,7 +65,7 @@ export const returnTypeAsJson = async (request: NextRequest) => {
 
   const productionUrl = url.replace(origin, "https://blockprotocol.org");
 
-  const kind = url.match(versionedTypeUrlRegExp)?.[1];
+  const kind = new URL(url).pathname.match(versionedTypeUrlRegExp)?.[1];
 
   let type: DataType | PropertyType | EntityType | null =
     hardcodedTypes[productionUrl as keyof typeof hardcodedTypes];

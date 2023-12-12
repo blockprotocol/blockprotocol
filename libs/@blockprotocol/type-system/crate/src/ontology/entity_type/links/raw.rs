@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
-    repr, url::VersionedUrl, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
+    raw, url::VersionedUrl, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
     ParseLinksError, ParseOneOfError,
 };
 
@@ -21,7 +21,7 @@ pub struct Links {
         )
     )]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    pub(crate) links: HashMap<String, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>,
+    pub links: HashMap<String, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>,
 }
 
 impl TryFrom<Links> for super::Links {
@@ -60,7 +60,7 @@ impl From<super::Links> for Links {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MaybeOrderedArray<T> {
     #[serde(flatten)]
-    array: repr::Array<T>,
+    array: raw::Array<T>,
     ordered: bool,
 }
 
@@ -102,16 +102,12 @@ impl From<super::MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MaybeOneOfEntityTypeReference {
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
-    inner: Option<repr::OneOf<repr::EntityTypeReference>>,
+    inner: Option<raw::OneOf<raw::EntityTypeReference>>,
 }
 
 impl MaybeOneOfEntityTypeReference {
-    #[expect(
-        clippy::missing_const_for_fn,
-        reason = "constant functions cannot evaluate destructors"
-    )]
     #[must_use]
-    pub fn into_inner(self) -> Option<repr::OneOf<repr::EntityTypeReference>> {
+    pub fn into_inner(self) -> Option<raw::OneOf<raw::EntityTypeReference>> {
         self.inner
     }
 }
@@ -169,7 +165,7 @@ mod tests {
                 "ordered": false
             });
 
-            let inner_array: repr::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
+            let inner_array: raw::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
                 .expect("failed to deserialize array to repr");
 
             check_repr_serialization_from_value(
@@ -200,7 +196,7 @@ mod tests {
                 "ordered": true
             });
 
-            let inner_array: repr::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
+            let inner_array: raw::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
                 .expect("failed to deserialize array to repr");
 
             check_repr_serialization_from_value(
@@ -235,7 +231,7 @@ mod tests {
                 "maxItems": 20,
             });
 
-            let inner_array: repr::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
+            let inner_array: raw::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
                 .expect("failed to deserialize array to repr");
 
             check_repr_serialization_from_value(

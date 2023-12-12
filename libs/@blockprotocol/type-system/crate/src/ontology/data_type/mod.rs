@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 pub use error::ParseDataTypeError;
+use serde::{Deserialize, Serialize};
 
 use crate::{
     url::{BaseUrl, VersionedUrl},
@@ -8,11 +9,12 @@ use crate::{
 };
 
 mod error;
-pub(in crate::ontology) mod repr;
+pub(in crate::ontology) mod raw;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(try_from = "raw::DataType", into = "raw::DataType")]
 pub struct DataType {
     id: VersionedUrl,
     title: String,
@@ -128,7 +130,7 @@ mod tests {
 
     #[test]
     fn text() {
-        check_serialization_from_str::<DataType, repr::DataType>(
+        check_serialization_from_str::<DataType, raw::DataType>(
             test_data::data_type::TEXT_V1,
             None,
         );
@@ -136,7 +138,7 @@ mod tests {
 
     #[test]
     fn number() {
-        check_serialization_from_str::<DataType, repr::DataType>(
+        check_serialization_from_str::<DataType, raw::DataType>(
             test_data::data_type::NUMBER_V1,
             None,
         );
@@ -144,7 +146,7 @@ mod tests {
 
     #[test]
     fn boolean() {
-        check_serialization_from_str::<DataType, repr::DataType>(
+        check_serialization_from_str::<DataType, raw::DataType>(
             test_data::data_type::BOOLEAN_V1,
             None,
         );
@@ -152,7 +154,7 @@ mod tests {
 
     #[test]
     fn null() {
-        check_serialization_from_str::<DataType, repr::DataType>(
+        check_serialization_from_str::<DataType, raw::DataType>(
             test_data::data_type::NULL_V1,
             None,
         );
@@ -160,7 +162,7 @@ mod tests {
 
     #[test]
     fn object() {
-        check_serialization_from_str::<DataType, repr::DataType>(
+        check_serialization_from_str::<DataType, raw::DataType>(
             test_data::data_type::OBJECT_V1,
             None,
         );
@@ -168,7 +170,7 @@ mod tests {
 
     #[test]
     fn empty_list() {
-        check_serialization_from_str::<DataType, repr::DataType>(
+        check_serialization_from_str::<DataType, raw::DataType>(
             test_data::data_type::EMPTY_LIST_V1,
             None,
         );
@@ -178,7 +180,7 @@ mod tests {
     fn invalid_schema() {
         let invalid_schema_url = "https://blockprotocol.org/types/modules/graph/0.3/schema/foo";
 
-        ensure_failed_validation::<repr::DataType, DataType>(
+        ensure_failed_validation::<raw::DataType, DataType>(
             &json!(
                 {
                   "$schema": invalid_schema_url,
@@ -195,7 +197,7 @@ mod tests {
 
     #[test]
     fn invalid_id() {
-        ensure_failed_validation::<repr::DataType, DataType>(
+        ensure_failed_validation::<raw::DataType, DataType>(
             &json!(
                 {
                   "$schema": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",

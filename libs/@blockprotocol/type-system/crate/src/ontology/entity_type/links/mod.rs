@@ -1,5 +1,5 @@
 mod error;
-pub(in crate::ontology) mod repr;
+pub(in crate::ontology) mod raw;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
@@ -13,7 +13,9 @@ use crate::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Links(HashMap<VersionedUrl, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>);
+pub struct Links(
+    pub(crate) HashMap<VersionedUrl, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
+);
 
 impl Links {
     /// Creates a new `Links` object.

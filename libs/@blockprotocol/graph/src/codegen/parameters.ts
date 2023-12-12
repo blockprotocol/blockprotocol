@@ -23,6 +23,12 @@ export type CodegenParameters = {
   typeNameOverrides?: {
     [sourceTypeId: string]: string;
   };
+  /**
+   * Enables fetching the schema from a different URL to the one in its schema.
+   * The return of this function will be used as the URL to fetch the type from,
+   * but does NOT affect the type id in the generated schema.
+   */
+  getFetchUrlFromTypeId?: (typeId: VersionedUrl) => VersionedUrl;
   /** Generate look-up maps with aliases for all type URLs */
   typeIdAliases?:
     | { enabled: false }
@@ -174,8 +180,9 @@ export const validateCodegenParameters = (
 
 export type ProcessedCodegenParameters = Omit<
   Required<CodegenParameters>,
-  "targets"
+  "targets" | "getFetchUrlFromTypeId"
 > & {
+  getFetchUrlFromTypeId: CodegenParameters["getFetchUrlFromTypeId"];
   targets: {
     [fileName: string]: {
       sourceTypeIds: VersionedUrl[];
@@ -226,6 +233,7 @@ export const processCodegenParameters = (
 
   return {
     ...parameters,
+    getFetchUrlFromTypeId: parameters.getFetchUrlFromTypeId,
     targets,
     typeIdAliases: parameters.typeIdAliases ?? { enabled: true },
     typeNameOverrides: parameters.typeNameOverrides ?? {},

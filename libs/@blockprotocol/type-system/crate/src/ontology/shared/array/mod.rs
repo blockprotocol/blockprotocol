@@ -1,5 +1,5 @@
 pub(crate) mod error;
-pub(in crate::ontology) mod repr;
+pub(in crate::ontology) mod raw;
 
 use crate::{url::BaseUrl, ValidateUrl, ValidationError};
 
@@ -58,7 +58,7 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::{repr, url::VersionedUrl, PropertyTypeReference};
+    use crate::{raw, url::VersionedUrl, PropertyTypeReference};
 
     fn get_test_value_or_array(url: &VersionedUrl) -> ValueOrArray<PropertyTypeReference> {
         let json_repr = json!({
@@ -69,7 +69,7 @@ mod tests {
             "minItems": 10,
             "maxItems": 20,
         });
-        let array_repr: repr::ValueOrArray<repr::PropertyTypeReference> =
+        let array_repr: raw::ValueOrArray<raw::PropertyTypeReference> =
             serde_json::from_value(json_repr).expect("failed to deserialize ValueOrArray");
 
         array_repr.try_into().expect("failed to convert array repr")
