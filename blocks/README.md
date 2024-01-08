@@ -1,6 +1,6 @@
 # Blocks
 
-This directory contains the source code for all Block Protocol-developed public [Block Protocol](https://blockprotocol.org/) blocks.
+This directory contains the source code for our public [Block Protocol](https://blockprotocol.org/) proof-of-concept, demo and learning blocks. For examples of actual real-world blocks, see the `blocks` directory in the [HASH repository](https://github.com/hashintel/hash/tree/main/blocks).
 
 ## Running these blocks
 
