@@ -36,6 +36,11 @@ export class TypeDependencyMap {
     const dependencyQueue = [this.dependencyMap[typeId]] ?? [];
 
     while (dependencyQueue.length > 0) {
+      // The dependencyQueue can have an undefined value for entity types with no properties
+      if (!dependencyQueue[0]) {
+        break;
+      }
+
       const dependencies = mustBeDefined(dependencyQueue.pop());
 
       if (flattenedDependencies.has(dependencies.typeId)) {
