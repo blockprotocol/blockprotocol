@@ -1,3 +1,5 @@
+import fetch from "node-fetch";
+
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 100;
 
