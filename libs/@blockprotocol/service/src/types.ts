@@ -16,8 +16,6 @@ import {
 import type {
   CreateChatCompletionRequest,
   CreateChatCompletionResponse,
-  CreateCompletionRequest,
-  CreateCompletionResponse,
   CreateImageRequest,
   ImagesResponse,
 } from "./openai-types";
