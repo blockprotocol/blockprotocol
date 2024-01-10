@@ -27,8 +27,6 @@ import {
   MapboxSuggestAddressResponseData,
   OpenAICompleteChatData,
   OpenAICompleteChatResponseData,
-  OpenAICompleteTextData,
-  OpenAICompleteTextResponseData,
   OpenAICreateImageData,
   OpenAICreateImageResponseData,
   ServiceBlockMessageCallbacks,
@@ -125,19 +123,6 @@ export class ServiceBlockHandler
         respondedToBy: "openaiCreateImageResponse",
       },
     );
-  }
-
-  openaiCompleteText({ data }: { data?: OpenAICompleteTextData }) {
-    return this.sendMessage<
-      OpenAICompleteTextResponseData,
-      ServiceMessageError
-    >({
-      message: {
-        messageName: "openaiCompleteText",
-        data,
-      },
-      respondedToBy: "openaiCompleteTextResponse",
-    });
   }
 
   openaiCompleteChat({ data }: { data?: OpenAICompleteChatData }) {
