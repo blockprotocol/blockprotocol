@@ -16,8 +16,6 @@ import {
 import type {
   CreateChatCompletionRequest,
   CreateChatCompletionResponse,
-  CreateCompletionRequest,
-  CreateCompletionResponse,
   CreateImageRequest,
   ImagesResponse,
 } from "./openai-types";
@@ -37,10 +35,6 @@ export type ServiceEmbedderMessages = {};
 export type OpenAICreateImageData = Omit<CreateImageRequest, "user">;
 
 export type OpenAICreateImageResponseData = ImagesResponse;
-
-export type OpenAICompleteTextData = Omit<CreateCompletionRequest, "user">;
-
-export type OpenAICompleteTextResponseData = CreateCompletionResponse;
 
 export type OpenAICompleteChatData = Omit<CreateChatCompletionRequest, "user">;
 
@@ -262,13 +256,6 @@ export type ServiceEmbedderMessageCallbacks = {
     OpenAICreateImageData,
     null,
     MessageReturn<OpenAICreateImageResponseData>,
-    ServiceMessageError
-  >;
-
-  openaiCompleteText: MessageCallback<
-    OpenAICompleteTextData,
-    null,
-    MessageReturn<OpenAICompleteTextResponseData>,
     ServiceMessageError
   >;
 

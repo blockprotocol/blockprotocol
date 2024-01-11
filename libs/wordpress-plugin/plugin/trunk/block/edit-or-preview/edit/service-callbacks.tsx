@@ -126,6 +126,7 @@ export const constructServiceModuleCallbacks = (
         displayToast,
       ),
 
+    /** @todo: remove this when `@blockprotocol/service` is updated */
     openaiCompleteText: async ({ data }) =>
       callService(
         {
