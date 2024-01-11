@@ -31,7 +31,7 @@
     "@blockprotocol/core": "0.1.2",
     "@blockprotocol/graph": "0.2.2",
     "@blockprotocol/hook": "0.1.3",
-    "@blockprotocol/service": "0.1.3",
+    "@blockprotocol/service": "0.1.4",
     "@fortawesome/fontawesome-svg-core": "6.4.0",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@lit-labs/react": "1.1.1",
