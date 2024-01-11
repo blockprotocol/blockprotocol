@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/service",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Implementation of the Block Protocol service module specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
