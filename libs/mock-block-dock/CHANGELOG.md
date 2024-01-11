@@ -1,5 +1,16 @@
 # mock-block-dock
 
+## 0.1.7
+
+### Patch Changes
+
+- [#1357](https://github.com/blockprotocol/blockprotocol/pull/1357) [`de7b209f`](https://github.com/blockprotocol/blockprotocol/commit/de7b209f37a703698e9533eff3534160ff4b71de) Thanks [@benwerner01](https://github.com/benwerner01)! - Remove `completeText` support, and replace its usage with `completeChat`
+
+- Updated dependencies [[`cb5cbaf7`](https://github.com/blockprotocol/blockprotocol/commit/cb5cbaf7dcb5dfb8f03f952dac6e3c54f15d634d), [`a11a1a91`](https://github.com/blockprotocol/blockprotocol/commit/a11a1a912a9f7c8411dcb4be543077a4602e7ef8), [`de7b209f`](https://github.com/blockprotocol/blockprotocol/commit/de7b209f37a703698e9533eff3534160ff4b71de), [`8423b35e`](https://github.com/blockprotocol/blockprotocol/commit/8423b35e2dc0cce26ff5aa481c46ebb713aa5317)]:
+  - @blockprotocol/graph@0.3.1
+  - @blockprotocol/service@0.1.4
+  - @blockprotocol/hook@0.1.5
+
 ## 0.1.6
 
 ### Patch Changes
