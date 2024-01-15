@@ -1171,10 +1171,10 @@
     "@blockprotocol/core" "0.1.2"
     "@blockprotocol/graph" "0.2.2"
 
-"@blockprotocol/service@0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/service/-/service-0.1.3.tgz#d3ab41b65ca807490e94bd946bfae727575696cc"
-  integrity sha512-APZEYr6cwCAfpABcBg3O4kTJkda7eZDsN7mjWahqXrDrIObVeI6mnnmVQH9lobvDLS/yOCXDUZOIeZPfzX8Zcg==
+"@blockprotocol/service@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/service/-/service-0.1.4.tgz#1d17227682cc8ab68c5651c1ee4abb7ded9ce52d"
+  integrity sha512-5B+NNIsH1sahTM7FpDT1VQPePfzPmLqydvWKGGPlg6mL9Owziogglc398hXlB91yoJjLTCDDvXQ3ESpyKyWUow==
   dependencies:
     "@blockprotocol/core" "0.1.2"
 
