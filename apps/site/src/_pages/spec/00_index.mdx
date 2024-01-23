@@ -27,11 +27,20 @@ It defines how structured data is passed between blocks and embedding applicatio
 
 The Block Protocol is split into a core specification and module specifications.
 
-The [core specification](https://blockprotocol.org/spec/core) sets out how blocks should be defined, how modules are defined, how embedding applications should initialize blocks, and _how_ applications and blocks communicate.
+The [core specification](https://blockprotocol.org/spec/core) sets out:
 
-Each **module specification** defines _what_ applications and blocks communicate. A module is a logical grouping of messages blocks and applications may exchange.
+- how blocks should be defined;
+- how embedding applications should initialize blocks;
+- how applications and blocks communicate;
+- how additional modules are defined.
 
-Each specification is versioned separately, allowing them to evolve independently.
+Each **module specification** defines _what_ applications and blocks communicate (i.e. the contents of the communications themselves). A module is a logical grouping of messages blocks and applications may exchange.
+
+- **Graph Module:** provides a shared definition of semantic data that blocks and apps should commonly use.
+- **Hook Module:** allows blocks to defer to embedding applications to provide arbitrary interfaces in blocks.
+- **Service Module:** allows blocks to interact with external services without needing to be provided with credentials.
+
+The core specification, and each module specification, are versioned separately, allowing them to evolve independently.
 Any reference to the ‘protocol version’ should be read as _the version of the core specification_.
 
 Separate core and module specifications were introduced in version 0.2 of the Block Protocol.
