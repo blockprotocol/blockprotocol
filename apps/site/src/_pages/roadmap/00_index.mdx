@@ -22,7 +22,7 @@ Our aim is to develop a new standard for building frontend components, or "block
 - **WordPress support:** additionally in February 2023, we launched the _Block Protocol for WordPress_ integration for [Wordpress.com](https://wordpress.com/plugins/blockprotocol) and [self-hosted WordPress](https://wordpress.org/plugins/blockprotocol) users. This made the Block Protocol accessible to all users of the world's most widely used content management system (CMS).
 - **HASH launch:** our core team are currently focused on readying the open-source [HASH](https://hash.ai/) application for production. HASH is the most advanced and complete implementation of the Block Protocol today. View its developer roadmap at [hash.dev/roadmap](https://hash.dev/roadmap)
 
-## Proposed Changes
+## Future Plans
 
 ### RFCs
 
@@ -49,13 +49,13 @@ We want to facilitate users leaving comments on elements within blocks. This cou
 - managed entirely outside the block, e.g. by a wrapper around the block which provides a context menu to users for adding comments on blocks – which avoids blocks having to have any knowledge of commenting, but could interfere with how the block wants to respond to user input, or
 - managed by providing a new module whereby blocks could send messages requesting that comments be attached to specific elements in blocks – which allows blocks to have control over how and to what element the user is able to attach comments.
 
-#### Internationalization module
+#### Browser Permissions module
 
-A module to provide the user’s preferred locale to blocks, for localization and internationalization. Please see the [GitHub discussion](https://github.com/blockprotocol/blockprotocol/discussions/315). This module could be generalized to support passing other user-specific preferences or options which can be used to customize blocks (e.g. accessibility choices around font-size, or color vision deficiency).
+We want to enable blocks to access certain browser-provided information about users, in a securely permissioned fashion.
 
-#### Location module
-
-A module to provide the user’s location to blocks (with appropriate safeguarding).
+- Blocks should be able to specify what permissions they want to ask users for.
+- Apps should be able to selectively choose whether or not to ask users for these (e.g. camera/microphone access, clipboard access, location information, etc).
+- Users should be able to choose on a block-by-block basis which blocks have the ability to utilize browser permissions they have shared with a given embedding application
 
 #### Styling module
 
@@ -65,19 +65,32 @@ Please see the [GitHub discussion](https://github.com/blockprotocol/blockprotoco
 
 #### Users module
 
-Much familiar functionality requires a reference to the current user, or being able to select from users in the system. For example:
+<InfoCardWrapper>
 
+<InfoCard variant="warning" title="What’s a specification?">
+
+We previously considered introducing a dedicated personalization module to support things like localization and internationalization, described in this [GitHub discussion](https://github.com/blockprotocol/blockprotocol/discussions/315). We have moved away from this in favor of supporting user preference passing in a more generalized way, outlined here, which can be relied upon by blocks to provide a more tailored user experience (e.g. accessibility choices around font-size, or color vision deficiency).
+
+</InfoCard>
+
+Many embedding application features require knowledge of the current user's identity, or the ability to list other users in an application. For example:
+
+- searching for users to mention (listing user display names to select from and search)
 - reacting to a post (linking the current user to the post via a reaction)
 - assigning a user to an action item (linking the current user to the action item)
-- searching for users to mention (having user display names to select from and search)
+- internationalizing, localizing or otherwise personalizing content (based on a user's application-level preferences)
 
-A users module could help expose some of this data to blocks, with appropriate safeguarding and permissions sought.
+A users module can help expose some of this data to blocks, with appropriate safeguarding and permissions sought.
+
+</InfoCardWrapper>
 
 #### Versioning module
 
 While embedding applications can handle displaying an interface for reloading blocks at particular earlier versions, we will specify a way of communicating to blocks that (a) an earlier version is being displayed, and (b) the difference with the current version would allow blocks to implement visual diffs.
 
 ### Changes to existing modules
+
+The below changes to existing modules are currently being considered.
 
 #### Core
 
