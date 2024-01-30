@@ -11,7 +11,7 @@ import { OntologyElementMetadata } from "./metadata.js";
 export type EntityTypeWithMetadata = {
   schema: EntityType;
   metadata: OntologyElementMetadata & {
-    labelProperty?: BaseUrl;
+    labelProperty?: BaseUrl | null;
     icon?: string | null;
   };
 };
