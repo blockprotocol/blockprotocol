@@ -180,7 +180,6 @@ export const ExternalServiceMethodRequestMethodNameEnum = {
   CanRetrieveAddress: "canRetrieveAddress",
   RetrieveStaticMap: "retrieveStaticMap",
   CreateImage: "createImage",
-  CompleteText: "completeText",
   CompleteChat: "completeChat",
 } as const;
 

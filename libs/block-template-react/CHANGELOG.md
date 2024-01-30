@@ -1,5 +1,16 @@
 # block-template-react
 
+## 0.4.3
+
+### Patch Changes
+
+- [#1311](https://github.com/blockprotocol/blockprotocol/pull/1311) [`8423b35e`](https://github.com/blockprotocol/blockprotocol/commit/8423b35e2dc0cce26ff5aa481c46ebb713aa5317) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add suffix to auto-generated data types, to avoid name clashes
+
+- Updated dependencies [[`de7b209f`](https://github.com/blockprotocol/blockprotocol/commit/de7b209f37a703698e9533eff3534160ff4b71de), [`cb5cbaf7`](https://github.com/blockprotocol/blockprotocol/commit/cb5cbaf7dcb5dfb8f03f952dac6e3c54f15d634d), [`a11a1a91`](https://github.com/blockprotocol/blockprotocol/commit/a11a1a912a9f7c8411dcb4be543077a4602e7ef8), [`8423b35e`](https://github.com/blockprotocol/blockprotocol/commit/8423b35e2dc0cce26ff5aa481c46ebb713aa5317)]:
+  - mock-block-dock@0.1.7
+  - @blockprotocol/graph@0.3.1
+  - block-scripts@0.3.2
+
 ## 0.4.2
 
 ### Patch Changes

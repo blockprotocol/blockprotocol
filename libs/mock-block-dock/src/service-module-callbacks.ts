@@ -94,15 +94,6 @@ export const constructServiceModuleCallbacks = (params: {
         blockProtocolSiteHost,
       }),
 
-    openaiCompleteText: async ({ data: payload }) =>
-      callExternalApiMethod({
-        providerName: "openai",
-        methodName: "completeText",
-        payload,
-        blockProtocolApiKey,
-        blockProtocolSiteHost,
-      }),
-
     openaiCompleteChat: async ({ data: payload }) =>
       callExternalApiMethod({
         providerName: "openai",

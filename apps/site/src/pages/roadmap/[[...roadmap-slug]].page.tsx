@@ -15,7 +15,7 @@ const documentationPages =
   (siteMap as SiteMap).pages
     .find(({ title }) => title === "Docs")!
     .subPages?.find(({ title }) => title === "Roadmap")!
-    .subPages?.find(({ title }) => title === "Proposed Changes")!
+    .subPages?.find(({ title }) => title === "Future Plans")!
     .subPages?.find(({ title }) => title === "RFCs")!.subPages ?? [];
 
 type RoadmapPageQueryParams = {

@@ -252,7 +252,7 @@ export const getPage = (params: {
 
         return prev;
       }, [])
-      .filter((heading) => heading.anchor !== "proposed-changes"),
+      .filter((heading) => heading.anchor !== "future-plans"),
     subPages: [],
   };
 };
@@ -310,7 +310,7 @@ export const getRoadmapSubPages = (): SiteMapPage[] => {
     return (
       slugify(getFullText(heading), {
         lower: true,
-      }) === "proposed-changes"
+      }) === "future-plans"
     );
   }) as Heading;
 

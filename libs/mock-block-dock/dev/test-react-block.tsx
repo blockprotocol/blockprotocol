@@ -7,7 +7,7 @@ import { getRoots } from "@blockprotocol/graph/stdlib";
 import { useHook, useHookBlockModule } from "@blockprotocol/hook/react";
 import {
   MapboxSuggestAddressResponseData,
-  OpenAICompleteTextResponseData,
+  OpenAICompleteChatResponseData,
 } from "@blockprotocol/service";
 import { useServiceBlockModule } from "@blockprotocol/service/react";
 import { FormEvent, useCallback, useMemo, useRef, useState } from "react";
@@ -29,10 +29,10 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
 
   const { hookModule } = useHookBlockModule(blockRef);
 
-  const [openaiCompleteTextPrompt, setOpenaiCompleteTextPrompt] =
+  const [openaiCompleteChatPrompt, setOpenaiCompleteChatPrompt] =
     useState<string>("");
-  const [openaiCompleteTextResponse, setOpenaiCompleteTextResponse] = useState<
-    OpenAICompleteTextResponseData | undefined | null
+  const [openaiCompleteChatResponse, setOpenaiCompleteChatResponse] = useState<
+    OpenAICompleteChatResponseData | undefined | null
   >(null);
 
   const [mapboxSuggestSearchText, setMapboxSuggestSearchText] =
@@ -54,22 +54,22 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
     },
   );
 
-  const handleOpenaiCompleteTextSubmit = useCallback(
+  const handleOpenaiCompleteChatSubmit = useCallback(
     async (event: FormEvent) => {
       event.preventDefault();
 
-      const response = await serviceModule.openaiCompleteText({
+      const response = await serviceModule.openaiCompleteChat({
         data: {
-          prompt: openaiCompleteTextPrompt,
+          messages: [{ content: openaiCompleteChatPrompt, role: "user" }],
           model: "text-davinci-003",
         },
       });
 
       if (response.data) {
-        setOpenaiCompleteTextResponse(response.data);
+        setOpenaiCompleteChatResponse(response.data);
       }
     },
-    [openaiCompleteTextPrompt, serviceModule],
+    [openaiCompleteChatPrompt, serviceModule],
   );
 
   const handleMapboxSuggestSubmit = useCallback(
@@ -164,24 +164,24 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
       />
       <h2>Hook-handled description editing</h2>
       <div ref={hookRef} />
-      <form onSubmit={handleOpenaiCompleteTextSubmit}>
+      <form onSubmit={handleOpenaiCompleteChatSubmit}>
         <label>
           OpenAI Complete Text API request
           <br />
           <input
             type="text"
-            value={openaiCompleteTextPrompt}
-            onChange={({ target }) => setOpenaiCompleteTextPrompt(target.value)}
+            value={openaiCompleteChatPrompt}
+            onChange={({ target }) => setOpenaiCompleteChatPrompt(target.value)}
           />
         </label>
-        <button type="submit" disabled={!openaiCompleteTextPrompt}>
+        <button type="submit" disabled={!openaiCompleteChatPrompt}>
           Suggest
         </button>
       </form>
-      {openaiCompleteTextResponse === undefined ? (
+      {openaiCompleteChatResponse === undefined ? (
         <p>Loading...</p>
-      ) : openaiCompleteTextResponse ? (
-        <p>{openaiCompleteTextResponse.choices[0]!.text}</p>
+      ) : openaiCompleteChatResponse ? (
+        <p>{openaiCompleteChatResponse.choices[0]!.message?.content}</p>
       ) : null}
       <form onSubmit={handleMapboxSuggestSubmit}>
         <label>
