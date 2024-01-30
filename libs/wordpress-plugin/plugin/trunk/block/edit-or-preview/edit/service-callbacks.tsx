@@ -126,16 +126,6 @@ export const constructServiceModuleCallbacks = (
         displayToast,
       ),
 
-    openaiCompleteText: async ({ data }) =>
-      callService(
-        {
-          providerName: "openai",
-          methodName: "completeText",
-          data,
-        },
-        displayToast,
-      ),
-
     /** Mapbox Geocoding API */
 
     mapboxForwardGeocoding: async ({ data }) =>

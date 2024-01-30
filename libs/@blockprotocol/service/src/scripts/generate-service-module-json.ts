@@ -57,29 +57,6 @@ export const mapboxMessages: ModuleMessageDefinition[] = [
     errorCodes,
   },
   {
-    messageName: "openaiCompleteText",
-    description:
-      "Complete text using OpenAI – see https://platform.openai.com/docs/api-reference/completions",
-    source: "block",
-    respondedToBy: "openaiCompleteTextResponse",
-    sentOnInitialization: false,
-    data: generateServiceSchema({
-      typeName: "OpenAICompleteTextData",
-    }),
-    errorCodes: [],
-  },
-  {
-    messageName: "openaiCompleteTextResponse",
-    description: "Response to a OpenAI complete text request",
-    source: "embedder",
-    respondedToBy: null,
-    sentOnInitialization: false,
-    data: generateServiceSchema({
-      typeName: "OpenAICompleteTextResponseData",
-    }),
-    errorCodes,
-  },
-  {
     messageName: "openaiCompleteChat",
     description: "Complete a chat using OpenAI",
     source: "block",

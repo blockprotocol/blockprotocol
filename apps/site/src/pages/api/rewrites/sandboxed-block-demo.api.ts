@@ -188,11 +188,6 @@ const handler: NextApiHandler = async (req, res) => {
           methodName: "createImage",
           payload,
         }),
-        openaiCompleteText: ({ data: payload }) => handleServiceMessage({
-          providerName: "OpenAI",
-          methodName: "completeText",
-          payload,
-        }),
         openaiCompleteChat: ({ data: payload }) => handleServiceMessage({
           providerName: "OpenAI",
           methodName: "completeChat",

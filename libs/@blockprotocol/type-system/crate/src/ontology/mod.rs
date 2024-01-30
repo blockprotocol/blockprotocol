@@ -36,20 +36,21 @@ pub use shared::{
 
 // Re-export the repr contents so they're nicely grouped and so that they're easier to import in
 // a non-ambiguous way where they don't get confused with their non repr counterparts.
-// For example, `import crate::repr` lets you then use `repr::DataType`
-pub mod repr {
+// For example, `import crate::raw` lets you then use `raw::DataType`
+#[allow(unreachable_pub, unused_imports)]
+pub(crate) mod raw {
     pub use super::{
-        data_type::repr::{DataType, DataTypeReference},
+        data_type::raw::{DataType, DataTypeReference},
         entity_type::{
-            links::repr::{Links, MaybeOneOfEntityTypeReference},
-            repr::{EntityType, EntityTypeReference},
+            links::raw::{Links, MaybeOneOfEntityTypeReference},
+            raw::{EntityType, EntityTypeReference},
         },
-        property_type::repr::{PropertyType, PropertyTypeReference, PropertyValues},
+        property_type::raw::{PropertyType, PropertyTypeReference, PropertyValues},
         shared::{
-            all_of::repr::AllOf,
-            array::repr::{Array, ValueOrArray},
-            object::repr::Object,
-            one_of::repr::OneOf,
+            all_of::raw::AllOf,
+            array::raw::{Array, ValueOrArray},
+            object::raw::Object,
+            one_of::raw::OneOf,
         },
     };
 }

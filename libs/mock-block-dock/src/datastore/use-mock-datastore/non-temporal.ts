@@ -45,6 +45,7 @@ export type MockDatastore = {
       | "deleteEntityType"
       | "createPropertyType"
       | "updatePropertyType"
+      | "requestLinkedQuery"
     >
   >;
 };

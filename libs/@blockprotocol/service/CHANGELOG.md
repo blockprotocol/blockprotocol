@@ -1,5 +1,11 @@
 # @blockprotocol/service
 
+## 0.1.4
+
+### Patch Changes
+
+- [#1357](https://github.com/blockprotocol/blockprotocol/pull/1357) [`de7b209f`](https://github.com/blockprotocol/blockprotocol/commit/de7b209f37a703698e9533eff3534160ff4b71de) Thanks [@benwerner01](https://github.com/benwerner01)! - Remove the deprecated `completeText` method from the service module callbacks
+
 ## 0.1.3
 
 ### Patch Changes

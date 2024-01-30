@@ -1,7 +1,5 @@
 use tsify::Tsify;
 
-use crate::utils::{set_panic_hook, Result};
-
 // Generates the TypeScript alias: type VersionedUrl = `${BaseUrl}v/${number}`
 #[derive(Tsify)]
 #[serde(rename = "VersionedUrl")]

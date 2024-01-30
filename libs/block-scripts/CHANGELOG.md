@@ -1,5 +1,12 @@
 # block-scripts
 
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [[`cb5cbaf7`](https://github.com/blockprotocol/blockprotocol/commit/cb5cbaf7dcb5dfb8f03f952dac6e3c54f15d634d), [`a11a1a91`](https://github.com/blockprotocol/blockprotocol/commit/a11a1a912a9f7c8411dcb4be543077a4602e7ef8), [`8423b35e`](https://github.com/blockprotocol/blockprotocol/commit/8423b35e2dc0cce26ff5aa481c46ebb713aa5317)]:
+  - @blockprotocol/graph@0.3.1
+
 ## 0.3.1
 
 ### Patch Changes

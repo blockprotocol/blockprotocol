@@ -13,6 +13,7 @@ const nextConfig = {
     isrMemoryCacheSize: 0,
   },
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
+  poweredByHeader: false,
   productionBrowserSourceMaps: true,
   swcMinify: true,
 

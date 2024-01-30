@@ -133,6 +133,8 @@ export const getOutgoingLinkAndTargetEntities = <
   getOutgoingLinkAndTargetEntitiesGeneral<false, LinkAndRightEntities>(
     subgraph,
     entityId,
+    undefined,
+    true,
   );
 export const getOutgoingLinksForEntity = (
   subgraph: Subgraph,

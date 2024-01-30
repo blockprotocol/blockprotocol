@@ -1,15 +1,11 @@
-use std::{
-    collections::{HashMap, HashSet},
-    str::FromStr,
-};
+use std::{collections::HashMap, str::FromStr};
 
 use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
 use crate::{
-    ontology::entity_type::error::MergeEntityTypeError,
-    repr,
+    raw,
     url::{BaseUrl, ParseVersionedUrlError, VersionedUrl},
     ParseEntityTypeError,
 };
@@ -37,71 +33,23 @@ pub struct EntityType {
     kind: EntityTypeTag,
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$id")]
-    id: String,
-    title: String,
+    pub id: String,
+    pub title: String,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(flatten)]
-    all_of: repr::AllOf<EntityTypeReference>,
+    pub all_of: raw::AllOf<EntityTypeReference>,
     #[cfg_attr(
         target_arch = "wasm32",
         tsify(optional, type = "Record<BaseUrl, any>[]")
     )]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    examples: Vec<HashMap<String, serde_json::Value>>,
+    pub examples: Vec<HashMap<String, serde_json::Value>>,
     #[serde(flatten)]
-    property_object: repr::Object<repr::ValueOrArray<repr::PropertyTypeReference>>,
+    pub property_object: raw::Object<raw::ValueOrArray<raw::PropertyTypeReference>>,
     #[serde(flatten)]
-    links: repr::Links,
-}
-
-impl EntityType {
-    /// Merges another entity type into this one.
-    ///
-    /// This will:
-    ///   - remove the other entity type from the `allOf`
-    ///   - merge the `properties` and `required` fields
-    ///   - merge the `links` field
-    ///
-    /// # Notes
-    ///
-    /// - This does not validate the resulting entity type.
-    /// - The `required` field may have a different order after merging.
-    ///
-    /// # Errors
-    ///
-    /// - [`DoesNotInheritFrom`] if the other entity type is not in the `allOf` field
-    ///
-    /// [`DoesNotInheritFrom`]: MergeEntityTypeError::NotInAllOf
-    pub fn merge_parent(&mut self, other: Self) -> Result<(), MergeEntityTypeError> {
-        self.all_of.elements.remove(
-            self.all_of
-                .elements
-                .iter()
-                .position(|x| x.url == other.id)
-                .ok_or_else(|| {
-                    MergeEntityTypeError::NotInAllOf(other.id.clone(), self.id.clone())
-                })?,
-        );
-
-        self.property_object
-            .properties
-            .extend(other.property_object.properties);
-
-        self.property_object.required = self
-            .property_object
-            .required
-            .drain(..)
-            .chain(other.property_object.required)
-            .collect::<HashSet<_>>()
-            .into_iter()
-            .collect();
-
-        self.links.links.extend(other.links.links);
-
-        Ok(())
-    }
+    pub links: raw::Links,
 }
 
 impl TryFrom<EntityType> for super::EntityType {
@@ -194,7 +142,7 @@ impl From<super::EntityType> for EntityType {
 pub struct EntityTypeReference {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUrl"))]
     #[serde(rename = "$ref")]
-    url: String,
+    pub url: String,
 }
 
 impl TryFrom<EntityTypeReference> for super::EntityTypeReference {
@@ -216,31 +164,25 @@ impl From<super::EntityTypeReference> for EntityTypeReference {
 
 #[cfg(test)]
 mod tests {
-    use crate::{repr, url::BaseUrl, utils::tests::check_serialization_from_str, EntityType};
+    use crate::{raw, url::BaseUrl, utils::tests::check_serialization_from_str, EntityType};
 
     #[test]
     fn merge_entity_type() {
-        let building = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let building = check_serialization_from_str::<EntityType, raw::EntityType>(
             crate::test_data::entity_type::BUILDING_V1,
             None,
         );
-        let church: EntityType = check_serialization_from_str::<EntityType, repr::EntityType>(
+        let mut church: EntityType = check_serialization_from_str::<EntityType, raw::EntityType>(
             crate::test_data::entity_type::CHURCH_V1,
             None,
         );
 
-        let building_repr = repr::EntityType::from(building);
-        let mut church_repr = repr::EntityType::from(church);
-
-        church_repr
-            .merge_parent(building_repr)
+        church
+            .merge_parent(building)
             .expect("merging entity types failed");
 
-        let church_closure =
-            EntityType::try_from(church_repr).expect("entity type closure is not valid");
-
         assert!(
-            church_closure.properties().contains_key(
+            church.properties().contains_key(
                 &BaseUrl::new(
                     "https://blockprotocol.org/@alice/types/property-type/built-at/".to_owned()
                 )
@@ -248,13 +190,13 @@ mod tests {
             )
         );
         assert!(
-            church_closure.properties().contains_key(
+            church.properties().contains_key(
                 &BaseUrl::new(
                     "https://blockprotocol.org/@alice/types/property-type/number-bells/".to_owned()
                 )
                 .expect("invalid url")
             )
         );
-        assert!(church_closure.inherits_from().all_of().is_empty());
+        assert!(church.inherits_from().all_of().is_empty());
     }
 }
