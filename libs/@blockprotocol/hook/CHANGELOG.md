@@ -1,5 +1,12 @@
 # @blockprotocol/hook
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies [[`3fb78653`](https://github.com/blockprotocol/blockprotocol/commit/3fb7865308accc791856a3898ad26d4fe33c631f)]:
+  - @blockprotocol/graph@0.3.2
+
 ## 0.1.5
 
 ### Patch Changes

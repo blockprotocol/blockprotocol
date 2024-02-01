@@ -1,5 +1,12 @@
 # block-template-html
 
+## 0.3.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - block-scripts@0.3.3
+
 ## 0.3.3
 
 ### Patch Changes
