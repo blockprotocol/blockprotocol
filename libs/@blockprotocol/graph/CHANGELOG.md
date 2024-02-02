@@ -1,5 +1,11 @@
 # @blockprotocol/graph
 
+## 0.3.2
+
+### Patch Changes
+
+- [#1360](https://github.com/blockprotocol/blockprotocol/pull/1360) [`3fb78653`](https://github.com/blockprotocol/blockprotocol/commit/3fb7865308accc791856a3898ad26d4fe33c631f) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add 'icon' and 'labelProperty' to entity type metadata
+
 ## 0.3.1
 
 ### Patch Changes
