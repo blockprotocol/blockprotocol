@@ -1,5 +1,13 @@
 # mock-block-dock
 
+## 0.1.9
+
+### Patch Changes
+
+- Updated dependencies [[`0ff1d7c4`](https://github.com/blockprotocol/blockprotocol/commit/0ff1d7c47680c118585d721da5627e89b9623ef6)]:
+  - @blockprotocol/graph@0.3.3
+  - @blockprotocol/hook@0.1.7
+
 ## 0.1.8
 
 ### Patch Changes
