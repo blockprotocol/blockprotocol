@@ -12,11 +12,7 @@ import { ReactNode } from "react";
 
 import supportedApplicationsFullImage from "../../../../public/assets/new-home/supported-applications-full-min.webp";
 import { FadeInOnViewport } from "../../fade-in-on-viewport";
-import {
-  FontAwesomeIcon,
-  HashIcon,
-  WordPressIcon,
-} from "../../icons";
+import { FontAwesomeIcon, HashIcon, WordPressIcon } from "../../icons";
 import { ArrowUpRightFromSquareIcon } from "../../icons/arrow-up-right-from-square-icon";
 import { BoxesStackedIcon } from "../../icons/boxes-stacked-icon";
 import { BrowserIcon } from "../../icons/browser-icon";
@@ -183,7 +179,7 @@ export const SupportedApplications = () => {
               >
                 Planned
               </Typography>
-
+              <Stack gap={2.5} flexDirection="row" justifyContent="center">
                 <IconButtonWithTooltip
                   href="/docs/blocks/environments#figma"
                   label="Figma"
@@ -291,8 +287,8 @@ export const SupportedApplications = () => {
               >
                 Rather than develop blocks separately for multiple platforms,
                 build your block once and let users access them in{" "}
-                <strong>HASH, WordPress</strong> and{" "}<strong>Figma
-                </strong> (planned).
+                <strong>HASH, WordPress</strong> and <strong>Figma</strong>{" "}
+                (planned).
               </Typography>
 
               <Box>
