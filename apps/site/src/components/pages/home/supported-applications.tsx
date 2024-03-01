@@ -12,12 +12,7 @@ import { ReactNode } from "react";
 
 import supportedApplicationsFullImage from "../../../../public/assets/new-home/supported-applications-full-min.webp";
 import { FadeInOnViewport } from "../../fade-in-on-viewport";
-import {
-  FontAwesomeIcon,
-  GithubIcon,
-  HashIcon,
-  WordPressIcon,
-} from "../../icons";
+import { FontAwesomeIcon, HashIcon, WordPressIcon } from "../../icons";
 import { ArrowUpRightFromSquareIcon } from "../../icons/arrow-up-right-from-square-icon";
 import { BoxesStackedIcon } from "../../icons/boxes-stacked-icon";
 import { BrowserIcon } from "../../icons/browser-icon";
@@ -182,23 +177,9 @@ export const SupportedApplications = () => {
                 }}
                 variant="bpSmallCaps"
               >
-                Coming soon
+                Planned
               </Typography>
-
               <Stack gap={2.5} flexDirection="row" justifyContent="center">
-                <IconButtonWithTooltip
-                  href="/docs/blocks/environments#github-blocks"
-                  label="GitHub Blocks"
-                  icon={
-                    <GithubIcon
-                      sx={{
-                        fill: ({ palette }) => palette.gray[90],
-                        fontSize: 54,
-                      }}
-                    />
-                  }
-                />
-
                 <IconButtonWithTooltip
                   href="/docs/blocks/environments#figma"
                   label="Figma"
@@ -306,8 +287,8 @@ export const SupportedApplications = () => {
               >
                 Rather than develop blocks separately for multiple platforms,
                 build your block once and let users access them in{" "}
-                <strong>HASH, WordPress, GitHub Blocks</strong> and{" "}
-                <strong>Figma</strong> (coming soon).
+                <strong>HASH, WordPress</strong> and <strong>Figma</strong>{" "}
+                (planned).
               </Typography>
 
               <Box>
