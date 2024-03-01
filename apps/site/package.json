@@ -100,7 +100,7 @@
     "remark-mdx-disable-explicit-jsx": "^0.1.0",
     "remark-parse": "^10.0.1",
     "rword": "^3.2.1",
-    "sanitize-html": "^2.7.2",
+    "sanitize-html": "^2.12.1",
     "sharp": "^0.30.7",
     "slick-carousel": "^1.8.1",
     "slugify": "^1.6.5",
