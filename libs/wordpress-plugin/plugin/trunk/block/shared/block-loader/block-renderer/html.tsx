@@ -1,4 +1,4 @@
-import { HtmlBlockDefinition, renderHtmlBlock } from "@blockprotocol/core";
+import { HtmlBlockDefinition, renderHtmlBlock } from "@blockprotocol/core/html";
 import { FunctionComponent, useEffect, useRef } from "react";
 
 type HtmlElementLoaderProps = {
