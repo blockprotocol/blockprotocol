@@ -21,28 +21,23 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
+  "type": "module",
   "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "default": "./dist/esm/index.js"
-    },
-    "./react": {
-      "import": "./dist/esm/react.js",
-      "require": "./dist/cjs/react.js",
-      "default": "./dist/esm/react.js"
-    }
+    ".": "./dist/index.js",
+    "./html": "./dist/html.js",
+    "./react": "./dist/react.js"
   },
-  "main": "./dist/esm/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
+  "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/esm/index.d.ts"
+        "./dist/index.d.ts"
+      ],
+      "html": [
+        "./dist/html.d.ts"
       ],
       "react": [
-        "./dist/esm/react.d.ts"
+        "./dist/react.d.ts"
       ]
     }
   },
@@ -50,9 +45,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:cjs && yarn build:esm",
-    "build:cjs": "tsc --skipLibCheck --project tsconfig.build.cjs.json",
-    "build:esm": "tsc --skipLibCheck --project tsconfig.build.esm.json",
+    "build": "yarn clean && tsc --skipLibCheck",
     "clean": "rimraf ./dist/",
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint --report-unused-disable-directives .",

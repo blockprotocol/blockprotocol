@@ -1,5 +1,5 @@
-import { CoreHandler } from "./core-handler";
-import { ModuleHandler } from "./module-handler";
+import type { CoreHandler } from "./core-handler.js";
+import type { ModuleHandler } from "./module-handler.js";
 
 // ---------------------------- UTILITIES ----------------------------- //
 
@@ -236,24 +236,6 @@ export type ModuleDefinition = {
   version: string;
   coreVersion: string;
   messages: ModuleMessageDefinition[];
-};
-
-export type HtmlBlockDefinition = {
-  /**
-   * The url to the block's HTML file entry point, e.g. `https://example.com/my-block.html`
-   * The path is used as the base to resolve relative URLs in scripts/imports, and
-   * is made available to blocks through `blockprotocol.getBlockUrl`. It is also
-   * used by `renderHtmlBlock` to fetch the block's HTML source (the entry point),
-   * if this is not provided.
-   */
-  url: string;
-  /**
-   * An HTML string equivalent to the file hosted at `url`.
-   * If `source` is provided, `renderHtmlBlock` doesn't need to fetch the HTML
-   * source, which can save time if you already have it available. `url` will
-   * still be used to resolve relative URLs inside scripts.
-   */
-  source?: string;
 };
 
 export type CoreHandlerCallback = (handler: CoreHandler) => void;
