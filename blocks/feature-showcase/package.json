@@ -1,6 +1,6 @@
 {
   "name": "@blocks/feature-showcase",
-  "version": "0.0.6-canary-20240312191227",
+  "version": "0.0.5",
   "private": true,
   "description": "This is a feature showcase block for the Block Protocol.",
   "keywords": [
@@ -33,7 +33,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.3.4-canary-20240312191227",
+    "@blockprotocol/graph": "0.3.3",
     "@blockprotocol/type-system": "0.1.1",
     "chalk": "5.2.0",
     "fs-extra": "^10.1.0"
@@ -42,9 +42,9 @@
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "@types/react-dom": "18.0.9",
-    "block-scripts": "0.3.5-canary-20240312191227",
+    "block-scripts": "0.3.4",
     "eslint": "8.33.0",
-    "mock-block-dock": "0.1.10-canary-20240312191227",
+    "mock-block-dock": "0.1.9",
     "prettier": "2.8.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -1,14 +1,5 @@
 # block-template-custom-element
 
-## 0.4.6-canary-20240312191227
-
-### Patch Changes
-
-- Updated dependencies []:
-  - @blockprotocol/graph@0.3.4-canary-20240312191227
-  - mock-block-dock@0.1.10-canary-20240312191227
-  - block-scripts@0.3.5-canary-20240312191227
-
 ## 0.4.5
 
 ### Patch Changes

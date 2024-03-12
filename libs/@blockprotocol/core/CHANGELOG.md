@@ -1,11 +1,5 @@
 # @blockprotocol/core
 
-## 0.1.3-canary-20240312191227
-
-### Patch Changes
-
-- [#1373](https://github.com/blockprotocol/blockprotocol/pull/1373) [`735eb078`](https://github.com/blockprotocol/blockprotocol/commit/735eb07840ab3e966053f99ffc077cd3db267a6a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - convert to ESM only package. separate export path for /html block functions
-
 ## 0.1.2
 
 ### Patch Changes
