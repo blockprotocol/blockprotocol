@@ -1,4 +1,4 @@
-import { MessageCallback, MessageReturn } from "@blockprotocol/core";
+import type { MessageCallback, MessageReturn } from "@blockprotocol/core";
 
 import {
   CreateEntityData,
