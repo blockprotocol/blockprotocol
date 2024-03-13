@@ -1,5 +1,12 @@
 # @blockprotocol/service
 
+## 0.1.5-canary-20240313122533
+
+### Patch Changes
+
+- Updated dependencies [[`735eb078`](https://github.com/blockprotocol/blockprotocol/commit/735eb07840ab3e966053f99ffc077cd3db267a6a)]:
+  - @blockprotocol/core@0.1.3-canary-20240313122533
+
 ## 0.1.4
 
 ### Patch Changes
