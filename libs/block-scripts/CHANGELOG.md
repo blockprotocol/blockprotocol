@@ -1,12 +1,5 @@
 # block-scripts
 
-## 0.3.5-canary-20240313191438
-
-### Patch Changes
-
-- Updated dependencies [[`d538ab89`](https://github.com/blockprotocol/blockprotocol/commit/d538ab8922876c81d1d1b999a580d5d6d4769f9f)]:
-  - @blockprotocol/graph@0.3.4-canary-20240313191438
-
 ## 0.3.4
 
 ### Patch Changes
