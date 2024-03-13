@@ -1,5 +1,12 @@
 # block-template-html
 
+## 0.3.6-canary-20240313191438
+
+### Patch Changes
+
+- Updated dependencies []:
+  - block-scripts@0.3.5-canary-20240313191438
+
 ## 0.3.5
 
 ### Patch Changes
