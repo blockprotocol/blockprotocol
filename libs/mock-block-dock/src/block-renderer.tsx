@@ -1,4 +1,4 @@
-import { HtmlBlockDefinition } from "@blockprotocol/core";
+import type { HtmlBlockDefinition } from "@blockprotocol/core/html";
 import { ComponentType, FunctionComponent } from "react";
 
 import { CustomElementLoader } from "./block-renderer/custom-element";
