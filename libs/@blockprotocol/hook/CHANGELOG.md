@@ -1,5 +1,13 @@
 # @blockprotocol/hook
 
+## 0.1.8-canary-20240314113521
+
+### Patch Changes
+
+- Updated dependencies [[`345ceaf3`](https://github.com/blockprotocol/blockprotocol/commit/345ceaf39abfdfac11e87cc7355746def3b888fb), [`5516c7f0`](https://github.com/blockprotocol/blockprotocol/commit/5516c7f054817201eff249a09fa5cc583c2c1c10)]:
+  - @blockprotocol/graph@0.3.4-canary-20240314113521
+  - @blockprotocol/core@0.1.3-canary-20240314113521
+
 ## 0.1.7
 
 ### Patch Changes

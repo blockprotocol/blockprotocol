@@ -1,5 +1,11 @@
 # @blockprotocol/core
 
+## 0.1.3-canary-20240314113521
+
+### Patch Changes
+
+- [#1375](https://github.com/blockprotocol/blockprotocol/pull/1375) [`5516c7f0`](https://github.com/blockprotocol/blockprotocol/commit/5516c7f054817201eff249a09fa5cc583c2c1c10) Thanks [@CiaranMn](https://github.com/CiaranMn)! - split out dedicated export path for html functions
+
 ## 0.1.2
 
 ### Patch Changes

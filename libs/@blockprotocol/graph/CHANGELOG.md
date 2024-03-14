@@ -1,5 +1,14 @@
 # @blockprotocol/graph
 
+## 0.3.4-canary-20240314113521
+
+### Patch Changes
+
+- [#1374](https://github.com/blockprotocol/blockprotocol/pull/1374) [`345ceaf3`](https://github.com/blockprotocol/blockprotocol/commit/345ceaf39abfdfac11e87cc7355746def3b888fb) Thanks [@CiaranMn](https://github.com/CiaranMn)! - account for draft entities when looking for a link's right entity in subgraph
+
+- Updated dependencies [[`5516c7f0`](https://github.com/blockprotocol/blockprotocol/commit/5516c7f054817201eff249a09fa5cc583c2c1c10)]:
+  - @blockprotocol/core@0.1.3-canary-20240314113521
+
 ## 0.3.3
 
 ### Patch Changes
