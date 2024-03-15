@@ -36,6 +36,9 @@
       "html": [
         "./dist/html.d.ts"
       ],
+      "html": [
+        "./dist/esm/html.d.ts"
+      ],
       "react": [
         "./dist/react.d.ts"
       ]

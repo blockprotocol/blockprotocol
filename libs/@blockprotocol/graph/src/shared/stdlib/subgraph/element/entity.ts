@@ -46,14 +46,24 @@ const getRevisionsForEntity = <Temporal extends boolean>(
     return entityRevisions;
   }
 
-  // check for the presence of draft versions of the entity in the subgraph
+  if (entityId.split("~")[2]) {
+    /**
+     * This entityId contains a draftId, and so we would have already found it via vertices[entityId] if it exists
+     */
+    return undefined;
+  }
+
+  /**
+   * We haven't found the exact entityId in the subgraph, but it might be qualified by a draftId
+   * – check for vertices which are keyed by a qualified version of the provided entityId
+   */
   const draftEntityIds = Object.keys(subgraph.vertices).filter((id) =>
     id.startsWith(`${entityId}~`),
   );
 
   if (draftEntityIds.length > 0) {
     /**
-     * Return a combined version of all the draft editions of this entity present in the subgraph.
+     * Return a combined object of all the draft editions of this entity present in the subgraph.
      * There may be multiple draft editions with the same timestamp, if:
      * 1. There are multiple draft series for the entity (i.e. multiple draftId where `${baseEntityId}~${draftId}`)
      * AND
