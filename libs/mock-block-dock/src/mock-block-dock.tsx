@@ -1,4 +1,4 @@
-import { HtmlBlockDefinition } from "@blockprotocol/core";
+import type { HtmlBlockDefinition } from "@blockprotocol/core/html";
 import { EntityRecordId } from "@blockprotocol/graph";
 import { useGraphEmbedderModule as useGraphEmbedderModuleNonTemporal } from "@blockprotocol/graph/react";
 import { useGraphEmbedderModule as useGraphEmbedderModuleTemporal } from "@blockprotocol/graph/temporal/react";

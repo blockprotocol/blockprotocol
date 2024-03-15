@@ -27,6 +27,11 @@
       "require": "./dist/cjs/index.js",
       "default": "./dist/esm/index.js"
     },
+    "./html": {
+      "import": "./dist/esm/html.js",
+      "require": "./dist/cjs/html.js",
+      "default": "./dist/esm/html.js"
+    },
     "./react": {
       "import": "./dist/esm/react.js",
       "require": "./dist/cjs/react.js",
@@ -40,6 +45,9 @@
     "*": {
       ".": [
         "./dist/esm/index.d.ts"
+      ],
+      "html": [
+        "./dist/esm/html.d.ts"
       ],
       "react": [
         "./dist/esm/react.d.ts"
