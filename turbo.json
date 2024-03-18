@@ -25,7 +25,7 @@
       "outputs": ["site-map.json"]
     },
     "@apps/site#build": {
-      "dependsOn": ["codegen"],
+      "dependsOn": ["codegen", "^build"],
       "outputs": ["dist/**", ".next/**", "public/schemas/**"]
     },
     "@blocks/feature-showcase#codegen": {

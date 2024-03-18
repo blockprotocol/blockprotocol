@@ -1,5 +1,5 @@
-import { CoreHandler } from "./core-handler";
-import { EmbedderInitMessage, Message } from "./types";
+import { CoreHandler } from "./core-handler.js";
+import type { EmbedderInitMessage, Message } from "./types.js";
 
 /**
  * Implements the Block Protocol Core Specification for blocks.

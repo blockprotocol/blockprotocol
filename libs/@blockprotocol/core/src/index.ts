@@ -1,6 +1,6 @@
-export { CoreBlockHandler } from "./core-block-handler";
-export { CoreEmbedderHandler } from "./core-embedder-handler";
-export { ModuleHandler } from "./module-handler";
+export { CoreBlockHandler } from "./core-block-handler.js";
+export { CoreEmbedderHandler } from "./core-embedder-handler.js";
+export { ModuleHandler } from "./module-handler.js";
 export type {
   BlockMetadata,
   BlockMetadataRepository,
@@ -16,4 +16,4 @@ export type {
   ModuleDefinition,
   ModuleMessageDefinition,
   UnknownRecord,
-} from "./types";
+} from "./types.js";

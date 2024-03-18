@@ -1,5 +1,5 @@
-import { CoreHandler } from "./core-handler";
-import { ModuleHandler } from "./module-handler";
+import type { CoreHandler } from "./core-handler.js";
+import type { ModuleHandler } from "./module-handler.js";
 
 // ---------------------------- UTILITIES ----------------------------- //
 
