@@ -1,5 +1,13 @@
 # @blockprotocol/core
 
+## 0.1.3
+
+### Patch Changes
+
+- [#1375](https://github.com/blockprotocol/blockprotocol/pull/1375) [`b2667eb1`](https://github.com/blockprotocol/blockprotocol/commit/b2667eb1d67b3bf4d91c1727fec1c52d9a77faed) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add dedicated export path for html functions
+
+- [#1373](https://github.com/blockprotocol/blockprotocol/pull/1373) [`fef95401`](https://github.com/blockprotocol/blockprotocol/commit/fef9540180e183381d82dc749cbc15aef267713b) Thanks [@CiaranMn](https://github.com/CiaranMn)! - convert to ESM only package. separate export path for /html block functions
+
 ## 0.1.2
 
 ### Patch Changes

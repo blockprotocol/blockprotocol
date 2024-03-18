@@ -1,5 +1,14 @@
 # @blockprotocol/graph
 
+## 0.3.4
+
+### Patch Changes
+
+- [#1374](https://github.com/blockprotocol/blockprotocol/pull/1374) [`345ceaf3`](https://github.com/blockprotocol/blockprotocol/commit/345ceaf39abfdfac11e87cc7355746def3b888fb) Thanks [@CiaranMn](https://github.com/CiaranMn)! - account for draft entities when looking for a link's right entity in subgraph
+
+- Updated dependencies [[`b2667eb1`](https://github.com/blockprotocol/blockprotocol/commit/b2667eb1d67b3bf4d91c1727fec1c52d9a77faed), [`fef95401`](https://github.com/blockprotocol/blockprotocol/commit/fef9540180e183381d82dc749cbc15aef267713b)]:
+  - @blockprotocol/core@0.1.3
+
 ## 0.3.3
 
 ### Patch Changes
