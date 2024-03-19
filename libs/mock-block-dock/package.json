@@ -1,6 +1,6 @@
 {
   "name": "mock-block-dock",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
@@ -34,10 +34,10 @@
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.1.2",
-    "@blockprotocol/graph": "0.3.3",
-    "@blockprotocol/hook": "0.1.7",
-    "@blockprotocol/service": "0.1.4",
+    "@blockprotocol/core": "0.1.3",
+    "@blockprotocol/graph": "0.3.4",
+    "@blockprotocol/hook": "0.1.8",
+    "@blockprotocol/service": "0.1.5",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@lit-labs/react": "1.1.1",
