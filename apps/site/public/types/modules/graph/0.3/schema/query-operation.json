@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/query-operation",
+  "title": "Query Operation",
+  "type": "object",
+  "properties": {
+    "multiFilter": {
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "$ref": "#/$defs/Field"
+                  },
+                  "operator": {
+                    "$ref": "#/$defs/FilterOperatorRequiringValue"
+                  },
+                  "value": {
+                    "$comment": "any JSON value allowed"
+                  }
+                },
+                "required": ["field", "operator", "value"]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "$ref": "#/$defs/Field"
+                  },
+                  "operator": {
+                    "$ref": "#/$defs/FilterOperatorWithoutValue"
+                  }
+                },
+                "required": ["field", "operator"]
+              }
+            ]
+          }
+        },
+        "operator": {
+          "$ref": "#/$defs/MultiFilterOperatorType"
+        }
+      },
+      "required": ["filters", "operator"]
+    },
+    "multiSort": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "$ref": "#/$defs/Field"
+          },
+          "desc": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": ["field"]
+      }
+    }
+  },
+  "$defs": {
+    "Field": {
+      "description": "the path to a JSON field, expressed as a list of path components where strings are object fields and numbers are array indices",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          }
+        ]
+      }
+    },
+    "FilterOperatorRequiringValue": {
+      "enum": [
+        "CONTAINS_SEGMENT",
+        "DOES_NOT_CONTAIN_SEGMENT",
+        "EQUALS",
+        "DOES_NOT_EQUAL",
+        "STARTS_WITH",
+        "ENDS_WITH"
+      ],
+      "type": "string"
+    },
+    "FilterOperatorWithoutValue": {
+      "enum": ["IS_DEFINED", "IS_NOT_DEFINED"],
+      "type": "string"
+    },
+    "MultiFilterOperatorType": {
+      "enum": ["AND", "OR"],
+      "type": "string"
+    }
+  }
+}

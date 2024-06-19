@@ -1,0 +1,35 @@
+== Changelog ==
+
+= 0.0.9 =
+* Bump write key used for data reporting
+
+= 0.0.8 =
+* Improved onboarding experience
+* Attempt to re-run migrations where they previously failed, for older dbs now supported
+
+= 0.0.7 =
+* Provide better support for querying with MariaDB
+
+= 0.0.6 =
+* Support older versions of MySQL (Minimum version is now 5.7.8 down from 8.0)
+
+= 0.0.5 =
+* Handle blocks being inside an iFrame in editor view (fixes incompatibility with Gutenberg plugin)
+
+= 0.0.4 =
+* Improved error handling, including more visible error messages
+* Add labels to custom block settings, fix 'found in post' for entities
+
+= 0.0.3 =
+* Add support for ChatGPT blocks
+* Notification when using unsupported database version
+* Fix rich text rendering
+* Icon for block category
+* Better error reporting
+
+= 0.0.2 =
+* Improve rich text editing handling, handling older blocks in editor and API endpoints.
+
+= 0.0.1 =
+* First release of the plugin.
+

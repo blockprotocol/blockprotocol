@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity",
+  "title": "Entity",
+  "type": "object",
+  "properties": {
+    "properties": {
+      "type": "object",
+      "$comment": "This should be constrained by the associated entity type",
+      "propertyNames": {
+        "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/base-url"
+      }
+    },
+    "metadata": {
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-metadata"
+    },
+    "linkData": {
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-data"
+    }
+  },
+  "required": ["metadata"]
+}

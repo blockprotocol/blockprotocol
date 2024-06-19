@@ -1,0 +1,54 @@
+# Service Module
+
+This document (version 0.1) defines a **service module** according to the terms set out in the [core specification](https://blockprotocol.org/spec/core).
+
+The service module enables blocks to interact with external services without needing to be provided with credentials: the embedding application calls the external service on the block's behalf.
+
+## Glossary
+
+**Provider:** a company, organization or person that provides a service or services (e.g. Mapbox)
+
+**Service:** a request handler which meets a specific functional goal, typically external to the embedding application and accessed via third-party API endpoint or integration (e.g. Retrieve Address).
+
+## Messages
+
+### Handling messages
+
+#### <Hidden>Handling messages </Hidden>Summary
+
+Any messages exchanged between application and block should be consistent with the shape and intent of the messages as described in this specification.
+
+While the messages are based on APIs available from external service providers, how exactly the embedding application generates responses to the block is beyond the scope of the Block Protocol, so long as the schema and intent of the message as described in this specification are met – i.e. the embedding application need not call the external service provider if they have another means of generating an appropriate response.
+
+#### <Hidden>Handling messages </Hidden>Specification
+
+Embedding applications MUST ensure that any responses they provide to blocks to messages sent under the service module are consistent with the schema and described intent of the message in this specification, and consistent with the response that the named service provider would return, except for any fields which are required by the named service provider but omitted from this specification (e.g. because they relate to authentication or other information that the block should not or does not have access to, and which can be added by the embedding application when making a request to an external service provider in order to produce a response for the block).
+
+Embedding applications MAY generate a response to a block's message by doing any of the following:
+
+- calling the external service provider directly (augmenting the block's original request with any additional fields or headers the service provider requires), OR
+- generating the response internally, OR
+- calling a third party that provides an appropriate response, whether the third party generates this response directly or by themselves making a request to the named service provider.
+
+### Error definitions
+
+#### <Hidden>Error definitions </Hidden>Specification
+
+If a request fails, embedding applications MUST provide blocks with an error which complies with this specification, i.e. contains a listed code and a message.
+
+Embedding applications MAY withhold or translate error codes and messages sent by the service provider when reporting an error to the block.
+
+Blocks MUST NOT rely on error codes and messages providing information that the named service provider would if contacted directly, e.g. relating to billing.
+
+### Message definitions
+
+#### <Hidden>Message definitions </Hidden>Summary
+
+The message signatures in the service specification aim to be as consistent as possible with the equivalent requests and responses from the named service provider, subject to exceptions mentioned elsewhere in this specification.
+
+#### <Hidden>Message definitions </Hidden>Specification
+
+The messages available for exchange in the service module are defined in the [module's JSON definition](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/service/src/service-module.json#L5) and are also
+listed below for ease of reference.
+
+<ServiceModuleMessageList />

@@ -7,7 +7,7 @@ Many changes, including bug fixes and documentation improvements can be implemen
 Some changes though are "substantial", and we ask that these be put through a bit of a design process and produce a consensus approved by the Block Protocol Core Team.
 
 [Active RFCs](https://github.com/blockprotocol/blockprotocol/discussions/categories/rfc)
-[Proposed RFCs](https://github.com/blockprotocol/blockprotocol/pulls?q=is%3Aopen+is%3Apr+label%3A%22category%3A+rfc%22)
+[Proposed RFCs](https://github.com/blockprotocol/blockprotocol/pulls?q=is%3Aopen+is%3Apr+label%3A%22area%3A+rfcs%22)
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@ Some changes though are "substantial", and we ask that these be put through a bi
 
 You should consider using this process if you intend to make "substantial" changes to the Block Protocol or its documentation. Some examples that would benefit from an RFC are:
 
-- The introduction of new services
+- The introduction of new modules
 - The removal of features that already shipped
 - The introduction of new idiomatic usage or conventions, even if they do not include code changes to the Block Protocol itself.
 

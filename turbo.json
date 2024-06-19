@@ -2,16 +2,74 @@
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
     "build": {
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "public/blocks/**",
-        "public/schemas/**",
-        "blocks-data.json",
-        "site-map.json"
-      ],
-      "dependsOn": ["codegen", "^build"]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
     },
-    "codegen": {}
+    "fix:eslint": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "lint:eslint": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "lint:tsc": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "@apps/site#codegen": {
+      "outputs": ["site-map.json"]
+    },
+    "@apps/site#build": {
+      "dependsOn": ["codegen", "^build"],
+      "outputs": ["dist/**", ".next/**", "public/schemas/**"]
+    },
+    "@blocks/feature-showcase#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/entity-types/**/*.gen.ts"]
+    },
+    "@blockprotocol/type-system#build": {
+      "dependsOn": [],
+      "outputs": ["dist/**", "wasm/**"]
+    },
+    "@blockprotocol/type-system#fix:eslint": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "@blockprotocol/type-system#lint:eslint": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "@blockprotocol/type-system#lint:tsc": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "@blockprotocol/type-system#test": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "mock-block-dock#codegen": {
+      "outputs": ["src/version.ts"]
+    },
+    "block-template-custom-element#build": {
+      "dependsOn": ["^build", "codegen"],
+      "outputs": ["dist/**"]
+    },
+    "block-template-custom-element#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/types/generated/**.ts"]
+    },
+    "block-template-react#build": {
+      "dependsOn": ["^build", "codegen"],
+      "outputs": ["dist/**"]
+    },
+    "block-template-react#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/types/generated/**.ts"]
+    }
   }
 }

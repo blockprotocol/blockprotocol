@@ -1,110 +1,92 @@
+"area: apps":
+  - "apps/**"
+  - "!apps/site/src/_pages/**"
+
+"area: apps > site":
+  - "apps/site/**"
+
+"area: blocks":
+  - "blocks/**"
+
 "area: dependencies":
-  - "**/patches/*"
-  - "**/patches/.*"
-  - "**/patches/**/*"
-  - "**/patches/**/.*"
+  - "**/patches/**"
   - "**/yarn.lock"
 
-"area: hub":
-  - "hub/*"
-  - "hub/.*"
-  - "hub/**/*"
-  - "hub/**/.*"
-
 "area: infra":
-  - ".github/*"
-  - ".github/.*"
-  - ".github/**/*"
-  - ".github/**/.*"
-  - ".husky/*"
-  - ".husky/.*"
-  - "scripts/*"
-  - "scripts/.*"
-  - "scripts/**/*"
-  - "scripts/**/.*"
+  - ".changeset/config.json"
+  - ".config/**"
+  - ".github/**"
+  - ".husky/**"
+  - "infra/**"
   - "*"
-  - ".*"
 
-"area: packages":
-  - "packages/*"
-  - "packages/.*"
-  - "packages/**/*"
-  - "packages/**/.*"
+"area: libs":
+  - "libs/**"
 
-"area: site":
-  - "site/*"
-  - "site/.*"
-  - "site/**/*"
-  - "site/**/.*"
+"area: tests":
+  - "**/*.test.ts"
+  - "**/tests/**"
 
-"area: spec":
-  - "site/src/_pages/spec/*"
-  - "site/src/_pages/spec/.*"
-  - "site/src/_pages/spec/**/*"
-  - "site/src/_pages/spec/**/.*"
+"area: user success":
+  - "apps/site/src/_pages/docs/**"
+  - "apps/site/src/_pages/spec/**"
+  - "apps/site/src/_pages/roadmap/**"
+  - "rfcs"
 
-"package: block-scripts":
-  - "packages/block-scripts/*"
-  - "packages/block-scripts/.*"
-  - "packages/block-scripts/**/*"
-  - "packages/block-scripts/**/.*"
+"area: user success > docs":
+  - "apps/site/src/_pages/docs/**"
 
-"package: block-template-custom-element":
-  - "packages/block-template-custom-element/*"
-  - "packages/block-template-custom-element/.*"
-  - "packages/block-template-custom-element/**/*"
-  - "packages/block-template-custom-element/**/.*"
+"area: user success > rfcs":
+  - "rfcs/**"
 
-"package: block-template-html":
-  - "packages/block-template-html/*"
-  - "packages/block-template-html/.*"
-  - "packages/block-template-html/**/*"
-  - "packages/block-template-html/**/.*"
+"area: user success > spec":
+  - "apps/site/src/_pages/spec/**"
 
-"package: block-template-react":
-  - "packages/block-template-react/*"
-  - "packages/block-template-react/.*"
-  - "packages/block-template-react/**/*"
-  - "packages/block-template-react/**/.*"
+"area: libs > @Þ/core":
+  - "libs/@blockprotocol/core/**"
 
-"package: blockprotocol":
-  - "packages/blockprotocol/*"
-  - "packages/blockprotocol/.*"
-  - "packages/blockprotocol/**/*"
-  - "packages/blockprotocol/**/.*"
+"area: libs > @Þ/design-system":
+  - "libs/@blockprotocol/design-system/**"
 
-"package: Þ core":
-  - "packages/@blockprotocol/core/*"
-  - "packages/@blockprotocol/core/.*"
-  - "packages/@blockprotocol/core/**/*"
-  - "packages/@blockprotocol/core/**/.*"
+"area: libs > @Þ/graph":
+  - "libs/@blockprotocol/graph/**"
 
-"package: create-block-app":
-  - "packages/create-block-app/*"
-  - "packages/create-block-app/.*"
-  - "packages/create-block-app/**/*"
-  - "packages/create-block-app/**/.*"
+"area: libs > @Þ/hook":
+  - "libs/@blockprotocol/hook/**"
 
-"package: Þ graph":
-  - "packages/@blockprotocol/graph/*"
-  - "packages/@blockprotocol/graph/.*"
-  - "packages/@blockprotocol/graph/**/*"
-  - "packages/@blockprotocol/graph/**/.*"
+"area: libs > @Þ/type-system":
+  - "libs/@blockprotocol/type-system-node/**"
+  - "libs/@blockprotocol/type-system-web/**"
 
-"package: mock-block-dock":
-  - "packages/mock-block-dock/*"
-  - "packages/mock-block-dock/.*"
-  - "packages/mock-block-dock/**/*"
-  - "packages/mock-block-dock/**/.*"
+"area: libs > @local/*":
+  - "libs/@local/**"
 
-"package: react-block-loader":
-  - "packages/react-block-loader/*"
-  - "packages/react-block-loader/.*"
-  - "packages/react-block-loader/**/*"
-  - "packages/react-block-loader/**/.*"
+"area: libs > block-scripts":
+  - "libs/block-scripts/**"
 
-"site: docs":
-  - "site/src/_pages/docs/*"
-  - "site/src/_pages/docs/.*"
-  - "site/src/_pages/docs/**/*"
-  - "site/src/_pages/docs/**/.*"
+"area: libs > block-template-custom-element":
+  - "libs/block-template-custom-element/**"
+
+"area: libs > block-template-html":
+  - "libs/block-template-html/**"
+
+"area: libs > block-template-react":
+  - "libs/block-template-react/**"
+
+"area: libs > blockprotocol":
+  - "libs/blockprotocol/**"
+
+"area: libs > create-block-app":
+  - "libs/create-block-app/**"
+
+"area: libs > mock-block-dock":
+  - "libs/mock-block-dock/**"
+
+"area: libs > wordpress-plugin":
+  - "libs/wordpress-plugin/**"
+
+"type: frontend":
+  - "libs/@blockprotocol/design-system/**"
+
+"type: writing":
+  - "apps/site/src/_pages/**"

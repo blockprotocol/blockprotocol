@@ -1,0 +1,151 @@
+.PromoStack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 34px;
+}
+
+.PromoCard {
+  --promo-y-padding: 30px;
+  --promo-x-padding: 40px;
+  background: white;
+  border: 1px solid rgb(221, 231, 240);
+  border-radius: 8px;
+  max-width: 826px;
+  overflow: hidden;
+}
+
+.PromoCardHeader {
+  padding: var(--promo-y-padding) var(--promo-x-padding) 0;
+
+  .PromoCardItems & {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.PromoCardSmallTitle {
+  font-family: colfax-web, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #0e1114;
+  margin-bottom: 4px;
+  margin-top: 0;
+}
+
+.PromoCardBigTitle {
+  font-family: colfax-web, sans-serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 42px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
+.PromoCardItems {
+  display: flex;
+  align-items: stretch;
+  gap: 51px;
+  padding: 0 var(--promo-x-padding);
+}
+
+.PromoCardItemsSmallGap {
+  gap: 36px;
+}
+
+.PromoCardItemsNoPaddingRight {
+  padding-right: 0;
+}
+
+.PromoCardItemsNoPaddingLeft {
+  padding-left: 0;
+}
+
+.PromoCardContent {
+  padding-bottom: var(--promo-y-padding);
+}
+
+.PromoList {
+  margin: 0;
+}
+
+.PromoListItem {
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.4;
+  color: black;
+  padding-left: 28px;
+  position: relative;
+  margin-bottom: 0;
+
+  &:not(:last-of-type) {
+    margin-bottom: 12px;
+  }
+
+  svg {
+    color: #91a5ba;
+    font-size: 16px;
+    position: absolute;
+    top: 3px;
+    left: 0;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  a {
+    text-decoration: none;
+    color: #6048e5;
+  }
+}
+
+.PromoListItemComingSoon {
+  svg {
+    color: #6f59ec;
+  }
+}
+
+.PromoListItemComingSoonText {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 140%;
+  text-transform: uppercase;
+  color: #6f59ec;
+}
+
+.PromoInfoText {
+  color: #758aa1;
+}
+
+.PromoInfoImage {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+
+  img {
+    height: auto;
+    width: 100%;
+  }
+
+  .PromoCardItemsNoPaddingRight & {
+    align-items: flex-end;
+  }
+
+  .PromoCardItemsNoPaddingLeft & {
+    align-items: flex-start;
+  }
+}
+
+.PromoCardPurpleText {
+  color: #6048e5;
+}

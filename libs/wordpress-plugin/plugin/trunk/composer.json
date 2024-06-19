@@ -1,0 +1,12 @@
+{
+  "name": "blockprotocol/blockprotocol",
+  "type": "wordpress-plugin",
+  "require": {
+    "sentry/sdk": "^3.3"
+  },
+  "config": {
+    "platform": {
+      "php": "7.4"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "extends": "@local/tsconfig/node.json",
+  "include": ["./"],
+  "exclude": ["dist"]
+}

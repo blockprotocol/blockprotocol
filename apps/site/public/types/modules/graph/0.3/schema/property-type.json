@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
+  "title": "Property Type",
+  "description": "Specifies the structure of a Block Protocol property type",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type"
+    },
+    "kind": {
+      "const": "propertyType"
+    },
+    "$id": {
+      "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/versioned-url"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "oneOf": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/propertyValues"
+      }
+    }
+  },
+  "required": ["$schema", "kind", "$id", "title", "oneOf"],
+  "additionalProperties": false,
+  "$defs": {
+    "propertyValues": {
+      "title": "propertyValues",
+      "description": "The definition of potential property values, either references to data types, objects made up of more property types, or an array where the items are defined from a set of other property values definitions.",
+      "oneOf": [
+        {
+          "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type-reference"
+        },
+        {
+          "title": "propertyObjectValue",
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "object"
+            },
+            "properties": {
+              "$ref": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type-object"
+            }
+          },
+          "minProperties": 1,
+          "required": ["type", "properties"]
+        },
+        {
+          "title": "propertyArrayValue",
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "array"
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneOf": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/propertyValues"
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": ["oneOf"],
+              "additionalProperties": false
+            },
+            "minItems": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxItems": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": ["type", "items"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

@@ -10,12 +10,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - uses: ./.github/actions/warm-up-repo
 
       - name: Sync Algolia Index
-        run: yarn workspace @blockprotocol/site exe scripts/sync-algolia-index.ts
+        run: yarn workspace @apps/site exe scripts/sync-algolia-index.ts
