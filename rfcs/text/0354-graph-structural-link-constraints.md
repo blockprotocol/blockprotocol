@@ -1,7 +1,10 @@
-- Feature Name: graph-structural-link-constraints
-- Start Date: 2022-06-14
-- RFC PR: [blockprotocol/blockprotocol#354](https://github.com/blockprotocol/blockprotocol/pull/354)
-- Block Protocol Discussion: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000)
+---
+Feature Name: "graph-structural-link-constraints"
+Start Date: 2022-06-14
+First Published: Pending
+RFC PR: https://github.com/blockprotocol/blockprotocol/pull/354
+RFC Discussion: Pending
+---
 
 # Summary
 
