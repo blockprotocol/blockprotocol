@@ -1,5 +1,5 @@
 ---
-Feature Name: Replace Me (choose a unique slug such as `my-feature`, this should be used in the name of the file)
+Feature Name: Replace Me (choose a unique slug wrapped in backticks, such as ``my-feature``, reflecting the name of the file)
 Start Date: Replace Me (replace with current YYYY-MM-DD date, upon creation)
 Published Date: Pending (replace with current YYYY-MM-DD date, immediately prior to merge)
 RFC PR: Replace Me (replace with URL to the PR containing this RFC, e.g. https://github.com/blockprotocol/blockprotocol/pull/0000)
