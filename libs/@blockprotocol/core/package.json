@@ -1,0 +1,68 @@
+{
+  "name": "@blockprotocol/core",
+  "version": "0.1.3",
+  "description": "Implementation of the Block Protocol Core specification for blocks and embedding applications",
+  "keywords": [
+    "blockprotocol",
+    "blocks",
+    "core"
+  ],
+  "homepage": "https://blockprotocol.org",
+  "bugs": {
+    "url": "https://github.com/blockprotocol/blockprotocol/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "libs/@blockprotocol/core"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./html": "./dist/html.js",
+    "./react": "./dist/react.js"
+  },
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "html": [
+        "./dist/html.d.ts"
+      ],
+      "react": [
+        "./dist/react.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn clean && tsc --skipLibCheck",
+    "clean": "rimraf ./dist/",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
+    "lint:tsc": "tsc --noEmit"
+  },
+  "dependencies": {
+    "es-module-lexer": "^0.10.5",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
+    "@local/tsconfig": "0.0.0-private",
+    "eslint": "8.33.0",
+    "rimraf": "^3.0.2",
+    "typescript": "4.9.4"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  }
+}

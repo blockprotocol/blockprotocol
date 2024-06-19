@@ -1,0 +1,17 @@
+{
+  "name": "html-block",
+  "version": "0.0.0",
+  "description": "Block Protocol block template for an HTML element-based block",
+  "author": "HASH",
+  "license": "MIT",
+  "schema": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
+  "variants": [],
+  "blockType": {
+    "entryPoint": "html"
+  },
+  "protocol": "0.3",
+  "displayName": "Template",
+  "icon": "public/omega.svg",
+  "image": "public/block-preview.png",
+  "source": "app.html"
+}

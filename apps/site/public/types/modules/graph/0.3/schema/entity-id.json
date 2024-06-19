@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-id",
+  "title": "Entity ID",
+  "description": "An entity ID is a unique identifier for an entity. It is a string that is unique within the scope of a graph.",
+  "type": "string"
+}

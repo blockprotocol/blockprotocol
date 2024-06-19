@@ -1,0 +1,4 @@
+{
+  "extends": "@local/tsconfig/node.json",
+  "exclude": ["./target/*"]
+}

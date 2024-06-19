@@ -1,98 +1,92 @@
+"area: apps":
+  - "apps/**"
+  - "!apps/site/src/_pages/**"
+
+"area: apps > site":
+  - "apps/site/**"
+
+"area: blocks":
+  - "blocks/**"
+
 "area: dependencies":
-  - "**/patches/*"
-  - "**/patches/.*"
-  - "**/patches/**/*"
-  - "**/patches/**/.*"
+  - "**/patches/**"
   - "**/yarn.lock"
 
-"area: hub":
-  - "hub/*"
-  - "hub/.*"
-  - "hub/**/*"
-  - "hub/**/.*"
-
 "area: infra":
-  - ".github/*"
-  - ".github/.*"
-  - ".github/**/*"
-  - ".github/**/.*"
-  - ".husky/*"
-  - ".husky/.*"
-  - "scripts/*"
-  - "scripts/.*"
-  - "scripts/**/*"
-  - "scripts/**/.*"
+  - ".changeset/config.json"
+  - ".config/**"
+  - ".github/**"
+  - ".husky/**"
+  - "infra/**"
   - "*"
-  - ".*"
 
-"area: packages":
-  - "packages/*"
-  - "packages/.*"
-  - "packages/**/*"
-  - "packages/**/.*"
+"area: libs":
+  - "libs/**"
 
-"area: site":
-  - "site/*"
-  - "site/.*"
-  - "site/**/*"
-  - "site/**/.*"
+"area: tests":
+  - "**/*.test.ts"
+  - "**/tests/**"
 
-"area: spec":
-  - "site/src/_pages/spec/*"
-  - "site/src/_pages/spec/.*"
-  - "site/src/_pages/spec/**/*"
-  - "site/src/_pages/spec/**/.*"
+"area: user success":
+  - "apps/site/src/_pages/docs/**"
+  - "apps/site/src/_pages/spec/**"
+  - "apps/site/src/_pages/roadmap/**"
+  - "rfcs"
 
-"package: block-scripts":
-  - "packages/block-scripts/*"
-  - "packages/block-scripts/.*"
-  - "packages/block-scripts/**/*"
-  - "packages/block-scripts/**/.*"
+"area: user success > docs":
+  - "apps/site/src/_pages/docs/**"
 
-"package: block-template":
-  - "packages/block-template/*"
-  - "packages/block-template/.*"
-  - "packages/block-template/**/*"
-  - "packages/block-template/**/.*"
+"area: user success > rfcs":
+  - "rfcs/**"
 
-"package: blockprotocol":
-  - "packages/blockprotocol/*"
-  - "packages/blockprotocol/.*"
-  - "packages/blockprotocol/**/*"
-  - "packages/blockprotocol/**/.*"
+"area: user success > spec":
+  - "apps/site/src/_pages/spec/**"
 
-"package: Þ core":
-  - "packages/@blockprotocol/core/*"
-  - "packages/@blockprotocol/core/.*"
-  - "packages/@blockprotocol/core/**/*"
-  - "packages/@blockprotocol/core/**/.*"
+"area: libs > @Þ/core":
+  - "libs/@blockprotocol/core/**"
 
-"package: create-block-app":
-  - "packages/create-block-app/*"
-  - "packages/create-block-app/.*"
-  - "packages/create-block-app/**/*"
-  - "packages/create-block-app/**/.*"
+"area: libs > @Þ/design-system":
+  - "libs/@blockprotocol/design-system/**"
 
-"package: Þ graph":
-  - "packages/@blockprotocol/graph/*"
-  - "packages/@blockprotocol/graph/.*"
-  - "packages/@blockprotocol/graph/**/*"
-  - "packages/@blockprotocol/graph/**/.*"
+"area: libs > @Þ/graph":
+  - "libs/@blockprotocol/graph/**"
 
-"package: mock-block-dock":
-  - "packages/mock-block-dock/*"
-  - "packages/mock-block-dock/.*"
-  - "packages/mock-block-dock/**/*"
-  - "packages/mock-block-dock/**/.*"
+"area: libs > @Þ/hook":
+  - "libs/@blockprotocol/hook/**"
 
-"package: react-block-loader":
-  - "packages/react-block-loader/*"
-  - "packages/react-block-loader/.*"
-  - "packages/react-block-loader/**/*"
-  - "packages/react-block-loader/**/.*"
+"area: libs > @Þ/type-system":
+  - "libs/@blockprotocol/type-system-node/**"
+  - "libs/@blockprotocol/type-system-web/**"
 
-"site: docs":
-  - "site/src/_pages/docs/*"
-  - "site/src/_pages/docs/.*"
-  - "site/src/_pages/docs/**/*"
-  - "site/src/_pages/docs/**/.*"
+"area: libs > @local/*":
+  - "libs/@local/**"
+
+"area: libs > block-scripts":
+  - "libs/block-scripts/**"
+
+"area: libs > block-template-custom-element":
+  - "libs/block-template-custom-element/**"
+
+"area: libs > block-template-html":
+  - "libs/block-template-html/**"
+
+"area: libs > block-template-react":
+  - "libs/block-template-react/**"
+
+"area: libs > blockprotocol":
+  - "libs/blockprotocol/**"
+
+"area: libs > create-block-app":
+  - "libs/create-block-app/**"
+
+"area: libs > mock-block-dock":
+  - "libs/mock-block-dock/**"
+
+"area: libs > wordpress-plugin":
+  - "libs/wordpress-plugin/**"
+
+"type: frontend":
+  - "libs/@blockprotocol/design-system/**"
+
+"type: writing":
+  - "apps/site/src/_pages/**"

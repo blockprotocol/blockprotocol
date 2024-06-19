@@ -1,0 +1,75 @@
+<!--
+* This is an embedding application for local development and debugging.
+* It is the application loaded into the browser when you run 'yarn dev' (or 'npm run dev')
+* No data from it will be published with your block or included as part of a production build.
+*
+* The component used here, 'MockBlockDock', does the following:
+* 1. It renders your block on the page and provides the initial properties specified below
+* 2. It holds an in-memory datastore of entities and links
+* 3. It listens for messages from your blocks and updates its datastore appropriately (e.g. to create a new entity)
+* 4. It displays a debug UI allowing you to see the contents of its datastore, and messages sent back and forth
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import htm from "https://esm.sh/htm?dev&deps=react@18.2.0,react-dom@18.2.0";
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0?dev&deps=react@18.2.0,react-dom@18.2.0";
+      import { createElement } from "https://esm.sh/react@18.2.0?dev&deps=react@18.2.0,react-dom@18.2.0";
+      import ReactDOM from "https://esm.sh/react-dom@18.2.0?dev&deps=react@18.2.0,react-dom@18.2.0";
+
+      const html = htm.bind(createElement);
+      const node = document.getElementById("app");
+
+      const blockEntity = {
+        metadata: {
+          recordId: {
+            entityId: "my-entity-1",
+            editionId: new Date(0).toISOString(),
+          },
+          entityTypeId:
+            "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
+        },
+        properties: {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/name/":
+            "World",
+        },
+      };
+
+      const initialData = {
+        initialEntities: [blockEntity],
+      };
+
+      const DevApp = () => {
+        return html`
+          <${MockBlockDock}
+            blockDefinition=${{
+              html: {
+                url: new URL("./src/app.html", import.meta.url).toString(),
+              },
+            }}
+            initialData=${initialData}
+            includeDefaultMockData
+            blockEntityRecordId=${blockEntity.metadata.recordId}
+            debug
+            simulateDatastoreLatency=${{
+              min: 100,
+              max: 200,
+            }}
+          />
+        `;
+        // `includeDefaultMockData` seeds the datastore with sample entities and links, remove it to start with just the contents of `initialData`
+        // modify `simulateDatastoreLatency` above to adjust the range of artificial latency in responses to datastore-related requests  (in ms)
+        // remove 'debug' above to start with the debug UI minimised. You can also toggle it in the UI
+        // hideDebugToggle <- add 'hideDebugToggle' to disable the debug UI entirely
+        // readonly <- add this above to start your block in readonly mode. You can also toggle it in the UI
+      };
+
+      ReactDOM.render(html` <${DevApp} /> `, node);
+    </script>
+  </body>
+</html>

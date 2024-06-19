@@ -1,0 +1,349 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  merge_group:
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: hashintel
+  TURBO_REMOTE_ONLY: true
+
+jobs:
+  linting:
+    name: Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - uses: ./.github/actions/warm-up-repo
+
+      - name: Run yarn lint:dependency-version-consistency
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:dependency-version-consistency; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Try running `yarn fix:dependency-version-consistency` locally to apply autofixes.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
+      - name: Run yarn lint:eslint
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:eslint; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Try running `yarn fix:eslint` locally to apply autofixes.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
+      - name: Run yarn lint:knip
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:knip; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Please fix the above errors locally for the check to pass.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
+      - name: Run yarn lint:lockfile-lint
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:lockfile-lint; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Try resetting yarn.lock to its previous state and then run `yarn install`.'
+            echo 'If your `~/.npmrc` mentions a custom registry, you should remove this setting first.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
+      - name: Run yarn lint:markdownlint
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:markdownlint; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Try running `yarn fix:markdownlint` locally to apply autofixes.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
+      - name: Run yarn lint:prettier
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:prettier; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Try running `yarn fix:prettier` locally to apply autofixes.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
+      - name: Run yarn lint:tsc
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:tsc; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Please fix the above errors locally for the check to pass.'
+            echo 'If you don’t see them, try merging target branch into yours.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
+        ## TODO: Replace with `yarn fix:yarn-dedupe` after upgrading to Yarn v3+
+        ## https://yarnpkg.com/cli/dedupe
+        ## https://github.com/yarnpkg/berry/issues/2297
+      - name: Run yarn lint:yarn-deduplicate
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:yarn-deduplicate; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Some dependencies can be deduplicated, which will make node_modules'
+            echo 'lighter and potentially save us from unexplainable bugs.'
+            echo 'Please run `yarn fix:yarn-deduplicate` locally and commit yarn.lock.'
+            echo 'You may need to run the command 2-3 times in some rare cases.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
+        ## yarn --frozen-lockfile does not work for monorepos, so using a workaround:
+        ## https://github.com/yarnpkg/yarn/issues/5840#issuecomment-467516207
+        ## TODO: Use `yarn install --immutable` after upgrading to Yarn v3+
+      - name: Check yarn.lock stability
+        if: ${{ success() || failure() }}
+        run: |
+          git diff yarn.lock
+          if ! git diff --exit-code yarn.lock; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Changes were detected in yarn.lock file after running `yarn install`.'
+            echo 'This makes runtime less stable, so should be avoided.'
+            echo 'Please run `yarn install` locally and commit yarn.lock.'
+            echo 'You may also want to run `yarn fix:yarn-deduplicate` just in case.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1;
+          fi
+
+  packages:
+    name: NPM Packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - uses: ./.github/actions/warm-up-repo
+
+      - name: Downgrade global NPM version
+        run: npm install --global npm@8.4.1 ## https://github.com/blockprotocol/blockprotocol/pull/281
+
+      - name: Run local registry
+        run: |
+          docker pull verdaccio/verdaccio:5
+          docker run -it --detach --rm --name verdaccio -p 4873:4873  verdaccio/verdaccio:5
+          yarn wait-on --timeout 30000 http://localhost:4873
+
+      - name: Publish NPM packages to local registry
+        run: yarn workspace @local/package-chores exe scripts/publish-to-local-registry.ts
+
+      - name: Smoke-test create-block-app (default template)
+        if: ${{ success() || failure() }}
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
+        env:
+          BLOCK_DIR_PATH: ~/test-blocks/default
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: Smoke-test create-block-app (custom-element template)
+        if: ${{ success() || failure() }}
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
+        env:
+          BLOCK_DIR_PATH: ~/test-blocks/custom-element
+          BLOCK_TEMPLATE: custom-element
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: Smoke-test create-block-app (html template)
+        if: ${{ success() || failure() }}
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
+        env:
+          BLOCK_DIR_PATH: ~/test-blocks/html
+          BLOCK_TEMPLATE: html
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: Smoke-test create-block-app (react template)
+        if: ${{ success() || failure() }}
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
+        env:
+          BLOCK_DIR_PATH: ~/test-blocks/react
+          BLOCK_TEMPLATE: react
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: Smoke-test create-block-app (unknown template)
+        if: ${{ success() || failure() }}
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
+        env:
+          BLOCK_DIR_PATH: ~/test-blocks/unknown
+          BLOCK_TEMPLATE: unknown
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: Show local registry logs and stop it
+        if: ${{ success() || failure() }}
+        run: |
+          docker logs verdaccio
+          docker stop verdaccio
+
+      - name: Upload block folder as artifact
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        if: ${{ success() || failure() }}
+        with:
+          name: ${{ env.BLOCK_NAME }}
+          path: |
+            ${{ env.BLOCK_DIR_PATH }}
+            !${{ env.BLOCK_DIR_PATH }}/node_modules/**
+          retention-days: 14
+
+  site-integration-tests:
+    name: "Site integration tests"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        device:
+          - chrome
+          - firefox
+          - iphone
+          - pixel
+          - safari
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
+        with:
+          path: apps/site/.next/cache
+          key: ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-${{ hashFiles('apps/site/**') }}
+          restore-keys: |
+            ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-
+            ${{ runner.os }}-site-next-cache
+
+      - uses: ./.github/actions/warm-up-repo
+        with:
+          playwright-deps: ${{ ((matrix.device == 'iphone' || matrix.device == 'safari') && 'webkit') || (matrix.device == 'firefox' && 'firefox') || 'chrome' }}
+
+      - name: Create temp files and folders
+        run: |
+          mkdir -p var/logs
+          mkdir -p var/site
+
+          cat << EOF > apps/site/.env.local
+          SESSION_SECRET=dev-session-secret
+          HASHING_SECRET=dev-hashing-secret
+
+          MONGODB_URI=mongodb://root:password@localhost:27017/
+          MONGODB_DB_NAME=local
+
+          S3_API_ENDPOINT=http://localhost:9000
+          S3_BUCKET=dev-bucket
+          S3_ACCESS_KEY_ID=dev-access-key
+          S3_SECRET_ACCESS_KEY=dev-secret-key
+          S3_BASE_URL=http://localhost:9000/dev-bucket
+
+          NEXT_PUBLIC_NPM_PUBLISHING=true
+
+          EOF
+
+      - name: Launch DB
+        if: ${{ success() || failure() }}
+        run: |
+          yarn dev:db 2>&1 | tee var/logs/db.log & ## ampersand enables background mode
+          yarn wait-on --timeout 60000 tcp:0.0.0.0:27017
+
+      - name: Seed DB
+        if: ${{ success() || failure() }}
+        run: yarn dev:seed-db
+
+      - name: Build and launch frontend
+        if: ${{ success() || failure() }}
+        run: |
+          yarn workspace @apps/site build
+          yarn workspace @apps/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
+          yarn wait-on --timeout 10000 http://0.0.0.0:3000
+        env:
+          TEST_COVERAGE: true
+
+      - name: Run Playwright tests
+        if: ${{ success() || failure() }}
+        run: yarn workspace @apps/site playwright test --project=integration-${{ matrix.device }}
+
+      - name: Stop frontend ## Updates .nyc_output
+        if: ${{ success() || failure() }}
+        run: kill -2 $(lsof -t -i:3000)
+        ## TODO: Replace with kill-port when SIGINT is supported as an argument
+        ## https://github.com/tiaanduplessis/kill-port/issues/48
+        # run: yarn kill-port 3000
+
+      - name: Stop DB
+        if: ${{ success() || failure() }}
+        run: docker-compose -f apps/site/docker-compose.dev.yml down
+
+      - name: Generate coverage report
+        if: ${{ success() || failure() }}
+        run: yarn nyc report --reporter=lcovonly --reporter=text
+
+      - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
+        if: ${{ success() || failure() }}
+        name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
+        with:
+          ## Temporarily disabled until https://github.com/codecov/codecov-action/issues/932 is resolved, and/or we rely
+          ## on coverage reports more strictly
+          fail_ci_if_error: false
+          files: coverage/lcov.info
+          flags: site-integration-${{ matrix.device }}
+          token: ${{ secrets.CODECOV_TOKEN }} ## not required for public repos, can be removed when https://github.com/codecov/codecov-action/issues/837 is resolved
+
+      - name: Show DB logs
+        if: ${{ success() || failure() }}
+        run: cat var/logs/db.log
+
+      - name: Show frontend logs
+        if: ${{ success() || failure() }}
+        run: cat var/logs/frontend.log
+
+      - name: Upload artifact playwright-report
+        if: ${{ success() || failure() }}
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: site-integration-tests-playwright-report-${{ matrix.device }}
+          path: apps/site/playwright-report
+          retention-days: 14
+
+      - name: Upload artifact playwright-var
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        if: ${{ success() || failure() }}
+        with:
+          name: site-integration-tests-var-${{ matrix.device }}
+          path: var
+          retention-days: 14

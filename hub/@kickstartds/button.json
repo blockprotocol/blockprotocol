@@ -1,7 +1,0 @@
-{
-  "repository": "git@github.com:kickstartDS/blocks.git",
-  "commit": "b1a6b814d82308d9f48c441d537073957b577052",
-
-  "workspace": "@kickstartds/block-button",
-  "distDir": "dist"
-}

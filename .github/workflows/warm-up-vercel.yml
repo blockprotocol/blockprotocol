@@ -1,32 +1,21 @@
-## Vercel uses AWS Lambda. When we call getStaticProps in fallback mode or getServerSideProps,
-## a cold Lambda function may take 5-15 seconds to execute. This pipeline warms up Lambda
-## containers for new deployments and keeps them up by fetching affected URLs every 10 minutes.
-
-name: Warm up Vercel
+name: Scheduled production API warm-up
 
 on:
-  deployment_status:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/10 * * * *" ## Every 10 minutes
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
-  fetch:
-    name: "Fetch"
-    if: github.event_name == 'schedule' || github.event.deployment_status.state == 'success'
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Fetch URLs that use AWS Lambda
-        run: |
-          cat << EOF > curl-format.txt
-            %{url_effective}\n
-              Status code: %{response_code}\n
-              Time: %{time_total}\n
-            \n
-          EOF
+  warm_up_production_api:
+    name: Warm up production API
+    runs-on: ubuntu-latest
 
-          for PATHNAME in "/@hash" "/@hash/blocks/divider/sandboxed-demo" "/api/me" "/types/DUMMY_ENTITY_ID"; do
-            npx retry-cli@0.6.0 -- curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
-          done
-        env:
-          BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
-          NODE_OPTIONS: --no-deprecation ## https://github.com/tirsen/retry-cli/issues/7
+    steps:
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - uses: ./.github/actions/warm-up-vercel
+        with:
+          deployment-base-url: "https://blockprotocol.org"

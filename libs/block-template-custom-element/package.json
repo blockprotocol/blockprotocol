@@ -1,0 +1,75 @@
+{
+  "name": "block-template-custom-element",
+  "version": "0.4.6",
+  "description": "Block Protocol block template for a custom element-based block",
+  "keywords": [
+    "blockprotocol",
+    "blocks"
+  ],
+  "homepage": "https://blockprotocol.org",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "libs/block-template-custom-element"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "scripts": {
+    "build": "block-scripts build",
+    "codegen": "block-scripts codegen && yarn format",
+    "dev": "block-scripts dev",
+    "fix:eslint": "eslint --fix .",
+    "format": "prettier --write --ignore-unknown .",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
+    "lint:tsc": "tsc --noEmit",
+    "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/cleanup-before-publishing.ts",
+    "serve": "block-scripts serve"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "trailingComma": "all"
+  },
+  "dependencies": {
+    "@blockprotocol/graph": "0.3.4",
+    "lit": "^2.4.1"
+  },
+  "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
+    "@types/react-dom": "18.0.9",
+    "@types/react-is": "18.2.0",
+    "block-scripts": "0.3.5",
+    "eslint": "8.33.0",
+    "mock-block-dock": "0.1.10",
+    "prettier": "2.8.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "block-scripts": {
+    "port": 63212
+  },
+  "blockprotocol": {
+    "blockType": {
+      "entryPoint": "custom-element",
+      "tagName": "my-block"
+    },
+    "displayName": "Template",
+    "icon": "public/omega.svg",
+    "image": "public/block-preview.png",
+    "name": "block-template-custom-element",
+    "protocol": "0.3",
+    "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/3",
+    "codegen": {
+      "outputFolder": "src/types/generated",
+      "targets": {
+        "block-entity.ts": [
+          {
+            "blockEntityType": true
+          }
+        ]
+      }
+    }
+  }
+}
