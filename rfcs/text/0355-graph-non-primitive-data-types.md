@@ -1,9 +1,9 @@
 ---
-- Feature Name: "graph-non-primitive-data-types"
-- Start Date: 2022-06-14
-- First Published: Pending
-- RFC PR: https://github.com/blockprotocol/blockprotocol/pull/355
-- RFC Discussion: Pending
+Feature Name: "graph-non-primitive-data-types"
+Start Date: 2022-06-14
+First Published: Pending
+RFC PR: https://github.com/blockprotocol/blockprotocol/pull/355
+RFC Discussion: Pending
 ---
 
 # Summary
