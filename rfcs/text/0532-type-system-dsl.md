@@ -1,9 +1,10 @@
-- Feature Name: type-system-dsl
-- Start Date: 2022-08-24
-- RFC
-  PR: [blockprotocol/blockprotocol#532](https://github.com/blockprotocol/blockprotocol/pull/532)
-- RFC
-  Discussion: [blockprotocol/blockprotocol#540](https://github.com/blockprotocol/blockprotocol/discussions/540)
+---
+Feature Name: "type-system-dsl"
+Start Date: 2022-08-24
+First Published: Pending
+RFC PR: https://github.com/blockprotocol/blockprotocol/pull/532
+RFC Discussion: https://github.com/blockprotocol/blockprotocol/discussions/540
+---
 
 # Summary
 
@@ -11,6 +12,7 @@
 
 This RFC proposes a new system for expressing all types outlined in [RFC 0352],
 and [RFC 0408] through a domain specific language (DSL).
+
 The DSL addresses pain points that working with raw types using JSON brings with and
 includes a toolbox of programs to aid in development, specifically geared towards
 developers.
