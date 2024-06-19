@@ -1,4 +1,4 @@
-import { Box, Skeleton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
@@ -9,7 +9,6 @@ import { Spacer } from "./spacer";
 import { VerifiedBadge } from "./verified-badge";
 
 type BlockCardProps = {
-  loading?: boolean;
   data?: Omit<BlockMetadata, "source" | "schema" | "variants">;
 };
 
@@ -21,53 +20,7 @@ const blockWidthStyles = {
   width: "100%",
 };
 
-const BlockCardLoading = () => {
-  return (
-    <Box
-      sx={{
-        maxWidth: 450,
-        minWidth: 288,
-        width: "100%",
-        borderRadius: "8px",
-        boxShadow: 1,
-        overflow: "hidden",
-      }}
-    >
-      <Box
-        sx={{
-          backgroundColor: "gray.20",
-          py: 3,
-          px: 2.75,
-        }}
-      >
-        <Skeleton variant="rectangular" height={186} />
-      </Box>
-      <Box
-        sx={{
-          p: 3,
-          backgroundColor: ({ palette }) => palette.common.white,
-        }}
-      >
-        <Skeleton variant="rectangular" width="100%" height={32} />
-        <Spacer height={1} />
-        <Skeleton variant="rectangular" width="72%" height={32} />
-        <Spacer height={3} />
-        <Skeleton variant="rectangular" width="72%" height={16} />
-        <Spacer height={1} />
-        <Skeleton variant="rectangular" width="52%" height={16} />
-      </Box>
-    </Box>
-  );
-};
-
-export const BlockCard: FunctionComponent<BlockCardProps> = ({
-  loading,
-  data,
-}) => {
-  if (loading) {
-    return <BlockCardLoading />;
-  }
-
+export const BlockCard: FunctionComponent<BlockCardProps> = ({ data }) => {
   if (!data) {
     return null;
   }
@@ -210,7 +163,7 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({
           </Box>
           <Typography
             variant="bpSmallCopy"
-            sx={{ display: "block", color: "gray.70" }}
+            sx={{ display: "block", color: ({ palette }) => palette.gray[70] }}
           >
             {description && description?.length <= 100
               ? description
@@ -236,63 +189,27 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({
             </Typography>
             <Typography
               sx={{ mr: 1.5, mb: 1.5 }}
-              color="gray.60"
+              color={({ palette }) => palette.gray[60]}
               variant="bpMicroCopy"
             >
               {version}
             </Typography>
-            <Typography color="gray.60" variant="bpMicroCopy">
+            <Typography
+              color={({ palette }) => palette.gray[60]}
+              variant="bpMicroCopy"
+            >
               <ClientOnlyLastUpdated value={lastUpdated} />
             </Typography>
           </Box>
           {/* Commenting this out since we don't currently track weekly downloads */}
           {/* <Stack direction="row">
      
-          <Typography color="gray.60" variant="bpMicroCopy">
+          <Typography color={({ palette }) => palette.gray[60]} variant="bpMicroCopy">
             344 weekly downloads
           </Typography>
         </Stack> */}
         </Box>
       </Box>
     </Link>
-  );
-};
-
-export const BlockCardComingSoon = () => {
-  return (
-    <Box
-      sx={{
-        py: 6,
-        px: 4.25,
-        minHeight: 400,
-        ...blockWidthStyles,
-        backgroundColor: "white",
-        border: ({ palette }) => `2px dashed ${palette.gray["30"]}`,
-        borderRadius: "8px",
-      }}
-    >
-      <Typography variant="bpHeading2" sx={{ lineHeight: 1 }}>
-        More blocks coming soon
-      </Typography>
-      <Spacer height={3} />
-      <Box sx={{ typography: "bpSmallCopy", color: "gray.60" }}>
-        We’re working on checklists, kanban boards, blockquotes, and many
-        more...
-      </Box>
-      <Spacer height={3} />
-      <Box sx={{ typography: "bpSmallCopy", color: "gray.60" }}>
-        You can also{" "}
-        <Link
-          href="/docs/developing-blocks"
-          sx={{
-            color: ({ palette }) => palette.purple[600],
-            fontWeight: 700,
-            textDecoration: "underline",
-          }}
-        >
-          build your own blocks.
-        </Link>
-      </Box>
-    </Box>
   );
 };

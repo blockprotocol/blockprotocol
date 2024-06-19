@@ -1,14 +1,49 @@
+import { extractBaseUrl } from "@blockprotocol/graph";
 import { BlockElementBase } from "@blockprotocol/graph/custom-element";
-// eslint-disable-next-line import/no-extraneous-dependencies
+import { getRoots } from "@blockprotocol/graph/stdlib";
+import { HookBlockHandler } from "@blockprotocol/hook";
 import { html } from "lit";
 
-type BlockEntityProperties = {
-  name: string;
-};
+import { propertyTypes } from "../src/data/property-types";
 
-export class TestCustomElementBlock extends BlockElementBase<BlockEntityProperties> {
+const paragraphId = "hook-paragraph";
+
+export class TestCustomElementBlock extends BlockElementBase {
+  private hookModule?: HookBlockHandler;
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
+  firstUpdated() {
+    if (!this.hookModule || this.hookModule.destroyed) {
+      this.hookModule = new HookBlockHandler({
+        element: this,
+      });
+    }
+
+    const paragraph = this.renderRoot.querySelector(`#${paragraphId}`);
+    if (!paragraph || !(paragraph instanceof HTMLParagraphElement)) {
+      throw new Error("No paragraph for hook module found in element DOM");
+    }
+
+    void this.hookModule.hook({
+      data: {
+        node: paragraph,
+        entityId: this.getBlockEntity()?.metadata.recordId.entityId,
+        hookId: null,
+        path: [extractBaseUrl(propertyTypes.description.$id)],
+        type: "text",
+      },
+    });
+  }
+
   private handleInput(event: Event) {
-    this.updateSelf({ name: (event.target as HTMLInputElement).value })
+    this.updateSelfProperties({
+      [extractBaseUrl(propertyTypes.name.$id)]: (
+        event.target as HTMLInputElement
+      ).value,
+    })
       // eslint-disable-next-line no-console -- intentional debugging tool
       .then(console.log)
       .catch(
@@ -18,22 +53,37 @@ export class TestCustomElementBlock extends BlockElementBase<BlockEntityProperti
   }
 
   render() {
+    const blockEntity = this.graph?.blockEntitySubgraph
+      ? getRoots(this.graph.blockEntitySubgraph)[0]!
+      : undefined;
     if (this.graph.readonly) {
-      return html`<h1>Hello, ${this.graph.blockEntity?.properties.name}</h1>
+      return html`<h1>
+          Hello,
+          ${blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)]}
+        </h1>
         <p>
-          The entityId of this block is ${this.graph.blockEntity?.entityId}.
+          The entityId of this block is
+          ${blockEntity?.metadata.recordId.entityId}.
         </p>
-        <p>${this.graph.blockEntity?.properties.name}</p>`;
+        <p>
+          ${blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)]}
+        </p>`;
     }
 
-    return html`<h1>Hello, ${this.graph.blockEntity?.properties.name}</h1>
+    return html`<h1>
+        Hello,
+        ${blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)]}
+      </h1>
       <p>
-        The entityId of this block is ${this.graph.blockEntity?.entityId}. Use
-        it to update its data when calling updateEntities.
+        The entityId of this block is
+        ${blockEntity?.metadata.recordId.entityId}. Use it to update its data
+        when calling updateEntities.
       </p>
       <input
         @change=${this.handleInput}
-        value=${this.graph.blockEntity?.properties.name}
-      />`;
+        value=${blockEntity?.properties[extractBaseUrl(propertyTypes.name.$id)]}
+      />
+      <h2>Hook-handled description display</h2>
+      <p id="hook-paragraph" />`;
   }
 }

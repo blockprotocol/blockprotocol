@@ -3,8 +3,6 @@
 - **RFC PR:** [blockprotocol/blockprotocol#352](https://github.com/blockprotocol/blockprotocol/pull/352)
 - **RFC Discussion:** [blockprotocol/blockprotocol#418](https://github.com/blockprotocol/blockprotocol/discussions/418)
 
-<!-- markdownlint-disable  MD036 -->
-
 # Summary
 
 [summary]: #summary
@@ -34,7 +32,7 @@ The Block Protocol operates in-between parties that otherwise have limited to no
 
 By getting both parties to agree to a prescriptive standard, new technological possibilities become viable. The Block Protocol is an example of this, enabling a new class of applications, ones that are able to dynamically load complex front-end components at run-time which are immediately usable and functional, even if the component was previously unknown to the application.
 
-The foundation of this capability is standardizing how requirements are expressed. Most notably, the block and entity schemas expressed through [the graph service](https://blockprotocol.org/docs/spec/graph-service) allow for dynamic resolution of expected input data.
+The foundation of this capability is standardizing how requirements are expressed. Most notably, the block and entity schemas expressed through [the graph module](https://blockprotocol.org/spec/graph) allow for dynamic resolution of expected input data.
 
 ---
 
@@ -112,16 +110,12 @@ In the following document we outline an approach to being more specific about th
 Given the motivation above and some other implications of the current design, this RFC attempts to:
 
 1.  make descriptions of data **discoverable**, **reusable**, and **composable**
-1.  remove the few instances where the specification currently misuses (modifies in a breaking way) JSON schema
+2.  remove the few instances where the specification currently misuses (modifies in a breaking way) JSON schema
 
 As well as addressing these existing shortcomings, this RFC seeks to:
 
-<!-- markdownlint-disable  MD029 -->
-
 3.  define a constrained type system that is able to describe any JSON object structure
 4.  refine the current way of defining links between entities, encapsulating the approach within the type system
-
-<!-- markdownlint-enable  MD029 -->
 
 ## Types
 
@@ -664,9 +658,9 @@ The `kind` keyword will be used to identify the kind of the schema being describ
 - `dataType`
 - `linkType`
 
-The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URIs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link (for more information see the [Reference-Level explanation](#reference-level-explanation)).
+The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URLs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link (for more information see the [Reference-Level explanation](#reference-level-explanation)).
 
-The `requiredLinks` keyword will be used to specify which links are required to be present for a given Entity Type. It is a list of URIs.
+The `requiredLinks` keyword will be used to specify which links are required to be present for a given Entity Type. It is a list of URLs.
 
 In JSON Schema `title` and `description` are described as follows: "Both of these keywords can be used to decorate a user interface with information about the data produced by this user interface".
 We repurpose these with slightly different meanings:
@@ -675,7 +669,7 @@ The `description` keyword for Link Types adds semantic meaning to a link (which 
 
 The `title` keyword refers to the name of the Type it is describing.
 
-The `$ref` keyword when used to refer to Property Types, Data Types, and Link Types URIs will always need to be equal to the key of the object which it is defined under (and vice versa). If the `$ref` is within an array's `items` definition, the URI should equal the nearest JSON Schema property name which is a URI. This is so that the property, data, or link type can be identified from an instance conforming to it (which it could not if the key, i.e. the property name, were different from the `$ref`).
+The `$ref` keyword when used to refer to Property Types, Data Types, and Link Types URLs will always need to be equal to the key of the object which it is defined under (and vice versa). If the `$ref` is within an array's `items` definition, the URL should equal the nearest JSON Schema property name which is a URL. This is so that the property, data, or link type can be identified from an instance conforming to it (which it could not if the key, i.e. the property name, were different from the `$ref`).
 
 ## Using the Types in the Block Protocol
 
@@ -683,7 +677,7 @@ The `$ref` keyword when used to refer to Property Types, Data Types, and Link Ty
 
 ### Interfacing with properties on Entities
 
-As the `title` of a Property Type is not guaranteed to be globally unique, the representation of entities is likely going to need to change, especially with regards to changing the keys to be the Property Type URIs:
+As the `title` of a Property Type is not guaranteed to be globally unique, the representation of entities is likely going to need to change, especially with regards to changing the keys to be the Property Type URLs:
 
 **An example of an entity in the current system:**
 
@@ -719,11 +713,11 @@ This will have an impact on how developers:
 
 #### Receiving Links and Linked Entities
 
-Links will likely continue to be returned in a separate collection alongside entities when blocks receive data. The data within the `linkGroups` object might change to incorporate the new type information, likely with the `path` field being replaced with something that uses the link type's URI.
+Links will likely continue to be returned in a separate collection alongside entities when blocks receive data. The data within the `linkGroups` object might change to incorporate the new type information, likely with the `path` field being replaced with something that uses the link type's URL.
 
 #### Creating Links
 
-The Link Functions will be updated to handle Link Types, removing the `path` fields and instead use the URI of the Link Type.
+The Link Functions will be updated to handle Link Types, removing the `path` fields and instead use the URL of the Link Type.
 
 ### Block Schemas
 
@@ -758,7 +752,7 @@ A **Data Type** is a JSON schema that satisfies the following JSON meta-schema:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/data-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/data-type",
   "description": "Specifies the structure of a Data Type",
   "type": "object",
   "properties": {
@@ -783,7 +777,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/text",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text",
     "title": "Text",
     "description": "An ordered sequence of characters",
     "type": "string"
@@ -795,7 +789,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/number",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/number",
     "title": "Number",
     "description": "An arithmetical value (in the Real number system)",
     "type": "number"
@@ -807,7 +801,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/boolean",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/boolean",
     "title": "Boolean",
     "description": "A True or False value",
     "type": "boolean"
@@ -819,7 +813,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/null",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/null",
     "title": "Null",
     "description": "A placeholder value representing 'nothing'",
     "type": "null"
@@ -831,7 +825,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/object",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/object",
     "title": "Object",
     "description": "A plain JSON object with no pre-defined structure",
     "type": "object"
@@ -843,7 +837,7 @@ This RFC defines the following primitive top-level Data Types
   ```json
   {
     "kind": "dataType",
-    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/empty-list",
+    "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list",
     "title": "Empty List",
     "description": "An Empty List",
     "type": "array",
@@ -861,7 +855,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
 
 ```json
 {
-  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/property-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/property-type",
   "description": "Specifies the structure of a Property Type",
   "type": "object",
   "properties": {
@@ -938,7 +932,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
         "properties": {
           "type": "object",
           "propertyNames": {
-            "$comment": "Property names must be a valid URI to a Property Type",
+            "$comment": "Property names must be a valid URL to a Property Type",
             "type": "string",
             "format": "uri"
           },
@@ -989,7 +983,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
       "type": "object",
       "properties": {
         "$ref": {
-          "$comment": "Property Object values must be defined through references to the same valid URI to a Property Type",
+          "$comment": "Property Object values must be defined through references to the same valid URL to a Property Type",
           "type": "string",
           "format": "uri"
         }
@@ -1025,10 +1019,10 @@ The `Favorite Quote` Property Type could define its value as being an instance o
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/favorite-quote",
+  "$id": "https://blockprotocol.org/@alice/property-type/favorite-quote",
   "title": "Favorite Quote",
   "oneOf": [
-    { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" }
+    { "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text" }
   ]
 }
 ```
@@ -1040,11 +1034,11 @@ The `Age` Property Type could define its value as being an instance of the `Numb
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/age",
+  "$id": "https://blockprotocol.org/@alice/property-type/age",
   "title": "Age",
   "oneOf": [
     {
-      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/Number"
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/Number"
     }
   ]
 }
@@ -1057,12 +1051,12 @@ The `User ID` Property Type could define its value as being _either_ an instance
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/user-id",
+  "$id": "https://blockprotocol.org/@alice/property-type/user-id",
   "title": "User ID",
   "oneOf": [
-    { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" },
+    { "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text" },
     {
-      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
     }
   ]
 }
@@ -1077,7 +1071,7 @@ A Property Type can also have an object made up of other properties as its value
   - that the list has a maximum amount of values
 - that a property is **required**
 
-The key of the property value is the Property Type URI, as shown in the following examples.
+The key of the property value is the Property Type URL, as shown in the following examples.
 
 **Example 1**
 
@@ -1086,21 +1080,21 @@ The `Contact Information` Property Type could define its value as being an objec
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/contact-information",
+  "$id": "https://blockprotocol.org/@alice/property-type/contact-information",
   "title": "Contact Information",
   "oneOf": [
     {
       "type": "object",
       "properties": {
-        "https://blockprotocol.org/types/@blockprotocol/property-type/email": {
-          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/email"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/email": {
+          "$ref": "https://blockprotocol.org/@blockprotocol/types/property-type/email"
         },
-        "https://blockprotocol.org/types/@blockprotocol/property-type/phone-number": {
-          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/phone-number"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/phone-number": {
+          "$ref": "https://blockprotocol.org/@blockprotocol/types/property-type/phone-number"
         }
       },
       "required": [
-        "https://blockprotocol.org/types/@blockprotocol/property-type/email"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/email"
       ]
     }
   ]
@@ -1114,22 +1108,22 @@ The `Interests` Property Type could define its value as being an object which ha
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/interests",
+  "$id": "https://blockprotocol.org/@alice/property-type/interests",
   "title": "Interests",
   "oneOf": [
     {
       "type": "object",
       "properties": {
-        "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-film": {
-          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-film"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/favorite-film": {
+          "$ref": "https://blockprotocol.org/@blockprotocol/types/property-type/favorite-film"
         },
-        "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song": {
-          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song"
+        "https://blockprotocol.org/@blockprotocol/types/property-type/favorite-song": {
+          "$ref": "https://blockprotocol.org/@blockprotocol/types/property-type/favorite-song"
         },
-        "https://blockprotocol.org/types/@blockprotocol/property-type/hobby": {
+        "https://blockprotocol.org/@blockprotocol/types/property-type/hobby": {
           "type": "array",
           "items": {
-            "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/hobby"
+            "$ref": "https://blockprotocol.org/@blockprotocol/types/property-type/hobby"
           }
         }
       }
@@ -1157,7 +1151,7 @@ For example if it is a strong requirement to model a grid of numbers, it can be 
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/numbers",
+  "$id": "https://blockprotocol.org/@alice/property-type/numbers",
   "title": "Numbers",
   "oneOf": [
     {
@@ -1165,7 +1159,7 @@ For example if it is a strong requirement to model a grid of numbers, it can be 
       "items": {
         "oneOf": [
           {
-            "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+            "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
           }
         ]
       }
@@ -1191,12 +1185,12 @@ The `User ID` Property Type could define its value as being _either_ an instance
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/user-id",
+  "$id": "https://blockprotocol.org/@alice/property-type/user-id",
   "title": "User ID",
   "oneOf": [
-    { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" },
+    { "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text" },
     {
-      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
     }
   ]
 }
@@ -1206,7 +1200,7 @@ Sample data when used in (simplified view of) an Entity
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/user-id": 42088130893
+  "https://blockprotocol.org/@alice/property-type/user-id": 42088130893
 }
 ```
 
@@ -1214,7 +1208,7 @@ or
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/user-id": "c09b1839-8084-4a2d-9713-5d074c9c6ce2"
+  "https://blockprotocol.org/@alice/property-type/user-id": "c09b1839-8084-4a2d-9713-5d074c9c6ce2"
 }
 ```
 
@@ -1225,18 +1219,18 @@ The `Contrived Property` Property Type could define its value as being _either_ 
 ```json
 {
   "kind": "propertyType",
-  "$id": "https://blockprotocol.org/types/@alice/property-type/contrived-property",
+  "$id": "https://blockprotocol.org/@alice/property-type/contrived-property",
   "title": "Contrived Property",
   "oneOf": [
     {
-      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
     },
     {
       "type": "array",
       "items": {
         "oneOf": [
           {
-            "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+            "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
           }
         ]
       },
@@ -1252,7 +1246,7 @@ Assuming that `Foo` accepts an instance of the `Text` Data Type
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/contrived-property": 32
+  "https://blockprotocol.org/@alice/property-type/contrived-property": 32
 }
 ```
 
@@ -1260,8 +1254,8 @@ or
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/contrived-property": {
-    "https://blockprotocol.org/types/@alice/property-type/foo": "something here"
+  "https://blockprotocol.org/@alice/property-type/contrived-property": {
+    "https://blockprotocol.org/@alice/property-type/foo": "something here"
   },
   ...
 }
@@ -1273,7 +1267,7 @@ A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/link-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/link-type",
   "description": "Specifies the structure of a Link Type",
   "properties": {
     "kind": {
@@ -1302,7 +1296,7 @@ A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
 ```json
 {
   "kind": "linkType",
-  "$id": "https://blockprotocol.org/types/@alice/link-type/owns",
+  "$id": "https://blockprotocol.org/@alice/link-type/owns",
   "title": "Owns",
   "description": "Have (something) as one's own; possess"
 }
@@ -1313,7 +1307,7 @@ A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
 ```json
 {
   "kind": "linkType",
-  "$id": "https://blockprotocol.org/types/@alice/link-type/submitted-by",
+  "$id": "https://blockprotocol.org/@alice/link-type/submitted-by",
   "title": "Submitted By",
   "description": "Suggested, proposed, or presented by"
 }
@@ -1325,7 +1319,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
 
 ```json
 {
-  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/entity-type",
+  "$id": "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
   "description": "Specifies the structure of an Entity Type",
   "type": "object",
   "properties": {
@@ -1342,7 +1336,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
       "$comment": "Default Entity instance",
       "type": "object",
       "propertyNames": {
-        "$comment": "Property names must be a valid URI to a Property Type",
+        "$comment": "Property names must be a valid URL to a Property Type",
         "type": "string",
         "format": "uri"
       }
@@ -1353,7 +1347,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
       "items": {
         "type": "object",
         "propertyNames": {
-          "$comment": "Property names must be a valid URI to a Property Type",
+          "$comment": "Property names must be a valid URL to a Property Type",
           "type": "string",
           "format": "uri"
         }
@@ -1375,7 +1369,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
     "links": {
       "type": "object",
       "propertyNames": {
-        "$comment": "Property names must be a valid URI to a link-type",
+        "$comment": "Property names must be a valid URL to a link-type",
         "type": "string",
         "format": "uri"
       },
@@ -1417,7 +1411,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
         "properties": {
           "type": "object",
           "propertyNames": {
-            "$comment": "Property names must be a valid URI to a Property Type",
+            "$comment": "Property names must be a valid URL to a Property Type",
             "type": "string",
             "format": "uri"
           },
@@ -1468,7 +1462,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
       "type": "object",
       "properties": {
         "$ref": {
-          "$comment": "Property Object values must be defined through references to the same valid URI to a Property Type",
+          "$comment": "Property Object values must be defined through references to the same valid URL to a Property Type",
           "type": "string",
           "format": "uri"
         }
@@ -1497,21 +1491,21 @@ Assuming that:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
+  "$id": "https://blockprotocol.org/@alice/entity-type/book",
   "type": "object",
   "title": "Book",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     },
-    "https://blockprotocol.org/types/@alice/property-type/published-on": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on"
+    "https://blockprotocol.org/@alice/property-type/published-on": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/published-on"
     },
-    "https://blockprotocol.org/types/@alice/property-type/blurb": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb"
+    "https://blockprotocol.org/@alice/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/blurb"
     }
   },
-  "required": ["https://blockprotocol.org/types/@alice/property-type/name"]
+  "required": ["https://blockprotocol.org/@alice/property-type/name"]
 }
 ```
 
@@ -1519,9 +1513,9 @@ This would accept Entity instances with the following shape
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
-  "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
-  "https://blockprotocol.org/types/@alice/property-type/blurb": ...
+  "https://blockprotocol.org/@alice/property-type/name": "The Time Machine",
+  "https://blockprotocol.org/@alice/property-type/published-on": "1895-05",
+  "https://blockprotocol.org/@alice/property-type/blurb": ...
 }
 ```
 
@@ -1542,29 +1536,29 @@ Assuming that:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/car",
+  "$id": "https://blockprotocol.org/@alice/entity-type/car",
   "type": "object",
   "title": "Car",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/make": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/make"
+    "https://blockprotocol.org/@alice/property-type/make": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/make"
     },
-    "https://blockprotocol.org/types/@alice/property-type/model": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/model"
+    "https://blockprotocol.org/@alice/property-type/model": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/model"
     },
-    "https://blockprotocol.org/types/@alice/property-type/spec": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/spec"
+    "https://blockprotocol.org/@alice/property-type/spec": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/spec"
     },
-    "https://blockprotocol.org/types/@alice/property-type/year": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/year"
+    "https://blockprotocol.org/@alice/property-type/year": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/year"
     },
-    "https://blockprotocol.org/types/@alice/property-type/brake-horsepower": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/brake-horsepower"
+    "https://blockprotocol.org/@alice/property-type/brake-horsepower": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/brake-horsepower"
     },
-    "https://blockprotocol.org/types/@alice/property-type/extra-trim": {
+    "https://blockprotocol.org/@alice/property-type/extra-trim": {
       "type": "array",
       "items": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/extra-trim"
+        "$ref": "https://blockprotocol.org/@alice/property-type/extra-trim"
       }
     }
   }
@@ -1575,11 +1569,11 @@ This would accept Entity instances with the following shape
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/make": "Mercedes-Benz",
-  "https://blockprotocol.org/types/@alice/property-type/model": "300 SL",
-  "https://blockprotocol.org/types/@alice/property-type/year": "1957",
-  "https://blockprotocol.org/types/@alice/property-type/brake-horsepower": 222,
-  "https://blockprotocol.org/types/@alice/property-type/extra-trim": [
+  "https://blockprotocol.org/@alice/property-type/make": "Mercedes-Benz",
+  "https://blockprotocol.org/@alice/property-type/model": "300 SL",
+  "https://blockprotocol.org/@alice/property-type/year": "1957",
+  "https://blockprotocol.org/@alice/property-type/brake-horsepower": 222,
+  "https://blockprotocol.org/@alice/property-type/extra-trim": [
     "Leather Seats",
     "Cream and Red"
   ]
@@ -1597,21 +1591,21 @@ Assuming that:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/product",
+  "$id": "https://blockprotocol.org/@alice/entity-type/product",
   "type": "object",
   "title": "Product",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/tag": {
+    "https://blockprotocol.org/@alice/property-type/tag": {
       "type": "array",
       "items": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/tag"
+        "$ref": "https://blockprotocol.org/@alice/property-type/tag"
       },
       "minItems": 1,
       "maxItems": 5
     },
     ...
   },
-  "required": ["https://blockprotocol.org/types/@alice/property-type/tag"]
+  "required": ["https://blockprotocol.org/@alice/property-type/tag"]
 }
 ```
 
@@ -1619,7 +1613,7 @@ This would accept Entity instances with the following shape
 
 ```json
 {
-  "https://blockprotocol.org/types/@alice/property-type/tag": [
+  "https://blockprotocol.org/@alice/property-type/tag": [
     "Clothing",
     "Summer",
     "Leisurewear"
@@ -1647,22 +1641,22 @@ Assuming that:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
+  "$id": "https://blockprotocol.org/@alice/entity-type/book",
   "type": "object",
   "title": "Book",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     },
-    "https://blockprotocol.org/types/@alice/property-type/published-on": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on"
+    "https://blockprotocol.org/@alice/property-type/published-on": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/published-on"
     },
-    "https://blockprotocol.org/types/@alice/property-type/blurb": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb"
+    "https://blockprotocol.org/@alice/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/blurb"
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/written-by": {}
+    "https://blockprotocol.org/@alice/link-type/written-by": {}
   }
 }
 ```
@@ -1675,7 +1669,7 @@ This would accept Entity instances with the following shape
   {
     "entityId": 111,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Herbert George Wells",
+      "https://blockprotocol.org/@alice/property-type/name": "Herbert George Wells",
       ...
     }
   },
@@ -1683,12 +1677,12 @@ This would accept Entity instances with the following shape
   {
     "entityId": 112,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
-      "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
-      "https://blockprotocol.org/types/@alice/property-type/blurb": "brulb"
+      "https://blockprotocol.org/@alice/property-type/name": "The Time Machine",
+      "https://blockprotocol.org/@alice/property-type/published-on": "1895-05",
+      "https://blockprotocol.org/@alice/property-type/blurb": "brulb"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/written-by": 111 // referring to the Person entity ID
+      "https://blockprotocol.org/@alice/link-type/written-by": 111 // referring to the Person entity ID
     }
   }
 ]
@@ -1701,24 +1695,24 @@ The `UK Address` Entity Type could contain Property Types `address-line-1`, `pos
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/uk-address",
+  "$id": "https://blockprotocol.org/@alice/entity-type/uk-address",
   "type": "object",
   "title": "UK Address",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/address-line-1": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/address-line-1"
+    "https://blockprotocol.org/@alice/property-type/address-line-1": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/address-line-1"
     },
-    "https://blockprotocol.org/types/@alice/property-type/postcode": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/postcode"
+    "https://blockprotocol.org/@alice/property-type/postcode": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/postcode"
     },
-    "https://blockprotocol.org/types/@alice/property-type/city": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/city"
+    "https://blockprotocol.org/@alice/property-type/city": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/city"
     }
   },
   "required": [
-    "https://blockprotocol.org/types/@alice/property-type/address-line-1",
-    "https://blockprotocol.org/types/@alice/property-type/postcode",
-    "https://blockprotocol.org/types/@alice/property-type/city"
+    "https://blockprotocol.org/@alice/property-type/address-line-1",
+    "https://blockprotocol.org/@alice/property-type/postcode",
+    "https://blockprotocol.org/@alice/property-type/city"
   ]
 }
 ```
@@ -1728,12 +1722,12 @@ The `Organization` Entity Type could contain the Property Type `Name`
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/organization",
+  "$id": "https://blockprotocol.org/@alice/entity-type/organization",
   "type": "object",
   "title": "Organization",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     }
   }
 }
@@ -1744,13 +1738,13 @@ The `Building` Entity Type could contain a `Located At` link, and a `Tenant` lin
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/building",
+  "$id": "https://blockprotocol.org/@alice/entity-type/building",
   "type": "object",
   "title": "Bulding",
   "properties": {},
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/located-at": {},
-    "https://blockprotocol.org/types/@alice/link-type/tenant": {}
+    "https://blockprotocol.org/@alice/link-type/located-at": {},
+    "https://blockprotocol.org/@alice/link-type/tenant": {}
   }
 }
 ```
@@ -1763,24 +1757,24 @@ This would accept Entity instances with the following shape
   {
     "entityId": 113,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/address-line-1": "Buckingham Palace",
-      "https://blockprotocol.org/types/@alice/property-type/postcode": "SW1A 1AA",
-      "https://blockprotocol.org/types/@alice/property-type/city": "London"
+      "https://blockprotocol.org/@alice/property-type/address-line-1": "Buckingham Palace",
+      "https://blockprotocol.org/@alice/property-type/postcode": "SW1A 1AA",
+      "https://blockprotocol.org/@alice/property-type/city": "London"
     }
   },
   // Organization entity
   {
     "entityId": 114,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
+      "https://blockprotocol.org/@alice/property-type/name": "HASH, Ltd."
     }
   }
   // Building entity
   {
     "entityId": 115,
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/located-at": 113, // referring to the UK Address entity ID
-      "https://blockprotocol.org/types/@alice/link-type/tenant": 114 // referring to the Organization entity ID
+      "https://blockprotocol.org/@alice/link-type/located-at": 113, // referring to the UK Address entity ID
+      "https://blockprotocol.org/@alice/link-type/tenant": 114 // referring to the Organization entity ID
     }
   }
 ]
@@ -1801,26 +1795,24 @@ Assuming that:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
+  "$id": "https://blockprotocol.org/@alice/entity-type/book",
   "type": "object",
   "title": "Book",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     },
-    "https://blockprotocol.org/types/@alice/property-type/published-on": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on"
+    "https://blockprotocol.org/@alice/property-type/published-on": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/published-on"
     },
-    "https://blockprotocol.org/types/@alice/property-type/blurb": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb"
+    "https://blockprotocol.org/@alice/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/blurb"
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/written-by": {}
+    "https://blockprotocol.org/@alice/link-type/written-by": {}
   },
-  "requiredLinks": [
-    "https://blockprotocol.org/types/@alice/link-type/written-by"
-  ]
+  "requiredLinks": ["https://blockprotocol.org/@alice/link-type/written-by"]
 }
 ```
 
@@ -1832,7 +1824,7 @@ This would accept Entity instances with the following shape
   {
     "entityId": 111,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Herbert George Wells",
+      "https://blockprotocol.org/@alice/property-type/name": "Herbert George Wells",
       ...
     }
   },
@@ -1840,12 +1832,12 @@ This would accept Entity instances with the following shape
   {
     "entityId": 112,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
-      "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
-      "https://blockprotocol.org/types/@alice/property-type/blurb": ...
+      "https://blockprotocol.org/@alice/property-type/name": "The Time Machine",
+      "https://blockprotocol.org/@alice/property-type/published-on": "1895-05",
+      "https://blockprotocol.org/@alice/property-type/blurb": ...
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/written-by": 111 // referring to the Person entity ID
+      "https://blockprotocol.org/@alice/link-type/written-by": 111 // referring to the Person entity ID
     }
   }
 ]
@@ -1854,7 +1846,7 @@ This would accept Entity instances with the following shape
 #### Specifying there is a List of Links
 
 The Entity Type can also express that it can have multiple outgoing links of the same type.
-Furthermore list of links can be constrainted with `minItems` and `maxItems`.
+Furthermore list of links can be constrained with `minItems` and `maxItems`.
 
 **Example 1**
 
@@ -1863,16 +1855,16 @@ The `Person` Entity Type could contain some Property Types, and multiple `Friend
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/person",
+  "$id": "https://blockprotocol.org/@alice/entity-type/person",
   "type": "object",
   "title": "Person",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/friend-of": {
+    "https://blockprotocol.org/@alice/link-type/friend-of": {
       "type": "array",
       "ordered": false
     }
@@ -1888,22 +1880,22 @@ This would accept Entity instances with the following shape
   {
     "entityId": 211,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Alice"
+      "https://blockprotocol.org/@alice/property-type/name": "Alice"
     }
   },
   {
     "entityId": 212,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Bob"
+      "https://blockprotocol.org/@alice/property-type/name": "Bob"
     }
   },
   {
     "entityId": 213,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Charlie"
+      "https://blockprotocol.org/@alice/property-type/name": "Charlie"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/friend-of": [211, 212] // referring to the Person entity IDs, where the array ordering is unstable
+      "https://blockprotocol.org/@alice/link-type/friend-of": [211, 212] // referring to the Person entity IDs, where the array ordering is unstable
     }
   }
 ]
@@ -1920,16 +1912,16 @@ The `Playlist` Entity Type could contain some Property Types, and an _ordered_ l
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/playlist",
+  "$id": "https://blockprotocol.org/@alice/entity-type/playlist",
   "type": "object",
   "title": "Playlist",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/contains": {
+    "https://blockprotocol.org/@alice/link-type/contains": {
       "type": "array",
       "ordered": true
     }
@@ -1942,12 +1934,12 @@ The `Song` Entity Type could contain some Property Types.
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/Song",
+  "$id": "https://blockprotocol.org/@alice/entity-type/Song",
   "type": "object",
   "title": "Song",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     }
   }
 }
@@ -1961,31 +1953,29 @@ This would accept Entity instances with the following shape
   {
     "entityId": 312,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Rocket Man"
+      "https://blockprotocol.org/@alice/property-type/name": "Rocket Man"
     }
   },
   {
     "entityId": 313,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Du Hast"
+      "https://blockprotocol.org/@alice/property-type/name": "Du Hast"
     }
   },
   {
     "entityId": 314,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Valley of the Shadows"
+      "https://blockprotocol.org/@alice/property-type/name": "Valley of the Shadows"
     }
   },
   // Playlist
   {
     "entityId": 315,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Favorite Songs"
+      "https://blockprotocol.org/@alice/property-type/name": "Favorite Songs"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/contains": [
-        312, 314, 313
-      ] // referring to the song entity IDs, ordering is intentional and stable
+      "https://blockprotocol.org/@alice/link-type/contains": [312, 314, 313] // referring to the song entity IDs, ordering is intentional and stable
     }
   }
 ]
@@ -1998,17 +1988,17 @@ The `Page` Entity Type could contain some Property Types, a `Written By` link, a
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/page",
+  "$id": "https://blockprotocol.org/@alice/entity-type/page",
   "type": "object",
   "title": "Page",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/text": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/text"
+    "https://blockprotocol.org/@alice/property-type/text": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/text"
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/link-type/written-by": {},
-    "https://blockprotocol.org/types/@alice/link-type/contains": {
+    "https://blockprotocol.org/@alice/link-type/written-by": {},
+    "https://blockprotocol.org/@alice/link-type/contains": {
       "type": "array",
       "ordered": true
     }
@@ -2026,41 +2016,39 @@ This would accept Entity instances with the following shape
   {
     "entityId": 316,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas."
+      "https://blockprotocol.org/@alice/property-type/text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas."
     }
   },
   // Heading Entity
   {
     "entityId": 317,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Duo Reges: constructio interrete."
+      "https://blockprotocol.org/@alice/property-type/name": "Duo Reges: constructio interrete."
     }
   },
   // Divider Entity
   {
     "entityId": 318,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/width": "full"
+      "https://blockprotocol.org/@alice/property-type/width": "full"
     }
   },
   // User Entity
   {
     "entityId": 319,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Alice"
+      "https://blockprotocol.org/@alice/property-type/name": "Alice"
     }
   },
   // Page Entity
   {
     "entityId": 320,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "Lorum Ipsum"
+      "https://blockprotocol.org/@alice/property-type/name": "Lorum Ipsum"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/link-type/written-by": 319, // referring to the User entity ID
-      "https://blockprotocol.org/types/@alice/link-type/contains": [
-        317, 316, 318
-      ] // referring to IDs above, ordering is intentional and stable
+      "https://blockprotocol.org/@alice/link-type/written-by": 319, // referring to the User entity ID
+      "https://blockprotocol.org/@alice/link-type/contains": [317, 316, 318] // referring to IDs above, ordering is intentional and stable
     }
   }
 ]
@@ -2080,7 +2068,7 @@ We can define the new JSON Schema keywords that the system uses through JSON Sch
   "links": {
     "type": "object",
     "propertyNames": {
-      "$comment": "Property names must be a valid URI to a link-type",
+      "$comment": "Property names must be a valid URL to a link-type",
       "type": "string",
       "format": "uri"
     },
@@ -2132,7 +2120,7 @@ The `description` keyword for Link Types add semantic meaning to a link (which c
 
 The `title` keyword refers to the name of the Type it is describing.
 
-The `$ref` keyword when used to refer to Property Types, Data Types, and Link Types URIs will always need to be equal to the key of the object which it is defined under (and vice versa). If the `$ref` is within an array's `items` definition, the URI should equal the nearest JSON Schema property name which is a URI. This is so that the property, data, or link type can be identified from an instance conforming to it (which it could not if the key, i.e. the property name, were different from the `$ref`).
+The `$ref` keyword when used to refer to Property Types, Data Types, and Link Types URLs will always need to be equal to the key of the object which it is defined under (and vice versa). If the `$ref` is within an array's `items` definition, the URL should equal the nearest JSON Schema property name which is a URL. This is so that the property, data, or link type can be identified from an instance conforming to it (which it could not if the key, i.e. the property name, were different from the `$ref`).
 
 This _is_ valid
 
@@ -2170,17 +2158,17 @@ For the most part, we're using existing JSON Schema keywords, but it would be pr
 
 ## Using the Types in the Block Protocol
 
-Using the proposed type system for Block Protocol imposes changes on the Graph Service and how Block Schemas are defined.
+Using the proposed type system for Block Protocol imposes changes on the Graph Module and how Block Schemas are defined.
 
 While the examples so far have shown `properties` and `links` side by side in the Entity instances, the Block Protocol would treat these two concepts separately.
 
-Messages in the Graph Service are currently specified under [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json) with additional requirements specified [here](https://blockprotocol.org/docs/spec/graph-service).
+Messages in the Graph Module are currently specified under [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json) with additional requirements specified [here](https://blockprotocol.org/spec/graph).
 
 ### Interfacing with properties on Entities
 
-A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URIs. As seen in the examples in earlier sections, properties that use simple keys will now have to point at _Property Type URIs_.
+A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URLs. As seen in the examples in earlier sections, properties that use simple keys will now have to point at _Property Type URLs_.
 
-**An example of an [`Entity`](https://blockprotocol.org/types/services/graph/entity) instance in the current system:**
+**An example of an [`Entity`](https://blockprotocol.org/types/modules/graph/0.2/schema/entity) instance in the current system:**
 
 ```json
 {
@@ -2200,10 +2188,10 @@ A key change for allowing the proposed type system to work is moving away from a
 {
   "entityId": 111,
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": "Arthur Philip Dent",
-    "https://blockprotocol.org/types/@alice/property-type/age": 30,
-    "https://blockprotocol.org/types/@alice/property-type/planet-of-origin": "Earth",
-    "https://blockprotocol.org/types/@alice/property-type/occupation": "Intergalactic Traveler"
+    "https://blockprotocol.org/@alice/property-type/name": "Arthur Philip Dent",
+    "https://blockprotocol.org/@alice/property-type/age": 30,
+    "https://blockprotocol.org/@alice/property-type/planet-of-origin": "Earth",
+    "https://blockprotocol.org/@alice/property-type/occupation": "Intergalactic Traveler"
   }
 }
 ```
@@ -2220,17 +2208,17 @@ This change canonicalizes property keys, such that they uniquely identify a Prop
 
 - how Block Schemas are defined
 - the reusability of properties and data types (and the increased need for type discovery to facilitate this)
-  - block authors can share and use types through URIs explicitly
+  - block authors can share and use types through URLs explicitly
 
-> 💡 Notice that `entityId`s are replaced by a Property Type URI that resides in the `/@blockprotocol` namespace. This is an implementation detail, and not something that is strictly dictated by the proposal.
+> 💡 Notice that `entityId`s are replaced by a Property Type URL that resides in the `/@blockprotocol` namespace. This is an implementation detail, and not something that is strictly dictated by the proposal.
 
 ### Interfacing with Linked Entities
 
 #### Receiving Links and Linked Entities
 
-Link groups and Linked entities in the Graph Service are currently supplied outside the entity as separate objects. This behavior will stay the same, but the objects received will be of a different shape.
+Link groups and Linked entities in the Graph Module are currently supplied outside the entity as separate objects. This behavior will stay the same, but the objects received will be of a different shape.
 
-**An example of a [`LinkGroup`](https://blockprotocol.org/types/services/graph/link-group) instance in the current system:**
+**An example of a [`LinkGroup`](https://blockprotocol.org/types/modules/graph/0.2/schema/link-group) instance in the current system:**
 
 ```json
 {
@@ -2251,26 +2239,26 @@ Link groups and Linked entities in the Graph Service are currently supplied outs
 ```json
 {
   "sourceEntityId": "user1",
-  "linkType": "https://blockprotocol.org/types/@alice/link-type/company",
+  "linkType": "https://blockprotocol.org/@alice/link-type/company",
   "ordered": false,
   "links": [
     {
       "sourceEntityId": "user1",
       "destinationEntityId": "company1",
-      "linkType": "https://blockprotocol.org/types/@alice/link-type/company"
+      "linkType": "https://blockprotocol.org/@alice/link-type/company"
     }
   ]
 }
 ```
 
-> 💡 In the proposed system example instance, the `path` key has been replaced with `linkType`. This is an implementation detail which is not dictated by the proposal. Alternatives could be `linkUri`, `link`, etc.
+> 💡 In the proposed system example instance, the `path` key has been replaced with `linkType`. This is an implementation detail which is not dictated by the proposal. Alternatives could be `linkUrl`, `link`, etc.
 
-Links (which are provided by the `links` field in the items of the `LinkGroups` array) will use Link Type URIs instead of a `path`.
+Links (which are provided by the `links` field in the items of the `LinkGroups` array) will use Link Type URLs instead of a `path`.
 The `LinkGroup` has a new key `ordered` which specifies whether or not the `links` array is ordered. More on this in the [Ordering of links](#ordering-of-links) section.
 
 As for the linked entities returned by `linkedEntities`, the imposed changes to Entities will apply here as well.
 
-**An example of [`linkedEntities`](https://blockprotocol.org/types/services/graph/entity) instance in the current system:**
+**An example of [`linkedEntities`](https://blockprotocol.org/types/modules/graph/0.2/schema/entity) instance in the current system:**
 
 ```json
 [
@@ -2290,7 +2278,7 @@ As for the linked entities returned by `linkedEntities`, the imposed changes to 
   {
     "entityId": 222,
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
+      "https://blockprotocol.org/@alice/property-type/name": "HASH, Ltd."
     }
   }
 ]
@@ -2298,9 +2286,9 @@ As for the linked entities returned by `linkedEntities`, the imposed changes to 
 
 #### Creating Links
 
-Link creation will not be using arbitrary `path`s, instead Link Types must be used through Link Type URIs.
+Link creation will not be using arbitrary `path`s, instead Link Types must be used through Link Type URLs.
 
-**An example of a [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
+**An example of a [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json#L395) instance in the current system:**
 
 ```json
 {
@@ -2316,11 +2304,11 @@ Link creation will not be using arbitrary `path`s, instead Link Types must be us
 {
   "sourceEntityId": 111,
   "destinationEntityId": 222,
-  "link": "https://blockprotocol.org/types/@alice/link-type/company"
+  "link": "https://blockprotocol.org/@alice/link-type/company"
 }
 ```
 
-Any link will use Link Type URIs instead of a `path`.
+Any link will use Link Type URLs instead of a `path`.
 
 ### Ordering of links
 
@@ -2328,7 +2316,7 @@ Links in the proposed system have the notion of cardinality. A link can be one-t
 
 Links can be ordered in the current system, and the behavior will stay mostly the same in the proposed system
 
-**An example of an _ordered_ [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
+**An example of an _ordered_ [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json#L395) instance in the current system:**
 
 ```json
 {
@@ -2346,7 +2334,7 @@ Links can be ordered in the current system, and the behavior will stay mostly th
   "sourceEntityId": 333,
   "destinationEntityId": 444,
   "index": 4,
-  "link": "https://blockprotocol.org/types/@alice/link-type/stops-at"
+  "link": "https://blockprotocol.org/@alice/link-type/stops-at"
 }
 ```
 
@@ -2361,7 +2349,7 @@ The indices of ordered links are transparent to the users, and implicitly given 
 {
   // A list of ordered links
   "sourceEntityId": 111,
-  "link": "https://blockprotocol.org/types/@alice/link-type/stops-at",
+  "link": "https://blockprotocol.org/@alice/link-type/stops-at",
   // Elements of this links array are ordered'
   "ordered": true,
   "links": [
@@ -2369,13 +2357,13 @@ The indices of ordered links are transparent to the users, and implicitly given 
       // First link
       "sourceEntityId": 111,
       "destinationEntityId": 222,
-      "link": "https://blockprotocol.org/types/@alice/link-type/stops-at"
+      "link": "https://blockprotocol.org/@alice/link-type/stops-at"
     },
     {
       // Second link
       "sourceEntityId": 111,
       "destinationEntityId": 333,
-      "link": "https://blockprotocol.org/types/@alice/link-type/stops-at"
+      "link": "https://blockprotocol.org/@alice/link-type/stops-at"
     }
   ]
 }
@@ -2386,7 +2374,7 @@ The indices of ordered links are transparent to the users, and implicitly given 
 ### Block Schemas
 
 Block Schemas in the Block Protocol describe the shape of their own properties.
-These properties should be stored within the same type system as the one that can be queried through the Graph Service.
+These properties should be stored within the same type system as the one that can be queried through the Graph Module.
 
 In the proposed system, Block Schemas are analogous to Entity Types. A Block Schema would need to be described in terms of Property Types. Links in Block Schemas in the proposed system must be explicit.
 
@@ -2422,22 +2410,22 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
   "kind": "entityType",
   "title": "Person Card",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name"
     },
-    "https://blockprotocol.org/types/@alice/property-type/email": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/email"
+    "https://blockprotocol.org/@alice/property-type/email": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/email"
     },
-    "https://blockprotocol.org/types/@alice/property-type/website-url": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/website-url"
+    "https://blockprotocol.org/@alice/property-type/website-url": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/website-url"
     },
-    "https://blockprotocol.org/types/@alice/property-type/avatar-image": {
-      "$ref": "https://blockprotocol.org/types/@alice/property-type/avatar-image"
+    "https://blockprotocol.org/@alice/property-type/avatar-image": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/avatar-image"
     }
   },
   "links": {
     // Employer
-    "https://blockprotocol.org/types/@alice/link-type/company": {}
+    "https://blockprotocol.org/@alice/link-type/company": {}
   }
 }
 ```
@@ -2445,12 +2433,12 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
 > 💡 As the syntax and validations of Block Schemas are closely related to Entity Types, they have the same `kind` for now. We would introduce a distinct `"blockSchema"` kind to make the distinction clear if there were a need for the two kinds of schemas to diverge.
 
 One clear difference in the new system is that properties are no longer named arbitrarily.
-Every Block Schema property must be a Property Type URI, which means semantic meaning is attached to every key.
+Every Block Schema property must be a Property Type URL, which means semantic meaning is attached to every key.
 
 This, as mentioned previously, allows for a greater level of confidence that data passed to blocks is correct and useable as there will be less guesswork for Embedding Applications.
 
 For any Embedding Application that loads a Block Schema defined with the proposed system, it will be clear what _exact_ Property Types and Links to look for when finding applicable Entity Types that satisfy the Block Schema.
-In the case of the Property Types not existing in the Embedding Application, the URIs, as they are canonical, can be used to fetch definitions.
+In the case of the Property Types not existing in the Embedding Application, the URLs, as they are canonical, can be used to fetch definitions.
 
 ### Structure-based Queries
 
@@ -2465,7 +2453,7 @@ With the proposed system, this needs to be expanded such that we can CRUD Proper
 
 The current system also supplies a way to "aggregate" Entity Types, which is a filtering operation on all Entity Types within the embedding application. On a side note, "aggregation" is a place where Structure-based Queries could be used.
 
-**Type-related [CRUD operations](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json) in the current system:**
+**Type-related [CRUD operations](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json) in the current system:**
 
 - `createEntityType`
 - `updateEntityType`
@@ -2495,7 +2483,7 @@ The current system also supplies a way to "aggregate" Entity Types, which is a f
 
 - `aggregateDataTypes`
 
-The main changes imposed by the proposed system are that Entity Types must be defined as previously outlined - with canonical Property Type URIs and that new messages for managing Property Types and Link Types must be added.
+The main changes imposed by the proposed system are that Entity Types must be defined as previously outlined - with canonical Property Type URLs and that new messages for managing Property Types and Link Types must be added.
 
 In the proposed system, Entity Types can be created and updated with the same semantics but have to conform to the [Entity Type](#entity-types-1) schema instead of arbitrary JSON schemas.
 Property Types will be defined similarly to Entity Types in the proposed system, conforming to the [Property Type](#property-types-1) schemas instead.
@@ -2521,7 +2509,7 @@ Link Types do not contain further structural data, which make them semantically 
 ```json
 {
   // updateEntityType message
-  "entityTypeId": "https://blockprotocol.org/types/@alice/entity-type/person",
+  "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
   "schema": {
     "properties": {
       "birthDate": { "type": "string", "format": "date" }
@@ -2540,14 +2528,14 @@ Link Types do not contain further structural data, which make them semantically 
     "kind": "entityType",
     "title": "Person",
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/name": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+      "https://blockprotocol.org/@alice/property-type/name": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/name"
       },
-      "https://blockprotocol.org/types/@alice/property-type/email": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/email"
+      "https://blockprotocol.org/@alice/property-type/email": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/email"
       },
-      "https://blockprotocol.org/types/@alice/property-type/phone-number": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/phone-number"
+      "https://blockprotocol.org/@alice/property-type/phone-number": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/phone-number"
       }
     }
   }
@@ -2557,12 +2545,12 @@ Link Types do not contain further structural data, which make them semantically 
 ```json
 {
   // updateEntityType message
-  "entityTypeId": "https://blockprotocol.org/types/@alice/entity-type/person",
+  "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
   "schema": {
     // The properties here are partially applied to the original Entity Type.
     "properties": {
-      "https://blockprotocol.org/types/@alice/property-type/birth-date": {
-        "$ref": "https://blockprotocol.org/types/@alice/property-type/birth-date"
+      "https://blockprotocol.org/@alice/property-type/birth-date": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/birth-date"
       }
     }
   }
@@ -2585,7 +2573,7 @@ Property Types do not exist.
     "title": "User ID",
     "oneOf": [
       {
-        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text"
+        "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text"
       }
     ]
   }
@@ -2595,14 +2583,14 @@ Property Types do not exist.
 ```json
 {
   // updatePropertyType message
-  "propertyTypeId": "https://blockprotocol.org/types/@alice/property-type/user-id",
+  "propertyTypeId": "https://blockprotocol.org/@alice/property-type/user-id",
   "schema": {
     "oneOf": [
       {
-        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text"
+        "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text"
       },
       {
-        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+        "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
       }
     ]
   }
@@ -2629,7 +2617,7 @@ Link Types do not exist.
 ```json
 {
   // updateLinkType message
-  "linkTypeId": "https://blockprotocol.org/types/@alice/link-type/friend-of",
+  "linkTypeId": "https://blockprotocol.org/@alice/link-type/friend-of",
   "keywords": ["knows"]
 }
 ```
@@ -2640,7 +2628,7 @@ For Property Types, having partial update semantics could lead to a lot of confu
 
 For Entity Types, Property Types, and Link Types, changing anything on the types could be a breaking change. We have not discussed this in this RFC yet, but there're a lot of considerations to be put into the semantics of updating/removing existing types. For the sake of simplicity, these example messages show how the Block Protocol in its current shape could be transformed to make use of this new Type System but in reality, the semantics of working with the types will need to be handled differently.
 
-> 💡 Currently, "schemas" can be defined from the [blockprotocol.org](https://blockprotocol.org/) website. With the proposed system's canonical URIs, types need to be globally identifiable and usable from Embedding Applications. Property Types and Entity Types in the examples are namespaces under the `@alice` user, but we've not specified how these types are defined. This is left out-of-scope for the purposes of this RFC.
+> 💡 Currently, "schemas" can be defined from the [blockprotocol.org](https://blockprotocol.org/) website. With the proposed system's canonical URLs, types need to be globally identifiable and usable from Embedding Applications. Property Types and Entity Types in the examples are namespaces under the `@alice` user, but we've not specified how these types are defined. This is left out-of-scope for the purposes of this RFC.
 
 # Drawbacks
 
@@ -2648,7 +2636,7 @@ For Entity Types, Property Types, and Link Types, changing anything on the types
 
 ## Implementation Complexity
 
-This RFC introduces additional barriers for developers who want to **fully** implement the Block Protocol specification. This could be viewed as a barrier-to-entry and potentially dissuade people from trying it out. Ideally the new service-based approach mitigates this in part, and people can continue to implement parts of the specification to gradually utilize the pieces they find useful. In the simple scenarios (for instance manually including a single block) this implementation complexity should be relatively constrained, and can be mitigated by helper methods in the Block Protocol Graph service implementation. In the more complex use-cases the embedding applications will likely need to implement methods to resolve external schemas, as well as functionality to handle, combine, and validate them.
+This RFC introduces additional barriers for developers who want to **fully** implement the Block Protocol specification. This could be viewed as a barrier-to-entry and potentially dissuade people from trying it out. Ideally the new module-based approach mitigates this in part, and people can continue to implement parts of the specification to gradually utilize the pieces they find useful. In the simple scenarios (for instance manually including a single block) this implementation complexity should be relatively constrained, and can be mitigated by helper methods in the Block Protocol Graph module implementation. In the more complex use-cases the embedding applications will likely need to implement methods to resolve external schemas, as well as functionality to handle, combine, and validate them.
 
 It's worth noting that standard JSON schema validators won't natively support the full Type System (due to some of the new keywords that have been created), however they should be able to do partial validation, where prior to this RFC there were occurrences where misusing JSON schema could break the validators entirely.
 
@@ -2680,7 +2668,7 @@ A more immediately apparent concern is if schemas are versioned, but their use i
 
 ## The Big Picture
 
-As outlined in the [Motivation section](#motivation), there are some clear shortcomings to how the Graph service works at the moment in regards to how it expresses data structure. It's also important to mention that there is a tough balance between comprehensive functionality for:
+As outlined in the [Motivation section](#motivation), there are some clear shortcomings to how the Graph module works at the moment in regards to how it expresses data structure. It's also important to mention that there is a tough balance between comprehensive functionality for:
 
 - Complex use-cases (such as those that are able to dynamically load and use a block at run-time)
 - Simple use-cases (such as those that include a handful of blocks in the source code at build-time).
@@ -2833,9 +2821,9 @@ As mentioned in a few sections, this design basically defines a way for communit
     - Yes we do, for now. We are treating the type titles as display names until we find a good reason not to.
 
 1.  Is there a way to specify in JSON schema that the key of a property is equal to the the thing it's a `$ref` to?
-    As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`?
+    As in can we specify a constraint that you have to have equal URLs in `"someUrl": { "$ref": "someUrl" }`?
     The reason why we want this, is such that our JSON Schemas can be validated through conventional means, without special-casing a custom check with the `$ref` and property name.
-1.  Should we further constrain allowed URIs (for example to force the end of the path to be `/property-type/foo`) and if so should we encode that in the JSON schema?
+1.  Should we further constrain allowed URLs (for example to force the end of the path to be `/property-type/foo`) and if so should we encode that in the JSON schema?
 1.  Do we want to allow types to define a separate plural name that can be used when they're set to `"type": "array"`?
 1.  How would we define our custom JSON Schema keywords in a JSON Schema Vocabulary? Could our meta schemas be defined as JSON Schema Vocabularies?
 
@@ -2861,7 +2849,7 @@ It should therefore be possible to allow for a decentralized system, while also 
 
 Having repositories should make it possible to build tooling around type discoverability, whether it be autocomplete in Schema Editors, or embedding applications being able to create and modify types within a repository.
 
-This is also made a lot easier as the proposed Type System has provisioned that `$id`s of types are unique URIs, which should make it easier to allow for a decentralized system for hosting them, while also enabling the creation of centralized ones for people who want to benefit from a closer-knit system.
+This is also made a lot easier as the proposed Type System has provisioned that `$id`s of types are unique URLs, which should make it easier to allow for a decentralized system for hosting them, while also enabling the creation of centralized ones for people who want to benefit from a closer-knit system.
 
 ## Supplementary tooling
 

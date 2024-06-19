@@ -1,42 +1,64 @@
-import { Entity } from "@blockprotocol/graph";
+import { extractBaseUrl } from "@blockprotocol/graph";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { createRoot } from "react-dom/client";
 
 import { MockBlockDock } from "../src";
+import { entityTypes } from "../src/data/entity-types";
+import { propertyTypes } from "../src/data/property-types";
 import { TestCustomElementBlock } from "./test-custom-element-block";
 import testBlockString from "./test-html-block/block.html?raw";
 import { TestReactBlock } from "./test-react-block";
 
 const node = document.getElementById("app");
 
-type TestBlockType =
-  | "react"
-  | "custom-element"
-  | "html-at-url"
-  | "html-as-string";
-
 const blockEntityMap = {
   react: {
-    entityId: "entity-react",
-    entityTypeId: "test-type-1",
-    properties: { name: "World" },
+    metadata: {
+      recordId: {
+        entityId: "entity-react",
+        editionId: new Date(0).toISOString(),
+      },
+      entityTypeId: entityTypes.testType.$id,
+    },
+    properties: {
+      [extractBaseUrl(propertyTypes.name.$id)]: "World",
+      [extractBaseUrl(propertyTypes.description.$id)]: "This is a description",
+    },
   },
   "custom-element": {
-    entityId: "entity-custom-element",
-    entityTypeId: "test-type-1",
-    properties: { name: "World" },
+    metadata: {
+      recordId: {
+        entityId: "entity-custom-element",
+        editionId: new Date(0).toISOString(),
+      },
+      entityTypeId: entityTypes.testType.$id,
+    },
+    properties: { [extractBaseUrl(propertyTypes.name.$id)]: "World" },
   },
   "html-at-url": {
-    entityId: "entity-html-as-url",
-    entityTypeId: "test-type-1",
-    properties: { name: "World" },
+    metadata: {
+      recordId: {
+        entityId: "entity-html-as-url",
+        editionId: new Date(0).toISOString(),
+      },
+      entityTypeId: entityTypes.testType.$id,
+    },
+    properties: { [extractBaseUrl(propertyTypes.name.$id)]: "World" },
   },
   "html-as-string": {
-    entityId: "entity-html-as-string",
-    entityTypeId: "test-type-1",
-    properties: { name: "World" },
+    metadata: {
+      recordId: {
+        entityId: "entity-html-as-string",
+        editionId: new Date(0).toISOString(),
+      },
+      entityTypeId: entityTypes.testType.$id,
+    },
+    properties: { [extractBaseUrl(propertyTypes.name.$id)]: "World" },
   },
-} as Record<string, Entity>;
+} as const;
+// } as const satisfies Record<string, Entity<true>>;
+
+type TestBlockType = keyof typeof blockEntityMap;
 
 const DevApp: FunctionComponent = () => {
   const [testBlockType, setTestBlockType] = useState<TestBlockType>("react");
@@ -117,7 +139,7 @@ const DevApp: FunctionComponent = () => {
 
       <MockBlockDock
         blockDefinition={blockDefinition}
-        blockEntity={blockEntity}
+        blockEntityRecordId={blockEntity.metadata.recordId}
         blockInfo={{
           displayName: "Test Block",
           blockType: {
@@ -128,8 +150,16 @@ const DevApp: FunctionComponent = () => {
           icon: "public/icon.svg",
           image: "public/image",
         }}
+        blockProtocolApiKey={process.env.BLOCK_PROTOCOL_API_KEY}
+        blockProtocolSiteHost={process.env.BLOCK_PROTOCOL_SITE_HOST}
         debug
         key={testBlockType} // completely reset the state when block type has changed
+        initialData={{
+          initialEntities: Object.values(blockEntityMap),
+        }}
+        includeDefaultMockData
+        temporal={false}
+        simulateDatastoreLatency={{ min: 50, max: 200 }}
       />
     </>
   );

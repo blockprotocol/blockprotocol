@@ -26,21 +26,13 @@ test("dashboard page should contain key elements", async ({ page }) => {
   await login({ page });
   await page.goto("/dashboard");
 
-  await expect(page.locator("text=Welcome Back, Alice!")).toBeVisible();
+  await expect(page.locator("text=Welcome, Alice!")).toBeVisible();
 
   for (const [text, url] of [
-    [
-      "Publish a block",
-      process.env.NEXT_PUBLIC_NPM_PUBLISHING
-        ? "/blocks/publish"
-        : "/@alice/blocks",
-    ],
-    ["Build a block", "/docs/developing-blocks"],
-    ["Create a Type", null],
-    ["Create and manage API keys", "/settings/api-keys"],
+    ["Build a block", "/docs/blocks/develop"],
+    ["Create a Type", "/@alice/types"],
+    ["Create and manage API keys", "/account/api"],
     ["View your public profile", "/@alice"],
-    ["Manage blocks", "/@alice/blocks"],
-    ["Manage types", "/@alice/schemas"],
     ["Browse blocks for inspiration", "/hub"],
   ] as const) {
     const card = page.locator(`[data-testid="dashboard-card"]`).filter({
@@ -53,8 +45,8 @@ test("dashboard page should contain key elements", async ({ page }) => {
     expect(await card.getAttribute("href")).toEqual(url);
   }
 
-  await page.locator('[aria-label="settings-tabs"] >> text=API Keys').click();
-  await expect(page).toHaveURL("/settings/api-keys");
+  await page.locator('[aria-label="settings-tabs"] >> text=My Account').click();
+  await expect(page).toHaveURL("/account/general");
 
   await page.locator('[aria-label="settings-tabs"] >> text=Dashboard').click();
   await expect(page).toHaveURL("/dashboard");

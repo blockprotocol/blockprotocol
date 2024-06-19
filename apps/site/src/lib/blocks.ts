@@ -1,16 +1,12 @@
-import path from "node:path";
-
 import {
   BlockMetadata,
   BlockMetadataRepository,
   JsonObject,
 } from "@blockprotocol/core";
-import fs from "fs-extra";
-import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 import sanitize from "sanitize-html";
 
-import { FRONTEND_URL } from "./config";
+import { BlockExampleGraph } from "../components/pages/hub/hub-utils";
 
 const sanitizeUrl = (url: string) => {
   const results = sanitize(`<a href="${url}" />`, {
@@ -34,12 +30,6 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   // the folder where the block's assets are stored, currently doubling up as a unique identifier for the block
   // @todo this needs rethinking when we introduce versions, as there will be multiple asset folders
   componentId: string;
-
-  downloads?: {
-    // minimum number of downloads of a block's source in the last 7 days (excludes cached results)
-    weekly: number;
-  };
-
   // an absolute URL to example-graph.json, if it exists
   exampleGraph?: string | null;
   lastUpdated?: string | null;
@@ -48,33 +38,8 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   pathWithNamespace: string;
   // the repository URL as a string (including commit and folder info where appropriate)
   repository?: string;
-  // metadata.schema rewritten to be an absolute URL
-  schema?: string | null;
   verified?: boolean;
 };
-
-/**
- * This represents the block metadata created when blocks are built from source and served from the NextJS app
- */
-export type BlockMetadataOnDisk = ExpandedBlockMetadata & {
-  unstable_hubInfo: {
-    directory: string;
-    checksum: string;
-    commit: string;
-    name: string;
-    preparedAt: string;
-  };
-};
-
-// The contents of the JSON file users provide when adding a block via PR, stored in the Hub/ folder
-export interface StoredBlockInfo {
-  repository: string;
-  commit: string;
-  distDir?: string;
-  folder?: string;
-  workspace?: string;
-  verified?: boolean;
-}
 
 // Generate an absolute url to a block file
 const generateBlockFileUrl = (
@@ -125,6 +90,8 @@ export const getRepositoryUrl = (
   return undefined;
 };
 
+const trustedAuthors = ["blockprotocol", "hash", "tldraw"];
+
 export const expandBlockMetadata = ({
   timestamps,
   includesExampleGraph,
@@ -171,9 +138,11 @@ export const expandBlockMetadata = ({
   // eslint-disable-next-line no-param-reassign -- could make a new object, but would need to update for any new metadata fields
   delete metadata.devReloadEndpoint;
 
+  const author = namespace.replace(/^@/, "");
+
   return {
     ...metadata,
-    author: namespace.replace(/^@/, ""),
+    author,
     blockSitePath: `/${namespace}/blocks/${name}`,
     // fallback while not all blocks have blockType defined
     blockType: metadata.blockType ?? { entryPoint: "react" },
@@ -189,7 +158,7 @@ export const expandBlockMetadata = ({
     pathWithNamespace,
     protocol: metadata.protocol ?? "0.1", // assume lowest if not specified - this is a required field so should be present
     repository: repositoryUrl,
-    schema: generateBlockFileUrl(metadata.schema, blockDistributionFolderUrl)!,
+    schema: metadata.schema,
     source: generateBlockFileUrl(metadata.source, blockDistributionFolderUrl)!,
     variants: metadata.variants?.length
       ? metadata.variants?.map((variant) => ({
@@ -201,45 +170,9 @@ export const expandBlockMetadata = ({
       includesExampleGraph ? "example-graph.json" : null,
       blockDistributionFolderUrl,
     ),
+    verified: trustedAuthors.includes(author),
     version: metadata.version ?? "0.0.0",
   };
-};
-
-/**
- * used to read block metadata from disk, for blocks published via JSON in hub/ and served from the public folder
- */
-export const readBlocksFromDisk = async (): Promise<
-  ExpandedBlockMetadata[]
-> => {
-  const blockMetadataFilePaths = await globby(
-    path.resolve(process.cwd(), `public/blocks/**/block-metadata.json`),
-  );
-
-  const result: ExpandedBlockMetadata[] = [];
-  for (const blockMetadataFilePath of blockMetadataFilePaths) {
-    const metadata: BlockMetadataOnDisk = await fs.readJson(
-      blockMetadataFilePath,
-      {
-        encoding: "utf8",
-      },
-    );
-
-    result.push(metadata);
-  }
-
-  return result;
-};
-
-// Blocks which are currently not compliant with the spec, and are thus misleading examples
-const blocksToHide = ["@hash/embed"];
-
-/** Helps consistently hide certain blocks from the Hub and user profile pages */
-export const excludeHiddenBlocks = (
-  blocks: ExpandedBlockMetadata[],
-): ExpandedBlockMetadata[] => {
-  return blocks.filter(
-    ({ pathWithNamespace }) => !blocksToHide.includes(pathWithNamespace),
-  );
 };
 
 export const retrieveBlockFileContent = async ({
@@ -250,23 +183,15 @@ export const retrieveBlockFileContent = async ({
 }: ExpandedBlockMetadata): Promise<{
   schema: JsonObject;
   source: string;
-  exampleGraph: JsonObject | null;
+  exampleGraph: BlockExampleGraph | null;
 }> => {
   let schema = { title: "Unparseable schema" };
   try {
-    schema = metadataSchemaUrl.startsWith(FRONTEND_URL)
-      ? JSON.parse(
-          await fs.readFile(
-            path.resolve(
-              process.cwd(),
-              `public/blocks/${pathWithNamespace}/${metadataSchemaUrl.substring(
-                metadataSchemaUrl.lastIndexOf("/") + 1,
-              )}`,
-            ),
-            { encoding: "utf8" },
-          ),
-        )
-      : await (await fetch(metadataSchemaUrl)).json();
+    schema = await (
+      await fetch(metadataSchemaUrl, {
+        headers: { accept: "application/json" },
+      })
+    ).json();
   } catch (err) {
     // eslint-disable-next-line no-console -- intentional log to flag problem without tanking site
     console.error(
@@ -274,33 +199,16 @@ export const retrieveBlockFileContent = async ({
     );
   }
 
-  const source = metadataSourceUrl.startsWith(FRONTEND_URL)
-    ? await fs.readFile(
-        path.resolve(
-          process.cwd(),
-          `public/blocks/${pathWithNamespace}/${metadataSourceUrl.substring(
-            metadataSourceUrl.lastIndexOf("/") + 1,
-          )}`,
-        ),
-        { encoding: "utf8" },
-      )
-    : await fetch(metadataSourceUrl).then((response) => response.text());
+  const source = await fetch(metadataSourceUrl).then((response) =>
+    response.text(),
+  );
 
   let exampleGraph = null;
 
   if (metadataExampleGraphUrl) {
-    exampleGraph = metadataExampleGraphUrl.startsWith(FRONTEND_URL)
-      ? JSON.parse(
-          fs.readFileSync(
-            `${process.cwd()}/public/blocks/${pathWithNamespace}/${metadataExampleGraphUrl.substring(
-              metadataExampleGraphUrl.lastIndexOf("/") + 1,
-            )}`,
-            { encoding: "utf8" },
-          ),
-        )
-      : await fetch(metadataExampleGraphUrl).then((response) =>
-          response.json(),
-        );
+    exampleGraph = await fetch(metadataExampleGraphUrl).then((response) =>
+      response.json(),
+    );
   }
 
   return {
@@ -315,15 +223,6 @@ export const retrieveBlockReadme = async (
   blockMetadata: ExpandedBlockMetadata,
 ): Promise<string | undefined> => {
   try {
-    if (blockMetadata.componentId.includes(FRONTEND_URL)) {
-      return fs.readFileSync(
-        `${process.cwd()}/public/blocks/${
-          blockMetadata.pathWithNamespace
-        }/README.vercel-hack.md`,
-        "utf8",
-      );
-    }
-
     return fetch(`${blockMetadata.componentId}/README.md`).then((resp) => {
       return resp.status === 200 ? resp.text() : undefined;
     });

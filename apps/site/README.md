@@ -2,7 +2,7 @@
 
 This folder contains the code for [blockprotocol.org](https://blockprotocol.org), including:
 
-- the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/3_spec)
+- the [Block Protocol specification](https://blockprotocol.org/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/spec)
 - the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs)
 
 ## Local development
@@ -14,7 +14,7 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     - `HASHING_SECRET`: the secret used to hash API keys
     - `SESSION_SECRET`: the secret used to sign the session ID cookie
     - `MONGODB_URI`: the URL where the mongo developer db instance is hosted (for example at `mongodb://root:password@localhost:27017/`)
-    - `MONGODB_DB_NAME`: the name of the database (for example `local`)
+    - `MONGODB_DB_NAME`: the name of the database (for example `development-database`)
     - `MONGODB_USERNAME`: the database username
     - `MONGODB_PASSWORD`: the database password
     - `NEXT_PUBLIC_FRONTEND_URL` (optional): the URL where the frontend is hosted (defaults to `http://localhost:3000`)
@@ -51,13 +51,13 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     yarn dev:db
     ```
 
-1.  **On first run**, or if you want to reset app data, seed the database in a separate terminal using:
+1.  **On first run**, or if you want to reset app data, seed the database and the static object storage in a separate terminal using:
 
     ```sh
     yarn dev:seed-db
     ```
 
-1.  **On first run**, or **if you need to rebuild a block or blocks**, follow the steps to [build Hub blocks](#building-hub-blocks)
+    This command initializes a couple of demo users and blocks. Selected blocks are mirrored from [blockprotocol.org/hub](https://blockprotocol.org/hub).
 
 1.  Run the Next.js app in a separate terminal using:
 
@@ -82,6 +82,13 @@ During local development, an S3-compatible service (`minio`) is automatically st
 Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
 When running in development environments, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
 
+### Data reporting
+
+The BP site allows publishing data to a collector platform. Currently the payloads are very simple and server-side only. To configure the targets for data collection, the following environment variables are required:
+
+- `DATA_URL`: The URL of the collector platform
+- `DATA_WRITE_KEY`: The write key for the collector platform, used in the username of HTTP basic auth header
+
 ### AWS configuration
 
 If you want to send verification codes to an email address, the following AWS environment variables have to be additionally configured:
@@ -89,23 +96,6 @@ If you want to send verification codes to an email address, the following AWS en
 - `BP_AWS_REGION`: The region, eg. `us-east-1`
 - `BP_AWS_ACCESS_KEY_ID`: The AWS access key
 - `BP_AWS_SECRET_ACCESS_KEY`: The AWS secret access key
-
-### Building Hub blocks
-
-Before serving any blocks via the Hub, they need to be prepared (i.e. built in most cases).
-Blocks can be registered in the repo's `/hub` with a build-config.
-The build-script `yarn workspace @apps/site exe prepare-blocks.ts` prepares blocks.
-
-```sh
-# prepare all blocks
-yarn workspace @apps/site exe scripts/prepare-blocks.ts
-
-# prepare blocks matching a filter (in this example, any in the `hub/@hash` folder)
-BLOCK_FILTER="@hash/*" workspace @apps/site exe scripts/prepare-blocks.ts
-```
-
-Once the blocks are built, simply `yarn dev` and head over to
-`localhost:3000/hub`.
 
 ## Vercel Deployment
 
@@ -275,18 +265,39 @@ Retrieves the user object of the currently logged in user.
 Retrieves metadata on the API keys associated with the authenticated user.
 
 - Request Response:
-  - `apiKeys`: metadata on API keys (the key itself is only visible at the point of generation)
+  - `apiKeys`: metadata on all the user's API keys (the keys themselves are only visible at the point of generation)
 
 #### `POST /api/me/generate-api-key` [requires cookie authentication]
 
-Generates a new API key for the authenticated user, and revokes any others.
+Generates a new API key for the authenticated user.
 
 - Request Body:
 
-  - `displayName`: a display name for the API key
+  - `displayName`: a display name for the API key.
 
 - Request Response:
   - `apiKey`: the key itself, a string.
+
+#### `POST /api/me/revoke-api-key` [requires cookie authentication]
+
+Revokes a given API key for the authenticated user.
+
+- Request Body:
+
+  - `publicId`: the public ID portion of the API key to revoke.
+
+- Request Response: `SUCCESS`
+
+#### `POST /api/me/update-api-key` [requires cookie authentication]
+
+Update a given API key for the authenticated user.
+
+- Request Body:
+
+  - `publicId`: the public ID portion of the API key to update.
+  - `displayName`: the new `displayName` that should be present on the API key.
+
+- Request Response: `SUCCESS`
 
 #### `POST /api/logout` [requires cookie authentication]
 
@@ -304,6 +315,24 @@ Uploads a user avatar and apply it to logged in profile page.
 
 - Response Body:
   - `avatarUrl`: Url pointing to the newly uploaded user avatar.
+
+#### `GET /api/remove-user-avatar` [requires cookie authentication]
+
+Removes current avatar of the user.
+
+- Request Response: `SUCCESS`
+
+#### `POST /api/update-user-preferred-name` [requires cookie authentication]
+
+Updates preferred name of the authenticated user.
+
+- Request Body:
+
+  - `preferredName`: the preferred name of the user associated with the BP account
+
+- Request Response:
+
+  - `user`: the updated BP user
 
 #### `POST /api/blocks/create`
 

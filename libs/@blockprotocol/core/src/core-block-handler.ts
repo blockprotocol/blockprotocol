@@ -1,5 +1,5 @@
-import { CoreHandler } from "./core-handler";
-import { EmbedderInitMessage, Message } from "./types";
+import { CoreHandler } from "./core-handler.js";
+import type { EmbedderInitMessage, Message } from "./types.js";
 
 /**
  * Implements the Block Protocol Core Specification for blocks.
@@ -34,11 +34,19 @@ export class CoreBlockHandler extends CoreHandler {
       sender: this,
     });
 
+    // In case the embedding application's handler is set up after the block's,
+    // retry the init message.
     return Promise.race([
       resp,
 
       new Promise<void>((resolve) => {
-        queueMicrotask(resolve);
+        // using queueMicrotask here leads to an infinite loop with some rendering strategies
+        // we could consider using setImmediate instead, but it would add a dependency.
+        // the 'time to init message exchange' is only material for:
+        // 1) HTML blocks, which depend on the exchange of init messages to receive init data
+        // 2) any block which sends other messages immediately after the init exchange
+        // React and Custom Element blocks receive their initial data as properties.
+        setTimeout(resolve);
       }),
     ]).then((response) => {
       if (!response) {
@@ -49,7 +57,7 @@ export class CoreBlockHandler extends CoreHandler {
 
   /**
    * Receives the {@link EmbedderInitMessage} sent by the embedding application,
-   * which is a series of payloads namespaced by service and message name.
+   * which is a series of payloads namespaced by module and message name.
    * Calls the individual callbacks registered for each of these values.
    *
    * Useful for HTML blocks receiving messages which are sent on initialization by the app
@@ -65,14 +73,14 @@ export class CoreBlockHandler extends CoreHandler {
     },
   ) {
     const { data } = message;
-    for (const serviceName of Object.keys(data)) {
-      for (const messageName of Object.keys(data[serviceName])) {
+    for (const moduleName of Object.keys(data)) {
+      for (const messageName of Object.keys(data[moduleName])) {
         void this.callCallback({
           message: {
             ...message,
-            data: data[serviceName][messageName],
+            data: data[moduleName][messageName],
             messageName,
-            service: serviceName,
+            module: moduleName,
           },
         });
       }

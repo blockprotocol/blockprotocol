@@ -1,5 +1,5 @@
 import Ajv from "ajv";
-import { query as queryValidator } from "express-validator";
+import { query as queryValidator, validationResult } from "express-validator";
 import cloneDeep from "lodash/cloneDeep";
 
 import { getAllBlocks } from "../../../lib/api/blocks/get";
@@ -8,6 +8,8 @@ import {
   ExpandedBlockMetadata,
   retrieveBlockFileContent,
 } from "../../../lib/blocks";
+import { formatErrors } from "../../../util/api";
+import { parseClientIp, sendReport } from "../../../util/usage";
 
 export type ApiBlockSearchQuery = {
   author?: string;
@@ -22,12 +24,17 @@ export type ApiBlockSearchResponse = {
 };
 
 export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
-  .use(queryValidator("author").isString().toLowerCase())
-  .use(queryValidator("license").isString().toLowerCase())
-  .use(queryValidator("name").isString().toLowerCase())
-  .use(queryValidator("q").isString().toLowerCase())
-  .use(queryValidator("json").isJSON())
+  .use(queryValidator("author").optional().isString().toLowerCase())
+  .use(queryValidator("license").optional().isString().toLowerCase())
+  .use(queryValidator("name").optional().isString().toLowerCase())
+  .use(queryValidator("q").optional().isString().toLowerCase())
+  .use(queryValidator("json").optional().isJSON())
   .get(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(formatErrors(...errors.array()));
+    }
+
     const {
       author: authorQuery,
       license: licenseQuery,
@@ -113,6 +120,23 @@ export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
     }
 
     // @todo paginate response
+
+    const clientIp = parseClientIp(req);
+
+    const userId = req.user.id;
+
+    await sendReport({
+      event: "block_search",
+      userId,
+      properties: {
+        origin: req.headers.origin ?? null,
+        bpUserId: userId,
+        ip: clientIp,
+        userAgent: req.headers["user-agent"] ?? null,
+        query: req.query ? JSON.stringify(req.query) : null,
+        resultCount: data.length,
+      },
+    });
 
     res.status(200).json({
       results: data,

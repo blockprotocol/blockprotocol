@@ -1,5 +1,5 @@
-import { CoreHandler } from "./core-handler";
-import { EmbedderInitMessage, Message, MessageContents } from "./types";
+import { CoreHandler } from "./core-handler.js";
+import type { EmbedderInitMessage, Message, MessageContents } from "./types.js";
 
 /**
  * Implements the Block Protocol Core Specification for embedding applications.
@@ -37,7 +37,12 @@ export class CoreEmbedderHandler extends CoreHandler {
     if (!event.target) {
       throw new Error("Could not update element from event – no event.target.");
     }
-    if (!(event.target instanceof HTMLElement)) {
+    const containingWindow = (event.target as Element).ownerDocument
+      .defaultView;
+    if (
+      !containingWindow ||
+      !(event.target instanceof containingWindow.HTMLElement)
+    ) {
       throw new Error(
         "'blockprotocolmessage' event must be sent from an HTMLElement.",
       );
@@ -48,7 +53,7 @@ export class CoreEmbedderHandler extends CoreHandler {
   /**
    * Process the initial message sent from the block.
    * Sends a {@link EmbedderInitMessage} in response, which has all the messages
-   * from registered services which can be sentOnInitialization.
+   * from registered modules which can be sentOnInitialization.
    */
   protected processInitMessage(
     this: CoreEmbedderHandler,
@@ -62,14 +67,14 @@ export class CoreEmbedderHandler extends CoreHandler {
   ) {
     this.updateDispatchElementFromEvent(event);
 
-    // get the properties sent on initialization for any registered services
+    // get the properties sent on initialization for any registered modules
     let data = this.initResponse;
 
     if (!data) {
       data = {};
 
-      for (const [serviceName, serviceInstance] of this.services) {
-        data[serviceName] = serviceInstance.getInitPayload();
+      for (const [moduleName, moduleInstance] of this.modules) {
+        data[moduleName] = moduleInstance.getInitPayload();
       }
     }
 

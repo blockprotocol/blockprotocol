@@ -1,7 +1,7 @@
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    repr,
+    raw,
     utils::{set_panic_hook, Result},
     ParsePropertyTypeError, PropertyType,
 };
@@ -10,7 +10,7 @@ fn convert_property_type(
     property_type_obj: &JsValue,
 ) -> std::result::Result<PropertyType, ParsePropertyTypeError> {
     let property_type_repr = property_type_obj
-        .into_serde::<repr::PropertyType>()
+        .into_serde::<raw::PropertyType>()
         .map_err(|err| ParsePropertyTypeError::InvalidJson(err.to_string()))?;
 
     PropertyType::try_from(property_type_repr)

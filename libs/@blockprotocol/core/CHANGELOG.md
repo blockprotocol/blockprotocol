@@ -1,5 +1,31 @@
 # @blockprotocol/core
 
+## 0.1.3
+
+### Patch Changes
+
+- [#1375](https://github.com/blockprotocol/blockprotocol/pull/1375) [`b2667eb1`](https://github.com/blockprotocol/blockprotocol/commit/b2667eb1d67b3bf4d91c1727fec1c52d9a77faed) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add dedicated export path for html functions
+
+- [#1373](https://github.com/blockprotocol/blockprotocol/pull/1373) [`fef95401`](https://github.com/blockprotocol/blockprotocol/commit/fef9540180e183381d82dc749cbc15aef267713b) Thanks [@CiaranMn](https://github.com/CiaranMn)! - convert to ESM only package. separate export path for /html block functions
+
+## 0.1.2
+
+### Patch Changes
+
+- [#1212](https://github.com/blockprotocol/blockprotocol/pull/1212) [`58d8f99c`](https://github.com/blockprotocol/blockprotocol/commit/58d8f99c0dac48a857c67d4c5dbda9a01afd108b) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Make instanceof check safe across iFrames
+
+## 0.1.1
+
+### Patch Changes
+
+- [#1157](https://github.com/blockprotocol/blockprotocol/pull/1157) [`3a044961`](https://github.com/blockprotocol/blockprotocol/commit/3a044961ecbbdf8fa427004044e78db16f5b52f2) Thanks [@CiaranMn](https://github.com/CiaranMn)! - update block init message retry from microtask to macrotask
+
+## 0.1.0
+
+### Minor Changes
+
+- [#985](https://github.com/blockprotocol/blockprotocol/pull/985) [`16871042`](https://github.com/blockprotocol/blockprotocol/commit/168710424e95d3f5f24d15527814a8067ad1e68b) Thanks [@CiaranMn](https://github.com/CiaranMn)! - rename Block Protocol 'Services' to 'Modules'
+
 ## 0.0.14
 
 ### Patch Changes

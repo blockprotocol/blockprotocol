@@ -1,5 +1,25 @@
 # blockprotocol
 
+## 0.2.3
+
+### Patch Changes
+
+- [#1310](https://github.com/blockprotocol/blockprotocol/pull/1310) [`0ff1d7c4`](https://github.com/blockprotocol/blockprotocol/commit/0ff1d7c47680c118585d721da5627e89b9623ef6) Thanks [@CiaranMn](https://github.com/CiaranMn)! - remove node-fetch dependency
+
+## 0.2.2
+
+### Patch Changes
+
+- [#1091](https://github.com/blockprotocol/blockprotocol/pull/1091) [`d09f5291`](https://github.com/blockprotocol/blockprotocol/commit/d09f5291d6f6f2df3690cc7bd75030516ca30abd) Thanks [@CiaranMn](https://github.com/CiaranMn)! - skip user prompts if running in ci
+
+## 0.2.1
+
+### Patch Changes
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`f03de705`](https://github.com/blockprotocol/blockprotocol/commit/f03de705383463f41f72612b7fe38df5589855b3) Thanks [@CiaranMn](https://github.com/CiaranMn)! - bump `node-fetch` version
+
+- [#1058](https://github.com/blockprotocol/blockprotocol/pull/1058) [`44f09c4e`](https://github.com/blockprotocol/blockprotocol/commit/44f09c4ec2e6fc38b8b2e1f7a2253df4bbefceef) Thanks [@kachkaev](https://github.com/kachkaev)! - Use non-zero exit code in edge cases
+
 ## 0.2.0
 
 ### Minor Changes

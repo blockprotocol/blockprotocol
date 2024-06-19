@@ -1,41 +1,28 @@
-import {
-  faAsterisk,
-  faKey,
-  faUserPen,
-} from "@fortawesome/free-solid-svg-icons";
+import { faKey, faUserPen } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  isBillingFeatureFlagEnabled,
-  shouldAllowNpmBlockPublishing,
-} from "../../../lib/config";
-import { BlockIcon } from "../../icons/block-icon";
 import { SolidSparklesIcon } from "../../icons/solid-sparkles-icon";
 import { DashboardCardProps } from "./dashboard-card/dashboard-card";
 
-export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
+export const dashboardPages: {
+  tabTitle: string;
+  tabHref: string;
+  // Used to indicate which tab should be active when the current page is a subpage of the tab's href
+  displayHref?: string;
+}[] = [
   {
     tabTitle: "Dashboard",
     tabHref: "/dashboard",
   },
   {
-    tabTitle: "Blocks",
-    tabHref: "/blocks",
+    tabTitle: "My Account",
+    tabHref: "/account/general",
+    displayHref: "/account",
   },
-  isBillingFeatureFlagEnabled
-    ? {
-        tabTitle: "Settings",
-        tabHref: "/settings",
-      }
-    : {
-        tabTitle: "API Keys",
-        tabHref: "/settings/api-keys",
-      },
 ];
 
 export type DashboardSection = "create" | "manage" | "explore";
 
 export const getDashboardSectionCards = (props: {
-  openCreateSchemaModal: () => void;
   profileLink: string;
 }): Record<DashboardSection, DashboardCardProps[]> => {
   return {
@@ -50,21 +37,19 @@ export const getDashboardSectionCards = (props: {
           "Read the quickstart guide and learn how to create and use blocks",
         link: {
           title: "Read the guide",
-          href: "/docs/developing-blocks",
+          href: "/docs/blocks/develop",
         },
       },
       {
-        title: "Publish a block",
+        title: "View your blocks",
         colorGradient:
           "linear-gradient(310.17deg, #FFB172 -167.67%, #9482FF 13.54%, #84E6FF 126.83%)",
         colorGradientOnHover:
           "linear-gradient(304.41deg, #FFB172 -167.57%, #9482FF -22.66%, #84E6FF 53.07%)",
-        description: "Build a block you’re ready to release on the Hub?",
+        description: "Browse your blocks or publish a new one to the Þ Hub",
         link: {
-          title: "Publish a block",
-          href: shouldAllowNpmBlockPublishing
-            ? "/blocks/publish"
-            : `${props.profileLink}/blocks`,
+          title: "View your blocks",
+          href: `${props.profileLink}/blocks`,
         },
       },
       {
@@ -76,8 +61,8 @@ export const getDashboardSectionCards = (props: {
         description:
           "Types are a formal way to describe data, links, properties and entities",
         link: {
-          title: "Create a type",
-          onClick: props.openCreateSchemaModal,
+          title: "Create a Type",
+          href: `${props.profileLink}/types`,
         },
       },
     ],
@@ -85,10 +70,10 @@ export const getDashboardSectionCards = (props: {
       {
         title: "Create and manage API keys",
         description:
-          "Your API key will allow you to search for and blocks by name, author, or compatible data structure",
+          "Your API key will allow you to search and discover blocks by name, author, or compatible data structure",
         link: {
           title: "Manage keys",
-          href: "/settings/api-keys",
+          href: "/account/api",
         },
         icon: faKey,
         variant: "secondary",
@@ -103,28 +88,6 @@ export const getDashboardSectionCards = (props: {
           href: props.profileLink,
         },
         icon: faUserPen,
-        variant: "secondary",
-      },
-      {
-        title: "Manage blocks",
-        description:
-          "View and modify the listings for blocks you’ve published on the Hub",
-        link: {
-          title: "Manage blocks",
-          href: `${props.profileLink}/blocks`,
-        },
-        CustomIcon: BlockIcon,
-        variant: "secondary",
-      },
-      {
-        title: "Manage types",
-        description:
-          "View and update the types you’ve created and made public on the Hub",
-        link: {
-          title: "Manage types",
-          href: `${props.profileLink}/schemas`,
-        },
-        icon: faAsterisk,
         variant: "secondary",
       },
     ],

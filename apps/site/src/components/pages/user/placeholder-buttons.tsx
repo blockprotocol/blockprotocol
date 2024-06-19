@@ -9,7 +9,7 @@ export const BuildBlockButton: FunctionComponent = () => {
   return (
     <LinkButton
       variant="secondary"
-      href="/docs/developing-blocks"
+      href="/docs/blocks/develop"
       sx={{ margin: 1 }}
       startIcon={<FontAwesomeIcon icon={faHammer} />}
     >
@@ -18,7 +18,7 @@ export const BuildBlockButton: FunctionComponent = () => {
   );
 };
 
-export const CreateSchemaButton: FunctionComponent<{
+export const CreateEntityTypeButton: FunctionComponent<{
   onClick: () => void;
 }> = ({ onClick }) => {
   return (
@@ -28,7 +28,7 @@ export const CreateSchemaButton: FunctionComponent<{
       onClick={onClick}
       startIcon={<TableTreeIcon />}
     >
-      Create a schema
+      Create an Entity Type
     </Button>
   );
 };

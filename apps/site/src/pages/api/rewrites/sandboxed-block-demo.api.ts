@@ -1,3 +1,4 @@
+import { QueryTemporalAxes } from "@blockprotocol/graph/temporal";
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
@@ -9,6 +10,22 @@ import { retrieveBlockFileContent } from "../../../lib/blocks";
  */
 const hotfixPackageName = (packageName: string): string => {
   return packageName === "lodash" ? "lodash-es" : packageName;
+};
+
+const currentTime = new Date().toISOString();
+
+const temporalAxes: QueryTemporalAxes = {
+  pinned: {
+    axis: "transactionTime",
+    timestamp: currentTime,
+  },
+  variable: {
+    axis: "decisionTime",
+    interval: {
+      start: { kind: "unbounded" },
+      end: { kind: "inclusive", limit: currentTime },
+    },
+  },
 };
 
 const handler: NextApiHandler = async (req, res) => {
@@ -40,8 +57,12 @@ const handler: NextApiHandler = async (req, res) => {
 
   const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
 
-  const reactVersion =
-    blockMetadata.externals?.react ?? packageJson.dependencies.react;
+  // @todo restore this when esm.sh treats version ranges correctly
+  //    it currently pulls non-latest versions of packages if a range is supplied
+  // const reactVersion =
+  //   blockMetadata.externals?.react ?? packageJson.dependencies.react;
+
+  const reactVersion = packageJson.dependencies.react;
 
   const externalUrlLookup: Record<string, string> = {};
 
@@ -56,16 +77,20 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   for (const [packageName, packageVersion] of Object.entries(externals)) {
+    if (packageName === "react" || packageName === "react-dom") {
+      // we already handled loading React in the HTML
+      continue;
+    }
     externalUrlLookup[packageName] = `https://esm.sh/${hotfixPackageName(
       packageName,
     )}@${packageVersion}?target=es2021`;
   }
 
+  // The initial datastore is set from a static file, example-graph.json
+  // We will dynamically update initialEntities in response to updated prop messages in the iFrame code
   const mockBlockDockInitialData = {
-    initialEntities: exampleGraph?.entities,
-    initialEntityTypes: exampleGraph?.entityTypes,
-    initialLinks: exampleGraph?.links,
-    initialLinkedAggregations: exampleGraph?.linkedAggregations,
+    initialEntities: exampleGraph?.entities ?? [],
+    initialTemporalAxes: temporalAxes,
   };
 
   const html = `
@@ -73,12 +98,18 @@ const handler: NextApiHandler = async (req, res) => {
 <html>
   <head>
     <meta charSet="utf-8" />
+    <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+    />
     <script type="module">
       const handleMessage = ({ data }) => {
-        if (typeof data !== "string") {
+        if (!("type" in data)) {
           return;
         }
-        globalThis.blockEntityProps = JSON.parse(data);
+        if (data.type === "blockEntityProps") {
+          globalThis.blockEntityProps = data.payload;
+        }
         window.removeEventListener("message", handleMessage);
       }
       window.addEventListener("message", handleMessage);
@@ -87,7 +118,7 @@ const handler: NextApiHandler = async (req, res) => {
       import React from "https://esm.sh/react@${reactVersion}?target=es2021"
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/index.js?target=es2021&deps=react@${reactVersion}";
 
       const requireLookup = {
         "react-dom": ReactDOM,
@@ -125,6 +156,84 @@ const handler: NextApiHandler = async (req, res) => {
       const timeout = setTimeout(() => { 
         document.getElementById("loading-indicator").style.visibility = "visible";
       }, 400);
+      
+      const serviceMessageType = "serviceModule";
+      
+      const handleServiceMessage = ({ providerName, methodName, payload }) => {
+        const id = new Date().valueOf() + Math.random();
+        const requestId = "service-request-" + id;
+        const promise = new Promise((resolve, reject) => {
+          window[requestId] = { resolve };
+        });
+        window.parent.postMessage({ 
+          requestId,
+          type: serviceMessageType, 
+          payload, 
+          providerName, 
+          methodName 
+        }, "*");
+        return promise;
+      }
+      
+      window.addEventListener("message", ({ data }) => {
+        if ("type" in data && data.type === serviceMessageType) {
+          const resolver = window[data.requestId]?.resolve;
+          resolver(data.payload);
+        }
+      });
+
+      const serviceModuleCallbacks = {
+        openaiCreateImage: ({ data: payload }) => handleServiceMessage({
+          providerName: "OpenAI",
+          methodName: "createImage",
+          payload,
+        }),
+        openaiCompleteChat: ({ data: payload }) => handleServiceMessage({
+          providerName: "OpenAI",
+          methodName: "completeChat",
+          payload,
+        }),
+        mapboxForwardGeocoding: ({ data: payload }) => handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "forwardGeocoding",
+          payload,
+        }),
+        mapboxReverseGeocoding: ({ data: payload }) => handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "reverseGeocoding",
+          payload,
+        }),
+        mapboxRetrieveDirections: ({ data: payload }) => handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "retrieveDirections",
+          payload,
+        }),
+        mapboxRetrieveIsochrones: ({ data: payload }) => handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "retrieveIsochrones",
+          payload,
+        }),
+        mapboxSuggestAddress: ({ data: payload }) => handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "suggestAddress",
+          payload,
+        }),
+        mapboxRetrieveAddress: ({ data: payload }) => handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "retrieveAddress",
+          payload,
+        }),
+        mapboxCanRetrieveAddress: ({ data: payload }) => handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "canRetrieveAddress",
+          payload,
+        }),
+        mapboxRetrieveStaticMap: ({ data: payload }) => handleServiceMessage({
+          providerName: "Mapbox",
+          methodName: "retrieveStaticMap",
+          payload,
+        }),
+      };
         
       fetch("${
         blockMetadata.source
@@ -151,11 +260,35 @@ const handler: NextApiHandler = async (req, res) => {
           )}
       
           const render = (props) => {
-            const { readonly, ...blockEntityProps } = props;
-            const mockBlockDockProps = { blockDefinition, blockEntity: blockEntityProps, ...mockBlockDockInitialData, hideDebugToggle: true, readonly  };
+            const { blockEntity, readonly } = props;
+            
+            const mockBlockDockProps = { 
+              blockDefinition, 
+              initialData: mockBlockDockInitialData, 
+              hideDebugToggle: true, 
+              readonly, 
+              serviceModuleCallbacks  
+            };
+            
+            // Check if we've previously added the block entity from the props message
+            const existingBlockEntity = mockBlockDockProps.initialData.initialEntities.find(entity => 
+               entity.metadata.recordId.entityId === blockEntity.metadata.recordId.entityId
+                  && entity.metadata.recordId.editionId === blockEntity.metadata.recordId.editionId
+            );
+            
+            if (existingBlockEntity) {
+              // We don't want to end up with two entities at the same record id, so we overwrite if it's been set previously
+              existingBlockEntity.metadata = blockEntity.metadata;
+              existingBlockEntity.properties = blockEntity.properties ?? {};
+            } else {
+              // This is the first render - add the block entity
+              mockBlockDockProps.initialData.initialEntities.push(blockEntity);
+            }
+
+            mockBlockDockProps.blockEntityRecordId = blockEntity.metadata.recordId;
             
             document.getElementById("loading-indicator")?.remove();
-          
+
             ReactDOM.render(
               _jsx(MockBlockDock, mockBlockDockProps),
               document.getElementById("container")
@@ -168,9 +301,9 @@ const handler: NextApiHandler = async (req, res) => {
           
           window.addEventListener(
               "message", 
-              ({ data }) => { 
-                if (typeof data === "string") { 
-                  render(JSON.parse(data)) 
+              ({ data }) => {
+                if ("type" in data && data.type === "blockEntityProps") {
+                  render(data.payload) 
                 }
               }
           );

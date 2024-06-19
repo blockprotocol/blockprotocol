@@ -1,0 +1,91 @@
+{
+  "name": "@blocks/feature-showcase",
+  "version": "0.0.6",
+  "private": true,
+  "description": "This is a feature showcase block for the Block Protocol.",
+  "keywords": [
+    "blockprotocol",
+    "blocks"
+  ],
+  "homepage": "https://blockprotocol.org",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "blocks/feature-showcase"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "scripts": {
+    "build": "block-scripts build",
+    "codegen": "block-scripts codegen && yarn format",
+    "dev": "block-scripts dev",
+    "fix:eslint": "eslint --fix .",
+    "format": "prettier --write --ignore-unknown .",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
+    "lint:tsc": "tsc --noEmit",
+    "serve": "block-scripts serve"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "trailingComma": "all"
+  },
+  "dependencies": {
+    "@blockprotocol/graph": "0.3.4",
+    "@blockprotocol/type-system": "0.1.1",
+    "chalk": "5.2.0",
+    "fs-extra": "^10.1.0"
+  },
+  "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
+    "@local/tsconfig": "0.0.0-private",
+    "@types/react-dom": "18.0.9",
+    "block-scripts": "0.3.5",
+    "eslint": "8.33.0",
+    "mock-block-dock": "0.1.10",
+    "prettier": "2.8.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "4.9.4"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "block-scripts": {
+    "port": 63212
+  },
+  "blockprotocol": {
+    "blockType": {
+      "entryPoint": "react"
+    },
+    "displayName": "Block Protocol Feature Showcase",
+    "icon": "public/omega.svg",
+    "image": "public/block-preview.png",
+    "name": "feature-showcase",
+    "protocol": "0.3",
+    "blockEntityType": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
+    "codegen": {
+      "outputFolder": "src/types/generated",
+      "targets": {
+        "block-entity.ts": [
+          {
+            "blockEntityType": true
+          }
+        ],
+        "company.ts": [
+          {
+            "sourceTypeId": "https://blockprotocol.org/@examples/types/entity-type/person/v/1"
+          }
+        ],
+        "person.ts": [
+          {
+            "sourceTypeId": "https://blockprotocol.org/@examples/types/entity-type/person/v/1"
+          }
+        ]
+      }
+    }
+  }
+}

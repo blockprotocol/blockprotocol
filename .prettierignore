@@ -33,6 +33,7 @@ yarn-error.log*
 
 ## Dependency directories
 node_modules
+vendor/
 
 ## TypeScript cache
 *.tsbuildinfo
@@ -55,6 +56,7 @@ node_modules
 
 ## Build artifacts
 dist
+build/
 
 ## VScode config
 .vscode
@@ -81,9 +83,7 @@ target
 wasm-pack.log
 
 ## Workspace-specific
-apps/site/blocks-data.json
 apps/site/playwright-report
-apps/site/public/blocks
 apps/site/public/schemas
 apps/site/site-map.json
 apps/site/test-results
@@ -99,3 +99,6 @@ libs/mock-block-dock/src/version.ts
 # Keep license files as is
 LICENSE.md
 LICENSE-*.md
+
+## Ignore auto-generated files
+*.gen.ts

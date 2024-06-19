@@ -3,6 +3,7 @@ import path from "node:path";
 import chalk from "chalk";
 import { findUp } from "find-up";
 import fs from "fs-extra";
+import isCi from "is-ci";
 
 import { printSpacer } from "../../shared/print-spacer.js";
 import { doesUserAgree } from "./does-user-agree.js";
@@ -42,7 +43,7 @@ const extractKeyFromRcFile = (filePath, namespace) => {
     `Config file ${chalk.red("does not contain")} '${configFileKey}' key.`,
   );
   console.log(`Path: ${filePath}`);
-  process.exit();
+  process.exit(1);
 };
 
 /**
@@ -84,7 +85,7 @@ export const findApiKey = async (namespace) => {
   );
 
   const projectRootPath = await findProjectRoot();
-  if (projectRootPath) {
+  if (projectRootPath && !isCi) {
     const agreement = await doesUserAgree(
       `Would you like a ${configFileName} created at the project root?`,
     );
@@ -100,5 +101,5 @@ export const findApiKey = async (namespace) => {
   }
 
   printSpacer();
-  process.exit();
+  process.exit(1);
 };

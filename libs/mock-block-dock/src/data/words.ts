@@ -12,6 +12,10 @@ export const personNames = [
   "Connor",
   "Jack",
   "Louis",
+  "Alice",
+  "Johanna",
+  "Jeremy",
+  "Samuel",
 ];
 
 export const companyNames = [

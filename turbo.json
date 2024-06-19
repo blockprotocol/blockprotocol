@@ -2,16 +2,8 @@
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
     "build": {
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "public/blocks/**",
-        "public/schemas/**"
-      ],
-      "dependsOn": ["codegen", "^build"]
-    },
-    "codegen": {
-      "outputs": ["blocks-data.json", "site-map.json", "src/version.ts"]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
     },
     "fix:eslint": {
       "dependsOn": ["^build"],
@@ -29,13 +21,24 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
+    "@apps/site#codegen": {
+      "outputs": ["site-map.json"]
+    },
+    "@apps/site#build": {
+      "dependsOn": ["codegen", "^build"],
+      "outputs": ["dist/**", ".next/**", "public/schemas/**"]
+    },
+    "@blocks/feature-showcase#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/entity-types/**/*.gen.ts"]
+    },
     "@blockprotocol/type-system#build": {
       "dependsOn": [],
       "outputs": ["dist/**", "wasm/**"]
     },
     "@blockprotocol/type-system#fix:eslint": {
       "dependsOn": ["build"],
-      "outputs": []
+      "cache": false
     },
     "@blockprotocol/type-system#lint:eslint": {
       "dependsOn": ["build"],
@@ -48,6 +51,25 @@
     "@blockprotocol/type-system#test": {
       "dependsOn": ["build"],
       "outputs": []
+    },
+    "mock-block-dock#codegen": {
+      "outputs": ["src/version.ts"]
+    },
+    "block-template-custom-element#build": {
+      "dependsOn": ["^build", "codegen"],
+      "outputs": ["dist/**"]
+    },
+    "block-template-custom-element#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/types/generated/**.ts"]
+    },
+    "block-template-react#build": {
+      "dependsOn": ["^build", "codegen"],
+      "outputs": ["dist/**"]
+    },
+    "block-template-react#codegen": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/types/generated/**.ts"]
     }
   }
 }

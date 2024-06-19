@@ -17,9 +17,9 @@ export const TABS = [
     testId: "profile-page-blocks-tab",
   },
   {
-    title: "Schemas",
-    value: "schemas",
-    slug: "schemas",
+    title: "Types",
+    value: "types",
+    slug: "types",
     testId: "profile-page-schemas-tab",
   },
 ] as const;

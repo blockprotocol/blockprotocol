@@ -1,37 +1,54 @@
 import {
-  BlockGraphMessageCallbacks,
-  GraphEmbedderHandler,
+  GraphBlockMessageCallbacks as GraphBlockMessageCallbacksNonTemporal,
+  GraphEmbedderHandler as GraphEmbedderHandlerNonTemporal,
 } from "@blockprotocol/graph";
+import {
+  GraphBlockMessageCallbacks as GraphBlockMessageCallbacksTemporal,
+  GraphEmbedderHandler as GraphEmbedderHandlerTemporal,
+} from "@blockprotocol/graph/temporal";
 import { useEffect, useRef } from "react";
 
-type GraphValue = {
-  [Key in keyof BlockGraphMessageCallbacks]: {
-    valueName: Key;
-    value: Parameters<BlockGraphMessageCallbacks[Key]>[0]["data"];
-  };
-}[keyof BlockGraphMessageCallbacks];
+type GraphValue<Temporal extends boolean> = Temporal extends true
+  ? {
+      [Key in keyof GraphBlockMessageCallbacksTemporal]: {
+        valueName: Key;
+        value: Parameters<GraphBlockMessageCallbacksTemporal[Key]>[0]["data"];
+      };
+    }[keyof GraphBlockMessageCallbacksTemporal]
+  : {
+      [Key in keyof GraphBlockMessageCallbacksNonTemporal]: {
+        valueName: Key;
+        value: Parameters<
+          GraphBlockMessageCallbacksNonTemporal[Key]
+        >[0]["data"];
+      };
+    }[keyof GraphBlockMessageCallbacksNonTemporal];
 
-type UseSendGraphValueArgs = {
-  graphService?: GraphEmbedderHandler | null;
-} & GraphValue;
+type UseSendGraphValueArgs<Temporal extends boolean> = {
+  graphModule:
+    | (Temporal extends true
+        ? GraphEmbedderHandlerTemporal
+        : GraphEmbedderHandlerNonTemporal)
+    | null;
+} & GraphValue<Temporal>;
 
-export const useSendGraphValue = ({
-  graphService,
+export const useSendGraphValue = <Temporal extends boolean>({
+  graphModule,
   value,
   valueName,
-}: UseSendGraphValueArgs) => {
+}: UseSendGraphValueArgs<Temporal>) => {
   const sentValue = useRef(value);
   const sentInitially = useRef(false);
 
   useEffect(() => {
     if (
-      graphService &&
+      graphModule &&
       (!sentInitially.current ||
         JSON.stringify(value) !== JSON.stringify(sentValue.current))
     ) {
-      graphService[valueName]({ data: value as any }); // @todo how to maintain the union GraphValue is initially set to?
+      graphModule[valueName]({ data: value as any }); // @todo how to maintain the union GraphValue is initially set to?
       sentInitially.current = true;
       sentValue.current = value;
     }
-  }, [graphService, value, valueName]);
+  }, [graphModule, value, valueName]);
 };

@@ -2,6 +2,7 @@ import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/legacy/image";
 
 import transparentBlocksWithCircleImage from "../../../../public/assets/new-home/transparent-blocks-with-circle-min.png";
+import { FadeInOnViewport } from "../../fade-in-on-viewport";
 
 export const InteroperableBlocks = () => {
   const theme = useTheme();
@@ -57,7 +58,7 @@ export const InteroperableBlocks = () => {
           </Box>
         )}
 
-        <Box
+        <FadeInOnViewport
           sx={{
             position: { xs: "relative", md: "absolute" },
             top: { md: "4%", lg: "8%", xl: "10%" },
@@ -123,7 +124,7 @@ export const InteroperableBlocks = () => {
             make it easy to capture and work with typed data - often even more
             convenient than inputting information in an unstructured fashion.
           </Typography>
-        </Box>
+        </FadeInOnViewport>
       </Box>
     </Box>
   );

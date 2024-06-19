@@ -1,5 +1,5 @@
 mod error;
-pub(in crate::ontology) mod repr;
+pub(in crate::ontology) mod raw;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
@@ -8,62 +8,29 @@ use std::collections::HashMap;
 pub use error::ParseLinksError;
 
 use crate::{
-    uri::{BaseUri, VersionedUri},
-    Array, EntityTypeReference, OneOf, ValidateUri, ValidationError,
+    url::{BaseUrl, VersionedUrl},
+    Array, EntityTypeReference, OneOf, ValidateUrl, ValidationError,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Links {
-    links: HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
-    required_links: Vec<VersionedUri>,
-}
+pub struct Links(
+    pub(crate) HashMap<VersionedUrl, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
+);
 
 impl Links {
-    /// Creates a new `Links` without validating.
+    /// Creates a new `Links` object.
     #[must_use]
-    pub const fn new_unchecked(
-        links: HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
-        required: Vec<VersionedUri>,
+    pub const fn new(
+        links: HashMap<VersionedUrl, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
     ) -> Self {
-        Self {
-            links,
-            required_links: required,
-        }
-    }
-
-    /// Creates a new `Links`.
-    ///
-    /// # Errors
-    ///
-    /// - [`ValidationError::MissingRequiredLink`] if a required link is not a key in `links`.
-    pub fn new(
-        links: HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
-        required: Vec<VersionedUri>,
-    ) -> Result<Self, ValidationError> {
-        let links = Self::new_unchecked(links, required);
-        links.validate()?;
-        Ok(links)
-    }
-
-    fn validate(&self) -> Result<(), ValidationError> {
-        for link in self.required() {
-            if !self.links().contains_key(link) {
-                return Err(ValidationError::MissingRequiredLink(link.clone()));
-            }
-        }
-        Ok(())
+        Self(links)
     }
 
     #[must_use]
     pub const fn links(
         &self,
-    ) -> &HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
-        &self.links
-    }
-
-    #[must_use]
-    pub fn required(&self) -> &[VersionedUri] {
-        &self.required_links
+    ) -> &HashMap<VersionedUrl, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
+        &self.0
     }
 }
 
@@ -98,9 +65,9 @@ impl<T> MaybeOrderedArray<T> {
     }
 }
 
-impl<T: ValidateUri> ValidateUri for MaybeOrderedArray<T> {
-    fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
-        self.array().items().validate_uri(base_uri)
+impl<T: ValidateUrl> ValidateUrl for MaybeOrderedArray<T> {
+    fn validate_url(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
+        self.array().items().validate_url(base_url)
     }
 }
 

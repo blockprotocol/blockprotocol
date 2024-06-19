@@ -1,183 +1,210 @@
 import {
-  BlockGraph,
-  EmbedderGraphMessageCallbacks,
-  Entity,
-  EntityType,
-  Link,
-  LinkedAggregation,
-  LinkedAggregationDefinition,
+  Entity as EntityNonTemporal,
+  EntityRecordId as EntityRecordIdNonTemporal,
 } from "@blockprotocol/graph";
+import {
+  Entity as EntityTemporal,
+  EntityRecordId as EntityRecordIdTemporal,
+  QueryTemporalAxes,
+} from "@blockprotocol/graph/temporal";
 import { Dispatch, SetStateAction, useMemo } from "react";
 
 import { mockData as initialMockData } from "./data";
-import { useDefaultState } from "./use-default-state";
-import { useLinkFields } from "./use-mock-block-props/use-link-fields";
+import { mockDataSubgraphTemporalAxes } from "./data/temporal-axes";
+import { MockData } from "./datastore/mock-data";
 import {
-  MockData,
-  useMockDatastore,
-} from "./use-mock-block-props/use-mock-datastore";
+  MockDatastoreNonTemporal,
+  MockDatastoreTemporal,
+  useMockDatastoreNonTemporal,
+  useMockDatastoreTemporal,
+} from "./datastore/use-mock-datastore";
+import { useDefaultState } from "./use-default-state";
 
-export type MockBlockHookArgs = {
-  blockEntity?: Entity;
-  blockSchema?: Partial<EntityType>;
-  initialEntities?: Entity[];
-  initialEntityTypes?: EntityType[];
-  initialLinks?: Link[];
-  initialLinkedAggregations?: LinkedAggregationDefinition[];
+export type InitialData<Temporal extends boolean> = Temporal extends true
+  ? {
+      initialTemporalAxes: QueryTemporalAxes;
+      initialEntities: EntityTemporal[];
+      // initialLinkedQueries: LinkedQueryDefinition[];
+    }
+  : {
+      initialEntities: EntityNonTemporal[];
+    };
+
+export type MockBlockHookArgs<Temporal extends boolean> = {
+  blockEntityRecordId?: Temporal extends true
+    ? EntityRecordIdTemporal
+    : EntityRecordIdNonTemporal;
+  initialData?: InitialData<Temporal>;
+  includeDefaultMockData?: boolean;
   readonly: boolean;
+  simulateDatastoreLatency?: { min: number; max: number };
 };
 
-export type MockBlockHookResult = {
-  blockEntity: Entity;
-  blockGraph: BlockGraph;
-  blockSchema?: Partial<EntityType>;
-  datastore: MockData;
-  entityTypes: EntityType[];
-  graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
-  linkedAggregations: LinkedAggregation[];
+export type MockBlockHookResult<Temporal extends boolean> = {
+  blockEntityRecordId: Temporal extends true
+    ? EntityRecordIdTemporal
+    : EntityRecordIdNonTemporal;
+  mockDatastore: Temporal extends true
+    ? MockDatastoreTemporal
+    : MockDatastoreNonTemporal;
   readonly: boolean;
   setReadonly: Dispatch<SetStateAction<boolean>>;
-  setEntityIdOfEntityForBlock: Dispatch<SetStateAction<string>>;
+  setEntityRecordIdOfEntityForBlock: Dispatch<
+    SetStateAction<
+      Temporal extends true ? EntityRecordIdTemporal : EntityRecordIdNonTemporal
+    >
+  >;
 };
+
+const defaultMockData = initialMockData<false>(undefined);
 
 /**
  * A hook to generate Block Protocol properties and callbacks for use in testing blocks.
  * The starting mock data can be customized using the initial[X] props.
  * See README.md for usage instructions.
- * @param [blockEntity] the block's own starting properties, if any
- * @param [blockSchema] - The schema for the block entity
- * @param [initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
- * @param [initialEntityTypes] - The entity types to include in the data store (NOT the block's type, which is always provided)
- * @param [initialLinks] - The links to include in the data store
- * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ *
+ * @param args
+ * @param [args.blockEntityRecordId] - the `EntityRecordId` of the block's own starting entity, if any
+ * @param [args.initialData] - The initial data to include in the data store, with default mock data being provided if this is omitted
+ * @param [args.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
+ * @param [args.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
+ * @param [args.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param {{min: number, max: number}} [args.simulateDatastoreLatency] simulate latency in responses to datastore-related requests, where each delay is randomly chosen from the supplied range
  */
-export const useMockBlockProps = ({
-  blockEntity: externalBlockEntity,
-  blockSchema: externalBlockSchema,
-  initialEntities,
-  initialEntityTypes,
-  initialLinks,
-  initialLinkedAggregations,
-  readonly: externalReadonly,
-}: MockBlockHookArgs): MockBlockHookResult => {
-  const [entityIdOfEntityForBlock, setEntityIdOfEntityForBlock] =
-    useDefaultState<string>(externalBlockEntity?.entityId ?? "");
-
-  const [readonly, setReadonly] = useDefaultState<boolean>(externalReadonly);
-
-  const { initialBlockEntity, mockData } = useMemo((): {
-    initialBlockEntity: Entity;
-    mockData: MockData;
-  } => {
-    const entityTypeId = externalBlockEntity?.entityTypeId ?? "block-type-1";
-
-    const blockEntityType: EntityType = {
-      entityTypeId,
-      schema: {
-        title: "BlockType",
-        type: "object",
-        $schema: "https://json-schema.org/draft/2019-09/schema",
-        $id: "http://localhost/blockType1",
-        ...(externalBlockSchema ?? {}),
-      },
-    };
-
-    const newBlockEntity: Entity = {
-      entityId: "block1",
-      entityTypeId,
-      properties: {},
-    };
-
-    if (externalBlockEntity && Object.keys(externalBlockEntity).length > 0) {
-      Object.assign(newBlockEntity, externalBlockEntity);
+export const useMockBlockPropsNonTemporal = (
+  args: MockBlockHookArgs<false>,
+): MockBlockHookResult<false> => {
+  const mockData = useMemo(() => {
+    if (
+      args.blockEntityRecordId &&
+      !args.initialData?.initialEntities.find(
+        (entity) =>
+          entity.metadata.recordId.entityId ===
+            args.blockEntityRecordId!.entityId &&
+          entity.metadata.recordId.editionId ===
+            args.blockEntityRecordId!.editionId,
+      )
+    ) {
+      throw new Error(
+        "If you provide blockEntityRecordId, it must match the recordId of an entity in initialData.initialEntities",
+      );
     }
 
-    const nextMockData: MockData = {
+    return {
       entities: [
-        newBlockEntity,
-        ...(initialEntities ?? initialMockData.entities),
+        ...(args.initialData?.initialEntities ?? []),
+        ...(args.includeDefaultMockData ? defaultMockData.entities : []),
       ],
-      entityTypes: [
-        blockEntityType,
-        ...(initialEntityTypes ?? initialMockData.entityTypes),
-      ],
-      links: initialLinks ?? initialMockData.links,
-      linkedAggregationDefinitions:
-        initialLinkedAggregations ??
-        initialMockData.linkedAggregationDefinitions,
     };
-
-    return { initialBlockEntity: newBlockEntity, mockData: nextMockData };
   }, [
-    externalBlockEntity,
-    externalBlockSchema,
-    initialEntities,
-    initialEntityTypes,
-    initialLinks,
-    initialLinkedAggregations,
+    args.blockEntityRecordId,
+    args.initialData?.initialEntities,
+    args.includeDefaultMockData,
   ]);
 
-  const datastore = useMockDatastore(mockData, readonly);
+  const defaultBlockEntity = mockData.entities[0]!;
 
-  const {
-    entities,
-    entityTypes,
-    graphServiceCallbacks,
-    links,
-    linkedAggregationDefinitions,
-  } = datastore;
-
-  const latestBlockEntity = useMemo(() => {
-    return (
-      entities.find((entity) => entity.entityId === entityIdOfEntityForBlock) ??
-      // fallback in case the entityId of the wrapped component is updated by updating its props
-      mockData.entities.find(
-        (entity) => entity.entityId === initialBlockEntity.entityId,
-      )
+  const [entityRecordIdOfEntityForBlock, setEntityRecordIdOfEntityForBlock] =
+    useDefaultState<EntityRecordIdNonTemporal>(
+      args.blockEntityRecordId ?? defaultBlockEntity.metadata.recordId,
     );
-  }, [
-    entities,
-    initialBlockEntity.entityId,
-    mockData.entities,
-    entityIdOfEntityForBlock,
-  ]);
 
-  if (!latestBlockEntity) {
-    throw new Error("Cannot find block entity. Did it delete itself?");
-  }
+  const [readonly, setReadonly] = useDefaultState<boolean>(args.readonly);
 
-  // construct BP-specified link fields from the links and linkedAggregations in the datastore
-  const { blockGraph, linkedAggregations } = useLinkFields({
-    entities,
-    links,
-    linkedAggregationDefinitions,
-    startingEntity: latestBlockEntity,
-  });
-
-  // @todo we don't do anything with this type except check it exists - do we need to do this?
-  const latestBlockEntityType = useMemo(
-    () =>
-      entityTypes.find(
-        (entityType) =>
-          entityType.entityTypeId === latestBlockEntity.entityTypeId,
-      ),
-    [entityTypes, latestBlockEntity.entityTypeId],
+  const mockDatastore = useMockDatastoreNonTemporal(
+    mockData,
+    readonly,
+    args.simulateDatastoreLatency,
   );
 
-  if (!latestBlockEntityType) {
-    throw new Error("Cannot find block entity type. Has it been deleted?");
-  }
+  return {
+    blockEntityRecordId: entityRecordIdOfEntityForBlock,
+    mockDatastore,
+    // linkedQueries,
+    readonly,
+    setEntityRecordIdOfEntityForBlock,
+    setReadonly,
+  };
+};
+
+const defaultTemporalMockData = initialMockData<true>(
+  mockDataSubgraphTemporalAxes(),
+);
+
+/**
+ * A hook to generate Block Protocol properties and callbacks for use in testing blocks.
+ * The starting mock data can be customized using the initial[X] props.
+ * See README.md for usage instructions.
+ *
+ * @param args
+ * @param [args.blockEntityRecordId] - the `EntityRecordId` of the block's own starting entity, if any
+ * @param [args.initialData] - The initial data to include in the data store, with default mock data being provided if this is omitted
+ * @param [args.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
+ * @param [args.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
+ * @param [args.initialData.initialLinkedQueries] - The linkedQuery DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param {{min: number, max: number}} [args.simulateDatastoreLatency] simulate latency in responses to datastore-related requests, where each delay is randomly chosen from the supplied range
+ */
+export const useMockBlockPropsTemporal = (
+  args: MockBlockHookArgs<true>,
+): MockBlockHookResult<true> => {
+  const mockData = useMemo((): MockData<true> => {
+    if (
+      args.blockEntityRecordId &&
+      !args.initialData?.initialEntities.find(
+        (entity) =>
+          entity.metadata.recordId.entityId ===
+            args.blockEntityRecordId!.entityId &&
+          entity.metadata.recordId.editionId ===
+            args.blockEntityRecordId!.editionId,
+      )
+    ) {
+      throw new Error(
+        "If you provide blockEntityRecordId, it must match the recordId of an entity in initialData.initialEntities",
+      );
+    }
+
+    return {
+      entities: [
+        ...(args.initialData?.initialEntities ?? []),
+        ...(args.includeDefaultMockData
+          ? defaultTemporalMockData.entities
+          : []),
+      ],
+      subgraphTemporalAxes: args.initialData?.initialTemporalAxes
+        ? {
+            initial: args.initialData?.initialTemporalAxes,
+            resolved: args.initialData?.initialTemporalAxes,
+          }
+        : defaultTemporalMockData.subgraphTemporalAxes,
+    };
+  }, [
+    args.blockEntityRecordId,
+    args.initialData?.initialEntities,
+    args.initialData?.initialTemporalAxes,
+    args.includeDefaultMockData,
+  ]);
+
+  const defaultBlockEntity = mockData.entities[0]!;
+
+  const [entityRecordIdOfEntityForBlock, setEntityRecordIdOfEntityForBlock] =
+    useDefaultState<EntityRecordIdNonTemporal>(
+      args.blockEntityRecordId ?? defaultBlockEntity.metadata.recordId,
+    );
+
+  const [readonly, setReadonly] = useDefaultState<boolean>(args.readonly);
+
+  const mockDatastore = useMockDatastoreTemporal(
+    mockData,
+    readonly,
+    args.simulateDatastoreLatency,
+  );
 
   return {
-    blockEntity: latestBlockEntity,
-    blockGraph,
-    blockSchema: externalBlockSchema,
-    datastore,
-    entityTypes,
-    graphServiceCallbacks,
-    linkedAggregations,
+    blockEntityRecordId: entityRecordIdOfEntityForBlock,
+    mockDatastore,
+    // linkedQueries,
     readonly,
-    setEntityIdOfEntityForBlock,
+    setEntityRecordIdOfEntityForBlock,
     setReadonly,
   };
 };

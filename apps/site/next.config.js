@@ -13,6 +13,7 @@ const nextConfig = {
     isrMemoryCacheSize: 0,
   },
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
+  poweredByHeader: false,
   productionBrowserSourceMaps: true,
   swcMinify: true,
 
@@ -20,7 +21,11 @@ const nextConfig = {
     autoInstrumentServerFunctions: false,
     hideSourceMaps: false,
   },
-  transpilePackages: ["internal-api-repo"],
+  transpilePackages: [
+    "internal-api-repo",
+    "@hashintel/design-system",
+    "@hashintel/type-editor",
+  ],
 
   // We call linters in GitHub Actions for all pull requests. By not linting
   // again during `next build`, we save CI minutes and unlock more feedback.
@@ -36,13 +41,6 @@ const nextConfig = {
          * @see ./src/middleware.page.ts for middleware which serves the JSON
          */
         source: "/:shortname/types/:path*",
-        has: [
-          {
-            type: "header",
-            key: "accept",
-            value: "(.*application/json.*)",
-          },
-        ],
         headers: [
           {
             key: "access-control-allow-origin",
@@ -77,32 +75,102 @@ const nextConfig = {
       },
       {
         source: "/docs/publishing-blocks",
-        destination: "/docs/developing-blocks#publish",
+        destination: "/docs/blocks#publish",
         permanent: true,
       },
       {
-        source: "/spec/:slug*",
-        destination: "/docs/spec/:slug*",
+        source: "/docs/working-with-services",
+        destination: "/docs/services",
+        permanent: false,
+      },
+      {
+        source: "/docs/developing-blocks",
+        destination: "/docs/blocks/develop",
+        permanent: false,
+      },
+      {
+        source: "/docs/using-blocks",
+        destination: "/docs/blocks/environments",
+        permanent: false,
+      },
+      {
+        source: "/docs/spec/:slug*",
+        destination: "/spec/:slug*",
         permanent: true,
       },
       {
-        source: "/docs/spec/block-types",
-        destination: "/docs/spec/core",
+        source: "/docs/roadmap",
+        destination: "/roadmap",
         permanent: true,
       },
       {
         source: "/spec/block-types",
-        destination: "/docs/spec/core",
+        destination: "/spec/core",
         permanent: true,
       },
       {
-        source: "/docs/spec/core-specification",
-        destination: "/docs/spec/core",
+        source: "/spec/block-types",
+        destination: "/spec/core",
         permanent: true,
       },
       {
-        source: "/docs/spec/graph-service-specification",
-        destination: "/docs/spec/graph-service",
+        source: "/spec/core-specification",
+        destination: "/spec/core",
+        permanent: true,
+      },
+      {
+        source: "/spec/graph-module-specification",
+        destination: "/spec/graph",
+        permanent: true,
+      },
+      {
+        source: "/spec/graph-service",
+        destination: "/spec/graph",
+        permanent: true,
+      },
+      {
+        source: "/spec/graph-module",
+        destination: "/spec/graph",
+        permanent: true,
+      },
+      {
+        source: "/spec/hook-service",
+        destination: "/spec/hook",
+        permanent: true,
+      },
+      {
+        source: "/spec/hook-module",
+        destination: "/spec/hook",
+        permanent: true,
+      },
+      {
+        source: "/spec/service-module",
+        destination: "/spec/service",
+        permanent: true,
+      },
+      {
+        source: "/spec/rfcs_and_roadmap",
+        destination: "/roadmap",
+        permanent: true,
+      },
+      {
+        source: "/docs/embedding-blocks",
+        destination: "/docs/blocks#your-own-application",
+        permanent: true,
+      },
+      {
+        source: "/settings/:slug*",
+        destination: "/account/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/account",
+        destination: "/account/general",
+        permanent: true,
+      },
+      {
+        source: "/:shortname/all-types",
+        destination: "/:shortname/types",
         permanent: true,
       },
     ];
@@ -119,14 +187,28 @@ const nextConfig = {
         destination: "/api/rewrites/sandboxed-block-demo",
       },
       {
-        source: "/types/services/:servicename/:typename",
-        destination: "/types/services/:servicename/:typename.json",
+        source: "/types/modules/:modulename/:typename*",
+        destination: "/types/modules/:modulename/:typename*.json",
+      },
+      {
+        source: "/legal/terms/dpa/attachment-:number",
+        destination: "/legal/terms/dpa/attachment-:number.pdf",
       },
       {
         source: "/types/core/:typename",
         destination: "/types/core/:typename.json",
       },
     ];
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "static.blockprotocol.com",
+        port: "",
+        pathname: "/cdn-cgi/imagedelivery/**",
+      },
+    ],
   },
 };
 

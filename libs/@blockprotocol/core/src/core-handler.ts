@@ -1,10 +1,10 @@
 import { v4 as uuid } from "uuid";
 
-import { ServiceHandler } from "./service-handler";
-import {
+import type { ModuleHandler } from "./module-handler.js";
+import type {
   GenericMessageCallback,
   Message,
-  MessageCallbacksByService,
+  MessageCallbacksByModule,
   MessageData,
   PromiseRejecter,
   PromiseResolver,
@@ -15,7 +15,7 @@ import {
 /**
  * Implements the Block Protocol Core Specification, i.e.:
  * - listening for and dispatching messages via events
- * - registering callbacks from service handlers
+ * - registering callbacks from module handlers
  * - processing incoming messages and calling callbacks as appropriate
  *
  * This base class handles those common functions. There are two implementers,
@@ -31,15 +31,15 @@ export abstract class CoreHandler {
   /** a default callback for use where no callback is registered for a message */
   private readonly defaultMessageCallback?: GenericMessageCallback;
 
-  /** an object containing registered callbacks for messages, by service and message name */
-  private readonly messageCallbacksByService: MessageCallbacksByService = {};
+  /** an object containing registered callbacks for messages, by module and message name */
+  private readonly messageCallbacksByModule: MessageCallbacksByModule = {};
 
   /** a map of promise settlers and expected response names for requests, by requestId */
   private readonly responseSettlersByRequestIdMap: ResponseSettlersByRequestIdMap =
     new Map();
 
-  /** the service handlers which have been registered to receive and send messages */
-  protected readonly services: Map<string, ServiceHandler> = new Map();
+  /** the module handlers which have been registered to receive and send messages */
+  protected readonly modules: Map<string, ModuleHandler> = new Map();
 
   /**
    * the element on which messages will be listened for
@@ -57,8 +57,8 @@ export abstract class CoreHandler {
   /** whether the instance of CoreHandler belongs to a block or embedding application */
   protected readonly sourceType: "block" | "embedder";
 
-  /** when this handler itself sends messages, serviceName identifies it as the core handler */
-  readonly serviceName: "core" = "core";
+  /** when this handler itself sends messages, moduleName identifies it as the core handler */
+  readonly moduleName: "core" = "core";
 
   /**
    * Handles the initialization messages exchanged when a block registers a handler
@@ -87,38 +87,38 @@ export abstract class CoreHandler {
       message !== null &&
       !Array.isArray(message) &&
       "requestId" in message &&
-      "service" in message &&
+      "module" in message &&
       "source" in message &&
       "messageName" in message
     );
   }
 
   /**
-   * Register a ServiceHandler for the given element.
+   * Register a ModuleHandler for the given element.
    * Will re-use the CoreHandler if it exists for that element, or create a new one.
    * Currently the only way CoreHandlers may be instantiated
    *
-   * [FUTURE]: there may be a need to instantiate CoreHandlers without any services
+   * [FUTURE]: there may be a need to instantiate CoreHandlers without any modules
    */
-  static registerService({
+  static registerModule({
     element,
-    service,
+    module,
   }: {
     element: HTMLElement;
-    service: ServiceHandler;
+    module: ModuleHandler;
   }) {
-    const { serviceName } = service;
+    const { moduleName } = module;
     const handler =
       this.instanceMap.get(element) ?? Reflect.construct(this, [{ element }]);
-    handler.services.set(serviceName, service);
-    handler.messageCallbacksByService[serviceName] ??= new Map();
+    handler.modules.set(moduleName, module);
+    handler.messageCallbacksByModule[moduleName] ??= new Map();
     return handler;
   }
 
-  unregisterService({ service }: { service: ServiceHandler }) {
-    const { serviceName } = service;
-    this.services.delete(serviceName);
-    if (this.services.size === 0) {
+  unregisterModule({ module }: { module: ModuleHandler }) {
+    const { moduleName } = module;
+    this.modules.delete(moduleName);
+    if (this.modules.size === 0) {
       this.removeEventListeners();
       CoreHandler.instanceMap.delete(this.listeningElement);
     }
@@ -192,15 +192,15 @@ export abstract class CoreHandler {
     {
       callback,
       messageName,
-      serviceName,
+      moduleName,
     }: {
       callback: GenericMessageCallback;
       messageName: string;
-      serviceName: string;
+      moduleName: string;
     },
   ) {
-    this.messageCallbacksByService[serviceName] ??= new Map();
-    this.messageCallbacksByService[serviceName]!.set(messageName, callback);
+    this.messageCallbacksByModule[moduleName] ??= new Map();
+    this.messageCallbacksByModule[moduleName]!.set(messageName, callback);
   }
 
   removeCallback(
@@ -208,14 +208,14 @@ export abstract class CoreHandler {
     {
       callback,
       messageName,
-      serviceName,
+      moduleName,
     }: {
       callback: GenericMessageCallback;
       messageName: string;
-      serviceName: string;
+      moduleName: string;
     },
   ) {
-    const map = this.messageCallbacksByService[serviceName];
+    const map = this.messageCallbacksByModule[moduleName];
     if (map?.get(messageName) === callback) {
       map.delete(messageName);
     }
@@ -246,14 +246,14 @@ export abstract class CoreHandler {
     MessageData<ExpectedResponseData, ExpectedResponseErrorCodes>
   > {
     const { partialMessage, requestId, sender } = args;
-    if (!sender.serviceName) {
-      throw new Error("Message sender has no serviceName set.");
+    if (!sender.moduleName) {
+      throw new Error("Message sender has no moduleName set.");
     }
     const fullMessage: Omit<Message, "timestamp"> = {
       ...partialMessage,
       requestId: requestId ?? uuid(),
       respondedToBy: "respondedToBy" in args ? args.respondedToBy : undefined,
-      service: sender.serviceName,
+      module: sender.moduleName,
       source: this.sourceType,
     };
 
@@ -308,11 +308,11 @@ export abstract class CoreHandler {
    * @throws Error if expected responses could not be produced, or callbacks error when called
    */
   protected async callCallback({ message }: { message: Message }) {
-    const { errors, messageName, data, requestId, respondedToBy, service } =
+    const { errors, messageName, data, requestId, respondedToBy, module } =
       message;
 
     const callback: GenericMessageCallback | undefined =
-      this.messageCallbacksByService[service]?.get(messageName) ??
+      this.messageCallbacksByModule[module]?.get(messageName) ??
       this.defaultMessageCallback;
 
     if (respondedToBy && !callback) {
@@ -327,9 +327,9 @@ export abstract class CoreHandler {
 
     // Produce and send a response, if this message requires one and a callback for it has been registered.
     if (respondedToBy) {
-      const serviceHandler = this.services.get(service);
-      if (!serviceHandler) {
-        throw new Error(`Handler for service ${service} not registered.`);
+      const moduleHandler = this.modules.get(module);
+      if (!moduleHandler) {
+        throw new Error(`Handler for module ${module} not registered.`);
       }
 
       try {
@@ -343,7 +343,7 @@ export abstract class CoreHandler {
             errors: responseErrors as any, // @todo fix this cast
           },
           requestId,
-          sender: serviceHandler,
+          sender: moduleHandler,
         });
       } catch (err) {
         throw new Error(
@@ -384,10 +384,10 @@ export abstract class CoreHandler {
       return;
     }
 
-    const { errors, messageName, data, requestId, service } = message;
+    const { errors, messageName, data, requestId, module } = message;
 
     if (
-      service === "core" &&
+      module === "core" &&
       ((this.sourceType === "embedder" && messageName === "init") ||
         (this.sourceType === "block" && messageName === "initResponse"))
     ) {
@@ -397,7 +397,7 @@ export abstract class CoreHandler {
       this.callCallback({ message }).catch((err) => {
         // eslint-disable-next-line no-console -- intentional feedback for users
         console.error(
-          `Error calling callback for '${service}' service, for message '${messageName}: ${err}`,
+          `Error calling callback for '${module}' module, for message '${messageName}: ${err}`,
         );
         throw err;
       });

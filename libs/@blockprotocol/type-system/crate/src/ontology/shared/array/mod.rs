@@ -1,7 +1,7 @@
 pub(crate) mod error;
-pub(in crate::ontology) mod repr;
+pub(in crate::ontology) mod raw;
 
-use crate::{uri::BaseUri, ValidateUri, ValidationError};
+use crate::{url::BaseUrl, ValidateUrl, ValidationError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Array<T> {
@@ -42,11 +42,11 @@ pub enum ValueOrArray<T> {
     Array(Array<T>),
 }
 
-impl<T: ValidateUri> ValidateUri for ValueOrArray<T> {
-    fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
+impl<T: ValidateUrl> ValidateUrl for ValueOrArray<T> {
+    fn validate_url(&self, base_url: &BaseUrl) -> Result<(), ValidationError> {
         match self {
-            Self::Value(value) => value.validate_uri(base_uri),
-            Self::Array(array) => array.items().validate_uri(base_uri),
+            Self::Value(value) => value.validate_url(base_url),
+            Self::Array(array) => array.items().validate_url(base_url),
         }
     }
 }
@@ -58,48 +58,48 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::{repr, uri::VersionedUri, PropertyTypeReference};
+    use crate::{raw, url::VersionedUrl, PropertyTypeReference};
 
-    fn get_test_value_or_array(uri: &VersionedUri) -> ValueOrArray<PropertyTypeReference> {
+    fn get_test_value_or_array(url: &VersionedUrl) -> ValueOrArray<PropertyTypeReference> {
         let json_repr = json!({
             "type": "array",
             "items": {
-                "$ref": uri.to_string()
+                "$ref": url.to_string()
             },
             "minItems": 10,
             "maxItems": 20,
         });
-        let array_repr: repr::ValueOrArray<repr::PropertyTypeReference> =
+        let array_repr: raw::ValueOrArray<raw::PropertyTypeReference> =
             serde_json::from_value(json_repr).expect("failed to deserialize ValueOrArray");
 
         array_repr.try_into().expect("failed to convert array repr")
     }
 
     #[test]
-    fn valid_uri() {
-        let uri =
-            VersionedUri::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
-                .expect("failed to parse VersionedUri");
-        let array = get_test_value_or_array(&uri);
+    fn valid_url() {
+        let url =
+            VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
+                .expect("failed to parse VersionedUrl");
+        let array = get_test_value_or_array(&url);
 
         array
-            .validate_uri(uri.base_uri())
-            .expect("failed to validate against base URI");
+            .validate_url(&url.base_url)
+            .expect("failed to validate against base URL");
     }
 
     #[test]
-    fn invalid_uri() {
-        let uri_a =
-            VersionedUri::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
-                .expect("failed to parse VersionedUri");
-        let uri_b =
-            VersionedUri::from_str("https://blockprotocol.org/@alice/types/property-type/name/v/1")
-                .expect("failed to parse VersionedUri");
+    fn invalid_url() {
+        let url_a =
+            VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
+                .expect("failed to parse VersionedUrl");
+        let url_b =
+            VersionedUrl::from_str("https://blockprotocol.org/@alice/types/property-type/name/v/1")
+                .expect("failed to parse VersionedUrl");
 
-        let array = get_test_value_or_array(&uri_a);
+        let array = get_test_value_or_array(&url_a);
 
         array
-            .validate_uri(uri_b.base_uri()) // Try and validate against a different URI
-            .expect_err("expected validation against base URI to fail but it didn't");
+            .validate_url(&url_b.base_url) // Try and validate against a different URL
+            .expect_err("expected validation against base URL to fail but it didn't");
     }
 }

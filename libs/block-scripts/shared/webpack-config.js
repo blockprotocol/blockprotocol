@@ -2,6 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import CopyPlugin from "copy-webpack-plugin";
+import Dotenv from "dotenv-webpack";
 import fs from "fs-extra";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import webpack from "webpack";
@@ -47,6 +48,11 @@ const generateBaseWebpackConfig = async (mode) => {
         ],
         "block entry point",
       ),
+      ...((await fs.pathExists("./src/example-graph.ts"))
+        ? {
+            "example-graph": "./src/example-graph.ts",
+          }
+        : {}),
     },
     output: {
       publicPath: "",
@@ -108,7 +114,7 @@ export const generateBuildWebpackConfig = async (mode) => {
   return {
     ...baseWebpackConfig,
     watch: mode === "development",
-    devtool: mode === "development" ? "inline-source-map" : "source-map",
+    devtool: mode === "development" ? "inline-source-map" : undefined,
     plugins: [
       ...(baseWebpackConfig.plugins ?? []),
       ...(mode === "production" ? [new BlockAssetsPlugin()] : []),
@@ -145,6 +151,7 @@ export const generateDevWebpackConfig = async () => {
     plugins: [
       ...(baseWebpackConfig.plugins ?? []),
       new BlockAssetsPlugin(),
+      new Dotenv({ silent: true }),
       new HtmlWebpackPlugin({
         filename: "index.html",
         template: path.resolve(

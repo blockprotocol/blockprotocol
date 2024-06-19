@@ -1,3 +1,4 @@
+import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import {
   Box,
   Container,
@@ -8,7 +9,6 @@ import {
 import { NextSeo } from "next-seo";
 import { FunctionComponent } from "react";
 
-import { EntityType } from "../../../lib/api/model/entity-type.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { Sidebar } from "./sidebar";
@@ -21,7 +21,7 @@ const SIDEBAR_WIDTH = 300;
 
 export type UserPageProps = {
   blocks: ExpandedBlockMetadata[];
-  entityTypes: EntityType[];
+  entityTypes: EntityTypeWithMetadata[];
   activeTab: TabValue;
   user: SerializedUser;
 };
@@ -89,7 +89,7 @@ export const UserPageComponent: FunctionComponent<UserPageProps> = ({
               activeTab={activeTab}
               tabItemsCount={{
                 blocks: blocks.length,
-                schemas: entityTypes.length,
+                types: entityTypes.length,
               }}
             />
             {/* TAB PANELS  */}
@@ -103,7 +103,7 @@ export const UserPageComponent: FunctionComponent<UserPageProps> = ({
             <TabPanel activeTab={activeTab} value="blocks" index={1}>
               <TabPanelContentsWithBlocks user={user} blocks={blocks} />
             </TabPanel>
-            <TabPanel activeTab={activeTab} value="schemas" index={2}>
+            <TabPanel activeTab={activeTab} value="types" index={2}>
               <TabPanelContentsWithSchemas
                 user={user}
                 entityTypes={entityTypes}

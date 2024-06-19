@@ -1,3 +1,4 @@
+import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import {
@@ -7,10 +8,11 @@ import {
   useCallback,
   useState,
 } from "react";
-import { unstable_batchedUpdates } from "react-dom";
+import slugify from "slugify";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
+import { generateOntologyUrl } from "../../pages/shared/schema";
 import { Button } from "../button";
 import { TextField } from "../text-field";
 import { Modal } from "./modal";
@@ -25,27 +27,16 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
   onClose,
 }) => {
   const [newSchemaTitle, setNewSchemaTitle] = useState("");
-  const [touchedInput, setTouchedInput] = useState(false);
+  const [touchedTitleInput, setTouchedTitleInput] = useState(false);
+  const [newDescription, setNewDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>(undefined);
   const router = useRouter();
   const { user } = useUser();
 
-  // @todo might be a good idea to split this into a hook
-  // @see https://github.com/blockprotocol/blockprotocol/pull/223#discussion_r808072665
-  const handleSchemaTitleChange = (value: string) => {
-    let formattedText = value.trim();
-    // replace all empty spaces
-    formattedText = formattedText.replace(/\s/g, "");
-
-    // capitalize text
-    const firstChar = formattedText[0];
-    if (typeof firstChar === "string") {
-      formattedText = firstChar.toUpperCase() + formattedText.slice(1);
-    }
-
-    setNewSchemaTitle(formattedText);
-  };
+  const isMac =
+    typeof window !== "undefined" &&
+    navigator.platform.toUpperCase().includes("MAC");
 
   const handleCreateSchema = useCallback(
     async (evt: FormEvent) => {
@@ -54,37 +45,71 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
         return;
       }
 
-      unstable_batchedUpdates(() => {
-        setTouchedInput(true);
-        setLoading(true);
-        setApiErrorMessage(undefined);
+      setTouchedTitleInput(true);
+      setLoading(true);
+      setApiErrorMessage(undefined);
+
+      const title = newSchemaTitle.trim();
+      const { baseUrl, versionedUrl } = generateOntologyUrl({
+        author: router.query.shortname as `@${string}`,
+        title,
+        kind: "entityType",
+        version: 1,
       });
 
-      const { data, error } = await apiClient.createEntityType({
+      const draft: EntityTypeWithMetadata = {
         schema: {
-          title: newSchemaTitle,
+          description: newDescription.trim(),
+          title,
+          $schema:
+            "https://blockprotocol.org/types/modules/graph/0.3/schema/entity-type",
+          $id: versionedUrl,
+          kind: "entityType",
+          properties: {},
+          type: "object",
         },
-      });
-      setLoading(false);
-      if (error) {
-        setApiErrorMessage(error.message);
-      } else if (data) {
-        const schemaTitle = data.entityType.schema.title;
-        void router.push(`/@${user.shortname}/types/${schemaTitle}`);
+        metadata: {
+          recordId: {
+            baseUrl,
+            version: 1,
+          },
+        },
+      };
+
+      const exists = await apiClient
+        .getEntityTypeByUrl({
+          versionedUrl,
+        })
+        .then((res) => !res.error);
+
+      if (exists) {
+        setLoading(false);
+        setApiErrorMessage("Type title must be unique");
+      } else {
+        void router.push(
+          `${new URL(draft.schema.$id).pathname}?draft=${encodeURIComponent(
+            Buffer.from(JSON.stringify(draft)).toString("base64"),
+          )}`,
+        );
       }
     },
-    [user, newSchemaTitle, router],
+    [user, newDescription, newSchemaTitle, router],
   );
 
   // @todo introduce a library for handling forms
-  const helperText = touchedInput
+  const helperText = touchedTitleInput
     ? apiErrorMessage ||
       (newSchemaTitle === "" ? "Please enter a valid value" : undefined)
     : undefined;
 
-  const isSchemaTitleInvalid = !!apiErrorMessage || newSchemaTitle === "";
+  const isSchemaTitleInvalid =
+    !!apiErrorMessage ||
+    slugify(newSchemaTitle, {
+      lower: true,
+      strict: true,
+    }) === "";
 
-  const displayError = touchedInput && isSchemaTitleInvalid;
+  const displayError = touchedTitleInput && isSchemaTitleInvalid;
 
   return (
     <Modal
@@ -103,7 +128,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
             display: "block",
           }}
         >
-          Create New <strong>Schema</strong>
+          Create New <strong>Entity Type</strong>
         </Typography>
         <Typography
           sx={{
@@ -113,14 +138,14 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
             width: { xs: "90%", md: "85%" },
           }}
         >
-          Schemas are used to define the structure of entities - in other words,
-          define a ‘type’ of entity
+          Types are used to define the structure of entities and their
+          relationships to other entities.
         </Typography>
         <Box component="form" onSubmit={handleCreateSchema}>
           <TextField
             sx={{ mb: 3 }}
             autoFocus
-            label="Schema Title"
+            label="Title"
             fullWidth
             helperText={helperText}
             value={newSchemaTitle}
@@ -128,10 +153,30 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
               if (apiErrorMessage) {
                 setApiErrorMessage(undefined);
               }
-              handleSchemaTitleChange(evt.target.value);
+              setNewSchemaTitle(evt.target.value);
             }}
             required
             error={displayError}
+          />
+
+          <TextField
+            sx={{ mb: 3 }}
+            label="Description"
+            fullWidth
+            value={newDescription}
+            onChange={(evt) => setNewDescription(evt.target.value)}
+            multiline
+            required
+            maxRows={8}
+            onKeyDown={(evt) => {
+              const { metaKey, ctrlKey, code } = evt;
+              if (
+                ((isMac && metaKey) || (!isMac && ctrlKey)) &&
+                code === "Enter"
+              ) {
+                void handleCreateSchema(evt);
+              }
+            }}
           />
 
           <Button

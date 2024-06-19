@@ -1,3 +1,7 @@
+import {
+  ExternalServiceMethod200Response,
+  ExternalServiceMethodRequest,
+} from "@local/internal-api-client";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import axiosRetry from "axios-retry";
 import { ValidationError } from "express-validator";
@@ -16,10 +20,28 @@ import {
   ApiGenerateApiKeyBody,
   ApiGenerateApiKeyResponse,
 } from "../pages/api/me/generate-api-key.api";
+import { RemoveAvatarResponse } from "../pages/api/me/remove-avatar.api";
+import {
+  ApiRevokeApiKeyBody,
+  ApiRevokeApiKeyResponse,
+} from "../pages/api/me/revoke-api-key.api";
+import {
+  ApiUpdateApiKeyBody,
+  ApiUpdateApiKeyResponse,
+} from "../pages/api/me/update-api-key.api";
+import {
+  ApiUpdatePreferredNameRequestBody,
+  ApiUpdatePreferredNameResponse,
+} from "../pages/api/me/update-preferred-name.api";
+import { ApiUploadAvatarResponse } from "../pages/api/me/upload-avatar.api";
 import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
 } from "../pages/api/send-login-code.api";
+import {
+  ApiSetUsageLimitRequestBody,
+  ApiSetUsageLimitResponse,
+} from "../pages/api/set-usage-limit.api";
 import {
   ApiSignupRequestBody,
   ApiSignupResponse,
@@ -29,17 +51,40 @@ import {
   SubscribeEmailResponse,
 } from "../pages/api/subscribe-email.api";
 import {
-  ApiTypeUpdateRequest,
-  ApiTypeUpdateResponse,
-} from "../pages/api/types/[id]/update.api";
+  ApiEntityTypeCreateRequest,
+  ApiEntityTypeCreateResponse,
+} from "../pages/api/types/entity-type/create.api";
 import {
-  ApiTypeCreateRequest,
-  ApiTypeCreateResponse,
-} from "../pages/api/types/create.api";
+  ApiEntityTypeByUrlGetQuery,
+  ApiEntityTypeByUrlResponse,
+} from "../pages/api/types/entity-type/get.api";
+import {
+  ApiQueryEntityTypesQuery,
+  ApiQueryEntityTypesResponse,
+} from "../pages/api/types/entity-type/query.api";
+import {
+  ApiEntityTypeUpdateRequest,
+  ApiEntityTypeUpdateResponse,
+} from "../pages/api/types/entity-type/update.api";
+import {
+  ApiPropertyTypeCreateRequest,
+  ApiPropertyTypeCreateResponse,
+} from "../pages/api/types/property-type/create.api";
+import {
+  ApiPropertyTypeByUrlGetQuery,
+  ApiPropertyTypeByUrlResponse,
+} from "../pages/api/types/property-type/get.api";
+import {
+  ApiQueryPropertyTypesQuery,
+  ApiQueryPropertyTypesResponse,
+} from "../pages/api/types/property-type/query.api";
+import {
+  ApiPropertyTypeUpdateRequest,
+  ApiPropertyTypeUpdateResponse,
+} from "../pages/api/types/property-type/update.api";
 import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
 import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
-import { ApiTypeByUserAndTitleResponse } from "../pages/api/users/[shortname]/types/[title].api";
-import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/index.api";
+import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/entity-type/index.api";
 import {
   ApiVerifyEmailRequestBody,
   ApiVerifyEmailResponse,
@@ -94,6 +139,18 @@ const get = <ResponseData = any, RequestParams = any>(
     .then(({ data }) => ({ data }))
     .catch(handleAxiosError);
 
+const deleteMethod = <ResponseData = any, RequestParams = any>(
+  url: string,
+  config: AxiosRequestConfig<RequestParams> = {},
+): Promise<{
+  data?: ResponseData;
+  error?: ApiClientError;
+}> =>
+  axiosClient
+    .delete<ResponseData>(url, config)
+    .then(({ data }) => ({ data }))
+    .catch(handleAxiosError);
+
 const post = <RequestData = any, ResponseData = any>(
   url: string,
   requestData?: RequestData,
@@ -132,36 +189,89 @@ export const apiClient = {
   get,
   post,
   put,
+  delete: deleteMethod,
+  externalServiceMethod: (requestData: ExternalServiceMethodRequest) =>
+    apiClient.post<
+      ExternalServiceMethodRequest,
+      ExternalServiceMethod200Response
+    >("external-service-method", requestData),
   generateApiKey: (requestData: ApiGenerateApiKeyBody) =>
     apiClient.post<ApiGenerateApiKeyBody, ApiGenerateApiKeyResponse>(
       "me/generate-api-key",
       requestData,
     ),
+  revokeApiKey: (requestData: ApiRevokeApiKeyBody) =>
+    apiClient.post<ApiRevokeApiKeyBody, ApiRevokeApiKeyResponse>(
+      "me/revoke-api-key",
+      requestData,
+    ),
+  updateApiKey: (requestData: ApiUpdateApiKeyBody) =>
+    apiClient.post<ApiUpdateApiKeyBody, ApiUpdateApiKeyResponse>(
+      "me/update-api-key",
+      requestData,
+    ),
   getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/api-keys"),
+  uploadAvatar: (requestData: FormData) =>
+    apiClient.post<FormData, ApiUploadAvatarResponse>(
+      "me/upload-avatar",
+      requestData,
+    ),
+  removeAvatar: () =>
+    apiClient.delete<RemoveAvatarResponse>("me/remove-avatar"),
+  updatePreferredName: (requestData: ApiUpdatePreferredNameRequestBody) =>
+    apiClient.put<
+      ApiUpdatePreferredNameRequestBody,
+      ApiUpdatePreferredNameResponse
+    >("me/update-preferred-name", requestData),
   getUser: ({ shortname }: { shortname: string }) =>
     apiClient.get<ApiUserByShortnameResponse>(`users/${shortname}`),
   getUserBlocks: ({ shortname }: { shortname: string }) =>
     apiClient.get<ApiBlocksByUserResponse>(`users/${shortname}/blocks`),
   getUserEntityTypes: ({ shortname }: { shortname: string }) =>
-    apiClient.get<ApiTypesByUserResponse>(`users/${shortname}/types`),
-  getEntityTypeByUserAndTitle: ({
-    title,
-    shortname,
-  }: {
-    title: string;
-    shortname: string;
-  }) =>
-    apiClient.get<ApiTypeByUserAndTitleResponse>(
-      `users/${shortname}/types/${title}`,
+    apiClient.get<ApiTypesByUserResponse>(
+      `users/${shortname}/types/entity-type`,
     ),
-  createEntityType: (requestData: ApiTypeCreateRequest) =>
-    apiClient.post<ApiTypeCreateRequest, ApiTypeCreateResponse>(
-      "types/create",
+  getEntityTypes: ({ latestOnly }: ApiQueryEntityTypesQuery) =>
+    apiClient.get<ApiQueryEntityTypesResponse>(
+      `types/entity-type/query?latestOnly=${latestOnly}`,
+    ),
+  getEntityTypeByUrl: ({ baseUrl, versionedUrl }: ApiEntityTypeByUrlGetQuery) =>
+    apiClient.get<ApiEntityTypeByUrlResponse>(
+      `types/entity-type/get?${
+        baseUrl ? `baseUrl=${baseUrl}` : `versionedUrl=${versionedUrl}`
+      }`,
+    ),
+  createEntityType: (requestData: ApiEntityTypeCreateRequest) =>
+    apiClient.post<ApiEntityTypeCreateRequest, ApiEntityTypeCreateResponse>(
+      "types/entity-type/create",
       requestData,
     ),
-  updateEntityType: (requestData: ApiTypeUpdateRequest, entityTypeId: string) =>
-    apiClient.put<ApiTypeUpdateRequest, ApiTypeUpdateResponse>(
-      `types/${entityTypeId}/update`,
+  updateEntityType: (requestData: ApiEntityTypeUpdateRequest) =>
+    apiClient.put<ApiEntityTypeUpdateRequest, ApiEntityTypeUpdateResponse>(
+      `types/entity-type/update`,
+      requestData,
+    ),
+  getPropertyTypes: ({ latestOnly }: ApiQueryPropertyTypesQuery) =>
+    apiClient.get<ApiQueryPropertyTypesResponse>(
+      `types/property-type/query?latestOnly=${latestOnly}`,
+    ),
+  getPropertyTypeByUrl: ({
+    baseUrl,
+    versionedUrl,
+  }: ApiPropertyTypeByUrlGetQuery) =>
+    apiClient.get<ApiPropertyTypeByUrlResponse>(
+      `types/property-type/get?${
+        baseUrl ? `baseUrl=${baseUrl}` : `versionedUrl=${versionedUrl}`
+      }`,
+    ),
+  createPropertyType: (requestData: ApiPropertyTypeCreateRequest) =>
+    apiClient.post<ApiPropertyTypeCreateRequest, ApiPropertyTypeCreateResponse>(
+      "types/property-type/create",
+      requestData,
+    ),
+  updatePropertyType: (requestData: ApiPropertyTypeUpdateRequest) =>
+    apiClient.put<ApiPropertyTypeUpdateRequest, ApiPropertyTypeUpdateResponse>(
+      `types/property-type/update`,
       requestData,
     ),
   signup: (requestData: ApiSignupRequestBody) =>
@@ -214,5 +324,10 @@ export const apiClient = {
           ...(other ? { WISH_EA: other } : {}),
         },
       },
+    ),
+  setUsageLimit: (requestData: ApiSetUsageLimitRequestBody) =>
+    apiClient.post<ApiSetUsageLimitRequestBody, ApiSetUsageLimitResponse>(
+      "set-usage-limit",
+      requestData,
     ),
 };

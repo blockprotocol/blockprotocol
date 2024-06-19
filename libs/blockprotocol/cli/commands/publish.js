@@ -2,6 +2,7 @@ import path from "node:path";
 
 import chalk from "chalk";
 import fs from "fs-extra";
+import isCi from "is-ci";
 import slugify from "slugify";
 import tar from "tar";
 import tmp from "tmp-promise";
@@ -93,7 +94,7 @@ const run = async (providedOptions) => {
     );
     console.log(`Checked: ${metadataPath}`);
     printSpacer();
-    process.exit();
+    process.exit(1);
   }
 
   console.log(chalk.green(`Found block files in ${blockFolderPath}`));
@@ -107,7 +108,7 @@ const run = async (providedOptions) => {
         error instanceof Error ? error.message : error,
       )}`,
     );
-    process.exit();
+    process.exit(1);
   }
 
   const blockName = metadataJson.name;
@@ -116,7 +117,7 @@ const run = async (providedOptions) => {
     console.log(
       `block-metadata.json does ${chalk.red("not")} contain 'name' key`,
     );
-    process.exit();
+    process.exit(1);
   }
 
   const { blockNamespace, blockNameWithoutNamespace } =
@@ -137,7 +138,7 @@ const run = async (providedOptions) => {
         `'name' in block-metadata.json must be a slug or defined as '@namespace/block-name' (all lowercase). Current value: '${blockName}'`,
       );
     }
-    process.exit();
+    process.exit(1);
   }
 
   const apiKey = await findApiKey(blockNamespace);
@@ -151,12 +152,12 @@ const run = async (providedOptions) => {
     process.exit();
   }
 
-  if (!yes) {
+  if (!yes || !isCi) {
     const shouldProceed = await doesUserAgree("Continue with publishing?");
 
     if (!shouldProceed) {
       console.log("Publishing cancelled.");
-      process.exit();
+      process.exit(1);
     }
   }
 
@@ -183,10 +184,12 @@ const run = async (providedOptions) => {
   if (errors || !block) {
     const errorMsg = errors?.[0]?.msg;
     console.log(chalk.red(errorMsg));
-    process.exit();
+    process.exit(1);
   }
 
-  const blockUrl = `${blockProtocolSiteHost}${block.blockSitePath}`;
+  const blockUrl = `${blockProtocolSiteHost.replace(/\/$/, "")}${
+    block.blockSitePath
+  }`;
 
   console.log(
     chalk.bgGreen(`Successfully published '${chalk.underline(blockName)}'!`),

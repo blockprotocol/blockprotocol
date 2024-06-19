@@ -1,15 +1,24 @@
 import { Box } from "@mui/material";
-import { FunctionComponent, ReactNode } from "react";
+import { Dispatch, FunctionComponent, ReactNode, SetStateAction } from "react";
 
 import { DebugView } from "./debug-view";
 import { OnSwitch } from "./debug-view/icons";
-import { useMockBlockDockContext } from "./mock-block-dock-context";
+import {
+  useMockBlockDockNonTemporalContext,
+  useMockBlockDockTemporalContext,
+} from "./mock-block-dock-context";
 
-export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
+const MockBlockDockUiComponent = ({
+  temporal,
+  debugMode,
+  setDebugMode,
   children,
+}: {
+  temporal: boolean;
+  debugMode: boolean;
+  setDebugMode: Dispatch<SetStateAction<boolean>>;
+  children: ReactNode;
 }) => {
-  const { setDebugMode, debugMode } = useMockBlockDockContext();
-
   const childrenWithBorder = (
     <div
       style={{
@@ -22,7 +31,7 @@ export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
   );
 
   return debugMode ? (
-    <DebugView>{childrenWithBorder}</DebugView>
+    <DebugView temporal={temporal}>{childrenWithBorder}</DebugView>
   ) : (
     <Box>
       <div className="mbd-debug-mode-toggle-header">
@@ -105,3 +114,45 @@ export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
     </Box>
   );
 };
+
+const MockBlockDockUiTemporal: FunctionComponent<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const { setDebugMode, debugMode } = useMockBlockDockTemporalContext();
+
+  return (
+    <MockBlockDockUiComponent
+      temporal
+      debugMode={debugMode}
+      setDebugMode={setDebugMode}
+    >
+      {children}
+    </MockBlockDockUiComponent>
+  );
+};
+
+const MockBlockDockUiNonTemporal: FunctionComponent<{
+  children: ReactNode;
+}> = ({ children }) => {
+  const { setDebugMode, debugMode } = useMockBlockDockNonTemporalContext();
+
+  return (
+    <MockBlockDockUiComponent
+      temporal={false}
+      debugMode={debugMode}
+      setDebugMode={setDebugMode}
+    >
+      {children}
+    </MockBlockDockUiComponent>
+  );
+};
+
+export const MockBlockDockUi: FunctionComponent<{
+  temporal: boolean;
+  children: ReactNode;
+}> = ({ temporal, children }) =>
+  temporal ? (
+    <MockBlockDockUiTemporal>{children}</MockBlockDockUiTemporal>
+  ) : (
+    <MockBlockDockUiNonTemporal>{children}</MockBlockDockUiNonTemporal>
+  );

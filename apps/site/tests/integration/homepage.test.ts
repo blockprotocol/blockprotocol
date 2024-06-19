@@ -36,7 +36,7 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(
     page.locator("text=Learn more about embedding Þ blocks"),
-  ).toHaveAttribute("href", "/docs/embedding-blocks");
+  ).toHaveAttribute("href", "/docs/blocks/environments#your-own-application");
 
   // Composable interfaces section
   await expect(page.locator("[data-testid='WordPress-button']")).toBeVisible();
@@ -77,12 +77,12 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(page.locator("text=Build a block")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks",
+    "/docs/blocks/develop",
   );
 
   await expect(page.locator("text=Browse apps")).toHaveAttribute(
     "href",
-    "/docs/using-blocks",
+    "/docs/blocks/environments",
   );
 
   await expect(page.locator("text=Browse blocks")).toHaveAttribute(
@@ -107,16 +107,16 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(page.locator("text=build it!")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks",
+    "/docs/blocks/develop",
   );
 
   // Block slider
   await expect(page.locator('[data-testid="block-slider"]')).toBeVisible();
 
-  // New blocks can get added, hence the usage of greater than instead of equal too
+  // More blocks can be mirrored, hence the usage of greater than instead of equal too
   expect(
     await page.locator('[data-testid="block-slider"] >> .slick-slide').count(),
-  ).toBeGreaterThan(5);
+  ).toBeGreaterThan(4);
 
   // Sign up section
   const finalCTA = page.locator('[data-testid="final-cta"]');

@@ -1,14 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { TableTreeIcon } from "../../icons";
+import { LinkIcon, TableTreeIcon } from "../../icons";
 import { ClientOnlyLastUpdated } from "../../last-updated";
 import { Link } from "../../link";
 import { Spacer } from "../../spacer";
 import { shy } from "./utils";
 
 type OverviewCardProps = {
-  type: "block" | "schema";
+  type: "block" | "schema" | "link-entity-type";
   title: string;
   description?: string;
   icon?: string | null;
@@ -17,6 +17,29 @@ type OverviewCardProps = {
   version?: string | null;
   url: string;
   hideImage?: boolean;
+};
+
+const TypeContent: FunctionComponent<{
+  type: OverviewCardProps["type"];
+}> = ({ type }) => {
+  if (type === "link-entity-type") {
+    return (
+      <>
+        <LinkIcon
+          sx={{
+            marginRight: "0.25rem",
+            width: "1rem",
+            height: "1rem",
+          }}
+        />
+        Entity Type
+      </>
+    );
+  } else if (type === "block") {
+    return <>Block</>;
+  } else {
+    return <>Entity Type</>;
+  }
 };
 
 export const OverviewCard: FunctionComponent<OverviewCardProps> = ({
@@ -149,14 +172,17 @@ export const OverviewCard: FunctionComponent<OverviewCardProps> = ({
                 variant="bpMicroCopy"
                 sx={{ lineHeight: 1, color: ({ palette }) => palette.gray[70] }}
               >
-                {type === "block" ? "Block" : "Schema"}
+                <TypeContent type={type} />
               </Typography>
             </Box>
           </Box>
           {description && (
             <Typography
               variant="bpSmallCopy"
-              sx={{ display: "block", color: "gray.70" }}
+              sx={{
+                display: "block",
+                color: ({ palette }) => palette.gray[70],
+              }}
             >
               {description.length <= 100
                 ? description
@@ -174,13 +200,16 @@ export const OverviewCard: FunctionComponent<OverviewCardProps> = ({
             {version && (
               <Typography
                 sx={{ mr: 1.5, mb: 1.5 }}
-                color="gray.60"
+                color={({ palette }) => palette.gray[60]}
                 variant="bpMicroCopy"
               >
                 {version}
               </Typography>
             )}
-            <Typography color="gray.60" variant="bpMicroCopy">
+            <Typography
+              color={({ palette }) => palette.gray[60]}
+              variant="bpMicroCopy"
+            >
               <ClientOnlyLastUpdated value={lastUpdated} />
             </Typography>
           </Box>

@@ -1,5 +1,17 @@
 # create-block-app
 
+## 0.0.13
+
+### Patch Changes
+
+- [#1108](https://github.com/blockprotocol/blockprotocol/pull/1108) [`e3d889a1`](https://github.com/blockprotocol/blockprotocol/commit/e3d889a156851831c1fa851244d0abe19edfbf6d) Thanks [@nonparibus](https://github.com/nonparibus)! - update links to docs
+
+## 0.0.12
+
+### Patch Changes
+
+- [#880](https://github.com/blockprotocol/blockprotocol/pull/880) [`217da986`](https://github.com/blockprotocol/blockprotocol/commit/217da9865c19097965038e6e1ce46229ab10e589) Thanks [@CiaranMn](https://github.com/CiaranMn)! - enable passing an npm tag when specifying template (e.g. --template react@canary)
+
 ## 0.0.11
 
 ### Patch Changes

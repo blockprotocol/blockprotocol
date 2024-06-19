@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
+import { isBillingFeatureFlagEnabled } from "../lib/config";
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { ArrowUpRightIcon } from "./icons/arrow-up-right-icon";
 import { DiscordIcon } from "./icons/discord-icon";
@@ -37,17 +38,23 @@ const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
     },
     {
       name: "Specification",
-      href: "/docs/spec",
+      href: "/spec",
     },
-    // Uncomment when we have the pricing page
-    // Don't forget to uncomment in tests aswell
-    // {
-    //   name: "Pricing",
-    //   href: "/pricing",
-    // },
+    ...(isBillingFeatureFlagEnabled
+      ? [
+          {
+            name: "Pricing",
+            href: "/pricing",
+          },
+        ]
+      : []),
     {
       name: "Contact Us",
       href: "/contact",
+    },
+    {
+      name: "About Us",
+      href: "/about",
     },
   ],
 };
@@ -57,15 +64,15 @@ const DISCOVER_NAVIGATION_LINKS: NavigationSection = {
   links: [
     {
       name: "Open-source blocks",
-      href: "/hub",
+      href: "/hub?type=blocks",
     },
     {
       name: "Semantic types",
-      href: "/hub",
+      href: "/hub?type=types",
     },
     {
-      name: "API endpoints",
-      href: "/hub",
+      name: "API services",
+      href: "/hub?type=services",
     },
   ],
 };
@@ -75,7 +82,7 @@ const PUBLISH_NAVIGATION_LINKS: NavigationSection = {
   links: [
     {
       name: "a block",
-      href: "/docs/developing-blocks#publish",
+      href: "/docs/blocks/develop#publish",
       arrow: true,
     },
     // Uncomment when we have the pages to link this to
@@ -86,7 +93,7 @@ const PUBLISH_NAVIGATION_LINKS: NavigationSection = {
     //   arrow: true,
     // },
     // {
-    //   name: "an endpoint",
+    //   name: "a service",
     //   href: "/",
     //   arrow: true,
     // },
@@ -304,9 +311,8 @@ export const Footer: FunctionComponent<FooterProps> = ({
               {Socials}
             </Grid>
           )}
-          {/* Uncomment when we have the pages to link this to
-          Don't forget to uncomment in tests aswell */}
-          {/* <Grid item xs={12}>
+
+          <Grid item xs={12}>
             {[
               { title: "Terms", href: "/legal/terms" },
               { title: "Privacy", href: "/legal/privacy" },
@@ -330,7 +336,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
                 {title}
               </Link>
             ))}
-          </Grid> */}
+          </Grid>
         </Grid>
       </Container>
     </Box>

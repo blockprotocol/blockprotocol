@@ -30,7 +30,14 @@ const runWasmPack = () => {
     "--scope",
     "blockprotocol",
     "--release",
+    ".",
+    "-Zbuild-std=panic_abort,std",
+    "-Zbuild-std-features=panic_immediate_abort",
   ]);
+
+  if (result.error) {
+    throw new Error(`Running wasm-pack failed: ${result.error}`);
+  }
 
   if (result.status !== 0) {
     console.log(result.stdout.toString());

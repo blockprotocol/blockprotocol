@@ -9,11 +9,14 @@ import { forwardRef, FunctionComponent } from "react";
 // inspired by https://github.com/loadingio/css-spinner/blob/master/src/ellipsis/index.styl
 const loadingAnimation = (
   <Box
+    className="bp-btn-loading"
     sx={{
-      display: "inline-block",
-      position: "relative",
+      position: "absolute",
       width: 80,
       height: 13,
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
       "> div": {
         position: "absolute",
         top: 0,
@@ -91,11 +94,19 @@ export const Button: FunctionComponent<ButtonProps> = forwardRef(
               ? { ":focus-visible:after": { borderRadius: 3 } }
               : undefined),
           },
+          loading && {
+            "& > :not(.bp-btn-loading)": {
+              opacity: 0,
+            },
+            color: "transparent !important",
+            transition: "none",
+          },
           ...(Array.isArray(sx) ? sx : [sx]),
         ]}
         ref={ref}
       >
-        {loading ? loadingAnimation : children}
+        {children}
+        {loading && loadingAnimation}
       </MuiButton>
     );
   },

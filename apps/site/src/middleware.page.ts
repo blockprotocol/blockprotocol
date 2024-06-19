@@ -3,10 +3,10 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { SESSION_COOKIE_NAME } from "./lib/api/middleware/constants";
+import { hardcodedTypes } from "./middleware.page/hardcoded-types";
 import {
   returnTypeAsJson,
-  versionedTypeUriRegExp,
+  versionedTypeUrlRegExp,
 } from "./middleware.page/return-types-as-json";
 
 const productionFrontendHost = process.env.NEXT_PUBLIC_FRONTEND_URL
@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
     };
 
     const openingBlockSandboxPage = Boolean(
-      url.pathname.match(/^\/@[\w_-]+\/blocks\/[\w_-]+\/sandboxed-demo$/),
+      url.pathname.match(/^\/@[\w_-]+\/blocks\/[\w_-]+\/sandboxed-demo(\/?)$/),
     );
 
     if (url.host === productionFrontendHost && openingBlockSandboxPage) {
@@ -39,24 +39,13 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (url.pathname === "/") {
-    const { cookies } = request;
+  // if this is a /types/* page, serve JSON unless we're asked for HTML (unless it's a hardcoded type – no HTML available)
+  const openingTypePage = !!url.pathname.match(versionedTypeUrlRegExp);
+  const htmlRequested = request.headers.get("accept")?.includes("text/html");
+  const isHardedCodedType =
+    url.href.replace(url.origin, "https://blockprotocol.org") in hardcodedTypes;
 
-    // destroying session at `logout.api.ts` removes this cookie
-    const isLoggedIn = !!cookies.get(SESSION_COOKIE_NAME);
-
-    if (isLoggedIn) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-  }
-
-  // check if we have a request for a type as JSON
-  const openingTypePage = Boolean(url.pathname.match(versionedTypeUriRegExp));
-  const jsonRequested = request.headers
-    .get("accept")
-    ?.includes("application/json");
-
-  if (openingTypePage && jsonRequested) {
+  if (openingTypePage && (!htmlRequested || isHardedCodedType)) {
     return returnTypeAsJson(request);
   }
 }

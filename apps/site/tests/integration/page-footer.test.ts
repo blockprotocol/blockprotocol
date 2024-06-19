@@ -35,11 +35,7 @@ test("page footer navigation works", async ({ page, browserName }) => {
   ).toHaveAttribute("href", "/docs");
   await expect(
     page.locator("footer >> a:has-text('Specification')"),
-  ).toHaveAttribute("href", "/docs/spec");
-  // await expect(page.locator("footer >> a:has-text('Pricing')")).toHaveAttribute(
-  //   "href",
-  //   "/pricing",
-  // );
+  ).toHaveAttribute("href", "/spec");
   await expect(
     page.locator("footer >> a:has-text('Contact Us')"),
   ).toHaveAttribute("href", "/contact");
@@ -49,34 +45,50 @@ test("page footer navigation works", async ({ page, browserName }) => {
   // Discover section
   await expect(
     page.locator("footer >> a:text-is('Open-source blocks')"),
-  ).toHaveAttribute("href", "/hub");
+  ).toHaveAttribute("href", "/hub?type=blocks");
   await expect(
     page.locator("footer >> a:text-is('Semantic types')"),
-  ).toHaveAttribute("href", "/hub");
+  ).toHaveAttribute("href", "/hub?type=types");
   await expect(
-    page.locator("footer >> a:text-is('API endpoints')"),
-  ).toHaveAttribute("href", "/hub");
+    page.locator("footer >> a:text-is('API services')"),
+  ).toHaveAttribute("href", "/hub?type=services");
 
   // Publish section
   await expect(page.locator("footer >> a:text-is('a block')")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks#publish",
+    "/docs/blocks/develop#publish",
   );
   // await expect(page.locator("footer >> a:text-is('a type')")).toHaveAttribute(
   //   "href",
   //   "/",
   // );
   // await expect(
-  //   page.locator("footer >> a:text-is('an endpoint')"),
+  //   page.locator("footer >> a:text-is('a service')"),
   // ).toHaveAttribute("href", "/");
 
   // Legal section
-  // await expect(page.locator("footer >> a:text-is('Terms')")).toHaveAttribute(
-  //   "href",
-  //   "/legal/terms",
-  // );
-  // await expect(page.locator("footer >> a:text-is('Privacy')")).toHaveAttribute(
-  //   "href",
-  //   "/legal/privacy",
-  // );
+  await expect(page.locator("footer >> a:text-is('Terms')")).toHaveAttribute(
+    "href",
+    "/legal/terms",
+  );
+  await expect(page.locator("footer >> a:text-is('Privacy')")).toHaveAttribute(
+    "href",
+    "/legal/privacy",
+  );
+});
+
+test("pricing footer link works", async ({ page }) => {
+  test.skip(
+    !process.env.NEXT_PUBLIC_BILLING_FEATURE_FLAG,
+    "NEXT_PUBLIC_BILLING_FEATURE_FLAG is not set",
+  );
+
+  await page.goto("/");
+
+  await page.locator("footer").scrollIntoViewIfNeeded();
+
+  await expect(page.locator("footer >> a:has-text('Pricing')")).toHaveAttribute(
+    "href",
+    "/pricing",
+  );
 });

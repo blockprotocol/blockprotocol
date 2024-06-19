@@ -69,7 +69,10 @@ pub(crate) mod tests {
         R: Debug + PartialEq + Clone + From<T> + Serialize + DeserializeOwned,
     {
         let deserialized_repr: R = serde_json::from_str(input).expect("failed to deserialize");
-        let value: T = deserialized_repr.clone().try_into().expect("failed to convert");
+        let value: T = deserialized_repr
+            .clone()
+            .try_into()
+            .expect("failed to convert");
         let re_serialized_repr: R = value.clone().into();
 
         assert_eq!(deserialized_repr, re_serialized_repr);
@@ -87,7 +90,7 @@ pub(crate) mod tests {
     /// checks that it fails with a given error when trying to convert it to its native
     /// representation.
     ///
-    /// [`repr`]: crate::repr
+    /// [`repr`]: crate::raw
     pub(crate) fn ensure_failed_validation<R, T>(input: &serde_json::Value, expected_err: T::Error)
     where
         R: for<'de> Deserialize<'de> + Serialize + Debug + PartialEq,
@@ -105,7 +108,7 @@ pub(crate) mod tests {
     ///
     /// Optionally checks the deserialized object against an expected value.
     ///
-    /// [`repr`]: crate::repr
+    /// [`repr`]: crate::raw
     #[expect(clippy::similar_names)]
     #[expect(
         clippy::needless_pass_by_value,
@@ -133,7 +136,7 @@ pub(crate) mod tests {
     /// Ensures a given [`serde_json::Value`] fails when trying to be deserialized into a given
     /// [`repr`] for a type.
     ///
-    /// [`repr`]: crate::repr
+    /// [`repr`]: crate::raw
     pub(crate) fn ensure_repr_failed_deserialization<T>(json: serde_json::Value)
     where
         for<'de> T: Debug + Deserialize<'de>,

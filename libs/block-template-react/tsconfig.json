@@ -10,5 +10,5 @@
     "resolveJsonModule": true,
     "strict": true
   },
-  "include": ["src"]
+  "include": ["declarations.d.ts", "src"]
 }

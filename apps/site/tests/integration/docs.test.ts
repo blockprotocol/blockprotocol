@@ -27,12 +27,14 @@ test("Docs page should contain key elements and interactions should work", async
 
   for (const [name, href] of [
     ["Introduction", "/docs"],
-    ["Developing Blocks", "/docs/developing-blocks"],
-    ["Embedding Blocks", "/docs/embedding-blocks"],
-    ["Specification", "/docs/spec"],
+    ["Blocks", "/docs/blocks"],
+    ["Types", "/docs/types"],
+    ["Services", "/docs/services"],
     ["FAQs", "/docs/faq"],
+    ["Specification", "/spec"],
+    ["Roadmap", "/roadmap"],
   ] as const) {
-    const item = sidebarLocator.locator(`a:has-text("${name}")`).first();
+    const item = sidebarLocator.locator(`a:text-is("${name}")`).first();
     await expect(item).toBeVisible();
     await expect(item).toHaveAttribute("href", href);
   }
@@ -73,7 +75,7 @@ test("Docs page should contain key elements and interactions should work", async
   // navigate to spec page
   await sidebarLocator.locator("a:has-text('Specification')").first().click();
 
-  await expect(page).toHaveURL("/docs/spec");
+  await expect(page).toHaveURL("/spec");
 
   await expect(page.locator('h1:has-text("Specification")')).toBeVisible();
 
@@ -92,22 +94,22 @@ test("Docs page should contain key elements and interactions should work", async
     ),
   ).toHaveAttribute(
     "href",
-    "https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/3_spec",
+    "https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/spec",
   );
 
-  // confirm docs footer nav have correct links
-  await expect(page.locator("text=PreviousUsing Blocks >> a")).toBeVisible();
+  // confirm specification footer nav contains the correct links
+  await expect(page.locator("text=PreviousFAQs >> a")).toBeVisible();
 
-  await expect(page.locator("text=PreviousUsing Blocks >> a")).toHaveAttribute(
+  await expect(page.locator("text=PreviousFAQs >> a")).toHaveAttribute(
     "href",
-    "/docs/using-blocks",
+    "/docs/faq",
   );
 
   await expect(page.locator("text=NextCore >> a")).toBeVisible();
 
   await expect(page.locator("text=NextCore >> a")).toHaveAttribute(
     "href",
-    "/docs/spec/core",
+    "/spec/core",
   );
 
   if (isMobile) {
@@ -136,25 +138,6 @@ test("Docs page should contain key elements and interactions should work", async
       "text=The Block Protocol provides a specification for the interaction between web blocks and applications using them: how data structures are typed and passed around, and what data operations are available to blocks.",
     ),
   ).toBeVisible();
-
-  await page.goto("/docs/spec");
-
-  const footerCTALocator = page.locator("data-test-id=footerCTA");
-  await expect(footerCTALocator).toBeVisible();
-
-  await expect(footerCTALocator.locator('text="Learn more"')).toHaveAttribute(
-    "href",
-    "/docs/embedding-blocks",
-  );
-
-  await expect(footerCTALocator.locator('text="Hub"')).toHaveAttribute(
-    "href",
-    "/hub",
-  );
-
-  await expect(
-    footerCTALocator.locator('text="Read the quickstart guide"'),
-  ).toHaveAttribute("href", "/docs/developing-blocks");
 });
 
 test("invalid docs page should redirect to 404", async ({ page }) => {

@@ -1,4 +1,4 @@
-import { getBlocksData, resetSite } from "../shared/fixtures.js";
+import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
 
@@ -20,7 +20,7 @@ test("key elements should be present when user views their account page", async 
   for (const [testId, href] of [
     ["profile-page-overview-tab", "/@alice"],
     ["profile-page-blocks-tab", "/@alice/blocks"],
-    ["profile-page-schemas-tab", "/@alice/schemas"],
+    ["profile-page-schemas-tab", "/@alice/types"],
   ] as const) {
     const item = page.locator(`[data-testid='${testId}']`);
     await expect(item).toBeVisible();
@@ -31,7 +31,7 @@ test("key elements should be present when user views their account page", async 
   await page.locator("[data-testid='profile-page-overview-tab']").click();
 
   await expect(
-    page.locator("text=You haven’t created any blocks or schemas yet"),
+    page.locator("text=You haven’t created any blocks or types yet"),
   ).toBeVisible();
 
   await expect(
@@ -42,10 +42,10 @@ test("key elements should be present when user views their account page", async 
 
   await expect(page.locator("text=Build a block")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks",
+    "/docs/blocks/develop",
   );
 
-  await expect(page.locator("text=Create a schema")).toBeVisible();
+  await expect(page.locator("text=Create an Entity Type")).toBeVisible();
 
   // Blocks tab tests
   await page.locator("[data-testid='profile-page-blocks-tab']").click();
@@ -62,30 +62,22 @@ test("key elements should be present when user views their account page", async 
 
   await expect(page.locator("text=Build a block")).toHaveAttribute(
     "href",
-    "/docs/developing-blocks",
+    "/docs/blocks/develop",
   );
 
   // Schema tab tests
   await page.locator("[data-testid='profile-page-schemas-tab']").click();
 
   await expect(
-    page.locator("text=You haven’t created any schemas yet"),
+    page.locator("text=You haven’t created any types yet"),
   ).toBeVisible();
 
   await expect(
     page.locator("text=Start building to see your creations show up here."),
   ).toBeVisible();
 
-  await expect(page.locator("text=Create a schema")).toBeVisible();
+  await expect(page.locator("text=Create an Entity Type")).toBeVisible();
 });
-
-const codeBlockMetadata = (await getBlocksData()).find(
-  ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
-);
-
-if (!codeBlockMetadata) {
-  throw new Error("Code block should be prepared before tests are run");
-}
 
 test("key elements should be present when guest user views account page", async ({
   page,
@@ -98,7 +90,7 @@ test("key elements should be present when guest user views account page", async 
   for (const [testId, href] of [
     ["profile-page-overview-tab", "/@hash"],
     ["profile-page-blocks-tab", "/@hash/blocks"],
-    ["profile-page-schemas-tab", "/@hash/schemas"],
+    ["profile-page-schemas-tab", "/@hash/types"],
   ] as const) {
     const item = page.locator(`[data-testid='${testId}']`);
     await expect(item).toBeVisible();
@@ -115,40 +107,40 @@ test("key elements should be present when guest user views account page", async 
     .toBeGreaterThan(3);
 
   const codeBlockOverviewCard = page.locator("[data-testid='overview-card']", {
-    hasText: codeBlockMetadata.displayName!,
+    hasText: "Code",
   });
 
   await expect(codeBlockOverviewCard).toHaveAttribute(
     "href",
-    codeBlockMetadata.blockSitePath,
+    "/@hash/blocks/code",
   );
 
   if (isMobile) {
     await expect(codeBlockOverviewCard.locator("img").first()).toHaveAttribute(
       "src",
-      codeBlockMetadata.icon!,
+      /\/blocks\/hash\/code\/public\/code\.svg$/,
     );
   } else {
     await expect(codeBlockOverviewCard.locator("img").first()).toHaveAttribute(
       "src",
-      codeBlockMetadata.image!,
+      /\/blocks\/hash\/code\/public\/preview\.svg$/,
     );
 
     await expect(codeBlockOverviewCard.locator("img").nth(1)).toHaveAttribute(
       "src",
-      codeBlockMetadata.icon!,
+      /\/blocks\/hash\/code\/public\/code\.svg$/,
     );
   }
 
   await expect(
-    codeBlockOverviewCard.locator(`text=${codeBlockMetadata.description}`),
+    codeBlockOverviewCard.locator(
+      `text="Write monospaced code with syntax highlighting in a range of programming and markup languages"`,
+    ),
   ).toBeVisible();
 
   await expect(codeBlockOverviewCard.locator("text=Block")).toBeVisible();
 
-  await expect(
-    codeBlockOverviewCard.locator(`text=${codeBlockMetadata.version}`),
-  ).toBeVisible();
+  await expect(codeBlockOverviewCard.locator(`text="0.2.0"`)).toBeVisible();
 
   await page.locator("[data-testid='profile-page-blocks-tab']").click();
 
@@ -166,33 +158,35 @@ test("key elements should be present when guest user views account page", async 
   await expect(page.locator(`text=Blocks${blocksCount}`)).toBeVisible();
 
   const codeBlockListViewCard = page.locator("[data-testid='list-view-card']", {
-    hasText: codeBlockMetadata.displayName!,
+    hasText: "Code",
   });
 
   await expect(codeBlockListViewCard).toHaveAttribute(
     "href",
-    codeBlockMetadata.blockSitePath,
+    "/@hash/blocks/code",
   );
 
   await expect(codeBlockListViewCard.locator("img")).toHaveAttribute(
     "src",
-    codeBlockMetadata.icon!,
+    /\/hash\/code\/public\/code\.svg$/,
   );
 
   await expect(
-    codeBlockListViewCard.locator(`text=${codeBlockMetadata.description}`),
+    codeBlockListViewCard.locator(
+      `text="Write monospaced code with syntax highlighting in a range of programming and markup languages"`,
+    ),
   ).toBeVisible();
 
   await page.locator("[data-testid='profile-page-schemas-tab']").click();
 
-  await expect(page).toHaveURL("/@hash/schemas");
+  await expect(page).toHaveURL("/@hash/types");
 
   await expect(
-    page.locator("text=@hash hasn’t published any schemas yet"),
+    page.locator("text=@hash hasn’t published any types yet"),
   ).toBeVisible();
 
   await expect(
-    page.locator("text=You can browse existing schemas on the Hub."),
+    page.locator("text=You can browse existing types on the Hub."),
   ).toBeVisible();
 
   await expect(page.locator("text=Browse the Hub")).toBeVisible();

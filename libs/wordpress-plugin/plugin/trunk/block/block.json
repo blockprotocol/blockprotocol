@@ -1,0 +1,38 @@
+{
+  "title": "Block Protocol",
+  "name": "blockprotocol/block",
+  "category": "blockprotocol",
+  "icon": "schedule",
+  "apiVersion": 2,
+  "description": "Block Protocol embedding application",
+  "keywords": ["block", "bp", "embed"],
+  "editorScript": "file:index.tsx",
+  "attributes": {
+    "author": {
+      "type": "string"
+    },
+    "entityId": {
+      "type": "string"
+    },
+    "entityTypeId": {
+      "type": "string"
+    },
+    "blockName": {
+      "type": "string"
+    },
+    "preview": {
+      "type": "boolean",
+      "default": false
+    },
+    "protocol": {
+      "type": "string"
+    },
+    "sourceUrl": {
+      "type": "string"
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

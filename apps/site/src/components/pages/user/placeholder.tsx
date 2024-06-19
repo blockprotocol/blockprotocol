@@ -28,6 +28,7 @@ export const Placeholder: FunctionComponent<PlaceholderProps> = ({
           color: ({ palette }) => palette.gray[70],
           paddingTop: 1,
           paddingBottom: 2,
+          margin: "0 auto",
         }}
       >
         {tip}
