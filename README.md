@@ -8,7 +8,6 @@
 [contact us]: https://blockprotocol.org/contact?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [core specification]: https://blockprotocol.org/spec/core?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [developing blocks]: https://blockprotocol.org/docs/blocks/develop?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [graph module]: https://blockprotocol.org/spec/graph?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [hook module]: https://blockprotocol.org/spec/hook?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [roadmap]: https://blockprotocol.org/roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
@@ -35,7 +34,7 @@
 
 [![github_banner](https://static.blockprotocol.com/cdn-cgi/imagedelivery/EipKtqu98OotgfhvKf6Eew/f8b0bf95-88ea-47ea-cac2-49cb2851b700/github)][github_banner]
 
-[![discord](https://img.shields.io/discord/1050770647564943402)][discord] [![github_star](https://img.shields.io/github/stars/blockprotocol/blockprotocol?label=Star%20on%20GitHub&style=social)][github_star]
+[![github_star](https://img.shields.io/github/stars/blockprotocol/blockprotocol?label=Star%20on%20GitHub&style=social)][github_star]
 
 # Block Protocol
 
@@ -133,9 +132,7 @@ Please see [SECURITY](/.github/SECURITY.md) for instructions around reporting is
 
 ## [![a](/.github/assets/gh_icon_contact_20px-base.svg)][gh-contact] &nbsp; Contact
 
-Find us on Twitter at [@blockprotocol](https://twitter.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
-
-You can also join our [Discord] community for quick help and support.
+Find us on 𝕏 at [@blockprotocol](https://x.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
 
 Project permalink: `https://github.com/blockprotocol/blockprotocol`
 

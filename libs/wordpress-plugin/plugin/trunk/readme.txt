@@ -1,6 +1,5 @@
 === Block Protocol ===
-Contributors: ciaranmn,nonparibus,asahash,spolsky
-Donate link: https://github.com/sponsors/blockprotocol
+Contributors: ciaranmn,nonparibus,spolsky
 Tags: block protocol, blocks, gutenberg, gutenberg blocks, block, schema, countdown block, timer block, person block, code block, drawing block, shuffle block
 Requires at least: 5.6.0
 Tested up to: 6.2
@@ -13,16 +12,16 @@ Access a growing collection of high-quality and powerful blocks with a one-time 
 
 == Description ==
 
-Install the [Block Protocol](https://blockprotocol.org) plugin to access an ever-growing library of high-quality blocks within WordPress. 
+Install the [Block Protocol](https://blockprotocol.org/?utm_medium=organic&utm_source=wordpress-plugin_readme) plugin to access an ever-growing library of high-quality blocks within WordPress. 
 
 Discover and use new blocks when you need them, at the point of insertion, directly from within the WordPress editor. No more installing new plugins to get more blocks.
 
 - Blocks that provide access to external services including **OpenAI** and **Mapbox**, without needing to sign up for these separately
-- Structured data blocks with SEO benefits for your website, helping you rank more highly in Google and Bing (e.g. the [Address](https://blockprotocol.org/@hash/blocks/address) and [How-to](https://blockprotocol.org/@hash/blocks/how-to) blocks)
-- Interactive blocks such as the [drawing](https://blockprotocol.org/@tldraw/blocks/drawing) and [countdown timer](https://blockprotocol.org/@hash/blocks/timer) blocks
-- "Traditional" content management blocks such as [callouts](https://blockprotocol.org/@hash/blocks/callout), [tables](https://blockprotocol.org/@hash/blocks/table), headings, images, and quotes
+- Structured data blocks with SEO benefits for your website, helping you rank more highly in Google and Bing (e.g. the [Address](https://blockprotocol.org/@hash/blocks/address?utm_medium=organic&utm_source=wordpress-plugin_readme) and [How-to](https://blockprotocol.org/@hash/blocks/how-to?utm_medium=organic&utm_source=wordpress-plugin_readme) blocks)
+- Interactive blocks such as the [drawing](https://blockprotocol.org/@tldraw/blocks/drawing?utm_medium=organic&utm_source=wordpress-plugin_readme) and [countdown timer](https://blockprotocol.org/@hash/blocks/timer?utm_medium=organic&utm_source=wordpress-plugin_readme) blocks
+- "Traditional" content management blocks such as [callouts](https://blockprotocol.org/@hash/blocks/callout?utm_medium=organic&utm_source=wordpress-plugin_readme), [tables](https://blockprotocol.org/@hash/blocks/table?utm_medium=organic&utm_source=wordpress-plugin_readme), headings, images, and quotes
 
-You can also build your own block for the Block Protocol without any PHP, and publish it instantly.  To build a block, [check out the developer docs](https://blockprotocol.org/docs/developing-blocks).
+You can also build your own block for the Block Protocol without any PHP, and publish it instantly.  To build a block, [check out the developer docs](https://blockprotocol.org/docs/developing-blocks?utm_medium=organic&utm_source=wordpress-plugin_readme).
 
 == Installation ==
 
@@ -46,7 +45,7 @@ around the number of blocks, entities and types used. No information about the s
 including their names or properties, and no personally identifiable information is collected. Information about critical errors and 
 crashes may also be collected and reported as they occur. You can turn telemetry on or off at any time from the plugin’s settings panel. 
 This telemetry data is used to help us identify and fix bugs and improve the Block Protocol. If you have any questions,
-please email support@blockprotocol.org
+please [contact us](https://blockprotocol.org/contact?utm_medium=organic&utm_source=wordpress-plugin_readme).
 
 == Frequently Asked Questions ==
 
@@ -62,11 +61,11 @@ The Block Protocol is an open standard for building block-based interfaces.
 
 Each block that uses the protocol can be used in any application which supports it.
 
-WordPress is one of these applications. [HASH](https://hash.ai), an all-in-one platform for decision making developed by the company behind the Block Protocol, is another. More are planned, including Figma and GitHub.
+WordPress is one of these applications. [HASH](https://hash.ai/?utm_medium=organic&utm_source=wordpress-plugin_readme), an all-in-one platform for decision making developed by the company behind the Block Protocol, is another. More are planned, including Figma and GitHub.
 
 = Can I create a block for the Block Protocol? =
 
-Absolutely. You can start coding your block in minutes and, once finished, publish your block instantly. [Check out the docs to get started](https://blockprotocol.org/docs/developing-blocks).
+Absolutely. You can start coding your block in minutes and, once finished, publish your block instantly. [Check out the docs to get started](https://blockprotocol.org/docs/developing-blocks/?utm_medium=organic&utm_source=wordpress-plugin_readme).
 
 = How might it change? =
 
@@ -78,7 +77,7 @@ The changelog and upgrade notices will make clear when any breaking changes are 
 
 == Need help? ==
 
-Please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Discord server](https://blockprotocol.org/discord) if you need help, have a question, or if you have suggestions for the plugin or new blocks.
+Please [contact us](https://blockprotocol.org/contact?utm_medium=organic&utm_source=wordpress-plugin_readme) if you need help, have questions, or want to make a suggestion for the plugin or new blocks.
 
 == Changelog ==
 

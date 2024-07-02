@@ -1,4 +1,4 @@
-import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import {
   faCircleCheck,
   faComment,
@@ -229,19 +229,12 @@ export const VoteCastModal: FunctionComponent<VoteCastModalProps> = ({
 
         <CTASection
           title="Join the Þ community"
-          subtitle="You can also join our Discord server, or watch and star us on GitHub."
+          subtitle="You can also watch and star us on GitHub."
           icon={faComment}
           textColor="#0089B4"
           backgroundColor="#F0F9FF"
           borderColor={theme.palette.teal[200]}
         >
-          <ActionButton
-            href="https://blockprotocol.org/discord"
-            label="Join our Discord"
-            icon={
-              <FontAwesomeIcon icon={faDiscord} sx={{ color: "#7289DA" }} />
-            }
-          />
           <ActionButton
             href="https://github.com/blockprotocol/blockprotocol"
             label="View on GitHub"

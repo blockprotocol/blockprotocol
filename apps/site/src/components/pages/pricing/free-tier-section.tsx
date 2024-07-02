@@ -1,4 +1,4 @@
-import { faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faArrowRight,
   faBoxOpen,
@@ -274,10 +274,10 @@ export const FreeTierSection: FunctionComponent<{
                 ),
               },
               {
-                icon: faDiscord,
+                icon: faGithub,
                 text: (
                   <>
-                    <strong>Discord</strong> support server
+                    <strong>GitHub Discussions</strong> forum
                   </>
                 ),
               },

@@ -15,7 +15,6 @@ import { FunctionComponent, ReactNode } from "react";
 import { isBillingFeatureFlagEnabled } from "../lib/config";
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { ArrowUpRightIcon } from "./icons/arrow-up-right-icon";
-import { DiscordIcon } from "./icons/discord-icon";
 import { Link } from "./link";
 import { LinkButton } from "./link-button";
 
@@ -162,12 +161,7 @@ const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
   {
     name: "Twitter",
     icon: <FontAwesomeIcon icon={faTwitter} />,
-    href: "https://twitter.com/blockprotocol",
-  },
-  {
-    name: "Discord",
-    icon: <DiscordIcon />,
-    href: "/discord",
+    href: "https://x.com/blockprotocol",
   },
 ];
 
