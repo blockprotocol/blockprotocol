@@ -132,7 +132,7 @@ Please see [SECURITY](/.github/SECURITY.md) for instructions around reporting is
 
 ## [![a](/.github/assets/gh_icon_contact_20px-base.svg)][gh-contact] &nbsp; Contact
 
-Find us on Twitter at [@blockprotocol](https://twitter.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
+Find us on 𝕏 at [@blockprotocol](https://x.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
 
 Project permalink: `https://github.com/blockprotocol/blockprotocol`
 
