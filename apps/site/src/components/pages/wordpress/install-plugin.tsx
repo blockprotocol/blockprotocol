@@ -274,7 +274,7 @@ export const InstallPlugin = () => {
                 sx={{ color: ({ palette }) => palette.purple[70] }}
                 href="/contact"
               >
-                <strong>message directly</strong>{" "}
+                <strong>message directly</strong>
               </Link>
               .
             </Box>
