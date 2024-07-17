@@ -1,4 +1,3 @@
----
 Feature Name: Replace Me (choose a unique slug wrapped in backticks, such as ``my-feature``, reflecting the name of the file)
 Start Date: Replace Me (replace with current YYYY-MM-DD date, upon creation)
 Published Date: Pending (replace with current YYYY-MM-DD date, immediately prior to merge)

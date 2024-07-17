@@ -1,4 +1,3 @@
----
 Feature Name: `versioning-types`
 Start Date: 2022-06-28
 First Published: 2022-07-13

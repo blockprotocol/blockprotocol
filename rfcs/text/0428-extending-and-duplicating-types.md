@@ -1,4 +1,3 @@
----
 Feature Name: `extending-and-duplicating-entity-types`
 Start Date: 2022-07-11
 First Published: 2023-06-30
