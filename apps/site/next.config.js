@@ -55,12 +55,14 @@ const nextConfig = {
     return [
       {
         source: "/discord",
-        destination: "https://github.com/blockprotocol/blockprotocol/discussions",
+        destination:
+          "https://github.com/blockprotocol/blockprotocol/discussions",
         permanent: true,
       },
       {
         source: "/discuss",
-        destination: "https://github.com/blockprotocol/blockprotocol/discussions",
+        destination:
+          "https://github.com/blockprotocol/blockprotocol/discussions",
         permanent: true,
       },
       {
