@@ -104,7 +104,10 @@ const Partners: NextPage = () => {
             </div>
 
             <div className={tw`mt-8`}>
-              <label htmlFor="PROJECT" className={tw`font-semibold uppercase `}>
+              <label
+                htmlFor="PROJECT"
+                className={tw`font-semibold uppercase mr-2`}
+              >
                 Project Name
               </label>
               <span className={tw`${labelSubtitleStyles}`}>
