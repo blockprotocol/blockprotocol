@@ -1,8 +1,9 @@
-Feature Name: `link-entities`
+Feature Name: link-entities
 Start Date: 2023-02-23
 First Published: 2023-06-28
 RFC PR: https://github.com/blockprotocol/blockprotocol/pull/1020
 RFC Discussion: https://github.com/blockprotocol/blockprotocol/discussions/1300
+
 ---
 
 # Summary
