@@ -105,7 +105,7 @@
     "slick-carousel": "^1.8.1",
     "slugify": "^1.6.5",
     "stripe": "^11.7.0",
-    "tar": "^6.1.11",
+    "tar": "^6.2.1",
     "tmp-promise": "3.0.3",
     "twind": "^0.16.17",
     "unified": "^10.1.2",
