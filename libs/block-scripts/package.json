@@ -51,7 +51,7 @@
     "style-loader": "^3.3.1",
     "typescript": "4.9.4",
     "typescript-json-schema": "^0.55.0",
-    "webpack": "^5.76.0",
+    "webpack": "^5.94.0",
     "webpack-assets-manifest": "^5.1.0",
     "webpack-bundle-analyzer": "^4.8.0",
     "webpack-dev-server": "^4.11.1",
