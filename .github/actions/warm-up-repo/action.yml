@@ -16,7 +16,7 @@ runs:
         node-version: 18 ## aligned with Node version on Vercel
 
     - name: Install Rust tools
-      uses: taiki-e/install-action@cc5a5c56a296ea597e6ea38f551f25dee8be1225 # v2.17.7
+      uses: taiki-e/install-action@e73edba6cef4fb2754007a50e0b28cf1c702c52b # v2.42.40
       with:
         tool: just@1.13.0,wasm-pack@0.11.0
 
