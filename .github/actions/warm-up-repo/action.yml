@@ -21,7 +21,7 @@ runs:
         tool: just@1.13.0,wasm-pack@0.11.0
 
     - name: Cache Rust dependencies
-      uses: Swatinem/rust-cache@e207df5d269b42b69c8bc5101da26f7d31feddb4 # v2.6.2
+      uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2.7.3
       with:
         workspaces: libs/@blockprotocol/type-system/crate
         shared-key: "shared"
