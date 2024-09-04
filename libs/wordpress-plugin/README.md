@@ -140,13 +140,11 @@ Our future plans include:
   - reduce bundle size for the rendered page
   - server-side rendering of block
 
-If you're interested in using a specific upcoming feature, please [contact us](https://blockprotocol.org/contact) or say 'hi!' on our [Discord server](https://blockprotocol.org/discord).
+If you're interested in using a specific upcoming feature, please [contact us](https://blockprotocol.org/contact).
 
 We prioritize developing features that users tell us they want, so your voice helps ensure the things you're looking forward to do actually ship sooner.
 
-If there's an idea _not_ listed above that you're interested in seeing built, we'd also love to hear from you.
-
-And if you'd like to help develop the Þ WordPress plugin, let us know a bit about yourself here or on Discord, and we can help you get started!
+If there's an idea _not_ listed above that you're interested in seeing built, or you'd like to actually help develop the Þ WordPress plugin, we'd also love to hear from you!
 
 ## Telemetry
 
