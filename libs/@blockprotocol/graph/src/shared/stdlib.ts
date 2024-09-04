@@ -16,7 +16,6 @@ export {
   intervalOverlapsInterval,
   intervalUnionWithInterval,
   sortIntervals,
-  unionOfIntervals,
 } from "./stdlib/interval.js";
 export {
   buildSubgraph,
@@ -70,3 +69,4 @@ export {
 } from "./stdlib/subgraph/roots.js";
 export { getLatestInstantIntervalForSubgraph } from "./stdlib/subgraph/temporal-axes.js";
 export { getVertexIdForRecordId } from "./stdlib/subgraph/vertex-id-for-element.js";
+export { unionOfIntervals } from "./stdlib/union-of-intervals";

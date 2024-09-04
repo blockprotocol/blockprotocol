@@ -1,12 +1,12 @@
-import { CoreBlockHandler } from "./core-block-handler";
-import { CoreEmbedderHandler } from "./core-embedder-handler";
-import { CoreHandler } from "./core-handler";
-import {
+import { CoreBlockHandler } from "./core-block-handler.js";
+import { CoreEmbedderHandler } from "./core-embedder-handler.js";
+import type { CoreHandler } from "./core-handler.js";
+import type {
   CoreHandlerCallback,
   GenericMessageCallback,
   MessageContents,
   MessageData,
-} from "./types";
+} from "./types.js";
 
 /**
  * The base class for creating module handlers from.

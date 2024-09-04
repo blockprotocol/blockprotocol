@@ -1,7 +1,7 @@
 import { v4 as uuid } from "uuid";
 
-import { ModuleHandler } from "./module-handler";
-import {
+import type { ModuleHandler } from "./module-handler.js";
+import type {
   GenericMessageCallback,
   Message,
   MessageCallbacksByModule,

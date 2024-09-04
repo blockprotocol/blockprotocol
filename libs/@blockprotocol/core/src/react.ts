@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import { ModuleHandler } from "./module-handler";
-import { GenericMessageCallback } from "./types";
+import type { ModuleHandler } from "./module-handler.js";
+import type { GenericMessageCallback } from "./types.js";
 
 type ModuleConstructor<T extends ModuleHandler> = {
   new (arg: {

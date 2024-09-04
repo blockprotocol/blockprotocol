@@ -6,8 +6,8 @@ import {
   getReferencedIdsFromPropertyType,
 } from "@blockprotocol/type-system/slim";
 
-import { unionOfIntervals } from "../../shared/stdlib.js";
-import { Entity, EntityId } from "../../shared/types/entity.js";
+import { unionOfIntervals } from "../../shared/stdlib/union-of-intervals.js";
+import type { Entity, EntityId } from "../../shared/types/entity.js";
 import {
   EntityIdWithInterval,
   EntityVertexId,
