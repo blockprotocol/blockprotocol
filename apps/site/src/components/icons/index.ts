@@ -17,8 +17,6 @@ export * from "./collapse-icon";
 export * from "./comment-dots-icon";
 export * from "./contentful-icon";
 export * from "./copy-icon";
-export * from "./discord-icon";
-export * from "./discord-new-icon";
 export * from "./download-icon";
 export * from "./envelope-dot-icon";
 export * from "./envelope-icon";
