@@ -6,4 +6,4 @@ If you'd like to make a significant change or re-architecture, please first disc
 
 ## Block Protocol monorepo
 
-This repository is the Block Protocol's public monorepo. Its contents are primarily dual-licensed under the [Apache License, Version 2.0](https://github.com/blockprotocol/blockprotocol/blob/main/LICENSE-APACHE.md) and [MIT License](https://github.com/blockprotocol/blockprotocol/blob/main/LICENSE-MIT.md). Please see the top-level [LICENSE](https://github.com/blockprotocol/blockprotocol/blob/main/LICENSE.md) file for an enumerated list of exceptions.
+This repository is the Block Protocol's public monorepo. Its contents are primarily dual-licensed under the [Apache License, Version 2.0](https://github.com/blockprotocol/blockprotocol/blob/main/.github/licenses/LICENSE-APACHE.md) and [MIT License](https://github.com/blockprotocol/blockprotocol/blob/main/.github/licenses/LICENSE-MIT.md). Please see the top-level [LICENSE](https://github.com/blockprotocol/blockprotocol/blob/main/LICENSE.md) file for an enumerated list of exceptions.
