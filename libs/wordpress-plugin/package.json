@@ -40,7 +40,7 @@
     "@rjsf/validator-ajv8": "5.0.1",
     "@sentry/integrations": "7.43.0",
     "@sentry/react": "7.43.0",
-    "@types/lodash.debounce": "4.0.7",
+    "@types/lodash.debounce": "4.0.9",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "@types/sanitize-html": "2.8.1",
