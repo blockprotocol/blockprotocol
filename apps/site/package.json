@@ -117,7 +117,7 @@
     "@playwright/test": "^1.30.0",
     "@types/busboy": "^1.5.0",
     "@types/cookie-signature": "^1.0.4",
-    "@types/cors": "^2.8.12",
+    "@types/cors": "^2.8.17",
     "@types/dedent": "^0.7.0",
     "@types/dotenv-flow": "^3.2.0",
     "@types/express-session": "^1.17.5",
