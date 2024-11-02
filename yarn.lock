@@ -6075,10 +6075,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.190.tgz#d8e99647af141c63902d0ca53cf2b34d2df33545"
   integrity sha512-5iJ3FBJBvQHQ8sFhEhJfjUP+G+LalhavTkYyrAYqz5MEJG+erSv0k9KJLb6q7++17Lafk1scaTIFXcMJlwK8Mw==
 
-"@types/md5@^2.3.2":
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/@types/md5/-/md5-2.3.2.tgz#529bb3f8a7e9e9f621094eb76a443f585d882528"
-  integrity sha512-v+JFDu96+UYJ3/UWzB0mEglIS//MZXgRaJ4ubUPwOM0gvLc/kcQ3TWNYwENEK7/EcXGQVrW8h/XqednSjBd/Og==
+"@types/md5@^2.3.5":
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/@types/md5/-/md5-2.3.5.tgz#481cef0a896e3a5dcbfc5a8a8b02c05958af48a5"
+  integrity sha512-/i42wjYNgE6wf0j2bcTX6kuowmdL/6PE4IVitMpm2eYKBUuYCprdcWVK+xEF0gcV6ufMCRhtxmReGfc6hIK7Jw==
 
 "@types/mdast@^3.0.0":
   version "3.0.10"

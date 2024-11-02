@@ -124,7 +124,7 @@
     "@types/hosted-git-info": "^3.0.5",
     "@types/html-to-text": "^8.1.1",
     "@types/lodash": "4.14.190",
-    "@types/md5": "^2.3.2",
+    "@types/md5": "^2.3.5",
     "@types/micromatch": "^4.0.2",
     "@types/mime-types": "^2.1.1",
     "@types/nodemailer": "^6.4.6",
