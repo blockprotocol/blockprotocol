@@ -6227,10 +6227,10 @@
   resolved "https://registry.yarnpkg.com/@types/prismjs/-/prismjs-1.26.0.tgz#a1c3809b0ad61c62cac6d4e0c56d610c910b7654"
   integrity sha512-ZTaqn/qSqUuAq1YwvOFQfVW1AR/oQJlLSZVustdjwI+GZ8kr0MSHBj0tsXPW1EqHubx50gtBEjbPGsdZwQwCjQ==
 
-"@types/prompt@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@types/prompt/-/prompt-1.1.4.tgz#d077cf77d074d8dc2710a4ead4fdaac8233003cb"
-  integrity sha512-FLMcf+ol+eUJALeIYWLjQl0hYw86G0PIg7D5+4jJHwr/wKI8p3R0u+oKLbyRkzCxb7e0pHixyCj7UgSv7I/TJQ==
+"@types/prompt@^1.1.9":
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/@types/prompt/-/prompt-1.1.9.tgz#4a4de1cf44517387ab190085c4117957acc5703f"
+  integrity sha512-Yl0hzOWGDNCo2JHA8s7g7e9higzonlP/MssTMAIAwYmA7GugrB5WZ1DmrfrpJyJY8Y5UHFr8uaXDlxiyHt2jbg==
   dependencies:
     "@types/node" "*"
     "@types/revalidator" "*"
