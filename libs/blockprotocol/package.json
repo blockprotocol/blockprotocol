@@ -43,7 +43,7 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
-    "@types/command-line-args": "^5.2.0",
+    "@types/command-line-args": "^5.2.3",
     "@types/command-line-usage": "^5.0.4",
     "@types/is-ci": "3.0.0",
     "@types/prompt": "^1.1.4",
