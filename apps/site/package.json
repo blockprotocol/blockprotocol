@@ -126,7 +126,7 @@
     "@types/lodash": "4.14.190",
     "@types/md5": "^2.3.2",
     "@types/micromatch": "^4.0.2",
-    "@types/mime-types": "^2.1.1",
+    "@types/mime-types": "^2.1.4",
     "@types/nodemailer": "^6.4.6",
     "@types/nprogress": "^0.2.0",
     "@types/passport": "^1.0.11",
