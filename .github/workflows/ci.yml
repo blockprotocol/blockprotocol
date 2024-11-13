@@ -313,7 +313,7 @@ jobs:
         if: ${{ success() || failure() }}
         run: yarn nyc report --reporter=lcovonly --reporter=text
 
-      - uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3.1.6
+      - uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238 # v4.6.0
         if: ${{ success() || failure() }}
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
