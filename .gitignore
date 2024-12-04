@@ -29,6 +29,9 @@ vendor
 
 ## Environment variables
 .env.local
+.env.development.local
+.env.production.local
+.env.test.local
 .blockprotocolrc
 
 ## Build artifacts
@@ -51,6 +54,9 @@ var
 
 ## Sentry
 .sentryclirc
+
+# Python
+uv.lock
 
 ## Rust / WASM
 *.rs.bk
