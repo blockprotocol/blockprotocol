@@ -101,7 +101,6 @@ export const DevTools = ({ temporal }: { temporal: boolean }) => {
 
   return (
     <Box ref={wrapperRef} height={height} position="relative">
-      {/* @ts-expect-error -- React 19 typing issue from resizable library? */}
       <Resizable
         height={height}
         width={width ?? 0}
@@ -115,7 +114,7 @@ export const DevTools = ({ temporal }: { temporal: boolean }) => {
           <Header>
             <Tabs
               value={selectedTabIndex}
-              onChange={(_, newVal) => setSelectedTabIndex(newVal)}
+              onChange={(_: any, newVal: any) => setSelectedTabIndex(newVal)}
             >
               <Tab label="Properties" {...a11yProps(0)} sx={{ pl: 3 }} />
               <Tab label="Datastore" {...a11yProps(1)} />

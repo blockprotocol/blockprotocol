@@ -179,7 +179,6 @@ export const TextHookView = ({
 
   return (
     <div style={{ position: "relative" }}>
-      {/* @ts-expect-error –– library needs updating for React 19? */}
       <Slate
         editor={editor}
         onChange={(value) => {
@@ -194,7 +193,6 @@ export const TextHookView = ({
         value={nodesFromProps}
       >
         <Toolbar />
-        {/* @ts-expect-error –– library needs updating for React 19? */}
         <Editable
           style={{ padding: "12px" }}
           onKeyDown={onKeyDown}
