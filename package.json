@@ -33,7 +33,7 @@
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
     "lint:tsc": "turbo run --continue lint:tsc",
     "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
-    "dev": "yarn workspace @app/site dev",
+    "dev": "yarn workspace @apps/site dev",
     "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
     "dev:db": "yarn workspace @apps/site dev:db",
     "prepare": "patch-package --error-on-warn && turbo run codegen && turbo run build \"--filter=!./apps/*\""
