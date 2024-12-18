@@ -101,6 +101,7 @@ export const DevTools = ({ temporal }: { temporal: boolean }) => {
 
   return (
     <Box ref={wrapperRef} height={height} position="relative">
+      {/* @ts-expect-error -- React 19 typing issue from resizable library? */}
       <Resizable
         height={height}
         width={width ?? 0}

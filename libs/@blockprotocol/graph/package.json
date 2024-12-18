@@ -149,7 +149,7 @@
     "rollup": "3.5.1"
   },
   "peerDependencies": {
-    "react": "^18.0.0"
+    "react": "^19.0.0"
   },
   "engines": {
     "node": ">=16.15"

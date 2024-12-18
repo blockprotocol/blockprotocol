@@ -155,7 +155,6 @@ const EntitySwitcherComponent = ({
               id="entity-id-selector"
               size="small"
               value={entityIdOfProposedEntity}
-              placeholder="Select Entity"
               onChange={(event) => {
                 setEntityIdOfProposedEntity(event.target.value);
               }}

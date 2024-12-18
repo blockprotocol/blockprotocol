@@ -47,7 +47,7 @@
     "@types/command-line-usage": "^5.0.2",
     "@types/is-ci": "3.0.0",
     "@types/prompt": "^1.1.4",
-    "@types/react": "^18.0.25",
+    "@types/react": "19.0.1",
     "eslint": "8.33.0",
     "typescript": "4.9.4"
   }
