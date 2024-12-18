@@ -43,7 +43,7 @@ A hastily-proposed RFC can hurt its chances of acceptance. Low quality proposals
 
 Although there is no single way to prepare for submitting an RFC, it is generally a good idea to pursue feedback from other project developers beforehand, to ascertain that the RFC may be desirable; having a consistent impact on the project requires concerted effort toward consensus-building.
 
-The most common preparations for writing and submitting an RFC includes talking the idea over on our [community Discord server], or in relevant Issue threads when the idea stems from previous discussion.
+The most common preparations for writing and submitting an RFC includes talking the idea over on our [discussions forum](https://github.com/blockprotocol/blockprotocol/discussions), or in a relevant issue where one already exists.
 
 As a rule of thumb, receiving encouraging feedback from long-standing project developers, and particularly members of the core team is a good indication that the RFC is worth pursuing.
 
@@ -102,5 +102,3 @@ The Block Protocols's RFC process strongly owes its inspiration to the [Rust RFC
 [react rfc process]: https://github.com/reactjs/rfcs
 
 We're open to changing it as needed in response to feedback.
-
-[community discord server]: https://blockprotocol.org/discord

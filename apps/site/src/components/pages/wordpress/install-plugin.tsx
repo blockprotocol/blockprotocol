@@ -3,8 +3,8 @@ import { Box, Grid, Link, Typography } from "@mui/material";
 import { FadeInOnViewport } from "../../fade-in-on-viewport";
 import {
   ArrowUpRightIcon,
-  DiscordNewIcon,
   DownloadIcon,
+  EnvelopeIcon,
   InfoCircleIcon,
   ServerIcon,
   WordPressIcon,
@@ -265,23 +265,16 @@ export const InstallPlugin = () => {
               alignItems: "center",
             }}
           >
-            <DiscordNewIcon
+            <EnvelopeIcon
               sx={{ color: ({ palette }) => palette.purple[50], width: "18px" }}
             />{" "}
             <Box>
-              If you get stuck, feel free to reach out on our{" "}
-              <Link
-                sx={{ color: ({ palette }) => palette.purple[70] }}
-                href="/discord"
-              >
-                <strong>community Discord server</strong>{" "}
-              </Link>{" "}
-              or drop us a{" "}
+              If you get stuck, feel free to drop us a{" "}
               <Link
                 sx={{ color: ({ palette }) => palette.purple[70] }}
                 href="/contact"
               >
-                <strong>message directly</strong>{" "}
+                <strong>message directly</strong>
               </Link>
               .
             </Box>

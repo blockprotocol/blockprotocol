@@ -19,11 +19,7 @@ test("page footer navigation works", async ({ page, browserName }) => {
   );
   await expect(socialLinksSelector.locator("a").nth(1)).toHaveAttribute(
     "href",
-    "https://twitter.com/blockprotocol",
-  );
-  await expect(socialLinksSelector.locator("a").nth(2)).toHaveAttribute(
-    "href",
-    "/discord",
+    "https://x.com/blockprotocol",
   );
   await expect(
     socialLinksSelector.locator("text=Star us on Github"),

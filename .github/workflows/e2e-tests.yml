@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - uses: ./.github/actions/warm-up-repo
         with:
@@ -34,7 +34,7 @@ jobs:
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: site-e2e-tests-playwright-report
           path: apps/site/playwright-report

@@ -517,12 +517,8 @@ export const FAQ = () => {
           <Box>
             Absolutely. It’s free, and gives your existing WordPress website new
             superpowers. If you get stuck or have any questions, feel free to{" "}
-            <Link href="mailto:">
+            <Link href="/contact">
               <strong>contact us</strong>
-            </Link>
-            , or drop a line in our{" "}
-            <Link href="" target="_blank">
-              <strong>community Discord</strong>
             </Link>
             .
           </Box>
