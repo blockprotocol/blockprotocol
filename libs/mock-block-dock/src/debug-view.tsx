@@ -1,5 +1,14 @@
-import { Box, CssBaseline, styled, ThemeProvider } from "@mui/material";
-import { ReactNode, useState } from "react";
+import { StyledComponent } from "@emotion/styled";
+import {
+  Box,
+  BoxProps,
+  CssBaseline,
+  styled,
+  Theme,
+  ThemeProvider,
+} from "@mui/material";
+import type { SystemProps } from "@mui/system";
+import { ElementType, ReactNode, useState } from "react";
 
 import { DevTools } from "./debug-view/dev-tools";
 import { Header } from "./debug-view/header";
@@ -10,9 +19,9 @@ type DebugViewProps = {
   children: ReactNode;
 };
 
-export const SIDEBAR_WIDTH = 200;
-
-export const MainContainer = styled(Box)(({ theme }) => ({
+export const MainContainer: StyledComponent<
+  BoxProps<ElementType, SystemProps<Theme>>
+> = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   flex: 1,

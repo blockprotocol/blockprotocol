@@ -1,5 +1,5 @@
 import { buildSubgraph } from "@blockprotocol/graph/stdlib";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import {
   blockSubgraphResolveDepths,
@@ -94,7 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
       blockSubgraphResolveDepths,
     );
 
-    render(
+    const root = createRoot(block);
+
+    root.render(
       <BlockLoader
         blockName={blockName}
         callbacks={{ graph: { getEntity: getEntitySubgraph } }}
@@ -104,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
         sourceString={sourceString}
         sourceUrl={sourceUrl}
       />,
-      block,
     );
   }
 });
