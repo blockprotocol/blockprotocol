@@ -1,47 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-
-  "automerge": true,
-  "branchPrefix": "deps/",
-  "dependencyDashboard": true,
-  "dependencyDashboardApproval": true,
+  "extends": ["github>blockprotocol/.github:renovate-config"],
+  "description": "Block Protocol public monorepo (blockprotocol/blockprotocol) Renovate configuration",
   "dependencyDashboardOSVVulnerabilitySummary": "none",
-  "dependencyDashboardTitle": "🚀 Dependency Updates",
-  "npm": { "minimumReleaseAge": "3 days" },
-  "postUpdateOptions": ["yarnDedupeFewer"],
-  "rangeStrategy": "bump",
-  "rebaseWhen": "conflicted",
-  "semanticCommits": "disabled",
-
-  "packageRules": [
-    {
-      "matchManagers": ["npm"],
-      "commitMessageTopic": "npm package `{{depName}}`",
-      "additionalBranchPrefix": "js/"
-    },
-    {
-      "matchManagers": ["poetry"],
-      "commitMessageTopic": "Python package `{{depName}}`",
-      "additionalBranchPrefix": "py/",
-      "reviewers": ["team:Python"]
-    },
-    {
-      "matchManagers": ["cargo"],
-      "additionalBranchPrefix": "rs/",
-      "reviewers": ["team:Rust"],
-      "commitMessageTopic": "Rust crate `{{depName}}`"
-    },
-    {
-      "matchManagers": ["github-actions"],
-      "commitMessageTopic": "GitHub Action `{{depName}}`",
-      "additionalBranchPrefix": "gha/",
-      "pinDigests": true
-    },
-    {
-      "matchManagers": ["docker-compose", "dockerfile"],
-      "commitMessageTopic": "Docker tag `{{depName}}`",
-      "additionalBranchPrefix": "docker/"
-    }
-  ]
+  "automerge": false
 }
