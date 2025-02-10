@@ -2,5 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>blockprotocol/.github:renovate-config"],
   "description": "Block Protocol public monorepo (blockprotocol/blockprotocol) Renovate configuration",
-  "dependencyDashboardOSVVulnerabilitySummary": "none"
+  "dependencyDashboardOSVVulnerabilitySummary": "none",
+  "automerge": false
 }
