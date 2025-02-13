@@ -1,5 +1,8 @@
 {
   "extends": "@local/tsconfig/node.json",
   "include": ["./"],
-  "exclude": ["dist"]
+  "exclude": ["dist"],
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
 }

@@ -68,6 +68,6 @@
     "typescript-json-schema": "^0.55.0"
   },
   "peerDependencies": {
-    "react": "^18.0.0"
+    "react": "^19.0.0"
   }
 }

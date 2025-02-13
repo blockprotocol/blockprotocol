@@ -136,7 +136,7 @@ const LogsViewComponent = ({
     source: "all",
     module: "all",
   });
-  const logsContainerRef = useRef<HTMLElement>();
+  const logsContainerRef = useRef<HTMLElement | null>(null);
   const prevLogs = usePrevious(logs);
 
   const filteredLogs = useMemo(() => {
