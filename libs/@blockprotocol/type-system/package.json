@@ -60,7 +60,7 @@
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "@rollup/plugin-typescript": "9.0.2",
-    "@rollup/plugin-wasm": "6.0.1",
+    "@rollup/plugin-wasm": "6.2.2",
     "@types/jest": "29.4.0",
     "eslint": "8.33.0",
     "fs-extra": "^10.1.0",

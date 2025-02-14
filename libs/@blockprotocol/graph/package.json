@@ -141,8 +141,8 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
-    "@rollup/plugin-commonjs": "24.0.1",
-    "@rollup/plugin-json": "6.0.0",
+    "@rollup/plugin-commonjs": "24.1.0",
+    "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-typescript": "9.0.2",
     "eslint": "8.33.0",
     "rimraf": "^3.0.2",
