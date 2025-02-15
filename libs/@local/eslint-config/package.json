@@ -26,6 +26,6 @@
     "eslint-plugin-unicorn": "45.0.2"
   },
   "devDependencies": {
-    "typescript": "4.9.4"
+    "typescript": "4.9.5"
   }
 }
