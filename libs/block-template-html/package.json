@@ -39,6 +39,6 @@
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",
     "prettier": "2.8.2",
-    "rimraf": "^3.0.2"
+    "rimraf": "^6.0.0"
   }
 }
