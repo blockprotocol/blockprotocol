@@ -74,7 +74,7 @@
     "concurrently": "^7.6.0",
     "core-js": "^3.26.1",
     "cross-env": "^7.0.3",
-    "eslint": "8.33.0",
+    "eslint": "8.57.1",
     "html-webpack-plugin": "^5.5.0",
     "lit": "^2.4.1",
     "react": "18.2.0",

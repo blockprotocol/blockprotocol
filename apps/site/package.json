@@ -145,7 +145,7 @@
     "babel-plugin-istanbul": "^6.1.1",
     "chalk": "5.2.0",
     "dotenv-flow": "3.2.0",
-    "eslint": "8.33.0",
+    "eslint": "8.57.1",
     "micromatch": "^4.0.5",
     "nyc": "^15.1.0",
     "playwright": "^1.30.0",
