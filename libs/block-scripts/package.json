@@ -64,7 +64,7 @@
     "@types/serve-handler": "^6.1.1",
     "@types/webpack-assets-manifest": "^5.1.0",
     "@types/webpack-bundle-analyzer": "^4.6.0",
-    "eslint": "8.33.0"
+    "eslint": "9.22.0"
   },
   "engines": {
     "node": "^14.15.0 || >=16.13.0"
