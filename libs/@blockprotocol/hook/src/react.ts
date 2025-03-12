@@ -12,7 +12,7 @@ import { HookBlockHandler, HookEmbedderHandler } from "./index.js";
  * calling hookModule.on("messageName", callback);
  */
 export const useHookBlockModule = (
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
   constructorArgs?: Omit<
     ConstructorParameters<typeof HookBlockHandler>[0],
     "element"
@@ -34,7 +34,7 @@ export const useHookBlockModule = (
  * calling hookModule.on("messageName", callback);
  */
 export const useHookEmbedderModule = (
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
   constructorArgs?: Omit<
     ConstructorParameters<typeof HookEmbedderHandler>[0],
     "element"

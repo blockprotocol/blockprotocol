@@ -10,7 +10,7 @@ import { ServiceBlockHandler, ServiceEmbedderHandler } from "./index.js";
  * Updates to any callbacks after first constructing should be made by calling serviceModule.on("messageName", callback);
  */
 export const useServiceBlockModule = (
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
   constructorArgs?: Omit<
     ConstructorParameters<typeof ServiceBlockHandler>[0],
     "element"
@@ -32,7 +32,7 @@ export const useServiceBlockModule = (
  * 2. to register multiple, call serviceModule.registerCallbacks({ [messageName]: callback });
  */
 export const useServiceEmbedderModule = (
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
   constructorArgs?: Omit<
     ConstructorParameters<typeof ServiceEmbedderHandler>[0],
     "element"
