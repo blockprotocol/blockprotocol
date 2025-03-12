@@ -3,5 +3,6 @@
   "extends": ["github>blockprotocol/.github:renovate-config"],
   "description": "Block Protocol public monorepo (blockprotocol/blockprotocol) Renovate configuration",
   "dependencyDashboardOSVVulnerabilitySummary": "none",
-  "automerge": false
+  "automerge": false,
+  "enabled": false
 }
