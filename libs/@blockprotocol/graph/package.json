@@ -141,12 +141,12 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
-    "@rollup/plugin-commonjs": "24.0.1",
+    "@rollup/plugin-commonjs": "28.0.3",
     "@rollup/plugin-json": "6.0.0",
-    "@rollup/plugin-typescript": "9.0.2",
+    "@rollup/plugin-typescript": "12.1.2",
     "eslint": "8.33.0",
     "rimraf": "^3.0.2",
-    "rollup": "3.29.5"
+    "rollup": "4.35.0"
   },
   "peerDependencies": {
     "react": "^18.0.0"
