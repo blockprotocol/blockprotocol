@@ -1,7 +1,10 @@
-- **Feature Name:** `graph-type-system`
-- **Start Date:** 2022-06-14
-- **RFC PR:** [blockprotocol/blockprotocol#352](https://github.com/blockprotocol/blockprotocol/pull/352)
-- **RFC Discussion:** [blockprotocol/blockprotocol#418](https://github.com/blockprotocol/blockprotocol/discussions/418)
+Feature Name: graph-type-system
+Start Date: 2022-06-14
+First Published: 2022-07-04
+RFC PR: https://github.com/blockprotocol/blockprotocol/pull/352
+RFC Discussion: https://github.com/blockprotocol/blockprotocol/discussions/418
+
+---
 
 # Summary
 
