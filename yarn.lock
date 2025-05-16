@@ -6732,10 +6732,10 @@
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
 
-"@yarnpkg/parsers@^3.0.0-rc.32":
-  version "3.0.0-rc.35"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/parsers/-/parsers-3.0.0-rc.35.tgz#5a22f2c4e9341ca991e4331de0f0c286a0fcefab"
-  integrity sha512-J6ySgEdQUqAmlttvZOoXOEsrDTAnHyR/MtEvuAG5a+gwKY/2Cc7xn4CWcpgfuwkp+0a4vXmt2BDwzacDoGDN1g==
+"@yarnpkg/parsers@^3.0.0-rc.48.1":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/parsers/-/parsers-3.0.3.tgz#624f35f242c1115a48beb1fd12aed610bcd8e823"
+  integrity sha512-mQZgUSgFurUtA07ceMjxrWkYz8QtDuYkvPlu0ZqncgjopQ0t6CNEo/OSealkmnagSUx8ZD5ewvezUwUuMqutQg==
   dependencies:
     js-yaml "^3.10.0"
     tslib "^2.4.0"
@@ -12847,11 +12847,12 @@ locate-path@^7.1.0:
     p-locate "^6.0.0"
 
 lockfile-lint-api@^5.5.0:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/lockfile-lint-api/-/lockfile-lint-api-5.5.0.tgz#9eab162f597121d8fdae13debe553abe1279c7c6"
-  integrity sha512-L/Jk109tOSmTCPHjUEQSH/bYDRt7rgT1E2NN8/p3tmAwJuKwuWplJliVzZ+bBiIRWKmtXBDcfHnXJ9yT1shevQ==
+  version "5.9.2"
+  resolved "https://registry.yarnpkg.com/lockfile-lint-api/-/lockfile-lint-api-5.9.2.tgz#c9ca335d4aa46c90d8b8467a92ed6670b5db0ed9"
+  integrity sha512-3QhxWxl3jT9GcMxuCnTsU8Tz5U6U1lKBlKBu2zOYOz/x3ONUoojEtky3uzoaaDgExcLqIX0Aqv2I7TZXE383CQ==
   dependencies:
-    "@yarnpkg/parsers" "^3.0.0-rc.32"
+    "@yarnpkg/parsers" "^3.0.0-rc.48.1"
+    debug "^4.3.4"
     object-hash "^3.0.0"
 
 lockfile-lint@4.10.0:
