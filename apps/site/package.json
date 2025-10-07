@@ -83,7 +83,7 @@
     "next-mdx-remote": "^4.0.3",
     "next-seo": "^5.5.0",
     "next-session": "^4.0.4",
-    "nodemailer": "^6.7.2",
+    "nodemailer": "^7.0.7",
     "notistack": "^2.0.5",
     "nprogress": "^0.2.0",
     "passport": "^0.6.0",
