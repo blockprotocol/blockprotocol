@@ -148,7 +148,7 @@
     "eslint": "8.33.0",
     "micromatch": "^4.0.5",
     "nyc": "^15.1.0",
-    "playwright": "^1.30.0",
+    "playwright": "^1.55.1",
     "playwright-test-coverage": "^1.2.8",
     "rimraf": "^3.0.2",
     "suppress-experimental-warnings": "^1.1.2",
