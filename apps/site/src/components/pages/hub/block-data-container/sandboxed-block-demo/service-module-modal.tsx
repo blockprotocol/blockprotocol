@@ -22,9 +22,8 @@ const AnonymousUserContent = () => (
         lineHeight: 2,
       }}
     >
-      <Link href="/signup">Sign up for a Block Protocol account</Link> to get
-      free credits for services like this to try out here or for use in real
-      applications.
+      <Link href="https://app.hash.ai/signup">Sign up for a HASH account</Link>
+      to get free credits for services like this, and to try this block out.
     </Typography>
     <Typography
       sx={{
@@ -35,7 +34,7 @@ const AnonymousUserContent = () => (
       }}
     >
       <strong>Þ</strong> blocks can be used within various different block-based
-      applications, including <Link href="/wordpress">WordPress</Link>.
+      applications, including <Link href="https://hash.ai/">HASH</Link>.
     </Typography>
     <Box display="flex" justifyContent="center">
       <LinkButton sx={{ width: 160, mr: 4, fontWeight: 600 }} href="/signup">
