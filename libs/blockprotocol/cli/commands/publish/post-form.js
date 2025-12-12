@@ -17,7 +17,14 @@ export const postPublishForm = async ({
 }) => {
   const url = `${blockProtocolSiteHost}/api/blocks/publish`;
 
-  // Node 24 provides WHATWG fetch + FormData + File globally.
+  // Node 20+ provides WHATWG fetch + FormData + File globally.
+  if (typeof FormData === "undefined" || typeof File === "undefined") {
+    const nodeVersion = process?.versions?.node ?? "unknown";
+    throw new Error(
+      `Publishing requires Node.js >= 20 (current: ${nodeVersion}). Please upgrade Node.js and try again.`,
+    );
+  }
+
   const form = new FormData();
 
   const tarballBytes = await readFile(tarballFilePath);
