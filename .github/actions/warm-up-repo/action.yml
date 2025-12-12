@@ -13,7 +13,7 @@ runs:
   steps:
     - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
       with:
-        node-version: 18 ## aligned with Node version on Vercel
+        node-version: 22 ## aligned with Node version on Vercel
 
     - name: Install Rust tools
       uses: taiki-e/install-action@e73edba6cef4fb2754007a50e0b28cf1c702c52b # v2.42.40
