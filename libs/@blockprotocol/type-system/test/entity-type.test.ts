@@ -324,7 +324,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
         reason: "InvalidBaseUrl",
         inner: {
           reason: "UrlParseError",
-          inner: "invalid domain character",
+          inner: "invalid international domain name",
         },
       },
     },
