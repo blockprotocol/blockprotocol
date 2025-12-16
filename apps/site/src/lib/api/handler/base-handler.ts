@@ -72,6 +72,14 @@ export const createBaseHandler = <
 };
 
 export const baseHandlerOptions = {
+  onNoMatch: async (request: BaseApiRequest, response: BaseApiResponse) => {
+    // eslint-disable-next-line no-console
+    console.error(
+      `[next-connect] No matching route for ${request.method} ${request.url}`,
+    );
+    response.statusCode = 404;
+    response.end(`Route ${request.method} ${request.url} not found`);
+  },
   onError: async (
     error: unknown,
     _request: BaseApiRequest,

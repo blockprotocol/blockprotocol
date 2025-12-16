@@ -29,6 +29,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const fetchUserProfileData = async (shortname: string) => {
+  // eslint-disable-next-line no-console
+  console.log(`[user-page] Fetching data for shortname: ${shortname}`);
+
   const [userResponse, blocksResponse, entityTypesResponse] = await Promise.all(
     [
       apiClient.getUser({
@@ -42,6 +45,14 @@ const fetchUserProfileData = async (shortname: string) => {
       }),
     ],
   );
+
+  // eslint-disable-next-line no-console
+  console.log(`[user-page] API responses:`, {
+    userError: userResponse.error?.message,
+    userFound: !!userResponse.data?.user,
+    blocksError: blocksResponse.error?.message,
+    typesError: entityTypesResponse.error?.message,
+  });
 
   if (!userResponse.data?.user) {
     throw new Error("No user found");
@@ -84,7 +95,9 @@ export const getStaticProps: GetStaticProps<
       },
       revalidate: 60,
     };
-  } catch {
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(`[user-page] Error fetching user data for ${shortname}:`, error);
     return { notFound: true, revalidate: 60 };
   }
 };

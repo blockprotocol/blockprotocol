@@ -93,6 +93,9 @@ import { FRONTEND_URL } from "./config";
 
 const BASE_URL = `${typeof window !== "undefined" ? "" : FRONTEND_URL}/api/`;
 
+// eslint-disable-next-line no-console
+console.log(`[api-client] BASE_URL: ${BASE_URL}, FRONTEND_URL: ${FRONTEND_URL}`);
+
 const axiosClient = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
