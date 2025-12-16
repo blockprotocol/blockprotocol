@@ -25,7 +25,7 @@ runs:
     - name: Install Rust tools
       uses: taiki-e/install-action@e73edba6cef4fb2754007a50e0b28cf1c702c52b # v2.42.40
       with:
-        tool: just@1.13.0,wasm-pack@0.12.1
+        tool: just@1.13.0,wasm-pack@0.13.1
 
     - name: Cache Rust dependencies
       uses: Swatinem/rust-cache@82a92a6e8fbeee089604da2575dc567ae9ddeaab # v2.7.5
