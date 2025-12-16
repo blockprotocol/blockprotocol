@@ -15,8 +15,7 @@ const nextConfig = {
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
   poweredByHeader: false,
   productionBrowserSourceMaps: true,
-  // Use webpack for builds (Turbopack is not yet fully compatible with all features)
-  turbopack: {},
+  swcMinify: true,
 
   sentry: {
     autoInstrumentServerFunctions: false,
