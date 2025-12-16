@@ -8,7 +8,8 @@
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
-    "strict": true
+    "strict": true,
+    "types": []
   },
   "include": ["declarations.d.ts", "src"]
 }
