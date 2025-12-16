@@ -32,9 +32,15 @@ export const getFeaturedBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
     const allBlocks = await readBlocksDataFile();
 
     const featuredBlocks = [
-      allBlocks.find(({ author, name }) => author === "hash" && name === "address"),
-      allBlocks.find(({ author, name }) => author === "hash" && name === "how-to"),
-      allBlocks.find(({ author, name }) => author === "hash" && name === "ai-image"),
+      allBlocks.find(
+        ({ author, name }) => author === "hash" && name === "address",
+      ),
+      allBlocks.find(
+        ({ author, name }) => author === "hash" && name === "how-to",
+      ),
+      allBlocks.find(
+        ({ author, name }) => author === "hash" && name === "ai-image",
+      ),
     ].filter((block): block is ExpandedBlockMetadata => Boolean(block));
 
     return featuredBlocks;
