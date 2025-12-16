@@ -54,7 +54,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["null", "boolean", "number", "string", "array", "string"]
+          "enum": ["null", "boolean", "number", "string", "array", "object"]
         },
         "anyOf": false
       },

@@ -22,13 +22,13 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: returntocorp/semgrep@sha256:875ea8c5200ca5938836fa0c155b2220eca8fc83940da1bfa90caf67d73fb0ed
+      image: returntocorp/semgrep@sha256:94ba484b73c8ae0a962c43b3d6b95cfb5cf755b56b862e8a2374b8323fc4b7d7
 
     # Skip any PR created by Dependabot to avoid permission issues:
     if: (github.actor != 'dependabot[bot]')
 
     steps:
-      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         name: Check-out Git project source
 
       - run: semgrep ci --sarif --output=semgrep.sarif
@@ -38,7 +38,7 @@ jobs:
 
       - name: Check SARIF file exists following Semgrep run
         id: sarif_file_check
-        uses: andstor/file-existence-action@20b4d2e596410855db8f9ca21e96fbe18e12930b # v2.0.0
+        uses: andstor/file-existence-action@076e0072799f4942c8bc574a82233e1e4d13e9d6 # v3.0.0
         with:
           files: "semgrep.sarif"
 

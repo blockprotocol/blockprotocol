@@ -11,14 +11,21 @@ runs:
   using: composite
 
   steps:
-    - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
+    - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
       with:
-        node-version: 18 ## aligned with Node version on Vercel
+        node-version: 24 ## aligned with Node version on Vercel
+
+    - name: Install Rust toolchain (pinned)
+      uses: dtolnay/rust-toolchain@0b1efabc08b657293548b77fb76cc02d26091c7e
+      with:
+        toolchain: nightly-2025-10-08
+        components: rust-src
+        targets: wasm32-unknown-unknown
 
     - name: Install Rust tools
       uses: taiki-e/install-action@e73edba6cef4fb2754007a50e0b28cf1c702c52b # v2.42.40
       with:
-        tool: just@1.13.0,wasm-pack@0.11.0
+        tool: just@1.13.0,wasm-pack@0.12.1
 
     - name: Cache Rust dependencies
       uses: Swatinem/rust-cache@82a92a6e8fbeee089604da2575dc567ae9ddeaab # v2.7.5
