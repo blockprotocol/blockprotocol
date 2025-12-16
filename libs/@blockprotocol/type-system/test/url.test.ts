@@ -17,35 +17,35 @@ const invalidBaseUrlCases: [string, ParseBaseUrlError][] = [
     {
       reason: "UrlParseError",
       inner:
-        '{"input":"\\\\example\\\\..\\\\demo/.\\\\/","code":"ERR_INVALID_URL"}',
+        '{"code":"ERR_INVALID_URL","input":"\\\\example\\\\..\\\\demo/.\\\\/"}',
     },
   ],
   [
     "https://ex ample.org/",
     {
       reason: "UrlParseError",
-      inner: '{"input":"https://ex ample.org/","code":"ERR_INVALID_URL"}',
+      inner: '{"code":"ERR_INVALID_URL","input":"https://ex ample.org/"}',
     },
   ],
   [
     "example/",
     {
       reason: "UrlParseError",
-      inner: '{"input":"example/","code":"ERR_INVALID_URL"}',
+      inner: '{"code":"ERR_INVALID_URL","input":"example/"}',
     },
   ],
   [
     "https://example.com:demo/",
     {
       reason: "UrlParseError",
-      inner: '{"input":"https://example.com:demo/","code":"ERR_INVALID_URL"}',
+      inner: '{"code":"ERR_INVALID_URL","input":"https://example.com:demo/"}',
     },
   ],
   [
     "http://[www.example.com]/",
     {
       reason: "UrlParseError",
-      inner: '{"input":"http://[www.example.com]/","code":"ERR_INVALID_URL"}',
+      inner: '{"code":"ERR_INVALID_URL","input":"http://[www.example.com]/"}',
     },
   ],
   /** @todo - This was a regression when moving to a JS implementation. */
@@ -78,7 +78,7 @@ const invalidVersionedUrlCases: [string, ParseVersionedUrlError][] = [
       reason: "InvalidBaseUrl",
       inner: {
         reason: "UrlParseError",
-        inner: '{"input":"example/","code":"ERR_INVALID_URL"}',
+        inner: '{"code":"ERR_INVALID_URL","input":"example/"}',
       },
     },
   ],
