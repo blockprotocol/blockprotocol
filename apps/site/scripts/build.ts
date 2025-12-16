@@ -9,7 +9,22 @@ const script = async () => {
 
   await import("./codegen");
 
-  await execa("yarn", ["generate-blockmetadata-schema"], { stdio: "inherit" });
+  // Skip schema generation if the file already exists (pre-generated and committed)
+  const schemaPath = path.resolve(
+    process.cwd(),
+    "public/schemas/block-metadata.json",
+  );
+  if (await fs.pathExists(schemaPath)) {
+    console.log(
+      chalk.green(
+        "Skipping block-metadata schema generation (file already exists).",
+      ),
+    );
+  } else {
+    await execa("yarn", ["generate-blockmetadata-schema"], {
+      stdio: "inherit",
+    });
+  }
 
   const hasMongoEnv =
     Boolean(process.env.MONGODB_URI) && Boolean(process.env.MONGODB_DB_NAME);
