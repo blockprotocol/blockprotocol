@@ -1,6 +1,9 @@
 import { query as queryValidator, validationResult } from "express-validator";
 
-import { createBaseHandler } from "../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../lib/api/handler/base-handler";
 import { User } from "../../lib/api/model/user.model";
 import { formatErrors } from "../../util/api";
 
@@ -24,4 +27,5 @@ export default createBaseHandler<null, ApiIsShortnameTakenResponse>()
     const isShortnameTaken = await User.isShortnameTaken(db, shortname);
 
     res.status(200).send(isShortnameTaken);
-  });
+  })
+  .handler(baseHandlerOptions);

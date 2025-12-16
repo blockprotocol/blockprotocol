@@ -1,13 +1,16 @@
 import httpProxyMiddleware from "next-http-proxy-middleware";
 
-import { createBaseHandler } from "../../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../../lib/api/handler/base-handler";
 import { isBillingFeatureFlagEnabled } from "../../../lib/config";
 import { formatErrors, mustGetEnvVar } from "../../../util/api";
 
 export default createBaseHandler()
   .use((_, res, next) => {
     if (isBillingFeatureFlagEnabled) {
-      next();
+      return next();
     } else {
       res.status(401).send(
         formatErrors({
@@ -16,7 +19,7 @@ export default createBaseHandler()
       );
     }
   })
-  .use((req, res, _) => {
+  .use((req, res) => {
     const bpUserId = req.user?.id;
 
     /**
@@ -42,4 +45,5 @@ export default createBaseHandler()
         },
       ],
     });
-  });
+  })
+  .handler(baseHandlerOptions);

@@ -1,5 +1,3 @@
-import { NextConnect } from "next-connect";
-
 import {
   isLoggedInMiddleware,
   IsLoggedInRequestExtensions,
@@ -19,10 +17,14 @@ export const createAuthenticatedHandler = <
   Response = unknown,
 >(
   isSignedUp: boolean = true,
-): NextConnect<
-  AuthenticatedApiRequest<RequestBody>,
-  BaseApiResponse<Response>
-> =>
-  createBaseHandler().use(
-    ...[isLoggedInMiddleware, isSignedUp ? isSignedUpMiddleware : []].flat(),
+) => {
+  const handler = createBaseHandler<RequestBody, Response>().use(
+    isLoggedInMiddleware,
   );
+
+  if (isSignedUp) {
+    return handler.use(isSignedUpMiddleware);
+  }
+
+  return handler;
+};

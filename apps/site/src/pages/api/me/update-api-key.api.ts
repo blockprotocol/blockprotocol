@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../../lib/api/handler/base-handler";
 import { ApiKey } from "../../../lib/api/model/api-key.model";
 import { formatErrors } from "../../../util/api";
 
@@ -45,4 +46,5 @@ export default createAuthenticatedHandler<
     // If it was found but not updated, the operation was a no-op.
 
     res.status(200).json("SUCCESS");
-  });
+  })
+  .handler(baseHandlerOptions);

@@ -1,6 +1,6 @@
 import { Db } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Middleware } from "next-connect";
+import { NextHandler } from "next-connect";
 
 import { connectToDatabase } from "../mongodb";
 
@@ -8,11 +8,12 @@ export type DbRequestExtensions = {
   db: Db;
 };
 
-export const dbMiddleware: Middleware<
-  NextApiRequest & DbRequestExtensions,
-  NextApiResponse
-> = async (req, _res, next) => {
+export const dbMiddleware = async (
+  req: NextApiRequest & DbRequestExtensions,
+  _res: NextApiResponse,
+  next: NextHandler,
+) => {
   const { db } = await connectToDatabase();
   req.db = db;
-  next();
+  return next();
 };

@@ -1,6 +1,9 @@
 import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 
-import { createBaseHandler } from "../../../../../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../../../../../lib/api/handler/base-handler";
 import { User } from "../../../../../../lib/api/model/user.model";
 import { formatErrors } from "../../../../../../util/api";
 
@@ -10,8 +13,8 @@ export type ApiTypesByUserRequest = {
 
 export type ApiTypesByUserResponse = { entityTypes: EntityTypeWithMetadata[] };
 
-export default createBaseHandler<null, ApiTypesByUserResponse>().get(
-  async (req, res) => {
+export default createBaseHandler<null, ApiTypesByUserResponse>()
+  .get(async (req, res) => {
     const { db, query } = req;
     const { shortname } = query as ApiTypesByUserRequest;
 
@@ -30,5 +33,5 @@ export default createBaseHandler<null, ApiTypesByUserResponse>().get(
     const entityTypes = await user.entityTypes(db);
 
     res.status(200).send({ entityTypes });
-  },
-);
+  })
+  .handler(baseHandlerOptions);

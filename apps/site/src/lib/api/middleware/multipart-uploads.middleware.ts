@@ -1,5 +1,5 @@
 import busboy from "busboy";
-import { Middleware } from "next-connect";
+import { NextHandler } from "next-connect";
 
 import { formatErrors } from "../../../util/api";
 import { AuthenticatedApiRequest } from "../handler/authenticated-handler";
@@ -100,36 +100,37 @@ const parseForm = async (
   });
 };
 
-export const multipartUploads: (
-  filesLimit: MultipartUploadsOptions,
-) => Middleware<
-  AuthenticatedApiRequest<MultipartExtensions>,
-  BaseApiResponse
-> = (options: MultipartUploadsOptions) => async (req, res, next) => {
-  const contentType = req.headers["content-type"];
-  if (contentType?.includes("multipart/form-data")) {
-    try {
-      req.body = await parseForm(options, req);
+export const multipartUploads =
+  (options: MultipartUploadsOptions) =>
+  async (
+    req: AuthenticatedApiRequest<MultipartExtensions>,
+    res: BaseApiResponse,
+    next: NextHandler,
+  ) => {
+    const contentType = req.headers["content-type"];
+    if (contentType?.includes("multipart/form-data")) {
+      try {
+        req.body = await parseForm(options, req);
 
-      next();
-    } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).json(
-          formatErrors({
-            msg: error.message,
-            param: "file upload",
-          }),
-        );
-      } else {
-        res.status(400).json(
-          formatErrors({
-            msg: "Unknown error while trying to receive uploaded files.",
-            param: "image",
-          }),
-        );
+        return next();
+      } catch (error) {
+        if (error instanceof Error) {
+          return res.status(400).json(
+            formatErrors({
+              msg: error.message,
+              param: "file upload",
+            }),
+          );
+        } else {
+          return res.status(400).json(
+            formatErrors({
+              msg: "Unknown error while trying to receive uploaded files.",
+              param: "image",
+            }),
+          );
+        }
       }
+    } else {
+      return next();
     }
-  } else {
-    next();
-  }
-};
+  };

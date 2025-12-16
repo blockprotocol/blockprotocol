@@ -78,7 +78,7 @@
     "mock-block-dock": "0.1.10",
     "mongodb": "^4.17.0",
     "next": "15.5.9",
-    "next-connect": "^0.12.1",
+    "next-connect": "^1.0.0",
     "next-http-proxy-middleware": "^1.2.5",
     "next-mdx-remote": "^4.0.3",
     "next-seo": "^5.5.0",

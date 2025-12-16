@@ -1,7 +1,10 @@
 import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import { BaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 
-import { createBaseHandler } from "../../../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../../../lib/api/handler/base-handler";
 import { formatErrors } from "../../../../util/api";
 import { getEntityType } from "./shared/db";
 
@@ -12,8 +15,8 @@ export type ApiEntityTypeByUrlGetQuery = {
 
 export type ApiEntityTypeByUrlResponse = { entityType: EntityTypeWithMetadata };
 
-export default createBaseHandler<null, ApiEntityTypeByUrlResponse>().get(
-  async (req, res) => {
+export default createBaseHandler<null, ApiEntityTypeByUrlResponse>()
+  .get(async (req, res) => {
     const { db } = req;
     const { baseUrl, versionedUrl } = req.query as ApiEntityTypeByUrlGetQuery;
 
@@ -28,5 +31,5 @@ export default createBaseHandler<null, ApiEntityTypeByUrlResponse>().get(
     }
 
     res.status(200).send({ entityType: dbRecord.entityTypeWithMetadata });
-  },
-);
+  })
+  .handler(baseHandlerOptions);

@@ -4,6 +4,7 @@ import cloneDeep from "lodash/cloneDeep";
 
 import { getAllBlocks } from "../../../lib/api/blocks/get";
 import { createApiKeyRequiredHandler } from "../../../lib/api/handler/api-key-required-handler";
+import { baseHandlerOptions } from "../../../lib/api/handler/base-handler";
 import {
   ExpandedBlockMetadata,
   retrieveBlockFileContent,
@@ -141,4 +142,5 @@ export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
     res.status(200).json({
       results: data,
     });
-  });
+  })
+  .handler(baseHandlerOptions);

@@ -1,4 +1,4 @@
-import { Middleware } from "next-connect";
+import { NextHandler } from "next-connect";
 
 import { formatErrors } from "../../../util/api";
 import { BaseApiRequest, BaseApiResponse } from "../handler/base-handler";
@@ -8,10 +8,11 @@ export type IsLoggedInRequestExtensions = {
   user: User;
 };
 
-export const isLoggedInMiddleware: Middleware<
-  BaseApiRequest,
-  BaseApiResponse
-> = (req, res, next) => {
+export const isLoggedInMiddleware = (
+  req: BaseApiRequest,
+  res: BaseApiResponse,
+  next: NextHandler,
+) => {
   const { user } = req;
 
   if (!user) {
@@ -22,5 +23,5 @@ export const isLoggedInMiddleware: Middleware<
     );
   }
 
-  next();
+  return next();
 };

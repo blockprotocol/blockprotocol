@@ -3,6 +3,7 @@ import { VersionedUrl } from "@blockprotocol/type-system/slim";
 import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 
 import { createAuthenticatedHandler } from "../../../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../../../lib/api/handler/base-handler";
 import { formatErrors } from "../../../../util/api";
 import { SystemDefinedProperties } from "../shared/constants";
 import { updateEntityType } from "./shared/db";
@@ -46,4 +47,5 @@ export default createAuthenticatedHandler<
         }),
       );
     }
-  });
+  })
+  .handler(baseHandlerOptions);

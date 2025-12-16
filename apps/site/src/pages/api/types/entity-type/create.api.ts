@@ -3,6 +3,7 @@ import { EntityType } from "@blockprotocol/type-system";
 import { body as bodyValidator } from "express-validator";
 
 import { createAuthenticatedHandler } from "../../../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../../../lib/api/handler/base-handler";
 import { formatErrors } from "../../../../util/api";
 import { SystemDefinedProperties } from "../shared/constants";
 import { createEntityType } from "./shared/db";
@@ -38,4 +39,5 @@ export default createAuthenticatedHandler<
         }),
       );
     }
-  });
+  })
+  .handler(baseHandlerOptions);

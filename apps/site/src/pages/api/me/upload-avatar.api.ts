@@ -4,6 +4,7 @@ import {
   AuthenticatedApiRequest,
   createAuthenticatedHandler,
 } from "../../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../../lib/api/handler/base-handler";
 import {
   MultipartExtensions,
   multipartUploads,
@@ -108,7 +109,8 @@ export default createAuthenticatedHandler<
         }),
       );
     }
-  });
+  })
+  .handler(baseHandlerOptions);
 
 export const config = {
   api: {

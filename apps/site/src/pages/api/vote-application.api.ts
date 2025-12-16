@@ -1,6 +1,9 @@
 import Ajv from "ajv";
 
-import { createBaseHandler } from "../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../lib/api/handler/base-handler";
 import { getMember, subscribeToMailchimp } from "../../lib/api/mailchimp";
 
 export type VoteApplicationRequestBody = {
@@ -46,26 +49,28 @@ export type VoteApplicationResponse = {
 export default createBaseHandler<
   VoteApplicationRequestBody,
   VoteApplicationResponse
->().put(async (req, res) => {
-  try {
-    const payload = { ...req.body };
+>()
+  .put(async (req, res) => {
+    try {
+      const payload = { ...req.body };
 
-    const valid = validate(payload);
+      const valid = validate(payload);
 
-    if (!valid) {
-      throw new Error();
+      if (!valid) {
+        throw new Error();
+      }
+
+      const member = await getMember({ email: payload.email });
+
+      if (member?.merge_fields?.WISH_EA && payload?.merge_fields?.WISH_EA) {
+        payload.merge_fields.WISH_EA = `${member?.merge_fields?.WISH_EA}, ${payload.merge_fields.WISH_EA}`;
+      }
+
+      await subscribeToMailchimp(payload);
+
+      return res.json({ success: true });
+    } catch {
+      return res.status(400).send({ error: true });
     }
-
-    const member = await getMember({ email: payload.email });
-
-    if (member?.merge_fields?.WISH_EA && payload?.merge_fields?.WISH_EA) {
-      payload.merge_fields.WISH_EA = `${member?.merge_fields?.WISH_EA}, ${payload.merge_fields.WISH_EA}`;
-    }
-
-    await subscribeToMailchimp(payload);
-
-    return res.json({ success: true });
-  } catch {
-    return res.status(400).send({ error: true });
-  }
-});
+  })
+  .handler(baseHandlerOptions);

@@ -6,6 +6,7 @@ import { AxiosError } from "axios";
 import { body as bodyValidator, validationResult } from "express-validator";
 
 import { createApiKeyRequiredHandler } from "../../lib/api/handler/api-key-required-handler";
+import { baseHandlerOptions } from "../../lib/api/handler/base-handler";
 import { isBillingFeatureFlagEnabled } from "../../lib/config";
 import { internalApi } from "../../lib/internal-api-client";
 import { formatErrors, mustGetEnvVar } from "../../util/api";
@@ -21,7 +22,7 @@ export default createApiKeyRequiredHandler<
 })
   .use(async (_req, res, next) => {
     if (isBillingFeatureFlagEnabled) {
-      next();
+      return next();
     } else {
       res.status(401).send(
         formatErrors({
@@ -100,4 +101,5 @@ export default createApiKeyRequiredHandler<
         }),
       );
     }
-  });
+  })
+  .handler(baseHandlerOptions);

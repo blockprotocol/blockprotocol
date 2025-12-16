@@ -1,4 +1,4 @@
-import { Middleware } from "next-connect";
+import { NextHandler } from "next-connect";
 
 import { formatErrors } from "../../../util/api";
 import { parseClientIp } from "../../../util/usage";
@@ -7,16 +7,16 @@ import { BaseApiResponse } from "../handler/base-handler";
 import { ApiKey } from "../model/api-key.model";
 import { User } from "../model/user.model";
 
-export const hasValidApiKeyMiddleware: Middleware<
-  ApiKeyRequiredRequest,
-  BaseApiResponse
-> = async (req, res, next) => {
+export const hasValidApiKeyMiddleware = async (
+  req: ApiKeyRequiredRequest,
+  res: BaseApiResponse,
+  next: NextHandler,
+) => {
   try {
     const apiKey = req.headers["x-api-key"];
     if (!apiKey || typeof apiKey !== "string") {
       if (req.allowCookieFallback && req.user) {
-        next();
-        return;
+        return next();
       }
 
       return res.status(401).send(
@@ -47,7 +47,7 @@ export const hasValidApiKeyMiddleware: Middleware<
 
     req.user = user;
 
-    next();
+    return next();
   } catch (err) {
     return res.status(401).send(
       formatErrors({

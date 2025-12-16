@@ -5,6 +5,7 @@ import {
 } from "express-validator";
 
 import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../lib/api/handler/base-handler";
 import { SerializedUser } from "../../lib/api/model/user.model";
 import { formatErrors } from "../../util/api";
 
@@ -46,4 +47,5 @@ export default createAuthenticatedHandler<
     });
 
     res.status(200).json({ user: user.serialize(true) });
-  });
+  })
+  .handler(baseHandlerOptions);
