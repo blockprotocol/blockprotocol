@@ -36,7 +36,7 @@ build-host *arguments:
 
 # Builds the wasm targets of the workspace
 [private]
-build-wasm *arguments: (install-tool "wasm-pack" "0.12.1")
+build-wasm *arguments: (install-tool "wasm-pack" "0.13.1")
   # TODO: add profile
   # TODO: consider moving away from wasm-pack and using wasm-bindgen directly so we can use weak-refs
   #       https://github.com/iotaledger/identity.rs/pull/694
