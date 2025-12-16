@@ -18,6 +18,9 @@
     ]
   },
   "scripts": {
+    "dev": "yarn workspace @apps/site dev",
+    "dev:db": "yarn workspace @apps/site dev:db",
+    "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "fix:dependency-version-consistency": "check-dependency-version-consistency --fix .",
     "fix:eslint": "turbo run --continue fix:eslint",
@@ -33,9 +36,6 @@
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
     "lint:tsc": "turbo run --continue lint:tsc",
     "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
-    "dev": "yarn workspace @apps/site dev",
-    "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
-    "dev:db": "yarn workspace @apps/site dev:db",
     "prepare": "patch-package --error-on-warn && turbo run codegen && turbo run build \"--filter=!./apps/*\""
   },
   "lint-staged": {
@@ -54,7 +54,7 @@
     "lint-staged": "13.1.0",
     "lockfile-lint": "4.10.0",
     "markdownlint-cli2": "0.7.0",
-    "npm-run-all": "4.1.5",
+    "npm-run-all2": "5.0.0",
     "patch-package": "6.5.0",
     "prettier": "2.8.2",
     "prettier-plugin-packagejson": "2.3.0",
