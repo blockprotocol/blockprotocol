@@ -7,7 +7,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
@@ -126,12 +126,7 @@ type BlockPageQueryParams = {
   "block-slug": string;
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-};
+// Removed getStaticPaths - using getServerSideProps instead
 
 const parseQueryParams = (params: BlockPageQueryParams | Record<string, string | string[] | undefined>) => {
   // Handle both getStaticProps params (string) and useRouter query (string | string[])
@@ -175,22 +170,27 @@ const generateRepositoryDisplayUrl = (repository: string): string => {
   return displayUrl;
 };
 
-export const getStaticProps: GetStaticProps<
-  BlockPageProps,
-  BlockPageQueryParams
-> = async ({ params }) => {
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] Raw params:`, JSON.stringify(params));
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] params type:`, typeof params);
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] params.shortname:`, params?.shortname);
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] params["block-slug"]:`, params?.["block-slug"]);
+export const getServerSideProps: GetServerSideProps<BlockPageProps> = async (
+  context,
+) => {
+  const { params, req } = context;
 
-  // Get params directly (matching working user profile page pattern)
-  const shortname = params?.shortname;
-  const blockSlug = params?.["block-slug"];
+  // Detailed debugging
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] Request URL:`, req.url);
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] Full context keys:`, Object.keys(context));
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] Raw params JSON:`, JSON.stringify(params));
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] params keys:`, params ? Object.keys(params) : "undefined");
+
+  // Get params directly
+  const shortname = params?.shortname as string | undefined;
+  const blockSlug = params?.["block-slug"] as string | undefined;
+
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] Parsed: shortname=${shortname}, blockSlug=${blockSlug}`);
 
   // eslint-disable-next-line no-console
   console.log(`[block-page] Direct access: shortname=${shortname}, blockSlug=${blockSlug}`);
@@ -254,6 +254,12 @@ export const getStaticProps: GetStaticProps<
       ).compiledSource
     : undefined;
 
+  // Set cache headers for CDN caching (similar to revalidate behavior)
+  context.res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=180, stale-while-revalidate=300",
+  );
+
   return {
     props: {
       blockMetadata,
@@ -265,7 +271,6 @@ export const getStaticProps: GetStaticProps<
       schema,
       exampleGraph,
     },
-    revalidate: 180,
   };
 };
 
