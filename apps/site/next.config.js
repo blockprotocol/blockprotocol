@@ -9,7 +9,10 @@ const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? { exclude: ["error", "warn"] }
+        : false,
   },
   experimental: {
     // @see `deleteIsrFilesCreatedAfterNextBuild()` for rationale
