@@ -94,21 +94,28 @@ import { FRONTEND_URL } from "./config";
 // Compute BASE_URL dynamically to ensure correct value in both SSR and client contexts
 const getBaseUrl = () => {
   const isServer = typeof window === "undefined";
-  const baseUrl = `${isServer ? FRONTEND_URL : ""}/api/`;
-  // eslint-disable-next-line no-console
-  console.log(
-    `[api-client] getBaseUrl called: isServer=${isServer}, FRONTEND_URL=${FRONTEND_URL}, baseUrl=${baseUrl}`,
-  );
-  return baseUrl;
+  return `${isServer ? FRONTEND_URL : ""}/api/`;
 };
 
 const axiosClient = axios.create({
   withCredentials: true,
 });
 
-// Add request interceptor to set baseURL dynamically
+// Add request interceptor to set baseURL dynamically and add Vercel protection bypass
 axiosClient.interceptors.request.use((config) => {
   config.baseURL = getBaseUrl();
+
+  // For server-side requests, add Vercel deployment protection bypass
+  // This is needed because Vercel's deployment protection blocks unauthenticated
+  // server-to-server requests with 401
+  if (typeof window === "undefined") {
+    const bypassToken = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+    if (bypassToken) {
+      config.headers = config.headers || {};
+      config.headers["x-vercel-protection-bypass"] = bypassToken;
+    }
+  }
+
   return config;
 });
 

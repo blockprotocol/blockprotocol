@@ -179,27 +179,17 @@ export const getStaticProps: GetStaticProps<
   const { shortname, blockSlug } = parseQueryParams(params || {});
 
   if (!shortname.startsWith("@")) {
-    // eslint-disable-next-line no-console
-    console.log(`[block-page] shortname doesn't start with @: ${shortname}`);
     return { notFound: true };
   }
   const pathWithNamespace = `${shortname}/${blockSlug}`;
 
   const blocks = await getAllBlocks();
-  // eslint-disable-next-line no-console
-  console.log(
-    `[block-page] getAllBlocks returned ${blocks.length} blocks for ${pathWithNamespace}`,
-  );
 
   const blockMetadata = blocks.find(
     (metadata) => metadata.pathWithNamespace === pathWithNamespace,
   );
 
   if (!blockMetadata) {
-    // eslint-disable-next-line no-console
-    console.log(
-      `[block-page] Block not found: ${pathWithNamespace}. Available: ${blocks.map((b) => b.pathWithNamespace).join(", ")}`,
-    );
     // TODO: Render custom 404 page for blocks
     return { notFound: true };
   }

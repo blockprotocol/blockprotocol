@@ -8,6 +8,9 @@ import {
   UserPageComponent,
   UserPageProps,
 } from "../../components/pages/user/user-page-component";
+import { getAllBlocksByUser } from "../../lib/api/blocks/get";
+import { connectToDatabase } from "../../lib/api/mongodb";
+import { User } from "../../lib/api/model/user.model";
 import { apiClient } from "../../lib/api-client";
 import { excludeHiddenBlocks } from "../../lib/excluded-blocks";
 
@@ -28,12 +31,37 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
+// Server-side function to fetch user profile data directly from database
+// This avoids HTTP calls which can be blocked by Vercel deployment protection
+const fetchUserProfileDataFromDb = async (shortname: string) => {
+  const cleanShortname = shortname.replace("@", "");
+
+  const { db } = await connectToDatabase();
+
+  const user = await User.getByShortname(db, { shortname: cleanShortname });
+  if (!user) {
+    throw new Error(`No user found for ${cleanShortname}`);
+  }
+
+  const [blocks, entityTypes] = await Promise.all([
+    getAllBlocksByUser({ shortname: cleanShortname }),
+    user.entityTypes(db),
+  ]);
+
+  return {
+    blocks: excludeHiddenBlocks(blocks).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    ),
+    entityTypes: entityTypes.sort((a, b) =>
+      a.schema.title.localeCompare(b.schema.title),
+    ),
+    user: user.serialize(),
+  };
+};
+
+// Client-side function to fetch user profile data via API
 const fetchUserProfileData = async (shortname: string) => {
   const cleanShortname = shortname.replace("@", "");
-  // eslint-disable-next-line no-console
-  console.log(
-    `[user-page] Fetching data for shortname: ${shortname} (clean: ${cleanShortname})`,
-  );
 
   const [userResponse, blocksResponse, entityTypesResponse] = await Promise.all(
     [
@@ -48,15 +76,6 @@ const fetchUserProfileData = async (shortname: string) => {
       }),
     ],
   );
-
-  // eslint-disable-next-line no-console
-  console.log(`[user-page] API responses for ${cleanShortname}:`, {
-    userError: userResponse.error?.message,
-    userStatus: userResponse.error?.response?.status,
-    userFound: !!userResponse.data?.user,
-    blocksError: blocksResponse.error?.message,
-    typesError: entityTypesResponse.error?.message,
-  });
 
   if (!userResponse.data?.user) {
     throw new Error(
@@ -92,7 +111,9 @@ export const getStaticProps: GetStaticProps<
   }
 
   try {
-    const { blocks, entityTypes, user } = await fetchUserProfileData(shortname);
+    // Use direct database access for server-side rendering to avoid
+    // Vercel deployment protection blocking internal HTTP requests
+    const { blocks, entityTypes, user } = await fetchUserProfileDataFromDb(shortname);
     return {
       props: {
         blocks,
@@ -101,9 +122,7 @@ export const getStaticProps: GetStaticProps<
       },
       revalidate: 60,
     };
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(`[user-page] Error fetching user data for ${shortname}:`, error);
+  } catch {
     return { notFound: true, revalidate: 60 };
   }
 };
