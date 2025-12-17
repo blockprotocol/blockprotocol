@@ -42,8 +42,25 @@ const nextConfig = {
         /**
          * Allow the sandboxed block demo to be loaded in an iframe.
          * This is required for block previews to work on the Hub.
+         * The :shortname param captures the full segment including @ prefix.
          */
         source: "/:shortname/blocks/:blockslug/sandboxed-demo",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self'",
+          },
+        ],
+      },
+      {
+        /**
+         * Also apply to the API route that the rewrite points to.
+         */
+        source: "/api/rewrites/sandboxed-block-demo",
         headers: [
           {
             key: "X-Frame-Options",
