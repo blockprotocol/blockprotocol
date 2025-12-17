@@ -39,13 +39,54 @@ export const createBaseHandler = <
   const { isPublicApi } = options ?? {};
 
   return createRouter<BaseApiRequest<RequestBody>, BaseApiResponse<Response>>()
-    .use(
-      expressWrapper(
-        cors({ origin: isPublicApi ? "*" : FRONTEND_URL, credentials: true }),
-      ),
-    )
+    .use(async (req, res, next) => {
+      // eslint-disable-next-line no-console
+      console.log(`[base-handler] Starting middleware chain for ${req.method} ${req.url}`);
+      return next();
+    })
+    .use(async (req, res, next) => {
+      // Use a custom CORS handler that's more permissive for server-to-server requests
+      const origin = req.headers.origin;
+      // eslint-disable-next-line no-console
+      console.log(`[base-handler] CORS check - origin header: ${origin || 'none'}`);
+      
+      // For server-to-server requests (no origin), skip CORS entirely
+      if (!origin) {
+        // eslint-disable-next-line no-console
+        console.log(`[base-handler] No origin header, skipping CORS`);
+        return next();
+      }
+      
+      // For browser requests, use the cors middleware
+      return new Promise<void>((resolve, reject) => {
+        cors({ 
+          origin: isPublicApi ? "*" : FRONTEND_URL, 
+          credentials: true 
+        })(req, res, (err?: unknown) => {
+          if (err) {
+            // eslint-disable-next-line no-console
+            console.log(`[base-handler] CORS error:`, err);
+            reject(err);
+          } else {
+            // eslint-disable-next-line no-console
+            console.log(`[base-handler] CORS passed`);
+            resolve();
+          }
+        });
+      }).then(() => next());
+    })
     .use(dbMiddleware)
+    .use(async (req, res, next) => {
+      // eslint-disable-next-line no-console
+      console.log(`[base-handler] After DB middleware, db connected: ${!!req.db}`);
+      return next();
+    })
     .use(sessionMiddleware)
+    .use(async (req, res, next) => {
+      // eslint-disable-next-line no-console
+      console.log(`[base-handler] After session middleware, session exists: ${!!req.session}`);
+      return next();
+    })
     /**
      * Manually set `req.session.regenerate` and `req.session.save` to prevent error
      * in `passport`. This should be removed once an alternative solution is available.
@@ -67,8 +108,23 @@ export const createBaseHandler = <
         return next();
       },
     )
+    .use(async (req, res, next) => {
+      // eslint-disable-next-line no-console
+      console.log(`[base-handler] After session patch`);
+      return next();
+    })
     .use(expressWrapper(passportMiddleware[0]!))
-    .use(expressWrapper(passportMiddleware[1]!));
+    .use(async (req, res, next) => {
+      // eslint-disable-next-line no-console
+      console.log(`[base-handler] After passport.initialize()`);
+      return next();
+    })
+    .use(expressWrapper(passportMiddleware[1]!))
+    .use(async (req, res, next) => {
+      // eslint-disable-next-line no-console
+      console.log(`[base-handler] After passport.session(), user: ${req.user?.id || 'none'}`);
+      return next();
+    });
 };
 
 export const baseHandlerOptions = {
