@@ -49,10 +49,10 @@ export default createApiKeyRequiredHandler<
       );
     }
 
-    const {
-      db,
-      user: { shortname },
-    } = req;
+    const { db, user } = req;
+
+    // user is guaranteed to exist by isLoggedInMiddleware
+    const shortname = user?.shortname;
 
     if (!shortname) {
       return res.status(403).json(

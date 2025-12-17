@@ -73,7 +73,6 @@ export const AccountDropdown: FunctionComponent = () => {
           horizontal: "right",
         }}
         PaperProps={{
-          // @ts-expect-error -- https://github.com/microsoft/TypeScript/issues/28960
           "data-testid": "account-dropdown-popover",
           elevation: 4,
           sx: {

@@ -26,6 +26,11 @@ export default createAuthenticatedHandler<
     const { db, user } = req;
     const { schema } = req.body;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).json(formatErrors({ msg: "Unauthorized" }));
+    }
+
     try {
       const dbRecord = await createPropertyType(db, { schema, user });
       return res

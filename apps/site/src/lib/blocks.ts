@@ -161,10 +161,15 @@ export const expandBlockMetadata = ({
     schema: metadata.schema,
     source: generateBlockFileUrl(metadata.source, blockDistributionFolderUrl)!,
     variants: metadata.variants?.length
-      ? metadata.variants?.map((variant) => ({
-          ...variant,
-          icon: generateBlockFileUrl(variant.icon, blockDistributionFolderUrl)!,
-        }))
+      ? metadata.variants?.map(
+          (variant: { icon?: string; [key: string]: unknown }) => ({
+            ...variant,
+            icon: generateBlockFileUrl(
+              variant.icon,
+              blockDistributionFolderUrl,
+            )!,
+          }),
+        )
       : null,
     exampleGraph: generateBlockFileUrl(
       includesExampleGraph ? "example-graph.json" : null,

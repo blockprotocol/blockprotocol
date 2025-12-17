@@ -1,4 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
+import { ConsoleMessage, Page } from "@playwright/test";
+// eslint-disable-next-line no-restricted-imports
 import { expect, test as base } from "playwright-test-coverage";
 
 // eslint-disable-next-line no-restricted-imports
@@ -64,9 +66,9 @@ export const tolerateCustomConsoleMessages = (
  * @see https://github.com/microsoft/playwright/discussions/11690#discussioncomment-2060397
  */
 export const test = base.extend({
-  page: async ({ page }, use) => {
+  page: async ({ page }: { page: Page }, use: (page: Page) => Promise<void>) => {
     const stringifiedMessages: string[] = [];
-    page.on("console", (consoleMessage) => {
+    page.on("console", (consoleMessage: ConsoleMessage) => {
       const stringifiedMessage = `[${consoleMessage.type()}] ${consoleMessage.text()}`;
       if (
         [

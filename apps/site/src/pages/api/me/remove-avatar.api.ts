@@ -8,6 +8,11 @@ export default createAuthenticatedHandler<unknown, RemoveAvatarResponse>()
   .delete(async (req, res) => {
     const { user, db } = req;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).send("SUCCESS");
+    }
+
     try {
       await user.update(db, {
         userAvatar: undefined,

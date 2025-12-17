@@ -25,6 +25,11 @@ export default createAuthenticatedHandler<
 
     const { db, user } = req;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).json("SUCCESS");
+    }
+
     const { publicId } = req.body;
 
     const { found, revoked } = await ApiKey.revokeByUser(db, {

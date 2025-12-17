@@ -72,7 +72,7 @@ export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
           [displayName, author, name].some((item) =>
             item?.toLowerCase().includes(query),
           ) ||
-          variants?.some((variant) =>
+          variants?.some((variant: { name?: string }) =>
             variant.name?.toLowerCase().includes(query),
           ),
       );
@@ -124,7 +124,7 @@ export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
 
     const clientIp = parseClientIp(req);
 
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     await sendReport({
       event: "block_search",

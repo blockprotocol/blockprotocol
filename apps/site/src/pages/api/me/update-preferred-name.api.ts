@@ -27,6 +27,11 @@ export default createAuthenticatedHandler<
     const { db, body, user } = req;
     const { preferredName } = body;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).json(formatErrors({ msg: "Unauthorized" }));
+    }
+
     try {
       await user.update(db, {
         preferredName,

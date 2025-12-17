@@ -27,6 +27,11 @@ export default createAuthenticatedHandler<
 
     const { db, user } = req;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).json("SUCCESS");
+    }
+
     const { publicId, displayName } = req.body;
 
     const { found } = await ApiKey.updateByUser(db, {

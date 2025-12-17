@@ -30,6 +30,11 @@ export default createAuthenticatedHandler<
 
     const { db, user, body } = req;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).json(formatErrors({ msg: "Unauthorized" }));
+    }
+
     const { shortname, preferredName } = body;
 
     if (user.shortname && user.shortname !== shortname) {

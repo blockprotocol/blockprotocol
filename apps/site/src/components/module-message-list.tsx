@@ -149,7 +149,7 @@ const ModuleMessage: FunctionComponent<{
           <MdxCode>errorCodes</MdxCode>:{" "}
           <Typography variant="bpSmallCopy">
             {errorCodes && errorCodes.length > 0
-              ? errorCodes.map((code, index) => (
+              ? errorCodes.map((code: string, index: number) => (
                   <Fragment key={code}>
                     {index > 0 ? ", " : ""}
                     <MdxCode>{code}</MdxCode>
@@ -184,7 +184,8 @@ export const ModuleMessageList: FunctionComponent<{
   return (
     <Box>
       <Box>
-        {moduleDefinition.messages.map(({ messageName, source }) => (
+        {moduleDefinition.messages.map(
+          ({ messageName, source }: { messageName: string; source: string }) => (
           <Typography key={messageName} mb={1}>
             <Link
               href={`#${generateModuleMessageAnchor(messageName)}`}
@@ -198,7 +199,7 @@ export const ModuleMessageList: FunctionComponent<{
           </Typography>
         ))}
       </Box>
-      {moduleDefinition.messages.map((message) => (
+      {moduleDefinition.messages.map((message: { messageName: string }) => (
         <ModuleMessage key={message.messageName} message={message} />
       ))}
     </Box>

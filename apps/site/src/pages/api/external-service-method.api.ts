@@ -48,7 +48,7 @@ export default createApiKeyRequiredHandler<
      */
     const internalApiKey = mustGetEnvVar("INTERNAL_API_KEY");
 
-    const { id: bpUserId } = req.user;
+    const bpUserId = req.user?.id;
 
     try {
       const { data } = await internalApi.externalServiceMethod(req.body, {

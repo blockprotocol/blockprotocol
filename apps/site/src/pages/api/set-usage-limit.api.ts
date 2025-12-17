@@ -42,6 +42,11 @@ export default createAuthenticatedHandler<
     const { user, db, body } = req;
     const { limit } = body;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).json(formatErrors({ msg: "Unauthorized" }));
+    }
+
     await user.update(db, {
       usageLimitCents: limit === "capped" ? body.usageLimitCents : undefined,
     });
