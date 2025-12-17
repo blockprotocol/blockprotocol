@@ -9,11 +9,11 @@ export type DbRequestExtensions = {
 };
 
 export const dbMiddleware = async (
-  req: NextApiRequest & DbRequestExtensions,
+  req: NextApiRequest,
   _res: NextApiResponse,
   next: NextHandler,
 ) => {
   const { db } = await connectToDatabase();
-  req.db = db;
+  (req as NextApiRequest & DbRequestExtensions).db = db;
   return next();
 };

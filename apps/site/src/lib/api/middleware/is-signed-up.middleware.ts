@@ -1,15 +1,15 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import { NextHandler } from "next-connect";
 
 import { formatErrors } from "../../../util/api";
 import { AuthenticatedApiRequest } from "../handler/authenticated-handler";
-import { BaseApiResponse } from "../handler/base-handler";
 
 export const isSignedUpMiddleware = (
-  req: AuthenticatedApiRequest,
-  res: BaseApiResponse,
+  req: NextApiRequest,
+  res: NextApiResponse,
   next: NextHandler,
 ) => {
-  const { user } = req;
+  const { user } = req as unknown as AuthenticatedApiRequest;
 
   if (!user.isSignedUp()) {
     return res.status(403).json(

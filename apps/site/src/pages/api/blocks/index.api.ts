@@ -3,7 +3,10 @@ import { query as queryValidator, validationResult } from "express-validator";
 import cloneDeep from "lodash/cloneDeep";
 
 import { getAllBlocks } from "../../../lib/api/blocks/get";
-import { createApiKeyRequiredHandler } from "../../../lib/api/handler/api-key-required-handler";
+import {
+  ApiKeyRequiredRequest,
+  createApiKeyRequiredHandler,
+} from "../../../lib/api/handler/api-key-required-handler";
 import { baseHandlerOptions } from "../../../lib/api/handler/base-handler";
 import {
   ExpandedBlockMetadata,
@@ -122,9 +125,10 @@ export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
 
     // @todo paginate response
 
-    const clientIp = parseClientIp(req);
+    const apiKeyReq = req as unknown as ApiKeyRequiredRequest;
+    const clientIp = parseClientIp(apiKeyReq);
 
-    const userId = req.user?.id;
+    const userId = apiKeyReq.user?.id;
 
     await sendReport({
       event: "block_search",

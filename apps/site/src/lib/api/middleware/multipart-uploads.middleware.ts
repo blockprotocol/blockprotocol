@@ -1,9 +1,9 @@
 import busboy from "busboy";
+import { NextApiRequest, NextApiResponse } from "next";
 import { NextHandler } from "next-connect";
 
 import { formatErrors } from "../../../util/api";
 import { AuthenticatedApiRequest } from "../handler/authenticated-handler";
-import { BaseApiResponse } from "../handler/base-handler";
 
 export type MultipartUploadsOptions = {
   fieldsLimit: number;
@@ -41,7 +41,7 @@ export type MultipartExtensions<
 
 const parseForm = async (
   { fieldsLimit, filesLimit, maxFileSize }: MultipartUploadsOptions,
-  req: AuthenticatedApiRequest<unknown>,
+  req: NextApiRequest,
 ): Promise<MultipartExtensions> => {
   return new Promise((resolve, reject) => {
     const form = busboy({
@@ -102,15 +102,13 @@ const parseForm = async (
 
 export const multipartUploads =
   (options: MultipartUploadsOptions) =>
-  async (
-    req: AuthenticatedApiRequest<MultipartExtensions>,
-    res: BaseApiResponse,
-    next: NextHandler,
-  ) => {
+  async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
     const contentType = req.headers["content-type"];
     if (contentType?.includes("multipart/form-data")) {
       try {
-        req.body = await parseForm(options, req);
+        const multipartReq =
+          req as unknown as AuthenticatedApiRequest<MultipartExtensions>;
+        multipartReq.body = await parseForm(options, req);
 
         return next();
       } catch (error) {

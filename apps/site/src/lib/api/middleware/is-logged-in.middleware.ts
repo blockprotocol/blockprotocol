@@ -1,7 +1,8 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import { NextHandler } from "next-connect";
 
 import { formatErrors } from "../../../util/api";
-import { BaseApiRequest, BaseApiResponse } from "../handler/base-handler";
+import { BaseApiRequest } from "../handler/base-handler";
 import { User } from "../model/user.model";
 
 export type IsLoggedInRequestExtensions = {
@@ -9,11 +10,11 @@ export type IsLoggedInRequestExtensions = {
 };
 
 export const isLoggedInMiddleware = (
-  req: BaseApiRequest,
-  res: BaseApiResponse,
+  req: NextApiRequest,
+  res: NextApiResponse,
   next: NextHandler,
 ) => {
-  const { user } = req;
+  const { user } = req as unknown as BaseApiRequest;
 
   if (!user) {
     return res.status(401).send(

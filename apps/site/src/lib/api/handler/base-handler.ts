@@ -30,6 +30,8 @@ export type ErrorResponse = {
 
 export type BaseApiResponse<T = unknown> = NextApiResponse<T | ErrorResponse>;
 
+// Use NextApiRequest/NextApiResponse for router to satisfy IncomingMessage constraint,
+// then use type assertions for middleware that need extended request types
 export const createBaseHandler = <
   RequestBody = unknown,
   Response = any,
@@ -38,7 +40,7 @@ export const createBaseHandler = <
 }) => {
   const { isPublicApi } = options ?? {};
 
-  return createRouter<BaseApiRequest<RequestBody>, BaseApiResponse<Response>>()
+  return createRouter<NextApiRequest, NextApiResponse>()
     .use(async (req, res, next) => {
       // For server-to-server requests (no origin), skip CORS entirely
       const origin = req.headers.origin;
@@ -68,21 +70,16 @@ export const createBaseHandler = <
      *
      * @see https://github.com/jaredhanson/passport/issues/904
      */
-    .use(
-      async (
-        req: BaseApiRequest<RequestBody>,
-        _res: BaseApiResponse<Response>,
-        next: NextHandler,
-      ) => {
-        if (req.session && !req.session.regenerate) {
-          req.session.regenerate = (cb: () => any) => cb();
-        }
-        if (req.session && !req.session.save) {
-          req.session.save = (cb: () => any) => cb();
-        }
-        return next();
-      },
-    )
+    .use(async (req, _res, next) => {
+      const baseReq = req as unknown as BaseApiRequest<RequestBody>;
+      if (baseReq.session && !baseReq.session.regenerate) {
+        baseReq.session.regenerate = (cb: () => any) => cb();
+      }
+      if (baseReq.session && !baseReq.session.save) {
+        baseReq.session.save = (cb: () => any) => cb();
+      }
+      return next();
+    })
     .use(expressWrapper(passportMiddleware[0]!))
     .use(expressWrapper(passportMiddleware[1]!));
 };

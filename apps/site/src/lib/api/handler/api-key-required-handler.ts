@@ -18,16 +18,10 @@ export const createApiKeyRequiredHandler = <
   allowCookieFallback?: boolean;
 }) =>
   createBaseHandler<RequestBody, Response>({ isPublicApi: true })
-    .use(
-      async (
-        req: ApiKeyRequiredRequest<RequestBody>,
-        _res: BaseApiResponse<Response>,
-        next: NextHandler,
-      ) => {
-        if (options?.allowCookieFallback) {
-          req.allowCookieFallback = true;
-        }
-        return next();
-      },
-    )
+    .use(async (req, _res, next) => {
+      if (options?.allowCookieFallback) {
+        (req as ApiKeyRequiredRequest<RequestBody>).allowCookieFallback = true;
+      }
+      return next();
+    })
     .use(hasValidApiKeyMiddleware);
