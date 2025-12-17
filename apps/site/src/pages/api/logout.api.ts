@@ -6,7 +6,7 @@ type LogoutResponse = "SUCCESS";
 export default createAuthenticatedHandler<unknown, LogoutResponse>()
   .post(async (req, res) => {
     await new Promise<void>((resolve, reject) => {
-      req.logout((err?: Error) => {
+      req.logout((err: unknown) => {
         if (err) {
           reject(err);
         } else {

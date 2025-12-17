@@ -20,7 +20,7 @@ export const ApplicationBadge: FunctionComponent<ApplicationBadgeProps> = ({
       <Box position="relative">
         {cloneElement(icon, {
           sx: { height: 88, width: "unset", opacity: alreadyVoted ? 0.4 : 1 },
-        })}
+        } as Record<string, unknown>)}
 
         {alreadyVoted ? (
           <Box

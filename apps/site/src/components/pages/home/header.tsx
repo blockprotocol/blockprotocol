@@ -31,12 +31,17 @@ const fadeInChildren: Variants = {
   show: { opacity: 1 },
 };
 
-const AnimatedTypography = m(Typography);
+const BaseAnimatedTypography = m(Typography);
 
-AnimatedTypography.defaultProps = {
-  variants: fadeInAndMoveDownChildren,
-  transition: { duration: 0.4, ease: "easeOut" },
-};
+const AnimatedTypography = (
+  props: React.ComponentProps<typeof BaseAnimatedTypography>,
+) => (
+  <BaseAnimatedTypography
+    variants={fadeInAndMoveDownChildren}
+    transition={{ duration: 0.4, ease: "easeOut" }}
+    {...props}
+  />
+);
 
 export const Header = () => {
   const theme = useTheme();

@@ -120,7 +120,7 @@ test("Sign Up page redirects logged in users to dashboard", async ({
   await Promise.all([
     page.goto("/signup"),
     page.waitForNavigation({
-      url: (url) => url.pathname === "/dashboard",
+      url: (url: URL) => url.pathname === "/dashboard",
     }),
   ]);
 });

@@ -28,6 +28,14 @@ export default createAuthenticatedHandler<
   .put(async (req, res) => {
     const { db, user } = req;
 
+    if (!user) {
+      return res.status(401).json(
+        formatErrors({
+          msg: "You must be logged in to update a property type",
+        }),
+      );
+    }
+
     const { versionedUrl, schema } = req.body;
 
     try {

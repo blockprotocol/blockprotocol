@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import cors from "cors";
 import { ValidationError } from "express-validator";
+import { Db } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { createRouter, expressWrapper, NextHandler } from "next-connect";
 import nextSession from "next-session";
@@ -12,6 +13,19 @@ import {
   PassportRequestExtensions,
 } from "../middleware/passport.middleware";
 import { sessionMiddleware } from "../middleware/session.middleware";
+import { User } from "../model/user.model";
+
+// Extend NextApiRequest globally to include our middleware extensions
+declare module "next" {
+  interface NextApiRequest {
+    db: Db;
+    user?: User;
+    session?: Awaited<ReturnType<ReturnType<typeof nextSession>>>;
+    login(user: User, done: (err: unknown) => void): void;
+    login(user: User, options: unknown, done: (err: unknown) => void): void;
+    logout(done: (err: unknown) => void): void;
+  }
+}
 
 export type BaseApiRequest<RequestBody = unknown> = Omit<
   NextApiRequest,
@@ -31,13 +45,12 @@ export type ErrorResponse = {
 export type BaseApiResponse<T = unknown> = NextApiResponse<T | ErrorResponse>;
 
 // Use NextApiRequest/NextApiResponse for router to satisfy IncomingMessage constraint,
-// then use type assertions for middleware that need extended request types
-export const createBaseHandler = <
-  RequestBody = unknown,
-  Response = any,
->(options?: {
-  isPublicApi?: boolean;
-}) => {
+// then cast the result to use proper extended types for handlers
+export const createBaseHandler = <RequestBody = unknown, Response = any>(
+  options?: {
+    isPublicApi?: boolean;
+  },
+) => {
   const { isPublicApi } = options ?? {};
 
   return createRouter<NextApiRequest, NextApiResponse>()
