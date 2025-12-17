@@ -179,17 +179,35 @@ export const getStaticProps: GetStaticProps<
   const { shortname, blockSlug } = parseQueryParams(params || {});
 
   if (!shortname.startsWith("@")) {
+    // eslint-disable-next-line no-console
+    console.log(`[block-page] shortname doesn't start with @: ${shortname}`);
     return { notFound: true };
   }
   const pathWithNamespace = `${shortname}/${blockSlug}`;
 
-  const blocks = await getAllBlocks();
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] Looking for block: ${pathWithNamespace}`);
+
+  let blocks: Awaited<ReturnType<typeof getAllBlocks>>;
+  try {
+    blocks = await getAllBlocks();
+    // eslint-disable-next-line no-console
+    console.log(`[block-page] getAllBlocks returned ${blocks.length} blocks`);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(`[block-page] Error fetching blocks:`, error);
+    return { notFound: true };
+  }
 
   const blockMetadata = blocks.find(
     (metadata) => metadata.pathWithNamespace === pathWithNamespace,
   );
 
   if (!blockMetadata) {
+    // eslint-disable-next-line no-console
+    console.log(
+      `[block-page] Block not found. Available paths: ${blocks.slice(0, 5).map((b) => b.pathWithNamespace).join(", ")}${blocks.length > 5 ? "..." : ""}`,
+    );
     // TODO: Render custom 404 page for blocks
     return { notFound: true };
   }
