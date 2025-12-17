@@ -29,33 +29,39 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const fetchUserProfileData = async (shortname: string) => {
+  const cleanShortname = shortname.replace("@", "");
   // eslint-disable-next-line no-console
-  console.log(`[user-page] Fetching data for shortname: ${shortname}`);
+  console.log(
+    `[user-page] Fetching data for shortname: ${shortname} (clean: ${cleanShortname})`,
+  );
 
   const [userResponse, blocksResponse, entityTypesResponse] = await Promise.all(
     [
       apiClient.getUser({
-        shortname: shortname.replace("@", ""),
+        shortname: cleanShortname,
       }),
       apiClient.getUserBlocks({
-        shortname: shortname.replace("@", ""),
+        shortname: cleanShortname,
       }),
       apiClient.getUserEntityTypes({
-        shortname: shortname.replace("@", ""),
+        shortname: cleanShortname,
       }),
     ],
   );
 
   // eslint-disable-next-line no-console
-  console.log(`[user-page] API responses:`, {
+  console.log(`[user-page] API responses for ${cleanShortname}:`, {
     userError: userResponse.error?.message,
+    userStatus: userResponse.error?.response?.status,
     userFound: !!userResponse.data?.user,
     blocksError: blocksResponse.error?.message,
     typesError: entityTypesResponse.error?.message,
   });
 
   if (!userResponse.data?.user) {
-    throw new Error("No user found");
+    throw new Error(
+      `No user found for ${cleanShortname}: ${userResponse.error?.message || "unknown error"}`,
+    );
   }
 
   return {

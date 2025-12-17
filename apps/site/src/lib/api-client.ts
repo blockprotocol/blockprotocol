@@ -91,15 +91,27 @@ import {
 } from "../pages/api/verify-email.api";
 import { FRONTEND_URL } from "./config";
 
-const BASE_URL = `${typeof window !== "undefined" ? "" : FRONTEND_URL}/api/`;
-
-// eslint-disable-next-line no-console
-console.log(`[api-client] BASE_URL: ${BASE_URL}, FRONTEND_URL: ${FRONTEND_URL}`);
+// Compute BASE_URL dynamically to ensure correct value in both SSR and client contexts
+const getBaseUrl = () => {
+  const isServer = typeof window === "undefined";
+  const baseUrl = `${isServer ? FRONTEND_URL : ""}/api/`;
+  // eslint-disable-next-line no-console
+  console.log(
+    `[api-client] getBaseUrl called: isServer=${isServer}, FRONTEND_URL=${FRONTEND_URL}, baseUrl=${baseUrl}`,
+  );
+  return baseUrl;
+};
 
 const axiosClient = axios.create({
-  baseURL: BASE_URL,
   withCredentials: true,
 });
+
+// Add request interceptor to set baseURL dynamically
+axiosClient.interceptors.request.use((config) => {
+  config.baseURL = getBaseUrl();
+  return config;
+});
+
 axiosRetry(axiosClient, { retries: 0 });
 
 export type ApiClientError = AxiosError<{
