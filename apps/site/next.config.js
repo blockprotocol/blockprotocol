@@ -38,6 +38,23 @@ const nextConfig = {
           },
         ],
       },
+      {
+        /**
+         * Allow the sandboxed block demo to be loaded in an iframe.
+         * This is required for block previews to work on the Hub.
+         */
+        source: "/:shortname/blocks/:blockslug/sandboxed-demo",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self'",
+          },
+        ],
+      },
     ];
   },
 
