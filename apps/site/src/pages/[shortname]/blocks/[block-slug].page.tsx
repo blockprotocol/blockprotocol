@@ -126,10 +126,8 @@ type BlockPageQueryParams = {
   "block-slug": string;
 };
 
-// Removed getStaticPaths - using getServerSideProps instead
-
 const parseQueryParams = (params: BlockPageQueryParams | Record<string, string | string[] | undefined>) => {
-  // Handle both getStaticProps params (string) and useRouter query (string | string[])
+  // Handle useRouter query which can have string | string[] values
   const rawShortname = params.shortname;
   const shortname = rawShortname
     ? typeof rawShortname === "string"
@@ -173,52 +171,25 @@ const generateRepositoryDisplayUrl = (repository: string): string => {
 export const getServerSideProps: GetServerSideProps<BlockPageProps> = async (
   context,
 ) => {
-  const { params, req } = context;
+  const { params } = context;
 
-  // Detailed debugging
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] Request URL:`, req.url);
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] Full context keys:`, Object.keys(context));
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] Raw params JSON:`, JSON.stringify(params));
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] params keys:`, params ? Object.keys(params) : "undefined");
-
-  // Get params directly
   const shortname = params?.shortname as string | undefined;
   const blockSlug = params?.["block-slug"] as string | undefined;
 
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] Parsed: shortname=${shortname}, blockSlug=${blockSlug}`);
-
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] Direct access: shortname=${shortname}, blockSlug=${blockSlug}`);
-
   if (typeof shortname !== "string" || !shortname.startsWith("@")) {
-    // eslint-disable-next-line no-console
-    console.log(`[block-page] Invalid shortname: type=${typeof shortname}, value=${shortname}`);
     return { notFound: true };
   }
 
   if (typeof blockSlug !== "string") {
-    // eslint-disable-next-line no-console
-    console.log(`[block-page] Invalid blockSlug: type=${typeof blockSlug}, value=${blockSlug}`);
     return { notFound: true };
   }
-  const pathWithNamespace = `${shortname}/${blockSlug}`;
 
-  // eslint-disable-next-line no-console
-  console.log(`[block-page] Looking for block: ${pathWithNamespace}`);
+  const pathWithNamespace = `${shortname}/${blockSlug}`;
 
   let blocks: Awaited<ReturnType<typeof getAllBlocks>>;
   try {
     blocks = await getAllBlocks();
-    // eslint-disable-next-line no-console
-    console.log(`[block-page] getAllBlocks returned ${blocks.length} blocks`);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(`[block-page] Error fetching blocks:`, error);
+  } catch {
     return { notFound: true };
   }
 
@@ -227,11 +198,6 @@ export const getServerSideProps: GetServerSideProps<BlockPageProps> = async (
   );
 
   if (!blockMetadata) {
-    // eslint-disable-next-line no-console
-    console.log(
-      `[block-page] Block not found. Available paths: ${blocks.slice(0, 5).map((b) => b.pathWithNamespace).join(", ")}${blocks.length > 5 ? "..." : ""}`,
-    );
-    // TODO: Render custom 404 page for blocks
     return { notFound: true };
   }
 
