@@ -74,7 +74,7 @@ export const InfoCardWrapper: FunctionComponent<InfoCardWrapperProps> = ({
               sm: INFO_CARD_WIDTH,
             },
           },
-        })}
+        } as Record<string, unknown>)}
       </Box>
     </Box>
   );

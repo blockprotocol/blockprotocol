@@ -46,14 +46,11 @@ export const PublishBlockCard = ({
       <Box sx={{ flex: 1, opacity: href ? 1 : 0.5 }}>
         <Typography variant="bpHeading5" fontWeight={500} mb={0.5}>
           Publish from{" "}
-          <Box component="b" color={({ palette }) => palette.common.black}>
+          <Box component="b" sx={{ color: "common.black" }}>
             {publishFrom}
           </Box>
         </Typography>
-        <Typography
-          variant="bpSmallCopy"
-          color={({ palette }) => palette.gray[70]}
-        >
+        <Typography variant="bpSmallCopy" sx={{ color: "gray.70" }}>
           {description}
         </Typography>
       </Box>
@@ -67,7 +64,7 @@ export const PublishBlockCard = ({
           variant="bpSmallCaps"
           textAlign="center"
           fontWeight="600"
-          color={({ palette }) => palette.gray[60]}
+          sx={{ color: "gray.60" }}
         >
           Coming Soon
         </Typography>

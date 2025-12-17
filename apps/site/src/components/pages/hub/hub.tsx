@@ -55,7 +55,7 @@ const HubItem = ({
         fontSize={18}
         fontWeight={600}
         lineHeight={1.2}
-        color={(theme) => theme.palette.gray[90]}
+        sx={{ color: "gray.90" }}
       >
         {title}
         {!!verified && <VerifiedBadge compact />}
@@ -77,18 +77,13 @@ const HubItem = ({
           {description}
         </Typography>
       ) : null}
-      <Typography
-        component="div"
-        fontSize={14}
-        color={(theme) => theme.palette.gray[70]}
-      >
+      <Typography component="div" fontSize={14} sx={{ color: "gray.70" }}>
         <Stack direction="row" spacing={2}>
           <Box
             component={Link}
             href={`/@${author}`}
-            color={(theme) => theme.palette.purple[70]}
+            sx={{ color: "purple.70", borderBottom: "0 !important" }}
             fontWeight={700}
-            sx={{ borderBottom: "0 !important" }}
           >
             @{author}
           </Box>
@@ -136,7 +131,7 @@ const HubHeading = ({ children }: { children: ReactNode }) => (
     variants={fadeInChildren}
     variant="bpHeading3"
     fontWeight={500}
-    color={(theme) => theme.palette.gray[80]}
+    sx={{ color: "gray.80" }}
   >
     {children}
   </AnimatedTypography>
@@ -146,7 +141,7 @@ const HubSubHeading = ({ children }: { children: ReactNode }) => (
   <AnimatedTypography
     variants={fadeInChildren}
     mt={2}
-    color={(theme) => theme.palette.gray[80]}
+    sx={{ color: "gray.80" }}
     fontSize={21}
   >
     {children}

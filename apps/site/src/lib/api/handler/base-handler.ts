@@ -88,7 +88,10 @@ export const createBaseHandler = <
 };
 
 export const baseHandlerOptions = {
-  onNoMatch: async (request: BaseApiRequest, response: BaseApiResponse) => {
+  onNoMatch: async (
+    request: NextApiRequest,
+    response: NextApiResponse,
+  ): Promise<void> => {
     // eslint-disable-next-line no-console
     console.error(
       `[next-connect] No matching route for ${request.method} ${request.url}`,
@@ -98,9 +101,9 @@ export const baseHandlerOptions = {
   },
   onError: async (
     error: unknown,
-    _request: BaseApiRequest,
-    response: BaseApiResponse,
-  ) => {
+    _request: NextApiRequest,
+    response: NextApiResponse,
+  ): Promise<void> => {
     // Source: https://github.com/vercel/next.js/blob/cd3e054f14ce38f4ff57c727a997da2a6e1d05dd/examples/with-sentry/pages/api/test4.js
     Sentry.captureException(error);
     await Sentry.flush(2000);

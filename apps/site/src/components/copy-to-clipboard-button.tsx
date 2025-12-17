@@ -10,7 +10,7 @@ const boxShadow =
   "0px 4px 11px rgba(39, 50, 86, 0.02), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.04), 0px 0.5px 1px rgba(39, 50, 86, 0.15)";
 
 export const CopyToClipboardButton = ({ copyText }: { copyText: string }) => {
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>(undefined);
   const [copied, setCopied] = useState(false);
 
   const handleClick = () => {

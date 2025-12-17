@@ -7,7 +7,7 @@ export const useKeyAction = () => {
   const [keyAction, setKeyAction] = useState<KeyAction>();
   const theme = useTheme();
   const query = theme.breakpoints.up("md").replace("@media ", "");
-  const didMatch = useRef<boolean | undefined>();
+  const didMatch = useRef<boolean | undefined>(undefined);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(query);

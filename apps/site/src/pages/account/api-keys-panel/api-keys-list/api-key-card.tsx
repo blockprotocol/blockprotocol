@@ -107,7 +107,7 @@ export const ApiKeyCard = ({
         >
           Key names usually refer to the website or environment where they’ll be
           used.{" "}
-          <Box component="span" color={({ palette }) => palette.purple[70]}>
+          <Box component="span" sx={{ color: "purple.70" }}>
             e.g. “WordPress” or “Staging”
           </Box>
         </Typography>

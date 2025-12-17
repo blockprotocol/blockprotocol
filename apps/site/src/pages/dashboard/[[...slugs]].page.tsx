@@ -65,10 +65,7 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
             },
           }}
         >
-          <Typography
-            variant="bpHeading2"
-            color={(theme) => theme.palette.black}
-          >
+          <Typography variant="bpHeading2" sx={{ color: "black" }}>
             Welcome, {userName}!
           </Typography>
           {typeof wordpressSettingsUrl === "string" ? (

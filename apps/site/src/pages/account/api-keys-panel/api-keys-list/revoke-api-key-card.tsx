@@ -45,14 +45,14 @@ export const RevokeApiKeyCard = ({
           }}
         />
         You are about to revoke{" "}
-        <Box component="span" color={({ palette }) => palette.red[80]}>
+        <Box component="span" sx={{ color: "red.80" }}>
           {displayName}
         </Box>
       </Typography>
 
       <Typography
         sx={{
-          color: ({ palette }) => palette.gray[80],
+          color: "gray.80",
           fontSize: 14,
           maxWidth: "unset",
           mb: 2,

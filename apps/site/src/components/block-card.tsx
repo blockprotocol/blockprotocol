@@ -188,14 +188,13 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({ data }) => {
               @{author}
             </Typography>
             <Typography
-              sx={{ mr: 1.5, mb: 1.5 }}
-              color={({ palette }) => palette.gray[60]}
+              sx={{ mr: 1.5, mb: 1.5, color: "gray.60" }}
               variant="bpMicroCopy"
             >
               {version}
             </Typography>
             <Typography
-              color={({ palette }) => palette.gray[60]}
+              sx={{ color: "gray.60" }}
               variant="bpMicroCopy"
             >
               <ClientOnlyLastUpdated value={lastUpdated} />

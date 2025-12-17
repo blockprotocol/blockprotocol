@@ -15,7 +15,7 @@ export const FieldInfoWrapper = ({
         <Typography
           variant="bpSmallCopy"
           fontWeight={400}
-          color={({ palette }) => palette.gray[70]}
+          sx={{ color: "gray.70" }}
         >
           <List
             dense

@@ -8,8 +8,7 @@ export const RequiredLabel = ({ children }: PropsWithChildren) => (
       variant="bpMicroCopy"
       fontWeight="700"
       component="span"
-      color={({ palette }) => palette.purple[70]}
-      ml={1}
+      sx={{ color: "purple.70", ml: 1 }}
     >
       REQUIRED
     </Typography>
