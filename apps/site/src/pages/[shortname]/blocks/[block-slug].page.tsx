@@ -122,33 +122,36 @@ type BlockPageProps = {
 };
 
 type BlockPageQueryParams = {
-  shortname?: string[];
-  "block-slug"?: string;
+  shortname: string;
+  "block-slug": string;
 };
 
-export const getStaticPaths: GetStaticPaths<
-  BlockPageQueryParams
-> = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
     fallback: "blocking",
   };
 };
 
-const parseQueryParams = (params: BlockPageQueryParams) => {
-  const shortname = params.shortname
-    ? typeof params.shortname === "string"
-      ? params.shortname
-      : params.shortname.length === 1
-      ? params.shortname[0]
-      : undefined
+const parseQueryParams = (params: BlockPageQueryParams | Record<string, string | string[] | undefined>) => {
+  // Handle both getStaticProps params (string) and useRouter query (string | string[])
+  const rawShortname = params.shortname;
+  const shortname = rawShortname
+    ? typeof rawShortname === "string"
+      ? rawShortname
+      : rawShortname[0]
     : undefined;
 
   if (!shortname) {
     throw new Error("Could not parse org shortname from query");
   }
 
-  const blockSlug = params["block-slug"];
+  const rawBlockSlug = params["block-slug"];
+  const blockSlug = rawBlockSlug
+    ? typeof rawBlockSlug === "string"
+      ? rawBlockSlug
+      : rawBlockSlug[0]
+    : undefined;
 
   if (!blockSlug) {
     throw new Error("Could not parse block slug from query");
@@ -176,11 +179,31 @@ export const getStaticProps: GetStaticProps<
   BlockPageProps,
   BlockPageQueryParams
 > = async ({ params }) => {
-  const { shortname, blockSlug } = parseQueryParams(params || {});
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] Raw params:`, JSON.stringify(params));
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] params type:`, typeof params);
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] params.shortname:`, params?.shortname);
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] params["block-slug"]:`, params?.["block-slug"]);
 
-  if (!shortname.startsWith("@")) {
+  // Get params directly (matching working user profile page pattern)
+  const shortname = params?.shortname;
+  const blockSlug = params?.["block-slug"];
+
+  // eslint-disable-next-line no-console
+  console.log(`[block-page] Direct access: shortname=${shortname}, blockSlug=${blockSlug}`);
+
+  if (typeof shortname !== "string" || !shortname.startsWith("@")) {
     // eslint-disable-next-line no-console
-    console.log(`[block-page] shortname doesn't start with @: ${shortname}`);
+    console.log(`[block-page] Invalid shortname: type=${typeof shortname}, value=${shortname}`);
+    return { notFound: true };
+  }
+
+  if (typeof blockSlug !== "string") {
+    // eslint-disable-next-line no-console
+    console.log(`[block-page] Invalid blockSlug: type=${typeof blockSlug}, value=${blockSlug}`);
     return { notFound: true };
   }
   const pathWithNamespace = `${shortname}/${blockSlug}`;
