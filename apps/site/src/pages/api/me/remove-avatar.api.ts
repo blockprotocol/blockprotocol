@@ -12,7 +12,9 @@ export default createAuthenticatedHandler<unknown, RemoveAvatarResponse>()
     if (!user) {
       return res
         .status(401)
-        .json(formatErrors({ msg: "You must be logged in to perform this action" }));
+        .json(
+          formatErrors({ msg: "You must be logged in to perform this action" }),
+        );
     }
 
     try {

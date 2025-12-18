@@ -31,7 +31,9 @@ export default createAuthenticatedHandler<
     if (!user) {
       return res
         .status(401)
-        .json(formatErrors({ msg: "You must be logged in to perform this action" }));
+        .json(
+          formatErrors({ msg: "You must be logged in to perform this action" }),
+        );
     }
 
     const { publicId, displayName } = req.body;
