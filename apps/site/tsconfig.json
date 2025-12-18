@@ -1,6 +1,6 @@
 {
   "extends": "@local/tsconfig/next.json",
-  "include": ["next-env.d.ts", "theme-override.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "theme-override.d.ts", "site-map.d.ts", "**/*.ts", "**/*.tsx"],
   "compilerOptions": {
     "skipLibCheck": true
   }
