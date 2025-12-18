@@ -23,7 +23,7 @@
     "fix:eslint": "turbo run --continue fix:eslint",
     "fix:markdownlint": "markdownlint-cli2 --fix '**/*.md' '#**/node_modules' '#**/vendor' '#**/dist' '#**/LICENSE-APACHE.md'",
     "fix:prettier": "prettier --cache --write --ignore-unknown .",
-    "fix:yarn-deduplicate": "yarn install && yarn-deduplicate --strategy=fewer && yarn install",
+    "fix:yarn-deduplicate": "yarn install --ignore-scripts && yarn-deduplicate --strategy=fewer && yarn install --ignore-scripts",
     "lint": "npm-run-all --continue-on-error \"lint:*\"",
     "lint:dependency-version-consistency": "check-dependency-version-consistency .",
     "lint:eslint": "turbo run --continue lint:eslint",
