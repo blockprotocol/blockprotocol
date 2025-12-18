@@ -206,7 +206,7 @@ export const ModuleMessageList: FunctionComponent<{
           ),
         )}
       </Box>
-      {moduleDefinition.messages.map((message: { messageName: string }) => (
+      {moduleDefinition.messages.map((message) => (
         <ModuleMessage key={message.messageName} message={message} />
       ))}
     </Box>
