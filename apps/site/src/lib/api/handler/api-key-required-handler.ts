@@ -1,8 +1,6 @@
-import { NextConnect } from "next-connect";
-
 import { hasValidApiKeyMiddleware } from "../middleware/has-valid-api-key.middleware";
 import { AuthenticatedApiRequest } from "./authenticated-handler";
-import { BaseApiResponse, createBaseHandler } from "./base-handler";
+import { createBaseHandler } from "./base-handler";
 
 type ApiKeyRequiredRequestExtensions = {
   allowCookieFallback?: boolean;
@@ -16,17 +14,14 @@ export const createApiKeyRequiredHandler = <
   Response = unknown,
 >(options?: {
   allowCookieFallback?: boolean;
-}): NextConnect<
-  ApiKeyRequiredRequest<RequestBody>,
-  BaseApiResponse<Response>
-> =>
-  createBaseHandler({ isPublicApi: true })
-    .use<ApiKeyRequiredRequest<RequestBody>, BaseApiResponse<Response>>(
-      (req, _res, next) => {
-        if (options?.allowCookieFallback) {
-          req.allowCookieFallback = true;
-        }
-        next();
-      },
-    )
+}) =>
+  createBaseHandler<RequestBody, Response>({ isPublicApi: true })
+    .use(async (req, _res, next) => {
+      if (options?.allowCookieFallback) {
+        (
+          req as unknown as ApiKeyRequiredRequest<RequestBody>
+        ).allowCookieFallback = true;
+      }
+      return next();
+    })
     .use(hasValidApiKeyMiddleware);

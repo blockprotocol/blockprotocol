@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../../lib/api/handler/base-handler";
 import { formatErrors } from "../../../util/api";
 
 export type ApiGenerateApiKeyBody = {
@@ -25,9 +26,15 @@ export default createAuthenticatedHandler<
 
     const { db, user } = req;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).json({ apiKey: null });
+    }
+
     const { displayName } = req.body;
 
     const apiKey = await user.generateApiKey(db, { displayName });
 
     res.status(200).json({ apiKey });
-  });
+  })
+  .handler(baseHandlerOptions);

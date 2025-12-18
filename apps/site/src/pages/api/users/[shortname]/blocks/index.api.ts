@@ -1,4 +1,7 @@
-import { createBaseHandler } from "../../../../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../../../../lib/api/handler/base-handler";
 import { User } from "../../../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../../../lib/blocks";
 import { formatErrors } from "../../../../../util/api";
@@ -11,8 +14,8 @@ export type ApiBlocksByUserResponse = {
   blocks: ExpandedBlockMetadata[];
 };
 
-export default createBaseHandler<null, ApiBlocksByUserResponse>().get(
-  async (req, res) => {
+export default createBaseHandler<null, ApiBlocksByUserResponse>()
+  .get(async (req, res) => {
     const { db, query } = req;
     const { shortname } = query as ApiBlocksByUserResponseQueryParams;
 
@@ -31,5 +34,5 @@ export default createBaseHandler<null, ApiBlocksByUserResponse>().get(
     const blocks = await user.blocks();
 
     res.status(200).send({ blocks });
-  },
-);
+  })
+  .handler(baseHandlerOptions);

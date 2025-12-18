@@ -43,7 +43,7 @@ export const DashboardWordPressSection = ({
         mb={2}
         mt={4}
         variant="bpSmallCaps"
-        color={(theme) => theme.palette.purple[70]}
+        sx={{ color: "purple.70" }}
         fontWeight={500}
       >
         Getting Started

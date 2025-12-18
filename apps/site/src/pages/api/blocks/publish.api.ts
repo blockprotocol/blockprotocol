@@ -2,6 +2,7 @@ import { getDbBlock } from "../../../lib/api/blocks/db";
 import { publishBlockFromTarball } from "../../../lib/api/blocks/from-tarball";
 import { notifySlackAboutBlock } from "../../../lib/api/blocks/slack";
 import { createApiKeyRequiredHandler } from "../../../lib/api/handler/api-key-required-handler";
+import { baseHandlerOptions } from "../../../lib/api/handler/base-handler";
 import {
   MultipartExtensions,
   multipartUploads,
@@ -48,10 +49,10 @@ export default createApiKeyRequiredHandler<
       );
     }
 
-    const {
-      db,
-      user: { shortname },
-    } = req;
+    const { db, user } = req;
+
+    // user is guaranteed to exist by isLoggedInMiddleware
+    const shortname = user?.shortname;
 
     if (!shortname) {
       return res.status(403).json(
@@ -169,7 +170,8 @@ export default createApiKeyRequiredHandler<
         }),
       );
     }
-  });
+  })
+  .handler(baseHandlerOptions);
 
 export const config = {
   api: {

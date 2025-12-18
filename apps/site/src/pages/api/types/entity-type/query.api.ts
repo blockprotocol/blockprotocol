@@ -1,7 +1,10 @@
 import { EntityTypeWithMetadata } from "@blockprotocol/graph";
 import { query as queryValidator } from "express-validator";
 
-import { createBaseHandler } from "../../../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../../../lib/api/handler/base-handler";
 import { getEntityTypes } from "./shared/db";
 
 export type ApiQueryEntityTypesQuery = {
@@ -28,4 +31,5 @@ export default createBaseHandler<
     res.status(200).send({
       entityTypes: dbRecords.map((record) => record.entityTypeWithMetadata),
     });
-  });
+  })
+  .handler(baseHandlerOptions);

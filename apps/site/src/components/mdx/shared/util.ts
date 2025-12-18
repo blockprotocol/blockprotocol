@@ -6,7 +6,7 @@ export const stringifyChildren = (node: ReactNode): string => {
   } else if (Array.isArray(node)) {
     return node.map(stringifyChildren).join("");
   } else if (!!node && typeof node === "object" && "props" in node) {
-    return stringifyChildren(node.props.children);
+    return stringifyChildren((node.props as { children?: ReactNode }).children);
   }
   return "";
 };

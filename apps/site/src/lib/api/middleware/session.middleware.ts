@@ -1,7 +1,7 @@
 import MongoStore from "connect-mongo";
 import signature from "cookie-signature";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Middleware } from "next-connect";
+import { NextHandler } from "next-connect";
 import nextSession from "next-session";
 import { promisifyStore } from "next-session/lib/compat";
 
@@ -39,10 +39,11 @@ const getSession = nextSession({
   encode: (sid) => (sid ? `s:${signature.sign(sid, SESSION_SECRET)}` : ""),
 });
 
-export const sessionMiddleware: Middleware<
-  NextApiRequest,
-  NextApiResponse
-> = async (req, res, next) => {
+export const sessionMiddleware = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  next: NextHandler,
+) => {
   await getSession(req, res); // session is set to req.session
-  next();
+  return next();
 };

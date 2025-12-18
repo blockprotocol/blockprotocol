@@ -203,13 +203,13 @@ export const DashboardCard: FunctionComponent<
           <Typography
             data-testid="dashboard-card-title"
             mb={1}
-            color={({ palette }) => palette.gray[90]}
+            sx={{ color: "gray.90" }}
             fontWeight="500"
             variant="bpHeading4"
           >
             {title}
           </Typography>
-          <Typography mb={2} color={({ palette }) => palette.gray[80]}>
+          <Typography mb={2} sx={{ color: "gray.80" }}>
             {description}
           </Typography>
           <LinkWrapper bold title={link.title} />

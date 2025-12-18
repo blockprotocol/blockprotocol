@@ -4,6 +4,7 @@ import { getDbBlock } from "../../../lib/api/blocks/db";
 import { publishBlockFromNpm } from "../../../lib/api/blocks/npm";
 import { notifySlackAboutBlock } from "../../../lib/api/blocks/slack";
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../../lib/api/handler/base-handler";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
 import {
@@ -46,10 +47,10 @@ export default createAuthenticatedHandler<
       return res.status(400).json(formatErrors(...errors.array()));
     }
 
-    const {
-      db,
-      user: { shortname },
-    } = req;
+    const { db, user } = req;
+
+    // user is guaranteed to exist by isLoggedInMiddleware
+    const shortname = user?.shortname;
 
     if (!shortname) {
       return res.status(403).json(
@@ -154,4 +155,5 @@ export default createAuthenticatedHandler<
         }),
       );
     }
-  });
+  })
+  .handler(baseHandlerOptions);

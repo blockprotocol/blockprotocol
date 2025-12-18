@@ -14,7 +14,7 @@ test("dashboard page should not be accessible to guests", async ({ page }) => {
   await Promise.all([
     page.goto("/dashboard"),
     page.waitForNavigation({
-      url: (url) => url.pathname === "/login",
+      url: (url: URL) => url.pathname === "/login",
     }),
   ]);
 });

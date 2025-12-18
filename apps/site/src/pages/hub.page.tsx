@@ -123,7 +123,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
           fontSize={42}
           fontFamily={COPY_FONT_FAMILY}
           fontWeight={300}
-          color={(theme) => theme.palette.gray[50]}
+          sx={{ color: "gray.50" }}
           letterSpacing="-0.03em"
         >
           <BlockProtocolIcon
@@ -137,7 +137,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
             <Box
               component="strong"
               fontWeight={700}
-              color={(theme) => theme.palette.purple[80]}
+              sx={{ color: "purple.80" }}
             >
               blocks
             </Box>
@@ -145,7 +145,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
             <Box
               component="strong"
               fontWeight={700}
-              color={(theme) => theme.palette.purple[70]}
+              sx={{ color: "purple.70" }}
             >
               types
             </Box>
@@ -155,7 +155,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
                 <Box
                   component="strong"
                   fontWeight={700}
-                  color={(theme) => theme.palette.purple[60]}
+                  sx={{ color: "purple.60" }}
                 >
                   services
                 </Box>
@@ -166,7 +166,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
         <Typography
           mb={3}
           variant="bpHeading4"
-          color={(theme) => theme.palette.bpGray[80]}
+          sx={{ color: "bpGray.80" }}
           fontFamily={COPY_FONT_FAMILY}
           fontSize={24}
           letterSpacing="-0.02em"

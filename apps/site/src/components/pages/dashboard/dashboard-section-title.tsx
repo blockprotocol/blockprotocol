@@ -10,7 +10,7 @@ export const DashboardSectionTitle = ({
       maxWidth={750}
       fontWeight={500}
       pt={2.25}
-      color={({ palette }) => palette.gray[70]}
+      sx={{ color: "gray.70" }}
       {...props}
     >
       {children}

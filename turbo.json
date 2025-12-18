@@ -6,7 +6,7 @@
       "outputs": ["dist/**"]
     },
     "fix:eslint": {
-      "dependsOn": ["^build"],
+      "dependsOn": [],
       "cache": false
     },
     "lint:eslint": {
@@ -37,7 +37,7 @@
       "outputs": ["dist/**", "wasm/**"]
     },
     "@blockprotocol/type-system#fix:eslint": {
-      "dependsOn": ["build"],
+      "dependsOn": [],
       "cache": false
     },
     "@blockprotocol/type-system#lint:eslint": {

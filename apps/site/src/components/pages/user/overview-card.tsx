@@ -199,17 +199,13 @@ export const OverviewCard: FunctionComponent<OverviewCardProps> = ({
           >
             {version && (
               <Typography
-                sx={{ mr: 1.5, mb: 1.5 }}
-                color={({ palette }) => palette.gray[60]}
+                sx={{ mr: 1.5, mb: 1.5, color: "gray.60" }}
                 variant="bpMicroCopy"
               >
                 {version}
               </Typography>
             )}
-            <Typography
-              color={({ palette }) => palette.gray[60]}
-              variant="bpMicroCopy"
-            >
+            <Typography sx={{ color: "gray.60" }} variant="bpMicroCopy">
               <ClientOnlyLastUpdated value={lastUpdated} />
             </Typography>
           </Box>

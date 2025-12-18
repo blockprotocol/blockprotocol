@@ -1,7 +1,10 @@
 import { PropertyTypeWithMetadata } from "@blockprotocol/graph";
 import { BaseUrl, VersionedUrl } from "@blockprotocol/type-system/slim";
 
-import { createBaseHandler } from "../../../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../../../lib/api/handler/base-handler";
 import { formatErrors } from "../../../../util/api";
 import { getPropertyType } from "./shared/db";
 
@@ -14,8 +17,8 @@ export type ApiPropertyTypeByUrlResponse = {
   propertyType: PropertyTypeWithMetadata;
 };
 
-export default createBaseHandler<null, ApiPropertyTypeByUrlResponse>().get(
-  async (req, res) => {
+export default createBaseHandler<null, ApiPropertyTypeByUrlResponse>()
+  .get(async (req, res) => {
     const { db } = req;
     const { baseUrl, versionedUrl } = req.query as ApiPropertyTypeByUrlGetQuery;
 
@@ -30,5 +33,5 @@ export default createBaseHandler<null, ApiPropertyTypeByUrlResponse>().get(
     }
 
     res.status(200).send({ propertyType: dbRecord.propertyTypeWithMetadata });
-  },
-);
+  })
+  .handler(baseHandlerOptions);

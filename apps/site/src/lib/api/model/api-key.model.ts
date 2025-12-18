@@ -197,8 +197,8 @@ export class ApiKey {
     });
     if (
       !crypto.timingSafeEqual(
-        Buffer.from(providedKeyHash),
-        Buffer.from(apiKey.hashedString),
+        new Uint8Array(Buffer.from(providedKeyHash)),
+        new Uint8Array(Buffer.from(apiKey.hashedString)),
       )
     ) {
       throw new Error(INVALID_KEY_ERROR_MSG);

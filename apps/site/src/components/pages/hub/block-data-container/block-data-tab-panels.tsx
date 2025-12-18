@@ -15,11 +15,7 @@ type BlockDataTabPanelProps = {
   setText: (newValue: string) => void;
 };
 
-const SnippetContainer = styled(({ children, ...props }: BoxProps) => (
-  <Box {...props} component="pre" p={4}>
-    {children}
-  </Box>
-))(({ theme }) =>
+const SnippetContainer = styled(Box)(({ theme }) =>
   theme.unstable_sx({
     fontSize: 14,
     backgroundColor: theme.palette.gray[90],
@@ -35,6 +31,7 @@ const SnippetContainer = styled(({ children, ...props }: BoxProps) => (
     borderBottomRightRadius: 6,
     overflow: "auto",
     width: "100%",
+    padding: 4,
 
     ".snippet": {
       overflow: "auto",
@@ -42,7 +39,7 @@ const SnippetContainer = styled(({ children, ...props }: BoxProps) => (
       whiteSpace: "break-spaces",
     },
   }),
-);
+) as typeof Box;
 
 export const blockPreviewAndDataHeight = 500;
 
@@ -70,7 +67,7 @@ export const BlockDataTabPanels: FunctionComponent<BlockDataTabPanelProps> = ({
         value={blockDataTab}
         index={1}
       >
-        <SnippetContainer height={modalHeight}>
+        <SnippetContainer component="pre" height={modalHeight}>
           <Snippet
             className="snippet"
             source={JSON.stringify(schema, null, 2)}
@@ -80,7 +77,7 @@ export const BlockDataTabPanels: FunctionComponent<BlockDataTabPanelProps> = ({
       </TabPanel>
       {!!exampleGraph && (
         <TabPanel value={blockDataTab} index={2}>
-          <SnippetContainer height={modalHeight}>
+          <SnippetContainer component="pre" height={modalHeight}>
             <Snippet
               className="snippet"
               source={JSON.stringify(exampleGraph, null, 2)}

@@ -4,6 +4,7 @@ import {
   AuthenticatedApiRequest,
   createAuthenticatedHandler,
 } from "../../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../../lib/api/handler/base-handler";
 import {
   MultipartExtensions,
   multipartUploads,
@@ -65,6 +66,11 @@ export default createAuthenticatedHandler<
   .post(async (req, res) => {
     const { body, user, db } = req;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).json({ avatarUrl: null });
+    }
+
     if (body?.uploads?.image) {
       try {
         const { mime, buffer } = body.uploads?.image ?? {};
@@ -108,7 +114,8 @@ export default createAuthenticatedHandler<
         }),
       );
     }
-  });
+  })
+  .handler(baseHandlerOptions);
 
 export const config = {
   api: {

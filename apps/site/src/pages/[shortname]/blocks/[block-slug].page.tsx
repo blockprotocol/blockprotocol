@@ -7,7 +7,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
@@ -122,33 +122,31 @@ type BlockPageProps = {
 };
 
 type BlockPageQueryParams = {
-  shortname?: string[];
-  "block-slug"?: string;
+  shortname: string;
+  "block-slug": string;
 };
 
-export const getStaticPaths: GetStaticPaths<
-  BlockPageQueryParams
-> = async () => {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-};
-
-const parseQueryParams = (params: BlockPageQueryParams) => {
-  const shortname = params.shortname
-    ? typeof params.shortname === "string"
-      ? params.shortname
-      : params.shortname.length === 1
-      ? params.shortname[0]
-      : undefined
+const parseQueryParams = (
+  params: BlockPageQueryParams | Record<string, string | string[] | undefined>,
+) => {
+  // Handle useRouter query which can have string | string[] values
+  const rawShortname = params.shortname;
+  const shortname = rawShortname
+    ? typeof rawShortname === "string"
+      ? rawShortname
+      : rawShortname[0]
     : undefined;
 
   if (!shortname) {
     throw new Error("Could not parse org shortname from query");
   }
 
-  const blockSlug = params["block-slug"];
+  const rawBlockSlug = params["block-slug"];
+  const blockSlug = rawBlockSlug
+    ? typeof rawBlockSlug === "string"
+      ? rawBlockSlug
+      : rawBlockSlug[0]
+    : undefined;
 
   if (!blockSlug) {
     throw new Error("Could not parse block slug from query");
@@ -172,25 +170,36 @@ const generateRepositoryDisplayUrl = (repository: string): string => {
   return displayUrl;
 };
 
-export const getStaticProps: GetStaticProps<
-  BlockPageProps,
-  BlockPageQueryParams
-> = async ({ params }) => {
-  const { shortname, blockSlug } = parseQueryParams(params || {});
+export const getServerSideProps: GetServerSideProps<BlockPageProps> = async (
+  context,
+) => {
+  const { params } = context;
 
-  if (!shortname.startsWith("@")) {
+  const shortname = params?.shortname as string | undefined;
+  const blockSlug = params?.["block-slug"] as string | undefined;
+
+  if (typeof shortname !== "string" || !shortname.startsWith("@")) {
     return { notFound: true };
   }
+
+  if (typeof blockSlug !== "string") {
+    return { notFound: true };
+  }
+
   const pathWithNamespace = `${shortname}/${blockSlug}`;
 
-  const blocks = await getAllBlocks();
+  let blocks: Awaited<ReturnType<typeof getAllBlocks>>;
+  try {
+    blocks = await getAllBlocks();
+  } catch {
+    return { notFound: true };
+  }
 
   const blockMetadata = blocks.find(
     (metadata) => metadata.pathWithNamespace === pathWithNamespace,
   );
 
   if (!blockMetadata) {
-    // TODO: Render custom 404 page for blocks
     return { notFound: true };
   }
 
@@ -213,6 +222,12 @@ export const getStaticProps: GetStaticProps<
       ).compiledSource
     : undefined;
 
+  // Set cache headers for CDN caching (similar to revalidate behavior)
+  context.res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=180, stale-while-revalidate=300",
+  );
+
   return {
     props: {
       blockMetadata,
@@ -224,7 +239,6 @@ export const getStaticProps: GetStaticProps<
       schema,
       exampleGraph,
     },
-    revalidate: 180,
   };
 };
 

@@ -3,6 +3,7 @@ import { VersionedUrl } from "@blockprotocol/type-system/slim";
 import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 
 import { createAuthenticatedHandler } from "../../../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../../../lib/api/handler/base-handler";
 import { formatErrors } from "../../../../util/api";
 import { SystemDefinedProperties } from "../shared/constants";
 import { updateEntityType } from "./shared/db";
@@ -27,6 +28,11 @@ export default createAuthenticatedHandler<
   .put(async (req, res) => {
     const { db, user } = req;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).json(formatErrors({ msg: "Unauthorized" }));
+    }
+
     const { versionedUrl, schema } = req.body;
 
     try {
@@ -46,4 +52,5 @@ export default createAuthenticatedHandler<
         }),
       );
     }
-  });
+  })
+  .handler(baseHandlerOptions);

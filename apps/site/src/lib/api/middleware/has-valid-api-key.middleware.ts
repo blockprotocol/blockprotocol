@@ -1,22 +1,23 @@
-import { Middleware } from "next-connect";
+import { NextApiRequest, NextApiResponse } from "next";
+import { NextHandler } from "next-connect";
 
 import { formatErrors } from "../../../util/api";
 import { parseClientIp } from "../../../util/usage";
 import { ApiKeyRequiredRequest } from "../handler/api-key-required-handler";
-import { BaseApiResponse } from "../handler/base-handler";
 import { ApiKey } from "../model/api-key.model";
 import { User } from "../model/user.model";
 
-export const hasValidApiKeyMiddleware: Middleware<
-  ApiKeyRequiredRequest,
-  BaseApiResponse
-> = async (req, res, next) => {
+export const hasValidApiKeyMiddleware = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  next: NextHandler,
+) => {
+  const apiKeyReq = req as unknown as ApiKeyRequiredRequest;
   try {
     const apiKey = req.headers["x-api-key"];
     if (!apiKey || typeof apiKey !== "string") {
-      if (req.allowCookieFallback && req.user) {
-        next();
-        return;
+      if (apiKeyReq.allowCookieFallback && apiKeyReq.user) {
+        return next();
       }
 
       return res.status(401).send(
@@ -26,11 +27,11 @@ export const hasValidApiKeyMiddleware: Middleware<
       );
     }
 
-    const { db } = req;
+    const { db } = apiKeyReq;
 
     const resolvedApiKey = await ApiKey.validateAndGet(db, {
       apiKeyString: apiKey,
-      usedAtOrigin: req.headers.origin ?? parseClientIp(req) ?? undefined,
+      usedAtOrigin: req.headers.origin ?? parseClientIp(apiKeyReq) ?? undefined,
     });
 
     const user = await User.getById(db, {
@@ -45,9 +46,9 @@ export const hasValidApiKeyMiddleware: Middleware<
       );
     }
 
-    req.user = user;
+    apiKeyReq.user = user;
 
-    next();
+    return next();
   } catch (err) {
     return res.status(401).send(
       formatErrors({

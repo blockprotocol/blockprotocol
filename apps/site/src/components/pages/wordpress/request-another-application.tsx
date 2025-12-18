@@ -17,7 +17,7 @@ export const RequestAnotherApplication = () => {
   const [displayModal, setDisplayModal] = useState(false);
   const [votes, setVotes] = useState<ApplicationId[]>([]);
 
-  const votingScreenRef = useRef<HTMLDivElement | null>();
+  const votingScreenRef = useRef<HTMLDivElement | null>(null);
   const [votingScreenHeight, setVotingScreenHeight] = useState(0);
 
   const resetFlow = () => {

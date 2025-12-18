@@ -91,12 +91,34 @@ import {
 } from "../pages/api/verify-email.api";
 import { FRONTEND_URL } from "./config";
 
-const BASE_URL = `${typeof window !== "undefined" ? "" : FRONTEND_URL}/api/`;
+// Compute BASE_URL dynamically to ensure correct value in both SSR and client contexts
+const getBaseUrl = () => {
+  const isServer = typeof window === "undefined";
+  return `${isServer ? FRONTEND_URL : ""}/api/`;
+};
 
 const axiosClient = axios.create({
-  baseURL: BASE_URL,
   withCredentials: true,
 });
+
+// Add request interceptor to set baseURL dynamically and add Vercel protection bypass
+axiosClient.interceptors.request.use((config) => {
+  config.baseURL = getBaseUrl();
+
+  // For server-side requests, add Vercel deployment protection bypass
+  // This is needed because Vercel's deployment protection blocks unauthenticated
+  // server-to-server requests with 401
+  if (typeof window === "undefined") {
+    const bypassToken = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+    if (bypassToken) {
+      config.headers = config.headers || {};
+      config.headers["x-vercel-protection-bypass"] = bypassToken;
+    }
+  }
+
+  return config;
+});
+
 axiosRetry(axiosClient, { retries: 0 });
 
 export type ApiClientError = AxiosError<{

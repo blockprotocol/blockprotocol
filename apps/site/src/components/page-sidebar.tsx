@@ -119,13 +119,13 @@ const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
       >
         <SidebarLink
           replace
-          ref={(ref) => {
+          ref={(ref: HTMLAnchorElement | null) => {
             if (ref && isSectionSelected) {
               setSelectedAnchorElement(ref);
             }
           }}
           href={sectionHref}
-          sx={(theme) => ({
+          sx={(theme: typeof themeImport) => ({
             paddingLeft: depth * 2 + 1.25,
             color: isSectionSelected
               ? theme.palette.purple[700]
@@ -231,7 +231,7 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
         fontFamily={COPY_FONT_FAMILY}
       >
         <SidebarLink
-          ref={(ref) => {
+          ref={(ref: HTMLAnchorElement | null) => {
             if (ref && isSelected) {
               setSelectedAnchorElement(ref);
             }
@@ -241,7 +241,7 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
             !asPath?.startsWith("/roadmap")
           }
           href={href}
-          sx={(theme) => ({
+          sx={(theme: typeof themeImport) => ({
             alignSelf: "flex-start",
             color: isSelected
               ? theme.palette.purple[800]

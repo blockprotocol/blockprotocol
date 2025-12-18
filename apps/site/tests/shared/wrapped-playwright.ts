@@ -59,12 +59,21 @@ export const tolerateCustomConsoleMessages = (
       : customMatches;
 };
 
+// eslint-disable-next-line no-restricted-imports
+import type { Page } from "@playwright/test";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type PageFixture = any;
+
 /**
  * This is a wrapper around the Playwright test function that adds checks for console messages.
  * @see https://github.com/microsoft/playwright/discussions/11690#discussioncomment-2060397
  */
 export const test = base.extend({
-  page: async ({ page }, use) => {
+  page: (async (
+    { page }: { page: Page },
+    use: (page: Page) => Promise<void>,
+  ) => {
     const stringifiedMessages: string[] = [];
     page.on("console", (consoleMessage) => {
       const stringifiedMessage = `[${consoleMessage.type()}] ${consoleMessage.text()}`;
@@ -80,7 +89,7 @@ export const test = base.extend({
     });
     await use(page);
     expect(stringifiedMessages).toStrictEqual([]);
-  },
+  }) as PageFixture,
 });
 
 test.beforeEach(() => {

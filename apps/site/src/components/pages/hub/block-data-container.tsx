@@ -195,7 +195,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
       try {
         const parsedProperties = JSON.parse(propertiesText);
 
-        setEntity((prevEntity) => {
+        setEntity((prevEntity: Entity | EntityTemporal | null) => {
           if (prevEntity) {
             if (stringifyProperties(prevEntity.properties) === propertiesText) {
               return prevEntity;

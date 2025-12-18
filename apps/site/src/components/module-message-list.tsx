@@ -84,8 +84,10 @@ const ModuleMessageData: FunctionComponent<{
                   </td>
                   <td style={{ wordBreak: "break-word" }}>
                     <Typography variant="bpMicroCopy">
-                      {typeof propertySchema.description === "string"
-                        ? propertySchema.description
+                      {typeof (propertySchema as { description?: string })
+                        .description === "string"
+                        ? (propertySchema as { description?: string })
+                            .description
                         : ""}
                     </Typography>
                   </td>
@@ -147,7 +149,7 @@ const ModuleMessage: FunctionComponent<{
           <MdxCode>errorCodes</MdxCode>:{" "}
           <Typography variant="bpSmallCopy">
             {errorCodes && errorCodes.length > 0
-              ? errorCodes.map((code, index) => (
+              ? errorCodes.map((code: string, index: number) => (
                   <Fragment key={code}>
                     {index > 0 ? ", " : ""}
                     <MdxCode>{code}</MdxCode>
@@ -182,19 +184,27 @@ export const ModuleMessageList: FunctionComponent<{
   return (
     <Box>
       <Box>
-        {moduleDefinition.messages.map(({ messageName, source }) => (
-          <Typography key={messageName} mb={1}>
-            <Link
-              href={`#${generateModuleMessageAnchor(messageName)}`}
-              sx={{ fontWeight: 600 }}
-            >
-              {messageName}
-            </Link>
-            <Typography component="span" variant="bpSmallCopy" ml={1}>
-              [{source}]
+        {moduleDefinition.messages.map(
+          ({
+            messageName,
+            source,
+          }: {
+            messageName: string;
+            source: string;
+          }) => (
+            <Typography key={messageName} mb={1}>
+              <Link
+                href={`#${generateModuleMessageAnchor(messageName)}`}
+                sx={{ fontWeight: 600 }}
+              >
+                {messageName}
+              </Link>
+              <Typography component="span" variant="bpSmallCopy" ml={1}>
+                [{source}]
+              </Typography>
             </Typography>
-          </Typography>
-        ))}
+          ),
+        )}
       </Box>
       {moduleDefinition.messages.map((message) => (
         <ModuleMessage key={message.messageName} message={message} />

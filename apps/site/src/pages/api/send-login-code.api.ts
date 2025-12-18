@@ -1,6 +1,9 @@
 import { body as bodyValidator, validationResult } from "express-validator";
 
-import { createBaseHandler } from "../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../lib/api/handler/base-handler";
 import { ensureUserIsMailchimpMember } from "../../lib/api/mailchimp";
 import { User } from "../../lib/api/model/user.model";
 import { isProduction } from "../../lib/config";
@@ -60,4 +63,5 @@ export default createBaseHandler<
       userId: user.id,
       verificationCodeId,
     });
-  });
+  })
+  .handler(baseHandlerOptions);

@@ -1,4 +1,7 @@
-import { createBaseHandler } from "../../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../../lib/api/handler/base-handler";
 import { SerializedUser, User } from "../../../lib/api/model/user.model";
 import { formatErrors } from "../../../util/api";
 
@@ -10,8 +13,8 @@ export type ApiUserByShortnameResponse = {
   user: SerializedUser;
 };
 
-export default createBaseHandler<null, ApiUserByShortnameResponse>().get(
-  async (req, res) => {
+export default createBaseHandler<null, ApiUserByShortnameResponse>()
+  .get(async (req, res) => {
     const { db, query } = req;
     const { shortname } = query as ApiUserByShortnameResponseQueryParams;
 
@@ -28,5 +31,5 @@ export default createBaseHandler<null, ApiUserByShortnameResponse>().get(
     }
 
     res.status(200).send({ user: user.serialize() });
-  },
-);
+  })
+  .handler(baseHandlerOptions);

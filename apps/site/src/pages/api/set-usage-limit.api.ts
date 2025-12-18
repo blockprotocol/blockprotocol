@@ -5,6 +5,7 @@ import {
 } from "express-validator";
 
 import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../lib/api/handler/base-handler";
 import { SerializedUser } from "../../lib/api/model/user.model";
 import { formatErrors } from "../../util/api";
 
@@ -41,9 +42,15 @@ export default createAuthenticatedHandler<
     const { user, db, body } = req;
     const { limit } = body;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res.status(401).json(formatErrors({ msg: "Unauthorized" }));
+    }
+
     await user.update(db, {
       usageLimitCents: limit === "capped" ? body.usageLimitCents : undefined,
     });
 
     res.status(200).json({ user: user.serialize(true) });
-  });
+  })
+  .handler(baseHandlerOptions);

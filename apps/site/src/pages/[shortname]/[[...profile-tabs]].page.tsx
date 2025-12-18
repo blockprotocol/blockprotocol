@@ -8,6 +8,9 @@ import {
   UserPageComponent,
   UserPageProps,
 } from "../../components/pages/user/user-page-component";
+import { getAllBlocksByUser } from "../../lib/api/blocks/get";
+import { connectToDatabase } from "../../lib/api/mongodb";
+import { User } from "../../lib/api/model/user.model";
 import { apiClient } from "../../lib/api-client";
 import { excludeHiddenBlocks } from "../../lib/excluded-blocks";
 
@@ -28,23 +31,58 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
+// Server-side function to fetch user profile data directly from database
+// This avoids HTTP calls which can be blocked by Vercel deployment protection
+const fetchUserProfileDataFromDb = async (shortname: string) => {
+  const cleanShortname = shortname.replace("@", "");
+
+  const { db } = await connectToDatabase();
+
+  const user = await User.getByShortname(db, { shortname: cleanShortname });
+  if (!user) {
+    throw new Error(`No user found for ${cleanShortname}`);
+  }
+
+  const [blocks, entityTypes] = await Promise.all([
+    getAllBlocksByUser({ shortname: cleanShortname }),
+    user.entityTypes(db),
+  ]);
+
+  return {
+    blocks: excludeHiddenBlocks(blocks).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    ),
+    entityTypes: entityTypes.sort((a, b) =>
+      a.schema.title.localeCompare(b.schema.title),
+    ),
+    user: user.serialize(),
+  };
+};
+
+// Client-side function to fetch user profile data via API
 const fetchUserProfileData = async (shortname: string) => {
+  const cleanShortname = shortname.replace("@", "");
+
   const [userResponse, blocksResponse, entityTypesResponse] = await Promise.all(
     [
       apiClient.getUser({
-        shortname: shortname.replace("@", ""),
+        shortname: cleanShortname,
       }),
       apiClient.getUserBlocks({
-        shortname: shortname.replace("@", ""),
+        shortname: cleanShortname,
       }),
       apiClient.getUserEntityTypes({
-        shortname: shortname.replace("@", ""),
+        shortname: cleanShortname,
       }),
     ],
   );
 
   if (!userResponse.data?.user) {
-    throw new Error("No user found");
+    throw new Error(
+      `No user found for ${cleanShortname}: ${
+        userResponse.error?.message || "unknown error"
+      }`,
+    );
   }
 
   return {
@@ -75,7 +113,11 @@ export const getStaticProps: GetStaticProps<
   }
 
   try {
-    const { blocks, entityTypes, user } = await fetchUserProfileData(shortname);
+    // Use direct database access for server-side rendering to avoid
+    // Vercel deployment protection blocking internal HTTP requests
+    const { blocks, entityTypes, user } = await fetchUserProfileDataFromDb(
+      shortname,
+    );
     return {
       props: {
         blocks,

@@ -340,7 +340,10 @@ export const mdxComponents: Record<
       child.type === mdxComponents.code &&
       !otherChildren.length
     ) {
-      const childProps = child.props;
+      const childProps = child.props as {
+        className?: string;
+        children?: React.ReactNode;
+      };
       const isLanguageBlockFunction =
         childProps.className === "language-block-function";
 

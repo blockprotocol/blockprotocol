@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
+import { baseHandlerOptions } from "../../../lib/api/handler/base-handler";
 import { ApiKey } from "../../../lib/api/model/api-key.model";
 import { formatErrors } from "../../../util/api";
 
@@ -24,6 +25,15 @@ export default createAuthenticatedHandler<
 
     const { db, user } = req;
 
+    // user is guaranteed to exist by isLoggedInMiddleware
+    if (!user) {
+      return res
+        .status(401)
+        .json(
+          formatErrors({ msg: "You must be logged in to perform this action" }),
+        );
+    }
+
     const { publicId } = req.body;
 
     const { found, revoked } = await ApiKey.revokeByUser(db, {
@@ -41,4 +51,5 @@ export default createAuthenticatedHandler<
     }
 
     res.status(200).json("SUCCESS");
-  });
+  })
+  .handler(baseHandlerOptions);

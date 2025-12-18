@@ -62,7 +62,7 @@ export const NewlyCreatedApiKeyCard = ({
           })}
         >
           {`${part1}.${part2}.`}
-          <Box component="span" color={({ palette }) => palette.purple[700]}>
+          <Box component="span" sx={{ color: "purple.700" }}>
             {part3}
           </Box>
         </Typography>
