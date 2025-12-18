@@ -10,7 +10,9 @@ export default createAuthenticatedHandler<unknown, RemoveAvatarResponse>()
 
     // user is guaranteed to exist by isLoggedInMiddleware
     if (!user) {
-      return res.status(401).send("SUCCESS");
+      return res
+        .status(401)
+        .json(formatErrors({ msg: "You must be logged in to perform this action" }));
     }
 
     try {
