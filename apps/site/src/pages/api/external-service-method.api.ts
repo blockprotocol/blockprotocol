@@ -24,7 +24,7 @@ export default createApiKeyRequiredHandler<
     if (isBillingFeatureFlagEnabled) {
       return next();
     } else {
-      res.status(401).send(
+      return res.status(401).send(
         formatErrors({
           msg: `The "billing" feature flag must be enabled to perform this request.`,
         }),
