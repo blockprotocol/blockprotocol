@@ -6,6 +6,24 @@ const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
 
 // @ts-check
 
+/**
+ * Build the frame-ancestors CSP directive for sandbox pages.
+ * In production, the sandbox pages are served from a different host than the main frontend,
+ * so we need to explicitly allow the frontend host to embed them.
+ */
+const getSandboxFrameAncestors = () => {
+  const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
+  if (frontendUrl) {
+    try {
+      const frontendOrigin = new URL(frontendUrl).origin;
+      return `frame-ancestors 'self' ${frontendOrigin}`;
+    } catch {
+      // Invalid URL, fall back to 'self' only
+    }
+  }
+  return "frame-ancestors 'self'";
+};
+
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
@@ -43,16 +61,17 @@ const nextConfig = {
          * Allow the sandboxed block demo to be loaded in an iframe.
          * This is required for block previews to work on the Hub.
          * The :shortname param captures the full segment including @ prefix.
+         *
+         * Note: X-Frame-Options is intentionally omitted because it only supports
+         * DENY or SAMEORIGIN, and cannot express cross-origin embedding.
+         * In production, sandbox pages are served from a different host than the
+         * main frontend, so we use CSP frame-ancestors which supports explicit origins.
          */
         source: "/:shortname/blocks/:blockslug/sandboxed-demo",
         headers: [
           {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'self'",
+            value: getSandboxFrameAncestors(),
           },
         ],
       },
@@ -63,12 +82,8 @@ const nextConfig = {
         source: "/api/rewrites/sandboxed-block-demo",
         headers: [
           {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'self'",
+            value: getSandboxFrameAncestors(),
           },
         ],
       },
