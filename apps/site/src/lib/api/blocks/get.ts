@@ -51,9 +51,7 @@ export const getFeaturedBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
     getDbBlock({ author: "hash", name: "how-to" }),
     getDbBlock({ author: "hash", name: "ai-image" }),
   ]).then((result: (ExpandedBlockMetadata | null)[]) =>
-    result.filter(
-      (block): block is ExpandedBlockMetadata => !!block,
-    ),
+    result.filter((block): block is ExpandedBlockMetadata => !!block),
   );
 };
 

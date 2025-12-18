@@ -27,8 +27,8 @@ const getSession = nextSession({
     domain: isProduction
       ? "blockprotocol.org"
       : process.env.VERCEL
-        ? ".stage.hash.ai"
-        : "localhost",
+      ? ".stage.hash.ai"
+      : "localhost",
     maxAge: COOKIE_MAX_AGE_SEC,
     httpOnly: true,
     sameSite: "lax",

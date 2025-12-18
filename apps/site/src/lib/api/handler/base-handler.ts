@@ -46,55 +46,58 @@ export type BaseApiResponse<T = unknown> = NextApiResponse<T | ErrorResponse>;
 
 // Use NextApiRequest/NextApiResponse for router to satisfy IncomingMessage constraint,
 // then cast the result to use proper extended types for handlers
-export const createBaseHandler = <RequestBody = unknown, Response = any>(
-  options?: {
-    isPublicApi?: boolean;
-  },
-) => {
+export const createBaseHandler = <
+  RequestBody = unknown,
+  Response = any,
+>(options?: {
+  isPublicApi?: boolean;
+}) => {
   const { isPublicApi } = options ?? {};
 
-  return createRouter<NextApiRequest, NextApiResponse>()
-    .use(async (req, res, next) => {
-      // For server-to-server requests (no origin), skip CORS entirely
-      const origin = req.headers.origin;
-      if (!origin) {
-        return next();
-      }
+  return (
+    createRouter<NextApiRequest, NextApiResponse>()
+      .use(async (req, res, next) => {
+        // For server-to-server requests (no origin), skip CORS entirely
+        const origin = req.headers.origin;
+        if (!origin) {
+          return next();
+        }
 
-      // For browser requests, use the cors middleware
-      return new Promise<void>((resolve, reject) => {
-        cors({
-          origin: isPublicApi ? "*" : FRONTEND_URL,
-          credentials: true,
-        })(req, res, (err?: unknown) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      }).then(() => next());
-    })
-    .use(dbMiddleware)
-    .use(sessionMiddleware)
-    /**
-     * Manually set `req.session.regenerate` and `req.session.save` to prevent error
-     * in `passport`. This should be removed once an alternative solution is available.
-     *
-     * @see https://github.com/jaredhanson/passport/issues/904
-     */
-    .use(async (req, _res, next) => {
-      const baseReq = req as unknown as BaseApiRequest<RequestBody>;
-      if (baseReq.session && !baseReq.session.regenerate) {
-        baseReq.session.regenerate = (cb: () => any) => cb();
-      }
-      if (baseReq.session && !baseReq.session.save) {
-        baseReq.session.save = (cb: () => any) => cb();
-      }
-      return next();
-    })
-    .use(expressWrapper(passportMiddleware[0]!))
-    .use(expressWrapper(passportMiddleware[1]!));
+        // For browser requests, use the cors middleware
+        return new Promise<void>((resolve, reject) => {
+          cors({
+            origin: isPublicApi ? "*" : FRONTEND_URL,
+            credentials: true,
+          })(req, res, (err?: unknown) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        }).then(() => next());
+      })
+      .use(dbMiddleware)
+      .use(sessionMiddleware)
+      /**
+       * Manually set `req.session.regenerate` and `req.session.save` to prevent error
+       * in `passport`. This should be removed once an alternative solution is available.
+       *
+       * @see https://github.com/jaredhanson/passport/issues/904
+       */
+      .use(async (req, _res, next) => {
+        const baseReq = req as unknown as BaseApiRequest<RequestBody>;
+        if (baseReq.session && !baseReq.session.regenerate) {
+          baseReq.session.regenerate = (cb: () => any) => cb();
+        }
+        if (baseReq.session && !baseReq.session.save) {
+          baseReq.session.save = (cb: () => any) => cb();
+        }
+        return next();
+      })
+      .use(expressWrapper(passportMiddleware[0]!))
+      .use(expressWrapper(passportMiddleware[1]!))
+  );
 };
 
 export const baseHandlerOptions = {

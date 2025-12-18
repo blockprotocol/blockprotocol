@@ -79,7 +79,9 @@ const fetchUserProfileData = async (shortname: string) => {
 
   if (!userResponse.data?.user) {
     throw new Error(
-      `No user found for ${cleanShortname}: ${userResponse.error?.message || "unknown error"}`,
+      `No user found for ${cleanShortname}: ${
+        userResponse.error?.message || "unknown error"
+      }`,
     );
   }
 
@@ -113,7 +115,9 @@ export const getStaticProps: GetStaticProps<
   try {
     // Use direct database access for server-side rendering to avoid
     // Vercel deployment protection blocking internal HTTP requests
-    const { blocks, entityTypes, user } = await fetchUserProfileDataFromDb(shortname);
+    const { blocks, entityTypes, user } = await fetchUserProfileDataFromDb(
+      shortname,
+    );
     return {
       props: {
         blocks,

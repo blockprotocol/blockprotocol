@@ -81,8 +81,8 @@ export const BlockDataTabs: FunctionComponent<BlockDataTabsProps> = ({
     <DesktopTabs
       value={blockDataTab}
       onChange={(_event: React.SyntheticEvent, newValue: number) =>
-          setBlockDataTab(newValue)
-        }
+        setBlockDataTab(newValue)
+      }
       modalOpen={modalOpen}
     >
       <Tab label="Block Properties" />

@@ -18,8 +18,9 @@ export const createApiKeyRequiredHandler = <
   createBaseHandler<RequestBody, Response>({ isPublicApi: true })
     .use(async (req, _res, next) => {
       if (options?.allowCookieFallback) {
-        (req as unknown as ApiKeyRequiredRequest<RequestBody>).allowCookieFallback =
-          true;
+        (
+          req as unknown as ApiKeyRequiredRequest<RequestBody>
+        ).allowCookieFallback = true;
       }
       return next();
     })

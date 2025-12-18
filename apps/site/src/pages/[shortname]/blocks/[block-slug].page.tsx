@@ -126,7 +126,9 @@ type BlockPageQueryParams = {
   "block-slug": string;
 };
 
-const parseQueryParams = (params: BlockPageQueryParams | Record<string, string | string[] | undefined>) => {
+const parseQueryParams = (
+  params: BlockPageQueryParams | Record<string, string | string[] | undefined>,
+) => {
   // Handle useRouter query which can have string | string[] values
   const rawShortname = params.shortname;
   const shortname = rawShortname

@@ -193,10 +193,7 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({ data }) => {
             >
               {version}
             </Typography>
-            <Typography
-              sx={{ color: "gray.60" }}
-              variant="bpMicroCopy"
-            >
+            <Typography sx={{ color: "gray.60" }} variant="bpMicroCopy">
               <ClientOnlyLastUpdated value={lastUpdated} />
             </Typography>
           </Box>

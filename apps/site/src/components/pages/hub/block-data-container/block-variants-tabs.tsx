@@ -70,8 +70,8 @@ export const BlockVariantsTabs: FunctionComponent<BlockVariantsTabsProps> = ({
       }}
       value={blockVariantsTab}
       onChange={(_event: React.SyntheticEvent, newValue: number) =>
-          setBlockVariantsTab(newValue)
-        }
+        setBlockVariantsTab(newValue)
+      }
     >
       {metadata.variants ? (
         metadata.variants.map((variant: { name: string }) => (

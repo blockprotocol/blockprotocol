@@ -185,19 +185,26 @@ export const ModuleMessageList: FunctionComponent<{
     <Box>
       <Box>
         {moduleDefinition.messages.map(
-          ({ messageName, source }: { messageName: string; source: string }) => (
-          <Typography key={messageName} mb={1}>
-            <Link
-              href={`#${generateModuleMessageAnchor(messageName)}`}
-              sx={{ fontWeight: 600 }}
-            >
-              {messageName}
-            </Link>
-            <Typography component="span" variant="bpSmallCopy" ml={1}>
-              [{source}]
+          ({
+            messageName,
+            source,
+          }: {
+            messageName: string;
+            source: string;
+          }) => (
+            <Typography key={messageName} mb={1}>
+              <Link
+                href={`#${generateModuleMessageAnchor(messageName)}`}
+                sx={{ fontWeight: 600 }}
+              >
+                {messageName}
+              </Link>
+              <Typography component="span" variant="bpSmallCopy" ml={1}>
+                [{source}]
+              </Typography>
             </Typography>
-          </Typography>
-        ))}
+          ),
+        )}
       </Box>
       {moduleDefinition.messages.map((message: { messageName: string }) => (
         <ModuleMessage key={message.messageName} message={message} />
