@@ -323,9 +323,11 @@ const handler: NextApiHandler = async (req, res) => {
   </html>
   `;
 
-  // Set headers to allow this page to be loaded in an iframe from the same origin
-  res.setHeader("X-Frame-Options", "SAMEORIGIN");
-  res.setHeader("Content-Security-Policy", "frame-ancestors 'self'");
+  // Security headers for iframe embedding (CSP frame-ancestors) are configured in
+  // next.config.js to allow cross-origin embedding from the frontend host.
+  // Do not set X-Frame-Options or CSP frame-ancestors here as they would override
+  // the permissive configuration needed for production where sandbox pages are
+  // served from a different host than the main frontend.
   res.setHeader("Content-Type", "text/html; charset=utf-8");
 
   res.status(200);
