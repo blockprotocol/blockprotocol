@@ -1,7 +1,10 @@
-- **Feature Name:** `hook-module`
-- **Start Date:** 2022-07-12
-- **RFC PR:** [blockprotocol/blockprotocol#430](https://github.com/blockprotocol/blockprotocol/pull/430)
-- **RFC Discussion:** [blockprotocol/blockprotocol#475](https://github.com/blockprotocol/blockprotocol/discussions/475)
+Feature Name: hook-module
+Start Date: 2022-07-12
+First Published: 2022-07-26
+RFC PR: https://github.com/blockprotocol/blockprotocol/pull/430
+RFC Discussion: https://github.com/blockprotocol/blockprotocol/discussions/475
+
+---
 
 # Summary
 
