@@ -71,7 +71,7 @@
     "html-to-text": "^8.2.0",
     "immer": "^9.0.16",
     "jsonschema": "^1.4.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "material-ui-popup-state": "^5.0.4",
     "md5": "^2.3.0",
     "mime-types": "^2.1.35",
