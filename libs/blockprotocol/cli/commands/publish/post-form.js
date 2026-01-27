@@ -1,5 +1,4 @@
-import { FormData } from "formdata-node";
-import { fileFromPath } from "formdata-node/file-from-path";
+import { readFile } from "node:fs/promises";
 
 /**
  * Posts to the Block Protocol API /blocks/publish endpoint
@@ -18,14 +17,25 @@ export const postPublishForm = async ({
 }) => {
   const url = `${blockProtocolSiteHost}/api/blocks/publish`;
 
+  // Node 20+ provides WHATWG fetch + FormData + File globally.
+  if (typeof FormData === "undefined" || typeof File === "undefined") {
+    const nodeVersion = process?.versions?.node ?? "unknown";
+    throw new Error(
+      `Publishing requires Node.js >= 20 (current: ${nodeVersion}). Please upgrade Node.js and try again.`,
+    );
+  }
+
   const form = new FormData();
 
-  const file = await fileFromPath(tarballFilePath);
+  const tarballBytes = await readFile(tarballFilePath);
+  const file = new File([tarballBytes], "tarball.tar.gz", {
+    type: "application/gzip",
+  });
 
   form.set("blockName", blockName);
-  form.set("tarball", file, "tarball.tar.gz");
+  form.set("tarball", file);
 
-  /** @type RequestInit} */
+  /** @type {RequestInit} */
   const options = {
     body: form,
     headers: {

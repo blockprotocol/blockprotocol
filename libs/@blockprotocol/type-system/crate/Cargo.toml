@@ -32,3 +32,6 @@ wasm-bindgen-test = "0.3.37"
 lto = true
 opt-level = 's'
 panic = 'abort'
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = true

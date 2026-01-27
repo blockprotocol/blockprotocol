@@ -224,7 +224,7 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
         reason: "InvalidBaseUrl",
         inner: {
           reason: "UrlParseError",
-          inner: "invalid domain character",
+          inner: "invalid international domain name",
         },
       },
     },
