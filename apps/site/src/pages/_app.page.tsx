@@ -25,6 +25,7 @@ import {
   UserState,
 } from "../context/user-context";
 import { apiClient } from "../lib/api-client";
+import { isProduction } from "../lib/config";
 import { setWordPressSettingsUrlSession } from "../lib/word-press-settings-url-session";
 import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
@@ -198,7 +199,11 @@ const MyApp = ({
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <SnackbarProvider maxSnack={3}>
-                <DefaultSeo {...defaultSeoConfig} />
+                <DefaultSeo
+                  {...defaultSeoConfig}
+                  dangerouslySetAllPagesToNoIndex={!isProduction}
+                  dangerouslySetAllPagesToNoFollow={!isProduction}
+                />
                 {getLayout(<Component {...pageProps} />)}
               </SnackbarProvider>
             </ThemeProvider>
