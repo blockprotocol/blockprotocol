@@ -14,7 +14,7 @@ export CARGO_HOME="$PWD/.vercel-cargo"
 export PATH="$CARGO_HOME/bin:$PATH"
 export RUSTUP_INIT_SKIP_PATH_CHECK=yes
 
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly-2023-10-08
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly-2025-10-08
 source "$CARGO_HOME/env"
 
 # Run `yarn`
