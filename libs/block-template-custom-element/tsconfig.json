@@ -9,6 +9,7 @@
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
     "strict": true,
+    "types": [],
     "useDefineForClassFields": false
   },
   "include": ["src"]
