@@ -20,6 +20,7 @@ import {
 } from "../../mdx/mdx-page-content";
 import { PageNavLinks } from "../../page-nav-links";
 import { Sidebar } from "../../page-sidebar";
+import { DeprecatedPageBanner } from "./deprecated-page-banner";
 
 type DocsPageProps = {
   title?: ReactNode;
@@ -29,6 +30,11 @@ type DocsPageProps = {
   flatPages?: SiteMapPage[];
   appendices?: SiteMapPage[];
   currentPage?: SiteMapPage | undefined;
+  /**
+   * When set, render a banner above the MDX content that links to the
+   * newest version of this page (which carries the deprecation notice).
+   */
+  deprecatedNoticeHref?: string;
 };
 
 const getParentPages = (
@@ -55,19 +61,26 @@ export const DocsContent: FunctionComponent<DocsPageProps> = ({
   flatPages = pages,
   currentPage,
   appendices,
+  deprecatedNoticeHref,
 }) => {
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
   const allPages = [...flatPages, ...(appendices ?? [])];
 
-  const currentPageIndex = currentPage ? allPages.indexOf(currentPage) : -1;
+  // Sequential prev/next navigation skips pages flagged as
+  // `hiddenFromSidebar` so deprecation/tombstone pages aren't surfaced as
+  // either a destination or a stepping stone between adjacent pages.
+  const navigablePages = allPages.filter((page) => !page.hiddenFromSidebar);
+  const currentPageIndex = currentPage
+    ? navigablePages.indexOf(currentPage)
+    : -1;
 
   const prevPage =
-    currentPageIndex > 0 ? allPages[currentPageIndex - 1] : undefined;
+    currentPageIndex > 0 ? navigablePages[currentPageIndex - 1] : undefined;
   const nextPage =
-    currentPageIndex < allPages.length - 1
-      ? allPages[currentPageIndex + 1]
+    currentPageIndex >= 0 && currentPageIndex < navigablePages.length - 1
+      ? navigablePages[currentPageIndex + 1]
       : undefined;
 
   const hasMultiplePages = allPages.length > 0;
@@ -157,6 +170,9 @@ export const DocsContent: FunctionComponent<DocsPageProps> = ({
           </Collapse>
         ) : null}
 
+        {deprecatedNoticeHref ? (
+          <DeprecatedPageBanner noticeHref={deprecatedNoticeHref} />
+        ) : null}
         <Box mb={hasMultiplePages ? 4 : 0}>
           <MdxPageContent flexGrow={1} serializedPage={content} />
         </Box>

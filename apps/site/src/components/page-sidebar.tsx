@@ -17,6 +17,7 @@ import {
   SetStateAction,
   useCallback,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -30,6 +31,14 @@ import { Link } from "./link";
 import { generatePathWithoutParams } from "./shared";
 
 export const SIDEBAR_WIDTH = 300;
+
+/**
+ * Pages marked `hiddenFromSidebar: true` in their MDX frontmatter are still
+ * routable but should not appear in nav. Filter them out wherever a sidebar
+ * iterates a list of pages.
+ */
+const visiblePages = (pages: SiteMapPage[] | undefined): SiteMapPage[] =>
+  (pages ?? []).filter((page) => !page.hiddenFromSidebar);
 
 const SIDEBAR_LINK_HEIGHT = 35;
 
@@ -206,7 +215,8 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
   const { asPath } = router;
   const pathWithoutParams = generatePathWithoutParams(asPath);
 
-  const { href, title, sections = [], subPages = [] } = page;
+  const { href, title, sections = [] } = page;
+  const subPages = visiblePages(page.subPages);
 
   const isSelected =
     pathWithoutParams === href ||
@@ -410,11 +420,15 @@ const useOpenedPages = (pages: SiteMapPage[], ssr: boolean) => {
 
 export const Sidebar: FunctionComponent<SidebarProps> = ({
   appendices,
-  pages,
+  pages: pagesProp,
   sx = [],
   isSsrSafe = true,
   ...boxProps
 }) => {
+  // Memoize so the filtered array's reference is stable across renders;
+  // `useOpenedPages` below compares by reference, so a fresh array each
+  // render would trigger an infinite setState loop.
+  const pages = useMemo(() => visiblePages(pagesProp), [pagesProp]);
   const ssr = useSsr();
   const [openedPages, setOpenedPages] = useOpenedPages(pages, ssr);
 
@@ -533,7 +547,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
                     setOpenedPages={setOpenedPages}
                   />
                 ))}
-                {pages[0]!.subPages?.map((subpage) => (
+                {visiblePages(pages[0]!.subPages).map((subpage) => (
                   <SidebarPage
                     key={subpage.href}
                     depth={0}
@@ -548,7 +562,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
             {appendices && appendices.length > 0 ? (
               <>
                 <Divider sx={{ marginBottom: 2 }} />
-                {appendices.map((page) => (
+                {visiblePages(appendices).map((page) => (
                   <SidebarPage
                     key={page.href}
                     page={page}

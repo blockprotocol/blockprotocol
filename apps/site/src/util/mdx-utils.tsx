@@ -248,6 +248,9 @@ export const getPage = (params: {
     ? `../../rfcs/text/${fileName}`
     : `src/_pages/${pathToDirectory}/${fileName}`;
 
+  const fileBuffer = fs.readFileSync(path.join(process.cwd(), markdownFilePath));
+  const { data: frontmatter } = matter(fileBuffer);
+
   const headings = getHeadingsFromMarkdown(markdownFilePath);
 
   const h1 = headings.find(({ depth }) => depth === 1);
@@ -262,6 +265,7 @@ export const getPage = (params: {
       name === "index" ? "" : `/${slugify(name, { lower: true })}`
     }`,
     markdownFilePath,
+    hiddenFromSidebar: frontmatter.hiddenFromSidebar === true,
     sections: headings
       .reduce<SiteMapPageSection[]>((prev, currentHeading) => {
         const slug = slugify(getFullText(currentHeading), {
@@ -303,8 +307,24 @@ export const getAllPages = (params: {
   pathToDirectory: string;
   filterIndexPage?: boolean;
   isRfc?: boolean;
+  /**
+   * When set, missing `00_index.mdx` files in this directory or any
+   * subdirectory are looked up against this chain of fallback directory
+   * paths (relative to `src/_pages`). This lets a versioned overlay (e.g.
+   * `docs/0.4/`) contribute targeted page overrides inside subdirectories
+   * without having to re-declare an unchanged `00_index.mdx` for that
+   * subfolder. The first fallback path that contains a readable index is
+   * used to build the index `SiteMapPage`; the resulting `href` keeps the
+   * overlay's path so navigation stays inside the requested version.
+   */
+  indexFallbackDirs?: string[];
 }): SiteMapPage[] => {
-  const { pathToDirectory, filterIndexPage = false, isRfc = false } = params;
+  const {
+    pathToDirectory,
+    filterIndexPage = false,
+    isRfc = false,
+    indexFallbackDirs = [],
+  } = params;
 
   const thisPath = isRfc ? "../../rfcs/text" : `src/_pages/${pathToDirectory}`;
 
@@ -315,14 +335,25 @@ export const getAllPages = (params: {
 
   return directoryItems.flatMap((directoryItem) => {
     if (fs.lstatSync(`${thisPath}/${directoryItem}`).isDirectory()) {
-      const indexPage = getPage({
-        pathToDirectory: `${pathToDirectory}/${directoryItem}`,
+      const childDir = `${pathToDirectory}/${directoryItem}`;
+      const childFallbacks = indexFallbackDirs.map(
+        (fallback) => `${fallback}/${directoryItem}`,
+      );
+
+      const indexPage = getPageWithFallback({
+        pathToDirectory: childDir,
         fileName: "00_index.mdx",
+        fallbackDirs: childFallbacks,
       });
 
+      if (!indexPage) {
+        return [];
+      }
+
       const subPages = getAllPages({
-        pathToDirectory: `${pathToDirectory}/${directoryItem}`,
+        pathToDirectory: childDir,
         filterIndexPage: true,
+        indexFallbackDirs: childFallbacks,
       });
 
       return {
@@ -337,6 +368,45 @@ export const getAllPages = (params: {
       isRfc,
     });
   });
+};
+
+/**
+ * Try to read `fileName` from `pathToDirectory`; if it doesn't exist there,
+ * fall through `fallbackDirs` in order. The returned page keeps `href` and
+ * `markdownFilePath` of the matched file's location — callers that need the
+ * overlay's href instead should rewrite it explicitly.
+ */
+const getPageWithFallback = (params: {
+  pathToDirectory: string;
+  fileName: string;
+  fallbackDirs: string[];
+}): SiteMapPage | undefined => {
+  const { pathToDirectory, fileName, fallbackDirs } = params;
+
+  for (const dir of [pathToDirectory, ...fallbackDirs]) {
+    const candidate = path.join(process.cwd(), `src/_pages/${dir}/${fileName}`);
+    if (fs.existsSync(candidate)) {
+      const page = getPage({ pathToDirectory: dir, fileName });
+      if (dir === pathToDirectory) {
+        return page;
+      }
+
+      // Rewrite the href so the inherited page is reachable at the overlay's
+      // path rather than the fallback version's path — the actual MDX content
+      // is resolved separately by `getSerializedPageForVersion` and walks the
+      // fallback chain at render time, so we just need the link target right.
+      const baseSlug = `/${pathToDirectory.replace(/\d+_/g, "")}`;
+      const fallbackSlug = `/${dir.replace(/\d+_/g, "")}`;
+      return {
+        ...page,
+        href: page.href.startsWith(fallbackSlug)
+          ? `${baseSlug}${page.href.slice(fallbackSlug.length)}`
+          : page.href,
+      };
+    }
+  }
+
+  return undefined;
 };
 
 /**
@@ -379,20 +449,25 @@ const overlayPagesBySlug = (
   base: SiteMapPage[],
   overlay: SiteMapPage[],
 ): SiteMapPage[] => {
-  const baseBySlug = new Map<string, SiteMapPage>();
-  for (const page of base) {
-    baseBySlug.set(stripVersionFromHref(page.href), page);
+  const overlayBySlug = new Map<string, SiteMapPage>();
+  for (const page of overlay) {
+    overlayBySlug.set(stripVersionFromHref(page.href), page);
   }
 
   const result: SiteMapPage[] = [];
   const handledSlugs = new Set<string>();
 
-  for (const overlayPage of overlay) {
-    const slug = stripVersionFromHref(overlayPage.href);
+  // Iterate the base list first so the established sidebar ordering is
+  // preserved when a newer version overrides only some of the pages. Without
+  // this, every overlay page ends up in front of inherited ones — which
+  // would push e.g. "Core" below "Hook Module" in v0.4 just because v0.4
+  // happens to ship its own hook override.
+  for (const basePage of base) {
+    const slug = stripVersionFromHref(basePage.href);
     handledSlugs.add(slug);
-    const basePage = baseBySlug.get(slug);
+    const overlayPage = overlayBySlug.get(slug);
 
-    if (basePage) {
+    if (overlayPage) {
       const mergedSubPages =
         overlayPage.subPages || basePage.subPages
           ? overlayPagesBySlug(
@@ -406,14 +481,16 @@ const overlayPagesBySlug = (
         subPages: mergedSubPages,
       });
     } else {
-      result.push(overlayPage);
+      result.push(basePage);
     }
   }
 
-  for (const basePage of base) {
-    const slug = stripVersionFromHref(basePage.href);
+  // Anything genuinely new in the overlay (no base equivalent) is appended
+  // at the end in the overlay's own declared order.
+  for (const overlayPage of overlay) {
+    const slug = stripVersionFromHref(overlayPage.href);
     if (!handledSlugs.has(slug)) {
-      result.push(basePage);
+      result.push(overlayPage);
     }
   }
 
@@ -452,12 +529,22 @@ export const unionVersionedPages = (params: {
   const chain = fallbackVersionChain(forVersion);
 
   let merged: SiteMapPage[] = [];
-  for (const version of [...chain].reverse()) {
+  // Iterate oldest-first so newer versions overlay older ones via
+  // `overlayPagesBySlug`. The per-version `indexFallbackDirs` lets a sparse
+  // overlay (e.g. only `0.4/1_blocks/02_develop.mdx` exists) still build a
+  // subdirectory by borrowing the index from an older version.
+  for (const [versionIndex, version] of [...chain].reverse().entries()) {
+    const olderVersions = [...chain].reverse().slice(0, versionIndex);
+    const indexFallbackDirs = [...olderVersions]
+      .reverse()
+      .map((olderVersion) => `${section}/${olderVersion}`);
+
     let pagesForVersion: SiteMapPage[];
     try {
       pagesForVersion = getAllPages({
         pathToDirectory: `${section}/${version}`,
         filterIndexPage,
+        indexFallbackDirs,
       });
     } catch {
       // The version's folder doesn't exist or is unreadable — skip.

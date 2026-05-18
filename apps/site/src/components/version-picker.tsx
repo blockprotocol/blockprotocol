@@ -1,10 +1,15 @@
-import { faCheck, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faChevronDown,
+  faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
@@ -78,6 +83,11 @@ export const VersionPicker: FunctionComponent = () => {
     return null;
   }
 
+  const isOutdated = location.version !== LATEST_DOCS_VERSION;
+  const outdatedMessage = `Currently viewing an outdated version of the ${
+    location.section === "spec" ? "specification" : "docs"
+  }.`;
+
   const handleSelect = (version: DocsVersion) => {
     setOpen(false);
     if (version === location.version) {
@@ -101,7 +111,13 @@ export const VersionPicker: FunctionComponent = () => {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        minWidth: 0,
+      }}
+    >
       <Button
         ref={buttonRef}
         variant="tertiary"
@@ -134,6 +150,48 @@ export const VersionPicker: FunctionComponent = () => {
       >
         {formatVersionLabel(location.version)}
       </Button>
+      {isOutdated ? (
+        // Tooltip mirrors the inline text so the warning is still discoverable
+        // at small viewports (where the label collapses to icon-only). Touch
+        // taps fire the tooltip via the zero `enterTouchDelay`.
+        <Tooltip
+          title={outdatedMessage}
+          arrow
+          enterTouchDelay={0}
+          leaveTouchDelay={3000}
+        >
+          <Box
+            role="status"
+            sx={(theme) => ({
+              ml: 1,
+              display: "flex",
+              alignItems: "center",
+              gap: 0.75,
+              color: theme.palette.purple[600],
+              cursor: "help",
+              minWidth: 0,
+            })}
+          >
+            <FontAwesomeIcon
+              icon={faTriangleExclamation}
+              sx={{ fontSize: 14 }}
+            />
+            <Typography
+              component="span"
+              sx={(theme) => ({
+                display: { xs: "none", md: "inline" },
+                color: theme.palette.purple[600],
+                fontSize: 12,
+                fontWeight: 500,
+                lineHeight: 1,
+                whiteSpace: "nowrap",
+              })}
+            >
+              {outdatedMessage}
+            </Typography>
+          </Box>
+        </Tooltip>
+      ) : null}
       <Menu
         anchorEl={buttonRef.current}
         open={open}

@@ -11,14 +11,15 @@ const PRODUCTION_ORIGIN = "https://blockprotocol.org";
 // Discovered by scraping `${PRODUCTION_ORIGIN}/hub` once - any new author
 // (or new author whose blocks should remain listed) should be added here.
 //
-// Authors deliberately excluded:
-//   - prachi123 (single low-quality "block-proto-practice" placeholder block)
+// Authors deliberately excluded (each only published a single test/placeholder
+// block we don't want surfaced on the Hub):
+//   - prachi123 (block-proto-practice)
+//   - rikhen    (test-block)
+//   - jerlendds (test-input-field)
 const SHORTNAMES = [
   "alfie",
   "blockprotocol",
   "hash",
-  "jerlendds",
-  "rikhen",
   "tldraw",
 ] as const;
 

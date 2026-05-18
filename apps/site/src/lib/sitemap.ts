@@ -23,6 +23,15 @@ export type SiteMapPage = {
   markdownFilePath?: string;
   /** The version this page belongs to, when it lives under a versioned section. */
   version?: DocsVersion;
+  /**
+   * When `true`, the page is still routable (its static path is generated and
+   * its MDX is rendered) but it is omitted from the sidebar tree. Used for
+   * deprecation/tombstone pages that should not be advertised in nav but must
+   * still respond at their URL.
+   *
+   * Set via the `hiddenFromSidebar: true` YAML frontmatter field on the page.
+   */
+  hiddenFromSidebar?: boolean;
   subPages?: SiteMapPage[];
   sections?: SiteMapPageSection[];
 };

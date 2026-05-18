@@ -15,6 +15,7 @@ import {
   LATEST_DOCS_VERSION,
 } from "../../lib/docs-versions";
 import { SiteMap, SiteMapPage } from "../../lib/sitemap";
+import { findDeprecatedNoticeHref } from "../../util/deprecated-page";
 import { getSerializedPageForVersion } from "../../util/mdx-utils";
 
 const typedSiteMap = siteMap as SiteMap;
@@ -29,6 +30,13 @@ type DocsPageProps = {
   serializedPage: MDXRemoteSerializeResult<Record<string, unknown>>;
   requestedVersion: DocsVersion;
   servedFromVersion: DocsVersion;
+  /**
+   * Set when the same logical slug exists at a newer version, and that
+   * newer version marks the page as `hiddenFromSidebar` (i.e. the page has
+   * been deprecated). The href points at the newest such version so the
+   * user lands on whichever copy carries the explanatory notice.
+   */
+  deprecatedNoticeHref: string | null;
 };
 
 const flattenPages = (pages: SiteMapPage[]): SiteMapPage[] =>
@@ -84,11 +92,20 @@ export const getStaticProps: GetStaticProps<
         parts: slugRest.length ? slugRest : ["index"],
       });
 
+    const pathname = `/docs/${maybeVersion}${slugRest.length ? `/${slugRest.join("/")}` : ""}`;
+    const deprecatedNoticeHref = findDeprecatedNoticeHref({
+      versionedSubPages: docsPagesByVersion,
+      section: "docs",
+      requestedVersion: maybeVersion,
+      pathname,
+    });
+
     return {
       props: {
         serializedPage,
         requestedVersion: maybeVersion,
         servedFromVersion,
+        deprecatedNoticeHref,
       },
     };
   } catch {
@@ -99,6 +116,7 @@ export const getStaticProps: GetStaticProps<
 const DocsPage: NextPage<DocsPageProps> = ({
   serializedPage,
   requestedVersion,
+  deprecatedNoticeHref,
 }) => {
   const { asPath } = useRouter();
   const { pages: allPages, versionedSubPages } = useContext(SiteMapContext);
@@ -143,6 +161,7 @@ const DocsPage: NextPage<DocsPageProps> = ({
         pages={subPages}
         flatPages={flatSubPages}
         currentPage={currentPage}
+        deprecatedNoticeHref={deprecatedNoticeHref ?? undefined}
       />
     </>
   );

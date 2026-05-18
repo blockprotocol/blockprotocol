@@ -15,14 +15,6 @@
       "preferredName": "HASH"
     },
     {
-      "shortname": "jerlendds",
-      "preferredName": "Jordan"
-    },
-    {
-      "shortname": "rikhen",
-      "preferredName": "Rikhen"
-    },
-    {
       "shortname": "tldraw",
       "preferredName": "Tldraw"
     }
@@ -1285,82 +1277,6 @@
           ]
         }
       }
-    },
-    {
-      "name": "test-input-field",
-      "version": "0.0.0",
-      "description": "A Test Input Field with validation properties, an example of a customizable input block showcasing validation for a github profile url.",
-      "repository": "https://github.com/jerlendds/test-input-field/tree/master",
-      "author": "jerlendds",
-      "license": "MIT",
-      "externals": {
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0"
-      },
-      "variants": null,
-      "schema": "https://blockprotocol.org/@jerlendds/types/entity-type/test-input-field/v/9",
-      "commit": "804f996de637cef89e9c6423376942bdbc909ba8",
-      "blockType": {
-        "entryPoint": "react"
-      },
-      "displayName": "Test Input Field",
-      "icon": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field/public/abc.svg",
-      "image": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field/public/block-preview.png",
-      "protocol": "0.3",
-      "codegen": {
-        "outputFolder": "src/types/generated",
-        "targets": {
-          "block-entity.ts": [
-            {
-              "blockEntityType": true
-            }
-          ]
-        }
-      },
-      "source": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field/main.7991e8b58b155c255576.js",
-      "blockSitePath": "/@jerlendds/blocks/test-input-field",
-      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field",
-      "createdAt": "2023-11-03T00:22:12.674Z",
-      "lastUpdated": "2023-11-03T02:00:52.153Z",
-      "npmPackageName": null,
-      "pathWithNamespace": "@jerlendds/test-input-field",
-      "exampleGraph": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field/example-graph.json",
-      "verified": false
-    },
-    {
-      "name": "test-block",
-      "version": "0.0.0",
-      "description": "test-block block",
-      "author": "rikhen",
-      "license": "MIT",
-      "externals": {
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0"
-      },
-      "schema": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
-      "variants": null,
-      "blockType": {
-        "entryPoint": "react"
-      },
-      "displayName": "test-block",
-      "examples": [
-        {
-          "name": "World"
-        }
-      ],
-      "icon": "https://blockprotocol.hashai.workers.dev/blocks/rikhen/test-block/public/omega.svg",
-      "image": "https://blockprotocol.hashai.workers.dev/blocks/rikhen/test-block/public/block-preview.png",
-      "protocol": "0.3",
-      "source": "https://blockprotocol.hashai.workers.dev/blocks/rikhen/test-block/main.669f4c4b9efa616764ea.js",
-      "blockSitePath": "/@rikhen/blocks/test-block",
-      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/rikhen/test-block",
-      "createdAt": "2023-03-13T20:39:37.016Z",
-      "lastUpdated": "2023-03-13T20:39:37.016Z",
-      "npmPackageName": null,
-      "pathWithNamespace": "@rikhen/test-block",
-      "repository": null,
-      "exampleGraph": null,
-      "verified": false
     },
     {
       "name": "drawing",

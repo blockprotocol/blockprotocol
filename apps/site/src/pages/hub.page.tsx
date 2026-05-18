@@ -85,7 +85,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
     <>
       <NextSeo
         title="Block Protocol – Hub"
-        description="The Block Protocol's registry of open-source blocks and types"
+        description="The Block Protocol's registry of open-source blocks"
       />
       <Container
         sx={(theme) => ({
@@ -219,7 +219,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
                 },
               })}
             >
-              Discover how blocks and types work
+              Discover how blocks work
               <FontAwesomeIcon icon={faChevronRight} sx={{ ml: 0.75 }} />
             </Box>
           </Stack>

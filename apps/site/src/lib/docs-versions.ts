@@ -52,3 +52,30 @@ export const formatVersionLabel = (version: DocsVersion): string =>
   version === LATEST_DOCS_VERSION
     ? `Latest (${version})`
     : `Version ${version}`;
+
+/**
+ * Returns versions newer than `version`, ordered newest-first. Walks the
+ * declared `DOCS_VERSIONS` list (which is itself newest-first), so the head
+ * of the result is the latest version available.
+ */
+export const versionsNewerThan = (version: DocsVersion): DocsVersion[] => {
+  const index = DOCS_VERSIONS.indexOf(version);
+  if (index <= 0) {
+    return [];
+  }
+  return DOCS_VERSIONS.slice(0, index);
+};
+
+/**
+ * Versions in which the Graph Module is still a first-class part of the spec.
+ *
+ * From 0.4 onwards the Graph Module has been split out into the standalone
+ * SemType specification (https://semtype.org/spec). The page at
+ * `/spec/<v>/graph` still resolves at deprecated versions (showing a notice),
+ * but it's hidden from the sidebar and any deep links into former sub-pages
+ * (`/spec/<v>/graph/<anything>`) are redirected to the notice page itself.
+ */
+const GRAPH_MODULE_SUPPORTED_VERSIONS: readonly DocsVersion[] = ["0.3"];
+
+export const isGraphModuleSupported = (version: DocsVersion): boolean =>
+  GRAPH_MODULE_SUPPORTED_VERSIONS.includes(version);

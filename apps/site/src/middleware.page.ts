@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 
 import {
   isDocsVersion,
+  isGraphModuleSupported,
   isVersionedSection,
   LATEST_DOCS_VERSION,
 } from "./lib/docs-versions";
@@ -59,6 +60,36 @@ const redirectToLatestVersionIfMissing = (
   return NextResponse.redirect(newUrl, 308);
 };
 
+/**
+ * Collapses `/spec/<v>/graph/<anything>` to `/spec/<v>/graph` for any version
+ * in which the Graph Module has been deprecated in favour of SemType. The
+ * Graph Module page itself stays live (it serves the deprecation notice);
+ * only deeper paths under it bounce back to it so the user is never left on a
+ * page that no longer exists at that version.
+ */
+const redirectDeprecatedGraphSubPaths = (
+  url: URL,
+): NextResponse | undefined => {
+  const segments = url.pathname.split("/").filter((segment) => segment !== "");
+
+  const [section, maybeVersion, maybePage, ...rest] = segments;
+
+  if (
+    section !== "spec" ||
+    !maybeVersion ||
+    !isDocsVersion(maybeVersion) ||
+    maybePage !== "graph" ||
+    rest.length === 0 ||
+    isGraphModuleSupported(maybeVersion)
+  ) {
+    return undefined;
+  }
+
+  const newUrl = new URL(url);
+  newUrl.pathname = `/spec/${maybeVersion}/graph`;
+  return NextResponse.redirect(newUrl, 308);
+};
+
 export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
 
@@ -85,6 +116,11 @@ export async function middleware(request: NextRequest) {
   const versionRedirect = redirectToLatestVersionIfMissing(url);
   if (versionRedirect) {
     return versionRedirect;
+  }
+
+  const graphSubPathRedirect = redirectDeprecatedGraphSubPaths(url);
+  if (graphSubPathRedirect) {
+    return graphSubPathRedirect;
   }
 
   // if this is a /types/* page, serve JSON unless we're asked for HTML (unless it's a hardcoded type – no HTML available)
