@@ -1,5 +1,3 @@
-import crypto from "node:crypto";
-
 import {
   Box,
   Container,
@@ -31,7 +29,7 @@ import {
   retrieveBlockFileContent,
   retrieveBlockReadme,
 } from "../../../lib/blocks";
-import { isFork, isProduction } from "../../../lib/config";
+import { isProduction } from "../../../lib/config";
 import { excludeHiddenBlocks } from "../../../lib/excluded-blocks";
 
 // Exclude <FooBar />, but keep <h1 />, <ul />, etc.
@@ -42,17 +40,33 @@ const markdownComponents = Object.fromEntries(
 );
 
 /**
- * We want a different origin for the iFrame to the parent window
- * so that it can't use cookies issued to the user in the main app.
+ * Resolves the origin used for the block sandbox iframe.
  *
- * The PRODUCTION origin will be blockprotocol.org, and we can use
- * a custom domain or the unique Vercel deployment URL as the origin .
+ * In PRODUCTION the parent docs page and the sandbox iframe MUST live on
+ * different origins so block code can't reach cookies issued to the main
+ * blockprotocol.org app. {@link NEXT_PUBLIC_BLOCK_SANDBOX_URL} carries that
+ * sibling host (e.g. `https://blocks.blockprotocol.org`); the middleware
+ * additionally moves `…/sandboxed-demo` requests onto it (see
+ * `middleware.page.ts`).
  *
- * In STAGING, we will mostly be visiting unique deployment URLs
- * for testing, so we can use the unique branch URL as the origin.
- * Note: this means the frame in preview deployments will always be
- * built from the tip of the branch - if you visit the non-latest preview
- * deployment AND you have changed the framed code, they may be out of sync.
+ * In PREVIEW we don't have a stable wildcard sibling per branch. The earlier
+ * approach — synthesizing `blockprotocol-git-{branchSlug}.stage.hash.ai`
+ * from the branch name and hoping a `*.stage.hash.ai` wildcard pointed at the
+ * matching Vercel preview — broke as soon as branch names started getting
+ * Vercel-supplied team/project hashes that this code can't see (long branch
+ * names hit the 63-char DNS-label cap and get a SHA-derived suffix that does
+ * not match Vercel's actual alias). The result is a hostname like
+ * `blockprotocol-git-cursor-…-7dab.stage.hash.ai` that simply has no DNS,
+ * and the iframe shows "refused to connect".
+ *
+ * Instead, fall back to the deployment's own Vercel URL (`VERCEL_BRANCH_URL`
+ * for the stable per-branch alias, else the per-deployment `VERCEL_URL`).
+ * That URL is guaranteed to resolve to the same Next app the parent page is
+ * served from, so the iframe loads. We trade cross-origin cookie isolation
+ * for reliability in non-production: the iframe `sandbox` attribute still
+ * provides JS-level isolation, and preview deployments aren't authenticated
+ * surfaces. Set {@link NEXT_PUBLIC_BLOCK_SANDBOX_URL} on a preview to opt
+ * back into a sibling origin (e.g. for testing the cookie-isolation path).
  */
 const generateSandboxBaseUrl = (): string => {
   if (isProduction) {
@@ -69,9 +83,17 @@ const generateSandboxBaseUrl = (): string => {
     return deploymentUrl;
   }
 
-  const branch = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF;
+  if (process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL) {
+    return process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL;
+  }
 
-  if (!branch) {
+  // Vercel exposes both env vars on preview deployments. Prefer the per-branch
+  // alias (stable across redeploys of the same branch) and fall back to the
+  // per-deployment URL.
+  const previewHost =
+    process.env.VERCEL_BRANCH_URL ?? process.env.NEXT_PUBLIC_VERCEL_URL;
+
+  if (!previewHost) {
     // eslint-disable-next-line no-console
     console.warn(
       "Running locally: Hub iFrame has same origin as main app. Block code can make authenticated requests to main app API.",
@@ -79,29 +101,7 @@ const generateSandboxBaseUrl = (): string => {
     return "";
   }
 
-  // @see https://vercel.com/docs/concepts/deployments/generated-urls
-  // @see https://vercel.com/docs/concepts/deployments/generated-urls#url-components
-  const branchSlug = branch
-    .toLowerCase()
-    .replace(/\./g, "")
-    .replace(/\//, "-")
-    .replace(/[/_]/g, "")
-    .replace(/[^\w-]+/g, "-");
-
-  const projectName = "blockprotocol";
-  const prefix = isFork ? "git-fork-" : "git-";
-  const rawBranchSubdomain = `${projectName}-${prefix}${branchSlug}`;
-
-  const branchSubdomain =
-    rawBranchSubdomain.length > 63
-      ? `${rawBranchSubdomain.slice(0, 56)}-${crypto
-          .createHash("sha256")
-          .update(prefix + branch + projectName)
-          .digest("hex")
-          .slice(0, 6)}`
-      : rawBranchSubdomain;
-
-  return `https://${branchSubdomain}.stage.hash.ai`;
+  return previewHost.startsWith("http") ? previewHost : `https://${previewHost}`;
 };
 
 const Bullet: FunctionComponent = () => {
