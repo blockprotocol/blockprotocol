@@ -45,13 +45,43 @@ export const fallbackVersionChain = (
 };
 
 /**
- * Human-readable label for the version picker. The latest version is
- * surfaced as "Latest (X.Y)"; others as "Version X.Y".
+ * Versions that are still working drafts rather than published releases.
+ *
+ * A "draft" version is one whose pages still ship the working-draft
+ * `<GitHubInfoCard />` callout (see `github-info-card.tsx`) — i.e. its
+ * content is being iterated on in public and shouldn't be presented to
+ * readers as the canonical, released version of the spec/docs. The
+ * version picker uses this to label the entry as "Draft (X.Y)" instead
+ * of "Latest (X.Y)" so users coming from older content don't mistake
+ * the in-flight version for the current published one.
+ *
+ * Treat this as the source of truth: when a draft is finalised, remove
+ * it from this list and the picker label flips back to "Latest" without
+ * any other code changes.
  */
-export const formatVersionLabel = (version: DocsVersion): string =>
-  version === LATEST_DOCS_VERSION
-    ? `Latest (${version})`
-    : `Version ${version}`;
+const DRAFT_DOCS_VERSIONS: readonly DocsVersion[] = ["0.4"];
+
+export const isDraftVersion = (version: DocsVersion): boolean =>
+  DRAFT_DOCS_VERSIONS.includes(version);
+
+/**
+ * Human-readable label for the version picker.
+ *
+ * - Drafts are surfaced as `Draft (X.Y)`, regardless of whether they're
+ *   also the latest version, because being the newest entry in
+ *   {@link DOCS_VERSIONS} doesn't imply the spec is finalised.
+ * - The latest non-draft version is surfaced as `Latest (X.Y)`.
+ * - Older non-draft versions are surfaced as `Version X.Y`.
+ */
+export const formatVersionLabel = (version: DocsVersion): string => {
+  if (isDraftVersion(version)) {
+    return `Draft (${version})`;
+  }
+  if (version === LATEST_DOCS_VERSION) {
+    return `Latest (${version})`;
+  }
+  return `Version ${version}`;
+};
 
 /**
  * Returns versions newer than `version`, ordered newest-first. Walks the
