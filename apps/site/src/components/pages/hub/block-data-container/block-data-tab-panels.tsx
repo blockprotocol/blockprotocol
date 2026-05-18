@@ -1,4 +1,4 @@
-import { Box, BoxProps, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { Snippet } from "../../../snippet";

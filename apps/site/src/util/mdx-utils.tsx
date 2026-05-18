@@ -306,6 +306,45 @@ export const getPage = (params: {
   };
 };
 
+/**
+ * Try to read `fileName` from `pathToDirectory`; if it doesn't exist there,
+ * fall through `fallbackDirs` in order. The returned page keeps `href` and
+ * `markdownFilePath` of the matched file's location — callers that need the
+ * overlay's href instead should rewrite it explicitly.
+ */
+const getPageWithFallback = (params: {
+  pathToDirectory: string;
+  fileName: string;
+  fallbackDirs: string[];
+}): SiteMapPage | undefined => {
+  const { pathToDirectory, fileName, fallbackDirs } = params;
+
+  for (const dir of [pathToDirectory, ...fallbackDirs]) {
+    const candidate = path.join(process.cwd(), `src/_pages/${dir}/${fileName}`);
+    if (fs.existsSync(candidate)) {
+      const page = getPage({ pathToDirectory: dir, fileName });
+      if (dir === pathToDirectory) {
+        return page;
+      }
+
+      // Rewrite the href so the inherited page is reachable at the overlay's
+      // path rather than the fallback version's path — the actual MDX content
+      // is resolved separately by `getSerializedPageForVersion` and walks the
+      // fallback chain at render time, so we just need the link target right.
+      const baseSlug = `/${pathToDirectory.replace(/\d+_/g, "")}`;
+      const fallbackSlug = `/${dir.replace(/\d+_/g, "")}`;
+      return {
+        ...page,
+        href: page.href.startsWith(fallbackSlug)
+          ? `${baseSlug}${page.href.slice(fallbackSlug.length)}`
+          : page.href,
+      };
+    }
+  }
+
+  return undefined;
+};
+
 // Get the structure of a all MDX files in a given directory
 export const getAllPages = (params: {
   pathToDirectory: string;
@@ -372,45 +411,6 @@ export const getAllPages = (params: {
       isRfc,
     });
   });
-};
-
-/**
- * Try to read `fileName` from `pathToDirectory`; if it doesn't exist there,
- * fall through `fallbackDirs` in order. The returned page keeps `href` and
- * `markdownFilePath` of the matched file's location — callers that need the
- * overlay's href instead should rewrite it explicitly.
- */
-const getPageWithFallback = (params: {
-  pathToDirectory: string;
-  fileName: string;
-  fallbackDirs: string[];
-}): SiteMapPage | undefined => {
-  const { pathToDirectory, fileName, fallbackDirs } = params;
-
-  for (const dir of [pathToDirectory, ...fallbackDirs]) {
-    const candidate = path.join(process.cwd(), `src/_pages/${dir}/${fileName}`);
-    if (fs.existsSync(candidate)) {
-      const page = getPage({ pathToDirectory: dir, fileName });
-      if (dir === pathToDirectory) {
-        return page;
-      }
-
-      // Rewrite the href so the inherited page is reachable at the overlay's
-      // path rather than the fallback version's path — the actual MDX content
-      // is resolved separately by `getSerializedPageForVersion` and walks the
-      // fallback chain at render time, so we just need the link target right.
-      const baseSlug = `/${pathToDirectory.replace(/\d+_/g, "")}`;
-      const fallbackSlug = `/${dir.replace(/\d+_/g, "")}`;
-      return {
-        ...page,
-        href: page.href.startsWith(fallbackSlug)
-          ? `${baseSlug}${page.href.slice(fallbackSlug.length)}`
-          : page.href,
-      };
-    }
-  }
-
-  return undefined;
 };
 
 /**

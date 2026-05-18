@@ -55,7 +55,7 @@ export const InfoCard: FunctionComponent<InfoCardProps> = ({
         }}
       >
         {isValidElement(child)
-          ? (child.props as { children?: React.ReactNode }).children
+          ? (child.props as { children?: ReactNode }).children
           : child}
       </Typography>
     );

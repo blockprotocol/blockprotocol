@@ -20,6 +20,8 @@ const axiosClient = axios.create({
   withCredentials: true,
 });
 
+// Axios interceptors are designed to mutate the request config in place.
+/* eslint-disable no-param-reassign */
 axiosClient.interceptors.request.use((config) => {
   config.baseURL = getBaseUrl();
 
@@ -33,6 +35,7 @@ axiosClient.interceptors.request.use((config) => {
 
   return config;
 });
+/* eslint-enable no-param-reassign */
 
 axiosRetry(axiosClient, { retries: 0 });
 

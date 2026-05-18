@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { m, Variants } from "framer-motion";
 import Image from "next/legacy/image";
+import type { ComponentProps } from "react";
 
 import helixBoxes from "../../../../public/assets/new-home/helix-boxes.webp";
 import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "../../navbar";
@@ -34,7 +35,7 @@ const fadeInChildren: Variants = {
 const BaseAnimatedTypography = m(Typography);
 
 const AnimatedTypography = (
-  props: React.ComponentProps<typeof BaseAnimatedTypography>,
+  props: ComponentProps<typeof BaseAnimatedTypography>,
 ) => (
   <BaseAnimatedTypography
     variants={fadeInAndMoveDownChildren}

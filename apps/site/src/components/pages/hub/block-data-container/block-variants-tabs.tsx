@@ -7,7 +7,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { FunctionComponent } from "react";
+import { FunctionComponent, SyntheticEvent } from "react";
 
 type BlockVariantsTabsProps = {
   blockVariantsTab: number;
@@ -69,7 +69,7 @@ export const BlockVariantsTabs: FunctionComponent<BlockVariantsTabsProps> = ({
         },
       }}
       value={blockVariantsTab}
-      onChange={(_event: React.SyntheticEvent, newValue: number) =>
+      onChange={(_event: SyntheticEvent, newValue: number) =>
         setBlockVariantsTab(newValue)
       }
     >

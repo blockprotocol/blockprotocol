@@ -1,4 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
+import type { Page } from "@playwright/test";
+// eslint-disable-next-line no-restricted-imports
 import { expect, test as base } from "playwright-test-coverage";
 
 // eslint-disable-next-line no-restricted-imports
@@ -59,10 +61,6 @@ export const tolerateCustomConsoleMessages = (
       : customMatches;
 };
 
-// eslint-disable-next-line no-restricted-imports
-import type { Page } from "@playwright/test";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PageFixture = any;
 
 /**
