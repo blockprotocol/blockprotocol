@@ -7,10 +7,7 @@ import { Box, Paper, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { FunctionComponent, ReactNode } from "react";
 
-import {
-  isDocsVersion,
-  LATEST_DOCS_VERSION,
-} from "../../../lib/docs-versions";
+import { isDocsVersion, LATEST_DOCS_VERSION } from "../../../lib/docs-versions";
 import { FontAwesomeIcon } from "../../icons";
 import { Link } from "../../link";
 import { LinkButton } from "../../link-button";
@@ -50,8 +47,8 @@ const workingDraftContent: CardContent = {
     <>
       This specification is currently in progress. We’re drafting it in public
       to gather feedback and improve the final document. If you have any
-      suggestions or improvements you would like to add, or questions you
-      would like to ask, feel free to submit a PR or open a discussion on{" "}
+      suggestions or improvements you would like to add, or questions you would
+      like to ask, feel free to submit a PR or open a discussion on{" "}
       <Link
         href="https://github.com/blockprotocol/blockprotocol"
         sx={{ ":focus-visible": { outlineColor: "currentcolor" } }}

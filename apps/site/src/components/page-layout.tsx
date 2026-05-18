@@ -19,13 +19,16 @@ export const PageLayout: FunctionComponent<PageLayoutProps> = ({
   const { pathname, asPath } = useRouter();
 
   const banner = useMemo(
-    () => BANNERS.find(({ shouldDisplay }) => shouldDisplay({ pathname, asPath })),
+    () =>
+      BANNERS.find(({ shouldDisplay }) => shouldDisplay({ pathname, asPath })),
     [pathname, asPath],
   );
 
   return (
     <Box display="flex" flexDirection="column" sx={{ minHeight: "100vh" }}>
-      <NavbarContainer blockMetadata={blockMetadata}>{children}</NavbarContainer>
+      <NavbarContainer blockMetadata={blockMetadata}>
+        {children}
+      </NavbarContainer>
       {banner ? <FooterBanner banner={banner} /> : null}
       <Footer
         sx={{

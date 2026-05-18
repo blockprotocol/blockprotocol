@@ -195,7 +195,9 @@ export const getSerializedPageForVersion = async (params: {
   }
 
   throw new Error(
-    `No version of ${section}/${parts.join("/")} found in the fallback chain starting at ${requestedVersion}.`,
+    `No version of ${section}/${parts.join(
+      "/",
+    )} found in the fallback chain starting at ${requestedVersion}.`,
   );
 };
 
@@ -248,7 +250,9 @@ export const getPage = (params: {
     ? `../../rfcs/text/${fileName}`
     : `src/_pages/${pathToDirectory}/${fileName}`;
 
-  const fileBuffer = fs.readFileSync(path.join(process.cwd(), markdownFilePath));
+  const fileBuffer = fs.readFileSync(
+    path.join(process.cwd(), markdownFilePath),
+  );
   const { data: frontmatter } = matter(fileBuffer);
 
   const headings = getHeadingsFromMarkdown(markdownFilePath);

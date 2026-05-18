@@ -21,7 +21,10 @@ export type SignupNotifyResponse = {
  * pushed into the same Mailchimp list used by other newsletter sign-ups so
  * the marketing team has a single source of truth.
  */
-export default createBaseHandler<SignupNotifyRequestBody, SignupNotifyResponse>()
+export default createBaseHandler<
+  SignupNotifyRequestBody,
+  SignupNotifyResponse
+>()
   .use(bodyValidator("email").isEmail().toLowerCase())
   .post(async (req, res) => {
     const errors = validationResult(req);

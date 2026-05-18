@@ -16,12 +16,7 @@ const PRODUCTION_ORIGIN = "https://blockprotocol.org";
 //   - prachi123 (block-proto-practice)
 //   - rikhen    (test-block)
 //   - jerlendds (test-input-field)
-const SHORTNAMES = [
-  "alfie",
-  "blockprotocol",
-  "hash",
-  "tldraw",
-] as const;
+const SHORTNAMES = ["alfie", "blockprotocol", "hash", "tldraw"] as const;
 
 export type SnapshotUser = {
   shortname: string;
@@ -42,16 +37,16 @@ const fetchJson = async <T>(url: string): Promise<T> => {
   });
 
   if (!response.ok) {
-    throw new Error(`GET ${url} failed: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `GET ${url} failed: ${response.status} ${response.statusText}`,
+    );
   }
 
   return (await response.json()) as T;
 };
 
 const script = async () => {
-  console.log(
-    chalk.bold(`Snapshotting Hub data from ${PRODUCTION_ORIGIN}...`),
-  );
+  console.log(chalk.bold(`Snapshotting Hub data from ${PRODUCTION_ORIGIN}...`));
 
   const users: SnapshotUser[] = [];
   const blocks: ExpandedBlockMetadata[] = [];
@@ -81,9 +76,7 @@ const script = async () => {
     process.stdout.write(` → ${userBlocks.length} block(s)\n`);
   }
 
-  blocks.sort((a, b) =>
-    a.pathWithNamespace.localeCompare(b.pathWithNamespace),
-  );
+  blocks.sort((a, b) => a.pathWithNamespace.localeCompare(b.pathWithNamespace));
   users.sort((a, b) => a.shortname.localeCompare(b.shortname));
 
   const snapshot: HubSnapshot = {

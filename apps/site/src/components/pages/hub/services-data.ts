@@ -222,8 +222,7 @@ const SERVICES: ServiceInput[] = [
   {
     provider: "mistral",
     name: "Models API",
-    description:
-      "Open-weight and frontier language models hosted in Europe.",
+    description: "Open-weight and frontier language models hosted in Europe.",
     category: "Text & reasoning",
   },
   {
@@ -284,15 +283,13 @@ const SERVICES: ServiceInput[] = [
   {
     provider: "mapbox",
     name: "Geocoding API",
-    description:
-      "Convert addresses to coordinates and back, worldwide.",
+    description: "Convert addresses to coordinates and back, worldwide.",
     category: "Maps & places",
   },
   {
     provider: "mapbox",
     name: "Directions API",
-    description:
-      "Driving, walking, cycling, and traffic-aware routing.",
+    description: "Driving, walking, cycling, and traffic-aware routing.",
     category: "Maps & places",
   },
   {
@@ -305,8 +302,7 @@ const SERVICES: ServiceInput[] = [
   {
     provider: "mapbox",
     name: "Static Images API",
-    description:
-      "On-demand map images for thumbnails, previews, and embeds.",
+    description: "On-demand map images for thumbnails, previews, and embeds.",
     category: "Maps & places",
   },
   {
@@ -328,8 +324,7 @@ const SERVICES: ServiceInput[] = [
   {
     provider: "pinecone",
     name: "Vector Database",
-    description:
-      "Managed vector search for retrieval-augmented generation.",
+    description: "Managed vector search for retrieval-augmented generation.",
     category: "Embeddings",
   },
   {
@@ -344,8 +339,7 @@ const SERVICES: ServiceInput[] = [
   {
     provider: "stripe",
     name: "Payments API",
-    description:
-      "Accept card, wallet, bank, and BNPL payments worldwide.",
+    description: "Accept card, wallet, bank, and BNPL payments worldwide.",
     category: "Payments",
   },
   {
@@ -385,8 +379,7 @@ const SERVICES: ServiceInput[] = [
   {
     provider: "resend",
     name: "Emails API",
-    description:
-      "Send transactional and broadcast email from React templates.",
+    description: "Send transactional and broadcast email from React templates.",
     category: "Communications",
   },
   {
@@ -442,8 +435,7 @@ const SERVICES: ServiceInput[] = [
   {
     provider: "spotify",
     name: "Web API",
-    description:
-      "Catalog metadata, playback control, and user listening data.",
+    description: "Catalog metadata, playback control, and user listening data.",
     category: "Media",
   },
 

@@ -124,7 +124,9 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(finalCTA).toBeVisible();
 
-  await expect(finalCTA.locator("text=Build with the Block Protocol")).toBeVisible();
+  await expect(
+    finalCTA.locator("text=Build with the Block Protocol"),
+  ).toBeVisible();
   await expect(finalCTA.locator("text=Add blocks to your app")).toBeVisible();
   await expect(
     finalCTA.locator("text=Contribute to a growing, open source community"),

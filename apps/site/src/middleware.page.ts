@@ -56,7 +56,9 @@ const redirectToLatestVersionIfMissing = (
 
   const newUrl = new URL(url);
   const rest = segments.slice(1).join("/");
-  newUrl.pathname = `/${section}/${LATEST_DOCS_VERSION}${rest ? `/${rest}` : ""}`;
+  newUrl.pathname = `/${section}/${LATEST_DOCS_VERSION}${
+    rest ? `/${rest}` : ""
+  }`;
   return NextResponse.redirect(newUrl, 308);
 };
 

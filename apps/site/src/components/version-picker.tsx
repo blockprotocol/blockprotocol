@@ -99,8 +99,7 @@ export const VersionPicker: FunctionComponent = () => {
     // If the chosen version's union doesn't contain the current slug, the
     // static handler would 404. Fall back to that version's index so the
     // picker is always safe to click.
-    const targetPages =
-      versionedSubPages?.[location.section]?.[version] ?? [];
+    const targetPages = versionedSubPages?.[location.section]?.[version] ?? [];
     const targetExists = flattenPages(targetPages).some(
       ({ href }) => href === targetHref,
     );
@@ -216,10 +215,7 @@ export const VersionPicker: FunctionComponent = () => {
             >
               <ListItemIcon sx={{ minWidth: "28px !important" }}>
                 {isSelected ? (
-                  <FontAwesomeIcon
-                    icon={faCheck}
-                    sx={{ fontSize: 12 }}
-                  />
+                  <FontAwesomeIcon icon={faCheck} sx={{ fontSize: 12 }} />
                 ) : null}
               </ListItemIcon>
               <ListItemText>

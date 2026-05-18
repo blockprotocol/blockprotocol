@@ -1,9 +1,4 @@
-import {
-  FunctionComponent,
-  useCallback,
-  useEffect,
-  useRef,
-} from "react";
+import { FunctionComponent, useCallback, useEffect, useRef } from "react";
 
 import { ExpandedBlockMetadata } from "../../../../lib/blocks";
 

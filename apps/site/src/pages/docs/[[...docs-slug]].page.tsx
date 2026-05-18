@@ -42,9 +42,7 @@ type DocsPageProps = {
 const flattenPages = (pages: SiteMapPage[]): SiteMapPage[] =>
   pages.flatMap((page) => [page, ...flattenPages(page.subPages ?? [])]);
 
-export const getStaticPaths: GetStaticPaths<
-  DocsPageQueryParams
-> = async () => {
+export const getStaticPaths: GetStaticPaths<DocsPageQueryParams> = async () => {
   const paths = DOCS_VERSIONS.flatMap((version) => {
     const versionPages = docsPagesByVersion[version] ?? [];
     const allHrefs = flattenPages(versionPages).map(({ href }) => href);
@@ -92,7 +90,9 @@ export const getStaticProps: GetStaticProps<
         parts: slugRest.length ? slugRest : ["index"],
       });
 
-    const pathname = `/docs/${maybeVersion}${slugRest.length ? `/${slugRest.join("/")}` : ""}`;
+    const pathname = `/docs/${maybeVersion}${
+      slugRest.length ? `/${slugRest.join("/")}` : ""
+    }`;
     const deprecatedNoticeHref = findDeprecatedNoticeHref({
       versionedSubPages: docsPagesByVersion,
       section: "docs",

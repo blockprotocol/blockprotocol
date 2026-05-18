@@ -54,9 +54,7 @@ export type SiteMap = {
   };
 };
 
-export const getDocsPagesForVersion = (
-  version: DocsVersion,
-): SiteMapPage[] =>
+export const getDocsPagesForVersion = (version: DocsVersion): SiteMapPage[] =>
   unionVersionedPages({ section: "docs", forVersion: version });
 
 /**
@@ -88,9 +86,7 @@ const getSpecLandingPageForVersion = (
   );
 };
 
-export const getSpecPageForVersion = (
-  version: DocsVersion,
-): SiteMapPage => ({
+export const getSpecPageForVersion = (version: DocsVersion): SiteMapPage => ({
   ...getSpecLandingPageForVersion(version),
   subPages: unionVersionedPages({
     section: "spec",
@@ -99,9 +95,7 @@ export const getSpecPageForVersion = (
   }),
 });
 
-const buildVersionedSubPages = (
-  section: VersionedSection,
-): VersionedSubPages =>
+const buildVersionedSubPages = (section: VersionedSection): VersionedSubPages =>
   Object.fromEntries(
     DOCS_VERSIONS.map((version) => [
       version,
@@ -139,11 +133,7 @@ export const generateSiteMap = (): SiteMap => {
       {
         title: "Docs",
         href: "/docs",
-        subPages: [
-          ...latestDocsSubPages,
-          latestSpecSubPage,
-          getRoadmapPage(),
-        ],
+        subPages: [...latestDocsSubPages, latestSpecSubPage, getRoadmapPage()],
       },
     ],
     versionedSubPages,

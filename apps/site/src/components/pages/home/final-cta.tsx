@@ -41,7 +41,11 @@ export const FinalCTA: NextPage = () => {
           gap: 3,
         })}
       >
-        <Typography variant="bpHeading2" component="h2" sx={{ fontWeight: 700 }}>
+        <Typography
+          variant="bpHeading2"
+          component="h2"
+          sx={{ fontWeight: 700 }}
+        >
           Build with the Block Protocol
         </Typography>
         <Typography

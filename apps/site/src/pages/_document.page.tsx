@@ -116,5 +116,4 @@ MyDocument.getInitialProps = async (ctx) => {
   };
 };
 
- 
 export default withTwindDocument(twindConfig, MyDocument as any);

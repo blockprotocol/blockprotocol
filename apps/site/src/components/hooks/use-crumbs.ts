@@ -2,11 +2,7 @@ import { BlockMetadata } from "@blockprotocol/core";
 import { useMemo } from "react";
 
 import { isDocsVersion, isVersionedSection } from "../../lib/docs-versions";
-import {
-  SiteMap,
-  SiteMapPage,
-  SiteMapPageSection,
-} from "../../lib/sitemap";
+import { SiteMap, SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { itemIsPage } from "../navbar/util";
 import { generatePathWithoutParams } from "../shared";
 
@@ -110,9 +106,7 @@ const buildVersionedSearchRoot = (params: {
     ];
   }
 
-  return pages.filter(({ title }) =>
-    ["Specification", "Docs"].includes(title),
-  );
+  return pages.filter(({ title }) => ["Specification", "Docs"].includes(title));
 };
 
 export const useCrumbs = (

@@ -42,9 +42,7 @@ type SpecPageProps = {
 const flattenPages = (pages: SiteMapPage[]): SiteMapPage[] =>
   pages.flatMap((page) => [page, ...flattenPages(page.subPages ?? [])]);
 
-export const getStaticPaths: GetStaticPaths<
-  SpecPageQueryParams
-> = async () => {
+export const getStaticPaths: GetStaticPaths<SpecPageQueryParams> = async () => {
   const paths = DOCS_VERSIONS.flatMap((version) => {
     const versionPages = specPagesByVersion[version] ?? [];
     const allHrefs = flattenPages(versionPages).map(({ href }) => href);
@@ -87,7 +85,9 @@ export const getStaticProps: GetStaticProps<
         parts: slugRest.length ? slugRest : ["index"],
       });
 
-    const pathname = `/spec/${maybeVersion}${slugRest.length ? `/${slugRest.join("/")}` : ""}`;
+    const pathname = `/spec/${maybeVersion}${
+      slugRest.length ? `/${slugRest.join("/")}` : ""
+    }`;
     const deprecatedNoticeHref = findDeprecatedNoticeHref({
       versionedSubPages: specPagesByVersion,
       section: "spec",

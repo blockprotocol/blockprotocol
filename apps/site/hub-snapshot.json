@@ -116,9 +116,7 @@
         "entryPoint": "react"
       },
       "displayName": "AI Chat",
-      "examples": [
-        {}
-      ],
+      "examples": [{}],
       "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-chat/public/ai-chat-icon.svg",
       "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-chat/public/ai-chat-preview.png",
       "protocol": "0.3",
@@ -169,9 +167,7 @@
         "entryPoint": "react"
       },
       "displayName": "AI Image",
-      "examples": [
-        {}
-      ],
+      "examples": [{}],
       "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-image/public/ai-image.svg",
       "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-image/public/block-preview.png",
       "protocol": "0.3",
@@ -212,9 +208,7 @@
         "entryPoint": "react"
       },
       "displayName": "AI Text",
-      "examples": [
-        {}
-      ],
+      "examples": [{}],
       "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-text/public/ai-text.svg",
       "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-text/public/block-preview.png",
       "protocol": "0.3",
@@ -351,9 +345,7 @@
           ]
         }
       },
-      "examples": [
-        {}
-      ],
+      "examples": [{}],
       "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/chart/public/chart-line-regular.svg",
       "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/chart/public/block-preview.svg",
       "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/chart/main.21343d962f4d5a5420e0.js",
@@ -824,9 +816,7 @@
       "displayName": "Image",
       "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/image/public/image.svg",
       "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/image/public/preview.svg",
-      "examples": [
-        {}
-      ],
+      "examples": [{}],
       "protocol": "0.3",
       "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/image/main.b3448d6da5ad62d69b50.js",
       "blockSitePath": "/@hash/blocks/image",
@@ -1252,9 +1242,7 @@
       "displayName": "Video",
       "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/video/public/play-box-outline.svg",
       "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/video/public/preview.svg",
-      "examples": [
-        {}
-      ],
+      "examples": [{}],
       "protocol": "0.3",
       "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/video/main.f5952c61a4a9a1e4292b.js",
       "blockSitePath": "/@hash/blocks/video",

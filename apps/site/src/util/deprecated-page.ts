@@ -1,7 +1,4 @@
-import {
-  DocsVersion,
-  versionsNewerThan,
-} from "../lib/docs-versions";
+import { DocsVersion, versionsNewerThan } from "../lib/docs-versions";
 import { SiteMapPage, VersionedSubPages } from "../lib/sitemap";
 
 const flattenPages = (pages: SiteMapPage[]): SiteMapPage[] =>
