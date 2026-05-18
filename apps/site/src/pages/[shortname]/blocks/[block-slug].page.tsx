@@ -47,26 +47,44 @@ const markdownComponents = Object.fromEntries(
  * blockprotocol.org app. {@link NEXT_PUBLIC_BLOCK_SANDBOX_URL} carries that
  * sibling host (e.g. `https://blocks.blockprotocol.org`); the middleware
  * additionally moves `…/sandboxed-demo` requests onto it (see
- * `middleware.page.ts`).
+ * `middleware.page.ts`). The corresponding `frame-ancestors` CSP on the
+ * sandbox response (see `next.config.js`) explicitly allows
+ * {@link NEXT_PUBLIC_FRONTEND_URL} as the parent origin.
  *
- * In PREVIEW we don't have a stable wildcard sibling per branch. The earlier
- * approach — synthesizing `blockprotocol-git-{branchSlug}.stage.hash.ai`
- * from the branch name and hoping a `*.stage.hash.ai` wildcard pointed at the
- * matching Vercel preview — broke as soon as branch names started getting
- * Vercel-supplied team/project hashes that this code can't see (long branch
- * names hit the 63-char DNS-label cap and get a SHA-derived suffix that does
- * not match Vercel's actual alias). The result is a hostname like
- * `blockprotocol-git-cursor-…-7dab.stage.hash.ai` that simply has no DNS,
- * and the iframe shows "refused to connect".
+ * In NON-PRODUCTION (Vercel previews and local dev) we deliberately use a
+ * same-origin iframe — i.e. an empty base URL so the iframe `src` resolves
+ * relative to the parent page and shares its origin. That avoids three
+ * compounding fragility issues that previously made previews break:
  *
- * Instead, fall back to the deployment's own Vercel URL (`VERCEL_BRANCH_URL`
- * for the stable per-branch alias, else the per-deployment `VERCEL_URL`).
- * That URL is guaranteed to resolve to the same Next app the parent page is
- * served from, so the iframe loads. We trade cross-origin cookie isolation
- * for reliability in non-production: the iframe `sandbox` attribute still
- * provides JS-level isolation, and preview deployments aren't authenticated
- * surfaces. Set {@link NEXT_PUBLIC_BLOCK_SANDBOX_URL} on a preview to opt
- * back into a sibling origin (e.g. for testing the cookie-isolation path).
+ *   1. **Hostname synthesis.** The earlier code derived the iframe origin
+ *      from the branch name (`blockprotocol-git-{branchSlug}.stage.hash.ai`)
+ *      and relied on a `*.stage.hash.ai` wildcard. As soon as Vercel started
+ *      adding team/project hashes to its actual aliases — and as soon as a
+ *      branch name was long enough to trip the 63-char DNS-label cap and
+ *      get a SHA-derived suffix this code couldn't see — the synthesized
+ *      hostname diverged from any real deployment, leaving the iframe
+ *      pointed at an unreachable host (`…refused to connect`).
+ *   2. **Stale env vars.** Honoring {@link NEXT_PUBLIC_BLOCK_SANDBOX_URL}
+ *      on previews used to be the escape hatch, but if the preview
+ *      environment had inherited the broken synthesized URL via its
+ *      environment configuration, that escape hatch silently re-introduced
+ *      the same dead host on every preview. The variable is intended for
+ *      production; the middleware even names its parsed form
+ *      `productionSandboxHost`.
+ *   3. **CSP `frame-ancestors`.** Pointing the iframe at the deployment's
+ *      `*.vercel.app` URL while the parent is on `*.stage.hash.ai` (or
+ *      vice-versa) defeats the sandbox-response CSP, which only allows
+ *      `'self'` plus {@link NEXT_PUBLIC_FRONTEND_URL}. Same-origin in
+ *      preview avoids this entirely.
+ *
+ * The iframe's `sandbox="allow-forms allow-scripts allow-same-origin"`
+ * attribute still provides JS-level isolation regardless of origin, and
+ * preview deployments aren't authenticated/sensitive surfaces, so the
+ * cross-origin cookie isolation that production needs is not load-bearing
+ * for previews. If a non-production deployment ever needs to exercise the
+ * production cookie-isolation path explicitly, set `NEXT_PUBLIC_VERCEL_ENV`
+ * to `"production"` for that deployment so the production branch below
+ * runs end-to-end.
  */
 const generateSandboxBaseUrl = (): string => {
   if (isProduction) {
@@ -83,25 +101,7 @@ const generateSandboxBaseUrl = (): string => {
     return deploymentUrl;
   }
 
-  if (process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL) {
-    return process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL;
-  }
-
-  // Vercel exposes both env vars on preview deployments. Prefer the per-branch
-  // alias (stable across redeploys of the same branch) and fall back to the
-  // per-deployment URL.
-  const previewHost =
-    process.env.VERCEL_BRANCH_URL ?? process.env.NEXT_PUBLIC_VERCEL_URL;
-
-  if (!previewHost) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "Running locally: Hub iFrame has same origin as main app. Block code can make authenticated requests to main app API.",
-    );
-    return "";
-  }
-
-  return previewHost.startsWith("http") ? previewHost : `https://${previewHost}`;
+  return "";
 };
 
 const Bullet: FunctionComponent = () => {
