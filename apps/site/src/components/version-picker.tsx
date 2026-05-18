@@ -179,7 +179,10 @@ export const VersionPicker: FunctionComponent = () => {
             <Typography
               component="span"
               sx={(theme) => ({
-                display: { xs: "none", md: "inline" },
+                // Hide the inline copy until `lg` (≥1200px). Below that the
+                // navbar competes for room with the right-side links and the
+                // tooltip on the icon is enough to surface the same message.
+                display: { xs: "none", lg: "inline" },
                 color: theme.palette.purple[600],
                 fontSize: 12,
                 fontWeight: 500,

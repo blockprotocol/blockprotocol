@@ -20,13 +20,15 @@ import {
   getRouteHubBrowseType,
   useRouteChangingWithTrigger as useRouteChangingWithListener,
 } from "./hub-utils";
+import { ServiceItem } from "./service-item";
 
 export const useRouteHubBrowseType = () => {
   const router = useRouter();
   return getRouteHubBrowseType(router.query);
 };
 
-export type HubItemDescription = {
+export type BlockItemDescription = {
+  kind: "block";
   image?: string | null;
   title: string;
   description?: string;
@@ -37,10 +39,26 @@ export type HubItemDescription = {
   verified?: boolean;
 };
 
-const HubItem = ({
+export type ServiceItemDescription = {
+  kind: "service";
+  /** Stable id used for React keys (provider doesn't enforce uniqueness alone). */
+  id: string;
+  provider: string;
+  /** Lowercase, handle-like representation rendered as `@providerHandle`. */
+  providerHandle: string;
+  providerColor: string;
+  providerInitial: string;
+  name: string;
+  description: string;
+  category: string;
+};
+
+export type HubItemDescription = BlockItemDescription | ServiceItemDescription;
+
+const BlockItem = ({
   item: { image, title, description, author, version, updated, url, verified },
 }: {
-  item: HubItemDescription;
+  item: BlockItemDescription;
 }) => (
   <Stack direction="row" spacing={2} alignItems="start">
     {image ? (
@@ -175,6 +193,10 @@ const HubBrowseHeaderComponents = {
     return (
       <HubHeaderWrapper>
         <HubHeading>Services</HubHeading>
+        <HubSubHeading>
+          Services give blocks access to third-party APIs — for language models,
+          maps, payments, communications, and more
+        </HubSubHeading>
       </HubHeaderWrapper>
     );
   },
@@ -281,8 +303,15 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
                   }}
                 >
                   {listing.map((item) => (
-                    <m.div key={item.url} variants={fadeInChildren}>
-                      <HubItem item={item} />
+                    <m.div
+                      key={item.kind === "block" ? item.url : item.id}
+                      variants={fadeInChildren}
+                    >
+                      {item.kind === "block" ? (
+                        <BlockItem item={item} />
+                      ) : (
+                        <ServiceItem item={item} />
+                      )}
                     </m.div>
                   ))}
                 </Box>

@@ -19,8 +19,14 @@ const SearchListItem = forwardRef<HTMLButtonElement, SearchItemProps>(
   ({ searchResult, getHighlight, closeModal }, ref) => {
     const { _highlightResult, slug } = searchResult;
 
-    const { pages } = useContext(SiteMapContext);
-    const crumbs = useCrumbs(pages, searchResult.slug);
+    const { pages, versionedSubPages } = useContext(SiteMapContext);
+    const crumbs = useCrumbs(
+      pages,
+      searchResult.slug,
+      undefined,
+      undefined,
+      versionedSubPages,
+    );
 
     return (
       <LinkButton

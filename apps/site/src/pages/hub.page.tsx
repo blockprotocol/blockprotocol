@@ -16,12 +16,11 @@ import { BlockProtocolIcon, FontAwesomeIcon } from "../components/icons";
 import { Link } from "../components/link";
 import { HubItemDescription, HubList } from "../components/pages/hub/hub";
 import { getRouteHubBrowseType } from "../components/pages/hub/hub-utils";
+import { getServiceListing } from "../components/pages/hub/services-data";
 import { getAllBlocks, getFeaturedBlocks } from "../lib/api/blocks/get";
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 import { excludeHiddenBlocks } from "../lib/excluded-blocks";
 import { COPY_FONT_FAMILY } from "../theme/typography";
-
-export const HUB_SERVICES_ENABLED = false;
 
 interface PageProps {
   featuredBlocks: BlockMetadata[];
@@ -35,6 +34,7 @@ const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
 
       return excludeHiddenBlocks(blocks).map(
         (item): HubItemDescription => ({
+          kind: "block",
           image: item.icon,
           author: item.author,
           title: item.displayName ?? "",
@@ -47,7 +47,7 @@ const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
       );
     },
     async services() {
-      return HUB_SERVICES_ENABLED ? [] : null;
+      return getServiceListing();
     },
   };
 
@@ -124,18 +124,14 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
             >
               blocks
             </Box>
-            {HUB_SERVICES_ENABLED ? (
-              <>
-                {" and "}
-                <Box
-                  component="strong"
-                  fontWeight={700}
-                  sx={{ color: "purple.60" }}
-                >
-                  services
-                </Box>
-              </>
-            ) : null}
+            {" and "}
+            <Box
+              component="strong"
+              fontWeight={700}
+              sx={{ color: "purple.60" }}
+            >
+              services
+            </Box>
           </Box>
         </Typography>
         <Typography

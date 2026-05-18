@@ -336,15 +336,27 @@ const Navbar: FunctionComponent<{
             <Box display="flex" alignItems="center">
               <Link
                 href="/"
+                onClick={(event) => {
+                  setMobileNavVisible(false);
+                  // When already on `/`, suppress Next.js's same-URL
+                  // navigation (which throws an "Invariant: attempted to hard
+                  // navigate to the same URL" runtime error) and treat the
+                  // logo click as a scroll-to-top instead.
+                  if (
+                    isHomePage &&
+                    typeof window !== "undefined" &&
+                    !window.location.hash
+                  ) {
+                    event.preventDefault();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
                 sx={{
                   color: ({ palette }) => palette.gray[90],
                 }}
                 className={navbarClasses.link}
               >
-                <BlockProtocolLogoIcon
-                  onClick={() => setMobileNavVisible(false)}
-                  sx={{ color: "inherit" }}
-                />
+                <BlockProtocolLogoIcon sx={{ color: "inherit" }} />
               </Link>
               {isDocs ? <VersionPicker /> : null}
             </Box>
@@ -485,7 +497,7 @@ export const NavbarContainer = ({
 }) => {
   const { route } = useRouter();
   const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
-  const { pages } = useContext(SiteMapContext);
+  const { pages, versionedSubPages } = useContext(SiteMapContext);
 
   const [breadcrumbsRef, breadcrumbsHeight] = useBreadcrumbsHeight();
 
@@ -494,6 +506,7 @@ export const NavbarContainer = ({
     hydrationFriendlyAsPath,
     route,
     blockMetadata,
+    versionedSubPages,
   );
 
   return (

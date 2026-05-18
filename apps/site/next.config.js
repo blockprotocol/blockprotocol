@@ -52,8 +52,12 @@ const nextConfig = {
         /**
          * allow fetching types as JSON from anywhere
          * @see ./src/middleware.page.ts for middleware which serves the JSON
+         *
+         * `:shortname(@[^/]+)` constrains the parameter to user/org handles
+         * (which always start with `@`) so system paths like `/docs/types`
+         * aren't accidentally captured.
          */
-        source: "/:shortname/types/:path*",
+        source: "/:shortname(@[^/]+)/types/:path*",
         headers: [
           {
             key: "access-control-allow-origin",
@@ -72,7 +76,7 @@ const nextConfig = {
          * In production, sandbox pages are served from a different host than the
          * main frontend, so we use CSP frame-ancestors which supports explicit origins.
          */
-        source: "/:shortname/blocks/:blockslug/sandboxed-demo",
+        source: "/:shortname(@[^/]+)/blocks/:blockslug/sandboxed-demo",
         headers: [
           {
             key: "Content-Security-Policy",
@@ -122,6 +126,13 @@ const nextConfig = {
       // Terms and Privacy are now authored on hash.ai. Sub-paths
       // (/legal/terms/dpa, /legal/privacy/cookies, etc.) collapse onto the
       // hash.ai section index because their slugs don't necessarily match.
+      // Sub-paths whose slugs DO match on hash.ai get their own explicit
+      // rules above the catch-all so the slug is preserved.
+      {
+        source: "/legal/terms/products",
+        destination: "https://hash.ai/legal/terms/products",
+        permanent: true,
+      },
       {
         source: "/legal/terms/:slug*",
         destination: "https://hash.ai/legal/terms",
@@ -312,12 +323,15 @@ const nextConfig = {
         permanent: false,
       },
       {
-        source: "/:shortname/all-types",
+        // `:shortname(@[^/]+)` constrains the parameter to user/org handles
+        // (which always start with `@`) so that system paths like
+        // `/docs/all-types` or `/docs/types` don't accidentally get captured.
+        source: "/:shortname(@[^/]+)/all-types",
         destination: "/:shortname",
         permanent: false,
       },
       {
-        source: "/:shortname/types/:path*",
+        source: "/:shortname(@[^/]+)/types/:path*",
         destination: "/:shortname",
         permanent: false,
       },
@@ -327,11 +341,11 @@ const nextConfig = {
   rewrites: () => {
     return [
       {
-        source: "/blocks/:shortname/:blockslug/block-metadata.json",
+        source: "/blocks/:shortname(@[^/]+)/:blockslug/block-metadata.json",
         destination: "/api/rewrites/block-metadata",
       },
       {
-        source: "/:shortname/blocks/:blockslug/sandboxed-demo",
+        source: "/:shortname(@[^/]+)/blocks/:blockslug/sandboxed-demo",
         destination: "/api/rewrites/sandboxed-block-demo",
       },
       {
