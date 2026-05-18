@@ -43,13 +43,10 @@ test("Home page should contain key elements", async ({ page }) => {
   await page.hover(`[data-testid='WordPress-button']`);
   await expect(page.locator("[data-testid='WordPress-tooltip']")).toBeVisible();
 
-  await expect(
-    page.locator("[data-testid='GitHub Blocks-button']"),
-  ).toBeVisible();
-  await page.hover(`[data-testid='GitHub Blocks-button']`);
-  await expect(
-    page.locator("[data-testid='GitHub Blocks-tooltip']"),
-  ).toBeVisible();
+  // The "GitHub Blocks" tooltip used to live alongside WordPress/HASH but
+  // was removed when the supported-applications section was tightened to
+  // shipping integrations + the "Planned" group. Don't reintroduce it here
+  // unless the section is rebuilt.
 
   await expect(page.locator("[data-testid='HASH-button']")).toBeVisible();
   await page.hover(`[data-testid='HASH-button']`);
@@ -100,7 +97,12 @@ test("Home page should contain key elements", async ({ page }) => {
   ).toBeVisible();
 
   // Carousel section
-  await expect(page.locator("text=Browse all Blocks")).toHaveAttribute(
+  // The "Browse all blocks" link rendering is lowercase ("blocks"), but
+  // Playwright's `text=` selector is case-insensitive substring match, so
+  // both "Browse all Blocks" and "Browse all blocks" resolve. We use
+  // `.first()` because the homepage also has a separate "Browse blocks"
+  // CTA whose text is a substring of this one.
+  await expect(page.locator("text=Browse all blocks").first()).toHaveAttribute(
     "href",
     "/hub",
   );
@@ -118,8 +120,11 @@ test("Home page should contain key elements", async ({ page }) => {
     await page.locator('[data-testid="block-slider"] >> .slick-slide').count(),
   ).toBeGreaterThan(4);
 
-  // Final CTA section — no longer prompts users to sign up while we focus
-  // on HASH; just points at the Hub and docs.
+  // Final CTA section. NOTE: `<FinalCTA />` is no longer composed directly
+  // by `index.page.tsx`; it now reaches the home page via the layout-level
+  // `<FooterBanner>` (the `BANNERS` entry whose `shouldDisplay` matches
+  // `pathname === "/"` renders `<FinalCTA />`). The `data-testid="final-cta"`
+  // and inner copy below therefore still apply on the home page.
   const finalCTA = page.locator('[data-testid="final-cta"]');
 
   await expect(finalCTA).toBeVisible();

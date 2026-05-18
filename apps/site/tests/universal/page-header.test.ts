@@ -35,7 +35,11 @@ test("page header navigation works", async ({
   }
 
   await navSelector.locator("text=Docs").click();
-  await expect(page).toHaveURL("/docs");
+  // The navbar Docs link points at the unversioned `/docs` href stored in
+  // `site-map.json`, but `middleware.page.ts` 308-redirects users onto the
+  // latest version (`/docs/0.4`) — which is what the address bar settles
+  // on. Assert against the post-redirect URL.
+  await expect(page).toHaveURL("/docs/0.4");
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
 
   // TODO: Add alt to BP logo, ensure that the logo is not clickable from /
