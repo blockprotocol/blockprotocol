@@ -128,10 +128,6 @@ export const generateSiteMap = (): SiteMap => {
   return {
     pages: [
       {
-        title: "About",
-        href: "/about",
-      },
-      {
         title: "Hub",
         href: "/hub",
       },

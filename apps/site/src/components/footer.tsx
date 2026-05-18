@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
-import { isBillingFeatureFlagEnabled } from "../lib/config";
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { ArrowUpRightIcon } from "./icons/arrow-up-right-icon";
 import { Link } from "./link";
@@ -38,22 +37,6 @@ const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
     {
       name: "Specification",
       href: "/spec",
-    },
-    ...(isBillingFeatureFlagEnabled
-      ? [
-          {
-            name: "Pricing",
-            href: "/pricing",
-          },
-        ]
-      : []),
-    {
-      name: "Contact Us",
-      href: "/contact",
-    },
-    {
-      name: "About Us",
-      href: "/about",
     },
   ],
 };

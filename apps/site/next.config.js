@@ -120,13 +120,54 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/partners",
-        destination: "/contact",
+        source: "/about",
+        destination: "https://hash.dev/docs/block-protocol",
+        permanent: true,
+      },
+      // Terms and Privacy are now authored on hash.ai. Sub-paths
+      // (/legal/terms/dpa, /legal/privacy/cookies, etc.) collapse onto the
+      // hash.ai section index because their slugs don't necessarily match.
+      {
+        source: "/legal/terms/:slug*",
+        destination: "https://hash.ai/legal/terms",
         permanent: true,
       },
       {
-        source: "/partners/submitted",
-        destination: "/contact/submitted",
+        source: "/legal/terms",
+        destination: "https://hash.ai/legal/terms",
+        permanent: true,
+      },
+      {
+        source: "/legal/privacy/:slug*",
+        destination: "https://hash.ai/legal/privacy",
+        permanent: true,
+      },
+      {
+        source: "/legal/privacy",
+        destination: "https://hash.ai/legal/privacy",
+        permanent: true,
+      },
+      // The Block Protocol no longer hosts its own contact form. All inbound
+      // enquiries are routed to HASH's contact page, which also covers the
+      // legacy /partners and /contact/submitted flows.
+      {
+        source: "/contact/:slug*",
+        destination: "https://hash.ai/contact",
+        permanent: true,
+      },
+      {
+        source: "/contact",
+        destination: "https://hash.ai/contact",
+        permanent: true,
+      },
+      {
+        source: "/partners/:slug*",
+        destination: "https://hash.ai/contact",
+        permanent: true,
+      },
+      {
+        source: "/partners",
+        destination: "https://hash.ai/contact",
         permanent: true,
       },
       {
