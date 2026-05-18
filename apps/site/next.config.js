@@ -26,6 +26,16 @@ const getSandboxFrameAncestors = () => {
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? { exclude: ["error", "warn"] }
+        : false,
+  },
+  experimental: {
+    // @see `deleteIsrFilesCreatedAfterNextBuild()` for rationale
+    isrMemoryCacheSize: 0,
+  },
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
   poweredByHeader: false,
   productionBrowserSourceMaps: true,
