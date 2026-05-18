@@ -7,6 +7,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # `pull_request_target` runs from the base branch (typically `main`),
+      # so without an explicit checkout `actions/labeler` falls back to its
+      # API path and fetches `.github/labeler.yml` from the workflow's ref
+      # (i.e. `main`). That means schema migrations to `labeler.yml` in a
+      # PR can never be tested by the labeler running on that PR — every
+      # PR sees the version of the config currently merged to `main`.
+      #
+      # We work around this by sparse-checking out just `.github/labeler.yml`
+      # from the PR head. No PR-side executable code lands on the runner,
+      # so `pull_request_target`'s elevated-permissions security model is
+      # preserved (only a YAML file is read by the labeler action).
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          sparse-checkout: |
+            .github/labeler.yml
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
       - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
         with:
           dot: true
