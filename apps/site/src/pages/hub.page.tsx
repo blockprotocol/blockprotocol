@@ -1,4 +1,3 @@
-import { extractVersion } from "@blockprotocol/type-system";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
@@ -18,7 +17,6 @@ import { Link } from "../components/link";
 import { HubItemDescription, HubList } from "../components/pages/hub/hub";
 import { getRouteHubBrowseType } from "../components/pages/hub/hub-utils";
 import { getAllBlocks, getFeaturedBlocks } from "../lib/api/blocks/get";
-import { apiClient } from "../lib/api-client";
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 import { excludeHiddenBlocks } from "../lib/excluded-blocks";
 import { COPY_FONT_FAMILY } from "../theme/typography";
@@ -46,21 +44,6 @@ const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
           url: item.blockSitePath,
           verified: item.verified,
         }),
-      );
-    },
-    async types() {
-      const types = await apiClient.getEntityTypes({ latestOnly: true });
-
-      return (
-        types.data?.entityTypes.map(
-          (type): HubItemDescription => ({
-            title: type.schema.title,
-            author: type.schema.$id.match(/@(.*?)\//)?.[1] ?? "",
-            description: type.schema.description,
-            url: type.schema.$id,
-            version: `${extractVersion(type.schema.$id)}`,
-          }),
-        ) ?? []
       );
     },
     async services() {
@@ -141,17 +124,9 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
             >
               blocks
             </Box>
-            {HUB_SERVICES_ENABLED ? <>,</> : <> and</>}{" "}
-            <Box
-              component="strong"
-              fontWeight={700}
-              sx={{ color: "purple.70" }}
-            >
-              types
-            </Box>
             {HUB_SERVICES_ENABLED ? (
               <>
-                , and{" "}
+                {" and "}
                 <Box
                   component="strong"
                   fontWeight={700}

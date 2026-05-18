@@ -1,118 +1,17 @@
 import {
-  faArrowLeft,
+  faArrowRight,
   faCodePullRequest,
   faPlus,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { Box, Fade, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
 
-import { useUser } from "../../../context/user-context";
-import { SerializedUser } from "../../../lib/api/model/user.model";
-import { apiClient } from "../../../lib/api-client";
-import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
-import { Button } from "../../button";
 import { FontAwesomeIcon } from "../../icons";
 import { ArrowUpIcon } from "../../icons/arrow-up-icon";
-import { CompleteSignupScreen } from "../../screens/complete-signup-screen";
-import { SignupScreen } from "../../screens/signup-screen";
-import {
-  VerificationCodeInfo,
-  VerificationCodeScreen,
-} from "../../screens/verification-code-screen";
-
-const SIGNUP_PAGE_SCREENS = [
-  "Email",
-  "VerificationCode",
-  "CompleteSignup",
-] as const;
-
-type SignupPageScreen = (typeof SIGNUP_PAGE_SCREENS)[number];
-
-type SignupPageParsedUrlQuery = {
-  redirectPath?: string;
-  email?: string;
-} & Partial<ApiVerifyEmailRequestBody>;
-
-const toStringElseUndefined = (item: string | string[] | undefined) =>
-  typeof item === "string" ? item : undefined;
+import { LinkButton } from "../../link-button";
 
 export const FinalCTA: NextPage = () => {
-  const router = useRouter();
-
-  const parsedQuery = useMemo((): SignupPageParsedUrlQuery => {
-    const { query } = router;
-
-    return {
-      redirectPath: toStringElseUndefined(query.redirectPath),
-      email: toStringElseUndefined(query.email),
-      userId: toStringElseUndefined(query.userId),
-      verificationCodeId: toStringElseUndefined(query.verificationCodeId),
-      code: toStringElseUndefined(query.code),
-    };
-  }, [router]);
-
-  const { user, setUser } = useUser();
-  const [currentScreen, setCurrentScreen] = useState<SignupPageScreen>("Email");
-
-  const [email, setEmail] = useState<string>();
-  const [redirectPath, setRedirectPath] = useState<string>();
-  const [initialVerificationCode, setInitialVerificationCode] =
-    useState<string>();
-
-  const [verificationCodeInfo, setVerificationCodeInfo] = useState<
-    VerificationCodeInfo | undefined
-  >();
-
-  useEffect(() => {
-    if (Object.values(parsedQuery).filter((value) => !!value).length > 0) {
-      if (parsedQuery.email) {
-        setEmail(parsedQuery.email);
-      }
-      if (parsedQuery.redirectPath) {
-        setRedirectPath(parsedQuery.redirectPath);
-      }
-
-      const { userId, verificationCodeId, code } = parsedQuery;
-
-      if (parsedQuery.email && userId && verificationCodeId && code) {
-        setVerificationCodeInfo({ userId, verificationCodeId });
-        setInitialVerificationCode(code);
-        setCurrentScreen("VerificationCode");
-      }
-
-      void router.replace({ pathname: router.pathname }, undefined, {
-        shallow: true,
-      });
-    }
-  }, [parsedQuery, router]);
-
-  useEffect(() => {
-    if (user && user !== "loading") {
-      if (user.isSignedUp && redirectPath && redirectPath !== "/") {
-        void router.push({ pathname: redirectPath });
-      } else if (currentScreen !== "CompleteSignup") {
-        setEmail(user.email);
-        setCurrentScreen("CompleteSignup");
-      }
-    }
-  }, [user, router, currentScreen, redirectPath]);
-
-  const handleSignup = (params: {
-    verificationCodeInfo: VerificationCodeInfo;
-    email: string;
-  }) => {
-    setVerificationCodeInfo(params.verificationCodeInfo);
-    setEmail(params.email);
-    setCurrentScreen("VerificationCode");
-  };
-
-  const handleVerificationCodeSubmitted = (loggedInUser: SerializedUser) => {
-    setUser(loggedInUser);
-  };
-
   return (
     <Box
       data-testid="final-cta"
@@ -127,7 +26,7 @@ export const FinalCTA: NextPage = () => {
       <Box
         display="flex"
         flexDirection="column"
-        alignItems="center"
+        alignItems="flex-start"
         justifyContent="center"
         sx={(theme) => ({
           height: "100%",
@@ -139,62 +38,32 @@ export const FinalCTA: NextPage = () => {
             lg: 12.5,
           },
           mb: 2,
+          gap: 3,
         })}
       >
-        <Box
-          marginTop="-3px"
-          display="flex"
-          justifyContent="space-between"
-          width="100%"
+        <Typography variant="bpHeading2" component="h2" sx={{ fontWeight: 700 }}>
+          Build with the Block Protocol
+        </Typography>
+        <Typography
+          component="p"
+          variant="bpBodyCopy"
+          sx={{ color: ({ palette }) => palette.gray[80] }}
         >
-          <Fade in={currentScreen === "VerificationCode"}>
-            <Box>
-              <Button
-                onClick={() => setCurrentScreen("Email")}
-                disabled={currentScreen === SIGNUP_PAGE_SCREENS[0]}
-                variant="transparent"
-                startIcon={
-                  <FontAwesomeIcon icon={faArrowLeft} sx={{ fontSize: 16 }} />
-                }
-                sx={{
-                  fontSize: 15,
-                }}
-              >
-                Back
-              </Button>
-            </Box>
-          </Fade>
+          Browse the open-source Hub for blocks you can drop into any compatible
+          application, or read the docs to start building your own.
+        </Typography>
+        <Box display="flex" flexWrap="wrap" gap={2}>
+          <LinkButton
+            href="/hub"
+            variant="primary"
+            endIcon={<FontAwesomeIcon icon={faArrowRight} />}
+          >
+            Browse the Hub
+          </LinkButton>
+          <LinkButton href="/docs" variant="secondary">
+            Read the docs
+          </LinkButton>
         </Box>
-
-        {currentScreen === "Email" ? (
-          <SignupScreen
-            autoFocus={false}
-            initialEmail={email}
-            onSignup={handleSignup}
-          />
-        ) : null}
-        {currentScreen === "VerificationCode" &&
-        verificationCodeInfo &&
-        email ? (
-          <VerificationCodeScreen
-            verificationCodeInfo={verificationCodeInfo}
-            email={email}
-            setVerificationCodeId={(verificationCodeId) => {
-              setVerificationCodeInfo({
-                ...verificationCodeInfo,
-                verificationCodeId,
-              });
-            }}
-            initialVerificationCode={initialVerificationCode}
-            onSubmit={handleVerificationCodeSubmitted}
-            onChangeEmail={() => setCurrentScreen("Email")}
-            submit={apiClient.verifyEmail}
-            resend={apiClient.signup}
-          />
-        ) : null}
-        {currentScreen === "CompleteSignup" && email ? (
-          <CompleteSignupScreen email={email} />
-        ) : null}
       </Box>
 
       <Box
@@ -237,7 +106,7 @@ export const FinalCTA: NextPage = () => {
             {
               heading: (
                 <>
-                  Publish blocks to the{" "}
+                  Discover the{" "}
                   <strong>
                     <Box
                       component="span"
@@ -256,22 +125,16 @@ export const FinalCTA: NextPage = () => {
               ),
               subHeading: (
                 <>
-                  Create and use blocks that work in any application that
-                  supports the protocol
+                  Browse existing blocks that work in any application supporting
+                  the protocol
                 </>
               ),
-              icon: (
-                <ArrowUpIcon
-                  sx={{
-                    fontSize: 16,
-                  }}
-                />
-              ),
+              icon: <ArrowUpIcon sx={{ fontSize: 16 }} />,
             },
             {
               heading: <>Add blocks to your app</>,
               subHeading: (
-                <>Access the open-source Hub and embed blocks you need</>
+                <>Embed open-source blocks from the Hub into your own product</>
               ),
               icon: (
                 <FontAwesomeIcon
@@ -284,11 +147,9 @@ export const FinalCTA: NextPage = () => {
               ),
             },
             {
-              heading: <>Take part in a growing, open source community</>,
+              heading: <>Contribute to a growing, open source community</>,
               subHeading: (
-                <>
-                  Help make open source blocks avaliable to everyone on the web
-                </>
+                <>Help make new block types available to everyone on the web</>
               ),
               icon: (
                 <FontAwesomeIcon
@@ -302,7 +163,7 @@ export const FinalCTA: NextPage = () => {
             },
             {
               heading: <>Claim your favorite username</>,
-              subHeading: <>@pizza goes fast 🍕</>,
+              subHeading: <>@pizza goes fast</>,
               icon: (
                 <FontAwesomeIcon
                   sx={{
@@ -315,7 +176,7 @@ export const FinalCTA: NextPage = () => {
             },
           ].map(({ heading, subHeading, icon }, index) => (
             <Box
-              // eslint-disable-next-line react/no-array-index-key -- TODO fix this
+              // eslint-disable-next-line react/no-array-index-key
               key={index}
               display="flex"
               alignItems="flex-start"

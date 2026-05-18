@@ -1,8 +1,9 @@
+import { SerializedUser } from "../../../context/user-context";
 import {
   baseHandlerOptions,
   createBaseHandler,
 } from "../../../lib/api/handler/base-handler";
-import { SerializedUser, User } from "../../../lib/api/model/user.model";
+import { getStaticUser } from "../../../lib/hub-data";
 import { formatErrors } from "../../../util/api";
 
 export type ApiUserByShortnameResponseQueryParams = {
@@ -14,13 +15,12 @@ export type ApiUserByShortnameResponse = {
 };
 
 export default createBaseHandler<null, ApiUserByShortnameResponse>()
-  .get(async (req, res) => {
-    const { db, query } = req;
-    const { shortname } = query as ApiUserByShortnameResponseQueryParams;
+  .get((req, res) => {
+    const { shortname } = req.query as ApiUserByShortnameResponseQueryParams;
 
-    const user = await User.getByShortname(db, { shortname });
+    const staticUser = getStaticUser({ shortname });
 
-    if (!user) {
+    if (!staticUser) {
       return res.status(404).json(
         formatErrors({
           msg: "Could not find user with the provided shortname",
@@ -30,6 +30,14 @@ export default createBaseHandler<null, ApiUserByShortnameResponse>()
       );
     }
 
-    res.status(200).send({ user: user.serialize() });
+    res.status(200).send({
+      user: {
+        id: staticUser.shortname,
+        isSignedUp: true,
+        shortname: staticUser.shortname,
+        preferredName: staticUser.preferredName,
+        userAvatarUrl: staticUser.userAvatarUrl,
+      },
+    });
   })
   .handler(baseHandlerOptions);

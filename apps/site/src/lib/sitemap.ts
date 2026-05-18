@@ -1,5 +1,4 @@
 import {
-  getAllPages,
   getPage,
   getRoadmapSubPages,
   unionVersionedPages,
@@ -108,9 +107,6 @@ export const getRoadmapPage = (): SiteMapPage => ({
   subPages: getRoadmapSubPages(),
 });
 
-export const getLegalSubPages = (): SiteMapPage[] =>
-  getAllPages({ pathToDirectory: "legal" });
-
 export const generateSiteMap = (): SiteMap => {
   const versionedSubPages = {
     docs: buildVersionedSubPages("docs"),
@@ -139,11 +135,6 @@ export const generateSiteMap = (): SiteMap => {
           latestSpecSubPage,
           getRoadmapPage(),
         ],
-      },
-      {
-        title: "Legal",
-        href: "/legal",
-        subPages: getLegalSubPages(),
       },
     ],
     versionedSubPages,

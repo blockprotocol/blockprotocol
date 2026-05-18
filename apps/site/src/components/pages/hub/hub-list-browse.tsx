@@ -1,4 +1,4 @@
-import { faAsterisk, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import {
   Hidden,
   Stack,
@@ -137,7 +137,6 @@ type BrowseItem = {
 
 const getBrowseItems = (): BrowseItem[] => [
   { icon: faBoxesStacked, type: "blocks", title: "Blocks" },
-  { icon: faAsterisk, type: "types", title: "Types" },
   ...(HUB_SERVICES_ENABLED
     ? [{ icon: faBinary, type: "services", title: "Services" }]
     : []),

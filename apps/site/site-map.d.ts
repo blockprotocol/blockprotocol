@@ -5,24 +5,28 @@
  */
 declare module "*/site-map.json" {
   import type { SiteMap } from "./src/lib/sitemap";
+
   const siteMap: SiteMap;
   export default siteMap;
 }
 
 declare module "../site-map.json" {
   import type { SiteMap } from "./src/lib/sitemap";
+
   const siteMap: SiteMap;
   export default siteMap;
 }
 
 declare module "../../site-map.json" {
   import type { SiteMap } from "./src/lib/sitemap";
+
   const siteMap: SiteMap;
   export default siteMap;
 }
 
 declare module "../../../site-map.json" {
   import type { SiteMap } from "./src/lib/sitemap";
+
   const siteMap: SiteMap;
   export default siteMap;
 }

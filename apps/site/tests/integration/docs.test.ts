@@ -1,5 +1,14 @@
-import { closeMobileNav, openMobileNav } from "../shared/nav.js";
-import { expect, test } from "../shared/wrapped-playwright.js";
+import { type Page, expect, test } from "../shared/wrapped-playwright.js";
+
+const openMobileNav = async (page: Page): Promise<void> => {
+  await page.locator("[data-testid='mobile-nav-trigger']").click();
+  await expect(page.locator("[data-testid='mobile-nav']")).toBeVisible();
+};
+
+const closeMobileNav = async (page: Page) => {
+  await page.locator("[data-testid='mobile-nav-trigger']").click();
+  await expect(page.locator("[data-testid='mobile-nav']")).not.toBeVisible();
+};
 
 test("Docs page should contain key elements and interactions should work", async ({
   page,

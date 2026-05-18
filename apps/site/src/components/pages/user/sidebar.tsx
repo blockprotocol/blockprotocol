@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { SerializedUser } from "../../../lib/api/model/user.model";
+import { SerializedUser } from "../../../context/user-context";
 import { UserAvatar } from "../../user-avatar";
 
 type SidebarProps = {

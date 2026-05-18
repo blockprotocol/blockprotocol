@@ -258,33 +258,6 @@ jobs:
           mkdir -p var/logs
           mkdir -p var/site
 
-          cat << EOF > apps/site/.env.local
-          SESSION_SECRET=dev-session-secret
-          HASHING_SECRET=dev-hashing-secret
-
-          MONGODB_URI=mongodb://root:password@localhost:27017/
-          MONGODB_DB_NAME=local
-
-          S3_API_ENDPOINT=http://localhost:9000
-          S3_BUCKET=dev-bucket
-          S3_ACCESS_KEY_ID=dev-access-key
-          S3_SECRET_ACCESS_KEY=dev-secret-key
-          S3_BASE_URL=http://localhost:9000/dev-bucket
-
-          NEXT_PUBLIC_NPM_PUBLISHING=true
-
-          EOF
-
-      - name: Launch DB
-        if: ${{ success() || failure() }}
-        run: |
-          yarn dev:db 2>&1 | tee var/logs/db.log & ## ampersand enables background mode
-          yarn wait-on --timeout 60000 tcp:0.0.0.0:27017
-
-      - name: Seed DB
-        if: ${{ success() || failure() }}
-        run: yarn dev:seed-db
-
       - name: Build and launch frontend
         if: ${{ success() || failure() }}
         run: |
@@ -305,10 +278,6 @@ jobs:
         ## https://github.com/tiaanduplessis/kill-port/issues/48
         # run: yarn kill-port 3000
 
-      - name: Stop DB
-        if: ${{ success() || failure() }}
-        run: docker-compose -f apps/site/docker-compose.dev.yml down
-
       - name: Generate coverage report
         if: ${{ success() || failure() }}
         run: yarn nyc report --reporter=lcovonly --reporter=text
@@ -323,10 +292,6 @@ jobs:
           files: coverage/lcov.info
           flags: site-integration-${{ matrix.device }}
           token: ${{ secrets.CODECOV_TOKEN }} ## not required for public repos, can be removed when https://github.com/codecov/codecov-action/issues/837 is resolved
-
-      - name: Show DB logs
-        if: ${{ success() || failure() }}
-        run: cat var/logs/db.log
 
       - name: Show frontend logs
         if: ${{ success() || failure() }}

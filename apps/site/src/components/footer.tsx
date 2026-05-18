@@ -48,14 +48,6 @@ const DISCOVER_NAVIGATION_LINKS: NavigationSection = {
       name: "Open-source blocks",
       href: "/hub?type=blocks",
     },
-    {
-      name: "Semantic types",
-      href: "/hub?type=types",
-    },
-    {
-      name: "API services",
-      href: "/hub?type=services",
-    },
   ],
 };
 

@@ -1,0 +1,1447 @@
+{
+  "generatedAt": "2026-05-18T12:25:34.925Z",
+  "source": "https://blockprotocol.org",
+  "users": [
+    {
+      "shortname": "alfie",
+      "preferredName": "Alfred"
+    },
+    {
+      "shortname": "blockprotocol",
+      "preferredName": "BlockProtocol"
+    },
+    {
+      "shortname": "hash",
+      "preferredName": "HASH"
+    },
+    {
+      "shortname": "jerlendds",
+      "preferredName": "Jordan"
+    },
+    {
+      "shortname": "prachi123",
+      "preferredName": "prachi"
+    },
+    {
+      "shortname": "rikhen",
+      "preferredName": "Rikhen"
+    },
+    {
+      "shortname": "tldraw",
+      "preferredName": "Tldraw"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "github-pr-overview",
+      "version": "0.1.0",
+      "description": "Display an overview of a GitHub Pull Request, including a timeline of key events",
+      "author": "alfie",
+      "license": "MIT",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.hashai.workers.dev/blocks/alfie/github-pr-overview/block-schema.json",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "GitHub Pull-Request Overview",
+      "examples": [
+        {
+          "selectedPullRequest": {
+            "repository": "blockprotocol/blockprotocol",
+            "number": 298
+          }
+        }
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/alfie/github-pr-overview/public/pull-request.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/alfie/github-pr-overview/public/block-preview.svg",
+      "protocol": "0.2",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/alfie/github-pr-overview/main.6e365b39f478f79fea6c.js",
+      "exampleGraph": "https://blockprotocol.hashai.workers.dev/blocks/alfie/github-pr-overview/example-graph.json",
+      "blockSitePath": "/@alfie/blocks/github-pr-overview",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/alfie/github-pr-overview",
+      "createdAt": "2023-02-16T14:17:18.904Z",
+      "lastUpdated": "2023-02-16T14:17:18.904Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@alfie/github-pr-overview",
+      "repository": null,
+      "variants": null,
+      "verified": true
+    },
+    {
+      "name": "address",
+      "version": "0.1.2",
+      "description": "Search for an address using the Mapbox Address Autofill and Mapbox Static Images APIs",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/address",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/address-block/v/4",
+      "variants": null,
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Address",
+      "examples": [],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/address/public/address.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/address/public/block-preview.png",
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/address/main.743fa1a6bdd460e7653d.js",
+      "blockSitePath": "/@hash/blocks/address",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/address",
+      "createdAt": "2023-03-01T15:03:50.353Z",
+      "lastUpdated": "2023-12-08T16:21:06.845Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/address",
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ai-chat",
+      "version": "0.0.0",
+      "description": "Have a conversation with an AI",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/ai-chat",
+      "author": "hash",
+      "license": "see LICENSE.md",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "variants": null,
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/ai-chat-block/v/1",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "AI Chat",
+      "examples": [
+        {}
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-chat/public/ai-chat-icon.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-chat/public/ai-chat-preview.png",
+      "protocol": "0.3",
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "ai-chat-block.ts": [
+            {
+              "blockEntityType": true
+            }
+          ],
+          "ai-chat-request-message.ts": [
+            {
+              "sourceTypeId": "https://blockprotocol.org/@hash/types/entity-type/ai-chat-request-message/v/1"
+            }
+          ],
+          "ai-chat-response-message.ts": [
+            {
+              "sourceTypeId": "https://blockprotocol.org/@hash/types/entity-type/ai-chat-response-message/v/1"
+            }
+          ]
+        }
+      },
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-chat/main.aa409eb5f15ba73ce06a.js",
+      "blockSitePath": "/@hash/blocks/ai-chat",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-chat",
+      "createdAt": "2023-03-29T17:30:17.062Z",
+      "lastUpdated": "2023-12-07T17:13:04.330Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/ai-chat",
+      "exampleGraph": null,
+      "verified": true
+    },
+    {
+      "name": "ai-image",
+      "version": "0.1.2",
+      "description": "Generate any image you can put into words, in just a few seconds",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/ai-image",
+      "author": "hash",
+      "license": "see LICENSE.md",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/ai-image-block/v/3",
+      "variants": null,
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "AI Image",
+      "examples": [
+        {}
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-image/public/ai-image.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-image/public/block-preview.png",
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-image/main.ea7bc21c5bb09f76e81d.js",
+      "blockSitePath": "/@hash/blocks/ai-image",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-image",
+      "createdAt": "2023-03-01T15:03:37.115Z",
+      "lastUpdated": "2023-12-08T16:21:06.848Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/ai-image",
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ai-text",
+      "version": "0.1.3",
+      "description": "Generate blog posts, press releases, ad copy – using the power of AI",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/ai-text",
+      "author": "hash",
+      "license": "see LICENSE.md",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/ai-text-block/v/2",
+      "variants": null,
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "AI Text",
+      "examples": [
+        {}
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-text/public/ai-text.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-text/public/block-preview.png",
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-text/main.0a23e6e35134af326064.js",
+      "blockSitePath": "/@hash/blocks/ai-text",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/ai-text",
+      "createdAt": "2023-03-01T15:04:26.815Z",
+      "lastUpdated": "2023-12-08T16:12:24.828Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/ai-text",
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "callout",
+      "version": "0.2.1",
+      "description": "Draw attention to an important point or message with framed text and a custom icon",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/callout-block/v/3",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Callout",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/callout/public/bullhorn-variant-outline.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/callout/public/preview.svg",
+      "examples": [
+        {
+          "https://blockprotocol.org/@hash/types/property-type/callout-block-emoji/": "📢",
+          "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "Hello World!"
+        }
+      ],
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/callout/main.e9deffd728cb3ecef9cb.js",
+      "blockSitePath": "/@hash/blocks/callout",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/callout",
+      "createdAt": "2023-02-22T10:08:08.032Z",
+      "lastUpdated": "2023-12-07T17:12:53.400Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/callout",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/callout",
+      "variants": null,
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "chart",
+      "version": "0.1.2",
+      "description": "A block for plotting entities in a 2D chart",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/chart",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "variants": [
+        {
+          "name": "Bar Chart",
+          "description": "",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/chart/public/chart-line-regular.svg",
+          "properties": {
+            "https://blockprotocol.org/@hash/types/property-type/chart-defintion/": {
+              "kind": "bar-chart"
+            }
+          },
+          "examples": [
+            {
+              "https://blockprotocol.org/@blockprotocol/types/property-type/title/": "Bar Chart Title",
+              "https://blockprotocol.org/@hash/types/property-type/chart-defintion/": {
+                "kind": "bar-chart"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Network Graph Chart",
+          "description": "",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/chart/public/chart-network-regular.svg",
+          "properties": {
+            "https://blockprotocol.org/@hash/types/property-type/chart-defintion/": {
+              "kind": "graph-chart",
+              "variant": "default"
+            }
+          },
+          "examples": [
+            {
+              "https://blockprotocol.org/@blockprotocol/types/property-type/title/": "Network Graph Chart Title",
+              "https://blockprotocol.org/@hash/types/property-type/chart-defintion/": {
+                "kind": "graph-chart",
+                "variant": "default"
+              }
+            }
+          ]
+        }
+      ],
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/chart-block/v/1",
+      "displayName": "Chart",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "protocol": "0.3",
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      },
+      "examples": [
+        {}
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/chart/public/chart-line-regular.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/chart/public/block-preview.svg",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/chart/main.21343d962f4d5a5420e0.js",
+      "blockSitePath": "/@hash/blocks/chart",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/chart",
+      "createdAt": "2023-11-16T13:54:21.716Z",
+      "lastUpdated": "2023-12-19T10:14:58.003Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/chart",
+      "exampleGraph": null,
+      "verified": true
+    },
+    {
+      "name": "code",
+      "version": "0.2.1",
+      "description": "Write monospaced code with syntax highlighting in a range of programming and markup languages",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/code",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/code-block/v/3",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Code",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/code/public/code.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/code/public/preview.svg",
+      "examples": [
+        {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "function debounce(func, timeout = 300){\n  let timer;\n  return (...args) => {\n    clearTimeout(timer);\n    timer = setTimeout(() => { func.apply(this, args); }, timeout);\n  };\n}",
+          "https://blockprotocol.org/@hash/types/property-type/code-block-language/": "javascript",
+          "https://blockprotocol.org/@blockprotocol/types/property-type/caption/": "A JavaScript code example."
+        }
+      ],
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/code/main.b11b207b155e7e224f13.js",
+      "blockSitePath": "/@hash/blocks/code",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/code",
+      "createdAt": "2023-02-27T10:32:34.862Z",
+      "lastUpdated": "2023-12-07T17:12:58.046Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/code",
+      "variants": null,
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "countdown",
+      "version": "0.2.1",
+      "description": "Countdown to a time and date",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/countdown-block/v/2",
+      "variants": null,
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Countdown",
+      "examples": [
+        {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/title/": "The Beta Launch",
+          "https://blockprotocol.org/@hash/types/property-type/target-date-and-time/": null,
+          "https://blockprotocol.org/@hash/types/property-type/countdown-block-should-display-time/": false
+        }
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/countdown/public/icon.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/countdown/public/preview.svg",
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/countdown/main.8a5e7f2b20b95a6200b7.js",
+      "blockSitePath": "/@hash/blocks/countdown",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/countdown",
+      "createdAt": "2023-02-22T10:08:07.158Z",
+      "lastUpdated": "2023-12-07T17:12:56.048Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/countdown",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/countdown",
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "divider",
+      "version": "0.1.2",
+      "description": "Break up content on a page with horizontal dividing lines",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/divider",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/divider-block/v/2",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Divider",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/divider/public/divider.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/divider/public/preview.svg",
+      "examples": [
+        {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/css-background-color/": "black",
+          "https://blockprotocol.org/@blockprotocol/types/property-type/height-in-pixels/": "2px"
+        }
+      ],
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/divider/main.9cdaba68dd7fc4dd1a18.js",
+      "blockSitePath": "/@hash/blocks/divider",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/divider",
+      "createdAt": "2023-03-01T15:04:05.123Z",
+      "lastUpdated": "2023-12-07T17:12:53.125Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/divider",
+      "variants": null,
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "embed",
+      "version": "0.1.1",
+      "description": "Embed external content",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "lodash": "4.17.21",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "block-schema.json",
+      "variants": [
+        {
+          "name": "Embed",
+          "description": "Embed Content",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/embed/public/embed.svg",
+          "examples": [
+            {
+              "initialHtml": "<iframe src=\"https://core.hash.ai/embed.html?project=%40hash%2Fcity-infection-model&ref=6.4.2\" width=\"300\" height=\"171\" frameborder=\"0\" scrolling=\"auto\"></iframe>",
+              "initialWidth": 600,
+              "initialHeight": 340
+            }
+          ]
+        },
+        {
+          "name": "Twitter",
+          "description": "Embed Tweet",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/embed/public/twitter.svg",
+          "properties": {
+            "embedType": "Twitter"
+          },
+          "examples": [
+            {
+              "initialHtml": "<blockquote class=\"twitter-tweet\" data-width=\"300\"><p lang=\"en\" dir=\"ltr\">1/ We&#39;ve been working a new protocol at <a href=\"https://twitter.com/hashintel?ref_src=twsrc%5Etfw\">@hashintel</a><br><br>It&#39;s called the block protocol (but NOT about blockchain or NFTs!)<br><br>It allows you to build reusable blocks (aka. components) that are interchangeable across website/apps<br><br>It takes a minute to explain, but I’ve drawn pictures… <a href=\"https://t.co/9uhsPdAPSh\">pic.twitter.com/9uhsPdAPSh</a></p>&mdash; Maggie Appleton 🧭 (@Mappletons) <a href=\"https://twitter.com/Mappletons/status/1488131234089873408?ref_src=twsrc%5Etfw\">January 31, 2022</a></blockquote>\n<script async src=\"https://platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>\n",
+              "initialHeight": 340
+            }
+          ]
+        },
+        {
+          "name": "YouTube",
+          "description": "Embed YouTube Video",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/embed/public/youtube.svg",
+          "properties": {
+            "embedType": "YouTube"
+          },
+          "examples": [
+            {
+              "initialHtml": "<iframe width=\"300\" height=\"225\" src=\"https://www.youtube.com/embed/tLcrXQxN70c?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>",
+              "initialWidth": 600,
+              "initialHeight": 340
+            }
+          ]
+        },
+        {
+          "name": "Spotify",
+          "description": "Embed Spotify Song",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/embed/public/spotify.svg",
+          "properties": {
+            "embedType": "Spotify"
+          },
+          "examples": [
+            {
+              "initialHtml": "<iframe width=\"100%\" height=\"380\" title=\"Spotify Embed: Today&apos;s Top Hits\" style=\"[object Object]\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" src=\"https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=oembed\"></iframe>",
+              "initialWidth": 600,
+              "initialHeight": 340
+            }
+          ]
+        },
+        {
+          "name": "HASH",
+          "description": "Embed Simulation",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/embed/public/hash.svg",
+          "properties": {
+            "embedType": "HASH"
+          },
+          "examples": [
+            {
+              "initialHtml": "<iframe src=\"https://core.hash.ai/embed.html?project=%40hash%2Fcity-infection-model&ref=6.4.2\" width=\"300\" height=\"171\" frameborder=\"0\" scrolling=\"auto\"></iframe>",
+              "initialWidth": 600,
+              "initialHeight": 340
+            }
+          ]
+        }
+      ],
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Embed",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/embed/public/embed.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/embed/public/preview.svg",
+      "examples": [
+        {
+          "initialHtml": "<iframe src=\"https://core.hash.ai/embed.html?project=%40hash%2Fcity-infection-model&ref=6.4.2\" width=\"300\" height=\"171\" frameborder=\"0\" scrolling=\"auto\"></iframe>",
+          "initialWidth": 600,
+          "initialHeight": 340
+        }
+      ],
+      "protocol": "0.1",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/embed/main.37bd7d8285d35dc4f2f1.js",
+      "blockSitePath": "/@hash/blocks/embed",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/embed",
+      "createdAt": "2023-02-27T20:17:40.399Z",
+      "lastUpdated": "2023-12-07T17:12:57.276Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/embed",
+      "repository": null,
+      "exampleGraph": null,
+      "verified": true
+    },
+    {
+      "name": "faq",
+      "version": "0.1.3",
+      "description": "Create a frequently asked questions section",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/faq",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "variants": null,
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/faq-block/v/1",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "FAQ",
+      "examples": [],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/faq/public/faq-icon.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/faq/public/block-preview.png",
+      "protocol": "0.3",
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      },
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/faq/main.57df02e147385b3c045d.js",
+      "blockSitePath": "/@hash/blocks/faq",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/faq",
+      "createdAt": "2023-03-30T18:07:50.451Z",
+      "lastUpdated": "2023-12-07T17:13:13.367Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/faq",
+      "exampleGraph": null,
+      "verified": true
+    },
+    {
+      "name": "heading",
+      "version": "0.2.3",
+      "description": "Write titles, sub-titles, and section headings in four different sizes",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/heading-block/v/3",
+      "variants": [
+        {
+          "name": "Heading 1",
+          "description": "For the largest (top-level) section headings",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/heading/public/h1.svg",
+          "properties": {
+            "https://blockprotocol.org/@blockprotocol/types/property-type/html-heading-level/": 1
+          },
+          "examples": [
+            {
+              "https://blockprotocol.org/@blockprotocol/types/property-type/html-heading-level/": 1,
+              "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "I'm a top-level heading!"
+            }
+          ]
+        },
+        {
+          "name": "Heading 2",
+          "description": "For large section headings",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/heading/public/h2.svg",
+          "properties": {
+            "https://blockprotocol.org/@blockprotocol/types/property-type/html-heading-level/": 2
+          },
+          "examples": [
+            {
+              "https://blockprotocol.org/@blockprotocol/types/property-type/html-heading-level/": 2,
+              "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "I'm a large heading!"
+            }
+          ]
+        },
+        {
+          "name": "Heading 3",
+          "description": "For medium section headings",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/heading/public/h3.svg",
+          "properties": {
+            "https://blockprotocol.org/@blockprotocol/types/property-type/html-heading-level/": 3
+          },
+          "examples": [
+            {
+              "https://blockprotocol.org/@blockprotocol/types/property-type/html-heading-level/": 3,
+              "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "I'm a medium heading!"
+            }
+          ]
+        },
+        {
+          "name": "Heading 4",
+          "description": "For small section headings",
+          "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/heading/public/h4.svg",
+          "properties": {
+            "https://blockprotocol.org/@blockprotocol/types/property-type/html-heading-level/": 4
+          },
+          "examples": [
+            {
+              "https://blockprotocol.org/@blockprotocol/types/property-type/html-heading-level/": 4,
+              "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "I'm a small heading!"
+            }
+          ]
+        }
+      ],
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Heading",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/heading/public/h1.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/heading/public/preview.svg",
+      "examples": [
+        {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "Hello World!",
+          "https://blockprotocol.org/@blockprotocol/types/property-type/html-heading-level/": 2,
+          "https://blockprotocol.org/@blockprotocol/types/property-type/css-text-color/": "black"
+        }
+      ],
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/heading/main.1769b0c658aa204d3c3f.js",
+      "blockSitePath": "/@hash/blocks/heading",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/heading",
+      "createdAt": "2023-02-22T10:07:59.716Z",
+      "lastUpdated": "2023-12-07T17:13:28.266Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/heading",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/heading",
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "how-to",
+      "version": "0.1.3",
+      "description": "Describe a task or process via a list of steps",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/how-to-block/v/2",
+      "variants": null,
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "How To",
+      "examples": [
+        {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/title/": "Boil water",
+          "https://blockprotocol.org/@blockprotocol/types/property-type/description/": "Bring the clear water to a rolling boil for 1 minute"
+        }
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/how-to/public/book-arrow-right.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/how-to/public/block-preview.png",
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/how-to/main.29557a7b007d46dda324.js",
+      "blockSitePath": "/@hash/blocks/how-to",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/how-to",
+      "createdAt": "2023-03-01T05:40:06.143Z",
+      "lastUpdated": "2023-12-07T17:13:02.886Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/how-to",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/how-to",
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "image",
+      "version": "0.2.1",
+      "description": "Embed JPG, GIF, and PNG images by URL or file upload and add an optional caption",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/image-block/v/3",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Image",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/image/public/image.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/image/public/preview.svg",
+      "examples": [
+        {}
+      ],
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/image/main.b3448d6da5ad62d69b50.js",
+      "blockSitePath": "/@hash/blocks/image",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/image",
+      "createdAt": "2023-02-27T10:33:18.796Z",
+      "lastUpdated": "2023-12-08T16:21:02.646Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/image",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/image",
+      "variants": null,
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "kanban-board",
+      "version": "0.0.2",
+      "description": "Capture information in cards, and drag cards flexibly between customizable columns",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/kanban-board",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/kanban-board-block/v/2",
+      "variants": null,
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Kanban Board",
+      "examples": [
+        {
+          "https://blockprotocol.org/@hash/types/property-type/kanban-board-column/": [
+            {
+              "https://blockprotocol.org/@hash/types/property-type/kanban-board-column-id/": "col-todo",
+              "https://blockprotocol.org/@blockprotocol/types/property-type/title/": "Todo",
+              "https://blockprotocol.org/@hash/types/property-type/kanban-board-card/": [
+                {
+                  "https://blockprotocol.org/@hash/types/property-type/kanban-board-card-id/": "task-1",
+                  "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "First task"
+                },
+                {
+                  "https://blockprotocol.org/@hash/types/property-type/kanban-board-card-id/": "task-2",
+                  "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "Second task with a very long description"
+                },
+                {
+                  "https://blockprotocol.org/@hash/types/property-type/kanban-board-card-id/": "task-3",
+                  "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "Third task"
+                }
+              ]
+            },
+            {
+              "https://blockprotocol.org/@hash/types/property-type/kanban-board-column-id/": "col-in-progress",
+              "https://blockprotocol.org/@blockprotocol/types/property-type/title/": "In Progress",
+              "https://blockprotocol.org/@hash/types/property-type/kanban-board-card/": [
+                {
+                  "https://blockprotocol.org/@hash/types/property-type/kanban-board-card-id/": "task-4",
+                  "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "Fourth task"
+                },
+                {
+                  "https://blockprotocol.org/@hash/types/property-type/kanban-board-card-id/": "task-5",
+                  "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "Fifth task"
+                }
+              ]
+            },
+            {
+              "https://blockprotocol.org/@hash/types/property-type/kanban-board-column-id/": "col-done",
+              "https://blockprotocol.org/@blockprotocol/types/property-type/title/": "Done",
+              "https://blockprotocol.org/@hash/types/property-type/kanban-board-card/": []
+            }
+          ]
+        }
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/kanban-board/public/kanban-board.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/kanban-board/public/block-preview.png",
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/kanban-board/main.15b43bb06d51fc50374f.js",
+      "blockSitePath": "/@hash/blocks/kanban-board",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/kanban-board",
+      "createdAt": "2023-03-24T14:10:30.899Z",
+      "lastUpdated": "2023-12-07T17:13:13.208Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/kanban-board",
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "minesweeper",
+      "version": "0.0.1",
+      "description": "Play Minesweeper in your browser!",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/minesweeper-block/v/1",
+      "blockType": {
+        "entryPoint": "custom-element",
+        "tagName": "minesweeper-block"
+      },
+      "displayName": "Minesweeper",
+      "examples": [
+        {
+          "https://blockprotocol.org/@hash/types/property-type/number-of-columns/": 12,
+          "https://blockprotocol.org/@hash/types/property-type/number-of-mines/": 30
+        }
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/minesweeper/public/minesweeper-icon.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/minesweeper/public/block-preview.png",
+      "protocol": "0.3",
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      },
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/minesweeper/main.cfee619b40b7a10627f5.js",
+      "blockSitePath": "/@hash/blocks/minesweeper",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/minesweeper",
+      "createdAt": "2023-03-17T18:27:10.457Z",
+      "lastUpdated": "2023-12-07T17:12:57.091Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/minesweeper",
+      "repository": null,
+      "variants": null,
+      "exampleGraph": null,
+      "verified": true
+    },
+    {
+      "name": "paragraph",
+      "version": "0.1.2",
+      "description": "Write a block of text to express an idea, make a point, or record a thought",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/paragraph-block/v/3",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Paragraph",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/paragraph/public/paragraph.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/paragraph/public/preview.svg",
+      "examples": [
+        {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "William Shakespeare was an English playwright, poet and actor, widely regarded as the greatest writer in the English language and the world's greatest dramatist. He is often called England's national poet and the \"Bard of Avon\"."
+        }
+      ],
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/paragraph/main.68d050d383f731eb9400.js",
+      "blockSitePath": "/@hash/blocks/paragraph",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/paragraph",
+      "createdAt": "2023-02-22T10:07:31.916Z",
+      "lastUpdated": "2023-12-07T17:12:53.032Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/paragraph",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/paragraph",
+      "variants": null,
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "person",
+      "version": "0.2.1",
+      "description": "Display information about a person, including their name, job title, email, website address, and an avatar",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "block-schema.json",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Person",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/person/public/account-circle.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/person/public/preview.svg",
+      "examples": [
+        {
+          "avatar": "https://i.pravatar.cc/300",
+          "employer": {
+            "name": "Bain & Co.",
+            "position": "General Manager of Insurance Claims"
+          },
+          "name": "Archibald Adams-Montgomery",
+          "email": "archie@example.com",
+          "link": "https://example.com/archie"
+        }
+      ],
+      "protocol": "0.2",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/person/main.6b0a7a2286cd1f55f43e.js",
+      "blockSitePath": "/@hash/blocks/person",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/person",
+      "createdAt": "2023-02-27T10:32:13.851Z",
+      "lastUpdated": "2023-12-07T17:12:59.405Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/person",
+      "repository": null,
+      "variants": null,
+      "exampleGraph": null,
+      "verified": true
+    },
+    {
+      "name": "shuffle",
+      "version": "0.1.2",
+      "description": "Create a list and (re-)arrange it in a random order",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/shuffle-block/v/2",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Shuffle",
+      "examples": [
+        {
+          "https://blockprotocol.org/@hash/types/property-type/shuffle-block-item/": [
+            {
+              "https://blockprotocol.org/@hash/types/property-type/shuffle-block-item-id/": "1",
+              "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "Alice"
+            },
+            {
+              "https://blockprotocol.org/@hash/types/property-type/shuffle-block-item-id/": "2",
+              "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "Bob"
+            },
+            {
+              "https://blockprotocol.org/@hash/types/property-type/shuffle-block-item-id/": "3",
+              "https://blockprotocol.org/@blockprotocol/types/property-type/textual-content/": "Charlie"
+            }
+          ]
+        }
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/shuffle/public/shuffle.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/shuffle/public/preview.png",
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/shuffle/main.8bafac704a9949aca646.js",
+      "blockSitePath": "/@hash/blocks/shuffle",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/shuffle",
+      "createdAt": "2023-02-27T10:32:57.959Z",
+      "lastUpdated": "2023-12-07T17:13:04.202Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/shuffle",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/shuffle",
+      "variants": null,
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "table",
+      "version": "0.3.4",
+      "description": "Display and manipulate tabular data with filter, sort, and search features",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/table-block/v/4",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Table",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/table/public/table.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/table/public/block-preview.png",
+      "examples": [
+        {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/title/": "My Table",
+          "https://blockprotocol.org/@hash/types/property-type/table-local-column/": [
+            {
+              "https://blockprotocol.org/@blockprotocol/types/property-type/title/": "Full Name",
+              "https://blockprotocol.org/@hash/types/property-type/table-local-column-id/": "fullName"
+            },
+            {
+              "https://blockprotocol.org/@blockprotocol/types/property-type/title/": "Role",
+              "https://blockprotocol.org/@hash/types/property-type/table-local-column-id/": "role"
+            }
+          ],
+          "https://blockprotocol.org/@hash/types/property-type/table-local-row/": [
+            {
+              "fullName": "John Johnson",
+              "role": "Role 1"
+            },
+            {
+              "fullName": "Bob Bobson",
+              "role": "Role 2"
+            },
+            {
+              "fullName": "Alice Aliceson",
+              "role": "Role 3"
+            }
+          ]
+        }
+      ],
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/table/main.9c1a2036030526d4f764.js",
+      "exampleGraph": null,
+      "blockSitePath": "/@hash/blocks/table",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/table",
+      "createdAt": "2023-02-22T10:07:44.537Z",
+      "lastUpdated": "2023-12-19T10:14:43.725Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/table",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/table",
+      "variants": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "timer",
+      "version": "0.2.1",
+      "description": "Set a countdown timer to remind you when a certain amount of time has elapsed",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/timer-block/v/2",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Timer",
+      "examples": [
+        {
+          "https://blockprotocol.org/@hash/types/property-type/timer-block-total-duration/": "PT5M"
+        }
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/timer/public/timer.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/timer/public/block-preview.svg",
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/timer/main.1c45a569d4e2f3d6dde7.js",
+      "blockSitePath": "/@hash/blocks/timer",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/timer",
+      "createdAt": "2023-02-22T10:08:02.148Z",
+      "lastUpdated": "2023-12-07T17:12:52.716Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/timer",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/timer",
+      "variants": null,
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "video",
+      "version": "0.2.1",
+      "description": "Embed MP4 and WEBM videos by URL or file upload and add an optional caption",
+      "author": "hash",
+      "license": "(MIT OR Apache-2.0)",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@hash/types/entity-type/video-block/v/3",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Video",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/hash/video/public/play-box-outline.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/hash/video/public/preview.svg",
+      "examples": [
+        {}
+      ],
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/hash/video/main.f5952c61a4a9a1e4292b.js",
+      "blockSitePath": "/@hash/blocks/video",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/hash/video",
+      "createdAt": "2023-02-27T10:32:36.601Z",
+      "lastUpdated": "2023-12-08T16:20:52.221Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@hash/video",
+      "repository": "https://github.com/hashintel/hash/tree/master/blocks/video",
+      "variants": null,
+      "exampleGraph": null,
+      "verified": true,
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "test-input-field",
+      "version": "0.0.0",
+      "description": "A Test Input Field with validation properties, an example of a customizable input block showcasing validation for a github profile url.",
+      "repository": "https://github.com/jerlendds/test-input-field/tree/master",
+      "author": "jerlendds",
+      "license": "MIT",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "variants": null,
+      "schema": "https://blockprotocol.org/@jerlendds/types/entity-type/test-input-field/v/9",
+      "commit": "804f996de637cef89e9c6423376942bdbc909ba8",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Test Input Field",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field/public/abc.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field/public/block-preview.png",
+      "protocol": "0.3",
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      },
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field/main.7991e8b58b155c255576.js",
+      "blockSitePath": "/@jerlendds/blocks/test-input-field",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field",
+      "createdAt": "2023-11-03T00:22:12.674Z",
+      "lastUpdated": "2023-11-03T02:00:52.153Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@jerlendds/test-input-field",
+      "exampleGraph": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field/example-graph.json",
+      "verified": false
+    },
+    {
+      "name": "block-proto-practice",
+      "version": "0.0.0",
+      "description": "block-proto-practice block",
+      "author": "prachi123",
+      "license": "MIT",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "variants": null,
+      "schema": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/3",
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "block-proto-practice",
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/prachi123/block-proto-practice/public/omega.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/prachi123/block-proto-practice/public/block-preview.png",
+      "protocol": "0.3",
+      "codegen": {
+        "outputFolder": "src/types/generated",
+        "targets": {
+          "block-entity.ts": [
+            {
+              "blockEntityType": true
+            }
+          ]
+        }
+      },
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/prachi123/block-proto-practice/main.60903c6a120a2147f32f.js",
+      "blockSitePath": "/@prachi123/blocks/block-proto-practice",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/prachi123/block-proto-practice",
+      "createdAt": "2024-03-07T06:09:59.705Z",
+      "lastUpdated": "2024-03-07T06:31:13.669Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@prachi123/block-proto-practice",
+      "repository": null,
+      "exampleGraph": "https://blockprotocol.hashai.workers.dev/blocks/prachi123/block-proto-practice/example-graph.json",
+      "verified": false
+    },
+    {
+      "name": "test-block",
+      "version": "0.0.0",
+      "description": "test-block block",
+      "author": "rikhen",
+      "license": "MIT",
+      "externals": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      },
+      "schema": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/2",
+      "variants": null,
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "test-block",
+      "examples": [
+        {
+          "name": "World"
+        }
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/rikhen/test-block/public/omega.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/rikhen/test-block/public/block-preview.png",
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/rikhen/test-block/main.669f4c4b9efa616764ea.js",
+      "blockSitePath": "/@rikhen/blocks/test-block",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/rikhen/test-block",
+      "createdAt": "2023-03-13T20:39:37.016Z",
+      "lastUpdated": "2023-03-13T20:39:37.016Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@rikhen/test-block",
+      "repository": null,
+      "exampleGraph": null,
+      "verified": false
+    },
+    {
+      "name": "drawing",
+      "version": "0.3.2",
+      "description": "Create a diagram, sketch an idea, or map a process",
+      "author": "tldraw",
+      "license": "MIT",
+      "externals": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "schema": "https://blockprotocol.org/@tldraw/types/entity-type/drawing-block/v/2",
+      "variants": null,
+      "blockType": {
+        "entryPoint": "react"
+      },
+      "displayName": "Drawing",
+      "examples": [
+        {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/height-in-pixels/": 400,
+          "https://blockprotocol.org/@blockprotocol/types/property-type/enable-dark-mode/": false,
+          "https://blockprotocol.org/@tldraw/types/property-type/drawing-block-serialized-document/": ""
+        }
+      ],
+      "icon": "https://blockprotocol.hashai.workers.dev/blocks/tldraw/drawing/public/icon.svg",
+      "image": "https://blockprotocol.hashai.workers.dev/blocks/tldraw/drawing/public/preview.png",
+      "protocol": "0.3",
+      "source": "https://blockprotocol.hashai.workers.dev/blocks/tldraw/drawing/main.0bdfbb8994085d19812a.js",
+      "blockSitePath": "/@tldraw/blocks/drawing",
+      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/tldraw/drawing",
+      "createdAt": "2023-02-15T14:50:43.570Z",
+      "lastUpdated": "2023-03-17T15:31:18.307Z",
+      "npmPackageName": null,
+      "pathWithNamespace": "@tldraw/drawing",
+      "repository": null,
+      "exampleGraph": null,
+      "verified": true
+    }
+  ]
+}

@@ -39,11 +39,7 @@ const nextConfig = {
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
   poweredByHeader: false,
   productionBrowserSourceMaps: true,
-  transpilePackages: [
-    "internal-api-repo",
-    "@hashintel/design-system",
-    "@hashintel/type-editor",
-  ],
+  transpilePackages: ["@hashintel/design-system"],
 
   // We call linters in GitHub Actions for all pull requests. By not linting
   // again during `next build`, we save CI minutes and unlock more feedback.
@@ -138,6 +134,16 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/legal/terms-corporate/:slug*",
+        destination: "https://hash.ai/legal/terms",
+        permanent: true,
+      },
+      {
+        source: "/legal/terms-corporate",
+        destination: "https://hash.ai/legal/terms",
+        permanent: true,
+      },
+      {
         source: "/legal/privacy/:slug*",
         destination: "https://hash.ai/legal/privacy",
         permanent: true,
@@ -145,6 +151,19 @@ const nextConfig = {
       {
         source: "/legal/privacy",
         destination: "https://hash.ai/legal/privacy",
+        permanent: true,
+      },
+      // Catch-all for any remaining /legal/* paths (acceptable-use, community,
+      // etc.). Must come *after* the more specific terms/privacy rules above
+      // so they win when they match.
+      {
+        source: "/legal/:slug*",
+        destination: "https://hash.ai/legal",
+        permanent: true,
+      },
+      {
+        source: "/legal",
+        destination: "https://hash.ai/legal",
         permanent: true,
       },
       // The Block Protocol no longer hosts its own contact form. All inbound
@@ -255,20 +274,53 @@ const nextConfig = {
         destination: "/docs/blocks#your-own-application",
         permanent: true,
       },
+      // The account/dashboard system has been removed while we focus on
+      // HASH. Existing inbound links are redirected to surfaces that still
+      // exist so visitors don't hit 404s.
       {
         source: "/settings/:slug*",
-        destination: "/account/:slug*",
-        permanent: true,
+        destination: "/login",
+        permanent: false,
+      },
+      {
+        source: "/dashboard",
+        destination: "/hub",
+        permanent: false,
+      },
+      {
+        source: "/dashboard/:path*",
+        destination: "/hub",
+        permanent: false,
       },
       {
         source: "/account",
-        destination: "/account/general",
-        permanent: true,
+        destination: "/login",
+        permanent: false,
+      },
+      {
+        source: "/account/:path*",
+        destination: "/login",
+        permanent: false,
+      },
+      {
+        source: "/blocks/publish",
+        destination: "/docs/blocks/develop#publish",
+        permanent: false,
+      },
+      {
+        source: "/blocks/publish/:path*",
+        destination: "/docs/blocks/develop#publish",
+        permanent: false,
       },
       {
         source: "/:shortname/all-types",
-        destination: "/:shortname/types",
-        permanent: true,
+        destination: "/:shortname",
+        permanent: false,
+      },
+      {
+        source: "/:shortname/types/:path*",
+        destination: "/:shortname",
+        permanent: false,
       },
     ];
   },

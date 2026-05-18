@@ -118,26 +118,27 @@ test("Home page should contain key elements", async ({ page }) => {
     await page.locator('[data-testid="block-slider"] >> .slick-slide').count(),
   ).toBeGreaterThan(4);
 
-  // Sign up section
+  // Final CTA section — no longer prompts users to sign up while we focus
+  // on HASH; just points at the Hub and docs.
   const finalCTA = page.locator('[data-testid="final-cta"]');
 
-  // @todo: Add tests to handle authenticated users, they shouldn't see this section
   await expect(finalCTA).toBeVisible();
 
-  await expect(finalCTA.locator("text=Create an account")).toBeVisible();
-  await expect(
-    finalCTA.locator("text=Publish blocks to the Þ Hub"),
-  ).toBeVisible();
+  await expect(finalCTA.locator("text=Build with the Block Protocol")).toBeVisible();
   await expect(finalCTA.locator("text=Add blocks to your app")).toBeVisible();
   await expect(
-    finalCTA.locator("text=Take part in a growing, open source community"),
+    finalCTA.locator("text=Contribute to a growing, open source community"),
   ).toBeVisible();
   await expect(
     finalCTA.locator("text=Claim your favorite username"),
   ).toBeVisible();
 
-  await expect(finalCTA.locator("text=Log in")).toHaveAttribute(
+  await expect(finalCTA.locator("text=Browse the Hub")).toHaveAttribute(
     "href",
-    "/login",
+    "/hub",
+  );
+  await expect(finalCTA.locator("text=Read the docs")).toHaveAttribute(
+    "href",
+    "/docs",
   );
 });

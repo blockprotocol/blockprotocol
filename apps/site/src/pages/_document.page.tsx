@@ -116,5 +116,5 @@ MyDocument.getInitialProps = async (ctx) => {
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export default withTwindDocument(twindConfig, MyDocument as any);

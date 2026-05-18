@@ -1,16 +1,11 @@
-import { ServiceEmbedderMessageCallbacks } from "@blockprotocol/service";
-import { ExternalServiceMethodRequest } from "@local/internal-api-client/api";
 import {
   FunctionComponent,
   useCallback,
   useEffect,
   useRef,
-  useState,
 } from "react";
 
-import { apiClient } from "../../../../lib/api-client";
 import { ExpandedBlockMetadata } from "../../../../lib/blocks";
-import { ServiceModuleModal } from "./sandboxed-block-demo/service-module-modal";
 
 export interface SandboxedBlockProps {
   metadata: ExpandedBlockMetadata;
@@ -20,24 +15,19 @@ export interface SandboxedBlockProps {
 
 const serviceModuleMessageTypeName = "serviceModule";
 
-type ServiceModuleMessageState = ExternalServiceMethodRequest & {
-  process: () => Promise<void>;
-  reject: () => void;
-};
-
+/**
+ * Sandboxed block previews used to be able to call into a server-side
+ * external-service proxy that required a logged-in Block Protocol account.
+ * That account system has been removed while we focus on HASH, so we always
+ * reply to service-module requests with a `FORBIDDEN` error and leave the
+ * iframe to render with whatever local data it has.
+ */
 export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
   metadata,
   props,
   sandboxBaseUrl,
 }) => {
-  const loadedRef = useRef(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-
-  const [serviceUsageIsPermitted, setServiceUsageIsPermitted] =
-    useState<boolean>();
-
-  const [serviceModuleMessage, setServiceModuleMessage] =
-    useState<ServiceModuleMessageState | null>(null);
 
   const postBlockProps = useCallback(() => {
     iframeRef.current?.contentWindow?.postMessage(
@@ -49,27 +39,6 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
     );
   }, [props]);
 
-  const postServiceModuleResponse = useCallback(
-    (
-      payload: Awaited<
-        ReturnType<
-          ServiceEmbedderMessageCallbacks[keyof ServiceEmbedderMessageCallbacks]
-        >
-      >,
-      requestId: string,
-    ) => {
-      iframeRef.current?.contentWindow?.postMessage(
-        {
-          type: serviceModuleMessageTypeName,
-          payload,
-          requestId,
-        },
-        "*",
-      );
-    },
-    [],
-  );
-
   useEffect(() => {
     const listener = (message: MessageEvent) => {
       if (sandboxBaseUrl && message.origin !== sandboxBaseUrl) {
@@ -77,64 +46,24 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
       }
 
       if (message.data.type === serviceModuleMessageTypeName) {
-        const { methodName, payload, providerName, requestId } = message.data;
+        const { requestId } = message.data;
 
-        const process = async () => {
-          try {
-            const { data: response } = await apiClient.externalServiceMethod({
-              methodName,
-              payload,
-              providerName: providerName.toLowerCase(),
-            });
-            if (response?.externalServiceMethodResponse) {
-              postServiceModuleResponse(
-                { data: response.externalServiceMethodResponse },
-                requestId,
-              );
-            }
-            throw new Error("No data provided by service");
-          } catch (error) {
-            postServiceModuleResponse(
-              {
-                errors: [
-                  {
-                    code: "INTERNAL_ERROR",
-                    message: (error as Error).message,
-                  },
-                ],
-              },
-              requestId,
-            );
-          }
-        };
-
-        const reject = () => {
-          postServiceModuleResponse(
-            {
+        iframeRef.current?.contentWindow?.postMessage(
+          {
+            type: serviceModuleMessageTypeName,
+            payload: {
               errors: [
                 {
                   code: "FORBIDDEN",
-                  message: "You are not permitted to use this service",
+                  message:
+                    "External service calls are unavailable while the Block Protocol Hub is paused.",
                 },
               ],
             },
             requestId,
-          );
-        };
-
-        if (serviceUsageIsPermitted === undefined) {
-          setServiceModuleMessage({
-            methodName,
-            payload,
-            process,
-            providerName,
-            reject,
-          });
-        } else if (serviceUsageIsPermitted) {
-          void process();
-        } else {
-          reject();
-        }
+          },
+          "*",
+        );
       }
     };
 
@@ -143,12 +72,7 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
     return () => {
       window.removeEventListener("message", listener);
     };
-  }, [
-    metadata.pathWithNamespace,
-    postServiceModuleResponse,
-    sandboxBaseUrl,
-    serviceUsageIsPermitted,
-  ]);
+  }, [sandboxBaseUrl]);
 
   useEffect(() => {
     postBlockProps();
@@ -160,41 +84,23 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
   )}/sandboxed-demo`;
 
   return (
-    <>
-      <ServiceModuleModal
-        setServiceUsagePermission={(allowed: boolean) => {
-          setServiceUsageIsPermitted(allowed);
-          if (allowed) {
-            void serviceModuleMessage?.process();
-          } else {
-            void serviceModuleMessage?.reject();
-          }
-        }}
-        onClose={() => setServiceModuleMessage(null)}
-        serviceModuleMessage={serviceModuleMessage}
-      />
-
-      <iframe
-        ref={iframeRef}
-        title="block"
-        src={sandboxedDemoUrl}
-        sandbox="allow-forms allow-scripts allow-same-origin"
-        allow="clipboard-write"
-        onLoad={() => {
-          // @todo-0.3 this isn't triggering – why not?
-          loadedRef.current = true;
-          postBlockProps();
-        }}
-        // todo: remove 100% after implementing viewport negotiation
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          width: "100%",
-          height: "100%",
-        }}
-      />
-    </>
+    <iframe
+      ref={iframeRef}
+      title="block"
+      src={sandboxedDemoUrl}
+      sandbox="allow-forms allow-scripts allow-same-origin"
+      allow="clipboard-write"
+      onLoad={() => {
+        postBlockProps();
+      }}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        width: "100%",
+        height: "100%",
+      }}
+    />
   );
 };
