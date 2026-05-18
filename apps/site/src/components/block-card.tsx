@@ -148,7 +148,7 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({ data }) => {
         >
           <Box sx={{ mb: 2, display: "flex", alignItems: "center" }}>
             <Box
-              sx={{ mr: 1.5, width: 24, height: 24 }}
+              sx={{ mr: 1.5, width: 24, height: 24, objectFit: "contain" }}
               component="img"
               src={icon ?? undefined}
             />

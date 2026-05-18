@@ -132,7 +132,7 @@ export const OverviewCard: FunctionComponent<OverviewCardProps> = ({
           >
             {icon ? (
               <Box
-                sx={{ mr: 1.5, width: 24, height: 24 }}
+                sx={{ mr: 1.5, width: 24, height: 24, objectFit: "contain" }}
                 component="img"
                 src={icon}
               />

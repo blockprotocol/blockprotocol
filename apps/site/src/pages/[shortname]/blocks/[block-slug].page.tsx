@@ -295,6 +295,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 mr: 3,
                 height: 108,
                 width: 108,
+                objectFit: "contain",
               }}
               component="img"
               src={blockMetadata.icon ?? undefined}
@@ -310,6 +311,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                     height: 44,
                     width: 44,
                     mr: 2,
+                    objectFit: "contain",
                   }}
                   component="img"
                   src={blockMetadata.icon ?? undefined}
