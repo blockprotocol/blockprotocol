@@ -117,6 +117,9 @@ const handler: NextApiHandler = async (req, res) => {
     <script type="module">
       import React from "https://esm.sh/react@${reactVersion}?target=es2021"
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
+      // React 19 removed the legacy ReactDOM.render / hydrate APIs in favour
+      // of the root API exposed from "react-dom/client".
+      import { createRoot } from "https://esm.sh/react-dom@${reactVersion}/client?target=es2021"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
       import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/index.js?target=es2021&deps=react@${reactVersion}";
 
@@ -258,6 +261,12 @@ const handler: NextApiHandler = async (req, res) => {
           const mockBlockDockInitialData = ${JSON.stringify(
             mockBlockDockInitialData,
           )}
+
+          // Persist the React 19 root across re-renders. Calling createRoot
+          // more than once on the same container is a warning in React 19,
+          // and the legacy ReactDOM.render API that previously handled this
+          // implicit reconciliation no longer exists.
+          let reactRoot;
       
           const render = (props) => {
             const { blockEntity, readonly } = props;
@@ -289,10 +298,8 @@ const handler: NextApiHandler = async (req, res) => {
             
             document.getElementById("loading-indicator")?.remove();
 
-            ReactDOM.render(
-              _jsx(MockBlockDock, mockBlockDockProps),
-              document.getElementById("container")
-            );
+            reactRoot ??= createRoot(document.getElementById("container"));
+            reactRoot.render(_jsx(MockBlockDock, mockBlockDockProps));
           }
           
           if (globalThis.blockEntityProps) {
