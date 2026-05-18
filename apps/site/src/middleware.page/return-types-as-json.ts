@@ -1,13 +1,13 @@
 /* istanbul ignore file */
-import {
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+
+import type {
   DataType,
   EntityType,
   PropertyType,
   VersionedUrl,
-} from "@blockprotocol/type-system/slim";
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-
+} from "../lib/bp-types";
 import { hardcodedTypes } from "./hardcoded-types";
 
 const generateErrorResponse = (

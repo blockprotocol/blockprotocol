@@ -3,7 +3,6 @@ import {
   Entity as EntityTemporal,
   EntityTemporalVersioningMetadata,
 } from "@blockprotocol/graph/temporal";
-import { VersionedUrl } from "@blockprotocol/type-system/slim";
 import {
   Box,
   FormControlLabel,
@@ -18,6 +17,7 @@ import {
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
+import type { VersionedUrl } from "../../../lib/bp-types";
 import { Alert } from "../../alert";
 import {
   BlockDataTabPanels,
