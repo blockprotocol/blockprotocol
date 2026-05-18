@@ -13,5 +13,10 @@ export type SerializedUser = {
   isSignedUp: boolean;
   shortname?: string;
   preferredName?: string;
-  userAvatarUrl?: string;
+  /**
+   * Always present so it round-trips through `JSON.stringify` cleanly when
+   * Next.js serializes `getStaticProps` output - `undefined` would crash the
+   * runtime serializer ("undefined cannot be serialized as JSON").
+   */
+  userAvatarUrl: string | null;
 };

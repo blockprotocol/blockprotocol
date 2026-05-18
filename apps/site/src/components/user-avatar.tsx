@@ -26,7 +26,7 @@ export const UserAvatar: FunctionComponent<UserAvatarProps> = ({
 
   return (
     <Avatar
-      src={userAvatarUrl}
+      src={userAvatarUrl ?? undefined}
       sx={[
         {
           width: size,

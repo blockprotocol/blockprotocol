@@ -10,12 +10,14 @@ const PRODUCTION_ORIGIN = "https://blockprotocol.org";
 // Shortnames whose blocks we want to mirror into the snapshot.
 // Discovered by scraping `${PRODUCTION_ORIGIN}/hub` once - any new author
 // (or new author whose blocks should remain listed) should be added here.
+//
+// Authors deliberately excluded:
+//   - prachi123 (single low-quality "block-proto-practice" placeholder block)
 const SHORTNAMES = [
   "alfie",
   "blockprotocol",
   "hash",
   "jerlendds",
-  "prachi123",
   "rikhen",
   "tldraw",
 ] as const;

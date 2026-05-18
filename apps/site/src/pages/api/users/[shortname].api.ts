@@ -36,7 +36,7 @@ export default createBaseHandler<null, ApiUserByShortnameResponse>()
         isSignedUp: true,
         shortname: staticUser.shortname,
         preferredName: staticUser.preferredName,
-        userAvatarUrl: staticUser.userAvatarUrl,
+        userAvatarUrl: staticUser.userAvatarUrl ?? null,
       },
     });
   })

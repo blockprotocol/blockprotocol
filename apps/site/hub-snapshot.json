@@ -19,10 +19,6 @@
       "preferredName": "Jordan"
     },
     {
-      "shortname": "prachi123",
-      "preferredName": "prachi"
-    },
-    {
       "shortname": "rikhen",
       "preferredName": "Rikhen"
     },
@@ -1329,46 +1325,6 @@
       "npmPackageName": null,
       "pathWithNamespace": "@jerlendds/test-input-field",
       "exampleGraph": "https://blockprotocol.hashai.workers.dev/blocks/jerlendds/test-input-field/example-graph.json",
-      "verified": false
-    },
-    {
-      "name": "block-proto-practice",
-      "version": "0.0.0",
-      "description": "block-proto-practice block",
-      "author": "prachi123",
-      "license": "MIT",
-      "externals": {
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0"
-      },
-      "variants": null,
-      "schema": "https://blockprotocol.org/@blockprotocol/types/entity-type/thing/v/3",
-      "blockType": {
-        "entryPoint": "react"
-      },
-      "displayName": "block-proto-practice",
-      "icon": "https://blockprotocol.hashai.workers.dev/blocks/prachi123/block-proto-practice/public/omega.svg",
-      "image": "https://blockprotocol.hashai.workers.dev/blocks/prachi123/block-proto-practice/public/block-preview.png",
-      "protocol": "0.3",
-      "codegen": {
-        "outputFolder": "src/types/generated",
-        "targets": {
-          "block-entity.ts": [
-            {
-              "blockEntityType": true
-            }
-          ]
-        }
-      },
-      "source": "https://blockprotocol.hashai.workers.dev/blocks/prachi123/block-proto-practice/main.60903c6a120a2147f32f.js",
-      "blockSitePath": "/@prachi123/blocks/block-proto-practice",
-      "componentId": "https://blockprotocol.hashai.workers.dev/blocks/prachi123/block-proto-practice",
-      "createdAt": "2024-03-07T06:09:59.705Z",
-      "lastUpdated": "2024-03-07T06:31:13.669Z",
-      "npmPackageName": null,
-      "pathWithNamespace": "@prachi123/block-proto-practice",
-      "repository": null,
-      "exampleGraph": "https://blockprotocol.hashai.workers.dev/blocks/prachi123/block-proto-practice/example-graph.json",
       "verified": false
     },
     {
