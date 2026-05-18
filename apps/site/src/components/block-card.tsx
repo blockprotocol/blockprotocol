@@ -148,7 +148,7 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({ data }) => {
         >
           <Box sx={{ mb: 2, display: "flex", alignItems: "center" }}>
             <Box
-              sx={{ mr: 1.5, width: 24, height: 24 }}
+              sx={{ mr: 1.5, width: 24, height: 24, objectFit: "contain" }}
               component="img"
               src={icon ?? undefined}
             />
@@ -188,16 +188,12 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({ data }) => {
               @{author}
             </Typography>
             <Typography
-              sx={{ mr: 1.5, mb: 1.5 }}
-              color={({ palette }) => palette.gray[60]}
+              sx={{ mr: 1.5, mb: 1.5, color: "gray.60" }}
               variant="bpMicroCopy"
             >
               {version}
             </Typography>
-            <Typography
-              color={({ palette }) => palette.gray[60]}
-              variant="bpMicroCopy"
-            >
+            <Typography sx={{ color: "gray.60" }} variant="bpMicroCopy">
               <ClientOnlyLastUpdated value={lastUpdated} />
             </Typography>
           </Box>

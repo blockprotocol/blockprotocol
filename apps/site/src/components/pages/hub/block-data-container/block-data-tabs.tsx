@@ -8,7 +8,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { FunctionComponent } from "react";
+import { FunctionComponent, SyntheticEvent } from "react";
 
 const DesktopTabs = styled(
   ({ children, ...props }: TabsProps & { modalOpen?: boolean }) => (
@@ -80,7 +80,9 @@ export const BlockDataTabs: FunctionComponent<BlockDataTabsProps> = ({
   ) : (
     <DesktopTabs
       value={blockDataTab}
-      onChange={(_event, newValue: number) => setBlockDataTab(newValue)}
+      onChange={(_event: SyntheticEvent, newValue: number) =>
+        setBlockDataTab(newValue)
+      }
       modalOpen={modalOpen}
     >
       <Tab label="Block Properties" />

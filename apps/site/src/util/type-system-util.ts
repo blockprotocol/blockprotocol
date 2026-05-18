@@ -8,4 +8,6 @@ export const linkEntityTypeId =
   ].$id;
 
 export const isLinkEntityType = (entityType: EntityTypeWithMetadata) =>
-  !!entityType.schema.allOf?.some((parent) => parent.$ref === linkEntityTypeId);
+  !!entityType.schema.allOf?.some(
+    (parent: { $ref?: string }) => parent.$ref === linkEntityTypeId,
+  );

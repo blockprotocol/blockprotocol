@@ -57,12 +57,31 @@ const handler: NextApiHandler = async (req, res) => {
 
   const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
 
-  // @todo restore this when esm.sh treats version ranges correctly
-  //    it currently pulls non-latest versions of packages if a range is supplied
-  // const reactVersion =
-  //   blockMetadata.externals?.react ?? packageJson.dependencies.react;
-
-  const reactVersion = packageJson.dependencies.react;
+  /**
+   * The block sandbox is fully isolated from the parent app, so the React
+   * version it loads is independent of {@link packageJson.dependencies.react}.
+   * Every currently-published block was built against React 18 and pulls in
+   * dependencies (notably `react-transition-group` via MUI) that call
+   * `ReactDOM.findDOMNode` / `ReactDOM.render` / `ReactDOM.hydrate` —
+   * APIs React 19 removed entirely. Loading the iframe with React 19 makes
+   * those blocks crash at first render with no visible error, leaving an
+   * empty container where the preview should be.
+   *
+   * Until we ship a build pipeline that recompiles existing blocks against
+   * React 19 (or all blocks switch to ref-forwarding APIs), pin the iframe
+   * to React 18 by default. A block can still opt into a different React
+   * by declaring it under `externals.react` in its `block-metadata.json`,
+   * but the value must be an exact version (esm.sh resolves caret/tilde
+   * ranges to the wrong release in some cases — this is the original
+   * reason this lookup was disabled).
+   */
+  const fallbackReactVersion = "18.2.0";
+  const externalsReactVersion = blockMetadata.externals?.react;
+  const reactVersion =
+    typeof externalsReactVersion === "string" &&
+    /^\d+\.\d+\.\d+$/.test(externalsReactVersion)
+      ? externalsReactVersion
+      : fallbackReactVersion;
 
   const externalUrlLookup: Record<string, string> = {};
 
@@ -117,6 +136,11 @@ const handler: NextApiHandler = async (req, res) => {
     <script type="module">
       import React from "https://esm.sh/react@${reactVersion}?target=es2021"
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
+      // Use the root API from "react-dom/client". This is the recommended
+      // entry point in React 18+ and the only one available in React 19,
+      // so the iframe stays compatible if a block declares a newer React
+      // via externals.react.
+      import { createRoot } from "https://esm.sh/react-dom@${reactVersion}/client?target=es2021"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
       import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/index.js?target=es2021&deps=react@${reactVersion}";
 
@@ -258,6 +282,12 @@ const handler: NextApiHandler = async (req, res) => {
           const mockBlockDockInitialData = ${JSON.stringify(
             mockBlockDockInitialData,
           )}
+
+          // Persist the root across re-renders. createRoot is intended to
+          // be called once per container; subsequent updates should go
+          // through root.render(). Re-creating the root each time would
+          // unmount-and-remount the tree on every prop message.
+          let reactRoot;
       
           const render = (props) => {
             const { blockEntity, readonly } = props;
@@ -289,10 +319,8 @@ const handler: NextApiHandler = async (req, res) => {
             
             document.getElementById("loading-indicator")?.remove();
 
-            ReactDOM.render(
-              _jsx(MockBlockDock, mockBlockDockProps),
-              document.getElementById("container")
-            );
+            reactRoot ??= createRoot(document.getElementById("container"));
+            reactRoot.render(_jsx(MockBlockDock, mockBlockDockProps));
           }
           
           if (globalThis.blockEntityProps) {
@@ -322,6 +350,13 @@ const handler: NextApiHandler = async (req, res) => {
     </body>
   </html>
   `;
+
+  // Security headers for iframe embedding (CSP frame-ancestors) are configured in
+  // next.config.js to allow cross-origin embedding from the frontend host.
+  // Do not set X-Frame-Options or CSP frame-ancestors here as they would override
+  // the permissive configuration needed for production where sandbox pages are
+  // served from a different host than the main frontend.
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
 
   res.status(200);
   res.write(html);

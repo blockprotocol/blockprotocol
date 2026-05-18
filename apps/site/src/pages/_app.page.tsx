@@ -4,7 +4,6 @@ import "../styles/prism.css";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import * as Sentry from "@sentry/nextjs";
 import withTwindApp from "@twind/next/app";
 import { LazyMotion } from "framer-motion";
 import type { AppProps } from "next/app";
@@ -12,23 +11,17 @@ import { Router, useRouter } from "next/router";
 import { DefaultSeo, DefaultSeoProps } from "next-seo";
 import { SnackbarProvider } from "notistack";
 import NProgress from "nprogress";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import TagManager from "react-gtm-module";
 
 import siteMap from "../../site-map.json";
 import twindConfig from "../../twind.config.cjs";
 import { PageLayout } from "../components/page-layout";
 import SiteMapContext from "../context/site-map-context";
-import {
-  UserContext,
-  UserContextValue,
-  UserState,
-} from "../context/user-context";
-import { apiClient } from "../lib/api-client";
-import { setWordPressSettingsUrlSession } from "../lib/word-press-settings-url-session";
+import { isProduction } from "../lib/config";
+import { SiteMap } from "../lib/sitemap";
 import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
-import { ApiMeResponse } from "./api/me.api";
 import { NextPageWithLayout } from "./shared/next-types";
 
 const loadFramerFeatures = () =>
@@ -91,60 +84,12 @@ const MyApp = ({
     };
   }, [router]);
 
-  const [user, setUser] = useState<UserState>("loading");
-
-  const signOut = useCallback(() => {
-    Sentry.configureScope((scope) => {
-      scope.clear();
-    });
-    setWordPressSettingsUrlSession(null);
-    setUser(undefined);
-  }, []);
-
-  const refetchUser = useCallback(async () => {
-    const { data, error } = await apiClient.get<ApiMeResponse>("me", {
-      "axios-retry": {
-        onRetry: (retryCount, axiosError) => {
-          Sentry.captureMessage("Retrying /api/me", {
-            extra: { retryCount, axiosError },
-          });
-        },
-        retries: 2,
-        retryCondition: (axiosError) =>
-          ![200, 304].includes(axiosError.response?.status ?? 0),
-      },
-    });
-
-    if (!data) {
-      Sentry.captureException("Problem fetching /api/me", {
-        level: "warning",
-        extra: { error },
-      });
-      return;
-    }
-
-    if ("guest" in data) {
-      signOut();
-    } else {
-      Sentry.configureScope((scope) => {
-        scope.setUser({ id: data.user.id });
-      });
-      setUser(data.user);
-    }
-  }, [signOut]);
-
-  useEffect(() => {
-    void refetchUser();
-  }, [refetchUser]);
-
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production") {
       TagManager.initialize({ gtmId: "GTM-5DRD4LS" });
     }
 
     const updatePreviousRoute = (url: string) => {
-      // routeChangeStart also runs on initial load,
-      // so this condition prevents the initial URL being added to sessionStorage
       if (document && !document.location.href.includes(url)) {
         try {
           sessionStorage.setItem("previousRoute", document.location.href);
@@ -168,22 +113,6 @@ const MyApp = ({
     }
   }, [router]);
 
-  useEffect(() => {
-    const { route } = router;
-    if (user && user !== "loading" && !user.isSignedUp && route !== "/signup") {
-      void router.push("/signup");
-    }
-    if (user && user !== "loading" && route === "/") {
-      void router.push("/dashboard");
-    }
-  }, [user, router]);
-
-  const userContextValue = useMemo<UserContextValue>(
-    () => ({ user, setUser, refetch: refetchUser, signOut }),
-    [refetchUser, user, signOut],
-  );
-
-  // Use the layout defined at the page level, if available
   const getLayout =
     Component.getLayout ??
     ((page) => (
@@ -192,19 +121,21 @@ const MyApp = ({
 
   return (
     <LazyMotion features={loadFramerFeatures} strict>
-      <UserContext.Provider value={userContextValue}>
-        <SiteMapContext.Provider value={siteMap}>
-          <CacheProvider value={emotionCache}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <SnackbarProvider maxSnack={3}>
-                <DefaultSeo {...defaultSeoConfig} />
-                {getLayout(<Component {...pageProps} />)}
-              </SnackbarProvider>
-            </ThemeProvider>
-          </CacheProvider>
-        </SiteMapContext.Provider>
-      </UserContext.Provider>
+      <SiteMapContext.Provider value={siteMap as unknown as SiteMap}>
+        <CacheProvider value={emotionCache}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <SnackbarProvider maxSnack={3}>
+              <DefaultSeo
+                {...defaultSeoConfig}
+                dangerouslySetAllPagesToNoIndex={!isProduction}
+                dangerouslySetAllPagesToNoFollow={!isProduction}
+              />
+              {getLayout(<Component {...pageProps} />)}
+            </SnackbarProvider>
+          </ThemeProvider>
+        </CacheProvider>
+      </SiteMapContext.Provider>
     </LazyMotion>
   );
 };

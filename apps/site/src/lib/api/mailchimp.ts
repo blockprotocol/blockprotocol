@@ -2,7 +2,6 @@ import axios, { AxiosError, AxiosInstance } from "axios";
 import md5 from "md5";
 
 import { mustGetEnvVar } from "../../util/api";
-import { User } from "./model/user.model";
 
 let cachedMailchimpApi: AxiosInstance;
 
@@ -50,34 +49,6 @@ export const subscribeToMailchimp = async (params: {
     status: "subscribed",
     merge_fields,
   });
-};
-
-export const ensureUserIsMailchimpMember = async (params: {
-  user: User;
-}): Promise<void> => {
-  const { user } = params;
-  const { email } = user;
-
-  const memberID = md5(email);
-
-  await getMailchimpApi()
-    .get(`members/${memberID}`)
-    .then(() => {})
-    .catch(async (error: AxiosError) => {
-      if (error.response?.status === 404) {
-        await subscribeToMailchimp({
-          email,
-          merge_fields: {
-            SHORTNAME: user.shortname,
-            PREFNAME: user.preferredName,
-          },
-        });
-      } else {
-        /** @todo: properly log error */
-        // eslint-disable-next-line no-console
-        console.log(error);
-      }
-    });
 };
 
 export const getMember = async (params: {

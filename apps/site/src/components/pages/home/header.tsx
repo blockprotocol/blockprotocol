@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { m, Variants } from "framer-motion";
 import Image from "next/legacy/image";
+import type { ComponentProps } from "react";
 
 import helixBoxes from "../../../../public/assets/new-home/helix-boxes.webp";
 import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "../../navbar";
@@ -31,12 +32,17 @@ const fadeInChildren: Variants = {
   show: { opacity: 1 },
 };
 
-const AnimatedTypography = m(Typography);
+const BaseAnimatedTypography = m(Typography);
 
-AnimatedTypography.defaultProps = {
-  variants: fadeInAndMoveDownChildren,
-  transition: { duration: 0.4, ease: "easeOut" },
-};
+const AnimatedTypography = (
+  props: ComponentProps<typeof BaseAnimatedTypography>,
+) => (
+  <BaseAnimatedTypography
+    variants={fadeInAndMoveDownChildren}
+    transition={{ duration: 0.4, ease: "easeOut" }}
+    {...props}
+  />
+);
 
 export const Header = () => {
   const theme = useTheme();

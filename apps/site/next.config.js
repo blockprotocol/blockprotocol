@@ -6,8 +6,32 @@ const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
 
 // @ts-check
 
+/**
+ * Build the frame-ancestors CSP directive for sandbox pages.
+ * In production, the sandbox pages are served from a different host than the main frontend,
+ * so we need to explicitly allow the frontend host to embed them.
+ */
+const getSandboxFrameAncestors = () => {
+  const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
+  if (frontendUrl) {
+    try {
+      const frontendOrigin = new URL(frontendUrl).origin;
+      return `frame-ancestors 'self' ${frontendOrigin}`;
+    } catch {
+      // Invalid URL, fall back to 'self' only
+    }
+  }
+  return "frame-ancestors 'self'";
+};
+
 /** @type {import("next").NextConfig} */
 const nextConfig = {
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? { exclude: ["error", "warn"] }
+        : false,
+  },
   experimental: {
     // @see `deleteIsrFilesCreatedAfterNextBuild()` for rationale
     isrMemoryCacheSize: 0,
@@ -15,17 +39,6 @@ const nextConfig = {
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
   poweredByHeader: false,
   productionBrowserSourceMaps: true,
-  swcMinify: true,
-
-  sentry: {
-    autoInstrumentServerFunctions: false,
-    hideSourceMaps: false,
-  },
-  transpilePackages: [
-    "internal-api-repo",
-    "@hashintel/design-system",
-    "@hashintel/type-editor",
-  ],
 
   // We call linters in GitHub Actions for all pull requests. By not linting
   // again during `next build`, we save CI minutes and unlock more feedback.
@@ -39,12 +52,47 @@ const nextConfig = {
         /**
          * allow fetching types as JSON from anywhere
          * @see ./src/middleware.page.ts for middleware which serves the JSON
+         *
+         * `:shortname(@[^/]+)` constrains the parameter to user/org handles
+         * (which always start with `@`) so system paths like `/docs/types`
+         * aren't accidentally captured.
          */
-        source: "/:shortname/types/:path*",
+        source: "/:shortname(@[^/]+)/types/:path*",
         headers: [
           {
             key: "access-control-allow-origin",
             value: "*",
+          },
+        ],
+      },
+      {
+        /**
+         * Allow the sandboxed block demo to be loaded in an iframe.
+         * This is required for block previews to work on the Hub.
+         * The :shortname param captures the full segment including @ prefix.
+         *
+         * Note: X-Frame-Options is intentionally omitted because it only supports
+         * DENY or SAMEORIGIN, and cannot express cross-origin embedding.
+         * In production, sandbox pages are served from a different host than the
+         * main frontend, so we use CSP frame-ancestors which supports explicit origins.
+         */
+        source: "/:shortname(@[^/]+)/blocks/:blockslug/sandboxed-demo",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: getSandboxFrameAncestors(),
+          },
+        ],
+      },
+      {
+        /**
+         * Also apply to the API route that the rewrite points to.
+         */
+        source: "/api/rewrites/sandboxed-block-demo",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: getSandboxFrameAncestors(),
           },
         ],
       },
@@ -71,13 +119,84 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/partners",
-        destination: "/contact",
+        source: "/about",
+        destination: "https://hash.dev/docs/block-protocol",
+        permanent: true,
+      },
+      // Terms and Privacy are now authored on hash.ai. Sub-paths
+      // (/legal/terms/dpa, /legal/privacy/cookies, etc.) collapse onto the
+      // hash.ai section index because their slugs don't necessarily match.
+      // Sub-paths whose slugs DO match on hash.ai get their own explicit
+      // rules above the catch-all so the slug is preserved.
+      {
+        source: "/legal/terms/products",
+        destination: "https://hash.ai/legal/terms/products",
         permanent: true,
       },
       {
-        source: "/partners/submitted",
-        destination: "/contact/submitted",
+        source: "/legal/terms/:slug*",
+        destination: "https://hash.ai/legal/terms",
+        permanent: true,
+      },
+      {
+        source: "/legal/terms",
+        destination: "https://hash.ai/legal/terms",
+        permanent: true,
+      },
+      {
+        source: "/legal/terms-corporate/:slug*",
+        destination: "https://hash.ai/legal/terms",
+        permanent: true,
+      },
+      {
+        source: "/legal/terms-corporate",
+        destination: "https://hash.ai/legal/terms",
+        permanent: true,
+      },
+      {
+        source: "/legal/privacy/:slug*",
+        destination: "https://hash.ai/legal/privacy",
+        permanent: true,
+      },
+      {
+        source: "/legal/privacy",
+        destination: "https://hash.ai/legal/privacy",
+        permanent: true,
+      },
+      // Catch-all for any remaining /legal/* paths (acceptable-use, community,
+      // etc.). Must come *after* the more specific terms/privacy rules above
+      // so they win when they match.
+      {
+        source: "/legal/:slug*",
+        destination: "https://hash.ai/legal",
+        permanent: true,
+      },
+      {
+        source: "/legal",
+        destination: "https://hash.ai/legal",
+        permanent: true,
+      },
+      // The Block Protocol no longer hosts its own contact form. All inbound
+      // enquiries are routed to HASH's contact page, which also covers the
+      // legacy /partners and /contact/submitted flows.
+      {
+        source: "/contact/:slug*",
+        destination: "https://hash.ai/contact",
+        permanent: true,
+      },
+      {
+        source: "/contact",
+        destination: "https://hash.ai/contact",
+        permanent: true,
+      },
+      {
+        source: "/partners/:slug*",
+        destination: "https://hash.ai/contact",
+        permanent: true,
+      },
+      {
+        source: "/partners",
+        destination: "https://hash.ai/contact",
         permanent: true,
       },
       {
@@ -165,20 +284,56 @@ const nextConfig = {
         destination: "/docs/blocks#your-own-application",
         permanent: true,
       },
+      // The account/dashboard system has been removed while we focus on
+      // HASH. Existing inbound links are redirected to surfaces that still
+      // exist so visitors don't hit 404s.
       {
         source: "/settings/:slug*",
-        destination: "/account/:slug*",
-        permanent: true,
+        destination: "/login",
+        permanent: false,
+      },
+      {
+        source: "/dashboard",
+        destination: "/hub",
+        permanent: false,
+      },
+      {
+        source: "/dashboard/:path*",
+        destination: "/hub",
+        permanent: false,
       },
       {
         source: "/account",
-        destination: "/account/general",
-        permanent: true,
+        destination: "/login",
+        permanent: false,
       },
       {
-        source: "/:shortname/all-types",
-        destination: "/:shortname/types",
-        permanent: true,
+        source: "/account/:path*",
+        destination: "/login",
+        permanent: false,
+      },
+      {
+        source: "/blocks/publish",
+        destination: "/docs/blocks/develop#publish",
+        permanent: false,
+      },
+      {
+        source: "/blocks/publish/:path*",
+        destination: "/docs/blocks/develop#publish",
+        permanent: false,
+      },
+      {
+        // `:shortname(@[^/]+)` constrains the parameter to user/org handles
+        // (which always start with `@`) so that system paths like
+        // `/docs/all-types` or `/docs/types` don't accidentally get captured.
+        source: "/:shortname(@[^/]+)/all-types",
+        destination: "/:shortname",
+        permanent: false,
+      },
+      {
+        source: "/:shortname(@[^/]+)/types/:path*",
+        destination: "/:shortname",
+        permanent: false,
       },
     ];
   },
@@ -186,11 +341,11 @@ const nextConfig = {
   rewrites: () => {
     return [
       {
-        source: "/blocks/:shortname/:blockslug/block-metadata.json",
+        source: "/blocks/:shortname(@[^/]+)/:blockslug/block-metadata.json",
         destination: "/api/rewrites/block-metadata",
       },
       {
-        source: "/:shortname/blocks/:blockslug/sandboxed-demo",
+        source: "/:shortname(@[^/]+)/blocks/:blockslug/sandboxed-demo",
         destination: "/api/rewrites/sandboxed-block-demo",
       },
       {

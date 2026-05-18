@@ -1,5 +1,9 @@
-import { openLoginModal, openMobileNav } from "../shared/nav.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
+
+const openMobileNav = async (page: import("@playwright/test").Page) => {
+  await page.locator("[data-testid='mobile-nav-trigger']").click();
+  await expect(page.locator("[data-testid='mobile-nav']")).toBeVisible();
+};
 
 test("page header navigation works", async ({
   page,
@@ -31,7 +35,11 @@ test("page header navigation works", async ({
   }
 
   await navSelector.locator("text=Docs").click();
-  await expect(page).toHaveURL("/docs");
+  // The navbar Docs link points at the unversioned `/docs` href stored in
+  // `site-map.json`, but `middleware.page.ts` 308-redirects users onto the
+  // latest version (`/docs/0.4`) — which is what the address bar settles
+  // on. Assert against the post-redirect URL.
+  await expect(page).toHaveURL("/docs/0.4");
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
 
   // TODO: Add alt to BP logo, ensure that the logo is not clickable from /
@@ -41,16 +49,14 @@ test("page header navigation works", async ({
     page.locator("text=The open standard for block-based apps"),
   ).toBeVisible();
 
-  if (isMobile) {
-    await openMobileNav(page);
-  }
-
-  await navSelector.locator("text=Create your account").click();
-  await expect(page).toHaveURL("/signup");
-  await expect(page.locator("text=Create an account")).toBeVisible();
-
-  await openLoginModal({ page, isMobile });
-  await expect(page).toHaveURL("/signup");
+  // Account-related navigation (Log In / Create your account) has been
+  // removed from the header while signups to the Hub are paused. The
+  // /login and /signup pages remain live so existing inbound links still
+  // resolve, but they are no longer reachable from the global nav.
+  await expect(navSelector.getByText("Log In", { exact: true })).toHaveCount(0);
+  await expect(
+    navSelector.getByText("Create your account", { exact: true }),
+  ).toHaveCount(0);
 });
 
 test("search modal is triggered by button press on desktop", async ({
@@ -73,5 +79,3 @@ test("search modal is triggered by button press on desktop", async ({
     "Clicking on search nav button should bring up search modal",
   ).toBeVisible();
 });
-
-// @todo: Add tests for authenticated flow

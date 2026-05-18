@@ -16,12 +16,6 @@ export const TABS = [
     slug: "blocks",
     testId: "profile-page-blocks-tab",
   },
-  {
-    title: "Types",
-    value: "types",
-    slug: "types",
-    testId: "profile-page-schemas-tab",
-  },
 ] as const;
 
 export type TabValue = (typeof TABS)[number]["value"];

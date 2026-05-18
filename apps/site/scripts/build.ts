@@ -11,19 +11,6 @@ const script = async () => {
 
   await execa("yarn", ["generate-blockmetadata-schema"], { stdio: "inherit" });
 
-  const hasMongoEnv =
-    Boolean(process.env.MONGODB_URI) && Boolean(process.env.MONGODB_DB_NAME);
-
-  if (hasMongoEnv) {
-    await import("./create-db-indexes");
-  } else {
-    console.log(
-      chalk.yellow(
-        "Skipping DB index creation (MONGODB_URI/MONGODB_DB_NAME not set).",
-      ),
-    );
-  }
-
   // @todo Remove babel.config.json when next.config.js supports swcInstrumentCoverage
   // https://github.com/vercel/next.js/pull/36692
   const babelConfigPath = path.resolve(process.cwd(), "babel.config.json");

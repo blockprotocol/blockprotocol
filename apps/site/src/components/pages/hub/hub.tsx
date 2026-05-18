@@ -20,13 +20,15 @@ import {
   getRouteHubBrowseType,
   useRouteChangingWithTrigger as useRouteChangingWithListener,
 } from "./hub-utils";
+import { ServiceItem } from "./service-item";
 
 export const useRouteHubBrowseType = () => {
   const router = useRouter();
   return getRouteHubBrowseType(router.query);
 };
 
-export type HubItemDescription = {
+export type BlockItemDescription = {
+  kind: "block";
   image?: string | null;
   title: string;
   description?: string;
@@ -37,10 +39,26 @@ export type HubItemDescription = {
   verified?: boolean;
 };
 
-const HubItem = ({
+export type ServiceItemDescription = {
+  kind: "service";
+  /** Stable id used for React keys (provider doesn't enforce uniqueness alone). */
+  id: string;
+  provider: string;
+  /** Lowercase, handle-like representation rendered as `@providerHandle`. */
+  providerHandle: string;
+  providerColor: string;
+  providerInitial: string;
+  name: string;
+  description: string;
+  category: string;
+};
+
+export type HubItemDescription = BlockItemDescription | ServiceItemDescription;
+
+const BlockItem = ({
   item: { image, title, description, author, version, updated, url, verified },
 }: {
-  item: HubItemDescription;
+  item: BlockItemDescription;
 }) => (
   <Stack direction="row" spacing={2} alignItems="start">
     {image ? (
@@ -55,7 +73,7 @@ const HubItem = ({
         fontSize={18}
         fontWeight={600}
         lineHeight={1.2}
-        color={(theme) => theme.palette.gray[90]}
+        sx={{ color: "gray.90" }}
       >
         {title}
         {!!verified && <VerifiedBadge compact />}
@@ -77,18 +95,13 @@ const HubItem = ({
           {description}
         </Typography>
       ) : null}
-      <Typography
-        component="div"
-        fontSize={14}
-        color={(theme) => theme.palette.gray[70]}
-      >
+      <Typography component="div" fontSize={14} sx={{ color: "gray.70" }}>
         <Stack direction="row" spacing={2}>
           <Box
             component={Link}
             href={`/@${author}`}
-            color={(theme) => theme.palette.purple[70]}
+            sx={{ color: "purple.70", borderBottom: "0 !important" }}
             fontWeight={700}
-            sx={{ borderBottom: "0 !important" }}
           >
             @{author}
           </Box>
@@ -136,7 +149,7 @@ const HubHeading = ({ children }: { children: ReactNode }) => (
     variants={fadeInChildren}
     variant="bpHeading3"
     fontWeight={500}
-    color={(theme) => theme.palette.gray[80]}
+    sx={{ color: "gray.80" }}
   >
     {children}
   </AnimatedTypography>
@@ -146,7 +159,7 @@ const HubSubHeading = ({ children }: { children: ReactNode }) => (
   <AnimatedTypography
     variants={fadeInChildren}
     mt={2}
-    color={(theme) => theme.palette.gray[80]}
+    sx={{ color: "gray.80" }}
     fontSize={21}
   >
     {children}
@@ -180,6 +193,10 @@ const HubBrowseHeaderComponents = {
     return (
       <HubHeaderWrapper>
         <HubHeading>Services</HubHeading>
+        <HubSubHeading>
+          Services give blocks access to third-party APIs — for language models,
+          maps, payments, communications, and more
+        </HubSubHeading>
       </HubHeaderWrapper>
     );
   },
@@ -286,8 +303,15 @@ export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
                   }}
                 >
                   {listing.map((item) => (
-                    <m.div key={item.url} variants={fadeInChildren}>
-                      <HubItem item={item} />
+                    <m.div
+                      key={item.kind === "block" ? item.url : item.id}
+                      variants={fadeInChildren}
+                    >
+                      {item.kind === "block" ? (
+                        <BlockItem item={item} />
+                      ) : (
+                        <ServiceItem item={item} />
+                      )}
                     </m.div>
                   ))}
                 </Box>

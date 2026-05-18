@@ -1,11 +1,10 @@
 import { FunctionComponent } from "react";
 
-import { SerializedUser } from "../../../lib/api/model/user.model";
+import { SerializedUser } from "../../../context/user-context";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { BlockListItem } from "./block-list-item";
 import { Placeholder } from "./placeholder";
-import { BrowseHubButton, BuildBlockButton } from "./placeholder-buttons";
-import { useUserStatus } from "./use-user-status";
+import { BrowseHubButton } from "./placeholder-buttons";
 
 export interface TabPanelContentsWithBlocksProps {
   blocks: ExpandedBlockMetadata[];
@@ -15,20 +14,8 @@ export interface TabPanelContentsWithBlocksProps {
 export const TabPanelContentsWithBlocks: FunctionComponent<
   TabPanelContentsWithBlocksProps
 > = ({ blocks, user }) => {
-  const userStatus = useUserStatus(user);
-
   if (!blocks.length) {
-    if (userStatus === "loading") {
-      return null;
-    }
-
-    return userStatus === "current" ? (
-      <Placeholder
-        header="You haven’t created any blocks yet"
-        tip="Start building to see your creations show up here."
-        actions={<BuildBlockButton />}
-      />
-    ) : (
+    return (
       <Placeholder
         header={`@${user.shortname} hasn’t published any blocks yet`}
         tip="You can browse existing blocks on the Hub."

@@ -1,5 +1,5 @@
 import { BlockMetadata } from "@blockprotocol/core";
-import { faArrowRight, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Container,
@@ -14,7 +14,6 @@ import { clsx } from "clsx";
 import { useRouter } from "next/router";
 import {
   FunctionComponent,
-  MouseEventHandler,
   ReactNode,
   RefCallback,
   useCallback,
@@ -27,16 +26,12 @@ import {
 import { unstable_batchedUpdates } from "react-dom";
 
 import SiteMapContext from "../context/site-map-context";
-import { useUser } from "../context/user-context";
 import { SiteMapPage } from "../lib/sitemap";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
 import { getScrollbarSize } from "../util/mui-utils";
-import { Button } from "./button";
 import { Crumb, useCrumbs } from "./hooks/use-crumbs";
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
-import { LinkButton } from "./link-button";
-import { AccountDropdown } from "./navbar/account-dropdown";
 import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs";
 import { MobileNavItems } from "./navbar/mobile-nav-items";
 import { NAVBAR_LINK_ICONS } from "./navbar/util";
@@ -45,16 +40,13 @@ import {
   generatePathWithoutParams,
   useHydrationFriendlyAsPath,
 } from "./shared";
+import { VersionPicker } from "./version-picker";
 
 export const DESKTOP_NAVBAR_HEIGHT = 73;
 
 export const MOBILE_NAVBAR_HEIGHT = 53;
 
 const IDLE_NAVBAR_TIMEOUT_MS = 3_000;
-
-type NavbarProps = {
-  openLoginModal: () => void;
-};
 
 const navbarClasses = {
   link: "Navbar-Link",
@@ -228,24 +220,14 @@ const useBreadcrumbsHeight = () => {
   return [breadcrumbsRef, breadcrumbsHeight] as const;
 };
 
-const Navbar: FunctionComponent<
-  NavbarProps & {
-    crumbs: Crumb[];
-    pages: SiteMapPage[];
-    hydrationFriendlyAsPath: string;
-    breadcrumbsRef: RefCallback<HTMLDivElement>;
-  }
-> = ({
-  openLoginModal,
-  crumbs,
-  hydrationFriendlyAsPath,
-  pages,
-  breadcrumbsRef,
-}) => {
+const Navbar: FunctionComponent<{
+  crumbs: Crumb[];
+  pages: SiteMapPage[];
+  hydrationFriendlyAsPath: string;
+  breadcrumbsRef: RefCallback<HTMLDivElement>;
+}> = ({ crumbs, hydrationFriendlyAsPath, pages, breadcrumbsRef }) => {
   const theme = useTheme();
-  const { pathname } = useRouter();
 
-  const { user } = useUser();
   const lastScrollbarSize = useLastScrollbarSize();
 
   const isHomePage = generatePathWithoutParams(hydrationFriendlyAsPath) === "/";
@@ -266,14 +248,6 @@ const Navbar: FunctionComponent<
     document.body.style.overflow = mobileNavVisible ? "hidden" : "auto";
   }, [mobileNavVisible]);
 
-  const handleLoginButtonClick = useCallback<MouseEventHandler>(
-    (event) => {
-      openLoginModal();
-      event.preventDefault();
-    },
-    [openLoginModal],
-  );
-
   return (
     <Box
       sx={[
@@ -288,13 +262,6 @@ const Navbar: FunctionComponent<
       <Box
         sx={[
           {
-            /**
-             * header container width is always 100vw,
-             * to keep the header alignment correct when we open/close modals,
-             * we set `paddingRight` to the last lastScrollbarSize, because scrollbar hides when modal opens,
-             * so we want to apply the scrollbarSize as padding.
-             * @see https://app.asana.com/0/1200211978612931/1202765662321717/f for the issue this change fixes
-             */
             width: "100vw",
             pr: `${lastScrollbarSize}px`,
             position: "fixed",
@@ -317,7 +284,6 @@ const Navbar: FunctionComponent<
             borderBottomStyle: "solid",
             borderBottomWidth: 1,
             borderBottomColor: "transparent",
-            /** @todo: find way to make drop-shadow appear behind mobile navigation links */
             ...(isDocs ||
             scrolledPast[isHomePage ? HOME_PAGE_HEADER_HEIGHT : 0] ||
             mobileNavVisible
@@ -367,18 +333,33 @@ const Navbar: FunctionComponent<
             alignItems="center"
             justifyContent="space-between"
           >
-            <Link
-              href="/"
-              sx={{
-                color: ({ palette }) => palette.gray[90],
-              }}
-              className={navbarClasses.link}
-            >
-              <BlockProtocolLogoIcon
-                onClick={() => setMobileNavVisible(false)}
-                sx={{ color: "inherit" }}
-              />
-            </Link>
+            <Box display="flex" alignItems="center">
+              <Link
+                href="/"
+                onClick={(event) => {
+                  setMobileNavVisible(false);
+                  // When already on `/`, suppress Next.js's same-URL
+                  // navigation (which throws an "Invariant: attempted to hard
+                  // navigate to the same URL" runtime error) and treat the
+                  // logo click as a scroll-to-top instead.
+                  if (
+                    isHomePage &&
+                    typeof window !== "undefined" &&
+                    !window.location.hash
+                  ) {
+                    event.preventDefault();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+                sx={{
+                  color: ({ palette }) => palette.gray[90],
+                }}
+                className={navbarClasses.link}
+              >
+                <BlockProtocolLogoIcon sx={{ color: "inherit" }} />
+              </Link>
+              {isDocs ? <VersionPicker /> : null}
+            </Box>
             <Box
               sx={{
                 display: "flex",
@@ -428,42 +409,6 @@ const Navbar: FunctionComponent<
                       </Typography>
                     </Link>
                   ))}
-                {user || pathname === "/login" ? null : (
-                  <Link
-                    href="#"
-                    onClick={handleLoginButtonClick}
-                    className={clsx(
-                      navbarClasses.link,
-                      navbarClasses.interactiveLink,
-                    )}
-                    sx={{ backgroundColor: "unset" }}
-                  >
-                    <Typography
-                      variant="bpHeading3"
-                      sx={{
-                        fontWeight: 500,
-                        fontSize: "var(--step--1)",
-                        color: "currentColor",
-                      }}
-                    >
-                      Log In
-                    </Typography>
-                  </Link>
-                )}
-                {user !== "loading" && !user?.id ? (
-                  <LinkButton
-                    href="/signup"
-                    size="small"
-                    variant="primary"
-                    endIcon={<FontAwesomeIcon icon={faArrowRight} />}
-                    sx={{
-                      color: "#F2F5FA",
-                      background: theme.palette.purple[700],
-                    }}
-                  >
-                    Create your account
-                  </LinkButton>
-                ) : null}
               </Box>
 
               <Box
@@ -483,10 +428,6 @@ const Navbar: FunctionComponent<
                   />
                 </IconButton>
               </Box>
-
-              {user !== "loading" && user?.isSignedUp ? (
-                <AccountDropdown />
-              ) : null}
             </Box>
           </Box>
           <Box
@@ -541,60 +482,6 @@ const Navbar: FunctionComponent<
               onClose={() => setMobileNavVisible(false)}
             />
           </Box>
-
-          {user ? null : (
-            <Box
-              flexShrink={0}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              sx={{
-                paddingY: 4,
-                paddingX: 4.25,
-                borderTopStyle: "solid",
-                borderTopWidth: 1,
-                borderTopColor: theme.palette.gray[40],
-                "> button, a": {
-                  width: {
-                    xs: "100%",
-                    sm: "unset",
-                  },
-                  minWidth: {
-                    xs: "unset",
-                    sm: 320,
-                  },
-                },
-              }}
-            >
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setMobileNavVisible(false);
-                  openLoginModal();
-                }}
-                sx={{
-                  fontSize: 18,
-                  marginBottom: 1.25,
-                }}
-              >
-                Log in
-              </Button>
-
-              <LinkButton
-                href="/signup"
-                sx={{
-                  fontSize: 18,
-                  color: "#F2F5FA",
-                  background: theme.palette.purple[700],
-                }}
-                variant="primary"
-                onClick={() => setMobileNavVisible(false)}
-                endIcon={<FontAwesomeIcon icon={faArrowRight} />}
-              >
-                Create your account
-              </LinkButton>
-            </Box>
-          )}
         </Box>
       </Slide>
     </Box>
@@ -604,14 +491,13 @@ const Navbar: FunctionComponent<
 export const NavbarContainer = ({
   children,
   blockMetadata,
-  ...props
-}: NavbarProps & {
+}: {
   blockMetadata?: BlockMetadata;
   children: ReactNode;
 }) => {
   const { route } = useRouter();
   const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
-  const { pages } = useContext(SiteMapContext);
+  const { pages, versionedSubPages } = useContext(SiteMapContext);
 
   const [breadcrumbsRef, breadcrumbsHeight] = useBreadcrumbsHeight();
 
@@ -620,6 +506,7 @@ export const NavbarContainer = ({
     hydrationFriendlyAsPath,
     route,
     blockMetadata,
+    versionedSubPages,
   );
 
   return (
@@ -642,7 +529,6 @@ export const NavbarContainer = ({
       ]}
     >
       <Navbar
-        {...props}
         crumbs={crumbs}
         hydrationFriendlyAsPath={hydrationFriendlyAsPath}
         pages={pages}

@@ -1,13 +1,6 @@
-import { useUser } from "../../../context/user-context";
-import { SerializedUser } from "../../../lib/api/model/user.model";
-
-export const useUserStatus = (
-  user: SerializedUser,
-): "loading" | "current" | "other" => {
-  const { user: currentUser } = useUser();
-  if (currentUser === "loading") {
-    return "loading";
-  }
-
-  return currentUser?.id === user.id ? "current" : "other";
-};
+/**
+ * The Block Protocol site no longer ships an account system, so every visitor
+ * is treated as "other" when looking at a profile page. The hook is kept so
+ * existing call sites continue to compile.
+ */
+export const useUserStatus = (): "loading" | "current" | "other" => "other";

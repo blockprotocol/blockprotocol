@@ -3,7 +3,7 @@ import {
   Entity as EntityTemporal,
   EntityTemporalVersioningMetadata,
 } from "@blockprotocol/graph/temporal";
-import { VersionedUrl } from "@blockprotocol/type-system/slim";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   FormControlLabel,
@@ -18,7 +18,9 @@ import {
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
+import type { VersionedUrl } from "../../../lib/bp-types";
 import { Alert } from "../../alert";
+import { FontAwesomeIcon } from "../../icons";
 import {
   BlockDataTabPanels,
   blockPreviewAndDataHeight,
@@ -195,7 +197,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
       try {
         const parsedProperties = JSON.parse(propertiesText);
 
-        setEntity((prevEntity) => {
+        setEntity((prevEntity: Entity | EntityTemporal | null) => {
           if (prevEntity) {
             if (stringifyProperties(prevEntity.properties) === propertiesText) {
               return prevEntity;
@@ -332,11 +334,64 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
                 }}
               >
                 {!checkIfBlockIsSupported(metadata) ? (
-                  <>
-                    This block was written for an earlier version of the Block
-                    Protocol specification and cannot currently be displayed in
-                    the Hub.
-                  </>
+                  <Box
+                    role="status"
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      width: "100%",
+                      maxWidth: 420,
+                      mx: "auto",
+                      px: 3,
+                      py: 4,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: 64,
+                        height: 64,
+                        borderRadius: "50%",
+                        backgroundColor: ({ palette }) => palette.gray[20],
+                        color: ({ palette }) => palette.gray[60],
+                        mb: 2.5,
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={faTriangleExclamation}
+                        sx={{ fontSize: 28 }}
+                      />
+                    </Box>
+                    <Typography
+                      variant="bpBodyCopy"
+                      sx={{
+                        fontSize: 16,
+                        fontWeight: 600,
+                        color: ({ palette }) => palette.gray[80],
+                        mb: 0.75,
+                      }}
+                    >
+                      Preview unavailable
+                    </Typography>
+                    <Typography
+                      variant="bpBodyCopy"
+                      sx={{
+                        fontSize: 14,
+                        lineHeight: 1.55,
+                        color: ({ palette }) => palette.gray[70],
+                        maxWidth: "38ch",
+                      }}
+                    >
+                      This block was written for an earlier version of the Block
+                      Protocol specification and cannot currently be displayed
+                      in the Hub.
+                    </Typography>
+                  </Box>
                 ) : (
                   <SandboxedBlockDemo
                     key={metadata.blockSitePath} // reset sandbox state when switching block

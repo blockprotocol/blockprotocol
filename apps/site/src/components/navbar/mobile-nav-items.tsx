@@ -17,6 +17,7 @@ import {
   SetStateAction,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -27,6 +28,14 @@ import { Link } from "../link";
 import { Search } from "../pages/docs/search";
 import { generatePathWithoutParams } from "../shared";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
+
+/**
+ * Pages marked `hiddenFromSidebar: true` in their MDX frontmatter are still
+ * routable but should not appear in nav. Filter them out wherever the mobile
+ * nav iterates a list of pages.
+ */
+const visiblePages = (pages: SiteMapPage[] | undefined): SiteMapPage[] =>
+  (pages ?? []).filter((page) => !page.hiddenFromSidebar);
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   icon?: ReactElement;
@@ -62,7 +71,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
   const isSelected = pathWithoutParams === href;
 
   const hasChildren = itemIsPage(item)
-    ? (item.subPages ?? []).length > 0 || (item.sections ?? []).length > 0
+    ? visiblePages(item.subPages).length > 0 || (item.sections ?? []).length > 0
     : item.subSections.length > 0;
 
   const isOpen =
@@ -172,7 +181,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
               ),
             )}
             {itemIsPage(item)
-              ? item.subPages?.map((subPage) => (
+              ? visiblePages(item.subPages).map((subPage) => (
                   <MobileNavNestedPage<SiteMapPage>
                     hydrationFriendlyAsPath={hydrationFriendlyAsPath}
                     key={subPage.href}
@@ -213,7 +222,7 @@ const getInitialExpandedItems = ({
 
   const expandedChildren = [
     ...(itemIsPage(item)
-      ? (item.subPages ?? [])
+      ? visiblePages(item.subPages)
           .map((page) =>
             getInitialExpandedItems({
               item: page,
@@ -254,7 +263,11 @@ export const MobileNavItems: FunctionComponent<MobileNavItemsProps> = ({
   onClose,
   hydrationFriendlyAsPath,
 }) => {
-  const { pages } = useContext(SiteMapContext);
+  const { pages: pagesRaw } = useContext(SiteMapContext);
+  // Memoize so the filtered array's reference is stable across renders;
+  // the `useEffect` below depends on `pages`, so a fresh array each render
+  // would trigger an infinite `setExpandedItems` loop.
+  const pages = useMemo(() => visiblePages(pagesRaw), [pagesRaw]);
 
   const [expandedItems, setExpandedItems] = useState<
     { href: string; depth: number }[]

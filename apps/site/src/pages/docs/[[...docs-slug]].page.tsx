@@ -8,12 +8,19 @@ import siteMap from "../../../site-map.json";
 import { DocsContent } from "../../components/pages/docs/docs-content";
 import { generatePathWithoutParams } from "../../components/shared";
 import SiteMapContext from "../../context/site-map-context";
-import { SiteMap } from "../../lib/sitemap";
-import { getSerializedPage } from "../../util/mdx-utils";
+import {
+  DOCS_VERSIONS,
+  DocsVersion,
+  isDocsVersion,
+  LATEST_DOCS_VERSION,
+} from "../../lib/docs-versions";
+import { SiteMap, SiteMapPage } from "../../lib/sitemap";
+import { findDeprecatedNoticeHref } from "../../util/deprecated-page";
+import { getSerializedPageForVersion } from "../../util/mdx-utils";
 
-const documentationPages =
-  (siteMap as SiteMap).pages.find(({ title }) => title === "Docs")!.subPages ??
-  [];
+const typedSiteMap = siteMap as SiteMap;
+
+const docsPagesByVersion = typedSiteMap.versionedSubPages.docs;
 
 type DocsPageQueryParams = {
   "docs-slug"?: string[];
@@ -21,21 +28,38 @@ type DocsPageQueryParams = {
 
 type DocsPageProps = {
   serializedPage: MDXRemoteSerializeResult<Record<string, unknown>>;
+  requestedVersion: DocsVersion;
+  servedFromVersion: DocsVersion;
+  /**
+   * Set when the same logical slug exists at a newer version, and that
+   * newer version marks the page as `hiddenFromSidebar` (i.e. the page has
+   * been deprecated). The href points at the newest such version so the
+   * user lands on whichever copy carries the explanatory notice.
+   */
+  deprecatedNoticeHref: string | null;
 };
 
-export const getStaticPaths: GetStaticPaths<DocsPageQueryParams> = async () => {
-  const possibleHrefs = documentationPages
-    .flatMap((page) => [page, ...(page.subPages ?? [])])
-    .map(({ href }) => href);
+const flattenPages = (pages: SiteMapPage[]): SiteMapPage[] =>
+  pages.flatMap((page) => [page, ...flattenPages(page.subPages ?? [])]);
 
-  const paths = possibleHrefs.map((href) => ({
-    params: {
-      "docs-slug": href
-        .replace("/docs", "")
-        .split("/")
-        .filter((item) => !!item),
-    },
-  }));
+export const getStaticPaths: GetStaticPaths<DocsPageQueryParams> = async () => {
+  const paths = DOCS_VERSIONS.flatMap((version) => {
+    const versionPages = docsPagesByVersion[version] ?? [];
+    const allHrefs = flattenPages(versionPages).map(({ href }) => href);
+    // Ensure the bare `/docs/<version>` index is always emitted, even if the
+    // index page is itself only available via fallback.
+    const hrefSet = new Set(allHrefs);
+    hrefSet.add(`/docs/${version}`);
+
+    return Array.from(hrefSet).map((href) => ({
+      params: {
+        "docs-slug": href
+          .replace(/^\/docs\//, "")
+          .split("/")
+          .filter((item) => !!item),
+      },
+    }));
+  });
 
   return {
     paths,
@@ -47,39 +71,77 @@ export const getStaticProps: GetStaticProps<
   DocsPageProps,
   DocsPageQueryParams
 > = async ({ params }) => {
-  const docsSlug = (params || {})["docs-slug"];
+  const docsSlug = (params || {})["docs-slug"] ?? [];
 
-  // As of Jan 2022, { fallback: false } in getStaticPaths does not prevent Vercel
-  // from calling getStaticProps for unknown pages. This causes 500 instead of 404:
-  //
-  //   Error: ENOENT: no such file or directory, open '{...}/_pages/docs/undefined'
-  //
-  // Using try / catch prevents 500, but we might not need them in Next v12+.
+  const [maybeVersion, ...slugRest] = docsSlug;
+
+  if (!maybeVersion || !isDocsVersion(maybeVersion)) {
+    // Requests without a version segment shouldn't reach this handler in
+    // production (middleware redirects them), but if one slips through (e.g.
+    // because the middleware was bypassed by a stale build), 404 cleanly.
+    return { notFound: true };
+  }
+
   try {
-    const serializedPage = await getSerializedPage({
-      pathToDirectory: "docs",
-      parts: docsSlug && docsSlug.length ? docsSlug : ["index"],
+    const { serializedPage, servedFromVersion } =
+      await getSerializedPageForVersion({
+        section: "docs",
+        requestedVersion: maybeVersion,
+        parts: slugRest.length ? slugRest : ["index"],
+      });
+
+    const pathname = `/docs/${maybeVersion}${
+      slugRest.length ? `/${slugRest.join("/")}` : ""
+    }`;
+    const deprecatedNoticeHref = findDeprecatedNoticeHref({
+      versionedSubPages: docsPagesByVersion,
+      section: "docs",
+      requestedVersion: maybeVersion,
+      pathname,
     });
 
     return {
       props: {
         serializedPage,
+        requestedVersion: maybeVersion,
+        servedFromVersion,
+        deprecatedNoticeHref,
       },
     };
   } catch {
-    return {
-      notFound: true,
-    };
+    return { notFound: true };
   }
 };
 
-const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
+const DocsPage: NextPage<DocsPageProps> = ({
+  serializedPage,
+  requestedVersion,
+  deprecatedNoticeHref,
+}) => {
   const { asPath } = useRouter();
-  const { pages: allPages } = useContext(SiteMapContext);
+  const { pages: allPages, versionedSubPages } = useContext(SiteMapContext);
 
   const pathWithoutParams = generatePathWithoutParams(asPath);
 
-  const { subPages = [] } = allPages.find(({ title }) => title === "Docs")!;
+  const docsForVersion =
+    versionedSubPages?.docs[requestedVersion] ??
+    versionedSubPages?.docs[LATEST_DOCS_VERSION] ??
+    [];
+
+  const specForVersion =
+    versionedSubPages?.spec[requestedVersion] ??
+    versionedSubPages?.spec[LATEST_DOCS_VERSION] ??
+    [];
+
+  const roadmapPage = allPages
+    .find(({ title }) => title === "Docs")
+    ?.subPages?.find(({ title }) => title === "Roadmap");
+
+  const subPages = [
+    ...docsForVersion,
+    ...specForVersion,
+    ...(roadmapPage ? [roadmapPage] : []),
+  ];
 
   const flatSubPages = subPages.flatMap((page) => [
     page,
@@ -91,18 +153,15 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
       pathWithoutParams === href || pathWithoutParams?.startsWith(`${href}#`),
   );
 
-  const isSpec = currentPage?.href.startsWith("/spec");
-
   return (
     <>
-      <NextSeo
-        title={`Block Protocol – ${isSpec ? "Specification" : "Docs"}`}
-      />
+      <NextSeo title="Block Protocol – Docs" />
       <DocsContent
         content={serializedPage}
         pages={subPages}
         flatPages={flatSubPages}
         currentPage={currentPage}
+        deprecatedNoticeHref={deprecatedNoticeHref ?? undefined}
       />
     </>
   );

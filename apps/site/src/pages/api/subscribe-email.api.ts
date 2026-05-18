@@ -1,4 +1,7 @@
-import { createBaseHandler } from "../../lib/api/handler/base-handler";
+import {
+  baseHandlerOptions,
+  createBaseHandler,
+} from "../../lib/api/handler/base-handler";
 import { subscribeToMailchimp } from "../../lib/api/mailchimp";
 
 export type SubscribeEmailRequestBody = {
@@ -14,12 +17,14 @@ export type SubscribeEmailResponse = {
 export default createBaseHandler<
   SubscribeEmailRequestBody,
   SubscribeEmailResponse
->().put(async (req, res) => {
-  return await subscribeToMailchimp(req.body)
-    .then(() => {
-      return res.json({ success: true });
-    })
-    .catch(() => {
-      return res.status(400).send({ error: true });
-    });
-});
+>()
+  .put(async (req, res) => {
+    return await subscribeToMailchimp(req.body)
+      .then(() => {
+        return res.json({ success: true });
+      })
+      .catch(() => {
+        return res.status(400).send({ error: true });
+      });
+  })
+  .handler(baseHandlerOptions);

@@ -55,7 +55,7 @@ export const AlreadyVotedScreen: FunctionComponent<AlreadyVotedScreenProps> = ({
         <strong> {selectedApplication.name}</strong>
         {cloneElement(selectedApplication.icon, {
           sx: { height: 24, width: "unset", ml: 1.5, mb: 0.125 },
-        })}
+        } as Record<string, unknown>)}
       </Typography>
 
       <Typography
