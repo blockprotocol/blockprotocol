@@ -12,6 +12,12 @@ import remarkParse from "remark-parse";
 import slugify from "slugify";
 import { unified } from "unified";
 
+import {
+  DOCS_VERSIONS,
+  DocsVersion,
+  fallbackVersionChain,
+  VersionedSection,
+} from "../lib/docs-versions";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 
 type Node = {
@@ -158,6 +164,41 @@ export const getSerializedPage = async (params: {
   return serializedMdx;
 };
 
+/**
+ * Resolves a versioned MDX page by walking the fallback version chain
+ * starting at the requested version, returning both the serialized content
+ * and the version that actually supplied it (so callers can show a banner
+ * when the served version differs from what was requested).
+ *
+ * Throws if no version in the chain has the requested page.
+ */
+export const getSerializedPageForVersion = async (params: {
+  section: VersionedSection;
+  requestedVersion: DocsVersion;
+  parts: string[];
+}): Promise<{
+  serializedPage: MDXRemoteSerializeResult<Record<string, unknown>>;
+  servedFromVersion: DocsVersion;
+}> => {
+  const { section, requestedVersion, parts } = params;
+
+  for (const version of fallbackVersionChain(requestedVersion)) {
+    try {
+      const serializedPage = await getSerializedPage({
+        pathToDirectory: `${section}/${version}`,
+        parts,
+      });
+      return { serializedPage, servedFromVersion: version };
+    } catch {
+      // Try the next-older version.
+    }
+  }
+
+  throw new Error(
+    `No version of ${section}/${parts.join("/")} found in the fallback chain starting at ${requestedVersion}.`,
+  );
+};
+
 // Recursively construct the text from leaf text nodes in an MDX AST
 const getFullText = (node: Node): string =>
   [
@@ -269,6 +310,7 @@ export const getAllPages = (params: {
 
   const directoryItems = fs
     .readdirSync(path.join(process.cwd(), thisPath))
+    .filter((item) => !item.startsWith("."))
     .filter((item) => !filterIndexPage || item !== "00_index.mdx");
 
   return directoryItems.flatMap((directoryItem) => {
@@ -295,6 +337,136 @@ export const getAllPages = (params: {
       isRfc,
     });
   });
+};
+
+/**
+ * Replaces the version segment in a `/docs/<v>/...` or `/spec/<v>/...` href
+ * with `toVersion`. Hrefs that don't contain a recognized version segment
+ * are returned unchanged.
+ */
+const rewriteHrefVersion = (href: string, toVersion: DocsVersion): string => {
+  const segments = href.split("/");
+  // segments[0] is "" (leading slash), segments[1] is the section,
+  // segments[2] is the version if present.
+  if (
+    segments.length >= 3 &&
+    (DOCS_VERSIONS as readonly string[]).includes(segments[2]!)
+  ) {
+    segments[2] = toVersion;
+    return segments.join("/");
+  }
+  return href;
+};
+
+/**
+ * Removes the version segment from a `/docs/<v>/...` or `/spec/<v>/...` href
+ * so two pages from different versions can be compared by their "logical"
+ * slug. Hrefs without a recognized version segment are returned unchanged.
+ */
+const stripVersionFromHref = (href: string): string => {
+  const segments = href.split("/");
+  if (
+    segments.length >= 3 &&
+    (DOCS_VERSIONS as readonly string[]).includes(segments[2]!)
+  ) {
+    segments.splice(2, 1);
+    return segments.join("/");
+  }
+  return href;
+};
+
+const overlayPagesBySlug = (
+  base: SiteMapPage[],
+  overlay: SiteMapPage[],
+): SiteMapPage[] => {
+  const baseBySlug = new Map<string, SiteMapPage>();
+  for (const page of base) {
+    baseBySlug.set(stripVersionFromHref(page.href), page);
+  }
+
+  const result: SiteMapPage[] = [];
+  const handledSlugs = new Set<string>();
+
+  for (const overlayPage of overlay) {
+    const slug = stripVersionFromHref(overlayPage.href);
+    handledSlugs.add(slug);
+    const basePage = baseBySlug.get(slug);
+
+    if (basePage) {
+      const mergedSubPages =
+        overlayPage.subPages || basePage.subPages
+          ? overlayPagesBySlug(
+              basePage.subPages ?? [],
+              overlayPage.subPages ?? [],
+            )
+          : undefined;
+
+      result.push({
+        ...overlayPage,
+        subPages: mergedSubPages,
+      });
+    } else {
+      result.push(overlayPage);
+    }
+  }
+
+  for (const basePage of base) {
+    const slug = stripVersionFromHref(basePage.href);
+    if (!handledSlugs.has(slug)) {
+      result.push(basePage);
+    }
+  }
+
+  return result;
+};
+
+const rewriteAllHrefs = (
+  pages: SiteMapPage[],
+  toVersion: DocsVersion,
+): SiteMapPage[] =>
+  pages.map((page) => ({
+    ...page,
+    href: rewriteHrefVersion(page.href, toVersion),
+    version: toVersion,
+    subPages: page.subPages
+      ? rewriteAllHrefs(page.subPages, toVersion)
+      : undefined,
+  }));
+
+/**
+ * Returns the union of pages reachable for a section at the requested
+ * version: pages defined under that version, plus any pages inherited
+ * from older versions (newest provider wins). All hrefs in the result use
+ * the requested version's prefix so links navigate within that version.
+ *
+ * Versions are iterated oldest-first so that newer pages overlay older ones
+ * via `overlayPagesBySlug`.
+ */
+export const unionVersionedPages = (params: {
+  section: VersionedSection;
+  forVersion: DocsVersion;
+  filterIndexPage?: boolean;
+}): SiteMapPage[] => {
+  const { section, forVersion, filterIndexPage = false } = params;
+
+  const chain = fallbackVersionChain(forVersion);
+
+  let merged: SiteMapPage[] = [];
+  for (const version of [...chain].reverse()) {
+    let pagesForVersion: SiteMapPage[];
+    try {
+      pagesForVersion = getAllPages({
+        pathToDirectory: `${section}/${version}`,
+        filterIndexPage,
+      });
+    } catch {
+      // The version's folder doesn't exist or is unreadable — skip.
+      continue;
+    }
+    merged = overlayPagesBySlug(merged, pagesForVersion);
+  }
+
+  return rewriteAllHrefs(merged, forVersion);
 };
 
 export const getRoadmapSubPages = (): SiteMapPage[] => {

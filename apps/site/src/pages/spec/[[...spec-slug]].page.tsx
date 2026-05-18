@@ -8,13 +8,18 @@ import siteMap from "../../../site-map.json";
 import { DocsContent } from "../../components/pages/docs/docs-content";
 import { generatePathWithoutParams } from "../../components/shared";
 import SiteMapContext from "../../context/site-map-context";
-import { SiteMap } from "../../lib/sitemap";
-import { getSerializedPage } from "../../util/mdx-utils";
+import {
+  DOCS_VERSIONS,
+  DocsVersion,
+  isDocsVersion,
+  LATEST_DOCS_VERSION,
+} from "../../lib/docs-versions";
+import { SiteMap, SiteMapPage } from "../../lib/sitemap";
+import { getSerializedPageForVersion } from "../../util/mdx-utils";
 
-const documentationPages =
-  (siteMap as SiteMap).pages
-    .find(({ title }) => title === "Docs")!
-    .subPages?.find(({ title }) => title === "Specification")!.subPages ?? [];
+const typedSiteMap = siteMap as SiteMap;
+
+const specPagesByVersion = typedSiteMap.versionedSubPages.spec;
 
 type SpecPageQueryParams = {
   "spec-slug"?: string[];
@@ -22,22 +27,31 @@ type SpecPageQueryParams = {
 
 type SpecPageProps = {
   serializedPage: MDXRemoteSerializeResult<Record<string, unknown>>;
+  requestedVersion: DocsVersion;
+  servedFromVersion: DocsVersion;
 };
 
-export const getStaticPaths: GetStaticPaths<SpecPageQueryParams> = async () => {
-  const possibleHrefs = documentationPages
-    .flatMap((page) => [page, ...(page.subPages ?? [])])
-    .map(({ href }) => href)
-    .concat("/spec");
+const flattenPages = (pages: SiteMapPage[]): SiteMapPage[] =>
+  pages.flatMap((page) => [page, ...flattenPages(page.subPages ?? [])]);
 
-  const paths = possibleHrefs.map((href) => ({
-    params: {
-      "spec-slug": href
-        .replace("/spec", "")
-        .split("/")
-        .filter((item) => !!item),
-    },
-  }));
+export const getStaticPaths: GetStaticPaths<
+  SpecPageQueryParams
+> = async () => {
+  const paths = DOCS_VERSIONS.flatMap((version) => {
+    const versionPages = specPagesByVersion[version] ?? [];
+    const allHrefs = flattenPages(versionPages).map(({ href }) => href);
+    const hrefSet = new Set(allHrefs);
+    hrefSet.add(`/spec/${version}`);
+
+    return Array.from(hrefSet).map((href) => ({
+      params: {
+        "spec-slug": href
+          .replace(/^\/spec\//, "")
+          .split("/")
+          .filter((item) => !!item),
+      },
+    }));
+  });
 
   return {
     paths,
@@ -49,39 +63,65 @@ export const getStaticProps: GetStaticProps<
   SpecPageProps,
   SpecPageQueryParams
 > = async ({ params }) => {
-  const specSlug = (params || {})["spec-slug"];
+  const specSlug = (params || {})["spec-slug"] ?? [];
 
-  // As of Jan 2022, { fallback: false } in getStaticPaths does not prevent Vercel
-  // from calling getStaticProps for unknown pages. This causes 500 instead of 404:
-  //
-  //   Error: ENOENT: no such file or directory, open '{...}/_pages/spec/undefined'
-  //
-  // Using try / catch prevents 500, but we might not need them in Next v12+.
+  const [maybeVersion, ...slugRest] = specSlug;
+
+  if (!maybeVersion || !isDocsVersion(maybeVersion)) {
+    return { notFound: true };
+  }
+
   try {
-    const serializedPage = await getSerializedPage({
-      pathToDirectory: "spec",
-      parts: specSlug && specSlug.length ? specSlug : ["index"],
-    });
+    const { serializedPage, servedFromVersion } =
+      await getSerializedPageForVersion({
+        section: "spec",
+        requestedVersion: maybeVersion,
+        parts: slugRest.length ? slugRest : ["index"],
+      });
 
     return {
       props: {
         serializedPage,
+        requestedVersion: maybeVersion,
+        servedFromVersion,
       },
     };
   } catch {
-    return {
-      notFound: true,
-    };
+    return { notFound: true };
   }
 };
 
-const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
+const SpecPage: NextPage<SpecPageProps> = ({
+  serializedPage,
+  requestedVersion,
+}) => {
   const { asPath } = useRouter();
-  const { pages: allPages } = useContext(SiteMapContext);
+  const { pages: allPages, versionedSubPages } = useContext(SiteMapContext);
 
   const pathWithoutParams = generatePathWithoutParams(asPath);
 
-  const { subPages = [] } = allPages.find(({ title }) => title === "Docs")!;
+  const docsForVersion =
+    versionedSubPages?.docs[requestedVersion] ??
+    versionedSubPages?.docs[LATEST_DOCS_VERSION] ??
+    [];
+
+  const specForVersion =
+    versionedSubPages?.spec[requestedVersion] ??
+    versionedSubPages?.spec[LATEST_DOCS_VERSION] ??
+    [];
+
+  const roadmapPage = allPages
+    .find(({ title }) => title === "Docs")
+    ?.subPages?.find(({ title }) => title === "Roadmap");
+
+  // The sidebar on `/spec` mirrors the sidebar on `/docs` so users can jump
+  // between sibling sections without losing context. The `currentPage` match
+  // below still highlights the active spec entry.
+  const subPages = [
+    ...docsForVersion,
+    ...specForVersion,
+    ...(roadmapPage ? [roadmapPage] : []),
+  ];
 
   const flatSubPages = subPages.flatMap((page) => [
     page,

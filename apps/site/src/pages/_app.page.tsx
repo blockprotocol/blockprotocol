@@ -26,6 +26,7 @@ import {
 } from "../context/user-context";
 import { apiClient } from "../lib/api-client";
 import { isProduction } from "../lib/config";
+import { SiteMap } from "../lib/sitemap";
 import { setWordPressSettingsUrlSession } from "../lib/word-press-settings-url-session";
 import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
@@ -194,7 +195,7 @@ const MyApp = ({
   return (
     <LazyMotion features={loadFramerFeatures} strict>
       <UserContext.Provider value={userContextValue}>
-        <SiteMapContext.Provider value={siteMap}>
+        <SiteMapContext.Provider value={siteMap as unknown as SiteMap}>
           <CacheProvider value={emotionCache}>
             <ThemeProvider theme={theme}>
               <CssBaseline />

@@ -45,6 +45,7 @@ import {
   generatePathWithoutParams,
   useHydrationFriendlyAsPath,
 } from "./shared";
+import { VersionPicker } from "./version-picker";
 
 export const DESKTOP_NAVBAR_HEIGHT = 73;
 
@@ -367,18 +368,21 @@ const Navbar: FunctionComponent<
             alignItems="center"
             justifyContent="space-between"
           >
-            <Link
-              href="/"
-              sx={{
-                color: ({ palette }) => palette.gray[90],
-              }}
-              className={navbarClasses.link}
-            >
-              <BlockProtocolLogoIcon
-                onClick={() => setMobileNavVisible(false)}
-                sx={{ color: "inherit" }}
-              />
-            </Link>
+            <Box display="flex" alignItems="center">
+              <Link
+                href="/"
+                sx={{
+                  color: ({ palette }) => palette.gray[90],
+                }}
+                className={navbarClasses.link}
+              >
+                <BlockProtocolLogoIcon
+                  onClick={() => setMobileNavVisible(false)}
+                  sx={{ color: "inherit" }}
+                />
+              </Link>
+              {isDocs ? <VersionPicker /> : null}
+            </Box>
             <Box
               sx={{
                 display: "flex",
