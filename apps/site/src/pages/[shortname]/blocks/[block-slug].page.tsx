@@ -1,5 +1,3 @@
-import crypto from "node:crypto";
-
 import {
   Box,
   Container,
@@ -7,7 +5,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
@@ -31,7 +29,7 @@ import {
   retrieveBlockFileContent,
   retrieveBlockReadme,
 } from "../../../lib/blocks";
-import { isFork, isProduction } from "../../../lib/config";
+import { isProduction } from "../../../lib/config";
 import { excludeHiddenBlocks } from "../../../lib/excluded-blocks";
 
 // Exclude <FooBar />, but keep <h1 />, <ul />, etc.
@@ -42,17 +40,51 @@ const markdownComponents = Object.fromEntries(
 );
 
 /**
- * We want a different origin for the iFrame to the parent window
- * so that it can't use cookies issued to the user in the main app.
+ * Resolves the origin used for the block sandbox iframe.
  *
- * The PRODUCTION origin will be blockprotocol.org, and we can use
- * a custom domain or the unique Vercel deployment URL as the origin .
+ * In PRODUCTION the parent docs page and the sandbox iframe MUST live on
+ * different origins so block code can't reach cookies issued to the main
+ * blockprotocol.org app. {@link NEXT_PUBLIC_BLOCK_SANDBOX_URL} carries that
+ * sibling host (e.g. `https://blocks.blockprotocol.org`); the middleware
+ * additionally moves `…/sandboxed-demo` requests onto it (see
+ * `middleware.page.ts`). The corresponding `frame-ancestors` CSP on the
+ * sandbox response (see `next.config.js`) explicitly allows
+ * {@link NEXT_PUBLIC_FRONTEND_URL} as the parent origin.
  *
- * In STAGING, we will mostly be visiting unique deployment URLs
- * for testing, so we can use the unique branch URL as the origin.
- * Note: this means the frame in preview deployments will always be
- * built from the tip of the branch - if you visit the non-latest preview
- * deployment AND you have changed the framed code, they may be out of sync.
+ * In NON-PRODUCTION (Vercel previews and local dev) we deliberately use a
+ * same-origin iframe — i.e. an empty base URL so the iframe `src` resolves
+ * relative to the parent page and shares its origin. That avoids three
+ * compounding fragility issues that previously made previews break:
+ *
+ *   1. **Hostname synthesis.** The earlier code derived the iframe origin
+ *      from the branch name (`blockprotocol-git-{branchSlug}.stage.hash.ai`)
+ *      and relied on a `*.stage.hash.ai` wildcard. As soon as Vercel started
+ *      adding team/project hashes to its actual aliases — and as soon as a
+ *      branch name was long enough to trip the 63-char DNS-label cap and
+ *      get a SHA-derived suffix this code couldn't see — the synthesized
+ *      hostname diverged from any real deployment, leaving the iframe
+ *      pointed at an unreachable host (`…refused to connect`).
+ *   2. **Stale env vars.** Honoring {@link NEXT_PUBLIC_BLOCK_SANDBOX_URL}
+ *      on previews used to be the escape hatch, but if the preview
+ *      environment had inherited the broken synthesized URL via its
+ *      environment configuration, that escape hatch silently re-introduced
+ *      the same dead host on every preview. The variable is intended for
+ *      production; the middleware even names its parsed form
+ *      `productionSandboxHost`.
+ *   3. **CSP `frame-ancestors`.** Pointing the iframe at the deployment's
+ *      `*.vercel.app` URL while the parent is on `*.stage.hash.ai` (or
+ *      vice-versa) defeats the sandbox-response CSP, which only allows
+ *      `'self'` plus {@link NEXT_PUBLIC_FRONTEND_URL}. Same-origin in
+ *      preview avoids this entirely.
+ *
+ * The iframe's `sandbox="allow-forms allow-scripts allow-same-origin"`
+ * attribute still provides JS-level isolation regardless of origin, and
+ * preview deployments aren't authenticated/sensitive surfaces, so the
+ * cross-origin cookie isolation that production needs is not load-bearing
+ * for previews. If a non-production deployment ever needs to exercise the
+ * production cookie-isolation path explicitly, set `NEXT_PUBLIC_VERCEL_ENV`
+ * to `"production"` for that deployment so the production branch below
+ * runs end-to-end.
  */
 const generateSandboxBaseUrl = (): string => {
   if (isProduction) {
@@ -69,39 +101,7 @@ const generateSandboxBaseUrl = (): string => {
     return deploymentUrl;
   }
 
-  const branch = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF;
-
-  if (!branch) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "Running locally: Hub iFrame has same origin as main app. Block code can make authenticated requests to main app API.",
-    );
-    return "";
-  }
-
-  // @see https://vercel.com/docs/concepts/deployments/generated-urls
-  // @see https://vercel.com/docs/concepts/deployments/generated-urls#url-components
-  const branchSlug = branch
-    .toLowerCase()
-    .replace(/\./g, "")
-    .replace(/\//, "-")
-    .replace(/[/_]/g, "")
-    .replace(/[^\w-]+/g, "-");
-
-  const projectName = "blockprotocol";
-  const prefix = isFork ? "git-fork-" : "git-";
-  const rawBranchSubdomain = `${projectName}-${prefix}${branchSlug}`;
-
-  const branchSubdomain =
-    rawBranchSubdomain.length > 63
-      ? `${rawBranchSubdomain.slice(0, 56)}-${crypto
-          .createHash("sha256")
-          .update(prefix + branch + projectName)
-          .digest("hex")
-          .slice(0, 6)}`
-      : rawBranchSubdomain;
-
-  return `https://${branchSubdomain}.stage.hash.ai`;
+  return "";
 };
 
 const Bullet: FunctionComponent = () => {
@@ -122,33 +122,31 @@ type BlockPageProps = {
 };
 
 type BlockPageQueryParams = {
-  shortname?: string[];
-  "block-slug"?: string;
+  shortname: string;
+  "block-slug": string;
 };
 
-export const getStaticPaths: GetStaticPaths<
-  BlockPageQueryParams
-> = async () => {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-};
-
-const parseQueryParams = (params: BlockPageQueryParams) => {
-  const shortname = params.shortname
-    ? typeof params.shortname === "string"
-      ? params.shortname
-      : params.shortname.length === 1
-      ? params.shortname[0]
-      : undefined
+const parseQueryParams = (
+  params: BlockPageQueryParams | Record<string, string | string[] | undefined>,
+) => {
+  // Handle useRouter query which can have string | string[] values
+  const rawShortname = params.shortname;
+  const shortname = rawShortname
+    ? typeof rawShortname === "string"
+      ? rawShortname
+      : rawShortname[0]
     : undefined;
 
   if (!shortname) {
     throw new Error("Could not parse org shortname from query");
   }
 
-  const blockSlug = params["block-slug"];
+  const rawBlockSlug = params["block-slug"];
+  const blockSlug = rawBlockSlug
+    ? typeof rawBlockSlug === "string"
+      ? rawBlockSlug
+      : rawBlockSlug[0]
+    : undefined;
 
   if (!blockSlug) {
     throw new Error("Could not parse block slug from query");
@@ -172,25 +170,36 @@ const generateRepositoryDisplayUrl = (repository: string): string => {
   return displayUrl;
 };
 
-export const getStaticProps: GetStaticProps<
-  BlockPageProps,
-  BlockPageQueryParams
-> = async ({ params }) => {
-  const { shortname, blockSlug } = parseQueryParams(params || {});
+export const getServerSideProps: GetServerSideProps<BlockPageProps> = async (
+  context,
+) => {
+  const { params } = context;
 
-  if (!shortname.startsWith("@")) {
+  const shortname = params?.shortname as string | undefined;
+  const blockSlug = params?.["block-slug"] as string | undefined;
+
+  if (typeof shortname !== "string" || !shortname.startsWith("@")) {
     return { notFound: true };
   }
+
+  if (typeof blockSlug !== "string") {
+    return { notFound: true };
+  }
+
   const pathWithNamespace = `${shortname}/${blockSlug}`;
 
-  const blocks = await getAllBlocks();
+  let blocks: Awaited<ReturnType<typeof getAllBlocks>>;
+  try {
+    blocks = await getAllBlocks();
+  } catch {
+    return { notFound: true };
+  }
 
   const blockMetadata = blocks.find(
     (metadata) => metadata.pathWithNamespace === pathWithNamespace,
   );
 
   if (!blockMetadata) {
-    // TODO: Render custom 404 page for blocks
     return { notFound: true };
   }
 
@@ -213,6 +222,12 @@ export const getStaticProps: GetStaticProps<
       ).compiledSource
     : undefined;
 
+  // Set cache headers for CDN caching (similar to revalidate behavior)
+  context.res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=180, stale-while-revalidate=300",
+  );
+
   return {
     props: {
       blockMetadata,
@@ -224,7 +239,6 @@ export const getStaticProps: GetStaticProps<
       schema,
       exampleGraph,
     },
-    revalidate: 180,
   };
 };
 
@@ -281,6 +295,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 mr: 3,
                 height: 108,
                 width: 108,
+                objectFit: "contain",
               }}
               component="img"
               src={blockMetadata.icon ?? undefined}
@@ -296,6 +311,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                     height: 44,
                     width: 44,
                     mr: 2,
+                    objectFit: "contain",
                   }}
                   component="img"
                   src={blockMetadata.icon ?? undefined}

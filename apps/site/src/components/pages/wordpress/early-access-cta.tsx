@@ -47,7 +47,15 @@ export const EarlyAccessCTA = () => {
     if (isEmailInputValid) {
       setLoading(true);
       await apiClient
-        .subscribeEmailWP({ email: emailValue })
+        .subscribeEmailWP({
+          email: emailValue,
+          signupLocation:
+            typeof window === "undefined" ? undefined : window.location.href,
+          referrer:
+            typeof window === "undefined"
+              ? undefined
+              : window.document.referrer,
+        })
         .then(({ data }) => {
           setSubmitError(false);
           setLoading(false);

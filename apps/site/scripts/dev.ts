@@ -6,8 +6,6 @@ const script = async () => {
 
   await import("./codegen");
 
-  await import("./create-db-indexes");
-
   await execa("next", ["dev"], { stdio: "inherit" });
 };
 

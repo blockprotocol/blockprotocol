@@ -1,7 +1,8 @@
 import { BlockMetadata } from "@blockprotocol/core";
 import { useMemo } from "react";
 
-import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
+import { isDocsVersion, isVersionedSection } from "../../lib/docs-versions";
+import { SiteMap, SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { itemIsPage } from "../navbar/util";
 import { generatePathWithoutParams } from "../shared";
 
@@ -57,18 +58,71 @@ const findCrumbs = (params: {
 
 export type Crumb = SiteMapPage | SiteMapPageSection;
 
+const VERSIONED_DOC_ROUTES = new Set([
+  "/docs/[[...docs-slug]]",
+  "/spec/[[...spec-slug]]",
+]);
+
+/**
+ * Builds the "Docs"-rooted page list that `findCrumbs` walks when the
+ * request is on `/docs/<v>/…` or `/spec/<v>/…`.
+ *
+ * The default `pages` tree exposes only the LATEST version's docs/spec
+ * subpages (see `generateSiteMap`), so when a user is on an older version
+ * the path-match never succeeds and no crumbs render. When we can identify
+ * the version, we synthesise a Docs entry whose children come from that
+ * version's tree — keeping crumbs working on `/docs/0.3/types`, etc.
+ *
+ * Falls back to the pre-existing behaviour (filter for "Docs"/"Specification"
+ * top-level entries) when the version can't be identified or per-version
+ * data isn't available (e.g. older callers that don't pass it through).
+ */
+const buildVersionedSearchRoot = (params: {
+  asPath: string;
+  pages: SiteMapPage[];
+  versionedSubPages?: SiteMap["versionedSubPages"];
+}): SiteMapPage[] => {
+  const { asPath, pages, versionedSubPages } = params;
+
+  const [section, version] = generatePathWithoutParams(asPath)
+    .split("/")
+    .filter((segment) => segment !== "");
+
+  if (
+    versionedSubPages &&
+    section &&
+    isVersionedSection(section) &&
+    version &&
+    isDocsVersion(version)
+  ) {
+    const docsForVersion = versionedSubPages.docs[version] ?? [];
+    const specForVersion = versionedSubPages.spec[version] ?? [];
+    return [
+      {
+        title: "Docs",
+        href: "/docs",
+        subPages: [...docsForVersion, ...specForVersion],
+      },
+    ];
+  }
+
+  return pages.filter(({ title }) => ["Specification", "Docs"].includes(title));
+};
+
 export const useCrumbs = (
   pages: SiteMapPage[],
   asPath: string,
   route: string = "/docs/[[...docs-slug]]",
   blockMetadata?: BlockMetadata,
+  versionedSubPages?: SiteMap["versionedSubPages"],
 ): Crumb[] => {
   return useMemo(() => {
-    // Documentation pages
-    if (route === "/docs/[[...docs-slug]]") {
-      const breadCrumbPages = pages.filter(({ title }) =>
-        ["Specification", "Docs"].includes(title),
-      );
+    if (VERSIONED_DOC_ROUTES.has(route)) {
+      const breadCrumbPages = buildVersionedSearchRoot({
+        asPath,
+        pages,
+        versionedSubPages,
+      });
 
       for (const page of breadCrumbPages) {
         const maybeCrumbs = findCrumbs({ asPath, item: page });
@@ -77,9 +131,7 @@ export const useCrumbs = (
           return maybeCrumbs;
         }
       }
-    }
-    // User block pages
-    else if (
+    } else if (
       route === "/[shortname]/blocks/[block-slug]" &&
       blockMetadata?.displayName
     ) {
@@ -96,5 +148,5 @@ export const useCrumbs = (
     }
 
     return [];
-  }, [asPath, pages, route, blockMetadata]);
+  }, [asPath, pages, route, blockMetadata, versionedSubPages]);
 };

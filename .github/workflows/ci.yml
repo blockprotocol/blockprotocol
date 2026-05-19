@@ -241,7 +241,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: apps/site/.next/cache
           key: ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-${{ hashFiles('apps/site/**') }}
@@ -258,33 +258,6 @@ jobs:
           mkdir -p var/logs
           mkdir -p var/site
 
-          cat << EOF > apps/site/.env.local
-          SESSION_SECRET=dev-session-secret
-          HASHING_SECRET=dev-hashing-secret
-
-          MONGODB_URI=mongodb://root:password@localhost:27017/
-          MONGODB_DB_NAME=local
-
-          S3_API_ENDPOINT=http://localhost:9000
-          S3_BUCKET=dev-bucket
-          S3_ACCESS_KEY_ID=dev-access-key
-          S3_SECRET_ACCESS_KEY=dev-secret-key
-          S3_BASE_URL=http://localhost:9000/dev-bucket
-
-          NEXT_PUBLIC_NPM_PUBLISHING=true
-
-          EOF
-
-      - name: Launch DB
-        if: ${{ success() || failure() }}
-        run: |
-          yarn dev:db 2>&1 | tee var/logs/db.log & ## ampersand enables background mode
-          yarn wait-on --timeout 60000 tcp:0.0.0.0:27017
-
-      - name: Seed DB
-        if: ${{ success() || failure() }}
-        run: yarn dev:seed-db
-
       - name: Build and launch frontend
         if: ${{ success() || failure() }}
         run: |
@@ -300,14 +273,37 @@ jobs:
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
-        run: kill -2 $(lsof -t -i:3000)
+        ## `lsof -t -i:3000` returns nothing when the frontend has already
+        ## exited (e.g. crashed during the Playwright run, or never started
+        ## successfully). In that case the previous `kill -2 $(lsof ...)`
+        ## form expanded to a bare `kill -2`, which prints the kill usage
+        ## message and exits 2 — masking the *actual* upstream failure with
+        ## a misleading cleanup-step failure.
+        ##
+        ## Guard on the PID list explicitly, and give Next.js a moment to
+        ## flush nyc coverage to `.nyc_output/` before the next step reads
+        ## it (which is the whole reason we send SIGINT rather than -9).
+        ##
         ## TODO: Replace with kill-port when SIGINT is supported as an argument
         ## https://github.com/tiaanduplessis/kill-port/issues/48
         # run: yarn kill-port 3000
-
-      - name: Stop DB
-        if: ${{ success() || failure() }}
-        run: docker-compose -f apps/site/docker-compose.dev.yml down
+        run: |
+          pids=$(lsof -t -i:3000 || true)
+          if [ -z "$pids" ]; then
+            echo "::notice::Nothing listening on :3000; the frontend already exited (check earlier steps)."
+            exit 0
+          fi
+          echo "Sending SIGINT to frontend pid(s): $pids"
+          # shellcheck disable=SC2086
+          kill -2 $pids
+          # Wait (up to 10s) for the port to actually free, so nyc has time
+          # to flush coverage before the next step reads .nyc_output.
+          for _ in $(seq 1 20); do
+            if [ -z "$(lsof -t -i:3000 || true)" ]; then
+              break
+            fi
+            sleep 0.5
+          done
 
       - name: Generate coverage report
         if: ${{ success() || failure() }}
@@ -323,10 +319,6 @@ jobs:
           files: coverage/lcov.info
           flags: site-integration-${{ matrix.device }}
           token: ${{ secrets.CODECOV_TOKEN }} ## not required for public repos, can be removed when https://github.com/codecov/codecov-action/issues/837 is resolved
-
-      - name: Show DB logs
-        if: ${{ success() || failure() }}
-        run: cat var/logs/db.log
 
       - name: Show frontend logs
         if: ${{ success() || failure() }}

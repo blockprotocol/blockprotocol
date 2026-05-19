@@ -1,7 +1,7 @@
 import { Avatar, AvatarProps, Typography, useTheme } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { SerializedUser } from "../lib/api/model/user.model";
+import { SerializedUser } from "../context/user-context";
 
 interface UserAvatarProps {
   user: SerializedUser;
@@ -26,7 +26,7 @@ export const UserAvatar: FunctionComponent<UserAvatarProps> = ({
 
   return (
     <Avatar
-      src={userAvatarUrl}
+      src={userAvatarUrl ?? undefined}
       sx={[
         {
           width: size,

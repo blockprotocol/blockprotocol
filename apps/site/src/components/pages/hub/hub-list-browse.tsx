@@ -1,4 +1,4 @@
-import { faAsterisk, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import {
   Hidden,
   Stack,
@@ -10,13 +10,12 @@ import {
 } from "@mui/material";
 import { ReactNode, useMemo, useState } from "react";
 
-import { HUB_SERVICES_ENABLED } from "../../../pages/hub.page";
 import { FontAwesomeIcon } from "../../icons";
 import { faBinary } from "../../icons/fa/binary";
 import { faBoxesStacked } from "../../icons/fa/boxes-stacked";
 import { Link } from "../../link";
 import { useRouteHubBrowseType } from "./hub";
-import { getHubBrowseQuery } from "./hub-utils";
+import { getHubBrowseQuery, HubBrowseType } from "./hub-utils";
 
 const HubListBrowseType = ({
   children,
@@ -25,7 +24,7 @@ const HubListBrowseType = ({
   active,
 }: {
   children: ReactNode;
-  type: string;
+  type: HubBrowseType;
   onClick: () => void;
   active: boolean;
 }) => {
@@ -132,15 +131,12 @@ const HubListTabs = ({
 type BrowseItem = {
   icon: IconDefinition;
   title: string;
-  type: string;
+  type: HubBrowseType;
 };
 
 const getBrowseItems = (): BrowseItem[] => [
   { icon: faBoxesStacked, type: "blocks", title: "Blocks" },
-  { icon: faAsterisk, type: "types", title: "Types" },
-  ...(HUB_SERVICES_ENABLED
-    ? [{ icon: faBinary, type: "services", title: "Services" }]
-    : []),
+  { icon: faBinary, type: "services", title: "Services" },
 ];
 
 export const HubListBrowse = ({

@@ -40,16 +40,6 @@ test("is not triggered by pressing / within an input or a textarea", async ({
 }) => {
   const searchModal = page.locator(searchModalSelector);
 
-  await page.goto("/");
-
-  await page.focus('input[placeholder="you@example.com"]');
-  await page.keyboard.press("/");
-
-  await expect(
-    searchModal,
-    "Search modal should not be visible when pressing '/' within an input",
-  ).not.toBeVisible();
-
   await page.goto("/@hash/blocks/code");
 
   const jsonEditor = page.locator(

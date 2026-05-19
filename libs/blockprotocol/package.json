@@ -36,7 +36,7 @@
     "is-ci": "3.0.1",
     "prompt": "^1.3.0",
     "slugify": "^1.6.5",
-    "tar": "^6.2.1",
+    "tar": "6.2.1",
     "tmp-promise": "3.0.3"
   },
   "devDependencies": {
@@ -46,7 +46,8 @@
     "@types/command-line-usage": "^5.0.4",
     "@types/is-ci": "3.0.4",
     "@types/prompt": "^1.1.9",
-    "@types/react": "^18.0.25",
+    "@types/react": "19.0.1",
+    "@types/tar": "^6.1.13",
     "eslint": "8.33.0",
     "typescript": "4.9.4"
   },

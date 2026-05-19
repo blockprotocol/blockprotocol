@@ -20,7 +20,7 @@ export const useModuleConstructor = <T extends ModuleHandler>({
     ConstructorParameters<ModuleConstructor<T>>[0],
     "element"
   >;
-  ref: RefObject<HTMLElement>;
+  ref: RefObject<HTMLElement | null>;
 }) => {
   const previousRef = useRef<HTMLElement | null>(null);
   const initialisedRef = useRef(false);

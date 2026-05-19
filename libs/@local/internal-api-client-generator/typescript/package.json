@@ -10,10 +10,6 @@
     "openapi-generator",
     "internal-api-client"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/GIT_USER_ID/GIT_REPO_ID.git"
-  },
   "license": "Unlicense",
   "author": "OpenAPI-Generator Contributors",
   "main": "./dist/index.js",
@@ -23,7 +19,7 @@
     "prepare": "yarn build"
   },
   "dependencies": {
-    "axios": "^1.6.1"
+    "axios": "1.16.1"
   },
   "devDependencies": {
     "typescript": "4.9.4"

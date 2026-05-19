@@ -54,6 +54,7 @@ export const ListViewCard: FunctionComponent<ListViewCardProps> = ({
             sx={{
               height: 24,
               width: 24,
+              objectFit: "contain",
             }}
           />
         ) : (

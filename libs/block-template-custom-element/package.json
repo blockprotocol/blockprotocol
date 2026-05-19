@@ -38,14 +38,14 @@
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
-    "@types/react-dom": "18.0.9",
-    "@types/react-is": "18.2.0",
+    "@types/react-dom": "19.0.2",
+    "@types/react-is": "19.0.0",
     "block-scripts": "0.3.5",
     "eslint": "8.33.0",
     "mock-block-dock": "0.1.10",
     "prettier": "2.8.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
   },
   "block-scripts": {
     "port": 63212

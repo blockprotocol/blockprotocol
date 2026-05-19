@@ -43,13 +43,10 @@ test("Home page should contain key elements", async ({ page }) => {
   await page.hover(`[data-testid='WordPress-button']`);
   await expect(page.locator("[data-testid='WordPress-tooltip']")).toBeVisible();
 
-  await expect(
-    page.locator("[data-testid='GitHub Blocks-button']"),
-  ).toBeVisible();
-  await page.hover(`[data-testid='GitHub Blocks-button']`);
-  await expect(
-    page.locator("[data-testid='GitHub Blocks-tooltip']"),
-  ).toBeVisible();
+  // The "GitHub Blocks" tooltip used to live alongside WordPress/HASH but
+  // was removed when the supported-applications section was tightened to
+  // shipping integrations + the "Planned" group. Don't reintroduce it here
+  // unless the section is rebuilt.
 
   await expect(page.locator("[data-testid='HASH-button']")).toBeVisible();
   await page.hover(`[data-testid='HASH-button']`);
@@ -100,7 +97,12 @@ test("Home page should contain key elements", async ({ page }) => {
   ).toBeVisible();
 
   // Carousel section
-  await expect(page.locator("text=Browse all Blocks")).toHaveAttribute(
+  // The "Browse all blocks" link rendering is lowercase ("blocks"), but
+  // Playwright's `text=` selector is case-insensitive substring match, so
+  // both "Browse all Blocks" and "Browse all blocks" resolve. We use
+  // `.first()` because the homepage also has a separate "Browse blocks"
+  // CTA whose text is a substring of this one.
+  await expect(page.locator("text=Browse all blocks").first()).toHaveAttribute(
     "href",
     "/hub",
   );
@@ -118,26 +120,37 @@ test("Home page should contain key elements", async ({ page }) => {
     await page.locator('[data-testid="block-slider"] >> .slick-slide').count(),
   ).toBeGreaterThan(4);
 
-  // Sign up section
+  // Final CTA section. NOTE: `<FinalCTA />` is no longer composed directly
+  // by `index.page.tsx`; it now reaches the home page via the layout-level
+  // `<FooterBanner>` (the `BANNERS` entry whose `shouldDisplay` matches
+  // `pathname === "/"` renders `<FinalCTA />`). The `data-testid="final-cta"`
+  // and inner copy below therefore still apply on the home page.
   const finalCTA = page.locator('[data-testid="final-cta"]');
 
-  // @todo: Add tests to handle authenticated users, they shouldn't see this section
   await expect(finalCTA).toBeVisible();
 
-  await expect(finalCTA.locator("text=Create an account")).toBeVisible();
   await expect(
-    finalCTA.locator("text=Publish blocks to the Þ Hub"),
+    finalCTA.locator("text=Build with the Block Protocol"),
   ).toBeVisible();
   await expect(finalCTA.locator("text=Add blocks to your app")).toBeVisible();
   await expect(
-    finalCTA.locator("text=Take part in a growing, open source community"),
+    finalCTA.locator("text=Contribute to a growing, open source community"),
   ).toBeVisible();
   await expect(
     finalCTA.locator("text=Claim your favorite username"),
   ).toBeVisible();
 
-  await expect(finalCTA.locator("text=Log in")).toHaveAttribute(
+  // Use exact-text locators (quoted strings) rather than the default
+  // `text=...` substring match: the `<p>` description above this block
+  // includes the phrase "...or read the docs to start building your own.",
+  // which would otherwise also satisfy `text=Read the docs` and trip
+  // Playwright's strict-mode-multiple-elements check.
+  await expect(finalCTA.locator('text="Browse the Hub"')).toHaveAttribute(
     "href",
-    "/login",
+    "/hub",
+  );
+  await expect(finalCTA.locator('text="Read the docs"')).toHaveAttribute(
+    "href",
+    "/docs",
   );
 });

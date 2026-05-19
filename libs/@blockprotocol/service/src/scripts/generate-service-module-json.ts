@@ -3,15 +3,33 @@ import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { JsonObject, ModuleMessageDefinition } from "@blockprotocol/core";
-import { generateSchema, getProgramFromFiles } from "typescript-json-schema";
+import { createGenerator } from "ts-json-schema-generator";
 
-const program = getProgramFromFiles([resolve("./src/types.ts")]);
+// We replaced `typescript-json-schema` with `ts-json-schema-generator`
+// because the former pulled in the deprecated and now critically
+// vulnerable `vm2` package (see GHSA-248r-7h7q-cr24 et al.). The same
+// generator is used by `@apps/site` so the workspace standardises on a
+// single TS-to-JSON-Schema implementation.
+//
+// `ts-json-schema-generator` mirrors the two `typescript-json-schema`
+// flags this script used to set:
+// - `required: true` (all properties required by default) is the default
+//   behaviour of the new generator; nothing to opt into.
+// - `ref: false` (inline every type, no `$ref`s) maps to the combination
+//   of `expose: "none"` + `topRef: false` here, which keeps the emitted
+//   JSON shape identical to what the old script produced.
+const config = {
+  path: resolve("./src/types.ts"),
+  tsconfig: resolve("./tsconfig.json"),
+  expose: "none" as const,
+  topRef: false,
+  skipTypeCheck: true,
+};
+
+const generator = createGenerator(config);
 
 const generateServiceSchema = (params: { typeName: string }): JsonObject => {
-  const schema = generateSchema(program, params.typeName, {
-    required: true,
-    ref: false,
-  });
+  const schema = generator.createSchema(params.typeName);
 
   if (!schema) {
     throw new Error(

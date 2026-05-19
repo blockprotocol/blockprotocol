@@ -136,6 +136,9 @@ test.skip("should show an error message if an unsupported block is rendered", as
   }
 
   await expect(
+    page.getByRole("status").filter({ hasText: "Preview unavailable" }),
+  ).toBeVisible();
+  await expect(
     page.locator(
       "text=This block was written for an earlier version of the Block Protocol specification and cannot currently be displayed in the Hub.",
     ),

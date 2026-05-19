@@ -1,4 +1,3 @@
-import { extractVersion } from "@blockprotocol/type-system";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
@@ -16,57 +15,57 @@ import { BlockCard } from "../components/block-card";
 import { BlockProtocolIcon, FontAwesomeIcon } from "../components/icons";
 import { Link } from "../components/link";
 import { HubItemDescription, HubList } from "../components/pages/hub/hub";
-import { getRouteHubBrowseType } from "../components/pages/hub/hub-utils";
+import {
+  getRouteHubBrowseType,
+  HubBrowseType,
+} from "../components/pages/hub/hub-utils";
+import { getServiceListing } from "../components/pages/hub/services-data";
 import { getAllBlocks, getFeaturedBlocks } from "../lib/api/blocks/get";
-import { apiClient } from "../lib/api-client";
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 import { excludeHiddenBlocks } from "../lib/excluded-blocks";
 import { COPY_FONT_FAMILY } from "../theme/typography";
-
-export const HUB_SERVICES_ENABLED = false;
 
 interface PageProps {
   featuredBlocks: BlockMetadata[];
   listing: HubItemDescription[];
 }
 
-const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
-  {
-    async blocks() {
-      const blocks = await getAllBlocks();
+const fetchBlocksListing = async (): Promise<HubItemDescription[]> => {
+  const blocks = await getAllBlocks();
 
-      return excludeHiddenBlocks(blocks).map(
-        (item): HubItemDescription => ({
-          image: item.icon,
-          author: item.author,
-          title: item.displayName ?? "",
-          description: item.description ?? "",
-          updated: item.lastUpdated ?? "",
-          version: item.version,
-          url: item.blockSitePath,
-          verified: item.verified,
-        }),
-      );
-    },
-    async types() {
-      const types = await apiClient.getEntityTypes({ latestOnly: true });
+  return excludeHiddenBlocks(blocks).map(
+    (item): HubItemDescription => ({
+      kind: "block",
+      image: item.icon,
+      author: item.author,
+      title: item.displayName ?? "",
+      description: item.description ?? "",
+      updated: item.lastUpdated ?? "",
+      version: item.version,
+      url: item.blockSitePath,
+      verified: item.verified,
+    }),
+  );
+};
 
-      return (
-        types.data?.entityTypes.map(
-          (type): HubItemDescription => ({
-            title: type.schema.title,
-            author: type.schema.$id.match(/@(.*?)\//)?.[1] ?? "",
-            description: type.schema.description,
-            url: type.schema.$id,
-            version: `${extractVersion(type.schema.$id)}`,
-          }),
-        ) ?? []
-      );
-    },
-    async services() {
-      return HUB_SERVICES_ENABLED ? [] : null;
-    },
-  };
+/**
+ * Resolves the listing for a given browse type using an explicit `switch` —
+ * importantly, the parameter is the validated {@link HubBrowseType} union
+ * (not an arbitrary string), and the dispatch is static rather than via
+ * dynamic property access. This is what closes the CodeQL
+ * js/unvalidated-dynamic-method-call finding that previously hit a
+ * `lookup[browseType]?.()` pattern here.
+ */
+const fetchListing = async (
+  browseType: HubBrowseType,
+): Promise<HubItemDescription[]> => {
+  switch (browseType) {
+    case "blocks":
+      return fetchBlocksListing();
+    case "services":
+      return getServiceListing();
+  }
+};
 
 /**
  * used to create an index of all available blocks, the catalog
@@ -77,17 +76,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const browseType = getRouteHubBrowseType(context.query);
   const [featuredBlocks, listing] = await Promise.all([
     getFeaturedBlocks(),
-    getHubItems[browseType]?.() ?? null,
+    fetchListing(browseType),
   ]);
-
-  if (!listing) {
-    return {
-      redirect: {
-        destination: "/hub",
-        permanent: false,
-      },
-    };
-  }
 
   return {
     props: {
@@ -102,7 +92,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
     <>
       <NextSeo
         title="Block Protocol – Hub"
-        description="The Block Protocol's registry of open-source blocks and types"
+        description="The Block Protocol's registry of open-source blocks"
       />
       <Container
         sx={(theme) => ({
@@ -123,7 +113,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
           fontSize={42}
           fontFamily={COPY_FONT_FAMILY}
           fontWeight={300}
-          color={(theme) => theme.palette.gray[50]}
+          sx={{ color: "gray.50" }}
           letterSpacing="-0.03em"
         >
           <BlockProtocolIcon
@@ -137,36 +127,24 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
             <Box
               component="strong"
               fontWeight={700}
-              color={(theme) => theme.palette.purple[80]}
+              sx={{ color: "purple.80" }}
             >
               blocks
             </Box>
-            {HUB_SERVICES_ENABLED ? <>,</> : <> and</>}{" "}
+            {" and "}
             <Box
               component="strong"
               fontWeight={700}
-              color={(theme) => theme.palette.purple[70]}
+              sx={{ color: "purple.60" }}
             >
-              types
+              services
             </Box>
-            {HUB_SERVICES_ENABLED ? (
-              <>
-                , and{" "}
-                <Box
-                  component="strong"
-                  fontWeight={700}
-                  color={(theme) => theme.palette.purple[60]}
-                >
-                  services
-                </Box>
-              </>
-            ) : null}
           </Box>
         </Typography>
         <Typography
           mb={3}
           variant="bpHeading4"
-          color={(theme) => theme.palette.bpGray[80]}
+          sx={{ color: "bpGray.80" }}
           fontFamily={COPY_FONT_FAMILY}
           fontSize={24}
           letterSpacing="-0.02em"
@@ -244,7 +222,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
                 },
               })}
             >
-              Discover how blocks and types work
+              Discover how blocks work
               <FontAwesomeIcon icon={faChevronRight} sx={{ ml: 0.75 }} />
             </Box>
           </Stack>

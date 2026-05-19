@@ -34,9 +34,10 @@ const flattenSitemapPages = (pages: SiteMapPage[]): SiteMapPage[] => {
   return result;
 };
 
-const markdownPageInfos = flattenSitemapPages(siteMap.pages).filter(
-  (page): page is SiteMapPage & { markdownFilePath: string } =>
-    Boolean(page.markdownFilePath),
+const markdownPageInfos = flattenSitemapPages(
+  siteMap.pages as unknown as SiteMapPage[],
+).filter((page): page is SiteMapPage & { markdownFilePath: string } =>
+  Boolean(page.markdownFilePath),
 );
 
 const script = async () => {

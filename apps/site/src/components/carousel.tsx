@@ -85,7 +85,7 @@ export const Carousel = <T,>({
 }: CarouselProps<T>): ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const slider = useRef<Slider>();
+  const slider = useRef<Slider>(null);
 
   const sliderSettings = useMemo(
     () =>
