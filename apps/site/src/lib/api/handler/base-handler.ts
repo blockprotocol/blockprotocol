@@ -60,26 +60,28 @@ export const createBaseHandler = <
 export const baseHandlerOptions = {
   onNoMatch: async (
     request: NextApiRequest,
-    response: NextApiResponse,
+    response: NextApiResponse<ErrorResponse>,
   ): Promise<void> => {
     // eslint-disable-next-line no-console
     console.error(
       `[next-connect] No matching route for ${request.method} ${request.url}`,
     );
-    response.statusCode = 404;
-    response.end(`Route ${request.method} ${request.url} not found`);
+    // Don't echo `request.method` / `request.url` back to the client — both are
+    // attacker-controlled and reflecting them into the response body is a
+    // reflected-XSS sink (CodeQL js/reflected-xss). The diagnostic info above
+    // is already logged server-side, which is where it belongs.
+    response.status(404).json({ errors: [{ msg: "Route not found" }] });
   },
   onError: async (
     error: unknown,
     _request: NextApiRequest,
-    response: NextApiResponse,
+    response: NextApiResponse<ErrorResponse>,
   ): Promise<void> => {
     Sentry.captureException(error);
     await Sentry.flush(2000);
 
-    response.statusCode = 500;
     // eslint-disable-next-line no-console
     console.error(error);
-    response.end("Internal Server Error");
+    response.status(500).json({ errors: [{ msg: "Internal Server Error" }] });
   },
 };
