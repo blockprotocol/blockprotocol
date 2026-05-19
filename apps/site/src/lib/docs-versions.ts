@@ -1,3 +1,11 @@
+/* istanbul ignore file */
+/**
+ * @see https://github.com/vercel/next.js/issues/32608#issuecomment-1007439478
+ * `istanbul ignore file` above is required because this module is imported by
+ * `src/middleware.page.ts`, which runs in the Edge runtime. Istanbul-instrumented
+ * code uses dynamic evaluation patterns that the Edge runtime forbids, so any
+ * module that the middleware (transitively) pulls in must opt out of coverage.
+ */
 /**
  * Declared newest first. The first entry is treated as the latest version
  * and is what `/docs` and `/spec` (without an explicit version) redirect to.
