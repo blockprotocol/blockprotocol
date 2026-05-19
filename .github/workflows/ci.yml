@@ -273,10 +273,37 @@ jobs:
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
-        run: kill -2 $(lsof -t -i:3000)
+        ## `lsof -t -i:3000` returns nothing when the frontend has already
+        ## exited (e.g. crashed during the Playwright run, or never started
+        ## successfully). In that case the previous `kill -2 $(lsof ...)`
+        ## form expanded to a bare `kill -2`, which prints the kill usage
+        ## message and exits 2 — masking the *actual* upstream failure with
+        ## a misleading cleanup-step failure.
+        ##
+        ## Guard on the PID list explicitly, and give Next.js a moment to
+        ## flush nyc coverage to `.nyc_output/` before the next step reads
+        ## it (which is the whole reason we send SIGINT rather than -9).
+        ##
         ## TODO: Replace with kill-port when SIGINT is supported as an argument
         ## https://github.com/tiaanduplessis/kill-port/issues/48
         # run: yarn kill-port 3000
+        run: |
+          pids=$(lsof -t -i:3000 || true)
+          if [ -z "$pids" ]; then
+            echo "::notice::Nothing listening on :3000; the frontend already exited (check earlier steps)."
+            exit 0
+          fi
+          echo "Sending SIGINT to frontend pid(s): $pids"
+          # shellcheck disable=SC2086
+          kill -2 $pids
+          # Wait (up to 10s) for the port to actually free, so nyc has time
+          # to flush coverage before the next step reads .nyc_output.
+          for _ in $(seq 1 20); do
+            if [ -z "$(lsof -t -i:3000 || true)" ]; then
+              break
+            fi
+            sleep 0.5
+          done
 
       - name: Generate coverage report
         if: ${{ success() || failure() }}
