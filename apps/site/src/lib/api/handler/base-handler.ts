@@ -32,6 +32,27 @@ export const createBaseHandler = <
 }) => {
   const { isPublicApi } = options ?? {};
 
+  // CORS configuration:
+  //
+  // - Public endpoints (`isPublicApi: true`) need to be reachable from any
+  //   origin — in particular, the sandboxed-block-demo iframe runs on a
+  //   different subdomain than the main frontend, and third-party embedders
+  //   (HASH, WordPress plugin, `npx block-template`, etc.) consume these
+  //   endpoints from arbitrary origins. They MUST NOT carry credentials:
+  //   combining `Access-Control-Allow-Origin: *` with
+  //   `Access-Control-Allow-Credentials: true` is the antipattern flagged by
+  //   CodeQL `js/cors-misconfiguration-for-credentials` because it would
+  //   permit credentialed cross-site requests from any origin. Browsers
+  //   actually reject the response in that combination, but the server-side
+  //   intent is what we want to be unambiguous here.
+  //
+  // - Private endpoints stay locked to `FRONTEND_URL` with credentials
+  //   enabled, since they're called by the first-party site and need the
+  //   session cookie.
+  const corsOptions: cors.CorsOptions = isPublicApi
+    ? { origin: "*", credentials: false }
+    : { origin: FRONTEND_URL, credentials: true };
+
   return createRouter<NextApiRequest, NextApiResponse>().use(
     async (req, res, next) => {
       // For server-to-server requests (no origin), skip CORS entirely
@@ -42,10 +63,7 @@ export const createBaseHandler = <
 
       // For browser requests, use the cors middleware
       return new Promise<void>((resolve, reject) => {
-        cors({
-          origin: isPublicApi ? "*" : FRONTEND_URL,
-          credentials: true,
-        })(req, res, (err?: unknown) => {
+        cors(corsOptions)(req, res, (err?: unknown) => {
           if (err) {
             reject(err);
           } else {

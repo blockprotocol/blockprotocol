@@ -15,10 +15,13 @@ export type BlockExampleGraph = {
 
 /**
  * Allowlist of accepted values for the `?type=` query parameter. Keep this in
- * sync with the dispatch tables in `hub.page.tsx` (`getHubItems`) and
- * `hub.tsx` (`HubBrowseHeaderComponents`).
+ * sync with the dispatch in `hub.page.tsx` (`fetchListing`) and the header
+ * table in `hub.tsx` (`HubBrowseHeaderComponents`).
+ *
+ * The "types" tab was removed when the type system spun out into SemType
+ * (https://semtype.org) — types are no longer browsed under the BP Hub.
  */
-export const HUB_BROWSE_TYPES = ["blocks", "services", "types"] as const;
+export const HUB_BROWSE_TYPES = ["blocks", "services"] as const;
 
 export type HubBrowseType = (typeof HUB_BROWSE_TYPES)[number];
 

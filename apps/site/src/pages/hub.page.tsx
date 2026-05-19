@@ -58,16 +58,12 @@ const fetchBlocksListing = async (): Promise<HubItemDescription[]> => {
  */
 const fetchListing = async (
   browseType: HubBrowseType,
-): Promise<HubItemDescription[] | null> => {
+): Promise<HubItemDescription[]> => {
   switch (browseType) {
     case "blocks":
       return fetchBlocksListing();
     case "services":
       return getServiceListing();
-    case "types":
-      // No server-side listing for the `types` tab yet — fall through to the
-      // redirect below.
-      return null;
   }
 };
 
@@ -82,15 +78,6 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
     getFeaturedBlocks(),
     fetchListing(browseType),
   ]);
-
-  if (!listing) {
-    return {
-      redirect: {
-        destination: "/hub",
-        permanent: false,
-      },
-    };
-  }
 
   return {
     props: {
