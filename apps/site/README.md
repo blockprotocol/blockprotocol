@@ -50,11 +50,15 @@ All of the variables below are optional and can be set in
   client-side Sentry config. See [Sentry](#sentry) below.
 - `SENTRY_AUTH_TOKEN`: build-time token used to upload source maps to
   Sentry. When unset, the Sentry webpack plugin runs in dry-run mode.
-- `MAILCHIMP_API_KEY`, `MAILCHIMP_API_USER`, `MAILCHIMP_LIST_ID`: only needed
+- `CUSTOMERIO_API_KEY` (and optionally `CUSTOMERIO_REGION=eu`): only needed
   if you want to actually exercise the `/api/signup-notify`,
-  `/api/subscribe-email`, or `/api/vote-application` endpoints, which forward
-  emails to Mailchimp. Without these, those endpoints return a 400 from the
-  upstream Mailchimp client.
+  `/api/subscribe-email`, or `/api/vote-application` endpoints, which push
+  the submitted email into the shared Customer.io workspace as an
+  `identify` call followed by a surface-specific `track` event
+  (`waitlist_joined`, `wordpress_plugin_interest_recorded`,
+  `application_voted`). Without these, those endpoints short-circuit to a
+  200 / `{ success: true }` so local dev and preview deployments don't
+  break the CTAs.
 - `DATA_URL`, `DATA_WRITE_KEY`: server-side telemetry collector used by
   `src/util/usage.ts`. Unset → telemetry is a no-op.
 - `VERCEL_AUTOMATION_BYPASS_SECRET`: only relevant for the snapshot script
@@ -112,13 +116,20 @@ error:
 
 ### Mailing-list integration
 
-- `POST /api/signup-notify` — accepts `{ email }` and adds it to Mailchimp
-  with a merge field indicating interest in being notified when Hub
-  signups re-open.
-- `POST /api/subscribe-email` — subscribes an email address to the
-  Block Protocol for WordPress mailing list.
-- `POST /api/submit-application-vote` — captures application-vote
-  submissions (used by the WordPress plugin landing page).
+All three endpoints push the submitted email into the shared Customer.io
+workspace (the same workspace used by `hash.ai`) via `identify` +
+surface-specific `track` events. They short-circuit to a success response
+when `CUSTOMERIO_API_KEY` is unset, so non-production environments do not
+need credentials.
+
+- `POST /api/signup-notify` — captures emails from the `/signup`
+  "Notify me" form (`waitlist_joined` event).
+- `PUT  /api/subscribe-email` — captures emails from the WordPress plugin
+  early-access CTA on `/wordpress`
+  (`wordpress_plugin_interest_recorded` event).
+- `PUT  /api/vote-application` — captures votes from the WordPress
+  application-voting widget (`application_voted` event, with the chosen
+  CMS / free-text suggestion as event properties).
 
 ## Testing
 

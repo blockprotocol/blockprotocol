@@ -4,11 +4,19 @@ import { ValidationError } from "express-validator";
 
 import { ApplicationId } from "../components/pages/wordpress/voting/applications";
 import {
+  SignupNotifyRequestBody,
+  SignupNotifyResponse,
+} from "../pages/api/signup-notify.api";
+import {
   SubscribeEmailRequestBody,
   SubscribeEmailResponse,
 } from "../pages/api/subscribe-email.api";
 import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
 import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
+import {
+  VoteApplicationRequestBody,
+  VoteApplicationResponse,
+} from "../pages/api/vote-application.api";
 import { FRONTEND_URL } from "./config";
 
 const getBaseUrl = () => {
@@ -120,20 +128,40 @@ export const apiClient = {
     apiClient.get<ApiUserByShortnameResponse>(`users/${shortname}`),
   getUserBlocks: ({ shortname }: { shortname: string }) =>
     apiClient.get<ApiBlocksByUserResponse>(`users/${shortname}/blocks`),
-  subscribeEmailWP: ({ email }: { email: string }) =>
+  subscribeEmailWP: ({
+    email,
+    signupLocation,
+    referrer,
+  }: {
+    email: string;
+    signupLocation?: string;
+    referrer?: string;
+  }) =>
     apiClient.put<SubscribeEmailRequestBody, SubscribeEmailResponse>(
       "subscribe-email",
       {
         email,
-        merge_fields: {
-          ECO_WP: "Yes",
-        },
+        ...(signupLocation ? { signupLocation } : {}),
+        ...(referrer ? { referrer } : {}),
       },
     ),
-  signupNotify: ({ email }: { email: string }) =>
-    apiClient.post<{ email: string }, { ok: true }>("signup-notify", {
-      email,
-    }),
+  signupNotify: ({
+    email,
+    signupLocation,
+    referrer,
+  }: {
+    email: string;
+    signupLocation?: string;
+    referrer?: string;
+  }) =>
+    apiClient.post<SignupNotifyRequestBody, SignupNotifyResponse>(
+      "signup-notify",
+      {
+        email,
+        ...(signupLocation ? { signupLocation } : {}),
+        ...(referrer ? { referrer } : {}),
+      },
+    ),
   submitApplicationVote: ({
     email,
     vote,
@@ -143,14 +171,12 @@ export const apiClient = {
     vote: ApplicationId;
     other?: string;
   }) =>
-    apiClient.put<SubscribeEmailRequestBody, SubscribeEmailResponse>(
+    apiClient.put<VoteApplicationRequestBody, VoteApplicationResponse>(
       "vote-application",
       {
         email,
-        merge_fields: {
-          [vote]: "Yes",
-          ...(other ? { WISH_EA: other } : {}),
-        },
+        vote,
+        ...(other ? { other } : {}),
       },
     ),
 };

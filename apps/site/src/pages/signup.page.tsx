@@ -24,7 +24,13 @@ const SignupPausedNotice = () => {
     setStatus("submitting");
     setErrorMessage(null);
 
-    const { error } = await apiClient.signupNotify({ email });
+    const { error } = await apiClient.signupNotify({
+      email,
+      signupLocation:
+        typeof window === "undefined" ? undefined : window.location.href,
+      referrer:
+        typeof window === "undefined" ? undefined : window.document.referrer,
+    });
 
     if (error) {
       setStatus("error");
