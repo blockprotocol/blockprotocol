@@ -13,12 +13,35 @@ export type BlockExampleGraph = {
   entities: Entity[];
 };
 
-const defaultBrowseType = "blocks";
+/**
+ * Allowlist of accepted values for the `?type=` query parameter. Keep this in
+ * sync with the dispatch tables in `hub.page.tsx` (`getHubItems`) and
+ * `hub.tsx` (`HubBrowseHeaderComponents`).
+ */
+export const HUB_BROWSE_TYPES = ["blocks", "services", "types"] as const;
 
-export const getRouteHubBrowseType = (query: NextParsedUrlQuery) =>
-  query.type?.toString() ?? defaultBrowseType;
+export type HubBrowseType = (typeof HUB_BROWSE_TYPES)[number];
 
-export const getHubBrowseQuery = (type: string) =>
+const defaultBrowseType: HubBrowseType = "blocks";
+
+const isHubBrowseType = (value: string): value is HubBrowseType =>
+  (HUB_BROWSE_TYPES as readonly string[]).includes(value);
+
+/**
+ * Normalises the `?type=` query parameter to a known {@link HubBrowseType}.
+ * Unknown values fall back to {@link defaultBrowseType} — this matters for
+ * security as well as UX: the result is used to index dispatch tables in the
+ * server-side handler, and accepting an arbitrary string would expose a
+ * dynamic-property-access sink (CodeQL js/unvalidated-dynamic-method-call).
+ */
+export const getRouteHubBrowseType = (
+  query: NextParsedUrlQuery,
+): HubBrowseType => {
+  const raw = query.type?.toString();
+  return raw !== undefined && isHubBrowseType(raw) ? raw : defaultBrowseType;
+};
+
+export const getHubBrowseQuery = (type: HubBrowseType) =>
   type === defaultBrowseType ? {} : { type };
 
 export const fadeInWrapper: Variants = {

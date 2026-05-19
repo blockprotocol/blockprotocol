@@ -15,7 +15,7 @@ import { faBinary } from "../../icons/fa/binary";
 import { faBoxesStacked } from "../../icons/fa/boxes-stacked";
 import { Link } from "../../link";
 import { useRouteHubBrowseType } from "./hub";
-import { getHubBrowseQuery } from "./hub-utils";
+import { getHubBrowseQuery, HubBrowseType } from "./hub-utils";
 
 const HubListBrowseType = ({
   children,
@@ -24,7 +24,7 @@ const HubListBrowseType = ({
   active,
 }: {
   children: ReactNode;
-  type: string;
+  type: HubBrowseType;
   onClick: () => void;
   active: boolean;
 }) => {
@@ -131,7 +131,7 @@ const HubListTabs = ({
 type BrowseItem = {
   icon: IconDefinition;
   title: string;
-  type: string;
+  type: HubBrowseType;
 };
 
 const getBrowseItems = (): BrowseItem[] => [

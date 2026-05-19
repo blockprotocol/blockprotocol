@@ -15,7 +15,10 @@ import { BlockCard } from "../components/block-card";
 import { BlockProtocolIcon, FontAwesomeIcon } from "../components/icons";
 import { Link } from "../components/link";
 import { HubItemDescription, HubList } from "../components/pages/hub/hub";
-import { getRouteHubBrowseType } from "../components/pages/hub/hub-utils";
+import {
+  getRouteHubBrowseType,
+  HubBrowseType,
+} from "../components/pages/hub/hub-utils";
 import { getServiceListing } from "../components/pages/hub/services-data";
 import { getAllBlocks, getFeaturedBlocks } from "../lib/api/blocks/get";
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
@@ -27,29 +30,46 @@ interface PageProps {
   listing: HubItemDescription[];
 }
 
-const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
-  {
-    async blocks() {
-      const blocks = await getAllBlocks();
+const fetchBlocksListing = async (): Promise<HubItemDescription[]> => {
+  const blocks = await getAllBlocks();
 
-      return excludeHiddenBlocks(blocks).map(
-        (item): HubItemDescription => ({
-          kind: "block",
-          image: item.icon,
-          author: item.author,
-          title: item.displayName ?? "",
-          description: item.description ?? "",
-          updated: item.lastUpdated ?? "",
-          version: item.version,
-          url: item.blockSitePath,
-          verified: item.verified,
-        }),
-      );
-    },
-    async services() {
+  return excludeHiddenBlocks(blocks).map(
+    (item): HubItemDescription => ({
+      kind: "block",
+      image: item.icon,
+      author: item.author,
+      title: item.displayName ?? "",
+      description: item.description ?? "",
+      updated: item.lastUpdated ?? "",
+      version: item.version,
+      url: item.blockSitePath,
+      verified: item.verified,
+    }),
+  );
+};
+
+/**
+ * Resolves the listing for a given browse type using an explicit `switch` —
+ * importantly, the parameter is the validated {@link HubBrowseType} union
+ * (not an arbitrary string), and the dispatch is static rather than via
+ * dynamic property access. This is what closes the CodeQL
+ * js/unvalidated-dynamic-method-call finding that previously hit a
+ * `lookup[browseType]?.()` pattern here.
+ */
+const fetchListing = async (
+  browseType: HubBrowseType,
+): Promise<HubItemDescription[] | null> => {
+  switch (browseType) {
+    case "blocks":
+      return fetchBlocksListing();
+    case "services":
       return getServiceListing();
-    },
-  };
+    case "types":
+      // No server-side listing for the `types` tab yet — fall through to the
+      // redirect below.
+      return null;
+  }
+};
 
 /**
  * used to create an index of all available blocks, the catalog
@@ -60,7 +80,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const browseType = getRouteHubBrowseType(context.query);
   const [featuredBlocks, listing] = await Promise.all([
     getFeaturedBlocks(),
-    getHubItems[browseType]?.() ?? null,
+    fetchListing(browseType),
   ]);
 
   if (!listing) {
