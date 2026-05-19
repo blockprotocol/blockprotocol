@@ -137,11 +137,23 @@ export const Search: FunctionComponent<SearchProps> = ({
     const items = searchListItemsRefs.current;
 
     if (activeResult >= items.length) {
+      // The `mobile` variant is rendered inline inside the mobile nav
+      // drawer (see `mobile-nav-items.tsx`). Auto-focusing the input
+      // there would pop the on-screen keyboard the moment the user opens
+      // the menu, which is bad UX — and it also caused intermittent
+      // Playwright failures on Pixel emulation where the focus-driven
+      // scroll inside the drawer's scroll container collapsed the
+      // bounding box of the very first sidebar link. Only auto-focus the
+      // desktop modal variant, where the input genuinely is the entry
+      // point.
+      if (variant !== "desktop") {
+        return;
+      }
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
       items[activeResult]?.focus();
     }
-  }, [activeResult]);
+  }, [activeResult, variant]);
 
   const helperText =
     searchState !== "normal" ? (

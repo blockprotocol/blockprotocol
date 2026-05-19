@@ -1,5 +1,11 @@
 import SearchIcon from "@mui/icons-material/Search";
-import { Chip, chipClasses, modalClasses, useTheme } from "@mui/material";
+import {
+  Chip,
+  chipClasses,
+  modalClasses,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 
 import { Button } from "./button";
@@ -9,8 +15,19 @@ import { Search } from "./pages/docs/search";
 export const SearchNavButton = () => {
   const [displayModal, setDisplayModal] = useState(false);
   const theme = useTheme();
+  // The `/` keyboard shortcut is a desktop-only affordance — the search
+  // button itself is hidden below the `md` breakpoint (see `navbar.tsx`),
+  // and mobile users have no way to discover or trigger the shortcut
+  // intentionally. Skip registering the handler on small viewports so a
+  // stray `/` keystroke (e.g. typed into a block sandbox) cannot pop open
+  // an otherwise inaccessible modal.
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
 
   useEffect(() => {
+    if (!isDesktop) {
+      return;
+    }
+
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "/") {
         // Do not trigger search when user is typing in an input field
@@ -27,7 +44,7 @@ export const SearchNavButton = () => {
     window.addEventListener("keydown", onKeyDown);
 
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [isDesktop]);
 
   return (
     <>
