@@ -24,7 +24,9 @@ const REQUEST_TIMEOUT_MS = 10_000;
 const authHeader = (): Record<string, string> => ({
   // Customer.io expects HTTP Basic auth with the API key as the username
   // and an empty password.
-  Authorization: `Basic ${Buffer.from(`${CUSTOMERIO_API_KEY}:`).toString("base64")}`,
+  Authorization: `Basic ${Buffer.from(`${CUSTOMERIO_API_KEY}:`).toString(
+    "base64",
+  )}`,
   "Content-Type": "application/json",
 });
 
@@ -45,7 +47,9 @@ const send = async (path: string, body: object): Promise<void> => {
     if (!response.ok) {
       const text = await response.text().catch(() => "");
       throw new Error(
-        `Customer.io ${path} responded ${response.status}${text ? `: ${text}` : ""}`,
+        `Customer.io ${path} responded ${response.status}${
+          text ? `: ${text}` : ""
+        }`,
       );
     }
   } finally {

@@ -44,7 +44,10 @@ export type SignupNotifyResponse = {
  * call, and we don't want previews / e2e tests to fail just because the
  * marketing pipeline isn't wired up.
  */
-export default createBaseHandler<SignupNotifyRequestBody, SignupNotifyResponse>()
+export default createBaseHandler<
+  SignupNotifyRequestBody,
+  SignupNotifyResponse
+>()
   .use(bodyValidator("email").isEmail().toLowerCase())
   .post(async (req, res) => {
     const errors = validationResult(req);

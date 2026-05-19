@@ -44,7 +44,13 @@ const validate = ajv.compile<VoteApplicationRequestBody>({
     email: { type: "string", format: "email" },
     vote: {
       type: "string",
-      enum: ["ECO_SANITY", "ECO_STRAPI", "ECO_CONFUL", "ECO_DRUPAL", "ECO_OTHER"],
+      enum: [
+        "ECO_SANITY",
+        "ECO_STRAPI",
+        "ECO_CONFUL",
+        "ECO_DRUPAL",
+        "ECO_OTHER",
+      ],
     },
     other: { type: "string" },
   },
