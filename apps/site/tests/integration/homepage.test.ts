@@ -140,11 +140,16 @@ test("Home page should contain key elements", async ({ page }) => {
     finalCTA.locator("text=Claim your favorite username"),
   ).toBeVisible();
 
-  await expect(finalCTA.locator("text=Browse the Hub")).toHaveAttribute(
+  // Use exact-text locators (quoted strings) rather than the default
+  // `text=...` substring match: the `<p>` description above this block
+  // includes the phrase "...or read the docs to start building your own.",
+  // which would otherwise also satisfy `text=Read the docs` and trip
+  // Playwright's strict-mode-multiple-elements check.
+  await expect(finalCTA.locator('text="Browse the Hub"')).toHaveAttribute(
     "href",
     "/hub",
   );
-  await expect(finalCTA.locator("text=Read the docs")).toHaveAttribute(
+  await expect(finalCTA.locator('text="Read the docs"')).toHaveAttribute(
     "href",
     "/docs",
   );
