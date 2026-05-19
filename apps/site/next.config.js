@@ -330,11 +330,6 @@ const nextConfig = {
         destination: "/:shortname",
         permanent: false,
       },
-      {
-        source: "/:shortname(@[^/]+)/types/:path*",
-        destination: "/:shortname",
-        permanent: false,
-      },
     ];
   },
 
