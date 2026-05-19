@@ -14,7 +14,6 @@
     "generate-blockmetadata-schema": "ts-json-schema-generator --path ../../libs/@blockprotocol/core/src/types.ts --type BlockMetadata -o public/schemas/block-metadata.json",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
-    "snapshot-hub-data": "yarn exe scripts/snapshot-hub-data.ts",
     "start": "yarn exe scripts/start.ts"
   },
   "dependencies": {

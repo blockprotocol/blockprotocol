@@ -11,11 +11,12 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
 
 The site no longer depends on MongoDB, S3, or any other external data store.
 Hub listings are read from the static
-[`hub-snapshot.json`](./hub-snapshot.json) snapshot file committed in this
-folder, and the entire account system (login, signup, dashboard, API keys,
-publishing) is paused while we focus on [HASH](https://hash.ai). As a result,
-running the site locally requires **no environment variables, no Docker
-containers, and no database**.
+[`hub-snapshot.json`](./hub-snapshot.json) committed in this folder (treated
+as a frozen artifact — there is no regeneration script), and the entire
+account system (login, signup, dashboard, API keys, publishing) is paused
+while we focus on [HASH](https://hash.ai). As a result, running the site
+locally requires **no environment variables, no Docker containers, and no
+database**.
 
 Pre-requisites: Node `24.x` (see [`package.json`](./package.json) `engines`)
 and Yarn 1 (the repo root pins a compatible version via the workspace setup).
@@ -61,22 +62,6 @@ All of the variables below are optional and can be set in
   break the CTAs.
 - `DATA_URL`, `DATA_WRITE_KEY`: server-side telemetry collector used by
   `src/util/usage.ts`. Unset → telemetry is a no-op.
-- `VERCEL_AUTOMATION_BYPASS_SECRET`: only relevant for the snapshot script
-  when scraping a password-protected Vercel preview deployment.
-
-### Refreshing the Hub snapshot
-
-[`hub-snapshot.json`](./hub-snapshot.json) is the single source of truth for
-`/hub`, `/@shortname`, and `/@shortname/blocks/[slug]`. To refresh it from
-production:
-
-```sh
-yarn workspace @apps/site snapshot-hub-data
-```
-
-The script scrapes the live production site's public `/api/users/:shortname`
-and `/api/users/:shortname/blocks` endpoints and rewrites the JSON file in
-place. Commit the changes when you want them to ship.
 
 ## Vercel Deployment
 
