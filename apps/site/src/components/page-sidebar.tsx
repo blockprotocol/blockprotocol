@@ -472,8 +472,8 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
           borderRightStyle: "solid",
           borderRightWidth: 1,
 
-          top: "var(--navbar-height)",
-          height: `calc(100vh - var(--navbar-height))`,
+          top: "calc(var(--banner-height) + var(--navbar-height))",
+          height: `calc(100vh - var(--banner-height) - var(--navbar-height))`,
           borderRightColor: theme.palette.gray[30],
         }),
         ...(Array.isArray(sx) ? sx : [sx]),

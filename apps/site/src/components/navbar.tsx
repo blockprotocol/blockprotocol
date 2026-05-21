@@ -265,7 +265,9 @@ const Navbar: FunctionComponent<{
             width: "100vw",
             pr: `${lastScrollbarSize}px`,
             position: "fixed",
-            top: isNavbarHidden ? `calc(0px - var(--navbar-height))` : 0,
+            top: isNavbarHidden
+              ? `calc(0px - var(--navbar-height))`
+              : "var(--banner-height)",
             zIndex: theme.zIndex.appBar,
             py: { xs: 1, md: 2 },
             backgroundColor: theme.palette.common.white,
@@ -313,7 +315,7 @@ const Navbar: FunctionComponent<{
             ? [
                 !scrolledPast[HOME_PAGE_HEADER_HEIGHT * 0.5] && {
                   position: "absolute",
-                  top: 0,
+                  top: "var(--banner-height)",
                 },
               ]
             : []),
@@ -454,13 +456,13 @@ const Navbar: FunctionComponent<{
         <Box
           sx={{
             zIndex: theme.zIndex.appBar + 1,
-            marginTop: `${MOBILE_NAVBAR_HEIGHT}px`,
+            marginTop: `calc(var(--banner-height) + ${MOBILE_NAVBAR_HEIGHT}px)`,
             position: "fixed",
             background: theme.palette.common.white,
             top: 0,
             left: 0,
             width: "100%",
-            height: `calc(100% - ${MOBILE_NAVBAR_HEIGHT}px)`,
+            height: `calc(100% - var(--banner-height) - ${MOBILE_NAVBAR_HEIGHT}px)`,
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
@@ -518,7 +520,7 @@ export const NavbarContainer = ({
         {
           "--navbar-height": `${MOBILE_NAVBAR_HEIGHT}px`,
           "--crumbs-height": `${crumbs.length ? breadcrumbsHeight : 0}px`,
-          "--neighbour-offset": `calc(var(--navbar-height) + var(--crumbs-height))`,
+          "--neighbour-offset": `calc(var(--banner-height) + var(--navbar-height) + var(--crumbs-height))`,
         },
         (theme) => ({
           [theme.breakpoints.up("md")]: {
