@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "block-scripts build",
-    "codegen": "block-scripts codegen && yarn format",
+    "codegen": "echo 'TEMPORARY: codegen disabled while blockprotocol.org type hosting is paused; using checked-in generated types under src/types/generated/. Restore `block-scripts codegen && yarn format` once schemas are rehosted.'",
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",

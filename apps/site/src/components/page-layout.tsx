@@ -6,6 +6,7 @@ import { FunctionComponent, ReactNode, useMemo } from "react";
 import { Footer } from "./footer";
 import { BANNERS, FooterBanner } from "./footer-banner";
 import { NavbarContainer } from "./navbar";
+import { TopBanner } from "./top-banner";
 
 type PageLayoutProps = {
   blockMetadata?: BlockMetadata;
@@ -25,7 +26,21 @@ export const PageLayout: FunctionComponent<PageLayoutProps> = ({
   );
 
   return (
-    <Box display="flex" flexDirection="column" sx={{ minHeight: "100vh" }}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      sx={(theme) => ({
+        minHeight: "100vh",
+        "--banner-height": "115px",
+        [theme.breakpoints.up("sm")]: {
+          "--banner-height": "86px",
+        },
+        [theme.breakpoints.up("md")]: {
+          "--banner-height": "72px",
+        },
+      })}
+    >
+      <TopBanner />
       <NavbarContainer blockMetadata={blockMetadata}>
         {children}
       </NavbarContainer>
