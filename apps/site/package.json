@@ -84,7 +84,7 @@
     "slugify": "^1.6.5",
     "twind": "^0.16.17",
     "unified": "^10.1.2",
-    "uuid": "^8.3.2"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
@@ -107,7 +107,6 @@
     "@types/react-slick": "^0.23.10",
     "@types/sanitize-html": "^2.6.2",
     "@types/trusted-types": "2.0.7",
-    "@types/uuid": "^8.3.4",
     "babel-plugin-inline-react-svg": "2.0.1",
     "babel-plugin-istanbul": "^6.1.1",
     "chalk": "5.2.0",
