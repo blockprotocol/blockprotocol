@@ -12,26 +12,14 @@ jobs:
     if: github.repository == 'blockprotocol/blockprotocol'
     permissions:
       contents: read
-      id-token: write
 
     steps:
-      - name: Authenticate Vault
-        id: secrets
-        uses: hashicorp/vault-action@4c06c5ccf5c0761b6029f56cfb1dcf5565918a3b # v3.4.0
-        with:
-          url: ${{ secrets.VAULT_ADDR }}
-          method: jwt
-          role: dev
-          secrets: |
-            automation/data/pipelines/hash/dev github_worker_app_id | GITHUB_WORKER_APP_ID ;
-            automation/data/pipelines/hash/dev github_worker_app_private_key | GITHUB_WORKER_APP_PRIVATE_KEY ;
-
       - name: Get token
         id: app-token
         uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
         with:
-          app-id: ${{ steps.secrets.outputs.GITHUB_WORKER_APP_ID }}
-          private-key: ${{ steps.secrets.outputs.GITHUB_WORKER_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.BLOCK_PROTOCOL_GITHUB_WORKER_APP_ID }}
+          private-key: ${{ secrets.BLOCK_PROTOCOL_GITHUB_WORKER_PRIVATE_KEY }}
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
