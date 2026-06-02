@@ -1,6 +1,7 @@
 {
   "name": "@blockprotocol/hook",
   "version": "0.1.9",
+  "private": true,
   "description": "Implementation of the Block Protocol Hook module specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
