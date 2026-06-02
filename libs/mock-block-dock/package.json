@@ -1,6 +1,7 @@
 {
   "name": "mock-block-dock",
   "version": "0.1.10",
+  "private": true,
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
