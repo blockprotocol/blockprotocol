@@ -1,6 +1,7 @@
 {
   "name": "block-scripts",
   "version": "0.3.5",
+  "private": true,
   "description": "Block development framework",
   "keywords": [
     "blockprotocol",
