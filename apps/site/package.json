@@ -17,10 +17,10 @@
     "start": "yarn exe scripts/start.ts"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.1.3",
-    "@blockprotocol/graph": "0.3.4",
-    "@blockprotocol/hook": "0.1.8",
-    "@blockprotocol/service": "0.1.5",
+    "@blockprotocol/core": "0.1.4",
+    "@blockprotocol/graph": "0.3.5",
+    "@blockprotocol/hook": "0.1.9",
+    "@blockprotocol/service": "0.1.6",
     "@cloudflare/stream-react": "^1.8.0",
     "@emotion/cache": "^11.10.0",
     "@emotion/react": "^11.10.0",
@@ -59,7 +59,7 @@
     "lodash": "4.18.1",
     "material-ui-popup-state": "^5.0.4",
     "mime-types": "^2.1.35",
-    "mock-block-dock": "0.1.10",
+    "mock-block-dock": "0.1.11",
     "next": "15.5.18",
     "next-connect": "^1.0.0",
     "next-mdx-remote": "^4.0.3",

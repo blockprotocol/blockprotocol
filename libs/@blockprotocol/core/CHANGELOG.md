@@ -1,5 +1,13 @@
 # @blockprotocol/core
 
+## 0.1.4
+
+### Patch Changes
+
+- [#1469](https://github.com/blockprotocol/blockprotocol/pull/1469) [`06bcdcad`](https://github.com/blockprotocol/blockprotocol/commit/06bcdcad0b0b36c39243337f701c8a927ad75977) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Update to React 19
+
+- [#1565](https://github.com/blockprotocol/blockprotocol/pull/1565) [`a9652ee4`](https://github.com/blockprotocol/blockprotocol/commit/a9652ee48e8dcf01ae21f10dc4c2dbbd7f50ad39) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Update uuid
+
 ## 0.1.3
 
 ### Patch Changes

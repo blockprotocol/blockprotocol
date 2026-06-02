@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/graph",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "private": true,
   "description": "Implementation of the Block Protocol Graph service specification for blocks and embedding applications",
   "keywords": [
@@ -131,7 +131,7 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.1.3",
+    "@blockprotocol/core": "0.1.4",
     "@blockprotocol/type-system": "0.1.1",
     "ajv": "^8.11.2",
     "ajv-formats": "^2.1.1",

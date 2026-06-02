@@ -1,6 +1,7 @@
 {
   "name": "block-template-react",
   "version": "0.4.6",
+  "private": true,
   "description": "Block Protocol template for a React-based block",
   "keywords": [
     "blockprotocol",
@@ -33,7 +34,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.3.4"
+    "@blockprotocol/graph": "0.3.5"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
@@ -41,7 +42,7 @@
     "@types/react-is": "19.0.0",
     "block-scripts": "0.3.5",
     "eslint": "8.33.0",
-    "mock-block-dock": "0.1.10",
+    "mock-block-dock": "0.1.11",
     "prettier": "2.8.2",
     "react": "19.0.0",
     "react-dom": "19.0.0"
