@@ -54,7 +54,7 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.1.4"
+    "@blockprotocol/core": "0.1.5"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
