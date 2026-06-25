@@ -10,16 +10,6 @@
     ".": {
       "ignore": "infra"
     },
-    "apps/site": {
-      "entry": [
-        // This workspace uses the Next.js plugin including its default entry points, the rest is manual:
-        "scripts/*.ts",
-        // Currently unused files, here to stay:
-        "src/components/hiring-banner.tsx"
-      ],
-      "project": "**/*.{ts,tsx}",
-      "eslint": false
-    },
     "crates/type-system": {
       "entry": "scripts/build-wasm.ts",
       "eslint": false

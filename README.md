@@ -1,18 +1,18 @@
 [þ hub]: https://blockprotocol.org/hub?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[block protocol documentation]: https://blockprotocol.org/docs?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[block protocol documentation]: https://hash.dev/docs/block-protocol?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol specification]: https://blockprotocol.org/spec?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [blockprotocol.org]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[becoming an embedder]: https://blockprotocol.org/docs/blocks/environments#other-environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[create a new block]: https://blockprotocol.org/docs/blocks/develop?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[becoming an embedder]: https://hash.dev/docs/block-protocol/blocks/environments#other-environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[create a new block]: https://hash.dev/docs/block-protocol/blocks/develop?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [contact us]: https://blockprotocol.org/contact?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [core specification]: https://blockprotocol.org/spec/core?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[developing blocks]: https://blockprotocol.org/docs/blocks/develop?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[developing blocks]: https://hash.dev/docs/block-protocol/blocks/develop?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [graph module]: https://blockprotocol.org/spec/graph?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [hook module]: https://blockprotocol.org/spec/hook?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [roadmap]: https://blockprotocol.org/roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[using blocks]: https://blockprotocol.org/docs/blocks/environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[WordPress]: https://blockprotocol.org/docs/blocks/environments#wordpress?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[using blocks]: https://hash.dev/docs/block-protocol/blocks/environments?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[WordPress]: https://hash.dev/docs/block-protocol/blocks/environments#wordpress?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 
 <!-- markdownlint-disable link-fragments -->
 
@@ -93,12 +93,9 @@ As a block developer, you probably care most about our utility libraries. All of
 
 You might also find the [Þ feature showcase block](https://github.com/blockprotocol/blockprotocol/tree/main/blocks/feature-showcase) helpful, for an all-in-one reference demonstrating the implementation of different Block Protocol methods.
 
-### For spec and site contributors
+### For spec and RFC contributors
 
-1.  [`apps/site`](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site): the code for [blockprotocol.org], including:
-
-    - the [Block Protocol specification] ([view on GitHub](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/4_spec))
-    - the [Block Protocol documentation] ([view on GitHub](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs))
+1.  The [Block Protocol documentation] now lives on [hash.dev](https://hash.dev/docs/block-protocol).
 
 1.  [`rfcs`](https://github.com/blockprotocol/blockprotocol/tree/main/rfcs): contains RFCs (Requests For Comments); this folder is intended to maintain a consistent and controlled process for new features to enter the project
 
@@ -137,8 +134,3 @@ Please see [SECURITY](/.github/SECURITY.md) for instructions around reporting is
 Find us on 𝕏 at [@blockprotocol](https://x.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
 
 Project permalink: `https://github.com/blockprotocol/blockprotocol`
-
-## [![a](/.github/assets/gh_icon_acknowledgement_20px-base.svg)][gh-acknowledgments] &nbsp; Acknowledgments
-
-- [Ciaran Morinan](https://github.com/CiaranMn) - [HASH](https://hash.ai/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root) ([profile](https://hash.ai/@ciaran?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root))
-- [Joel Spolsky](https://github.com/jspolsky) - [HASH](https://hash.ai/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root) ([profile](https://hash.ai/@spolsky?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root))
