@@ -115,7 +115,7 @@ const nextConfig = {
       },
       {
         source: "/faq",
-        destination: "/docs/faq",
+        destination: "https://hash.dev/docs/block-protocol/faq",
         permanent: true,
       },
       {
@@ -201,22 +201,22 @@ const nextConfig = {
       },
       {
         source: "/docs/publishing-blocks",
-        destination: "/docs/blocks#publish",
+        destination: "https://hash.dev/docs/block-protocol/blocks/develop#publish",
         permanent: true,
       },
       {
         source: "/docs/working-with-services",
-        destination: "/docs/services",
+        destination: "https://hash.dev/docs/block-protocol/services",
         permanent: false,
       },
       {
         source: "/docs/developing-blocks",
-        destination: "/docs/blocks/develop",
+        destination: "https://hash.dev/docs/block-protocol/blocks/develop",
         permanent: false,
       },
       {
         source: "/docs/using-blocks",
-        destination: "/docs/blocks/environments",
+        destination: "https://hash.dev/docs/block-protocol/blocks/environments",
         permanent: false,
       },
       {
@@ -281,7 +281,38 @@ const nextConfig = {
       },
       {
         source: "/docs/embedding-blocks",
-        destination: "/docs/blocks#your-own-application",
+        destination:
+          "https://hash.dev/docs/block-protocol/blocks#your-own-application",
+        permanent: true,
+      },
+      {
+        source: "/docs/0.4",
+        destination: "https://hash.dev/docs/block-protocol",
+        permanent: true,
+      },
+      {
+        source: "/docs/0.4/:path*",
+        destination: "https://hash.dev/docs/block-protocol/:path*",
+        permanent: true,
+      },
+      {
+        source: "/docs/0.3",
+        destination: "https://hash.dev/docs/block-protocol",
+        permanent: true,
+      },
+      {
+        source: "/docs/0.3/:path*",
+        destination: "https://hash.dev/docs/block-protocol/:path*",
+        permanent: true,
+      },
+      {
+        source: "/docs",
+        destination: "https://hash.dev/docs/block-protocol",
+        permanent: true,
+      },
+      {
+        source: "/docs/:path*",
+        destination: "https://hash.dev/docs/block-protocol/:path*",
         permanent: true,
       },
       // The account/dashboard system has been removed while we focus on

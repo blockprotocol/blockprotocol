@@ -37,6 +37,8 @@ import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 const visiblePages = (pages: SiteMapPage[] | undefined): SiteMapPage[] =>
   (pages ?? []).filter((page) => !page.hiddenFromSidebar);
 
+const navDisplayTitle = (title: string) => (title === "Docs" ? "Spec" : title);
+
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   icon?: ReactElement;
   item: T;
@@ -61,6 +63,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
   const pathWithoutParams = generatePathWithoutParams(hydrationFriendlyAsPath);
 
   const { title } = item;
+  const displayTitle = navDisplayTitle(title);
 
   const isRoot = depth === 0;
 
@@ -121,7 +124,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
             </ListItemIcon>
           ) : null}
           <ListItemText
-            primary={title}
+            primary={displayTitle}
             sx={{
               wordBreak: "break-word",
               "> .MuiListItemText-primary": {

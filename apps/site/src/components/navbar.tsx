@@ -378,39 +378,43 @@ const Navbar: FunctionComponent<{
 
                 {pages
                   .filter(({ title }) => title === "Docs" || title === "Hub")
-                  .map(({ title, href }) => (
-                    <Link
-                      href={href}
-                      key={href}
-                      className={clsx(
-                        navbarClasses.link,
-                        navbarClasses.interactiveLink,
-                      )}
-                      sx={[
-                        {
-                          display: "flex",
-                          alignItems: "center",
-                        },
-                        hydrationFriendlyAsPath.startsWith(href) && {
-                          color: theme.palette.purple[600],
-                        },
-                      ]}
-                    >
-                      {NAVBAR_LINK_ICONS[title]}
-                      <Typography
-                        variant="bpHeading3"
-                        sx={{
-                          marginLeft: 1,
-                          fontWeight: 500,
-                          fontSize: "var(--step--1)",
-                          color: "currentColor",
-                          ...(title === "Hub" ? { fontStyle: "italic" } : {}),
-                        }}
+                  .map(({ title, href }) => {
+                    const displayTitle = title === "Docs" ? "Spec" : title;
+
+                    return (
+                      <Link
+                        href={href}
+                        key={href}
+                        className={clsx(
+                          navbarClasses.link,
+                          navbarClasses.interactiveLink,
+                        )}
+                        sx={[
+                          {
+                            display: "flex",
+                            alignItems: "center",
+                          },
+                          hydrationFriendlyAsPath.startsWith(href) && {
+                            color: theme.palette.purple[600],
+                          },
+                        ]}
                       >
-                        {title}
-                      </Typography>
-                    </Link>
-                  ))}
+                        {NAVBAR_LINK_ICONS[title]}
+                        <Typography
+                          variant="bpHeading3"
+                          sx={{
+                            marginLeft: 1,
+                            fontWeight: 500,
+                            fontSize: "var(--step--1)",
+                            color: "currentColor",
+                            ...(title === "Hub" ? { fontStyle: "italic" } : {}),
+                          }}
+                        >
+                          {displayTitle}
+                        </Typography>
+                      </Link>
+                    );
+                  })}
               </Box>
 
               <Box
