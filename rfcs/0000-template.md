@@ -1,7 +1,10 @@
-- **Feature Name:** (fill me in with a unique slug such as `my-feature`, this should be used in the name of the file)
-- **Start Date:** (fill me in with today's date, YYYY-MM-DD)
-- **RFC PR:** [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/pull/0000)
-- **RFC Discussion:** [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000) (to be created **after** the RFC has been accepted and the PR is **merged**)
+Feature Name: Replace Me (choose a unique slug such as `my-feature`, reflecting the name of the file)
+Start Date: Replace Me (replace with current `YYYY-MM-DD` date, upon creation)
+Published Date: Pending (replace with current `YYYY-MM-DD` date, immediately prior to merge)
+RFC PR: Replace Me (replace with URL to the PR containing this RFC, e.g. `https://github.com/blockprotocol/blockprotocol/pull/0000`)
+RFC Discussion: Pending (replace with URL to repo discussion regarding this RFC, e.g. `https://github.com/blockprotocol/blockprotocol/discussions/0000` - to be created **after** the RFC has been accepted and the PR is **merged**)
+
+---
 
 # Summary
 

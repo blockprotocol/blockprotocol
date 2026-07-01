@@ -21,13 +21,6 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "@apps/site#codegen": {
-      "outputs": ["site-map.json"]
-    },
-    "@apps/site#build": {
-      "dependsOn": ["codegen", "^build"],
-      "outputs": ["dist/**", ".next/**", "public/schemas/**"]
-    },
     "@blocks/feature-showcase#codegen": {
       "dependsOn": ["^build"],
       "outputs": ["src/entity-types/**/*.gen.ts"]

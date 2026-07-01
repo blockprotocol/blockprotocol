@@ -4,7 +4,6 @@
   "type": "module",
   "workspaces": {
     "packages": [
-      "apps/*",
       "infra/*",
       "libs/@blockprotocol/*",
       "libs/@local/*",
@@ -18,9 +17,6 @@
     ]
   },
   "scripts": {
-    "dev": "yarn workspace @apps/site dev",
-    "dev:db": "yarn workspace @apps/site dev:db",
-    "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "fix:dependency-version-consistency": "check-dependency-version-consistency --fix .",
     "fix:eslint": "turbo run --continue fix:eslint",
@@ -36,7 +32,7 @@
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
     "lint:tsc": "turbo run --continue lint:tsc",
     "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
-    "prepare": "patch-package --error-on-warn && turbo run codegen && turbo run build \"--filter=!./apps/*\""
+    "prepare": "patch-package --error-on-warn && turbo run codegen && turbo run build"
   },
   "lint-staged": {
     "**": [

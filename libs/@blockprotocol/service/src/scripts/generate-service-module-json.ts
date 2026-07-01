@@ -8,8 +8,8 @@ import { createGenerator } from "ts-json-schema-generator";
 // We replaced `typescript-json-schema` with `ts-json-schema-generator`
 // because the former pulled in the deprecated and now critically
 // vulnerable `vm2` package (see GHSA-248r-7h7q-cr24 et al.). The same
-// generator is used by `@apps/site` so the workspace standardises on a
-// single TS-to-JSON-Schema implementation.
+// generator is also used elsewhere in the ecosystem, so the workspace
+// standardises on a single TS-to-JSON-Schema implementation.
 //
 // `ts-json-schema-generator` mirrors the two `typescript-json-schema`
 // flags this script used to set:
