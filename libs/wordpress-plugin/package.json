@@ -57,7 +57,7 @@
     "lodash.debounce": "4.0.8",
     "patch-package": "6.5.1",
     "react-toastify": "9.1.1",
-    "sanitize-html": "2.12.1",
+    "sanitize-html": "2.17.5",
     "ts-loader": "9.4.1",
     "typescript": "4.8.4",
     "uuid": "14.0.0",
