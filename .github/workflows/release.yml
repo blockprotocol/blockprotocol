@@ -10,16 +10,23 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: github.repository == 'blockprotocol/blockprotocol'
+    environment: main
     permissions:
       contents: read
+      id-token: write
 
     steps:
       - name: Get token
         id: app-token
-        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
+        uses: hashintel/.github/.github/actions/github-app-token@6235da521f7054945cf1ff9967708d40c745c6b4 # unmerged — re-pin to main
         with:
-          app-id: ${{ secrets.BLOCK_PROTOCOL_GITHUB_WORKER_APP_ID }}
-          private-key: ${{ secrets.BLOCK_PROTOCOL_GITHUB_WORKER_PRIVATE_KEY }}
+          vault-address: ${{ vars.VAULT_ADDR }}
+          vault-role: ci-blockprotocol-release
+          app-id: "3893708"
+          transit-key: github-app-block-protocol-worker
+          repository: ${{ github.repository }}
+          cf-access-client-id: ${{ vars.CF_ACCESS_CLIENT_ID }}
+          cf-access-client-secret: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
