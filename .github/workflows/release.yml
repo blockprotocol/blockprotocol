@@ -22,8 +22,8 @@ jobs:
         with:
           vault-address: ${{ vars.VAULT_ADDR }}
           vault-role: ci-blockprotocol-release
-          app-id: "3893708"
-          transit-key: github-app-block-protocol-worker
+          app-id: "4505139"
+          transit-key: github-app-block-protocol-release
           repository: ${{ github.repository }}
           cf-access-client-id: ${{ vars.CF_ACCESS_CLIENT_ID }}
           cf-access-client-secret: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
