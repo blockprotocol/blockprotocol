@@ -14,9 +14,18 @@ on:
   schedule:
     - cron: "30 0 1,15 * *" # scheduled for 00:30 UTC on both the 1st and 15th of the month
 
+permissions: {}
+
 jobs:
   semgrep:
     name: Scan
+    environment:
+      name: Semgrep
+      deployment: false
+
+    permissions:
+      contents: read
+      security-events: write # uploads the findings to code scanning
 
     # Change this in the event of future self-hosting of Action runner:
     runs-on: ubuntu-latest
@@ -34,7 +43,7 @@ jobs:
       - run: semgrep ci --sarif --output=semgrep.sarif
         name: Run Semgrep
         env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_TOKEN }}
 
       - name: Check SARIF file exists following Semgrep run
         id: sarif_file_check
