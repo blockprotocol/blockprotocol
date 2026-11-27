@@ -10,7 +10,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: github.repository == 'blockprotocol/blockprotocol'
-    environment: main
+    environment:
+      name: Release
+      deployment: false
     permissions:
       contents: read
       id-token: write
@@ -21,7 +23,7 @@ jobs:
         uses: hashintel/.github/.github/actions/github-app-token@8c1a3b18a4f6528fc8eabcf9acda7780a1e47776 # main
         with:
           vault-address: ${{ vars.VAULT_ADDR }}
-          vault-role: ci-blockprotocol-release
+          vault-role: ci-blockprotocol-blockprotocol-release
           app-id: "4505139"
           transit-key: github-app-block-protocol-release
           repository: ${{ github.repository }}
